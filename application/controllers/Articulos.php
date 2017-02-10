@@ -54,7 +54,8 @@ class Articulos extends CI_Controller
 			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
-			/***********************************/
+			/****************MOMENT*******************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/moment.min.js');
 			$this->datos['unidad']=$this->articulo_model->retornar_tabla("unidad");			
 			$this->datos['marca']=$this->articulo_model->retornar_tabla("marca");
 			$this->datos['linea']=$this->articulo_model->retornar_tabla("linea");

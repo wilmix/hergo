@@ -224,7 +224,13 @@ function retornarTabla()
             exportTypes:['excel','csv'],
             exportDataType:'all',
             exportOptions:{fileName: 'Articulos',worksheetName: "Articulos"},
-            columns:[  
+            columns:[
+            {   
+                field: 'idArticulos',            
+                title: 'id',
+                align: 'center',
+                //events: operateEvents,
+            },  
             {   
                 field: 'Imagen',            
                 title: 'Imagen',
@@ -277,7 +283,20 @@ function retornarTabla()
                 title:"Producto <br> Servicio",
                 formatter:verproductoservicio,
                 sortable:true,
-            },                    
+            },
+            {
+                field:"Fecha",
+                title:"Fecha",
+                sortable:true,
+                visible:false,
+                formatter: formato_fecha
+            },          
+            {
+                field:"autor",
+                title:"Autor",
+                sortable:true,
+                visible:false,
+            },          
             {               
                 title: 'Editar',
                 align: 'center',
@@ -313,6 +332,15 @@ function mostrarimagen(value, row, index)
 
     imagen = '<div class="contimg"><img src="'+base_url(ruta)+'" class="'+clase+'"></div>'
     return [imagen].join('');
+}
+function formato_fecha(value, row, index)
+{
+    var fecha = ""
+    if(value=="0000-00-00 00:00:00")
+        fecha="sin fecha de registro"
+    else
+        fecha = moment(value,"YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY HH:mm:ss")
+    return [fecha]
 }
 function verproductoservicio(value, row, index)
 {

@@ -17,7 +17,7 @@ class Articulo_model extends CI_Model
 	}
 	public function mostrarArticulos()
 	{
-		$sql="SELECT a.idArticulos, a.CodigoArticulo, a.Descripcion, a.NumParte, u.Unidad, m.Marca, l.Linea, a.PosicionArancelaria, r.Requisito, a.ProductoServicio, a.detalleLargo, a.EnUso,a.Imagen
+		$sql="SELECT a.idArticulos, a.CodigoArticulo, a.Descripcion, a.NumParte, u.Unidad, m.Marca, l.Linea, a.PosicionArancelaria, r.Requisito, a.ProductoServicio, a.detalleLargo, a.EnUso,a.Imagen, a.Fecha , Concat(us.first_name,' ',us.last_name) as autor
 			FROM articulos a
 			INNER JOIN unidad u
 			ON a.idUnidad = u.idUnidad
@@ -27,7 +27,9 @@ class Articulo_model extends CI_Model
 			ON a.idLinea = l.idLinea
 			INNER JOIN requisito r
 			ON a.idRequisito = r.idRequisito
-			ORDER BY a.idArticulos desc ";
+            INNER JOIN users us
+			ON a.Autor = us.id			
+			ORDER BY a.idArticulos desc";
 		
 		$query=$this->db->query($sql);		
 		return $query;
