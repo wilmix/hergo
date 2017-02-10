@@ -85,7 +85,8 @@ class Articulos extends CI_Controller
         	$autoriza = addslashes($this->security->xss_clean($this->input->post('autoriza')));   
         	$proser = addslashes($this->security->xss_clean($this->input->post('proser')));
         	$uso = addslashes($this->security->xss_clean($this->input->post('uso')));
-        	        	        
+        	      
+        	
         	if($id=="")
         	{
         		$nom_imagen=$this->subir_imagen($id,$_FILES);
@@ -123,9 +124,12 @@ class Articulos extends CI_Controller
 		// Contar envían por el plugin
 		$Imagenes =count(isset($archivo_img['imagenes']['name'])?$archivo_img['imagenes']['name']:0);
 		$infoImagenesSubidas = array();
-		$nombreArchivo="ninguno.jpg";
-		
+		$nombreArchivo="";
 	
+
+		if(($archivo_img['imagenes']['name'])!="")
+		{
+			echo $archivo_img['imagenes']['name'];
 		  // El nombre y nombre temporal del archivo que vamos para adjuntar
 		  $nombreArchivo=isset($archivo_img['imagenes']['name'])?time().$archivo_img['imagenes']['name']:null;
 		  $nombreTemporal=isset($archivo_img['imagenes']['tmp_name'])?$archivo_img['imagenes']['tmp_name']:null;
@@ -133,7 +137,7 @@ class Articulos extends CI_Controller
 		  $rutaArchivo=$carpetaAdjunta.$nombreArchivo;
 
 		  move_uploaded_file($nombreTemporal,$rutaArchivo);
-		
+		}
 		
 		//return ($nombreArchivo=="")?"ninguno.jpg":$nombreArchivo;
 		  return($nombreArchivo);

@@ -22,3 +22,12 @@ img.maximizada
 	width: 80%;
 
 }
+.file-preview-frame 
+{
+	height: auto !important;	
+}
+.file-preview-frame img
+{
+	width: 200px !important;
+	height: auto !important;	
+}

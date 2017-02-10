@@ -1,5 +1,12 @@
 $(document).ready(function(){
     retornarTabla()
+    $("#imagenes").fileinput({
+        language: "es",
+        showUpload: false,
+        previewFileType: "image",
+        maxFileSize: 1024,
+      
+    });
     
      $('#form_articulo').bootstrapValidator({
              
@@ -112,7 +119,8 @@ $(document).ready(function(){
         .on('success.form.bv', function(e) {
             e.preventDefault();
             var valuesToSubmit = $("#form_articulo").serialize();  
-            var formData = new FormData($('#form_articulo')[0]);        
+            var formData = new FormData($('#form_articulo')[0]);  
+            console.log(formData)      
         
            /* retornarajax(base_url("index.php/articulos/agregarArticulo"),valuesToSubmit,function(data)
             {
@@ -138,6 +146,7 @@ $(document).ready(function(){
                     //$("#modal_ok").modal("show");
                     $('#contact-form-success').show().fadeOut(10000);
                     $('#modalarticulo').modal('hide');
+        
                     retornarTabla();
                 }
             }); 
@@ -149,6 +158,16 @@ $(document).on("click",".btnnuevo",function(){
     resetForm('#form_articulo')
     $(".modal-title").html("Agregar articulo")
     $("#bguardar_articulo").html("Guardar")
+    /****resetinput****/
+    $('#imagenes').fileinput('destroy');
+    $("#imagenes").fileinput({
+        language: "es",
+        showUpload: false,
+        previewFileType: "image",
+        maxFileSize: 1024,
+      
+    });
+    $('#imagenes').fileinput('refresh');
 })
 $(document).on("click",".botoncerrarmodal",function(){
    resetForm('#form_articulo')
@@ -165,6 +184,7 @@ function asignarselect(text1,select)
 function mostrarModal(fila)
 {
     console.log(fila)
+    cargarimagen(fila.Imagen)
     $("#id_articulo").val(fila.idArticulos)
     $("#codigoarticulo").val(fila.CodigoArticulo)
     $("#descrpcionarticulo").val(fila.Descripcion)
@@ -324,5 +344,27 @@ $(document).on("click",".imagenminiatura",function(){
     $("#imagen_max").html(imagen)
     $("#prev_imagen").modal("show");
 })
+
+function cargarimagen(imagen)
+{
+     ruta=(imagen=="")?"/assets/img_articulos/ninguno.png":"/assets/img_articulos/"+imagen
+    $('#imagenes').fileinput('destroy');
+    console.log(base_url(ruta))
+     $("#imagenes").fileinput({
+        initialPreview: [
+           
+            base_url(ruta)
+        ],
+        initialPreviewAsData: true,
+        
+        initialCaption: imagen,
+        language: "es",
+        showUpload: false,
+        previewFileType: "image",
+        maxFileSize: 1024,
+    });
+     $('#imagenes').fileinput('refresh');
+     console.log("refresh")
+}
 
 

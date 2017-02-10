@@ -228,13 +228,7 @@ th:hover .filterControl {
 </form>
 
 <script>
-    $("#imagenes").fileinput({
-        language: "es",
-        showUpload: false,
-        previewFileType: "image",
-        maxFileSize: 1024,
-      
-    });
+   
 </script>
 
 <!-- Modal imagen -->
@@ -245,7 +239,7 @@ th:hover .filterControl {
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body text-center" id="imagen_max">
-        <img class="maximizada" src="http://192.168.1.139:8080/hergo/assets/img_articulos/ninguno.png">
+        <img class="maximizada" src="<?= base_url("/assets/img_articulos/ninguno.png") ?>">
       </div>
     </div>
   </div>
