@@ -121,3 +121,14 @@ function resetForm(id)
     $(id)[0].reset();
     $(id).bootstrapValidator('resetForm', true);
 }
+$(document).on("click",".sidebar-toggle",function(){
+   
+    setTimeout(function(){
+       $('table').bootstrapTable('resetWidth');    
+    }, 500);
+})
+$( window ).resize(function() {
+    setTimeout(function(){
+       $('table').bootstrapTable('resetWidth');    
+    }, 500);
+});

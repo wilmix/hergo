@@ -12,7 +12,9 @@
               data-classes="table table-hover table-condensed"
               data-striped="true"
               data-sort-name="stargazers_count"
-              data-sort-order="desc">
+              data-sort-order="desc"
+              class="table-striped"
+              >
               <thead>
                   <tr>
                       <th>Nombre de almacen</th>

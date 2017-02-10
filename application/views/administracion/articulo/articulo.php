@@ -23,10 +23,9 @@ th:hover .filterControl {
       </div>
 
       <table id="tarticulo"
-      data-toggle="table"
+            data-toggle="table"
              data-height="550"
-             data-search="true"
-             
+             data-search="true"             
              data-show-columns="true"
              data-page-size="200"
              data-pagination="true"

@@ -217,7 +217,7 @@ function retornarTabla()
             data:res,           
             striped:true,
             pagination:true,
-            pageSize:10,
+            pageSize:25,
             clickToSelect:true,
             search:true,
             showExport:true,
@@ -366,5 +366,6 @@ function cargarimagen(imagen)
      $('#imagenes').fileinput('refresh');
      console.log("refresh")
 }
+
 
 

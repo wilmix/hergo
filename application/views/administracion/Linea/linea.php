@@ -19,7 +19,8 @@
              data-search="true"
              data-show-export="true"
              data-export-types="['excel', 'pdf']"
-             data-striped="true">
+             data-striped="true"
+             >
               <thead>
                   <tr>
                       <th>Linea</th>

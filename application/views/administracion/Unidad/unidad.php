@@ -15,7 +15,9 @@
              data-show-refresh="false"
              data-page-size="10"
              data-pagination="true"
-             data-search="true">
+             data-search="true"
+             data-striped="true"
+             >
               <thead>
                   <tr>
                       <th>Unidad</th>

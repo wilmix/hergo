@@ -13,6 +13,7 @@ class Almacen extends CI_Controller
 				base_url("assets/fa/css/font-awesome.min.css"),
 				base_url("assets/dist/css/AdminLTE.min.css"),
 				base_url("assets/dist/css/skins/skin-blue.min.css"),
+				base_url("assets/hergo/estilos.css"),
 			);
 		$this->cabecera_script=array(
 				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),

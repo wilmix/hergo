@@ -31,3 +31,9 @@ img.maximizada
 	width: 200px !important;
 	height: auto !important;	
 }
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #f3f0f0;
+}
+.table-striped>tbody>tr:hover {
+    background-color: #ccc;
+}
