@@ -143,7 +143,7 @@ $(document).ready(function(){
                 processData: false,
                 success: function (returndata) {
                    $(".mensaje_ok").html(" Los datos se guardaron correctamente");
-                    //$("#modal_ok").modal("show");
+                    $("#modal_ok").modal("show");
                     $('#contact-form-success').show().fadeOut(10000);
                     $('#modalarticulo').modal('hide');
         
@@ -285,7 +285,7 @@ function retornarTabla()
                 sortable:true,
             },
             {
-                field:"Fecha",
+                field:"fecha",
                 title:"Fecha",
                 sortable:true,
                 visible:false,
@@ -333,15 +333,7 @@ function mostrarimagen(value, row, index)
     imagen = '<div class="contimg"><img src="'+base_url(ruta)+'" class="'+clase+'"></div>'
     return [imagen].join('');
 }
-function formato_fecha(value, row, index)
-{
-    var fecha = ""
-    if(value=="0000-00-00 00:00:00")
-        fecha="sin fecha de registro"
-    else
-        fecha = moment(value,"YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY HH:mm:ss")
-    return [fecha]
-}
+
 function verproductoservicio(value, row, index)
 {
     if(value=="p")

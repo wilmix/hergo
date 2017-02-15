@@ -15,14 +15,14 @@ class Almacen_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function agregarAlmacen_model($alm,$dir,$ciu,$enu)
+	public function agregarClientes_model($alm,$dir,$ciu,$enu)
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
 		$sql="INSERT INTO almacen (nombre, direccion, ciudad, enuso, autor, fecha) VALUES('$alm','$dir','$ciu',$enu,'$autor','$fecha')";
 		$query=$this->db->query($sql);		
 	}
-	public function editarAlmacen_model($alm,$dir,$ciu,$enu,$cod)
+	public function editarClientes_model($alm,$dir,$ciu,$enu,$cod)
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');

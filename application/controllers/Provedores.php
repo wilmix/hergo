@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Clientes extends CI_Controller
+class Provedores extends CI_Controller
 {
 	private $datos;
 	public function __construct()
 	{	
 		parent::__construct();
 		$this->load->helper('url');	
-		$this->load->model("cliente_model");
+		$this->load->model("provedores_model");
 		$this->cabeceras_css=array(
 				base_url('assets/bootstrap/css/bootstrap.min.css'),
 				base_url("assets/fa/css/font-awesome.min.css"),
@@ -34,14 +34,14 @@ class Clientes extends CI_Controller
 			redirect('auth', 'refresh');
 		
 			$this->datos['menu']="Administracion";
-			$this->datos['opcion']="Clientes";
-			$this->datos['titulo']="Clientes";
+			$this->datos['opcion']="Provedores";
+			$this->datos['titulo']="Provedores";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/clientes.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/provedores.js');
 			
 			/*************TABLE***************/
 			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/css/bootstrap-table.css'); 
@@ -50,17 +50,17 @@ class Clientes extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-export.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/tableExport.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-filter-control.js');
-			
-			/****************MOMENT*******************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/moment.min.js');
+			/*********UPLOAD******************/
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
 			/***********************************/
 			/***********************************/
 			/***********************************/
 			/***********************************/
 
-			//$this->datos['clientes']=$this->cliente_model->mostrarclientes();
-			$this->datos['tipodocumento']=$this->cliente_model->retornar_tabla("documentotipo");			
-			$this->datos['tipocliente']=$this->cliente_model->retornar_tabla("clientetipo");		
+
+					
 			
 
 
@@ -71,52 +71,9 @@ class Clientes extends CI_Controller
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('administracion/clientes/clientes.php',$this->datos);
+			$this->load->view('administracion/provedores/provedores.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);						
-	}
-	public function mostrarclientes()
-	{
-		if($this->input->is_ajax_request())
-        {
-			$res=$this->cliente_model->mostrarclientes_model();
-			$res=$res->result_array();
-			echo json_encode($res);
-		}
-		else
-		{
-			die("PAGINA NO ENCONTRADA");
-		}
-	}
-	public function agregarCliente()
-	{
-		if($this->input->is_ajax_request())
-        {
-        	$id = addslashes($this->security->xss_clean($this->input->post('id_cliente')));
-        	$tipo_doc = addslashes($this->security->xss_clean($this->input->post('tipo_doc')));
-        	$carnet = addslashes($this->security->xss_clean($this->input->post('carnet')));
-        	$nombre_cliente = addslashes($this->security->xss_clean($this->input->post('nombre_cliente')));
-        	$clientetipo = addslashes($this->security->xss_clean($this->input->post('clientetipo')));
-        	$direccion = addslashes($this->security->xss_clean($this->input->post('direccion')));           	
-        	$phone = addslashes($this->security->xss_clean($this->input->post('phone')));
-        	$fax = addslashes($this->security->xss_clean($this->input->post('fax')));
-        	$email = addslashes($this->security->xss_clean($this->input->post('email')));
-        	$website = addslashes($this->security->xss_clean($this->input->post('website')));
-        
-        	      
-        	
-        	if($id=="")//es nuevo, agregar
-        	{
-        		
-        		$this->cliente_model->agregarcliente_model($id,$tipo_doc,$carnet,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website);
-        	}
-        	else //existe, editar
-        	{
-        		
-        		$this->cliente_model->editarcliente_model($id,$tipo_doc,$carnet,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website);
-        	}
-        }
-        echo "{}";
 	}
 	
 

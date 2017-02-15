@@ -52,7 +52,7 @@
 <!-- Modal -->
 <form action=" " method="post"  id="form_unidad">
   <div class="modal fade" id="modalunidad" role="dialog">
-      <input type="" name="cod" value="" id="cod_unidad" hidden> <!-- input oculto para el codigo de unidad-->
+      <input type="" name="cod" value="" id="cod_cliente" hidden> <!-- input oculto para el codigo de unidad-->
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
