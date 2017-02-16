@@ -7,7 +7,7 @@ class Provedores extends CI_Controller
 	{	
 		parent::__construct();
 		$this->load->helper('url');	
-		$this->load->model("provedores_model");
+		$this->load->model("proveedores_model");
 		$this->cabeceras_css=array(
 				base_url('assets/bootstrap/css/bootstrap.min.css'),
 				base_url("assets/fa/css/font-awesome.min.css"),
@@ -54,15 +54,14 @@ class Provedores extends CI_Controller
 			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
+			/****************MOMENT*******************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/moment.min.js');
 			/***********************************/
 			/***********************************/
 			/***********************************/
 			/***********************************/
-
-
-					
-			
-
+	
+			$this->datos['tipodocumento']=$this->proveedores_model->retornar_tabla("documentotipo");			
 
 			/***********************************/
 			/***********************************/
@@ -75,7 +74,49 @@ class Provedores extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);						
 	}
-	
+	public function mostrarProveedores()
+	{
+		if($this->input->is_ajax_request())
+        {
+			$res=$this->proveedores_model->mostrarProveedores_model();
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function agregarProveedor()
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$id = addslashes($this->security->xss_clean($this->input->post('id_proveedor')));
+        	$tipo_doc = addslashes($this->security->xss_clean($this->input->post('tipo_doc')));
+        	$carnet = addslashes($this->security->xss_clean($this->input->post('carnet')));
+        	$nombre = addslashes($this->security->xss_clean($this->input->post('nombre')));        	
+        	$direccion = addslashes($this->security->xss_clean($this->input->post('direccion')));           	
+        	$nombre_res = addslashes($this->security->xss_clean($this->input->post('nombre_res')));
+        	$phone = addslashes($this->security->xss_clean($this->input->post('phone')));
+        	$fax = addslashes($this->security->xss_clean($this->input->post('fax')));
+        	$email = addslashes($this->security->xss_clean($this->input->post('email')));
+        	$website = addslashes($this->security->xss_clean($this->input->post('website')));
+        
+        	      
+        	
+        	if($id=="")//es nuevo, agregar
+        	{
+        		
+        		$this->proveedores_model->agregarProveedor_model($id,$tipo_doc,$carnet,$nombre,$direccion,$nombre_res,$phone,$fax,$email,$website);
+        	}
+        	else //existe, editar
+        	{
+        		
+        		$this->proveedores_model->editarProveedor_model($id,$tipo_doc,$carnet,$nombre,$direccion,$nombre_res,$phone,$fax,$email,$website);
+        	}
+        }
+        echo "{}";
+	}
 
 	
 }

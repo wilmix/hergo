@@ -17,26 +17,10 @@
              data-search="true"
              data-striped="false"
              data-toolbar-align="right"
-             data-toolbar="#toolbar">
-              <thead>
-                <tr>
-                  <th data-field="idproveedor" data-visible="false">Id</th>
-                  <th data-field="idDocumentoTipo" >Tipo Documento</th>
-                  <th data-field="documento" data-switchable="false">Número de Documento</th>
-                  <th data-field="nombreproveedor" data-switchable="false">Provedor</th>
-                  <th data-field="responsable" data-visible="false">Responsable</th>
-                  <th data-field="telefono" data-visible="false">Telefono</th>
-                  <th data-field="fax" data-visible="false">Fax</th>
-                  <th data-field="email" data-visible="false">Email</th>
-                  <th data-field="web" data-visible="false">Web</th>
-                  <th data-field="autor" data-visible="false">Autor</th>
-                  <th data-field="fecha" data-visible="false">Fecha</th>
-                  <th data-field="logo" data-visible="false">Logo</th>
-                  <th>Editar</th>
-                </tr>
-              </thead>
-
-              <tbody>
+             data-toolbar="#toolbar"
+             id="tproveedores"
+             >
+              
 
           </table>     
         </div>
@@ -52,7 +36,7 @@
 <!-- Modal -->
 <form action=" " method="post"  id="form_provedor" enctype="multipart/form-data">
   <div class="modal fade" id="modalprovedor" role="dialog">
-    <input type="" name="id_articulo" value="" id="id_articulo" hidden value="<?= "" ?>"> <!-- input oculto para el codigo de articulo-->
+    <input type="" name="id_proveedor" value="" id="id_proveedor" hidden value=""> <!-- input oculto para el codigo de articulo-->
       <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -68,12 +52,13 @@
                     <div class="col-md-9 col-lg-9 selectContainer">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
-                        <select name="tipo_doc" class="form-control selectpicker" >
-                          <option value=" " >Selecciona</option>
-                          <option>NIT</option>
-                          <option>CARNET DE IDENTIDAD</option>
-                          <option ></option>
-                          <option ></option>
+                        <select name="tipo_doc" id="tipo_doc" class="form-control selectpicker" >
+                         
+                            <option value=" " >Selecciona</option>
+                             <?php foreach ($tipodocumento->result_array() as $fila):  ?>
+                              <option value="<?= $fila['idDocumentoTipo'] ?>"><?= $fila['documentotipo']?></option>
+                            <?php endforeach ?>                        
+                      
                         </select>
                       </div>
                     </div>
@@ -84,7 +69,7 @@
                     <div class="col-md-9 col-lg-9 inputGroupContainer">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
-                        <input  name="carnet" placeholder="00000000" class="form-control"  type="number">
+                        <input  name="carnet"  id="carnet" placeholder="00000000" class="form-control"  type="number">
                       </div>
                     </div>
                   </div>
@@ -94,7 +79,7 @@
                     <div class="col-md-9 col-lg-9 inputGroupContainer">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
-                        <input  name="nombre" placeholder="Nombre de Proveedor" class="form-control"  type="text">
+                        <input  name="nombre"  id="nombre" placeholder="Nombre de Proveedor" class="form-control"  type="text">
                       </div>
                     </div>
                   </div>
@@ -104,7 +89,7 @@
                     <div class="col-md-9 col-lg-9 inputGroupContainer">
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
-                          <input name="direccion" placeholder="Dirección de Proovedor" class="form-control" type="text">
+                          <input name="direccion" id="direccion" placeholder="Dirección de Proovedor" class="form-control" type="text">
                       </div>
                     </div>
                   </div>
@@ -114,7 +99,7 @@
                     <div class="col-md-9 col-lg-9 inputGroupContainer">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
-                        <input  name="nombre_res" placeholder="Nombre de Responsable de Proovedor" class="form-control"  type="text">
+                        <input  name="nombre_res" id="nombre_res" placeholder="Nombre de Responsable de Proovedor" class="form-control"  type="text">
                       </div>
                     </div>
                   </div>
@@ -124,7 +109,7 @@
                     <div class="col-md-9 col-lg-9 inputGroupContainer">
                       <div class="input-group">
                          <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-                        <input name="phone" placeholder="Telefono de Proovedor" class="form-control" type="number">
+                        <input name="phone" id="phone" placeholder="Telefono de Proovedor" class="form-control" type="number">
                       </div>
                     </div>
                   </div>
@@ -134,7 +119,7 @@
                       <div class="col-md-9 col-lg-9 inputGroupContainer">
                       <div class="input-group">
                          <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-                        <input name="phone" placeholder="Telefono Fax" class="form-control" type="number">
+                        <input name="fax" id="fax" placeholder="Telefono Fax" class="form-control" type="number">
                       </div>
                     </div>
                   </div>
@@ -144,7 +129,7 @@
                     <div class="col-md-9 col-lg-9 inputGroupContainer">
                       <div class="input-group">
                          <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                         <input name="email" placeholder="Dirección Email" class="form-control"  type="text">
+                         <input name="email" id="email" placeholder="Dirección Email" class="form-control"  type="text">
                       </div>
                     </div>
                   </div>
@@ -154,7 +139,7 @@
                     <div class="col-md-9 col-lg-9 inputGroupContainer">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-                        <input name="website" placeholder="Sitio Web Proovedor" class="form-control" type="text">
+                        <input name="website" id="website" placeholder="Sitio Web Proovedor" class="form-control" type="text">
                       </div>
                     </div>
                   </div>

@@ -97,7 +97,7 @@
             }); 
         });
 });
- $(document).on("click","#botonmodalcliente",function(){
+$(document).on("click","#botonmodalcliente",function(){
     resetForm('#form_clientes')
     $(".modal-title").html("Agregar Cliente")
     $("#bguardar").html("Guardar")
@@ -107,15 +107,7 @@ $(document).on("click",".botoncerrarmodal",function(){
    resetForm('#form_clientes')
 })
 
-function asignarselect(text1,select)
-{
-    text1=text1.trim()
-    $("option",select).filter(function() {
-        var aux=$(this).text()
-        aux=aux.trim()
-        return aux.toUpperCase() == text1.toUpperCase();
-    }).prop('selected', true);
-}
+
 function mostrarModal(fila)
 {
     console.log(fila)

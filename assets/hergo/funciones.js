@@ -143,3 +143,12 @@ function formato_fecha(value, row, index)
         fecha = moment(value,"YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY HH:mm:ss")
     return [fecha]
 }
+function asignarselect(text1,select)
+{
+    text1=text1.trim()
+    $("option",select).filter(function() {
+        var aux=$(this).text()
+        aux=aux.trim()
+        return aux.toUpperCase() == text1.toUpperCase();
+    }).prop('selected', true);
+}
