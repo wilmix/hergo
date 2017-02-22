@@ -11,6 +11,9 @@
               data-toggle="table"
               data-pagination="true"
               data-search="true"
+              data-page-size="100"
+              data-pagination="true"
+              data-height="550"
               id="tingresos">           
           </table>
           

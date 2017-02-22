@@ -88,6 +88,10 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/tableExport.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-filter-control.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/select2/select2.min.js');
+			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
+
+
 		
 
 					
@@ -96,7 +100,7 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('ingresos/importaciones/importaciones.php',$this->datos);
+			$this->load->view('ingresos/importaciones/importaciones2.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);						
 	}
