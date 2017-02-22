@@ -25,8 +25,8 @@
               </thead>
               <tbody>                   
                  <?php foreach ($almacen->result_array() as $fila): ?>
-                   <tr id="<?= $fila['cod_almacen'] ?>">
-                     <td><?= $fila['nombre'] ?></td>
+                   <tr id="<?= $fila['idalmacen'] ?>">
+                     <td><?= $fila['almacen'] ?></td>
                      <td><?= $fila['direccion'] ?></td>
                      <td><?= $fila['ciudad'] ?></td>
                      <td>

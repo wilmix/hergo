@@ -45,7 +45,7 @@ $(document).ready(function(){
             e.preventDefault();
             // Get the form instance
             var valuesToSubmit = $("#form_almacen").serialize();
-            
+            console.log(valuesToSubmit)
             $.ajax({
                 url: base_url("index.php/almacen/agregarAlmacen"),
                 data: valuesToSubmit,              

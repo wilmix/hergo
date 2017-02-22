@@ -7,7 +7,7 @@ class Ingresos extends CI_Controller
 	{	
 		parent::__construct();
 		$this->load->helper('url');	
-		$this->load->model("articulo_model");
+		$this->load->model("ingresos_model");
 		$this->cabeceras_css=array(
 				base_url('assets/bootstrap/css/bootstrap.min.css'),
 				base_url("assets/fa/css/font-awesome.min.css"),
@@ -41,7 +41,7 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_script']= $this->cabecera_script;
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/articulo.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresos.js');
 			
 			/*************TABLE***************/
 			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/css/bootstrap-table.css'); 
@@ -50,19 +50,15 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-export.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/tableExport.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-filter-control.js');
-			/*********UPLOAD******************/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
-			/***********************************/
+			
 
-					
+			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();
 			
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('ingresos/importaciones/index.php',$this->datos);
+			$this->load->view('ingresos/importaciones/ingresos.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);						
 	}
@@ -92,11 +88,7 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/tableExport.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-filter-control.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/select2/select2.min.js');
-			/*********UPLOAD******************/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
-			/***********************************/
+		
 
 					
 			
@@ -108,7 +100,33 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);						
 	}
-	
+	public function mostrarIngresos()
+	{
+		if($this->input->is_ajax_request())
+        {
+			$res=$this->ingresos_model->mostrarIngresos();
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function mostrarDetalle()
+	{
+		if($this->input->is_ajax_request() && $this->input->post('id'))
+        {
+        	$id = addslashes($this->security->xss_clean($this->input->post('id')));
+			$res=$this->ingresos_model->mostrarDetalle($id);
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 	
 	
 }

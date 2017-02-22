@@ -1,10 +1,7 @@
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
-          <ol class="breadcrumb">
-            <li><a href="<?php echo base_url() ?>Ingresos">Ingresos</a></li>
-            <li class="active">Ingreso Importaciones</li>
-          </ol>
+         
         <div class="box-header with-border">
           <h3 class="box-title">Ingreso Importaciones</h3>
 

@@ -57,7 +57,7 @@ class Almacen extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/tableExport.js');
 			/***********************************/
 
-			$this->datos['almacen']=$this->almacen_model->retornar_tabla("almacen");
+			$this->datos['almacen']=$this->almacen_model->retornar_tabla("almacenes");
 			//print_r($this->datos['almacen']);
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
