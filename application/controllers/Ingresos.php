@@ -76,7 +76,7 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_script']= $this->cabecera_script;
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/articulo.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresos.js');
 			
 			/*************TABLE***************/
 			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/css/bootstrap-table.css'); 
@@ -130,6 +130,22 @@ class Ingresos extends CI_Controller
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
+	}
+	public function revisarStd()
+	{
+		
+		if($this->input->is_ajax_request())
+        {
+        	$d = addslashes($this->security->xss_clean($this->input->post('d')));
+        	$id = addslashes($this->security->xss_clean($this->input->post('id')));
+			$res=$this->ingresos_model->editarestado_model($d,$id);
+			
+			echo json_encode("{estado:ok}");
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}	
 	}
 	
 	

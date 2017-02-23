@@ -11,10 +11,6 @@
           <div class="box-body">
              
 
-
-
-
-
             <script>
               $('select').select2();
             </script>

@@ -12,7 +12,7 @@
 
 <!-- REQUIRED JS SCRIPTS -->
 <!-- CARGANDO - MODAL ERROR CORRECTO -->
-<div class="espera hidden" id="cargando">
+<div class="espera" id="cargando" style="display: none">
     <div class="centro">
         <img src="<?php echo base_url("assets/imagenes/loading_2.gif") ?> ">
     </div>

@@ -1,6 +1,7 @@
 $(document).ready(function(){
 	retornarTablaIngresos()
 })
+var glob_tipoCambio=6.96
 function retornarTablaIngresos()
 {
     $.ajax({
@@ -44,11 +45,13 @@ function retornarTablaIngresos()
             {
                 field:'nfact',
                 title:"Factura",
+
                 sortable:true,
             },
             {
                 field:'total',
                 title:"Total",
+                align: 'right',
                 sortable:true,
             },
             {
@@ -112,6 +115,7 @@ window.operateEvents = {
 };
 function verdetalle(fila)
 {
+    console.log(fila)
 	id=fila.idIngresos
 	datos={id:id}
 	retornarajax(base_url("index.php/ingresos/mostrarDetalle"),datos,function(data)
@@ -119,15 +123,70 @@ function verdetalle(fila)
 		estado=validarresultado_ajax(data);
 		if(estado)
 		{	
-			console.log(data.respuesta)
+			
 			mostrarDetalle(data.respuesta);
-			var moneda=(fila.moneda==1)?"Bs. ":"Usd. "
-			$("#monedaingreso").html(moneda)
-			$("#totaldetalle").html(fila.total)
+			//console.log(glob_tipoCambio)
+            var sus=fila.total;
+            sus=sus.replace(',','')
+            sus=sus.replace(',','')
+            sus=sus.replace(',','')
+            sus=sus.replace(',','')
+            sus=sus.replace(',','')
+            sus=sus.replace(',','')
+            sus=sus/glob_tipoCambio;
+            sus=parseFloat(sus)
+            console.log(sus)
+            sus=sus.toLocaleString()
+
+            $("#almacen_imp").val(fila.almacen)
+            $("#tipomov_imp").val(fila.tipomov)
+            $("#fechamov_imp").val(fila.fechamov)
+            $("#moneda_imp").val(fila.monedasigla)
+            $("#nmov_imp").val(fila.n)
+            $("#proveedor_imp").val(fila.nombreproveedor)
+            $("#ordcomp_imp").val(fila.ordcomp)
+            $("#nfact_imp").val(fila.nfact)
+            $("#ningalm_imp").val(fila.ningalm)
+            /***pendienteaprobado***/
+            var boton="";
+            if(fila.estado=="0")
+                boton='<button type="button" class="btn btn-success" datastd="'+fila.idIngresos+'" id="btnaprobado">Aprobado</button>';               
+            else
+                boton='<button type="button" class="btn btn-danger" datastd="'+fila.idIngresos+'" id="btnpendiente">Pendiente</button>';
+                
+            $("#pendienteaprobado").html(boton)
+			$("#totalsusdetalle").val(sus)
+			$("#totalbsdetalle").val(fila.total)
 			$("#modalIgresoDetalle").modal("show");
 		}
 	})	
 }
+$(document).on("click","#btnaprobado",function(){
+    id=$(this).attr("datastd");
+    datos={d:1,id:id}
+    retornarajax(base_url("index.php/ingresos/revisarStd"),datos,function(data)
+    {
+        estado=validarresultado_ajax(data);
+        if(estado)
+        {   
+            retornarTablaIngresos()
+            $("#modalIgresoDetalle").modal("hide");
+        }
+    })  
+})
+$(document).on("click","#btnpendiente",function(){
+    id=$(this).attr("datastd");
+    datos={d:0,id:id}
+    retornarajax(base_url("index.php/ingresos/revisarStd"),datos,function(data)
+    {
+        estado=validarresultado_ajax(data);
+        if(estado)
+        {   
+            retornarTablaIngresos()
+            $("#modalIgresoDetalle").modal("hide");
+        }
+    })  
+})
 function mostrarDetalle(res)
 {
 	$("#tingresosdetalle").bootstrapTable('destroy');
@@ -153,17 +212,21 @@ function mostrarDetalle(res)
             {
                 field:'cantidad',
                 title:"Cantidad",
+                align: 'right',
                 sortable:true,
             },
             {
                 field:'punitario',
                 title:"Costo",
+                align: 'right',
                 sortable:true,
             },
             {
                 field:'total',
                 title:"total",
+                align: 'right',
                 sortable:true,
-            }]
+            },
+            ]
         });
 }
