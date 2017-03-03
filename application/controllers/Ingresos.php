@@ -8,18 +8,27 @@ class Ingresos extends CI_Controller
 		parent::__construct();
 		$this->load->helper('url');	
 		$this->load->model("ingresos_model");
+		$this->load->helper('date');
+		date_default_timezone_set("America/La_Paz");
 		$this->cabeceras_css=array(
 				base_url('assets/bootstrap/css/bootstrap.min.css'),
 				base_url("assets/fa/css/font-awesome.min.css"),
 				base_url("assets/dist/css/AdminLTE.min.css"),
 				base_url("assets/dist/css/skins/skin-blue.min.css"),
 				base_url("assets/hergo/estilos.css"),
+				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
 			);
 		$this->cabecera_script=array(
 				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
 				base_url('assets/bootstrap/js/bootstrap.min.js'),
 				base_url('assets/dist/js/app.min.js'),
 				base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
+				base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
+				base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
+				base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
+				base_url('assets/plugins/table-boot/js/tableExport.js'),
+				base_url('assets/plugins/table-boot/js/bootstrap-table-filter-control.js'),
+
 				
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
@@ -39,17 +48,13 @@ class Ingresos extends CI_Controller
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
+
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresos.js');
 			
-			/*************TABLE***************/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/css/bootstrap-table.css'); 
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-export.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/tableExport.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-filter-control.js');
+			
+			
 			
 
 			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();
@@ -63,7 +68,7 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/footer.php',$this->datos);						
 	}
 
-	public function Importaciones()
+	public function importaciones()
 	{
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
@@ -74,27 +79,24 @@ class Ingresos extends CI_Controller
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
+			/***************AUTOCOMPLETE************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresos.js');
 			
-			/*************TABLE***************/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/css/bootstrap-table.css'); 
-			$this->datos['cabeceras_css'][]=base_url('assets/select2/select2.min.css');
-			$this->datos['cabeceras_css'][]=base_url('assets/select2/select2-bootstrap.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-export.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/tableExport.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-filter-control.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/select2/select2.min.js');
+			
+			
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
 
+            $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
+            $this->datos['tingreso']=$this->ingresos_model->retornar_tabla("tmovimiento");
+		  	$this->datos['fecha']=date('Y-m-d');
+		  	$this->datos['proveedor']=$this->ingresos_model->retornar_tabla("provedores");
+		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
 
-		
-
-					
 			
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);

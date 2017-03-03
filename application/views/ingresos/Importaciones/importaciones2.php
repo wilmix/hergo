@@ -10,22 +10,24 @@
           <div class="row"> <!--PRIMERA FILA-->
              <div class=" col-xs-6 col-sm-6 col-md-3">
               <label>Almacen:</label>
-              <select class="form-control form-control-sm" id="almacen_imp" name="almacen_imp">
-                 <option selected>CENTRAL HERGO</option>
-                 <option>POTOSI </option>
+              <select class="form-control form-control-sm" id="almacen_imp" name="almacen_imp">                 
+                 <?php foreach ($almacen->result_array() as $fila): ?>
+                   <option id=<?= $fila['idalmacen'] ?>><?= $fila['almacen'] ?></option>
+                 <?php endforeach ?>
               </select>
              </div>  
              <div class=" col-xs-6 col-sm-6 col-md-3">
               <label for="moneda_imp">Tipo de Ingreso:</label>
               <select class="form-control form-control-sm" id="tipomov_imp" name="tipomov_imp">
-                 <option selected>Ingresos (compras)</option>
-                 <option>Traspaso DE Almacen </option>
+                 <?php foreach ($tingreso->result_array() as $fila): ?>
+                   <option id=<?= $fila['id'] ?>><?= $fila['tipomov'] ?></option>
+                 <?php endforeach ?>
               </select>
              </div>  
              <div class="col-xs-6 col-sm-6 col-md-2">
 
                 <label for="fechamov_imp" >Fecha:</label>
-                <input id="fechamov_imp" type="date" class="form-control form-control-sm" name="fechamov_imp" placeholder="Fecha" >
+                <input id="fechamov_imp" type="date" class="form-control form-control-sm" name="fechamov_imp" placeholder="Fecha" value="<?= $fecha  ?>">
              </div>
              <div class="col-xs-6 col-sm-6 col-md-2">
                 <label for="moneda_imp">Moneda:</label>
@@ -42,22 +44,15 @@
           <div class="row"> <!--SEGUNDA FILA-->
                  <div class="col-xs-12 col-lg-6 col-md-6">
                    <label >Proveedor:</label>
-                   <select class="form-control" id="proveedor_imp" name="proveedor_imp">
-                     <option>3 M</option>
-                     <option>AIRGAS SOUTH INC</option>
-                     <option>CIENSA LTDA.</option>
-                     <option>COLMENA</option>
-                     <option>COMERCIAL DE HERRAMIENTAS PALESTINA</option>
-                     <option>COMERCIAL GABRIEL</option>
-                     <option>COMERCIAL OERLIKON</option>
-                     <option>CONFECCIONES MURILLO</option>
-                     <option>COSIM</option>
-                     <option>DINMEC</option>
-                     <option>DISTRIBUIDORA INDUSTRIAL</option>
-                     <option>DREAMS</option>
-                     <option>EBENEZER</option>
-                  </select> 
-                 </div>
+                   <!--<select class="form-control" id="proveedor_imp" name="proveedor_imp">-->
+                     <select class="form-control selectpicker" data-size="5" data-live-search="true">
+                      <?php foreach ($proveedor->result_array() as $fila): ?>
+                       <option id=<?= $fila['idproveedor'] ?>><?= $fila['nombreproveedor'] ?></option>
+                     <?php endforeach ?>
+                    </select>
+
+
+                 </div>                 
                  <div class="col-xs-4 col-sm-4 col-md-2">
                        <label>Orden de Compra:</label>
                        <input id="ordcomp_imp" type="text" class="form-control form-control-sm" name="ordcomp_imp" placeholder="Orden de Compra" >
@@ -71,14 +66,16 @@
                        <input id="ningalm_imp" type="text" class="form-control form-control-sm" name="ningalm_imp" placeholder="# Ingreso" >
                  </div>
               </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
+
               <hr>
               <div class="row"> <!--TERCERA FILA-->
                 <div class="col-xs-12 col-md-2">
                     <!--seleccionar codigo de articulo de la base de datos-->
                    <label for="articulo_imp">Codigo:</label>
-                   <select   class="form-control form-control-sm" id="articulo_imp" name="articulo_imp">
-                      <option>CL01234</option> 
-                      <option>AV1234</option>
+                   <select  class="form-control selectpicker" data-size="5" data-live-search="true" id="articulo_imp" name="articulo_imp" >
+                      <?php foreach ($articulo->result_array() as $fila): ?>
+                       <option id=<?= $fila['idArticulos'] ?> descripcion="<?= $fila['Descripcion'] ?>"><?= $fila['CodigoArticulo'] ?></option>
+                     <?php endforeach ?>
                    </select> 
                 </div>
                 <div class="col-xs-12 col-md-4">
