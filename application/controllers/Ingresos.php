@@ -63,7 +63,7 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/footer.php',$this->datos);						
 	}
 
-	public function Importaciones()
+	public function importaciones()
 	{
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
@@ -87,7 +87,7 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-export.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/tableExport.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-filter-control.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/select2/select2.min.js');
+			
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
 
