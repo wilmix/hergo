@@ -50,7 +50,7 @@
                        <option id=<?= $fila['idproveedor'] ?>><?= $fila['nombreproveedor'] ?></option>
                      <?php endforeach ?>
                     </select>
-
+                    <!-- Busqueda con select cambiar a autocomplete-->
 
                  </div>                 
                  <div class="col-xs-4 col-sm-4 col-md-2">
