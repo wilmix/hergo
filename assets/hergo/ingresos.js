@@ -1,6 +1,9 @@
 $(document).ready(function(){
 	retornarTablaIngresos()
+
 })
+
+
 var glob_tipoCambio=6.96
 function retornarTablaIngresos()
 {
