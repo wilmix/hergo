@@ -69,4 +69,10 @@ class Ingresos_model extends CI_Model
 			$sql="UPDATE articulos SET CodigoArticulo='$codigo', Descripcion='$descripcion', NumParte='$parte', idUnidad='$unidad', idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito=$autoriza, ProductoServicio='$proser', EnUso='$uso', detalleLargo='???', Autor='$autor', Fecha='$fecha',Imagen='$nom_imagen'  WHERE idArticulos=$id";
 		$query=$this->db->query($sql);		
 	}*/
+    public function retornarArticulosBusqueda()
+    {        
+		$sql="SELECT CodigoArticulo, Descripcion from articulos";		
+		$query=$this->db->query($sql);		
+		return $query;
+    }
 }

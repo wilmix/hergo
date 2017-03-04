@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	retornarTablaIngresos()
-
+    cargarArticulosAux()
 })
 
 
@@ -233,3 +233,80 @@ function mostrarDetalle(res)
             ]
         });
 }
+var availableTags = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"
+    ];
+var glob_articulos="";
+function cargarArticulosAux()
+{
+    $.ajax({
+         url: base_url("index.php/ingresos/retornararticulos"),
+          dataType: "json",
+          success: function(data) {
+              //de objeto a array
+           
+            glob_articulos=data; 
+            console.log(glob_articulos)
+          }
+      });
+}
+$(document).on("keyup","#articulo_imp",function(){
+  //  console.log(glob_articulos)
+})
+ $( function() {
+
+    $("#articulo_imp").autocomplete(
+    {      
+     // minLength: 2,
+      source: function (request, response) {
+           response($.map(glob_articulos, function (value, key) {
+                return {
+                    label: value.CodigoArticulo,
+                    value: value.Descripcion
+                }
+            }));
+        
+    }, 
+     /* focus: function( event, ui ) {
+          //$(".solicitanuevo").val( ui.item.nombre );//si se instancio como indice un valor en este caso array("nombre"=> "valor")
+          $(".solicitanuevo").val( ui.item[0] );
+         // carregarDados();
+          return false;
+      },*/
+      select: function( event, ui ) {
+          //$(".solicitanuevo").val( ui.item.nombre );
+        //  console.log(ui)
+          $("#articulo_imp").val( ui.item.label);
+          $("#Descripcion_imp").val( ui.item.value);
+          
+          return false;
+      }
+    })
+    /*.autocomplete( "instance" )._renderItem = function( ul, item ) {
+      
+      return $( "<li>" )
+        .append( "<a><div>" + item.CodigoArticulo + " </div><div class='mailage'>" + item.Descripcion + "</div></a>" )
+        .appendTo( ul );
+    };*/
+ });

@@ -72,11 +72,12 @@
                 <div class="col-xs-12 col-md-2">
                     <!--seleccionar codigo de articulo de la base de datos-->
                    <label for="articulo_imp">Codigo:</label>
-                   <select  class="form-control selectpicker" data-size="5" data-live-search="true" id="articulo_imp" name="articulo_imp" >
-                      <?php foreach ($articulo->result_array() as $fila): ?>
-                       <option id=<?= $fila['idArticulos'] ?> descripcion="<?= $fila['Descripcion'] ?>"><?= $fila['CodigoArticulo'] ?></option>
-                     <?php endforeach ?>
-                   </select> 
+                   <!--<select  class="form-control selectpicker" data-size="5" data-live-search="true" id="articulo_imp" name="articulo_imp" >
+                      <?php //foreach ($articulo->result_array() as $fila): ?>
+                       <option id=<?php //$fila['idArticulos'] ?> descripcion="<?php //$fila['Descripcion'] ?>"><?php //$fila['CodigoArticulo'] ?></option>
+                     <?php //endforeach ?>
+                   </select> -->
+                   <input class="form-control form-control-sm" type="text" id="articulo_imp" name="articulo_imp"/>  
                 </div>
                 <div class="col-xs-12 col-md-4">
                     <!--mostrar descripcion de articulo segun codigo-->

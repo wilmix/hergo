@@ -48,6 +48,9 @@ class Ingresos extends CI_Controller
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
+            /*************AUTOCOMPLETE**********/
+            $this->datos['cabeceras_css'][]=base_url('assets/hergo/plugins/jQueryUI/jquery-ui.min.css');
+            $this->datos['cabeceras_script'][]=base_url('assets/hergo/plugins/jQueryUI/jquery-ui.min.js');
 
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
@@ -79,26 +82,17 @@ class Ingresos extends CI_Controller
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
-			/***************AUTOCOMPLETE************/
+			/***************SELECT***********/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
 			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
+            /*************AUTOCOMPLETE**********/
+            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresos.js');
 			
-<<<<<<< HEAD
-			/*************TABLE***************/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/css/bootstrap-table.css'); 
-			$this->datos['cabeceras_css'][]=base_url('assets/select2/select2.min.css');
-			$this->datos['cabeceras_css'][]=base_url('assets/select2/select2-bootstrap.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-export.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/tableExport.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-filter-control.js');
-=======
-			
->>>>>>> origin/master
+
 			
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
@@ -161,6 +155,19 @@ class Ingresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}	
 	}
+    public function retornararticulos()
+    {
+        if($this->input->is_ajax_request())
+        {
+        	$dato=$this->ingresos_model->retornarArticulosBusqueda();
+           // $datos2=datos->result_array();			
+			echo json_encode($dato->result_array());
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}	
+    }
 	
 	
 }
