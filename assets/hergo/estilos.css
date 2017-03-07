@@ -39,14 +39,23 @@ img.maximizada
 }
 .espera
 {
-    display: none;
+    /*display: none;
     width: 100%;
     height: 100%;
     position:absolute;
     background-color: rgba(218,218,218,0.87);
    opacity: .5;
     top:0;
-    z-index: 9999;
+    z-index: 9999;*/
+
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    /*background-color: #000;*/
+     background-color: rgba(218,218,218,0.87);
      
 }
 .centro
@@ -64,4 +73,10 @@ img.maximizada
 }
 .modal-95 {
     width: 90% !important;
+}
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+  
+    overflow-x: hidden;
 }

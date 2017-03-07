@@ -109,7 +109,7 @@ function retornarajax(url,datos,callback)
         {
             $(".mensaje_error").html(resultado.respuesta);
             $("#modal_error").modal("show");
-            setTimeout(function(){$("#modal_error").modal("hide");},5000)
+            //setTimeout(function(){$("#modal_error").modal("hide");},5000)
             return false;
         }
     }

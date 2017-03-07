@@ -31,6 +31,7 @@ class Ingresos_model extends CI_Model
 			ON a.idalmacen=i.almacen
 			INNER JOIN moneda m
 			ON i.moneda=m.id
+			ORDER BY i.idIngresos DESC
 ";
 		
 		$query=$this->db->query($sql);		
@@ -69,10 +70,64 @@ class Ingresos_model extends CI_Model
 			$sql="UPDATE articulos SET CodigoArticulo='$codigo', Descripcion='$descripcion', NumParte='$parte', idUnidad='$unidad', idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito=$autoriza, ProductoServicio='$proser', EnUso='$uso', detalleLargo='???', Autor='$autor', Fecha='$fecha',Imagen='$nom_imagen'  WHERE idArticulos=$id";
 		$query=$this->db->query($sql);		
 	}*/
-    public function retornarArticulosBusqueda()
+    public function retornarArticulosBusqueda($b)
     {        
-		$sql="SELECT CodigoArticulo, Descripcion from articulos";		
+		$sql="SELECT CodigoArticulo, Descripcion from articulos where CodigoArticulo like '$b%' or Descripcion like '$b%'";
+		//die($sql);
 		$query=$this->db->query($sql);		
 		return $query;
+    }
+    public function guardarmovimiento_model($datos)
+    {  
+		$almacen_imp=$datos['almacen_imp'];
+    	$tipomov_imp=$datos['tipomov_imp'];
+    	$fechamov_imp=$datos['fechamov_imp'];
+    	$moneda_imp=$datos['moneda_imp'];
+    	$proveedor_imp=$datos['proveedor_imp'];
+    	$ordcomp_imp=$datos['ordcomp_imp'];
+    	$nfact_imp=$datos['nfact_imp'];
+    	$ningalm_imp=$datos['ningalm_imp'];
+    	$obs_imp=$datos['obs_imp'];
+
+    	$autor=$this->session->userdata('user_id');
+		$fecha = date('Y-m-d H:i:s');
+
+    	$sql="INSERT INTO ingresos (almacen,tipomov,nmov,fechamov,proveedor,moneda,nfact,ningalm,ordcomp,obs,fecha,autor) VALUES('$almacen_imp','$tipomov_imp','0','$fechamov_imp','$proveedor_imp','$moneda_imp','$nfact_imp','$ningalm_imp','$ordcomp_imp','$obs_imp','$fecha','$autor')";
+    	$query=$this->db->query($sql);
+    	$idIngreso=$this->db->insert_id();
+    	if($idIngreso>0)/**Si se guardo correctamente se guarda la tabla*/
+    	{
+
+    		foreach ($datos['tabla'] as $fila) {
+    			//print_r($fila);
+    			$idArticulo=$this->retornar_datosArticulo($fila[0]);
+    			if($idArticulo)
+    			{
+    				$sql="INSERT INTO ingdetalle(idIngreso,nmov,articulo,moneda,cantidad,punitario,total) VALUES('$idIngreso','0','$idArticulo','1','$fila[2]','$fila[3]','$fila[4]')";
+    				$this->db->query($sql);
+    			}
+    		}
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    private function retornar_datosArticulo($dato)
+    {
+    	$sql="SELECT idArticulos from articulos where CodigoArticulo='$dato' LIMIT 1";
+    	$query=$this->db->query($sql);
+    	if($query->num_rows()>0)
+    	{
+    		$fila=$query->row();
+    		return $fila->idArticulos;
+    	}
+    	else
+    	{
+
+    		return false;
+    	}
+
     }
 }

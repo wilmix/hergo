@@ -1,10 +1,10 @@
 $(document).ready(function(){
-	retornarTablaIngresos()
-    cargarArticulosAux()
+    retornarTablaIngresos()
 })
 
 
-var glob_tipoCambio=6.96
+var glob_tipoCambio=6.96;
+var glob_agregar=false;
 function retornarTablaIngresos()
 {
     $.ajax({
@@ -233,60 +233,30 @@ function mostrarDetalle(res)
             ]
         });
 }
-var availableTags = [
-      "ActionScript",
-      "AppleScript",
-      "Asp",
-      "BASIC",
-      "C",
-      "C++",
-      "Clojure",
-      "COBOL",
-      "ColdFusion",
-      "Erlang",
-      "Fortran",
-      "Groovy",
-      "Haskell",
-      "Java",
-      "JavaScript",
-      "Lisp",
-      "Perl",
-      "PHP",
-      "Python",
-      "Ruby",
-      "Scala",
-      "Scheme"
-    ];
-var glob_articulos="";
-function cargarArticulosAux()
-{
-    $.ajax({
-         url: base_url("index.php/ingresos/retornararticulos"),
-          dataType: "json",
-          success: function(data) {
-              //de objeto a array
-           
-            glob_articulos=data; 
-            console.log(glob_articulos)
-          }
-      });
-}
-$(document).on("keyup","#articulo_imp",function(){
-  //  console.log(glob_articulos)
-})
+
+
  $( function() {
 
     $("#articulo_imp").autocomplete(
     {      
-     // minLength: 2,
-      source: function (request, response) {
-           response($.map(glob_articulos, function (value, key) {
-                return {
-                    label: value.CodigoArticulo,
-                    value: value.Descripcion
-                }
-            }));
-        
+      minLength: 2,
+      source: function (request, response) {        
+        $("#cargandocodigo").show(150)
+        $("#Descripcion_imp").val('');
+        $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+        glob_agregar=false;
+        $.ajax({
+            url: base_url("index.php/ingresos/retornararticulos"),
+            dataType: "json",
+            data: {
+                b: request.term
+            },
+            success: function(data) {
+               response(data);    
+               $("#cargandocodigo").hide(150)
+              
+            }
+          });        
     }, 
      /* focus: function( event, ui ) {
           //$(".solicitanuevo").val( ui.item.nombre );//si se instancio como indice un valor en este caso array("nombre"=> "valor")
@@ -295,18 +265,143 @@ $(document).on("keyup","#articulo_imp",function(){
           return false;
       },*/
       select: function( event, ui ) {
-          //$(".solicitanuevo").val( ui.item.nombre );
-        //  console.log(ui)
-          $("#articulo_imp").val( ui.item.label);
-          $("#Descripcion_imp").val( ui.item.value);
-          
+      
+          $("#articulo_imp").val( ui.item.CodigoArticulo);
+          $("#Descripcion_imp").val( ui.item.Descripcion);
+          console.log("sdsd")
+          $("#codigocorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
+          glob_agregar=true;
           return false;
       }
     })
-    /*.autocomplete( "instance" )._renderItem = function( ul, item ) {
+    .autocomplete( "instance" )._renderItem = function( ul, item ) {
       
       return $( "<li>" )
-        .append( "<a><div>" + item.CodigoArticulo + " </div><div class='mailage'>" + item.Descripcion + "</div></a>" )
+        .append( "<a><div>" + item.CodigoArticulo + " </div><div style='color:#615f5f; font-size:10px'>" + item.Descripcion + "</div></a>" )
         .appendTo( ul );
-    };*/
+    };
  });
+$(document).on("click","#agregar_articulo",function(){
+    if(glob_agregar)
+    {
+        agregarArticulo();
+    }
+})
+$(document).on("click",".eliminarArticulo",function(){    
+    $(this).parents("tr").remove()
+    calcularTotal()
+})
+function limpiarArticulo()
+{
+    $("#articulo_imp").val("")
+    $("#Descripcion_imp").val("")
+    $("#cantidad_imp").val("")
+    $("#punitario_imp").val("")
+    glob_agregar=false;
+    $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+}
+function limpiarCabecera()
+{
+    $("#ordcomp_imp").val("")
+    $("#nfact_imp").val("")
+    $("#ningalm_imp").val("")
+    $("#obs_imp").val("")
+    $("#totalacostosus").val("")
+    $("#totalacostobs").val("")
+   
+}
+function limpiarTabla()
+{
+    $("#tbodyarticulos").find("tr").remove();
+}
+function calcularTotal()
+{
+    var totalCosto=0;
+    var totales=$(".totalCosto").toArray();
+    var total=0;
+    var dato=0;
+    $.each(totales,function(index, value){
+        dato=$(value).html()
+        total+=(dato=="")?0:parseFloat(dato)
+    })
+    $("#totalacostobs").val(total)
+    var totalDolares=total/glob_tipoCambio;
+    $("#totalacostosus").val(totalDolares.toFixed(2))
+
+}
+function agregarArticulo()
+{
+    var codigo=$("#articulo_imp").val()
+    var descripcion=$("#Descripcion_imp").val()
+    var cant=$("#cantidad_imp").val()
+    var costo=$("#punitario_imp").val()
+    var cant=(cant=="")?0:cant;
+    var costo=(costo=="")?0:costo;
+    var total=cant*costo;
+    var articulo='<tr>'+
+      '<td><label>'+codigo+'</label></td>'+
+      '<td><label>'+descripcion+'</label></td>'+
+      '<td><label>'+cant+'</label></td>'+
+      '<td><label>'+costo+'</label></td>'+
+      '<td><label class="totalCosto">'+total+'</label></td>'+
+      '<td class="text-center"><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align">'+
+      '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'+
+    '</td>';
+    $("#tbodyarticulos").append(articulo)
+    calcularTotal()
+    limpiarArticulo();
+}
+function guardarmovimiento()
+{     
+    var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
+    var tablaaux=tablatoarray();
+    if(tablaaux.length>0)
+    {
+        var tabla=JSON.stringify(tablaaux);
+
+        valuesToSubmit+="&tabla="+tabla;    
+        retornarajax(base_url("index.php/ingresos/guardarmovimiento"),valuesToSubmit,function(data)
+        {
+            estado=validarresultado_ajax(data);
+            if(estado)
+            {               
+                if(data.respuesta)
+                {
+                    
+                    $("#modalIgresoDetalle").modal("hide");
+                    limpiarArticulo();
+                    limpiarCabecera();
+                    limpiarTabla();
+                    $(".mensaje_ok").html("Datos almacenados correctamente");
+                    $("#modal_ok").modal("show");
+                }
+                else
+                {
+                    $(".mensaje_error").html("Error al almacenar los datos, intente nuevamente");
+                    $("#modal_error").modal("show");
+                }
+                
+            }
+        })      
+    }
+    else
+    {
+        alert("no se tiene datos en la tabla para guardar")
+    }
+}
+function tablatoarray()
+{
+    var tabla=new Array()
+    var filas=$("#tbodyarticulos").find("tr").toArray()
+    var datos=""
+    $.each(filas,function(index,value){
+        datos=$(value).find("label").toArray()
+        tabla.push(Array($(datos[0]).html(),$(datos[1]).html(),$(datos[2]).html(),$(datos[3]).html(),$(datos[4]).html()))
+        //console.log(datos);
+    })
+    return(tabla)
+    //console.log(filas)
+}
+$(document).on("click","#guardarMovimiento",function(){
+    guardarmovimiento();
+})
