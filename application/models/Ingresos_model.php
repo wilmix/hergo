@@ -15,6 +15,13 @@ class Ingresos_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+    public function retornar_tablaMovimiento($tipo)
+    {
+        $sql="SELECT * from tmovimiento where operacion='$tipo'";
+		
+		$query=$this->db->query($sql);		
+		return $query;
+    }
 	public function mostrarIngresos()
 	{
 		
@@ -72,7 +79,11 @@ class Ingresos_model extends CI_Model
 	}*/
     public function retornarArticulosBusqueda($b)
     {        
-		$sql="SELECT CodigoArticulo, Descripcion from articulos where CodigoArticulo like '$b%' or Descripcion like '$b%'";
+		$sql="SELECT a.CodigoArticulo, a.Descripcion, u.Unidad
+        FROM articulos a
+        INNER JOIN unidad u
+        ON a.idUnidad=u.idUnidad
+        where CodigoArticulo like '$b%' or Descripcion like '$b%'";
 		//die($sql);
 		$query=$this->db->query($sql);		
 		return $query;

@@ -82,23 +82,23 @@ class Ingresos extends CI_Controller
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
-			/***************SELECT***********/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
             /*************AUTOCOMPLETE**********/
             $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
+			/***************SELECT***********/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
+           
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresos.js');
 			
-
 			
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
 
             $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
-            $this->datos['tingreso']=$this->ingresos_model->retornar_tabla("tmovimiento");
+            $this->datos['tingreso']=$this->ingresos_model->retornar_tablaMovimiento("+");
 		  	$this->datos['fecha']=date('Y-m-d');
 		  	$this->datos['proveedor']=$this->ingresos_model->retornar_tabla("provedores");
 		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");

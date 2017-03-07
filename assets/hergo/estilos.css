@@ -80,3 +80,7 @@ img.maximizada
   
     overflow-x: hidden;
 }
+.ui-tooltip
+{
+    display: none!important;
+}

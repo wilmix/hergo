@@ -52,6 +52,7 @@
                          <option value=<?= $fila['idproveedor'] ?>><?= $fila['nombreproveedor'] ?></option>
                        <?php endforeach ?>
                       </select>
+                     
                       <!-- Busqueda con select cambiar a autocomplete-->
 
                    </div>                 
@@ -138,9 +139,9 @@
                     <tr>
                       <th>Código</th>
                       <th>Artículo</th>
-                      <th>Cantidad</th>
-                      <th>Costo</th>
-                      <th>Total</th>
+                      <th class="text-right">Cantidad</th>
+                      <th class="text-right">Costo</th>
+                      <th class="text-right">Total</th>
                       <th>&nbsp;</th>
                     </tr>
                   </thead>
@@ -160,10 +161,10 @@
                 <div class = "input-group col-md-12 col-xs-12">
                   <span class = "input-group-addon">$</span>
                   <!--mostrar el total de dolares-->
-                  <input type = "text" class="form-control form-control-sm" placeholder = "" id="totalacostosus">
+                  <input type = "text" class="form-control form-control-sm text-right" placeholder = "" id="totalacostosus">
                   <span class = "input-group-addon" >Bs</span>
                   <!--mostrar el total bolivivanos-->
-                  <input type = "text" class="form-control form-control-sm" id="totalacostobs">
+                  <input type = "text" class="form-control form-control-sm text-right" id="totalacostobs">
                  </div>
               </div>
             </div><!--row-->
@@ -173,9 +174,4 @@
   </div> <!-- /.class="col-xs-12" -->
 </div> <!-- /.class="row" -->
 
-
-<!-- select2 
-<script type="text/javascript">
-  $('select').select2();
-</script>-->
 

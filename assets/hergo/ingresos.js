@@ -268,7 +268,7 @@ function mostrarDetalle(res)
       
           $("#articulo_imp").val( ui.item.CodigoArticulo);
           $("#Descripcion_imp").val( ui.item.Descripcion);
-          console.log("sdsd")
+          $("#unidad_imp").val(ui.item.Unidad);
           $("#codigocorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
           glob_agregar=true;
           return false;
@@ -324,6 +324,7 @@ function calcularTotal()
         dato=$(value).html()
         total+=(dato=="")?0:parseFloat(dato)
     })
+    total=total.toFixed(2);
     $("#totalacostobs").val(total)
     var totalDolares=total/glob_tipoCambio;
     $("#totalacostosus").val(totalDolares.toFixed(2))
@@ -337,13 +338,15 @@ function agregarArticulo()
     var costo=$("#punitario_imp").val()
     var cant=(cant=="")?0:cant;
     var costo=(costo=="")?0:costo;
+    //costo=costo.toFixed(2);
     var total=cant*costo;
+    total=total.toFixed(2);
     var articulo='<tr>'+
       '<td><label>'+codigo+'</label></td>'+
       '<td><label>'+descripcion+'</label></td>'+
-      '<td><label>'+cant+'</label></td>'+
-      '<td><label>'+costo+'</label></td>'+
-      '<td><label class="totalCosto">'+total+'</label></td>'+
+      '<td class="text-right"><label>'+cant+'</label></td>'+
+      '<td class="text-right"><label>'+costo+'</label></td>'+
+      '<td class="text-right"><label class="totalCosto">'+total+'</label></td>'+
       '<td class="text-center"><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align">'+
       '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'+
     '</td>';
