@@ -4,13 +4,12 @@ class IngresoReporte extends CI_Controller {
  
   public function index()
   {
-    // Se carga el modelo alumno
-    $this->load->model('ingresopdf_model');    //********cambiar nombre de modelo
+    $this->load->model('Ingresos_model');    //********cambiar nombre de modelo
     // Se carga la libreria fpdf
     $this->load->library('ingresopdf/pdf');
  
     // Se obtienen los alumnos de la base de datos
-    $lineas = $this->ingresopdf_model->mostrarIngresos();
+    $lineas = $this->Ingresos_model->mostrarIngresos();
  
     // Creacion del PDF
  
@@ -24,10 +23,13 @@ class IngresoReporte extends CI_Controller {
     // Define el alias para el número de página que se imprimirá en el pie
     $this->pdf->AliasNbPages();
 
- 
+   /* echo "<pre>";
+    print_r($lineas->result_array());
+    echo "</pre>";
+    die();*/
 
       ///contenido de tabla detalle
-      foreach ($lineas as $linea) {
+      foreach ($lineas->result_array() as $fila) {
         $this->pdf->SetX(10);
         $this->pdf->SetFont('Arial','',7);
         $this->pdf->Cell(15,5,'TM0001',0,0,'C',0);  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO

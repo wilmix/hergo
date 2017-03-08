@@ -6,86 +6,95 @@
     class Pdf extends FPDF {
         public function __construct() {
             parent::__construct();
+           
         }
 
         //CellFitSpace( ) 
         // El encabezado del PDF
-        public function Header(){
-      $this->Image('images/hergo.jpeg', 10, 13, 45 );
-      $this->SetFont('Arial','B',18);
-      $this->Cell(85);
-      $this->Cell(30,10, 'NOTA DE INGRESOS',0,0,'C');
-      $this->Ln(8);
+      public function Header()
+      {
+        $ci = & get_instance();
+        $ci->load->model("Ingresos_model");
+        $lineas = $ci->Ingresos_model->mostrarIngresos();
+        $fila=$lineas->row(30);
 
-           //****TITULO*****
-      //TIPO DE INGRESO
-      $this->SetFont('Arial','BU',15);
-      $this->Cell(85);
-      $this->Cell(30,10, 'COMPRAS LOCALES',0,0,'C');
-      $this->Ln(5);
+       // return $fila->idArticulos;
+        $this->Image('images/hergo.jpeg', 10, 13, 45 );
+        $this->SetFont('Arial','B',18);
+        $this->Cell(85);
+        $this->Cell(30,10, 'NOTA DE INGRESOS',0,0,'C');
+        $this->Ln(8);
 
-      
-      //fecha de movimiento
-      $this->SetY(8);
-      $this->SetX(160);
-      $this->Cell(10);
-      $this->SetFont('Times','i',9);
-      $this->Cell(30, 10, 'Fecha Mov: '.date('d-m-Y').'', 0);
+             //****TITULO*****
+        //TIPO DE INGRESO
+        $this->SetFont('Arial','BU',15);
+        $this->Cell(85);
+        $this->Cell(30,10, 'COMPRAS LOCALES',0,0,'C');
+        $this->Ln(5);
 
-      //tipo de moneda
-      $this->SetY(13);
-      $this->SetX(160);
-      $this->Cell(10);
-      $this->SetFont('Times','i',9);
-      $this->Cell(30, 10, 'Moneda: Bolivianos', 0);
+        
+        //fecha de movimiento
+        $this->SetY(8);
+        $this->SetX(160);
+        $this->Cell(10);
+        $this->SetFont('Times','i',9);
+        $this->Cell(30, 10, 'Fecha Mov: '.$fila->fechamov.'', 0);
 
-      // n movimiento
-      $this->SetY(18);
-      $this->SetX(160);
-      $this->Cell(10);
-      $this->SetFont('Times','i',9);
-      $this->Cell(30, 10, 'Nro Movimiento: ##', 0);
+        //tipo de moneda
+        $this->SetY(13);
+        $this->SetX(160);
+        $this->Cell(10);
+        $this->SetFont('Times','i',9);
+        $moneda=($fila->moneda==1)?"Bolivianos":"Dolares";
+        $this->Cell(30, 10, 'Moneda: '.$moneda, 0);
 
-      //****ENCABEZADO****
-      $this->Ln(10);
-      $this->SetX(10);
-      $this->SetFont('Arial','',9);
-      // almacen
-      $this->Cell(30,10, 'Almacen: CENTRAL HERGO',0,0,'');
-      $this->Cell(40);
-      //proveedor
-      $this->Cell(30,10, 'Proveedor: HANSA',0,0,'');
-      $this->Cell(50);
-      //factura
-      $this->Cell(30,10, 'Factura: 654',0,0,'');
-      $this->Ln(5);
-      $this->SetX(10);
-      $this->SetFont('Arial','',9);
-      //tipo movimiento
-      $this->Cell(30,10, 'Tipo Movimiento: COMPRAS LOCALES',0,0,'');
-      $this->Cell(40);
-      // N° ingreso
-      $this->Cell(30,10, 'Nro Ingreso: 684',0,0,'');
-      $this->Cell(50);
-      // Orden de compra
-      $this->Cell(30,10, 'Orden Compra: 6445',0,0,'');
-      $this->Ln(10);
+        // n movimiento
+        $this->SetY(18);
+        $this->SetX(160);
+        $this->Cell(10);
+        $this->SetFont('Times','i',9);
+        $this->Cell(30, 10, 'Nro Movimiento: '.$fila->n, 0);
 
-       //ENCABEZADO TABLA
-      $this->SetX(10);
-      $this->SetFillColor(232,232,232);
-      $this->SetFont('Arial','B',7); 
-      $this->Cell(15,5,'CODIGO',0,0,'C',1);  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
-      $this->Cell(70,5,'ARTICULO',0,0,'C',1);
-      $this->Cell(10,5,'UNIDAD',0,0,'C',1);
-      $this->Cell(20,5,'CANTIDAD',0,0,'R',1);
-      $this->Cell(20,5,'PRECIO $',0,0,'R',1);
-      $this->Cell(20,5,'PRECIO Bs',0,0,'R',1);
-      $this->Cell(20,5,'TOTAL $',0,0,'R',1);
-      $this->Cell(20,5,'TOTAL Bs',0,0,'R',1);
-      $this->Ln(5);
+        //****ENCABEZADO****
+        $this->Ln(10);
+        $this->SetX(10);
+        $this->SetFont('Arial','',9);
+        // almacen
+        $this->Cell(30,10, 'Almacen: '.$fila->almacen,0,0,'');
+        $this->Cell(40);
+        //proveedor
+        $this->Cell(30,10, 'Proveedor: '.$fila->nombreproveedor,0,0,'');
+        $this->Cell(50);
+        //factura
+        $this->Cell(30,10, 'Factura: '.$fila->nfact,0,0,'');
+        $this->Ln(5);
+        $this->SetX(10);
+        $this->SetFont('Arial','',9);
+        //tipo movimiento
+        $this->Cell(30,10, 'Tipo Movimiento: '.$fila->tipomov,0,0,'');
+        $this->Cell(40);
+        // N° ingreso
+        $this->Cell(30,10, 'Nro Ingreso: '.$fila->ningalm,0,0,'');
+        $this->Cell(50);
+        // Orden de compra
+        $this->Cell(30,10, 'Orden Compra: '.$fila->ordcomp,0,0,'');
+        $this->Ln(10);
 
-      
+         //ENCABEZADO TABLA
+        $this->SetX(10);
+        $this->SetFillColor(232,232,232);
+        $this->SetFont('Arial','B',7); 
+        $this->Cell(15,5,'CODIGO',0,0,'C',1);  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
+        $this->Cell(70,5,'ARTICULO',0,0,'C',1);
+        $this->Cell(10,5,'UNIDAD',0,0,'C',1);
+        $this->Cell(20,5,'CANTIDAD',0,0,'R',1);
+        $this->Cell(20,5,'PRECIO $',0,0,'R',1);
+        $this->Cell(20,5,'PRECIO Bs',0,0,'R',1);
+        $this->Cell(20,5,'TOTAL $',0,0,'R',1);
+        $this->Cell(20,5,'TOTAL Bs',0,0,'R',1);
+        $this->Ln(5);
+
+        
 
 
 

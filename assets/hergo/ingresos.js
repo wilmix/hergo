@@ -324,10 +324,17 @@ function calcularTotal()
         dato=$(value).html()
         total+=(dato=="")?0:parseFloat(dato)
     })
-    total=total.toFixed(2);
-    $("#totalacostobs").val(total)
+    //total=Math.round(total * 100) / 100
+    
     var totalDolares=total/glob_tipoCambio;
-    $("#totalacostosus").val(totalDolares.toFixed(2))
+    console.log(totalDolares)
+    //totalDolares=Math.round(totalDolares * 100) / 100
+    total=total.toLocaleString()
+    $("#totalacostobs").val(total)
+
+    totalDolares=totalDolares.toLocaleString()
+    $("#totalacostosus").val(totalDolares)
+
 
 }
 function agregarArticulo()
@@ -407,4 +414,9 @@ function tablatoarray()
 }
 $(document).on("click","#guardarMovimiento",function(){
     guardarmovimiento();
+})
+$(document).on("click","#cancelarMovimiento",function(){
+    limpiarArticulo();
+    limpiarCabecera();
+    limpiarTabla();
 })

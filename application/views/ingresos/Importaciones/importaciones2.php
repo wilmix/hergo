@@ -154,7 +154,7 @@
               <div class="form-group row">
               <div class="col-xs-12 col-md-6">
                 <button type="button" class="btn btn-primary" id="guardarMovimiento">Grabar Movimiento</button>
-                <button type="button" class="btn btn-danger">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="cancelarMovimiento">Cancelar</button>
                 
               </div>
               <div class="col-md-6 col-xs-12">
