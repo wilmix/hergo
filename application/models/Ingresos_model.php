@@ -22,10 +22,11 @@ class Ingresos_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
     }
-	public function mostrarIngresos()
+	public function mostrarIngresos($id=null)
 	{
-		
-		$sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, DATE_FORMAT(i.fechamov,'%d/%m/%Y') fechamov, p.nombreproveedor, i.nfact,
+		if($id==null) //no tiene id de entrada
+        {                
+		  $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, DATE_FORMAT(i.fechamov,'%d/%m/%Y') fechamov, p.nombreproveedor, i.nfact,
 				(SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.last_name,' ', u.first_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm
 			FROM ingresos i
 			INNER JOIN tmovimiento  t
@@ -38,8 +39,29 @@ class Ingresos_model extends CI_Model
 			ON a.idalmacen=i.almacen
 			INNER JOIN moneda m
 			ON i.moneda=m.id
+			ORDER BY i.idIngresos DESC            
+            ";
+        }
+        else
+        {
+            $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, DATE_FORMAT(i.fechamov,'%d/%m/%Y') fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
+				(SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.last_name,' ', u.first_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs
+			FROM ingresos i
+			INNER JOIN tmovimiento  t
+			ON i.tipomov = t.id
+			INNER JOIN provedores p
+			ON i.proveedor=p.idproveedor
+			INNER JOIN users u
+			ON u.id=i.autor
+			INNER JOIN almacenes a
+			ON a.idalmacen=i.almacen
+			INNER JOIN moneda m
+			ON i.moneda=m.id
+            WHERE idIngresos=$id
 			ORDER BY i.idIngresos DESC
-";
+            LIMIT 1
+            ";
+        }
 		
 		$query=$this->db->query($sql);		
 		return $query;

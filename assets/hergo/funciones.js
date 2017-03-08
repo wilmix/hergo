@@ -28,7 +28,7 @@ $(document).ready(function()
         "responsive": true,
     });*/
 })
-   
+var glob_tipoCambio=6.96;   
 function base_url(complemento)
 {
      complemento = (complemento) ? complemento : '';

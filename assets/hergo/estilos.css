@@ -80,7 +80,12 @@ img.maximizada
   
     overflow-x: hidden;
 }
-.ui-tooltip
+.estilofila
 {
-    display: none!important;
+    border: none;
+    background-color: transparent;
 }
+.ui-tooltip
+ {
+     display: none!important;
+ }

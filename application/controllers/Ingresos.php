@@ -49,12 +49,12 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
             /*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/hergo/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/hergo/plugins/jQueryUI/jquery-ui.min.js');
-
+            //$this->datos['cabeceras_css'][]=base_url('assets/hergo/plugins/jQueryUI/jquery-ui.min.css');
+            //$this->datos['cabeceras_script'][]=base_url('assets/hergo/plugins/jQueryUI/jquery-ui.min.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresos.js');
+            
 			
 			
 			
@@ -87,16 +87,68 @@ class Ingresos extends CI_Controller
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
 			/***************SELECT***********/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
-           
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');           
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresos.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresosimportaciones.js');
+            /**************INPUT MASK***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
 			
 			
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
 
+            $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
+            $this->datos['tingreso']=$this->ingresos_model->retornar_tablaMovimiento("+");
+		  	$this->datos['fecha']=date('Y-m-d');
+		  	$this->datos['proveedor']=$this->ingresos_model->retornar_tabla("provedores");
+		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
+
+			
+			$this->load->view('plantilla/head.php',$this->datos);
+			$this->load->view('plantilla/header.php',$this->datos);
+			$this->load->view('plantilla/menu.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('ingresos/importaciones/importaciones2.php',$this->datos);
+			$this->load->view('plantilla/footcontainer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);						
+	}
+    public function editarimportaciones($id=null)
+	{
+        //if("si no esta autorizado a editar redireccionar o enviar error!!!!")
+		if(!$this->session->userdata('logeado'))
+			redirect('auth', 'refresh');
+		
+			$this->datos['menu']="Ingresos";
+			$this->datos['opcion']="Importaciones";
+			$this->datos['titulo']="Ingreso Importaciones";
+
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
+            /*************AUTOCOMPLETE**********/
+            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
+			/***************SELECT***********/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');           
+			/**************FUNCION***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresosimportaciones.js');
+            /**************INPUT MASK***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+			
+			
+			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
+            $this->datos['dcab']=$this->mostrarIngresosEdicion($id);//datos cabecera
+           /* echo "<pre>";
+            print_r($this->datos['dcab']);
+            echo "<pre>";*/
+        
             $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
             $this->datos['tingreso']=$this->ingresos_model->retornar_tablaMovimiento("+");
 		  	$this->datos['fecha']=date('Y-m-d');
@@ -124,6 +176,19 @@ class Ingresos extends CI_Controller
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
+	}
+    public function mostrarIngresosEdicion($id)
+	{
+        $res=$this->ingresos_model->mostrarIngresos($id);       
+        if($res->num_rows()>0)
+    	{
+    		$fila=$res->row();
+    		return $fila;
+    	}
+        else
+        {
+            return(false);    
+        }        
 	}
 	public function mostrarDetalle()
 	{

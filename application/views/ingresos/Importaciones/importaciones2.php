@@ -1,3 +1,22 @@
+<?php
+    
+    $cont=(isset($dcab))?true:false;//si existe datos cabecera
+    $idalmacen=0;
+    $idtingreso=0;
+    $idmoneda=0;
+    $idproveedor=0;
+    if($cont)
+    {
+        $originalDate = $dcab->fechamov;
+        $newDate = date("Y-m-d", strtotime($originalDate));//revisar mes y año
+        $idalmacen=$dcab->idalmacen;
+        $idtingreso=$dcab->idtipomov;
+        $idmoneda=$dcab->idmoneda;
+        $idproveedor=$dcab->idproveedor;
+    }
+?>
+
+
 <div class="row">
   <div class="col-xs-12">
     <div class="box">         
@@ -14,7 +33,7 @@
                 <label>Almacen:</label>
                 <select class="form-control form-control-sm" id="almacen_imp" name="almacen_imp">                 
                    <?php foreach ($almacen->result_array() as $fila): ?>
-                     <option value=<?= $fila['idalmacen'] ?>><?= $fila['almacen'] ?></option>
+                     <option value=<?= $fila['idalmacen'] ?> <?= ($idalmacen==$fila['idalmacen'])?"selected":"" ?> ><?= $fila['almacen'] ?></option>
                    <?php endforeach ?>
                 </select>
                </div>  
@@ -22,25 +41,25 @@
                 <label for="moneda_imp">Tipo de Ingreso:</label>
                 <select class="form-control form-control-sm" id="tipomov_imp" name="tipomov_imp">
                    <?php foreach ($tingreso->result_array() as $fila): ?>
-                     <option value=<?= $fila['id'] ?>><?= $fila['tipomov'] ?></option>
+                     <option value=<?= $fila['id'] ?> <?= ($idtingreso==$fila['id'])?"selected":"" ?>><?= $fila['tipomov'] ?></option>
                    <?php endforeach ?>
                 </select>
                </div>  
                <div class="col-xs-6 col-sm-6 col-md-2">
 
                   <label for="fechamov_imp" >Fecha:</label>
-                  <input id="fechamov_imp" type="date" class="form-control form-control-sm" name="fechamov_imp" placeholder="Fecha" value="<?= $fecha  ?>">
+                  <input id="fechamov_imp" type="date" class="form-control form-control-sm" name="fechamov_imp" placeholder="Fecha" value="<?= ($cont)?$newDate:$fecha  ?>">
                </div>
                <div class="col-xs-6 col-sm-6 col-md-2">
                   <label for="moneda_imp">Moneda:</label>
                   <select class="form-control form-control-sm" id="moneda_imp" name="moneda_imp">
-                    <option value="1" selected>BOLIVIANOS</option>
-                    <option value="2">DOLARES </option>
+                    <option value="1" <?= ($idmoneda==1)?"selected":"" ?> >BOLIVIANOS</option>
+                    <option value="2" <?= ($idmoneda==2)?"selected":"" ?>>DOLARES </option>
                   </select>
                </div>
                <div class="col-xs-12 col-sm-6 col-md-2">
                   <label for="fechamov_imp" ># Movimiento:</label>
-                  <input id="nmov_imp" type="number" class="form-control" name="nmov_imp" placeholder="# Movimiento" readonly/>
+                  <input id="nmov_imp" type="number" class="form-control" name="nmov_imp" placeholder="# Movimiento" readonly value="<?= ($cont)?$dcab->n:""  ?>"/>
                </div>               
             </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
             <div class="row"> <!--SEGUNDA FILA-->
@@ -49,7 +68,7 @@
                      <!--<select class="form-control" id="proveedor_imp" name="proveedor_imp">-->
                        <select class="form-control selectpicker" data-size="5" data-live-search="true" id="proveedor_imp" name="proveedor_imp">
                         <?php foreach ($proveedor->result_array() as $fila): ?>
-                         <option value=<?= $fila['idproveedor'] ?>><?= $fila['nombreproveedor'] ?></option>
+                         <option value=<?= $fila['idproveedor'] ?> <?= ($idproveedor==$fila['idproveedor'])?"selected":"" ?>><?= $fila['nombreproveedor'] ?></option>
                        <?php endforeach ?>
                       </select>
                      
@@ -58,15 +77,15 @@
                    </div>                 
                    <div class="col-xs-4 col-sm-4 col-md-2">
                          <label>Orden de Compra:</label>
-                         <input id="ordcomp_imp" type="text" class="form-control form-control-sm" name="ordcomp_imp" placeholder="Orden de Compra" >
+                         <input id="ordcomp_imp" type="text" class="form-control form-control-sm" name="ordcomp_imp" placeholder="Orden de Compra" value="<?= ($cont)?$dcab->ordcomp:""  ?>" >
                    </div>
                    <div class="col-xs-4 col-sm-4 col-md-2">
                          <label>N° Factura:</label>
-                         <input id="nfact_imp" name="nfact_imp" type="text" class="form-control form-control-sm"  placeholder="# Factura" >
+                         <input id="nfact_imp" name="nfact_imp" type="text" class="form-control form-control-sm"  placeholder="# Factura" value="<?= ($cont)?$dcab->nfact:""  ?>">
                    </div>
                    <div class="col-xs-4 col-sm-4 col-md-2">
                          <label>N° Ingreso:</label>
-                         <input id="ningalm_imp" type="text" class="form-control form-control-sm" name="ningalm_imp" placeholder="# Ingreso" >
+                         <input id="ningalm_imp" type="text" class="form-control form-control-sm" name="ningalm_imp" placeholder="# Ingreso" value="<?= ($cont)?$dcab->ningalm:""  ?>">
                    </div>
                 </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
 
@@ -110,7 +129,7 @@
                   <div class="col-xs-12 col-md-6">
                       <!--insertar costo de articulo a ingresar-->
                       <label for="observaciones_imp">Observaciones:</label>
-                      <input type="text" class="form-control" id="obs_imp" name="obs_imp" /> 
+                      <input type="text" class="form-control" id="obs_imp" name="obs_imp" value="<?= ($cont)?$dcab->obs:""  ?>" /> 
                   </div>
                   
                   <div class="col-xs-6 col-md-2">
@@ -121,7 +140,7 @@
                   <div class="col-xs-6 col-md-2">
                       <!--insertar costo de articulo a ingresar-->
                       <label>Costo Unitario:</label>
-                      <input type="number" class="form-control form-control-sm" id="punitario_imp" name="punitario_imp" /> 
+                      <input type="text" class="form-control form-control-sm tiponumerico" id="punitario_imp" name="punitario_imp" /> 
                   </div>
 
                   <div class="col-xs-12 col-md-2">
@@ -161,10 +180,10 @@
                 <div class = "input-group col-md-12 col-xs-12">
                   <span class = "input-group-addon">$</span>
                   <!--mostrar el total de dolares-->
-                  <input type = "text" class="form-control form-control-sm text-right" placeholder = "" id="totalacostosus">
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" placeholder = "" id="totalacostosus">
                   <span class = "input-group-addon" >Bs</span>
                   <!--mostrar el total bolivivanos-->
-                  <input type = "text" class="form-control form-control-sm text-right" id="totalacostobs">
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="totalacostobs">
                  </div>
               </div>
             </div><!--row-->
