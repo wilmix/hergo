@@ -26,7 +26,7 @@ class Ingresos_model extends CI_Model
 	{
 		if($id==null) //no tiene id de entrada
         {                
-		  $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, DATE_FORMAT(i.fechamov,'%d/%m/%Y') fechamov, p.nombreproveedor, i.nfact,
+		  $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
 				(SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.last_name,' ', u.first_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm
 			FROM ingresos i
 			INNER JOIN tmovimiento  t
@@ -44,7 +44,7 @@ class Ingresos_model extends CI_Model
         }
         else
         {
-            $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, DATE_FORMAT(i.fechamov,'%d/%m/%Y') fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
+            $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
 				(SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.last_name,' ', u.first_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs
 			FROM ingresos i
 			INNER JOIN tmovimiento  t

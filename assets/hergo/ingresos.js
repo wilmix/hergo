@@ -39,6 +39,7 @@ function retornarTablaIngresos()
                 field:'fechamov',
                 title:"Fecha",
                 sortable:true,
+                formatter: formato_fecha_corta
             },
             {
                 field:'nombreproveedor',

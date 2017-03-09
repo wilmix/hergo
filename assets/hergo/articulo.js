@@ -285,7 +285,7 @@ function retornarTabla()
                 sortable:true,
             },
             {
-                field:"fecha",
+                field:"Fecha",
                 title:"Fecha",
                 sortable:true,
                 visible:false,
