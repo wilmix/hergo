@@ -206,6 +206,7 @@ function actualizarMovimiento()
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos actualizados correctamente");
                     $("#modal_ok").modal("show");
+                    window.location.href=base_url("index.php/ingresos");
                 }
                 else
                 {

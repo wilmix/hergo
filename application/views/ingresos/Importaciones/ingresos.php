@@ -3,8 +3,12 @@
     <div class="box">
       <div class="box-body">
           <div class="text-right">
+               <div id="toolbar" class="btn-group">
+               <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("index.php/ingresoreporte") ?>" target="_blank"><span class="glyphicon glyphicon-print">_MuestraReporte_</span></a>
+
               <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Importaciones") ?>"></span>Ingreso Importaciones</a>
-              <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="#"></span>Compras Locales</a>
+
+              <!--<a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="#"></span>Compras Locales</a>-->
           </div> 
                              
           <table class="table-striped" 

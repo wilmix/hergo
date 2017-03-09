@@ -46,7 +46,7 @@
             <li><a href="<?php echo base_url("index.php/unidad") ?>">Unidad</a></li>
             <li><a href="<?php echo base_url("index.php/clientes") ?>">Clientes</a></li>
             <li><a href="<?php echo base_url("index.php/Provedores") ?>">Provedores</a></li>
-            <li><a href="<?php echo base_url("index.php/usuarios") ?>"> FormFuncionarios</a></li>
+            <!--<li><a href="<?php echo base_url("index.php/usuarios") ?>"> FormFuncionarios</a></li>
             <!--<li><a href="#">Modificar Precis Articulos</a></li>
             <li><a href="#">Datos Factura</a></li>
             <li><a href="#">Roles</a></li>
