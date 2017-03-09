@@ -181,6 +181,46 @@ function guardarmovimiento()
         alert("no se tiene datos en la tabla para guardar")
     }
 }
+function actualizarMovimiento()
+{     
+    var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
+    var tablaaux=tablatoarray();
+    console.log(valuesToSubmit)
+    console.log(tablaaux);
+    if(tablaaux.length>0)
+    {
+        var tabla=JSON.stringify(tablaaux);
+
+        valuesToSubmit+="&tabla="+tabla;    
+        retornarajax(base_url("index.php/ingresos/actualizarmovimiento"),valuesToSubmit,function(data)
+        {
+            estado=validarresultado_ajax(data);
+            if(estado)
+            {               
+                if(data.respuesta)
+                {
+                    
+                    $("#modalIgresoDetalle").modal("hide");
+                    limpiarArticulo();
+                    limpiarCabecera();
+                    limpiarTabla();
+                    $(".mensaje_ok").html("Datos actualizados correctamente");
+                    $("#modal_ok").modal("show");
+                }
+                else
+                {
+                    $(".mensaje_error").html("Error al actualizar los datos, intente nuevamente");
+                    $("#modal_error").modal("show");
+                }
+                
+            }
+        })      
+    }
+    else
+    {
+        alert("no se tiene datos en la tabla para guardar")
+    }
+}
 function tablatoarray()
 {
     var tabla=new Array()
@@ -201,4 +241,7 @@ $(document).on("click","#cancelarMovimiento",function(){
     limpiarArticulo();
     limpiarCabecera();
     limpiarTabla();
+})
+$(document).on("click","#actualizarMovimiento",function(){
+    actualizarMovimiento();
 })

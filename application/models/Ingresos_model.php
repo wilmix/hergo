@@ -147,6 +147,43 @@ class Ingresos_model extends CI_Model
     		return false;
     	}
     }
+    public function actualizarmovimiento_model($datos)
+    {  
+		$idingresoimportacion=$datos['idingresoimportacion'];
+        $almacen_imp=$datos['almacen_imp'];
+    	$tipomov_imp=$datos['tipomov_imp'];
+    	$fechamov_imp=$datos['fechamov_imp'];
+    	$moneda_imp=$datos['moneda_imp'];
+    	$proveedor_imp=$datos['proveedor_imp'];
+    	$ordcomp_imp=$datos['ordcomp_imp'];
+    	$nfact_imp=$datos['nfact_imp'];
+    	$ningalm_imp=$datos['ningalm_imp'];
+    	$obs_imp=$datos['obs_imp'];
+
+    	$autor=$this->session->userdata('user_id');
+		$fecha = date('Y-m-d H:i:s');
+    	
+        
+        $sql="UPDATE ingresos SET almacen='$almacen_imp',tipomov='$tipomov_imp',nmov=0,fechamov='$fechamov_imp',proveedor='$proveedor_imp',moneda='$moneda_imp',nfact='$nfact_imp',ningalm='$ningalm_imp',ordcomp='$ordcomp_imp',obs='$obs_imp',fecha='$fecha',autor='$autor' where idIngresos='$idingresoimportacion'";
+        
+    	$query=$this->db->query($sql);
+    	
+        $sql="DELETE FROM ingdetalle where idIngreso='$idingresoimportacion'";
+        
+        $this->db->query($sql);
+        
+        foreach ($datos['tabla'] as $fila) 
+        {
+            $idArticulo=$this->retornar_datosArticulo($fila[0]);
+            if($idArticulo)
+            {
+                $sql="INSERT INTO ingdetalle(idIngreso,nmov,articulo,moneda,cantidad,punitario,total) VALUES('$idingresoimportacion','0','$idArticulo','1','$fila[2]','$fila[3]','$fila[4]')";
+                $this->db->query($sql);
+            }
+        }
+        return true;
+    	
+    }
     private function retornar_datosArticulo($dato)
     {
     	$sql="SELECT idArticulos from articulos where CodigoArticulo='$dato' LIMIT 1";

@@ -145,7 +145,8 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
             $this->datos['dcab']=$this->mostrarIngresosEdicion($id);//datos cabecera
-           /* echo "<pre>";
+            $this->datos['detalle']=$this->mostrarDetalleEditar($id);
+            /*echo "<pre>";
             print_r($this->datos['dcab']);
             echo "<pre>";*/
         
@@ -204,6 +205,12 @@ class Ingresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+    public function mostrarDetalleEditar($id)
+	{		       
+        $res=$this->ingresos_model->mostrarDetalle($id);
+        $res=$res->result_array();
+        return($res);
+	}
 	public function revisarStd()
 	{
 		
@@ -250,6 +257,32 @@ class Ingresos extends CI_Controller
         	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
 
         	if($this->ingresos_model->guardarmovimiento_model($datos))        	
+				echo json_encode("true");
+			else
+				echo json_encode("false");
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+    }    
+    public function actualizarmovimiento()
+    {
+    	if($this->input->is_ajax_request())
+        {
+            $datos['idingresoimportacion'] = $this->security->xss_clean($this->input->post('idingresoimportacion'));
+        	$datos['almacen_imp'] = $this->security->xss_clean($this->input->post('almacen_imp'));
+        	$datos['tipomov_imp'] = $this->security->xss_clean($this->input->post('tipomov_imp'));
+        	$datos['fechamov_imp'] = $this->security->xss_clean($this->input->post('fechamov_imp'));
+        	$datos['moneda_imp'] = $this->security->xss_clean($this->input->post('moneda_imp'));
+        	$datos['proveedor_imp'] = $this->security->xss_clean($this->input->post('proveedor_imp'));
+        	$datos['ordcomp_imp'] = $this->security->xss_clean($this->input->post('ordcomp_imp'));
+        	$datos['nfact_imp'] = $this->security->xss_clean($this->input->post('nfact_imp'));
+        	$datos['ningalm_imp'] = $this->security->xss_clean($this->input->post('ningalm_imp'));
+        	$datos['obs_imp'] = $this->security->xss_clean($this->input->post('obs_imp'));
+        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
+
+        	if($this->ingresos_model->actualizarmovimiento_model($datos))        	
 				echo json_encode("true");
 			else
 				echo json_encode("false");

@@ -1,6 +1,6 @@
 <?php
     
-    $cont=(isset($dcab))?true:false;//si existe datos cabecera
+    $cont=(isset($dcab))?true:false;//si existe datos cabecera true si existe => editar
     $idalmacen=0;
     $idtingreso=0;
     $idmoneda=0;
@@ -27,7 +27,9 @@
         <form action=" " method="post"  id="form_ingresoImportaciones">
           <div class="form">
           <!-- formulario PRIMERA FILA-->
-          
+            <?php if ($cont): ?>
+                <input id="idingresoimportacion" name="idingresoimportacion" type="text" class="hidden"  hidden value="<?= $dcab->idIngresos ?>">
+            <?php endif ?>
             <div class="row"> <!--PRIMERA FILA-->
                <div class=" col-xs-6 col-sm-6 col-md-3">
                 <label>Almacen:</label>
@@ -165,15 +167,33 @@
                     </tr>
                   </thead>
                   <tbody id="tbodyarticulos">
-                    
+                    <?php if ($cont): ?>
+                        <?php foreach ($detalle as $fila): ?>
+                            <tr>
+                                <td><input type="text" class="estilofila" disabled value="<?= $fila['CodigoArticulo'] ?>"></input></td>
+                                <td><input type="text" class="estilofila" disabled value="<?= $fila['Descripcion'] ?>"></input</td>
+                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['cantidad'] ?>"></input></td>
+                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['punitario'] ?>"></input></td>
+                                <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="<?= $fila['total'] ?>"></input></td>
+                                <td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
+                            </tr>
+                        <?php endforeach ?>
+                    <?php endif ?>
+                     
                   </tbody>
                 </table>
               </div> <!--div class="table-responsive"-->
 
               <div class="form-group row">
               <div class="col-xs-12 col-md-6">
-                <button type="button" class="btn btn-primary" id="guardarMovimiento">Grabar Movimiento</button>
-                <button type="button" class="btn btn-danger" id="cancelarMovimiento">Cancelar</button>
+                <?php if ($cont): ?>
+                    <button type="button" class="btn btn-primary" id="actualizarMovimiento">Actualizar Movimiento</button>
+                    <button type="button" class="btn btn-danger" id="cancelarMovimientoActualizar">Cancelar</button>
+                <?php else: ?>
+                    <button type="button" class="btn btn-primary" id="guardarMovimiento">Grabar Movimiento</button>
+                    <button type="button" class="btn btn-danger" id="cancelarMovimiento">Cancelar</button>
+                <?php endif ?>
+                
                 
               </div>
               <div class="col-md-6 col-xs-12">
