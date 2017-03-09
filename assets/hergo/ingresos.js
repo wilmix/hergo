@@ -110,7 +110,11 @@ window.operateEvents = {
     	verdetalle(row)       
     },
     'click .editarIngreso': function (e, value, row, index) {
-      alert(JSON.stringify(row));
+      //console.log(row.idIngresos);
+    
+      var editar=base_url("Ingresos/editarimportaciones/")+row.idIngresos;
+        
+        window.location.href = editar;
     },
     'click .imprimirIngreso': function (e, value, row, index) {
      //alert(JSON.stringify(row));
