@@ -20,23 +20,22 @@
     }
 ?>
 <style>
+    input{
+        height: 50px;    
+    }
   input:focus{
-  border:3px solid #0000FF;
-  background-color: #5882FA;
-  margin-rigth:10px;
-  color: white;
+ 
+  background-color: rgba(60, 141, 188, 0.47);;
+  /*color: white;*/
+      font-weight: 700;
 }
 select:focus{
-  border:3px solid #0000FF;
-  background-color: #5882FA;
-  margin-rigth:10px;
-  color: white;
-  font-weight: 600;
+ 
+  background-color:rgba(60, 141, 188, 0.47);
+  /*color: white;*/
+  
 }
-button:focus{
-  border:3px solid #0000FF;
-  font-weight: 700;
-}
+
 input[type=date]::-webkit-outer-spin-button,
 input[type=date]::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -87,7 +86,7 @@ input[type=date]::-webkit-inner-spin-button {
                </div>
                <div class="col-xs-12 col-sm-6 col-md-2">
                   <label for="fechamov_imp" ># Movimiento:</label>
-                  <input id="nmov_imp" type="number" class="form-control" name="nmov_imp" placeholder="# Movimiento" readonly value="<?= ($cont)?$dcab->n:""  ?>"/>
+                  <input id="nmov_imp" type="number" class="form-control" name="nmov_imp" placeholder="# Movimiento" disabled value="<?= ($cont)?$dcab->n:""  ?>"/>
                </div>               
             </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
             <div class="row"> <!--SEGUNDA FILA-->
@@ -117,11 +116,6 @@ input[type=date]::-webkit-inner-spin-button {
                    </div>
                 </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
 
-                  <div class="col-xs-12 col-md-12">
-                      <!--insertar costo de articulo a ingresar-->
-                      <label for="observaciones_imp">Observaciones:</label>
-                      <input type="text" class="form-control" id="obs_imp" name="obs_imp" value="<?= ($cont)?$dcab->obs:""  ?>" tabindex=15/> 
-                  </div>
 
                 <hr>
                 <div class="row"> <!--TERCERA FILA-->
@@ -144,17 +138,17 @@ input[type=date]::-webkit-inner-spin-button {
                   <div class="col-xs-4 col-md-2">
                        <!--mostrar unidad de articulo segun codigo-->
                      <label for="">Unidad:</label>
-                     <input type="text" class="form-control form-control-sm" id="unidad_imp" readonly/> 
+                     <input type="text" class="form-control form-control-sm" id="unidad_imp" disabled/> 
                   </div>
                   <div class="col-xs-4 col-md-2">
                       <!--mostrar costo promedio ponderado de articulo segun codigo-->
                      <label for="costo_imp">Costo:</label>
-                     <input type="text" class="form-control form-control-sm" id="costo_imp" readonly/> 
+                     <input type="text" class="form-control form-control-sm" id="costo_imp" disabled/> 
                   </div>
                    <div class="col-xs-4 col-md-2">
                       <!--mostrar saldo en almacen de articulo segun codigo-->
                      <label for="saldo_imp">Saldo:</label>
-                      <input type="text" class="form-control form-control-sm" id="saldo_imp" readonly/> 
+                      <input type="text" class="form-control form-control-sm" id="saldo_imp" disabled/> 
                   </div>
 
                  </div><!-- div class="form-group-sm row"  TERCERA FILA-->
@@ -214,30 +208,43 @@ input[type=date]::-webkit-inner-spin-button {
                   </tbody>
                 </table>
               </div> <!--div class="table-responsive"-->
-
-              <div class="form-group row">
-              <div class="col-xs-12 col-md-6">
-                <?php if ($cont): ?>
-                    <button type="button" class="btn btn-primary" id="actualizarMovimiento">Actualizar Movimiento</button>
-                    <button type="button" class="btn btn-danger" id="cancelarMovimientoActualizar">Cancelar</button>
-                <?php else: ?>
-                    <button type="button" class="btn btn-primary" id="guardarMovimiento" tabindex=11>Grabar Movimiento</button>
-                    <button type="button" class="btn btn-danger" id="cancelarMovimiento" tabindex=12>Cancelar</button>
-                <?php endif ?>
-                
-                
-              </div>
+            
+            <div class="form-group row">
+                <div class="col-md-6 col-xs-12"></div>
               <div class="col-md-6 col-xs-12">
                 <div class = "input-group col-md-12 col-xs-12">
                   <span class = "input-group-addon">$</span>
                   <!--mostrar el total de dolares-->
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" placeholder = "" id="totalacostosus" tabindex=13>
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostosus" tabindex=13>
                   <span class = "input-group-addon" >Bs</span>
                   <!--mostrar el total bolivivanos-->
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="totalacostobs" tabindex=14>
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostobs" tabindex=14>
                  </div>
               </div>
             </div><!--row-->
+            <hr>
+            <div class="row">   
+                <div class="col-xs-12 col-md-12">
+                  <!--insertar costo de articulo a ingresar-->
+                  <label for="observaciones_imp">Observaciones:</label>
+                  <input type="text" class="form-control" id="obs_imp" name="obs_imp" value="<?= ($cont)?$dcab->obs:""  ?>" /> 
+              </div>
+                <hr>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-xs-12">
+                <?php if ($cont): ?>
+                    <button type="button" class="btn btn-primary" id="actualizarMovimiento">Actualizar Movimiento</button>
+                    <button type="button" class="btn btn-danger" id="cancelarMovimientoActualizar">Cancelar</button>
+                <?php else: ?>
+                    <button type="button" class="btn btn-primary" id="guardarMovimiento" tabindex=11>Guardar Movimiento</button>
+                    <button type="button" class="btn btn-danger" id="cancelarMovimiento" tabindex=12>Cancelar Movimiento</button>
+                <?php endif ?>
+                
+                
+              </div>
+            </div>
         </form>
       </div> <!-- /.box-body -->
     </div> <!-- /.class="box" -->
