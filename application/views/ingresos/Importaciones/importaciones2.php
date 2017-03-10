@@ -8,7 +8,11 @@
     if($cont)
     {
         $originalDate = $dcab->fechamov;
+        //$originalDate = str_replace("/", "-", $originalDate);
         $newDate = date("Y-m-d", strtotime($originalDate));//revisar mes y año
+       /* echo $originalDate."\n";
+        echo $newDate;
+        die();*/
         $idalmacen=$dcab->idalmacen;
         $idtingreso=$dcab->idtipomov;
         $idmoneda=$dcab->idmoneda;

@@ -28,6 +28,7 @@ class Ingresos extends CI_Controller
 				base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
 				base_url('assets/plugins/table-boot/js/tableExport.js'),
 				base_url('assets/plugins/table-boot/js/bootstrap-table-filter-control.js'),
+                base_url('assets/plugins/daterangepicker/moment.min.js'),
 
 				
 			);

@@ -206,7 +206,7 @@ function actualizarMovimiento()
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos actualizados correctamente");
                     $("#modal_ok").modal("show");
-                    window.location.href=base_url("index.php/ingresos");
+                    window.location.href=base_url("ingresos");
                 }
                 else
                 {
@@ -245,4 +245,7 @@ $(document).on("click","#cancelarMovimiento",function(){
 })
 $(document).on("click","#actualizarMovimiento",function(){
     actualizarMovimiento();
+})
+$(document).on("click","#cancelarMovimientoActualizar",function(){
+    window.location.href=base_url("ingresos");
 })

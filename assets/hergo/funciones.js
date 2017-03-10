@@ -136,11 +136,21 @@ $( window ).resize(function() {
 function formato_fecha(value, row, index)
 {
     var fecha = ""
-    console.log(value)
+    //console.log(value)
     if((value=="0000-00-00 00:00:00")||(value=="")||(value==null))
         fecha="sin fecha de registro"
     else
         fecha = moment(value,"YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY HH:mm:ss")
+    return [fecha]
+}
+function formato_fecha_corta(value, row, index)
+{
+    var fecha = ""
+    //console.log(value)
+    if((value=="0000-00-00 00:00:00")||(value=="")||(value==null))
+        fecha="sin fecha de registro"
+    else
+        fecha = moment(value,"YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY")
     return [fecha]
 }
 function asignarselect(text1,select)
