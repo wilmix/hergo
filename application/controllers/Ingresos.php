@@ -15,8 +15,9 @@ class Ingresos extends CI_Controller
 				base_url("assets/fa/css/font-awesome.min.css"),
 				base_url("assets/dist/css/AdminLTE.min.css"),
 				base_url("assets/dist/css/skins/skin-blue.min.css"),
-				base_url("assets/hergo/estilos.css"),
+				base_url("assets/hergo/estilos.css"),				
 				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
+				
 			);
 		$this->cabecera_script=array(
 				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
@@ -27,7 +28,7 @@ class Ingresos extends CI_Controller
 				base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
 				base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
 				base_url('assets/plugins/table-boot/js/tableExport.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-filter-control.js'),
+				base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
                 base_url('assets/plugins/daterangepicker/moment.min.js'),
 
 				
@@ -49,9 +50,11 @@ class Ingresos extends CI_Controller
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
-            /*************AUTOCOMPLETE**********/
-            //$this->datos['cabeceras_css'][]=base_url('assets/hergo/plugins/jQueryUI/jquery-ui.min.css');
-            //$this->datos['cabeceras_script'][]=base_url('assets/hergo/plugins/jQueryUI/jquery-ui.min.js');
+           
+            /*************DATERANGEPICKER**********/
+            $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js'); 
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');        
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresos.js');
@@ -170,7 +173,9 @@ class Ingresos extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-			$res=$this->ingresos_model->mostrarIngresos();
+        	$ini=$this->security->xss_clean($this->input->post("i"));
+        	$fin=$this->security->xss_clean($this->input->post("f"));
+			$res=$this->ingresos_model->mostrarIngresos($id=null,$ini,$fin);
 			$res=$res->result_array();
 			echo json_encode($res);
 		}
@@ -198,7 +203,7 @@ class Ingresos extends CI_Controller
         {
         	$id = addslashes($this->security->xss_clean($this->input->post('id')));
 			$res=$this->ingresos_model->mostrarDetalle($id);
-			$res=$res->result_array();
+			$res=$res->result_array();			
 			echo json_encode($res);
 		}
 		else
@@ -206,6 +211,7 @@ class Ingresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	
     public function mostrarDetalleEditar($id)
 	{		       
         $res=$this->ingresos_model->mostrarDetalle($id);

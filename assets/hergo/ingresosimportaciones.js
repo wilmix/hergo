@@ -1,4 +1,5 @@
-$(document).ready(function(){    
+$(document).ready(function(){ 
+
     $(".tiponumerico").inputmask({
         alias:"decimal",
         digits:2,
@@ -7,6 +8,7 @@ $(document).ready(function(){
         autoUnmask:true
     }); 
     var glob_agregar=false;
+    calcularTotal()  
 })
 
  $( function() {

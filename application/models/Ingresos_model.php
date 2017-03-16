@@ -22,12 +22,12 @@ class Ingresos_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
     }
-	public function mostrarIngresos($id=null)
+	public function mostrarIngresos($id=null,$ini=null,$fin=null)
 	{
 		if($id==null) //no tiene id de entrada
         {                
 		  $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
-				(SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.last_name,' ', u.first_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm
+				(SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm
 			FROM ingresos i
 			INNER JOIN tmovimiento  t
 			ON i.tipomov = t.id
@@ -39,13 +39,15 @@ class Ingresos_model extends CI_Model
 			ON a.idalmacen=i.almacen
 			INNER JOIN moneda m
 			ON i.moneda=m.id
+            WHERE i.fechamov BETWEEN '$ini' AND '$fin'
 			ORDER BY i.idIngresos DESC            
             ";
+            
         }
         else
         {
             $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
-				(SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.last_name,' ', u.first_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs
+				(SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs
 			FROM ingresos i
 			INNER JOIN tmovimiento  t
 			ON i.tipomov = t.id

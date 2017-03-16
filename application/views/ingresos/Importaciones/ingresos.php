@@ -1,15 +1,25 @@
+
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body">
+         
           <div class="text-right">
-               <div id="toolbar" class="btn-group">
-               <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("index.php/ingresoreporte") ?>" target="_blank"><span class="glyphicon glyphicon-print">_MuestraReporte_</span></a>
+            <div id="toolbar" class="btn-group">
+              
+                  <button type="button" class="btn btn-default" id="fechapersonalizada">
+                    <span>
+                      <i class="fa fa-calendar"></i> Fecha
+                    </span>
+                    <i class="fa fa-caret-down"></i>
+                  </button>
+                
+               <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("index.php/ingresoreporte") ?>" target="_blank"><span class="glyphicon glyphicon-print"></span> Mostrar reporte</a>
 
-              <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Importaciones") ?>"></span>Ingreso Importaciones</a>
+              <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Importaciones") ?>">Ingreso Importaciones</a>
 
               <!--<a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="#"></span>Compras Locales</a>-->
-          </div> 
+            </div> 
                              
           <table class="table-striped" 
               data-toggle="table"

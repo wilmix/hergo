@@ -1,5 +1,45 @@
+var iniciofecha=moment().subtract(0, 'year').startOf('year')
+var finfecha=moment().subtract(0, 'year').endOf('year')
+
 $(document).ready(function(){
-    retornarTablaIngresos();      
+    var start = moment().subtract(0, 'year').startOf('year')
+    var end = moment().subtract(0, 'year').endOf('year')
+   
+    $(function() {
+
+        function cb(start, end) {
+            $('#fechapersonalizada span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            iniciofecha=start
+            finfecha=end
+        }
+        moment.locale('es');
+        $('#fechapersonalizada').daterangepicker({
+            locale: {
+                  applyLabel: 'Aplicar',
+                  cancelLabel: 'Cancelar',                  
+                  customRangeLabel: 'Personalizado',
+
+                },
+            startDate: start,
+            endDate: end,
+            ranges: {
+               'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
+               'Hoy': [moment(), moment()],
+               'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+               'Ultimos 7 dias': [moment().subtract(6, 'days'), moment()],
+               'Ultimos 30 dias': [moment().subtract(29, 'days'), moment()],
+               'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+              
+            }
+        }, cb);
+
+        cb(start, end);
+    
+    }); 
+    $('#fechapersonalizada').on('apply.daterangepicker', function(ev, picker) {      
+      retornarTablaIngresos();
+    });
+    retornarTablaIngresos(); 
 })
 
 
@@ -7,11 +47,15 @@ $(document).ready(function(){
 
 function retornarTablaIngresos()
 {
+
+    
+    ini=iniciofecha.format('YYYY-MM-DD')
+    fin=finfecha.format('YYYY-MM-DD')
     $.ajax({
         type:"POST",
         url: base_url('index.php/ingresos/mostrarIngresos'),
         dataType: "json",
-        data: {},
+        data: {i:ini,f:fin},
     }).done(function(res){
 
         $("#tingresos").bootstrapTable('destroy');
@@ -21,35 +65,41 @@ function retornarTablaIngresos()
             striped:true,
             pagination:true,           
             clickToSelect:true,
-            search:true,         
+            search:true,
+            showFilter:true,
+            
+        
             columns:[
             {   
                 field: 'n',            
                 title: 'N',
                 align: 'center',
                 sortable:true,
+
             },  
             {   
                 field: 'sigla',            
                 title: 'Tipo',
                 align: 'center',
+                showFilter:true,
                 sortable:true,
             },         
             {
                 field:'fechamov',
                 title:"Fecha",
-                sortable:true,
+                sortable:true,                 
                 formatter: formato_fecha_corta
             },
             {
                 field:'nombreproveedor',
                 title:"Proveedor",
+          
                 sortable:true,
             },
             {
                 field:'nfact',
                 title:"Factura",
-
+           
                 sortable:true,
             },
             {
@@ -62,11 +112,24 @@ function retornarTablaIngresos()
                 field:"estado",
                 title:"Estado",
                 sortable:true,
+             
                 formatter: operateFormatter2,
                 align: 'center'
             },
-            
-            
+            {
+                field:"autor",
+                title:"Autor",
+                sortable:true,
+
+                align: 'center'
+            },
+            {
+                field:"fecha",
+                title:"Fecha",
+                sortable:true,
+                formatter: formato_fecha_corta,
+                align: 'center'
+            },                
             {               
                 title: 'Acciones',
                 align: 'center',

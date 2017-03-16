@@ -24,11 +24,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-$config['base_url'] = 'http://1.32.16.223/hergo/';
+//$config['base_url'] = 'http://1.32.16.223/hergo/';
 
 //$config['base_url'] = 'http://localhost:8080/hergo';
 
 //$config['base_url'] = 'http://192.168.1.45:8080/hergo/';
+$config['base_url'] = 'http://192.168.1.8/hergo/';
 
 /*
 |--------------------------------------------------------------------------
@@ -517,3 +518,4 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
