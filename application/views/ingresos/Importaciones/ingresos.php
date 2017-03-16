@@ -23,12 +23,28 @@
                              
           <table class="table-striped" 
               data-toggle="table"
+              data-show-columns="true"
               data-pagination="true"
               data-search="true"
               data-page-size="100"
               data-pagination="true"
               data-height="550"
-              id="tingresos">           
+              id="tingresos">   
+              <thead>
+              <tr>
+                  <th data-field="n" data-visible="true"></th>
+                  <th data-field="tipo"  data-visible="true"></th>
+                  <th data-field="fecha"  data-visible="true"></th>
+                  <th data-field="provedor"  data-visible="true"></th>
+                  <th data-field="factura"  data-visible="true"></th>
+                  <th data-field="total"  data-visible="true"></th>
+                  <th data-field="estado" data-visible="true"></th>
+                  <th data-field="autor" data-visible="false"></th>
+                  <th data-field="fecha" data-visible="false"></th>
+                  <th data-field="acciones" data-visible="true"></th>
+              </tr>
+              </thead>
+
           </table>
           
       </div>

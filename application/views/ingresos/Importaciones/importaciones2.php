@@ -46,7 +46,7 @@ input[type=date]::-webkit-inner-spin-button {
   <div class="col-xs-12">
     <div class="box">         
       <div class="box-header with-border">
-        <h3 class="box-title">Ingreso Importaciones</h3>
+        <!--<h3 class="box-title">Ingreso Importaciones</h3>-->
       </div>
       <div class="box-body">
         <form action=" " method="post"  id="form_ingresoImportaciones">
