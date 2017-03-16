@@ -4,7 +4,7 @@ var finfecha=moment().subtract(0, 'year').endOf('year')
 $(document).ready(function(){
     var start = moment().subtract(0, 'year').startOf('year')
     var end = moment().subtract(0, 'year').endOf('year')
-   
+
     $(function() {
 
         function cb(start, end) {
@@ -16,7 +16,7 @@ $(document).ready(function(){
         $('#fechapersonalizada').daterangepicker({
             locale: {
                   applyLabel: 'Aplicar',
-                  cancelLabel: 'Cancelar',                  
+                  cancelLabel: 'Cancelar',
                   customRangeLabel: 'Personalizado',
 
                 },
@@ -29,17 +29,17 @@ $(document).ready(function(){
                'Ultimos 7 dias': [moment().subtract(6, 'days'), moment()],
                'Ultimos 30 dias': [moment().subtract(29, 'days'), moment()],
                'Este Mes': [moment().startOf('month'), moment().endOf('month')],
-              
+
             }
         }, cb);
 
         cb(start, end);
-    
-    }); 
-    $('#fechapersonalizada').on('apply.daterangepicker', function(ev, picker) {      
+
+    });
+    $('#fechapersonalizada').on('apply.daterangepicker', function(ev, picker) {
       retornarTablaIngresos();
     });
-    retornarTablaIngresos(); 
+    retornarTablaIngresos();
 })
 
 
@@ -48,7 +48,7 @@ $(document).ready(function(){
 function retornarTablaIngresos()
 {
 
-    
+
     ini=iniciofecha.format('YYYY-MM-DD')
     fin=finfecha.format('YYYY-MM-DD')
     $.ajax({
@@ -60,46 +60,46 @@ function retornarTablaIngresos()
 
         $("#tingresos").bootstrapTable('destroy');
         $("#tingresos").bootstrapTable({
-            
-            data:res,           
+
+            data:res,
             striped:true,
-            pagination:true,           
+            pagination:true,
             clickToSelect:true,
             search:true,
-            showFilter:true,
-            
-        
+            filter:true,
+
+
             columns:[
-            {   
-                field: 'n',            
+            {
+                field: 'n',
                 title: 'N',
                 align: 'center',
                 sortable:true,
 
-            },  
-            {   
-                field: 'sigla',            
+            },
+            {
+                field: 'sigla',
                 title: 'Tipo',
                 align: 'center',
-                showFilter:true,
                 sortable:true,
-            },         
+                filter: {type: "input"}
+            },
             {
                 field:'fechamov',
                 title:"Fecha",
-                sortable:true,                 
-                formatter: formato_fecha_corta
+                sortable:true,
+                formatter: formato_fecha_corta,
             },
             {
                 field:'nombreproveedor',
                 title:"Proveedor",
-          
+                filter: {type: "input"},
                 sortable:true,
             },
             {
                 field:'nfact',
                 title:"Factura",
-           
+                filter: {type: "input"},
                 sortable:true,
             },
             {
@@ -112,7 +112,7 @@ function retornarTablaIngresos()
                 field:"estado",
                 title:"Estado",
                 sortable:true,
-             
+                filter: {type: "input"},
                 formatter: operateFormatter2,
                 align: 'center'
             },
@@ -120,7 +120,7 @@ function retornarTablaIngresos()
                 field:"autor",
                 title:"Autor",
                 sortable:true,
-
+                filter: {type: "input"},
                 align: 'center'
             },
             {
@@ -129,8 +129,8 @@ function retornarTablaIngresos()
                 sortable:true,
                 formatter: formato_fecha_corta,
                 align: 'center'
-            },                
-            {               
+            },
+            {
                 title: 'Acciones',
                 align: 'center',
                 events: operateEvents,
@@ -140,14 +140,14 @@ function retornarTablaIngresos()
 
         $("#tarticulo").bootstrapTable('hideLoading');
         $("#tarticulo").bootstrapTable('resetView');
-        
+
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
     console.log( "Request Failed: " + err );
     });
     //$("body").css("padding-right","0px");
 }
-function operateFormatter(value, row, index) 
+function operateFormatter(value, row, index)
 {
     return [
         '<button type="button" class="btn btn-default verIngreso" aria-label="Right Align">',
@@ -158,7 +158,7 @@ function operateFormatter(value, row, index)
 	    '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
     ].join('');
 }
-function operateFormatter2(value, row, index) 
+function operateFormatter2(value, row, index)
 {
 	$ret=''
 	if(value==0)
@@ -171,13 +171,13 @@ function operateFormatter2(value, row, index)
 window.operateEvents = {
     'click .verIngreso': function (e, value, row, index) {
      // fila=JSON.stringify(row);
-    	verdetalle(row)       
+    	verdetalle(row)
     },
     'click .editarIngreso': function (e, value, row, index) {
       //console.log(row.idIngresos);
-    
+
       var editar=base_url("Ingresos/editarimportaciones/")+row.idIngresos;
-        
+
         window.location.href = editar;
     },
     'click .imprimirIngreso': function (e, value, row, index) {
@@ -193,8 +193,8 @@ function verdetalle(fila)
 	{
 		estado=validarresultado_ajax(data);
 		if(estado)
-		{	
-			
+		{
+
 			mostrarDetalle(data.respuesta);
 			//console.log(glob_tipoCambio)
             var sus=fila.total;
@@ -221,16 +221,16 @@ function verdetalle(fila)
             /***pendienteaprobado***/
             var boton="";
             if(fila.estado=="0")
-                boton='<button type="button" class="btn btn-success" datastd="'+fila.idIngresos+'" id="btnaprobado">Aprobado</button>';               
+                boton='<button type="button" class="btn btn-success" datastd="'+fila.idIngresos+'" id="btnaprobado">Aprobado</button>';
             else
                 boton='<button type="button" class="btn btn-danger" datastd="'+fila.idIngresos+'" id="btnpendiente">Pendiente</button>';
-                
+
             $("#pendienteaprobado").html(boton)
 			$("#totalsusdetalle").val(sus)
 			$("#totalbsdetalle").val(fila.total)
 			$("#modalIgresoDetalle").modal("show");
 		}
-	})	
+	})
 }
 $(document).on("click","#btnaprobado",function(){
     id=$(this).attr("datastd");
@@ -239,11 +239,11 @@ $(document).on("click","#btnaprobado",function(){
     {
         estado=validarresultado_ajax(data);
         if(estado)
-        {   
+        {
             retornarTablaIngresos()
             $("#modalIgresoDetalle").modal("hide");
         }
-    })  
+    })
 })
 $(document).on("click","#btnpendiente",function(){
     id=$(this).attr("datastd");
@@ -252,34 +252,34 @@ $(document).on("click","#btnpendiente",function(){
     {
         estado=validarresultado_ajax(data);
         if(estado)
-        {   
+        {
             retornarTablaIngresos()
             $("#modalIgresoDetalle").modal("hide");
         }
-    })  
+    })
 })
 function mostrarDetalle(res)
 {
 	$("#tingresosdetalle").bootstrapTable('destroy');
         $("#tingresosdetalle").bootstrapTable({
-            
-            data:res,           
+
+            data:res,
             striped:true,
-            pagination:true,           
+            pagination:true,
             clickToSelect:true,
-            search:true,         
+            search:true,
             columns:[
-            {   
-                field: 'CodigoArticulo',            
+            {
+                field: 'CodigoArticulo',
                 title: 'Código',
                 align: 'center',
                 sortable:true,
-            },  
-            {   
-                field: 'Descripcion',            
+            },
+            {
+                field: 'Descripcion',
                 title: 'Descripcion',
                 sortable:true,
-            },         
+            },
             {
                 field:'cantidad',
                 title:"Cantidad",
@@ -301,4 +301,3 @@ function mostrarDetalle(res)
             ]
         });
 }
-
