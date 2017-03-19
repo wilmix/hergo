@@ -76,7 +76,7 @@
         tr = $(tr);
 
         if (tr.data('field') === column.field) {
-          console.log(tr)
+          //console.log(tr)
           tr.find('.fht-cell').prepend(html.join(''));
           return false;
         }

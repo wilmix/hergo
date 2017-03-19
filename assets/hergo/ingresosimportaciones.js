@@ -91,6 +91,7 @@ function limpiarTabla()
 }
 function calcularTotal()
 {
+    var moneda=$("#moneda_imp").val()
     var totalCosto=0;
     var totales=$(".totalCosto").toArray();
     var total=0;
@@ -101,18 +102,22 @@ function calcularTotal()
         total+=(dato=="")?0:parseFloat(dato)
     })
     //total=Math.round(total * 100) / 100
-    
-    var totalDolares=total/glob_tipoCambio;
-    console.log(totalDolares)
-    //totalDolares=Math.round(totalDolares * 100) / 100
-    //total=total.toLocaleString()
+    if(moneda==1)
+    {
+        var totalDolares=total/glob_tipoCambio;
+    }
+    else
+    {
+        var totalDolares=total;
+        total=total*glob_tipoCambio;
+
+    }
     $("#totalacostobs").val(total)
-
-    //totalDolares=totalDolares.toLocaleString()
     $("#totalacostosus").val(totalDolares)
-
-
 }
+$(document).on("change","#moneda_imp",function(){
+    calcularTotal()
+})
 function agregarArticulo()
 {
     var codigo=$("#articulo_imp").val()
@@ -224,6 +229,47 @@ function actualizarMovimiento()
         alert("no se tiene datos en la tabla para guardar")
     }
 }
+function anularMovimiento()
+{     
+    var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
+    var tablaaux=tablatoarray();
+    console.log(valuesToSubmit)
+    console.log(tablaaux);
+    if(tablaaux.length>0)
+    {
+        var tabla=JSON.stringify(tablaaux);
+
+        valuesToSubmit+="&tabla="+tabla;    
+        retornarajax(base_url("index.php/ingresos/anularmovimiento"),valuesToSubmit,function(data)
+        {
+            estado=validarresultado_ajax(data);
+            if(estado)
+            {               
+                if(data.respuesta)
+                {
+                    
+                    $("#modalIgresoDetalle").modal("hide");
+                    limpiarArticulo();
+                    limpiarCabecera();
+                    limpiarTabla();
+                    $(".mensaje_ok").html("Datos actualizados correctamente");
+                    $("#modal_ok").modal("show");
+                    window.location.href=base_url("ingresos");
+                }
+                else
+                {
+                    $(".mensaje_error").html("Error al anular los datos, intente nuevamente");
+                    $("#modal_error").modal("show");
+                }
+                
+            }
+        })      
+    }
+    else
+    {
+        alert("no se tiene datos en la tabla para guardar")
+    }
+}
 function tablatoarray()
 {
     var tabla=new Array()
@@ -250,4 +296,12 @@ $(document).on("click","#actualizarMovimiento",function(){
 })
 $(document).on("click","#cancelarMovimientoActualizar",function(){
     window.location.href=base_url("ingresos");
+})
+
+$(document).on("click","#anularMovimiento",function(){
+    anularMovimiento();
+    limpiarArticulo();
+    limpiarCabecera();
+    limpiarTabla();
+
 })

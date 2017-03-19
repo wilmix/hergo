@@ -2,9 +2,35 @@ var iniciofecha=moment().subtract(0, 'year').startOf('year')
 var finfecha=moment().subtract(0, 'year').endOf('year')
 
 $(document).ready(function(){
+     $(".tiponumerico").inputmask({
+        alias:"decimal",
+        digits:2,
+        groupSeparator: ',',
+        autoGroup: true,
+        autoUnmask:true
+    }); 
     var start = moment().subtract(0, 'year').startOf('year')
     var end = moment().subtract(0, 'year').endOf('year')
+    var actual=moment().subtract(0, 'year').startOf('year')
+    var unanterior=moment().subtract(1, 'year').startOf('year')
+    var dosanterior=moment().subtract(2, 'year').startOf('year')
+    var tresanterior=moment().subtract(3, 'year').startOf('year')
 
+   /* var ractual="Gestion "+actual.format('YYYY')
+    var runo="Gestion "+unanterior.format('YYYY')
+    var rdos="Gestion "+dosanterior.format('YYYY')
+    var rtres="Gestion"+tresanterior.format('YYYY')
+   
+    var rango={};
+    rango[ractual]=[actual,actual];
+    rango[runo]=[unanterior,unanterior];
+    rango[rdos]=[dosanterior,dosanterior];
+    rango[rtres]=[tresanterior,tresanterior];
+
+    jsonrango=JSON.stringify(rango)
+    console.log(jsonrango)
+*/
+    
     $(function() {
 
         function cb(start, end) {
@@ -18,17 +44,18 @@ $(document).ready(function(){
                   applyLabel: 'Aplicar',
                   cancelLabel: 'Cancelar',
                   customRangeLabel: 'Personalizado',
-
                 },
             startDate: start,
             endDate: end,
+            //ranges:jsonrango
             ranges: {
                'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
-               'Hoy': [moment(), moment()],
-               'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-               'Ultimos 7 dias': [moment().subtract(6, 'days'), moment()],
-               'Ultimos 30 dias': [moment().subtract(29, 'days'), moment()],
-               'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+               "Hace un Año": [moment().subtract(1, 'year').startOf('year'),moment().subtract(1, 'year').endOf('year')],
+               'Hace dos Años': [moment().subtract(2, 'year').startOf('year'),moment().subtract(2, 'year').endOf('year')],
+               'Hace tres Años': [moment().subtract(3, 'year').startOf('year'),moment().subtract(3, 'year').endOf('year')],
+               /*'Hoy': [moment(), moment()],
+               'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],               
+               'Este Mes': [moment().startOf('month'), moment().endOf('month')],*/
 
             }
         }, cb);
@@ -44,7 +71,6 @@ $(document).ready(function(){
 
 
 
-
 function retornarTablaIngresos()
 {
 
@@ -57,16 +83,20 @@ function retornarTablaIngresos()
         dataType: "json",
         data: {i:ini,f:fin},
     }).done(function(res){
-
+       datosselect= restornardatosSelect(res)
+       //console.log((datosselect))
         $("#tingresos").bootstrapTable('destroy');
         $("#tingresos").bootstrapTable({
 
             data:res,
             striped:true,
             pagination:true,
+            pageSize:"100",
+            //height:"550", error con filtros
             clickToSelect:true,
             search:true,
             filter:true,
+            showColumns:true,
 
 
             columns:[
@@ -75,25 +105,32 @@ function retornarTablaIngresos()
                 title: 'N',
                 align: 'center',
                 sortable:true,
-
+                filter: {type: "input"}
             },
             {
                 field: 'sigla',
                 title: 'Tipo',
                 align: 'center',
                 sortable:true,
-                filter: {type: "input"}
+                filter: {
+                        type: "select",
+                        data: datosselect[1]
+                    }
             },
             {
                 field:'fechamov',
                 title:"Fecha",
                 sortable:true,
+
                 formatter: formato_fecha_corta,
             },
             {
                 field:'nombreproveedor',
                 title:"Proveedor",
-                filter: {type: "input"},
+                filter: {
+                    type: "select",
+                    data: datosselect[0]
+                },
                 sortable:true,
             },
             {
@@ -106,13 +143,17 @@ function retornarTablaIngresos()
                 field:'total',
                 title:"Total",
                 align: 'right',
+                filter: {type: "input"},
                 sortable:true,
             },
             {
                 field:"estado",
                 title:"Estado",
                 sortable:true,
-                filter: {type: "input"},
+                filter: {
+                    type: "select",
+                    data:["APROBADO","PENDIENTE"]
+                },
                 formatter: operateFormatter2,
                 align: 'center'
             },
@@ -120,7 +161,11 @@ function retornarTablaIngresos()
                 field:"autor",
                 title:"Autor",
                 sortable:true,
-                filter: {type: "input"},
+                filter: {
+                    type: "select",
+                    data: datosselect[2]
+                },
+                visible:false,
                 align: 'center'
             },
             {
@@ -128,6 +173,7 @@ function retornarTablaIngresos()
                 title:"Fecha",
                 sortable:true,
                 formatter: formato_fecha_corta,
+                visible:false,
                 align: 'center'
             },
             {
@@ -146,6 +192,7 @@ function retornarTablaIngresos()
     console.log( "Request Failed: " + err );
     });
     //$("body").css("padding-right","0px");
+
 }
 function operateFormatter(value, row, index)
 {
@@ -186,7 +233,7 @@ window.operateEvents = {
 };
 function verdetalle(fila)
 {
-    console.log(fila)
+  console.log(fila)
 	id=fila.idIngresos
 	datos={id:id}
 	retornarajax(base_url("index.php/ingresos/mostrarDetalle"),datos,function(data)
@@ -197,17 +244,28 @@ function verdetalle(fila)
 
 			mostrarDetalle(data.respuesta);
 			//console.log(glob_tipoCambio)
-            var sus=fila.total;
-            sus=sus.replace(',','')
-            sus=sus.replace(',','')
-            sus=sus.replace(',','')
-            sus=sus.replace(',','')
-            sus=sus.replace(',','')
-            sus=sus.replace(',','')
-            sus=sus/glob_tipoCambio;
-            sus=parseFloat(sus)
-            console.log(sus)
-            sus=sus.toLocaleString()
+            var totalnn=fila.total
+            totalnn=totalnn.replace(',','')
+            totalnn=totalnn.replace(',','')
+            totalnn=totalnn.replace(',','')
+            totalnn=totalnn.replace(',','')
+            totalnn=totalnn.replace(',','')
+            totalnn=totalnn.replace(',','')
+            var totalsus=totalnn;
+            var totalbs=totalnn;
+            if(fila.moneda==1)
+            {
+                totalsus=totalsus/glob_tipoCambio;
+                totalsus=parseFloat(totalsus)    
+            }
+            else
+            {
+                totalbs=totalbs*glob_tipoCambio;
+            }
+            
+
+            //console.log(sus)
+            //sus=sus.toLocaleString()
 
             $("#almacen_imp").val(fila.almacen)
             $("#tipomov_imp").val(fila.tipomov)
@@ -218,6 +276,7 @@ function verdetalle(fila)
             $("#ordcomp_imp").val(fila.ordcomp)
             $("#nfact_imp").val(fila.nfact)
             $("#ningalm_imp").val(fila.ningalm)
+            $("#obs_imp").val(fila.obs)
             /***pendienteaprobado***/
             var boton="";
             if(fila.estado=="0")
@@ -226,8 +285,8 @@ function verdetalle(fila)
                 boton='<button type="button" class="btn btn-danger" datastd="'+fila.idIngresos+'" id="btnpendiente">Pendiente</button>';
 
             $("#pendienteaprobado").html(boton)
-			$("#totalsusdetalle").val(sus)
-			$("#totalbsdetalle").val(fila.total)
+			$("#totalsusdetalle").val(totalsus)
+			$("#totalbsdetalle").val(totalbs)
 			$("#modalIgresoDetalle").modal("show");
 		}
 	})
@@ -301,3 +360,23 @@ function mostrarDetalle(res)
             ]
         });
 }
+function restornardatosSelect(res)
+{
+    var proveedor = new Array()
+    var tipo = new Array()
+    var autor = new Array()
+    var datos =new Array()
+    $.each(res, function(index, value){
+
+        proveedor.push(value.nombreproveedor)
+        tipo.push(value.sigla)
+        autor.push(value.autor)
+    })
+    datos.push(proveedor.unique());
+    datos.push(tipo.unique());
+    datos.push(autor.unique());
+    return(datos);
+}
+Array.prototype.unique=function(a){
+  return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
+});

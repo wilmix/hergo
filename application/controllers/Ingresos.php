@@ -33,10 +33,7 @@ class Ingresos extends CI_Controller
 				base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
 				base_url('assets/plugins/table-boot/plugin/select2.min.js'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
-        base_url('assets/plugins/daterangepicker/moment.min.js'),
-
-
-
+        		base_url('assets/plugins/daterangepicker/moment.min.js'),
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 			if($this->session->userdata('foto')==NULL)
@@ -56,14 +53,17 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
 
-      /*************DATERANGEPICKER**********/
-      $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-      $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-      $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
+	        /*************DATERANGEPICKER**********/
+	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresos.js');
-
+			/**************INPUT MASK***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
 
 
 
@@ -304,6 +304,32 @@ class Ingresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
     }
+    public function anularmovimiento()
+    {
+    	if($this->input->is_ajax_request())
+        {
+            $datos['idingresoimportacion'] = $this->security->xss_clean($this->input->post('idingresoimportacion'));
+        	$datos['almacen_imp'] = $this->security->xss_clean($this->input->post('almacen_imp'));
+        	$datos['tipomov_imp'] = $this->security->xss_clean($this->input->post('tipomov_imp'));
+        	$datos['fechamov_imp'] = $this->security->xss_clean($this->input->post('fechamov_imp'));
+        	$datos['moneda_imp'] = $this->security->xss_clean($this->input->post('moneda_imp'));
+        	$datos['proveedor_imp'] = $this->security->xss_clean($this->input->post('proveedor_imp'));
+        	$datos['ordcomp_imp'] = $this->security->xss_clean($this->input->post('ordcomp_imp'));
+        	$datos['nfact_imp'] = $this->security->xss_clean($this->input->post('nfact_imp'));
+        	$datos['ningalm_imp'] = $this->security->xss_clean($this->input->post('ningalm_imp'));
+        	$datos['obs_imp'] = $this->security->xss_clean($this->input->post('obs_imp'));
+        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
 
+        	if($this->ingresos_model->anularmovimiento_model($datos))
+				echo json_encode("true");
+			else
+				echo json_encode("false");
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+    }
+    
 
 }
