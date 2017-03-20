@@ -8,7 +8,8 @@ $(document).ready(function(){
         groupSeparator: ',',
         autoGroup: true,
         autoUnmask:true
-    }); 
+    });
+
     var start = moment().subtract(0, 'year').startOf('year')
     var end = moment().subtract(0, 'year').endOf('year')
     var actual=moment().subtract(0, 'year').startOf('year')
@@ -68,7 +69,9 @@ $(document).ready(function(){
     });
     retornarTablaIngresos();
 })
-
+$(document).on("change","#almacen_filtro",function(){
+    retornarTablaIngresos();
+})
 
 
 function retornarTablaIngresos()
@@ -77,11 +80,12 @@ function retornarTablaIngresos()
 
     ini=iniciofecha.format('YYYY-MM-DD')
     fin=finfecha.format('YYYY-MM-DD')
+    alm=$("#almacen_filtro").val()
     $.ajax({
         type:"POST",
         url: base_url('index.php/ingresos/mostrarIngresos'),
         dataType: "json",
-        data: {i:ini,f:fin},
+        data: {i:ini,f:fin,a:alm},
     }).done(function(res){
        datosselect= restornardatosSelect(res)
        //console.log((datosselect))

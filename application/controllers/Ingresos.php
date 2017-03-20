@@ -66,7 +66,7 @@ class Ingresos extends CI_Controller
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
 
 
-
+            $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
 
 
 			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();
@@ -178,9 +178,12 @@ class Ingresos extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
+        	//$almacen=//retornar almacen al que corresponde el usuario!!!!!
         	$ini=$this->security->xss_clean($this->input->post("i"));
         	$fin=$this->security->xss_clean($this->input->post("f"));
-			$res=$this->ingresos_model->mostrarIngresos($id=null,$ini,$fin);
+        	$alm=$this->security->xss_clean($this->input->post("a"));
+        	
+			$res=$this->ingresos_model->mostrarIngresos($id=null,$ini,$fin,$alm);
 			$res=$res->result_array();
 			echo json_encode($res);
 		}

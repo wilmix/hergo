@@ -22,7 +22,7 @@ class Ingresos_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
     }
-	public function mostrarIngresos($id=null,$ini=null,$fin=null)
+	public function mostrarIngresos($id=null,$ini=null,$fin=null,$alm="")
 	{
 		if($id==null) //no tiene id de entrada
         {
@@ -39,7 +39,7 @@ class Ingresos_model extends CI_Model
 			ON a.idalmacen=i.almacen
 			INNER JOIN moneda m
 			ON i.moneda=m.id
-            WHERE i.fechamov BETWEEN '$ini' AND '$fin'
+            WHERE i.fechamov BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm'
 			ORDER BY i.idIngresos DESC
             ";
 
@@ -64,7 +64,7 @@ class Ingresos_model extends CI_Model
             LIMIT 1
             ";
         }
-
+        
 		$query=$this->db->query($sql);
 		return $query;
 	}
