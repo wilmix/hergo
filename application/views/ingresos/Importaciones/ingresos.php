@@ -18,8 +18,11 @@
               <!--<a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("index.php/ingresoreporte") ?>" target="_blank"><span class="glyphicon glyphicon-print"></span> Mostrar reporte</a>-->
 
               <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Compraslocales") ?>">Compras Locales</a>
+
               <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Importaciones") ?>">Ingreso Importaciones</a>
+
               <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Importaciones") ?>">Anulacion Egresos</a>
+              
 
               <!--<a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="#"></span>Compras Locales</a>-->
             </div>

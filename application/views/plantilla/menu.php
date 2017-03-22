@@ -62,13 +62,12 @@
             </span>
           </a>
           <ul class="treeview-menu">
+
             <li><a href="<?php echo base_url("ingresos") ?>">Consultas</a></li>
             <li><a href="<?php echo base_url("Ingresos/Compraslocales") ?>">Compras Locales</a></li>
             <li><a href="<?php echo base_url("Ingresos/Importaciones") ?>">Ingreso Importaciones</a></li>
             <li><a href="<?php echo base_url("Ingresos/Importaciones") ?>">Anulacion Egresos</a></li>
-            <!--<li><a href="#">Traspasos</a></li>
-            <li><a href="#">Devolución Cliente</a></li>
-            <li><a href="#">Anulacion de Egreso</a></li>-->
+
           </ul>
         </li>
               
@@ -87,7 +86,7 @@
         </li>
 
                   <li class="treeview">
-          <a href="#"><i class="fa fa fa-exchange"></i> <span>Traspasos</span>
+          <a href="#"><i class="fa fa fa-exchange"></i> <span>Traspasos </span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
