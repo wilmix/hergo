@@ -172,7 +172,7 @@ input[type=date]::-webkit-inner-spin-button {
                   </div>
                   <div class="col-xs-6 col-md-2">
                       <!--insertar costo de articulo a ingresar-->
-                      <label>Costo Unitario:</label>
+                      <label>Total:</label>
                       <input type="text" class="form-control form-control-sm tiponumerico" id="punitario_imp" name="punitario_imp" tabindex=11/>
                   </div>
 

@@ -15,20 +15,25 @@
                 <i class="fa fa-caret-down"></i>
               </button>
 
-              <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("index.php/ingresoreporte") ?>" target="_blank"><span class="glyphicon glyphicon-print"></span> Mostrar reporte</a>
+              <!--<a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("index.php/ingresoreporte") ?>" target="_blank"><span class="glyphicon glyphicon-print"></span> Mostrar reporte</a>-->
 
+              <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Compraslocales") ?>">Compras Locales</a>
               <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Importaciones") ?>">Ingreso Importaciones</a>
+              <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Importaciones") ?>">Anulacion Egresos</a>
 
               <!--<a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="#"></span>Compras Locales</a>-->
             </div>
+
             <div id="toolbar2">
+
               <select class="form-control" id="almacen_filtro" name="almacen_filtro">
                    <?php foreach ($almacen->result_array() as $fila): ?>
                      <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
                    <?php endforeach ?>
               </select>
+
             </div>
-         
+
           <table id="tingresos" data-toolbar="#toolbar2">
 
           </table>
