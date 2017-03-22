@@ -38,46 +38,46 @@
         $this->SetX(160);
         $this->Cell(10);
         $this->SetFont('Times','i',9);
-        $this->Cell(30, 10, 'Fecha Mov: '.$fila->fechamov.'', 0);
+        $this->Cell(30, 10, 'Fecha Mov: ', 0);
 
         //tipo de moneda
         $this->SetY(13);
         $this->SetX(160);
         $this->Cell(10);
         $this->SetFont('Times','i',9);
-        $moneda=($fila->moneda==1)?"Bolivianos":"Dolares";
-        $this->Cell(30, 10, 'Moneda: '.$moneda, 0);
+       "Bolivianos";
+        $this->Cell(30, 10, 'Moneda: ', 0);
 
         // n movimiento
         $this->SetY(18);
         $this->SetX(160);
         $this->Cell(10);
         $this->SetFont('Times','i',9);
-        $this->Cell(30, 10, 'Nro Movimiento: '.$fila->n, 0);
+        $this->Cell(30, 10, 'Nro Movimiento: ', 0);
 
         //****ENCABEZADO****
         $this->Ln(10);
         $this->SetX(10);
         $this->SetFont('Arial','',9);
         // almacen
-        $this->Cell(30,10, 'Almacen: '.$fila->almacen,0,0,'');
+        $this->Cell(30,10, 'Almacen: ',0,0,'');
         $this->Cell(40);
         //proveedor
-        $this->Cell(30,10, 'Proveedor: '.$fila->nombreproveedor,0,0,'');
+        $this->Cell(30,10, 'Proveedor: ',0,0,'');
         $this->Cell(50);
         //factura
-        $this->Cell(30,10, 'Factura: '.$fila->nfact,0,0,'');
+        $this->Cell(30,10, 'Factura: ',0,0,'');
         $this->Ln(5);
         $this->SetX(10);
         $this->SetFont('Arial','',9);
         //tipo movimiento
-        $this->Cell(30,10, 'Tipo Movimiento: '.$fila->tipomov,0,0,'');
+        $this->Cell(30,10, 'Tipo Movimiento: ',0,0,'');
         $this->Cell(40);
         // N° ingreso
-        $this->Cell(30,10, 'Nro Ingreso: '.$fila->ningalm,0,0,'');
+        $this->Cell(30,10, 'Nro Ingreso: ',0,0,'');
         $this->Cell(50);
         // Orden de compra
-        $this->Cell(30,10, 'Orden Compra: '.$fila->ordcomp,0,0,'');
+        $this->Cell(30,10, 'Orden Compra: ',0,0,'');
         $this->Ln(10);
 
          //ENCABEZADO TABLA

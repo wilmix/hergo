@@ -19,7 +19,7 @@ class IngresoReporte extends CI_Controller {
      */
     $this->pdf = new Pdf();
     // Agregamos una página
-    $this->pdf->AddPage('P','Letter');
+    $this->pdf->AddPage('L','Letter');
     // Define el alias para el número de página que se imprimirá en el pie
     $this->pdf->AliasNbPages();
 
