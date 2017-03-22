@@ -66,7 +66,7 @@
             <li><a href="<?php echo base_url("ingresos") ?>">Consultas</a></li>
             <li><a href="<?php echo base_url("Ingresos/Compraslocales") ?>">Compras Locales</a></li>
             <li><a href="<?php echo base_url("Ingresos/Importaciones") ?>">Ingreso Importaciones</a></li>
-            <li><a href="<?php echo base_url("Ingresos/Importaciones") ?>">Anulacion Egresos</a></li>
+            <li><a href="<?php echo base_url("Ingresos/anulacionEgresos") ?>">Anulacion Egresos</a></li>
 
           </ul>
         </li>

@@ -86,7 +86,7 @@ class Ingresos extends CI_Controller
 			redirect('auth', 'refresh');
 
 			$this->datos['menu']="Ingresos";
-			$this->datos['opcion']="Importaciones";
+			
 			$this->datos['titulo']="Ingreso Importaciones";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
@@ -105,7 +105,7 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
 
-
+			
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
 
@@ -114,6 +114,10 @@ class Ingresos extends CI_Controller
 		  	$this->datos['fecha']=date('Y-m-d');
 		  	$this->datos['proveedor']=$this->ingresos_model->retornar_tabla("provedores");
 		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
+		
+			$this->datos['opcion']="Importaciones";
+			$this->datos['idingreso']=16;
+			
 
 
 			$this->load->view('plantilla/head.php',$this->datos);
@@ -126,7 +130,7 @@ class Ingresos extends CI_Controller
 	}
 
 	//FORMULARIO PARA COMPRAS LOCALES
-		public function Compraslocales()
+	public function Compraslocales()
 	{
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
@@ -160,18 +164,66 @@ class Ingresos extends CI_Controller
 		  	$this->datos['fecha']=date('Y-m-d');
 		  	$this->datos['proveedor']=$this->ingresos_model->retornar_tabla("provedores");
 		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
-
+			
+			$this->datos['opcion']="Compras locales";
+			$this->datos['idingreso']=2;
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('ingresos/importaciones/compraslocales.php',$this->datos);
+			$this->load->view('ingresos/importaciones/importaciones2.php',$this->datos);
+			$this->load->view('plantilla/footcontainer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
+	}
+	public function anulacionEgresos()
+	{
+		if(!$this->session->userdata('logeado'))
+			redirect('auth', 'refresh');
+
+			$this->datos['menu']="Ingresos";
+			$this->datos['opcion']="Compras Locales";
+			$this->datos['titulo']="Compras Locales";
+
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
+            /*************AUTOCOMPLETE**********/
+            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
+			/***************SELECT***********/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
+			/**************FUNCION***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresosimportaciones.js');
+            /**************INPUT MASK***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+
+
+			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
+
+            $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
+            $this->datos['tingreso']=$this->ingresos_model->retornar_tablaMovimiento("+");
+		  	$this->datos['fecha']=date('Y-m-d');
+		  	$this->datos['proveedor']=$this->ingresos_model->retornar_tabla("provedores");
+		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
+			
+			$this->datos['opcion']="Anulacion egresos";
+			$this->datos['idingreso']=5;;
+
+			$this->load->view('plantilla/head.php',$this->datos);
+			$this->load->view('plantilla/header.php',$this->datos);
+			$this->load->view('plantilla/menu.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('ingresos/importaciones/importaciones2.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
 	
-    public function editarimportaciones($id=null)
+    public function editarimportaciones($id=null)//cambiar nombre a editar ingresos!!!!
 	{
         //if("si no esta autorizado a editar redireccionar o enviar error!!!!")
 		if(!$this->session->userdata('logeado'))
@@ -211,7 +263,9 @@ class Ingresos extends CI_Controller
 		  	$this->datos['fecha']=date('Y-m-d');
 		  	$this->datos['proveedor']=$this->ingresos_model->retornar_tabla("provedores");
 		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
-
+		
+			
+			
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
