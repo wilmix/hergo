@@ -21,7 +21,7 @@
 
               <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Importaciones") ?>">Ingreso Importaciones</a>
 
-              <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Importaciones") ?>">Anulacion Egresos</a>
+              <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/anulacionEgresos") ?>">Anulacion Egresos</a>
               
 
               <!--<a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="#"></span>Compras Locales</a>-->
@@ -36,8 +36,14 @@
               </select>
 
             </div>
+            <style>
+              table { table-layout: fixed; }
+            </style>
 
-          <table id="tingresos" data-toolbar="#toolbar2">
+          <table id="tingresos" data-toolbar="#toolbar2"
+          data-toggle="table"
+             data-height="550">
+
 
           </table>
 

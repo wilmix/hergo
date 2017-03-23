@@ -2,7 +2,7 @@ $(document).ready(function(){
 
     $(".tiponumerico").inputmask({
         alias:"decimal",
-        digits:2,
+        digits:3,
         groupSeparator: ',',
         autoGroup: true,
         autoUnmask:true

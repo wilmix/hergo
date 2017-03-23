@@ -28,6 +28,9 @@ class Principal extends CI_Controller
 	{
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
+			$this->datos['menu']="Index";
+			$this->datos['opcion']="Index";
+			$this->datos['titulo']="Hergo | Inventarios";
 		
 				    
 			$this->datos['cabeceras_css']= $this->cabeceras_css;

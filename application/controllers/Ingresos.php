@@ -48,7 +48,7 @@ class Ingresos extends CI_Controller
 
 			$this->datos['menu']="Ingresos";
 			$this->datos['opcion']="Consultas";
-			$this->datos['titulo']="Consultas";
+			$this->datos['titulo']="Ingresos";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
