@@ -130,7 +130,7 @@ class Ingresos extends CI_Controller
 	}
 
 	//FORMULARIO PARA COMPRAS LOCALES
-	public function Compraslocales()
+	public function compraslocales()
 	{
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
@@ -172,7 +172,7 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('ingresos/importaciones/importaciones2.php',$this->datos);
+			$this->load->view('ingresos/importaciones/compraslocales.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
@@ -182,8 +182,8 @@ class Ingresos extends CI_Controller
 			redirect('auth', 'refresh');
 
 			$this->datos['menu']="Ingresos";
-			$this->datos['opcion']="Compras Locales";
-			$this->datos['titulo']="Compras Locales";
+			//$this->datos['opcion']="Compras Locales";
+			//$this->datos['titulo']="Compras Locales";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
@@ -265,8 +265,6 @@ class Ingresos extends CI_Controller
 		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
 		
 			
-			
-
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
@@ -424,7 +422,7 @@ class Ingresos extends CI_Controller
         	$datos['obs_imp'] = $this->security->xss_clean($this->input->post('obs_imp'));
         	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
 
-        	if($this->ingresos_model->anularmovimiento_model($datos))
+        	if($this->ingresos_model->anularRecuperarMovimiento_model($datos,1))
 				echo json_encode("true");
 			else
 				echo json_encode("false");
@@ -434,6 +432,31 @@ class Ingresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
     }
-    
+    public function recuperarmovimiento()
+    {
+    	if($this->input->is_ajax_request())
+        {
+            $datos['idingresoimportacion'] = $this->security->xss_clean($this->input->post('idingresoimportacion'));
+        	$datos['almacen_imp'] = $this->security->xss_clean($this->input->post('almacen_imp'));
+        	$datos['tipomov_imp'] = $this->security->xss_clean($this->input->post('tipomov_imp'));
+        	$datos['fechamov_imp'] = $this->security->xss_clean($this->input->post('fechamov_imp'));
+        	$datos['moneda_imp'] = $this->security->xss_clean($this->input->post('moneda_imp'));
+        	$datos['proveedor_imp'] = $this->security->xss_clean($this->input->post('proveedor_imp'));
+        	$datos['ordcomp_imp'] = $this->security->xss_clean($this->input->post('ordcomp_imp'));
+        	$datos['nfact_imp'] = $this->security->xss_clean($this->input->post('nfact_imp'));
+        	$datos['ningalm_imp'] = $this->security->xss_clean($this->input->post('ningalm_imp'));
+        	$datos['obs_imp'] = $this->security->xss_clean($this->input->post('obs_imp'));
+        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
+
+        	if($this->ingresos_model->anularRecuperarMovimiento_model($datos,0))
+				echo json_encode("true");
+			else
+				echo json_encode("false");
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+    }
 
 }

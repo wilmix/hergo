@@ -156,7 +156,7 @@ function retornarTablaIngresos()
                 sortable:true,
                 filter: {
                     type: "select",
-                    data:["APROBADO","PENDIENTE"]
+                    data:["APROBADO","PENDIENTE","ANULADO"]
                 },
                 formatter: operateFormatter2,
                 align: 'center'
@@ -212,10 +212,18 @@ function operateFormatter(value, row, index)
 function operateFormatter2(value, row, index)
 {
 	$ret=''
-	if(value==0)
-		$ret='<span class="label label-danger">PENDIENTE</span>';
-	if(value==1)
-		$ret='<span class="label label-success">APROBADO</span>';
+    if(row.anulado==1)
+    {        
+        $ret='<span class="label label-warning">ANULADO</span>';
+    }
+    else
+    {
+        if(value==0)
+            $ret='<span class="label label-danger">PENDIENTE</span>';
+        if(value==1)
+            $ret='<span class="label label-success">APROBADO</span>';
+    }
+	
     return ($ret);
 }
 /***********Eventos*************/

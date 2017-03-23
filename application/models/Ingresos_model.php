@@ -27,7 +27,7 @@ class Ingresos_model extends CI_Model
 		if($id==null) //no tiene id de entrada
         {
 		  $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
-				(SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs
+				(SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado
 			FROM ingresos i
 			INNER JOIN tmovimiento  t
 			ON i.tipomov = t.id
@@ -192,7 +192,7 @@ class Ingresos_model extends CI_Model
         return true;
 
     }
-    public function anularmovimiento_model($datos)
+    public function anularRecuperarMovimiento_model($datos,$anuladorecuperado)
     {
         $idingresoimportacion=$datos['idingresoimportacion'];
         //$almacen_imp=$datos['almacen_imp'];
@@ -206,7 +206,7 @@ class Ingresos_model extends CI_Model
         $obs_imp=$datos['obs_imp'];
         $autor=$this->session->userdata('user_id');
         $fecha = date('Y-m-d H:i:s');
-        $sql="UPDATE ingresos SET proveedor='$proveedor_imp',moneda='$moneda_imp',nfact='$nfact_imp',ningalm='$ningalm_imp',ordcomp='$ordcomp_imp',obs='$obs_imp',fecha='$fecha',autor='$autor', anulado='1' where idIngresos='$idingresoimportacion'";
+        $sql="UPDATE ingresos SET proveedor='$proveedor_imp',moneda='$moneda_imp',nfact='$nfact_imp',ningalm='$ningalm_imp',ordcomp='$ordcomp_imp',obs='$obs_imp',fecha='$fecha',autor='$autor', anulado='$anuladorecuperado' where idIngresos='$idingresoimportacion'";
         $query=$this->db->query($sql);
         
         return true;

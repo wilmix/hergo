@@ -248,7 +248,12 @@ input[type=date]::-webkit-inner-spin-button {
                 <div class="col-xs-12">
                 <?php if ($cont): ?>
                     <button type="button" class="btn btn-primary" id="actualizarMovimiento">Actualizar Movimiento</button>
-                    <button type="button" class="btn btn-warning" id="anularMovimiento">Anular Movimiento</button>
+                      <?php if ($dcab->anulado==0): ?>
+                        <button type="button" class="btn btn-warning" id="anularMovimiento">Anular Movimiento</button>  
+                      <?php else: ?>
+                        <button type="button" class="btn btn-info" id="recuperarMovimiento">Recuperar Movimiento</button>  
+                      <?php endif ?>
+                      
                     <button type="button" class="btn btn-danger" id="cancelarMovimientoActualizar">Cancelar</button>
                 <?php else: ?>
                     <button type="button" class="btn btn-primary" id="guardarMovimiento" tabindex=11>Guardar Movimiento</button>

@@ -65,14 +65,17 @@ input[type=date]::-webkit-inner-spin-button {
                </div>
                <div class=" col-xs-6 col-sm-6 col-md-3">
                 <label for="moneda_imp">Tipo de Ingreso:</label>
-                <select class="form-control form-control-sm" id="tipomov_imp" name="tipomov_imp" tabindex=2 <?= ($cont)?"disabled":"" ?>>
+                <select class="form-control form-control-sm" id="tipomov_imp" name="tipomov_imp" tabindex=2 <?= ($cont)?"disabled":"" ?> disabled>
                    <?php foreach ($tingreso->result_array() as $fila): ?>
                     <?php if ($cont): ?>
                       <?php if ($idtingreso==$fila['id']): ?>
                         <option value=<?= $fila['id'] ?> "selected"><?= $fila['tipomov'] ?></option>
                       <?php endif ?>
                     <?php else: ?>
-                      <option value=<?= $fila['id'] ?> <?= ($idtingreso==$fila['id'])?"selected":"" ?>><?= $fila['tipomov'] ?></option>
+          
+                    <?php if ($idingreso==$fila['id']): ?>
+                                <option value=<?= $fila['id'] ?> <?= ($idtingreso==$fila['id'])?"selected":"" ?>><?= $fila['tipomov'] ?></option>
+                    <?php endif ?>
                     <?php endif ?>
                      
                    <?php endforeach ?>

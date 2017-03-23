@@ -252,13 +252,54 @@ function anularMovimiento()
                     limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
-                    $(".mensaje_ok").html("Datos actualizados correctamente");
+                    $(".mensaje_ok").html("Datos anulados correctamente");
                     $("#modal_ok").modal("show");
                     window.location.href=base_url("ingresos");
                 }
                 else
                 {
                     $(".mensaje_error").html("Error al anular los datos, intente nuevamente");
+                    $("#modal_error").modal("show");
+                }
+                
+            }
+        })      
+    }
+    else
+    {
+        alert("no se tiene datos en la tabla para guardar")
+    }
+}
+function recuperarMovimiento()
+{     
+    var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
+    var tablaaux=tablatoarray();
+    console.log(valuesToSubmit)
+    console.log(tablaaux);
+    if(tablaaux.length>0)
+    {
+        var tabla=JSON.stringify(tablaaux);
+
+        valuesToSubmit+="&tabla="+tabla;    
+        retornarajax(base_url("index.php/ingresos/recuperarmovimiento"),valuesToSubmit,function(data)
+        {
+            estado=validarresultado_ajax(data);
+            if(estado)
+            {               
+                if(data.respuesta)
+                {
+                    
+                    $("#modalIgresoDetalle").modal("hide");
+                    limpiarArticulo();
+                    limpiarCabecera();
+                    limpiarTabla();
+                    $(".mensaje_ok").html("Datos recuperados correctamente");
+                    $("#modal_ok").modal("show");
+                    window.location.href=base_url("ingresos");
+                }
+                else
+                {
+                    $(".mensaje_error").html("Error al recuperar los datos, intente nuevamente");
                     $("#modal_error").modal("show");
                 }
                 
@@ -303,5 +344,10 @@ $(document).on("click","#anularMovimiento",function(){
     limpiarArticulo();
     limpiarCabecera();
     limpiarTabla();
-
+})
+$(document).on("click","#recuperarMovimiento",function(){
+    recuperarMovimiento();
+    limpiarArticulo();
+    limpiarCabecera();
+    limpiarTabla();
 })
