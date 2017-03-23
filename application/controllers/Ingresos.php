@@ -48,7 +48,7 @@ class Ingresos extends CI_Controller
 
 			$this->datos['menu']="Ingresos";
 			$this->datos['opcion']="Consultas";
-			$this->datos['titulo']="Ingreso Importaciones";
+			$this->datos['titulo']="Consultas";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
@@ -87,7 +87,7 @@ class Ingresos extends CI_Controller
 
 			$this->datos['menu']="Ingresos";
 			
-			$this->datos['titulo']="Ingreso Importaciones";
+			$this->datos['titulo']="Importaciones";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
@@ -183,7 +183,7 @@ class Ingresos extends CI_Controller
 
 			$this->datos['menu']="Ingresos";
 			//$this->datos['opcion']="Compras Locales";
-			//$this->datos['titulo']="Compras Locales";
+			$this->datos['titulo']="Anulacion Egresos";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
@@ -231,7 +231,7 @@ class Ingresos extends CI_Controller
 
 			$this->datos['menu']="Ingresos";
 			$this->datos['opcion']="Importaciones";
-			$this->datos['titulo']="Ingreso Importaciones";
+			$this->datos['titulo']="Editar";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;

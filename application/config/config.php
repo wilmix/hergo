@@ -23,9 +23,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://192.168.1.4/hergo/';
+//$config['base_url'] = 'http://192.168.1.4/hergo/';
 
-//$config['base_url'] = 'http://1.32.16.223:8080/hergo/';
+$config['base_url'] = 'http://1.32.16.223:8080/hergo/';
 
 //$config['base_url'] = 'http://localhost:8080/hergo';
 
