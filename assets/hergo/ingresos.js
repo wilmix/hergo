@@ -35,7 +35,7 @@ $(document).ready(function(){
     $(function() {
 
         function cb(start, end) {
-            $('#fechapersonalizada span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            $('#fechapersonalizada span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
             iniciofecha=start
             finfecha=end
         }
@@ -99,6 +99,8 @@ function retornarTablaIngresos()
             //height:"550", error con filtros
             clickToSelect:true,
             search:true,
+            strictSearch:true,
+            searchOnEnterKey:true,
             filter:true,
             showColumns:true,
 
@@ -145,16 +147,19 @@ function retornarTablaIngresos()
                 field:'nfact',
                 title:"Factura",
                 width: '90px',
-                filter: {type: "input"},
                 sortable:true,
+                //searchable:false,
+                filter: {type: "input"},
+                
             },
             {
                 field:'total',
                 title:"Total",
                 width: '150px',
                 align: 'right',
-                filter: {type: "input"},
                 sortable:true,
+                //searchable:false,
+                filter: {type: "input"},
             },
             {
                 field:"estado",
