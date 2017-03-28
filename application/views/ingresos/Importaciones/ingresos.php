@@ -3,52 +3,45 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body">
-
-        <div class="text-right">
            
-            <div id="toolbar" class="btn-group">
-              
-             
-              
+          <div id="toolbar" class="text-right">
+            <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Compraslocales") ?>">Compras Locales</a>
 
-              <!--<a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="#"></span>Compras Locales</a>-->
-            </div>
+            <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Importaciones") ?>">Ingreso Importaciones</a>
 
-            <div id="toolbar2">
-              <div style="float:left;">
-                <select class="form-control" id="almacen_filtro" name="almacen_filtro">
-                     <?php foreach ($almacen->result_array() as $fila): ?>
-                       <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
-                     <?php endforeach ?>
-                </select>  
-              </div>  
-              <div style="float:left;" class="btn-group">
-                <button type="button" class="btn btn-default" id="fechapersonalizada">
-                  <span>
-                    <i class="fa fa-calendar"></i> Fecha
-                  </span>
-                  <i class="fa fa-caret-down"></i>
-                </button>
+            <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/anulacionEgresos") ?>">Anulacion Egresos</a>
+          </div>
 
-                <!--<a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("index.php/ingresoreporte") ?>" target="_blank"><span class="glyphicon glyphicon-print"></span> Mostrar reporte</a>-->
+          <div id="toolbar2" class="form-inline">
+             <button type="button" class="btn btn-default" id="fechapersonalizada">
+               <span>
+                 <i class="fa fa-calendar"></i> Fecha
+               </span>
+                <i class="fa fa-caret-down"></i>
+             </button>
 
-                <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Compraslocales") ?>">Compras Locales</a>
+              <select class="form-control" id="almacen_filtro" name="almacen_filtro">
+                <?php foreach ($almacen->result_array() as $fila): ?>
+                <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
+                <?php endforeach ?>
+              </select>
 
-                <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Importaciones") ?>">Ingreso Importaciones</a>
+              <select class="form-control" name="tipo_filtro" id="tipo_filtro">
+                 <option value="">COMPRAS LOCALES</option>
+                  <option value="">IMPORTACIONES</option>
+                  <option value="">ANULACION EGRESOS</option>
+              </select>
+           </div>
 
-                <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/anulacionEgresos") ?>">Anulacion Egresos</a>  
-              </div>
-              
-            </div>
-            <style>
-              table { table-layout: fixed; }
-            </style>
+          <style>
+            table { table-layout: fixed; }
+          </style>
 
-          <table id="tingresos" data-toolbar="#toolbar2"
-          data-toggle="table"
-             data-height="550">
-
-
+          <table 
+            id="tingresos" 
+            data-toolbar="#toolbar2"
+            data-toggle="table"
+            data-height="550">
           </table>
 
       </div>
