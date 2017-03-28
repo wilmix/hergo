@@ -158,7 +158,7 @@ function retornarTablaIngresos()
                 width: '150px',
                 align: 'right',
                 sortable:true,
-                //searchable:false,
+                formatter: operateFormatter3,
                 filter: {type: "input"},
             },
             {
@@ -240,6 +240,12 @@ function operateFormatter2(value, row, index)
     }
 	
     return ($ret);
+}
+function operateFormatter3(value, row, index)
+{       
+    num=Math.round(value * 100) / 100
+    return (formatNumber.new(num));
+   //return(num)
 }
 /***********Eventos*************/
 window.operateEvents = {
@@ -407,3 +413,23 @@ function restornardatosSelect(res)
 Array.prototype.unique=function(a){
   return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
 });
+/*******************formato de numeros***************/
+var formatNumber = {
+ separador: ",", // separador para los miles
+ sepDecimal: '.', // separador para los decimales
+ formatear:function (num){
+  num +='';
+  var splitStr = num.split('.');
+  var splitLeft = splitStr[0];
+  var splitRight = splitStr.length > 1 ? this.sepDecimal + splitStr[1] : '';
+  var regx = /(\d+)(\d{3})/;
+  while (regx.test(splitLeft)) {
+  splitLeft = splitLeft.replace(regx, '$1' + this.separador + '$2');
+  }
+  return this.simbol + splitLeft  +splitRight;
+ },
+ new:function(num, simbol){
+  this.simbol = simbol ||'';
+  return this.formatear(num);
+ }
+}
