@@ -64,6 +64,8 @@
           <ul class="treeview-menu">
 
             <li><a href="<?php echo base_url("ingresos") ?>">Consultas</a></li>
+            <li><a href="<?php echo base_url("ingresos/consultadetalle") ?>">ConsultasDetalle
+            <small class="label pull-right bg-red">construction</small></a></li>
             <li><a href="<?php echo base_url("Ingresos/Compraslocales") ?>">Compras Locales</a></li>
             <li><a href="<?php echo base_url("Ingresos/Importaciones") ?>">Ingreso Importaciones</a></li>
             <li><a href="<?php echo base_url("Ingresos/anulacionEgresos") ?>">Anulacion Egresos</a></li>
