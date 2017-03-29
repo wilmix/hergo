@@ -17,6 +17,11 @@
         $idtingreso=$dcab->idtipomov;
         $idmoneda=$dcab->idmoneda;
         $idproveedor=$dcab->idproveedor;
+        $idingresocompraslocales=$idtingreso;
+    }
+    else
+    {
+      $idingresocompraslocales=$idingreso;
     }
 ?>
 <style>
@@ -177,7 +182,7 @@ input[type=date]::-webkit-inner-spin-button {
                   </div>
                   <div class="col-xs-6 col-md-2">
                       <!--insertar costo de articulo a ingresar-->
-                      <label><?= $idingreso==2? "Total:":"Costo Unitario:" ?></label> <!--CAMBIO PARA COMPRAS LOCALES-->
+                      <label><?= $idingresocompraslocales==2? "Total:":"Costo Unitario:" ?></label> <!--CAMBIO PARA COMPRAS LOCALES-->
                       <input type="text" class="form-control form-control-sm tiponumerico" id="punitario_imp" name="punitario_imp" tabindex=11/>
                   </div>
 
@@ -197,7 +202,7 @@ input[type=date]::-webkit-inner-spin-button {
                       <th>Código</th>
                       <th>Artículo</th>
                       <th class="text-right">Cantidad</th>
-                      <th class="text-right"><?= $idingreso==2? "Costo Unitario:":"Total:" ?></th><!--CAMBIO PARA COMPRAS LOCALES-->
+                      <th class="text-right"><?= $idingresocompraslocales==2? "Costo Unitario:":"Total:" ?></th><!--CAMBIO PARA COMPRAS LOCALES-->
                       <th class="text-right">Total</th>
                       <th>&nbsp;</th>
                     </tr>
