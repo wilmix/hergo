@@ -1,3 +1,5 @@
+var glob_factorIVA=0.87;
+var glob_factorRET=0.087;
 $(document).ready(function(){ 
 
     $(".tiponumerico").inputmask({
@@ -117,32 +119,53 @@ function calcularTotal()
 }
 $(document).on("change","#moneda_imp",function(){
     calcularTotal()
+
 })
+//calculo de compras locales con y sin factura
+function calculocompraslocales(cant,costo)
+{
+    var ret;    
+    var pu//preciounitario
+    pu=costo/cant;// calculamos el costo unitario      
+    if($("#nfact_imp").val()!="")  //si no tiene texto es sin factura              
+        ret=pu*glob_factorIVA; //confactura
+    else                        
+        ret=pu*glob_factorRET+pu; //sinfactura            
+    return ret;
+}
 function agregarArticulo()
 {
     var codigo=$("#articulo_imp").val()
     var descripcion=$("#Descripcion_imp").val()
     var cant=$("#cantidad_imp").inputmask('unmaskedvalue');
-    var costo=$("#punitario_imp").inputmask('unmaskedvalue');
-    
+    var costo=$("#punitario_imp").inputmask('unmaskedvalue');    
     var cant=(cant=="")?0:cant;
     var costo=(costo=="")?0:costo;
-    //costo=costo.toFixed(2);
-    var total=cant*costo;
-    console.log("cant",cant,"* costo",costo,"=",total)
+    var tipoingreso=$("#tipomov_imp2").val()
+    var total;
+    //console.log(tipoingreso)
+    if(tipoingreso==2)//si es compra local idcompralocal=2
+    {
+ 
+        costo=calculocompraslocales(cant,costo)
+
+    }
+        total=cant*costo;    
+    
+    //console.log("cant",cant,"* costo",costo,"=",total)
     
     var articulo='<tr>'+
-            '<td><input type="text" class="estilofila" disabled value='+codigo+'></input></td>'+
-            '<td><input type="text" class="estilofila" disabled value='+descripcion+'></input</td>'+
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value='+cant+'></input></td>'+
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value='+costo+'></input></td>'+
-            '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value='+total+'></input></td>'+
+            '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
+            '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
+            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
+            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+
+            '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
             '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+
         '</tr>'
     $("#tbodyarticulos").append(articulo)
     $(".tiponumerico").inputmask({
         alias:"decimal",
-        digits:2,
+        digits:3,
         groupSeparator: ',',
         autoGroup: true
     });

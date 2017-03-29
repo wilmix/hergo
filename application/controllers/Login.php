@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Login extends CI_Controller
 {
+	private $datos;
 	public function __construct()
 	{	
 		parent::__construct();
@@ -27,9 +28,8 @@ class Login extends CI_Controller
 		$datos['cabeceras_script'][]=base_url('assets/login/js/jquery.backstretch.min.js');
 		$datos['cabeceras_script'][]=base_url('assets/login/js/scripts.js');
 
-						
-		$this->load->view('plantilla/head.php',$datos);
-		
+		$this->datos['titulo']="Iniciar Sesion";
+		$this->load->view('plantilla/head.php',$datos);		
 		$this->load->view('login/login.php',$datos);
 		$this->load->view('login/footerlogin.php',$datos);
 	}

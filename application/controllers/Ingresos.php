@@ -172,7 +172,7 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('ingresos/importaciones/compraslocales.php',$this->datos);
+			$this->load->view('ingresos/importaciones/importaciones2.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}

@@ -75,9 +75,9 @@ input[type=date]::-webkit-inner-spin-button {
                       <?php endif ?>
                     <?php else: ?>
 					
-					  <?php if ($idingreso==$fila['id']): ?>
-                      	<option value=<?= $fila['id'] ?> <?= ($idingreso==$fila['id'])?"selected":"" ?>><?= $fila['tipomov'] ?></option>
-					  <?php endif ?>
+          					  <?php if ($idingreso==$fila['id']): ?>
+                                	<option value=<?= $fila['id'] ?> <?= ($idingreso==$fila['id'])?"selected":"" ?>><?= $fila['tipomov'] ?></option>
+          					  <?php endif ?>
                     <?php endif ?>
                      
                    <?php endforeach ?>
@@ -177,7 +177,7 @@ input[type=date]::-webkit-inner-spin-button {
                   </div>
                   <div class="col-xs-6 col-md-2">
                       <!--insertar costo de articulo a ingresar-->
-                      <label>Costo Unitario:</label>
+                      <label><?= $idingreso==2? "Total:":"Costo Unitario:" ?></label> <!--CAMBIO PARA COMPRAS LOCALES-->
                       <input type="text" class="form-control form-control-sm tiponumerico" id="punitario_imp" name="punitario_imp" tabindex=11/>
                   </div>
 
@@ -197,7 +197,7 @@ input[type=date]::-webkit-inner-spin-button {
                       <th>Código</th>
                       <th>Artículo</th>
                       <th class="text-right">Cantidad</th>
-                      <th class="text-right">Costo</th>
+                      <th class="text-right"><?= $idingreso==2? "Costo Unitario:":"Total:" ?></th><!--CAMBIO PARA COMPRAS LOCALES-->
                       <th class="text-right">Total</th>
                       <th>&nbsp;</th>
                     </tr>
