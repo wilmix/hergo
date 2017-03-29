@@ -34,6 +34,7 @@ class Ingresos extends CI_Controller
 				base_url('assets/plugins/table-boot/plugin/select2.min.js'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
         		base_url('assets/plugins/daterangepicker/moment.min.js'),
+        		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 			if($this->session->userdata('foto')==NULL)
@@ -74,7 +75,7 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			//$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('ingresos/importaciones/ingresos.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
@@ -86,7 +87,7 @@ class Ingresos extends CI_Controller
 			redirect('auth', 'refresh');
 
 			$this->datos['menu']="Ingresos";
-			$this->datos['opcion']="Consultas";
+			$this->datos['opcion']="Consultas Detalle";
 			$this->datos['titulo']="ConsultaDetalle";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
@@ -104,7 +105,7 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
 
-
+            $this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresodetalle.js');
             $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
 
 

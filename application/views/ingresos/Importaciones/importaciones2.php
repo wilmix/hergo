@@ -170,20 +170,25 @@ input[type=date]::-webkit-inner-spin-button {
                  </div><!-- div class="form-group-sm row"  TERCERA FILA-->
                  <div class="form-group row"> <!--CUARTA FILA-->
 
-                  <div class="col-xs-12 col-md-6">
+                  <div class="col-xs-12 col-md-4">
                       <!--insertar costo de articulo a ingresar-->
 
                   </div>
 
-                  <div class="col-xs-6 col-md-2">
+                  <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
                       <label>Cantidad:</label>
                       <input type="text" class="form-control form-control-sm" id="cantidad_imp" name="cantidad_imp" tabindex=10/>
                   </div>
-                  <div class="col-xs-6 col-md-2">
+                  <div class="col-xs-4 col-md-2">
                       <!--insertar costo de articulo a ingresar-->
                       <label><?= $idingresocompraslocales==2? "Total:":"Costo Unitario:" ?></label> <!--CAMBIO PARA COMPRAS LOCALES-->
                       <input type="text" class="form-control form-control-sm tiponumerico" id="punitario_imp" name="punitario_imp" tabindex=11/>
+                  </div>
+                  <div class="col-xs-4 col-md-2">
+                        <!--insertar cantidad de productos a ingresar-->
+                      <label>CostoUnitario:</label>
+                      <input type="text" class="form-control form-control-sm" id="" name="" readonly/>
                   </div>
 
                   <div class="col-xs-12 col-md-2">

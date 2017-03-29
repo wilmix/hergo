@@ -1,7 +1,7 @@
  <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Page Header
+        Prueba
         <small>Optional description</small>
       </h1>
       <ol class="breadcrumb">
@@ -14,6 +14,7 @@
     <section class="content">
 
       <!-- Your Page Content Here -->
+      <h1>contenido</h1>
 
     </section>
     <!-- /.content -->

@@ -1,15 +1,28 @@
+ <section class="content-header">
+      <h1>
+        Ingresos
+        <small>Consulta</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="<?php echo base_url("ingresos") ?>"><i class="fa fa-dashboard"></i> Ingresos</a></li>
+        <li class="active">Consultas</li>
+      </ol>
+    </section>
 
+    <!-- Main content -->
+    <section class="content">
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body">
            
           <div id="toolbar" class="text-right">
-            <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Compraslocales") ?>">Compras Locales</a>
+            <a class="btn btn-primary btn-sm" href="<?php echo base_url("Ingresos/Compraslocales") ?>"><i class="fa fa-plus-circle fa-lg"></i>  ComprasLocales</a>
 
-            <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/Importaciones") ?>">Ingreso Importaciones</a>
+            <a class="btn btn-primary btn-sm" href="<?php echo base_url("Ingresos/Importaciones") ?>"><i class="fa fa-plus-circle fa-lg"></i>  IngresoImportaciones</a>
 
-            <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("Ingresos/anulacionEgresos") ?>">Anulacion Egresos</a>
+            <a class="btn btn-primary btn-sm" href="<?php echo base_url("Ingresos/anulacionEgresos") ?>")><i class="fa fa-plus-circle fa-lg"></i>  Anulacion Egresos</a>
+
           </div>
 
           <div id="toolbar2" class="form-inline">
@@ -43,6 +56,7 @@
             data-toggle="table"
             data-height="550">
           </table>
+
 
       </div>
 
