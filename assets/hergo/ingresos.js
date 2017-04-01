@@ -128,7 +128,7 @@ function retornarTablaIngresos()
                 title: 'Tipo',
                 align: 'center',
                 sortable:true,
-                searchable:false,
+                
                 filter: {
                         type: "select",
                         data: datosselect[1]
@@ -140,7 +140,7 @@ function retornarTablaIngresos()
                 title:"Fecha",
                 sortable:true,
                 align: 'center',
-                searchable:false,
+                
                 formatter: formato_fecha_corta,
             },
             {
@@ -151,7 +151,7 @@ function retornarTablaIngresos()
                     data: datosselect[0]
                 },
                 sortable:true,
-                searchable:false,
+                
             },
             {
                 field:'nfact',
@@ -160,7 +160,7 @@ function retornarTablaIngresos()
                 sortable:true,
                 //searchable:false,
                 filter: {type: "input"},
-                searchable:false,
+                
                 
             },
             {
@@ -171,7 +171,7 @@ function retornarTablaIngresos()
                 sortable:true,
                 formatter: operateFormatter3,
                 filter: {type: "input"},
-                searchable:false,
+                
             },
             {
                 field:"estado",
@@ -184,7 +184,7 @@ function retornarTablaIngresos()
                 },
                 formatter: operateFormatter2,
                 align: 'center',
-                searchable:false,
+                
             },
             {
                 field:"autor",
@@ -197,7 +197,7 @@ function retornarTablaIngresos()
                 },
                 visible:false,
                 align: 'center',
-                searchable:false,
+                
             },
             {
                 field:"fecha",
@@ -207,7 +207,7 @@ function retornarTablaIngresos()
                 formatter: formato_fecha_corta,
                 visible:false,
                 align: 'center',
-                searchable:false,
+                
             },
             {
                 title: 'Acciones',
