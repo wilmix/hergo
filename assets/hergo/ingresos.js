@@ -33,15 +33,17 @@ $(document).ready(function(){
 */
     
     $(function() {
-
+        moment.locale('es');
         function cb(start, end) {
             $('#fechapersonalizada span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
             iniciofecha=start
             finfecha=end
         }
-        moment.locale('es');
+        
         $('#fechapersonalizada').daterangepicker({
+
             locale: {
+                  format: 'DD/MM/YYYY',
                   applyLabel: 'Aplicar',
                   cancelLabel: 'Cancelar',
                   customRangeLabel: 'Personalizado',
@@ -72,6 +74,9 @@ $(document).ready(function(){
 $(document).on("change","#almacen_filtro",function(){
     retornarTablaIngresos();
 })
+$(document).on("change","#tipo_filtro",function(){
+    retornarTablaIngresos();
+})
 
 
 function retornarTablaIngresos()
@@ -81,11 +86,13 @@ function retornarTablaIngresos()
     ini=iniciofecha.format('YYYY-MM-DD')
     fin=finfecha.format('YYYY-MM-DD')
     alm=$("#almacen_filtro").val()
+    tipoingreso=$("#tipo_filtro").val()
+    console.log(tipoingreso)
     $.ajax({
         type:"POST",
         url: base_url('index.php/ingresos/mostrarIngresos'),
         dataType: "json",
-        data: {i:ini,f:fin,a:alm},
+        data: {i:ini,f:fin,a:alm,ti:tipoingreso},
     }).done(function(res){
        datosselect= restornardatosSelect(res)
        //console.log((datosselect))
@@ -121,6 +128,7 @@ function retornarTablaIngresos()
                 title: 'Tipo',
                 align: 'center',
                 sortable:true,
+                searchable:false,
                 filter: {
                         type: "select",
                         data: datosselect[1]
@@ -132,6 +140,7 @@ function retornarTablaIngresos()
                 title:"Fecha",
                 sortable:true,
                 align: 'center',
+                searchable:false,
                 formatter: formato_fecha_corta,
             },
             {
@@ -142,6 +151,7 @@ function retornarTablaIngresos()
                     data: datosselect[0]
                 },
                 sortable:true,
+                searchable:false,
             },
             {
                 field:'nfact',
@@ -150,6 +160,7 @@ function retornarTablaIngresos()
                 sortable:true,
                 //searchable:false,
                 filter: {type: "input"},
+                searchable:false,
                 
             },
             {
@@ -160,6 +171,7 @@ function retornarTablaIngresos()
                 sortable:true,
                 formatter: operateFormatter3,
                 filter: {type: "input"},
+                searchable:false,
             },
             {
                 field:"estado",
@@ -171,7 +183,8 @@ function retornarTablaIngresos()
                     data:["APROBADO","PENDIENTE","ANULADO"]
                 },
                 formatter: operateFormatter2,
-                align: 'center'
+                align: 'center',
+                searchable:false,
             },
             {
                 field:"autor",
@@ -183,7 +196,8 @@ function retornarTablaIngresos()
                     data: datosselect[2]
                 },
                 visible:false,
-                align: 'center'
+                align: 'center',
+                searchable:false,
             },
             {
                 field:"fecha",
@@ -192,7 +206,8 @@ function retornarTablaIngresos()
                 sortable:true,
                 formatter: formato_fecha_corta,
                 visible:false,
-                align: 'center'
+                align: 'center',
+                searchable:false,
             },
             {
                 title: 'Acciones',

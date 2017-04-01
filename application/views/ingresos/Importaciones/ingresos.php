@@ -37,12 +37,15 @@
                 <?php foreach ($almacen->result_array() as $fila): ?>
                 <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
                 <?php endforeach ?>
+                <option value="">TODOS</option>
               </select>
-
+              
               <select class="form-control" name="tipo_filtro" id="tipo_filtro">
-                 <option value="">COMPRAS LOCALES</option>
-                  <option value="">IMPORTACIONES</option>
-                  <option value="">ANULACION EGRESOS</option>
+                <?php foreach ($tipoingreso->result_array() as $fila): ?>
+                  <option value="<?= $fila['id'] ?>" <?= $fila['id']==2?"selected":""  ?>><?= strtoupper($fila['tipomov']) ?></option>
+                <?php endforeach ?>
+                <option value="">TODOS</option>
+                 
               </select>
            </div>
 
