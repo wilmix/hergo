@@ -39,18 +39,19 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="<?php echo base_url("index.php/almacen") ?>">Almacen</a></li>
-            <li><a href="<?php echo base_url("index.php/articulos") ?>">Articulos</a></li>
-            <li><a href="<?php echo base_url("index.php/marcaarticulos") ?>">Marca Articulos</a></li>
-            <li><a href="<?php echo base_url("index.php/linea") ?>">Linea</a></li>
-            <li><a href="<?php echo base_url("index.php/unidad") ?>">Unidad</a></li>
-            <li><a href="<?php echo base_url("index.php/clientes") ?>">Clientes</a></li>
-            <li><a href="<?php echo base_url("index.php/Provedores") ?>">Provedores</a></li>
+            <li><a href="<?php echo base_url("index.php/almacen") ?>"><i class="fa fa-industry"></i> Almacen</a></li>
+            <li><a href="<?php echo base_url("index.php/articulos") ?>"><i class="fa fa-list-ol"></i> Articulos</a></li>
+            <li><a href="<?php echo base_url("index.php/marcaarticulos") ?>"><i class="fa fa fa-columns"></i> Marca Articulos</a></li>
+            <li><a href="<?php echo base_url("index.php/linea") ?>"><i class="fa fa fa-columns"></i> Linea</a></li>
+            <li><a href="<?php echo base_url("index.php/unidad") ?>"><i class="fa fa fa-columns"></i> Unidad</a></li>
+            <li><a href="<?php echo base_url("index.php/clientes") ?>"><i class="fa fa-users"></i> Clientes</a></li>
+            <li><a href="<?php echo base_url("index.php/Provedores") ?>"><i class="fa fa-users"></i> Provedores</a></li>
             <!--<li><a href="<?php echo base_url("index.php/usuarios") ?>"> FormFuncionarios</a></li>
             <!--<li><a href="#">Modificar Precis Articulos</a></li>
             <li><a href="#">Datos Factura</a></li>
             <li><a href="#">Roles</a></li>
             <li><a href="#">Opciones</a></li>-->
+
           </ul>
         </li>
 
@@ -63,13 +64,12 @@
           </a>
           <ul class="treeview-menu">
 
-            <li><a href="<?php echo base_url("ingresos") ?>">Consultas</a></li>
-            <li><a href="<?php echo base_url("ingresos/consultadetalle") ?>">ConsultasDetalle
-            <small class="label pull-right bg-red">construction</small></a></li>
-            <li><a href="<?php echo base_url("Ingresos/Compraslocales") ?>">Compras Locales</a></li>
-            <li><a href="<?php echo base_url("Ingresos/Importaciones") ?>">Ingreso Importaciones</a></li>
-            <li><a href="<?php echo base_url("Ingresos/anulacionEgresos") ?>">Anulacion Egresos</a></li>
-
+            <li><a href="<?php echo base_url("ingresos") ?>"><i class="fa fa-caret-square-o-down "></i>  Consultas</a></li>
+            <li><a href="<?php echo base_url("ingresos/consultadetalle") ?>"><i class="fa fa-cog fa-spin fa-fw"></i> ConsultasDetalle
+            <small class="label pull-right bg-red"> construc</small></a></li>
+            <li><a href="<?php echo base_url("Ingresos/Compraslocales") ?>"><i class="fa fa-plus-circle"></i> Compras Locales</a></li>
+            <li><a href="<?php echo base_url("Ingresos/Importaciones") ?>"><i class="fa fa-plus-circle"></i> Ingreso Importaciones</a></li>
+            <li><a href="<?php echo base_url("Ingresos/anulacionEgresos") ?>"><i class="fa fa-plus-circle"></i> Anulacion Egresos</a></li>
           </ul>
         </li>
               
@@ -87,18 +87,6 @@
           </ul>
         </li>
 
-                  <li class="treeview">
-          <a href="#"><i class="fa fa fa-exchange"></i> <span>Traspasos </span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="#">Consultas</a></li>
-         </ul>
-        </li>
-
-
           <li class="treeview">
           <a href="#"><i class="fa fa-money"></i> <span>Facturas</span>
             <span class="pull-right-container">
@@ -111,6 +99,20 @@
             <li><a href="#">Consulta de Facturas</a></li>
           </ul>
         </li>
+
+          <li class="treeview">
+          <a href="#"><i class="fa fa fa-exchange"></i> <span>Traspasos </span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="#">Consultas</a></li>
+         </ul>
+        </li>
+
+
+
 
 
         <li class="treeview">
