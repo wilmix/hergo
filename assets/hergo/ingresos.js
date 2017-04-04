@@ -104,9 +104,9 @@ function retornarTablaIngresos()
             pagination:true,
             pageSize:"100",
             //height:"550", error con filtros
-            clickToSelect:true,
+            //clickToSelect:true,
             search:true,
-            strictSearch:true,
+            //strictSearch:true,
             searchOnEnterKey:true,
             filter:true,
             showColumns:true,
@@ -116,7 +116,7 @@ function retornarTablaIngresos()
             columns:[
             {
                 field: 'n',
-                width: '70px',
+                width: '5%',
                 title: 'N',
                 align: 'center',
                 sortable:true,
@@ -124,9 +124,10 @@ function retornarTablaIngresos()
             },
             {
                 field: 'sigla',
-                width: '70px',
+                width: '5%',
                 title: 'Tipo',
                 align: 'center',
+                visible:false,
                 sortable:true,
                 
                 filter: {
@@ -136,16 +137,18 @@ function retornarTablaIngresos()
             },
             {
                 field:'fechamov',
-                width: '90px',
+                width: '7%',
                 title:"Fecha",
+                align: 'right',
                 sortable:true,
-                align: 'center',
+                //align: 'center',
                 
                 formatter: formato_fecha_corta,
             },
             {
                 field:'nombreproveedor',
                 title:"Proveedor",
+                width: '20%',
                 filter: {
                     type: "select",
                     data: datosselect[0]
@@ -156,7 +159,7 @@ function retornarTablaIngresos()
             {
                 field:'nfact',
                 title:"Factura",
-                width: '90px',
+                width: '7%',
                 sortable:true,
                 //searchable:false,
                 filter: {type: "input"},
@@ -166,7 +169,7 @@ function retornarTablaIngresos()
             {
                 field:'total',
                 title:"Total",
-                width: '150px',
+                width: '7%',
                 align: 'right',
                 sortable:true,
                 formatter: operateFormatter3,
@@ -176,7 +179,7 @@ function retornarTablaIngresos()
             {
                 field:"estado",
                 title:"Estado",
-                width: '90px',
+                width: '7%',
                 sortable:true,
                 filter: {
                     type: "select",
@@ -188,7 +191,7 @@ function retornarTablaIngresos()
             },
             {
                 field:"autor",
-                width: '100px',
+                width: '10%',
                 title:"Autor",
                 sortable:true,
                 filter: {
@@ -201,7 +204,7 @@ function retornarTablaIngresos()
             },
             {
                 field:"fecha",
-                width: '90px',
+                width: '10%',
                 title:"Fecha",
                 sortable:true,
                 formatter: formato_fecha_corta,
@@ -212,7 +215,7 @@ function retornarTablaIngresos()
             {
                 title: 'Acciones',
                 align: 'center',
-                width: '150px',
+                width: '10%',
                 events: operateEvents,
                 formatter: operateFormatter
             }]
