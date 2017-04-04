@@ -69,7 +69,7 @@ class Ingresos extends CI_Controller
 
             $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
             $this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("+");
-         
+
 
 			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();
 
@@ -100,7 +100,7 @@ class Ingresos extends CI_Controller
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresos.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/consultadetalle.js');
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');

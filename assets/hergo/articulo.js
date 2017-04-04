@@ -212,6 +212,7 @@ function retornarTabla()
     }).done(function(res){
 
         $("#tarticulo").bootstrapTable('destroy');
+        
         $("#tarticulo").bootstrapTable({
             
             data:res,           
@@ -306,7 +307,7 @@ function retornarTabla()
         });
 
         $("#tarticulo").bootstrapTable('hideLoading');
-        $("#tarticulo").bootstrapTable('resetView');
+        //$("#tarticulo").bootstrapTable('resetView');
         
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
