@@ -142,7 +142,7 @@ class Ingresos_model extends CI_Model
     			$idArticulo=$this->retornar_datosArticulo($fila[0]);
     			if($idArticulo)
     			{
-    				$sql="INSERT INTO ingdetalle(idIngreso,nmov,articulo,moneda,cantidad,punitario,total) VALUES('$idIngreso','0','$idArticulo','1','$fila[2]','$fila[3]','$fila[4]')";
+    				$sql="INSERT INTO ingdetalle(idIngreso,nmov,articulo,moneda,cantidad,punitario,total) VALUES('$idIngreso','0','$idArticulo','$moneda_imp','$fila[2]','$fila[3]','$fila[4]')";
     				$this->db->query($sql);
     			}
     		}
