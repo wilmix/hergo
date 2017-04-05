@@ -384,13 +384,57 @@ class Ingresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	//actualizar tabla costoarticulo
+	public function actualizarcostoarticulo($id,$cant=0,$preciou=0)	
+	{		
+		$ncantidad=0;
+    	$nprecionu=0;
+    	$ntotal=0;
+    	$total=$cant*$preciou;
+
+		$ca=$this->ingresos_model->retornarcostoarticulo_model($id);
+		
+		$fila=$ca->row();    			
+		$ncantidad=$cant+$fila->cantidad;
+		$nprecionu=($fila->total+$total)/$ncantidad;    		
+		$ntotal=$ncantidad*$nprecionu;
+		$obj=new StdClass();
+		$obj->ncantidad=$ncantidad;
+		$obj->nprecionu=$nprecionu;
+		$obj->ntotal=$ntotal;
+		return $obj;
+	}
+	public function retornarcostoarticulo($id)
+	{
+		$idArticulo=$this->ingresos_model->retornar_datosArticulo($id);
+		$ca=$this->ingresos_model->retornarcostoarticulo_model($idArticulo);
+		$obj=new StdClass();
+		//print_r($obj);
+		if($ca)
+		{
+			$fila=$ca->row();    					
+			
+			$obj->ncantidad=$fila->cantidad;
+			$obj->nprecionu=$fila->precioUnitario;
+			$obj->ntotal=$fila->total;	
+		}
+		else
+		{
+			$obj->ncantidad=0;
+			$obj->nprecionu=0;
+			$obj->ntotal=0;
+		}
+		
+		echo json_encode($obj);
+		//return $obj;
+	}
     public function retornararticulos()
     {
         if($this->input->is_ajax_request() && $this->input->get('b'))
         {
         	$b = $this->security->xss_clean($this->input->get('b'));
-        	$dato=$this->ingresos_model->retornarArticulosBusqueda($b);
-           // $datos2=datos->result_array();
+        	$dato=$this->ingresos_model->retornarArticulosBusqueda($b);        	
+
 			echo json_encode($dato->result_array());
 		}
         else

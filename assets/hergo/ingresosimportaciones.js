@@ -1,5 +1,7 @@
 var glob_factorIVA=0.87;
 var glob_factorRET=0.087;
+
+
 $(document).ready(function(){ 
 
     $(".tiponumerico").inputmask({
@@ -42,7 +44,19 @@ $(document).ready(function(){
           return false;
       },*/
       select: function( event, ui ) {
-      
+        //agregar costo articulo
+         $.ajax({
+            url: base_url("index.php/ingresos/retornarcostoarticulo/"+ui.item.CodigoArticulo),
+            dataType: "json",
+            data: {},
+            success: function(data) {
+                //response(data);                   
+                console.log(data)
+                $("#costo_imp").val(data.nprecionu);
+                $("#saldo_imp").val(data.ncantidad);              
+            }
+          });    
+         //fin agregar costo articulo
           $("#articulo_imp").val( ui.item.CodigoArticulo);
           $("#Descripcion_imp").val( ui.item.Descripcion);
           $("#unidad_imp").val(ui.item.Unidad);

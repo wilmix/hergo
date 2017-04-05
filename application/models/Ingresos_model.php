@@ -108,9 +108,32 @@ class Ingresos_model extends CI_Model
         INNER JOIN unidad u
         ON a.idUnidad=u.idUnidad
         where CodigoArticulo like '$b%' or Descripcion like '$b%'";
-		//die($sql);
+		
 		$query=$this->db->query($sql);
 		return $query;
+    }
+    public function retornarcostoarticulo_model($id)
+    {
+        /*$sql="SELECT MAX(idtabla),c.*
+            FROM costoarticulos c
+            WHERE c.idArticulo=$id";*/
+        $sql="SELECT c.*
+            FROM costoarticulos c
+            WHERE c.idArticulo=$id
+            ORDER By c.idtabla
+            limit 1
+            ";
+   
+        $query=$this->db->query($sql);
+        if($query->num_rows()>0)
+        {                   
+            return $query;    
+        }
+        else
+        {
+            return false;
+        }
+        
     }
     public function guardarmovimiento_model($datos)
     {
@@ -136,7 +159,6 @@ class Ingresos_model extends CI_Model
     	$idIngreso=$this->db->insert_id();
     	if($idIngreso>0)/**Si se guardo correctamente se guarda la tabla*/
     	{
-
     		foreach ($datos['tabla'] as $fila) {
     			//print_r($fila);
     			$idArticulo=$this->retornar_datosArticulo($fila[0]);
@@ -153,6 +175,7 @@ class Ingresos_model extends CI_Model
     		return false;
     	}
     }
+
     public function actualizarmovimiento_model($datos)
     {
 		$idingresoimportacion=$datos['idingresoimportacion'];
@@ -212,7 +235,7 @@ class Ingresos_model extends CI_Model
         return true;
 
     }
-    private function retornar_datosArticulo($dato)
+    public function retornar_datosArticulo($dato)
     {
     	$sql="SELECT idArticulos from articulos where CodigoArticulo='$dato' LIMIT 1";
     	$query=$this->db->query($sql);
