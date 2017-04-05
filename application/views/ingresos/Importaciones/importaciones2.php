@@ -204,9 +204,9 @@ input[type=date]::-webkit-inner-spin-button {
                 <table  class="table table-condensed table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>Código</th>
-                      <th>Artículo</th>
-                      <th class="text-right">Cantidad</th>
+                      <th class="col-sm-1" >Código</th>
+                      <th class="col-sm-6">Artículo</th>
+                      <th class="col-sm-1" class="text-right">Cantidad</th>
                       <th class="text-right"><?= $idingresocompraslocales==2? "Costo Unitario:":"Total:" ?></th><!--CAMBIO PARA COMPRAS LOCALES-->
                       <th class="text-right">Total</th>
                       <th>&nbsp;</th>

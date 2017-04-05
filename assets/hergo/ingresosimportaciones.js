@@ -18,7 +18,7 @@ $(document).ready(function(){
  $( function() {
     $("#articulo_imp").autocomplete(
     {      
-      minLength: 2,
+      minLength: 1,
       source: function (request, response) {        
         $("#cargandocodigo").show(150)
         $("#Descripcion_imp").val('');
@@ -146,6 +146,7 @@ function calculocompraslocales(cant,costo)
     else                        
         ret=pu*glob_factorRET+pu; //sinfactura            
     return ret;
+
 }
 function agregarArticulo()
 {

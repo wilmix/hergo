@@ -322,7 +322,7 @@ function mostrarimagen(value, row, index)
     var imagen=""
     if((value=="")||(value=="null"))
     {
-        ruta="/assets/img_articulos/ninguno.png"
+        ruta="/assets/img_articulos/hergo.jpg"
         clase=""
     }
     else
