@@ -114,16 +114,14 @@ class Ingresos_model extends CI_Model
     }
     public function retornarcostoarticulo_model($id)
     {
-        /*$sql="SELECT MAX(idtabla),c.*
-            FROM costoarticulos c
-            WHERE c.idArticulo=$id";*/
+        // quitar desc de la consulta para los ultimos datos de la tabla costoarticulo
         $sql="SELECT c.*
             FROM costoarticulos c
             WHERE c.idArticulo=$id
-            ORDER By c.idtabla
-            limit 1
+            ORDER By c.idtabla desc 
+            limit 1 
             ";
-   
+ 
         $query=$this->db->query($sql);
         if($query->num_rows()>0)
         {                   
@@ -281,5 +279,10 @@ class Ingresos_model extends CI_Model
         {
             return 1;
         }
-    }	
+    }
+    public function actualizartablacostoarticulo($idArticulo,$cantidad,$costou,$total,$idalmacen)
+    {
+        $sql="INSERT INTO costoarticulos(idArticulo,idAlmacen,cantidad,total,precioUnitario) VALUES('$idArticulo','$idalmacen','$cantidad','$total','$costou')";
+        $this->db->query($sql);
+    }
 }

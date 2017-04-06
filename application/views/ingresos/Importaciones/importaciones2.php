@@ -159,12 +159,12 @@ input[type=date]::-webkit-inner-spin-button {
                   <div class="col-xs-4 col-md-2">
                       <!--mostrar costo promedio ponderado de articulo segun codigo-->
                      <label for="costo_imp">Costo:</label>
-                     <input type="text" class="form-control form-control-sm" id="costo_imp" disabled/>
+                     <input type="text" class="form-control form-control-sm text-right tiponumerico" id="costo_imp" disabled/>
                   </div>
                    <div class="col-xs-4 col-md-2">
                       <!--mostrar saldo en almacen de articulo segun codigo-->
                      <label for="saldo_imp">Saldo:</label>
-                      <input type="text" class="form-control form-control-sm" id="saldo_imp" disabled/>
+                      <input type="text" class="form-control form-control-sm text-right tiponumerico" id="saldo_imp" disabled/>
                   </div>
 
                  </div><!-- div class="form-group-sm row"  TERCERA FILA-->
@@ -187,8 +187,8 @@ input[type=date]::-webkit-inner-spin-button {
                   </div>
                   <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
-                      <label>CostoUnitario:</label>
-                      <input type="text" class="form-control form-control-sm" id="" name="" readonly/>
+                      <label>Costo Unitario:</label>
+                      <input type="text" class="form-control form-control-sm tiponumerico" id="constounitario" name="" readonly/>
                   </div>
 
                   <div class="col-xs-12 col-md-2">

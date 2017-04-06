@@ -385,24 +385,48 @@ class Ingresos extends CI_Controller
 		}
 	}
 	//actualizar tabla costoarticulo
-	public function actualizarcostoarticulo($id,$cant=0,$preciou=0)	
+	public function get_costo_articulo($codigo,$cant=0,$preciou=0)	//para tabla
 	{		
+		$cant=$cant==""?0:$cant;
+		$preciou=$preciou==""?0:$preciou;
 		$ncantidad=0;
     	$nprecionu=0;
     	$ntotal=0;
-    	$total=$cant*$preciou;
-
-		$ca=$this->ingresos_model->retornarcostoarticulo_model($id);
-		
-		$fila=$ca->row();    			
-		$ncantidad=$cant+$fila->cantidad;
-		$nprecionu=($fila->total+$total)/$ncantidad;    		
-		$ntotal=$ncantidad*$nprecionu;
+    	
+    	$idArticulo=$this->ingresos_model->retornar_datosArticulo($codigo);
+		$ca=$this->ingresos_model->retornarcostoarticulo_model($idArticulo);
 		$obj=new StdClass();
-		$obj->ncantidad=$ncantidad;
-		$obj->nprecionu=$nprecionu;
-		$obj->ntotal=$ntotal;
+		if($ca)
+		{
+			$total=$cant*$preciou;
+			$fila=$ca->row();    			
+			$ncantidad=$cant+$fila->cantidad;
+			$nprecionu=($fila->total+$total)/$ncantidad;    		
+			$ntotal=$ncantidad*$nprecionu;
+			
+			$obj->ncantidad=$ncantidad;
+			$obj->nprecionu=$nprecionu;
+			$obj->ntotal=$ntotal;
+			$obj->idArticulo=$idArticulo;
+		}
+		else
+		{
+			$obj->ncantidad=0;
+			$obj->nprecionu=0;
+			$obj->ntotal=0;
+			$obj->idArticulo=$idArticulo;
+		}
+		
 		return $obj;
+	}
+	public function retornarcostoarticulo_tabla($tabla,$idalmacen)
+	{
+		foreach ($tabla as $fila) 
+		{	
+			$aux=$this->get_costo_articulo($fila[0],$fila[2],$fila[3]);
+			$this->ingresos_model->actualizartablacostoarticulo($aux->idArticulo,$aux->ncantidad,$aux->nprecionu,$aux->ntotal,$idalmacen);
+		}
+		
 	}
 	public function retornarcostoarticulo($id)
 	{
@@ -458,9 +482,14 @@ class Ingresos extends CI_Controller
         	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
 
         	if($this->ingresos_model->guardarmovimiento_model($datos))
+        	{
+        		$this->retornarcostoarticulo_tabla($datos['tabla'],$datos['almacen_imp']);
 				echo json_encode("true");
+        	}
 			else
+			{				
 				echo json_encode("false");
+			}
 		}
         else
 		{

@@ -75,6 +75,7 @@ $(document).ready(function(){
 $(document).on("click","#agregar_articulo",function(){
     if(glob_agregar)
     {
+        //agregarArticulo(idcosto);//despues de generar el id de costo se agrega la fila con el id de costo
         agregarArticulo();
     }
 })
@@ -88,6 +89,7 @@ function limpiarArticulo()
     $("#Descripcion_imp").val("")
     $("#cantidad_imp").val("")
     $("#punitario_imp").val("")
+    $("#constounitario").val("")
     glob_agregar=false;
     $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
 }
@@ -99,7 +101,6 @@ function limpiarCabecera()
     $("#obs_imp").val("")
     $("#totalacostosus").val("")
     $("#totalacostobs").val("")
-   
 }
 function limpiarTabla()
 {
@@ -148,8 +149,9 @@ function calculocompraslocales(cant,costo)
     return ret;
 
 }
-function agregarArticulo()
+function agregarArticulo() //faltaria el id costo; si se guarda en la base primero
 {
+    //idcosto=12;
     var codigo=$("#articulo_imp").val()
     var descripcion=$("#Descripcion_imp").val()
     var cant=$("#cantidad_imp").inputmask('unmaskedvalue');
@@ -169,7 +171,8 @@ function agregarArticulo()
     
     //console.log("cant",cant,"* costo",costo,"=",total)
     
-    var articulo='<tr>'+
+    //var articulo='<tr caid="'+idcosto+'">'+ //costo articulo id
+    var articulo='<tr>'+ 
             '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
             '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
             '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
@@ -187,6 +190,19 @@ function agregarArticulo()
     calcularTotal()
     limpiarArticulo();
 }
+$(document).on("keyup","#cantidad_imp,#punitario_imp",function(){
+    var cant=$("#cantidad_imp").inputmask('unmaskedvalue');
+    var costo=$("#punitario_imp").inputmask('unmaskedvalue'); 
+    var tipoingreso=$("#tipomov_imp2").val()
+    cant=(cant=="")?0:cant;
+    costo=(costo=="")?0:costo;
+    if(tipoingreso==2)//si es compra local idcompralocal=2
+    {
+        costo=calculocompraslocales(cant,costo)
+    }
+    //total=cant*costo;
+    $("#constounitario").val(costo);
+})
 function guardarmovimiento()
 {     
     var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
