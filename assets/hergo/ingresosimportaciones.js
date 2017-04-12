@@ -201,8 +201,29 @@ $(document).on("keyup","#cantidad_imp,#punitario_imp",function(){
         costo=calculocompraslocales(cant,costo)
     }
     //total=cant*costo;
-    $("#constounitario").val(costo);
+    $("#constounitario").val(costo);//costo calculado
+    /***para la alerta*******/
+    var costobase=$("#costo_imp").inputmask('unmaskedvalue');//costo de base de datos
+    alertacosto(costo,costobase);
 })
+function alertacosto(costounitario,costobase)
+{
+    var valormin=(parseFloat(costobase)-parseFloat(costobase*0.15))
+    var valormax=(parseFloat(costobase)+parseFloat(costobase*0.15))
+    if((costounitario>valormin)&&(costounitario<valormax))
+    {
+        //se encuentra en el rango correco
+        $("#constounitario").css("background-color","#eee")
+        $("#constounitario").css("color","##555555")
+
+    }
+    else
+    {
+        //fuera de rango
+        $("#constounitario").css("background-color","red")
+        $("#constounitario").css("color","#fff")
+    }
+}
 function guardarmovimiento()
 {     
     var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
