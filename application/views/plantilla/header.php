@@ -1,4 +1,10 @@
 
+<style>
+  body {
+    /* el tamaño por defecto es 14px */
+    font-size: 16px;
+}
+</style>
 <body class="skin-blue fixed sidebar-mini" class="hold-transition skin-blue sidebar-mini">
 <input type="hidden" id="baseurl" value="<?php echo base_url() ?>">
 <div class="wrapper">

@@ -16,7 +16,8 @@
     <div class="box">
       <div class="box-body">
            
-          <div id="toolbar" class="text-right">
+          <div class="text-right" class="btn-group" id="toolbar">
+
             <a class="btn btn-primary btn-sm" href="<?php echo base_url("Ingresos/Compraslocales") ?>" target="_blank"><i class="fa fa-plus-circle fa-lg"></i>  ComprasLocales</a>
 
             <a class="btn btn-primary btn-sm" href="<?php echo base_url("Ingresos/Importaciones") ?>" target="_blank"><i class="fa fa-plus-circle fa-lg"></i>  IngresoImportaciones</a>
@@ -25,8 +26,8 @@
 
           </div>
 
-          <div id="toolbar2" class="form-inline">
-             <button type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
+          <div  id="toolbar2" class="form-inline">
+             <button  type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
                <span>
                  <i class="fa fa-calendar"></i> Fecha
                </span>
@@ -48,10 +49,6 @@
                  
               </select>
            </div>
-
-          <style>
-            table { table-layout: fixed; }
-          </style>
 
           <table 
             id="tingresos" 
@@ -77,7 +74,11 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Detalle de ingresos</h4>
+
+        <h4 class="modal-title">Detalle de ingresos 
+        
+        </h4>
+
       </div>
       <div class="modal-body">
          <!-- formulario PRIMERA FILA-->
@@ -125,8 +126,6 @@
               <hr>
          <table class="table-striped"
               data-toggle="table"
-              data-pagination="true"
-              data-search="true"
               id="tingresosdetalle">
           </table>
 

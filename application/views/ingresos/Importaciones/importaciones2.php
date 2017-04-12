@@ -188,7 +188,7 @@ input[type=date]::-webkit-inner-spin-button {
                   <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
                       <label>Costo Unitario:</label>
-                      <input type="text" class="form-control form-control-sm tiponumerico" id="constounitario" name="" readonly/>
+                      <input type="text" class="form-control form-control-sm tiponumerico" id="constounitario" name="" disabled/>
                   </div>
 
                   <div class="col-xs-12 col-md-2">

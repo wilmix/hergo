@@ -28,6 +28,20 @@
             table { table-layout: fixed; }
           </style>
 
+          <script>
+                    $(document).bind('keydown',function(eEvento){  
+                        
+            if(eEvento.which == 27) { 
+                var $jQuery=window.parent.$;
+    
+                //buscamos la clase .clsVentanaCerrar y le hacemos clic
+                $jQuery('body').find('#modalIgresoDetalle').trigger('click');
+
+            } 
+        
+        });
+          </script>
+
           <table 
             id="tbconsultadetalle"
             data-toolbar="#toolbar2"

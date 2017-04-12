@@ -377,7 +377,7 @@ function mostrarDetalle(res)
             striped:true,
             pagination:true,
             clickToSelect:true,
-            search:true,
+            search:false,
             columns:[
             {
                 field: 'CodigoArticulo',
@@ -389,7 +389,7 @@ function mostrarDetalle(res)
             {
                 field: 'Descripcion',
                 title: 'Descripcion',
-                width: '50%',
+                width: '40%',
                 sortable:true,
             },
             {
@@ -399,18 +399,39 @@ function mostrarDetalle(res)
                 width: '10%',
                 sortable:true,
             },
+            
+
+            //PARA COMPARAR CON FACTURA
+            {
+                field:'',
+                title:"P/U Factura",
+                align: 'right',
+                width: '10%',
+                sortable:true,
+            },
+            {
+                field:'',
+                title:"Total Factura",
+                align: 'right',
+                width: '10%',
+                sortable:true,
+            },
+
+
+
+
             {
                 field:'punitario',
-                title:"Costo",
+                title:"C/U Sistema",
                 align: 'right',
-                width: '15%',
+                width: '10%',
                 sortable:true,
             },
             {
                 field:'total',
-                title:"total",
+                title:"Total",
                 align: 'right',
-                width: '15%',
+                width: '10%',
                 sortable:true,
             },
             ]
