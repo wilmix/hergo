@@ -85,11 +85,15 @@ $(document).on("click",".eliminarArticulo",function(){
 })
 function limpiarArticulo()
 {
-    $("#articulo_imp").val("")
-    $("#Descripcion_imp").val("")
-    $("#cantidad_imp").val("")
-    $("#punitario_imp").val("")
-    $("#constounitario").val("")
+    $("#articulo_imp").val("");
+    $("#Descripcion_imp").val("");
+    $("#cantidad_imp").val("");
+    $("#punitario_imp").val("");
+    $("#constounitario").val("");
+    $("#unidad_imp").val("");
+    $("#costo_imp").val("");
+    $("#saldo_imp").val("");
+    $("#constounitario").css("background-color","#eee");
     glob_agregar=false;
     $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
 }
@@ -136,13 +140,25 @@ $(document).on("change","#moneda_imp",function(){
     calcularTotal()
 
 })
+$(document).on("keyup","#nfact_imp",function(){
+    if($(this).val()=="SF")
+    {
+        $("#consinfac").html("(sin Factura)")
+        $("#consinfac").css("color","#a60000")
+    }
+    else
+    {
+        $("#consinfac").html("(con Factura)")   
+        $("#consinfac").css("color","#00a65a")
+    }
+})
 //calculo de compras locales con y sin factura
 function calculocompraslocales(cant,costo)
 {
     var ret;    
     var pu//preciounitario
     pu=costo/cant;// calculamos el costo unitario      
-    if($("#nfact_imp").val()!="")  //si no tiene texto es sin factura              
+    if($("#nfact_imp").val()!="SF")  //si tiene el texto SF es sin factura         
         ret=pu*glob_factorIVA; //confactura
     else                        
         ret=pu*glob_factorRET+pu; //sinfactura            
@@ -214,7 +230,7 @@ function alertacosto(costounitario,costobase)
     {
         //se encuentra en el rango correco
         $("#constounitario").css("background-color","#eee")
-        $("#constounitario").css("color","##555555")
+        $("#constounitario").css("color","#555555")
 
     }
     else

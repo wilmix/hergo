@@ -123,8 +123,8 @@ input[type=date]::-webkit-inner-spin-button {
                          <input id="ordcomp_imp" type="text" class="form-control form-control-sm" name="ordcomp_imp" placeholder="Orden de Compra" value="<?= ($cont)?$dcab->ordcomp:""  ?>" tabindex=6>
                    </div>
                    <div class="col-xs-4 col-sm-4 col-md-2">
-                         <label>N° Factura:</label>
-                         <input id="nfact_imp" name="nfact_imp" type="text" class="form-control form-control-sm"  placeholder="# Factura" value="<?= ($cont)?$dcab->nfact:""  ?>" tabindex=7>
+                         <label>N° Factura: <small id="consinfac" style="font-size: 11px;color: #00a65a;">(con Factura)</small></label>
+                         <input id="nfact_imp" name="nfact_imp" type="text" style="text-transform:uppercase" onkeyup="javascript:this.value=this.value.toUpperCase();" class="form-control form-control-sm"  placeholder="# Factura" value="<?= ($cont)?$dcab->nfact:""  ?>" tabindex=7>
                    </div>
                    <div class="col-xs-4 col-sm-4 col-md-2">
                          <label>N° Ingreso:</label>
