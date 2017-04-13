@@ -172,6 +172,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     var descripcion=$("#Descripcion_imp").val()
     var cant=$("#cantidad_imp").inputmask('unmaskedvalue');
     var costo=$("#punitario_imp").inputmask('unmaskedvalue');    
+    var totalfac=costo;
     var cant=(cant=="")?0:cant;
     var costo=(costo=="")?0:costo;
     var tipoingreso=$("#tipomov_imp2").val()
@@ -188,10 +189,13 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     //console.log("cant",cant,"* costo",costo,"=",total)
     
     //var articulo='<tr caid="'+idcosto+'">'+ //costo articulo id
+    var punitfac=cant==0?0:(totalfac/cant);
     var articulo='<tr>'+ 
             '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
             '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
             '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
+            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+punitfac+'""></input></td>'+  //nuevo P/U Factura
+            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+totalfac+'""></input></td>'+ //nuevo Total Factura
             '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+
             '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
             '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+
@@ -410,7 +414,7 @@ function tablatoarray()
     var datos=""
     $.each(filas,function(index,value){
         datos=$(value).find("input").toArray()
-        tabla.push(Array($(datos[0]).val(),$(datos[1]).val(),$(datos[2]).inputmask('unmaskedvalue'),$(datos[3]).inputmask('unmaskedvalue'),$(datos[4]).inputmask('unmaskedvalue')))
+        tabla.push(Array($(datos[0]).val(),$(datos[1]).val(),$(datos[2]).inputmask('unmaskedvalue'),$(datos[3]).inputmask('unmaskedvalue'),$(datos[4]).inputmask('unmaskedvalue'),$(datos[5]).inputmask('unmaskedvalue'),$(datos[6]).inputmask('unmaskedvalue')))
         //console.log(datos);
     })
     return(tabla)

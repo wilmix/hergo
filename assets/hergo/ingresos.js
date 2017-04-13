@@ -408,9 +408,10 @@ function mostrarDetalle(res)
                 align: 'right',
                 width: '10%',
                 sortable:true,
+                formatter: punitariofac
             },
             {
-                field:'',
+                field:'totaldoc',
                 title:"Total Factura",
                 align: 'right',
                 width: '10%',
@@ -437,6 +438,17 @@ function mostrarDetalle(res)
             ]
         });
 }
+function punitariofac(value, row, index)
+{       
+    
+    console.log(row);
+    var punit=row.cantidad==""?0:row.cantidad;
+    punit=row.totaldoc/punit;
+    punit=redondeo(punit,3)
+    
+    return (formatNumber.new(punit));
+   //return(num)
+}
 function restornardatosSelect(res)
 {
     var proveedor = new Array()
@@ -459,9 +471,11 @@ Array.prototype.unique=function(a){
 });
 /*******************formato de numeros***************/
 var formatNumber = {
+
  separador: ",", // separador para los miles
  sepDecimal: '.', // separador para los decimales
  formatear:function (num){
+    
   num +='';
   var splitStr = num.split('.');
   var splitLeft = splitStr[0];
@@ -476,4 +490,10 @@ var formatNumber = {
   this.simbol = simbol ||'';
   return this.formatear(num);
  }
+}
+function redondeo(numero, decimales)
+{
+    var flotante = parseFloat(numero);
+    var resultado = Math.round(flotante*Math.pow(10,decimales))/Math.pow(10,decimales);
+    return resultado;
 }

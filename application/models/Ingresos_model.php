@@ -70,7 +70,7 @@ class Ingresos_model extends CI_Model
 	}
 	public function mostrarDetalle($id)
 	{
-		$sql="SELECT a.CodigoArticulo, a.Descripcion, i.cantidad, FORMAT(i.punitario,2) punitario, FORMAT(i.total,2) total
+		$sql="SELECT a.CodigoArticulo, a.Descripcion, i.cantidad,i.totaldoc, FORMAT(i.punitario,3) punitario, FORMAT(i.total,3) total
 		FROM ingdetalle i
 		INNER JOIN articulos a
 		ON i.articulo = a.idArticulos
@@ -157,12 +157,13 @@ class Ingresos_model extends CI_Model
     	$idIngreso=$this->db->insert_id();
     	if($idIngreso>0)/**Si se guardo correctamente se guarda la tabla*/
     	{
+            
     		foreach ($datos['tabla'] as $fila) {
     			//print_r($fila);
     			$idArticulo=$this->retornar_datosArticulo($fila[0]);
     			if($idArticulo)
     			{
-    				$sql="INSERT INTO ingdetalle(idIngreso,nmov,articulo,moneda,cantidad,punitario,total) VALUES('$idIngreso','0','$idArticulo','$moneda_imp','$fila[2]','$fila[3]','$fila[4]')";
+    				$sql="INSERT INTO ingdetalle(idIngreso,nmov,articulo,moneda,cantidad,punitario,total,totaldoc) VALUES('$idIngreso','0','$idArticulo','$moneda_imp','$fila[2]','$fila[5]','$fila[6]','$fila[4]')";
     				$this->db->query($sql);
     			}
     		}
@@ -206,7 +207,8 @@ class Ingresos_model extends CI_Model
             $idArticulo=$this->retornar_datosArticulo($fila[0]);
             if($idArticulo)
             {
-                $sql="INSERT INTO ingdetalle(idIngreso,articulo,moneda,cantidad,punitario,total) VALUES('$idingresoimportacion','$idArticulo','$moneda_imp','$fila[2]','$fila[3]','$fila[4]')";
+               // $sql="INSERT INTO ingdetalle(idIngreso,articulo,moneda,cantidad,punitario,total) VALUES('$idingresoimportacion','$idArticulo','$moneda_imp','$fila[2]','$fila[3]','$fila[4]')";
+                $sql="INSERT INTO ingdetalle(idIngreso,nmov,articulo,moneda,cantidad,punitario,total,totaldoc) VALUES('$idIngreso','0','$idArticulo','$moneda_imp','$fila[2]','$fila[5]','$fila[6]','$fila[4]')";
                 $this->db->query($sql);
             }
         }

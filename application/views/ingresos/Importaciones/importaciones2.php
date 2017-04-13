@@ -207,7 +207,9 @@ input[type=date]::-webkit-inner-spin-button {
                       <th class="col-sm-1" >Código</th>
                       <th class="col-sm-6">Artículo</th>
                       <th class="col-sm-1" class="text-right">Cantidad</th>
-                      <th class="text-right"><?= $idingresocompraslocales==2? "Costo Unitario:":"Total:" ?></th><!--CAMBIO PARA COMPRAS LOCALES-->
+                      <th class="col-sm-1" class="text-right">P/U Factura</th> <!--nuevo-->
+                      <th class="col-sm-1" class="text-right">Total Factura</th> <!--nuevo-->
+                      <th class="text-right">C/U Sistema</th><!--CAMBIO PARA COMPRAS LOCALES "Costo Unitario":"Total" --> 
                       <th class="text-right">Total</th>
                       <th>&nbsp;</th>
                     </tr>
@@ -215,10 +217,16 @@ input[type=date]::-webkit-inner-spin-button {
                   <tbody id="tbodyarticulos">
                     <?php if ($cont): ?>
                         <?php foreach ($detalle as $fila): ?>
+                          <?php 
+                            $punitariofac= $fila['cantidad']==""?0:$fila['cantidad'];
+                            $punitariofac=$fila['totaldoc'] / $punitariofac;
+                          ?>
                             <tr>
                                 <td><input type="text" class="estilofila" disabled value="<?= $fila['CodigoArticulo'] ?>"></input></td>
                                 <td><input type="text" class="estilofila" disabled value="<?= $fila['Descripcion'] ?>"></input</td>
                                 <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['cantidad'] ?>"></input></td>
+                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $punitariofac ?>"></input></td><!--nuevo-->
+                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['totaldoc'] ?>"></input></td><!--nuevo-->
                                 <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['punitario'] ?>"></input></td>
                                 <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="<?= $fila['total'] ?>"></input></td>
                                 <td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
