@@ -158,7 +158,7 @@ input[type=date]::-webkit-inner-spin-button {
                   </div>
                   <div class="col-xs-4 col-md-2">
                       <!--mostrar costo promedio ponderado de articulo segun codigo-->
-                     <label for="costo_imp">Costo:</label>
+                     <label for="costo_imp">CostoPromedio:</label>
                      <input type="text" class="form-control form-control-sm text-right tiponumerico" id="costo_imp" disabled/>
                   </div>
                    <div class="col-xs-4 col-md-2">
