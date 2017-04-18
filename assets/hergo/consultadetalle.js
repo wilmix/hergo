@@ -57,10 +57,30 @@ $(document).on("change","#almacen_filtro",function(){
 $(document).on("change","#tipo_filtro",function(){
     retornarTablaIngresos();
 })
+
+
 function retornarTablaIngresos()
 {
 
-    $('#tbconsultadetalle').bootstrapTable({
+
+    ini=iniciofecha.format('YYYY-MM-DD')
+    fin=finfecha.format('YYYY-MM-DD')
+    alm=$("#almacen_filtro").val()
+    tipoingreso=$("#tipo_filtro").val()
+    console.log(tipoingreso)
+    $.ajax({
+        type:"POST",
+        url: base_url('index.php/ingresos/mostrarIngresosDetalle'),
+        dataType: "json",
+        data: {i:ini,f:fin,a:alm,ti:tipoingreso},
+    }).done(function(res){
+       //datosselect= restornardatosSelect(res)
+       //console.log((datosselect))
+console.log(res)
+        $("#tbconsultadetalle").bootstrapTable('destroy');
+        $('#tbconsultadetalle').bootstrapTable({
+
+                data:res,
                 striped:true,
                 pagination:true,
                 pageSize:"100",
@@ -72,7 +92,7 @@ function retornarTablaIngresos()
                 showColumns:true,
                 columns: [
                 {
-                    field: 'n',
+                    field: 'nmov',
                     width: '3%',
                     title: 'N',
                     align: 'center',
@@ -100,35 +120,35 @@ function retornarTablaIngresos()
                     
                 },
                 {
-                    field:'',
+                    field:'CodigoArticulo',
                     title:"Codigo",
                     width: '7%',
                     align: 'right',
                     sortable:true,
-                    formatter: operateFormatter3,
+                    
                 },
                 {
-                    field:"",
+                    field:"Descripcion",
                     title:"Descripción",
                     width: '17%',
                     sortable:true,
-                    formatter: operateFormatter2,
+                
                     align: 'center'
                 },
                 {
-                    field:"",
+                    field:"cantidad",
                     title:"Cantidad",
                     width: '7%',
                     sortable:true,
-                    formatter: operateFormatter2,
+                 
                     align: 'center'
                 },
                 {
-                    field:"",
+                    field:"total",
                     title:"Monto",
                     width: '8%',
                     sortable:true,
-                    formatter: operateFormatter2,
+                  
                     align: 'center'
                 },
                 {
@@ -150,149 +170,9 @@ function retornarTablaIngresos()
                 }]
     
           });
-}
 
-function retornarTablaIngresos2()
-{
-
-
-    ini=iniciofecha.format('YYYY-MM-DD')
-    fin=finfecha.format('YYYY-MM-DD')
-    alm=$("#almacen_filtro").val()
-    tipoingreso=$("#tipo_filtro").val()
-    console.log(tipoingreso)
-    $.ajax({
-        type:"POST",
-        url: base_url('index.php/ingresos/mostrarIngresos'),
-        dataType: "json",
-        data: {i:ini,f:fin,a:alm,ti:tipoingreso},
-    }).done(function(res){
-       datosselect= restornardatosSelect(res)
-       //console.log((datosselect))
-        $("#tingresos").bootstrapTable('destroy');
-        $("#tingresos").bootstrapTable({
-
-            data:res,
-            striped:true,
-            pagination:true,
-            pageSize:"100",
-            //height:"550", error con filtros
-            clickToSelect:true,
-            search:true,
-            strictSearch:true,
-            searchOnEnterKey:true,
-            filter:true,
-            showColumns:true,
-
-
-
-            columns:[
-            {
-                field: 'n',
-                width: '70px',
-                title: 'N',
-                align: 'center',
-                sortable:true,
-                filter: {type: "input"}
-            },
-            {
-                field: 'sigla',
-                width: '70px',
-                title: 'Tipo',
-                align: 'center',
-                sortable:true,
-                
-                filter: {
-                        type: "select",
-                        data: datosselect[1]
-                    }
-            },
-            {
-                field:'fechamov',
-                width: '90px',
-                title:"Fecha",
-                sortable:true,
-                align: 'center',
-                
-                formatter: formato_fecha_corta,
-            },
-            {
-                field:'nombreproveedor',
-                title:"Proveedor",
-                filter: {
-                    type: "select",
-                    data: datosselect[0]
-                },
-                sortable:true,
-                
-            },
-            {
-                field:'nfact',
-                title:"Factura",
-                width: '90px',
-                sortable:true,
-                //searchable:false,
-                filter: {type: "input"},
-                
-                
-            },
-            {
-                field:'total',
-                title:"Total",
-                width: '150px',
-                align: 'right',
-                sortable:true,
-                formatter: operateFormatter3,
-                filter: {type: "input"},
-                
-            },
-            {
-                field:"estado",
-                title:"Estado",
-                width: '90px',
-                sortable:true,
-                filter: {
-                    type: "select",
-                    data:["APROBADO","PENDIENTE","ANULADO"]
-                },
-                formatter: operateFormatter2,
-                align: 'center',
-                
-            },
-            {
-                field:"autor",
-                width: '100px',
-                title:"Autor",
-                sortable:true,
-                filter: {
-                    type: "select",
-                    data: datosselect[2]
-                },
-                visible:false,
-                align: 'center',
-                
-            },
-            {
-                field:"fecha",
-                width: '90px',
-                title:"Fecha",
-                sortable:true,
-                formatter: formato_fecha_corta,
-                visible:false,
-                align: 'center',
-                
-            },
-            {
-                title: 'Acciones',
-                align: 'center',
-                width: '150px',
-                events: operateEvents,
-                formatter: operateFormatter
-            }]
-        });
-
-        $("#tarticulo").bootstrapTable('hideLoading');
-        $("#tarticulo").bootstrapTable('resetView');
+        $("#tbconsultadetalle").bootstrapTable('hideLoading');
+        $("#tbconsultadetalle").bootstrapTable('resetView');
 
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
