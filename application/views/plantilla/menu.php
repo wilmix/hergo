@@ -74,15 +74,15 @@
         </li>
               
           <li class="treeview">
-          <a href="#"><i class="fa fa-minus-square"></i> <span>Egresos</span>
+          <a href="<?php echo base_url("egresos") ?>"><i class="fa fa-minus-square"></i> <span>Egresos</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">Consultas</a></li>
+            <li><a href="<?php echo base_url("egresos") ?>">Consultas</a></li>
             <li><a href="#">Venta Caja</a></li>
-            <li><a href="#">Nota de Entrega</a></li>
+            <li><a href="<?php echo base_url("egresos/Notaentrega") ?>">Nota de Entrega</a></li>
             <li><a href="#">Baja de Producto</a></li>
           </ul>
         </li>
