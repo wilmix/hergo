@@ -404,7 +404,7 @@ class Ingresos extends CI_Controller
 		}
 	}
 	//actualizar tabla costoarticulo
-	public function get_costo_articulo($codigo,$cant=0,$preciou=0)	//para tabla
+	public function get_costo_articulo($codigo,$cant=0,$preciou=0,$idAlmacen)	//para tabla
 	{		
 		$cant=$cant==""?0:$cant;
 		$preciou=$preciou==""?0:$preciou;
@@ -413,7 +413,7 @@ class Ingresos extends CI_Controller
     	$ntotal=0;
     	
     	$idArticulo=$this->ingresos_model->retornar_datosArticulo($codigo);
-		$ca=$this->ingresos_model->retornarcostoarticulo_model($idArticulo);
+		$ca=$this->ingresos_model->retornarcostoarticulo_model($idArticulo,$idAlmacen);
 		$obj=new StdClass();
 		if($ca)
 		{
@@ -442,15 +442,16 @@ class Ingresos extends CI_Controller
 	{
 		foreach ($tabla as $fila) 
 		{	
-			$aux=$this->get_costo_articulo($fila[0],$fila[2],$fila[3]);
+			$aux=$this->get_costo_articulo($fila[0],$fila[2],$fila[3],$idalmacen);
 			$this->ingresos_model->actualizartablacostoarticulo($aux->idArticulo,$aux->ncantidad,$aux->nprecionu,$aux->ntotal,$idalmacen);
 		}
 		
 	}
-	public function retornarcostoarticulo($id)
+	public function retornarcostoarticulo($id,$idAlmacen)
 	{
 		$idArticulo=$this->ingresos_model->retornar_datosArticulo($id);
-		$ca=$this->ingresos_model->retornarcostoarticulo_model($idArticulo);
+		
+		$ca=$this->ingresos_model->retornarcostoarticulo_model($idArticulo,$idAlmacen);
 		$obj=new StdClass();
 		//print_r($obj);
 		if($ca)

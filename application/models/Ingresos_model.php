@@ -143,12 +143,12 @@ class Ingresos_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
     }
-    public function retornarcostoarticulo_model($id)
+    public function retornarcostoarticulo_model($id,$idAlmacen)
     {
         // quitar desc de la consulta para los ultimos datos de la tabla costoarticulo
         $sql="SELECT c.*
             FROM costoarticulos c
-            WHERE c.idArticulo=$id
+            WHERE c.idArticulo=$id AND c.idAlmacen=$idAlmacen
             ORDER By c.idtabla desc 
             limit 1 
             ";

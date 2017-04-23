@@ -45,8 +45,12 @@ $(document).ready(function(){
       },*/
       select: function( event, ui ) {
         //agregar costo articulo
+        //console.log(ui.item.CodigoArticulo);
+        idAlmacen=$("#almacen_imp").val();
+        console.log(idAlmacen)
          $.ajax({
-            url: base_url("index.php/ingresos/retornarcostoarticulo/"+ui.item.CodigoArticulo),
+
+            url: base_url("index.php/ingresos/retornarcostoarticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
             dataType: "json",
             data: {},
             success: function(data) {
