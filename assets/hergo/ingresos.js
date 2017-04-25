@@ -328,16 +328,22 @@ function verdetalle(fila)
             $("#nfact_imp").val(fila.nfact)
             $("#ningalm_imp").val(fila.ningalm)
             $("#obs_imp").val(fila.obs)
+
             /***pendienteaprobado***/
             var boton="";
             if(fila.estado=="0")
                 boton='<button type="button" class="btn btn-success" datastd="'+fila.idIngresos+'" id="btnaprobado">Aprobado</button>';
             else
                 boton='<button type="button" class="btn btn-danger" datastd="'+fila.idIngresos+'" id="btnpendiente">Pendiente</button>';
+            var csFact="Sin factura";
+            if(fila.nfact!="SF")
+                csFact="Con factura";
 
-            $("#pendienteaprobado").html(boton)
-			$("#totalsusdetalle").val(totalsus)
-			$("#totalbsdetalle").val(totalbs)
+
+            $("#pendienteaprobado").html(boton);
+			$("#totalsusdetalle").val(totalsus);
+			$("#totalbsdetalle").val(totalbs);
+            $("#titulo_modalIgresoDetalle").html(" - "+fila.tipomov+ " - "+csFact);
 			$("#modalIgresoDetalle").modal("show");
 		}
 	})
@@ -461,6 +467,9 @@ function restornardatosSelect(res)
         tipo.push(value.sigla)
         autor.push(value.autor)
     })
+    proveedor.sort();
+    tipo.sort();
+    autor.sort();
     datos.push(proveedor.unique());
     datos.push(tipo.unique());
     datos.push(autor.unique());

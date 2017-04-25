@@ -1,5 +1,38 @@
-var glob_factorIVA=0.87;
-var glob_factorRET=0.087;
+$(document).ready(function(){
+    var glob_factorIVA=0.87;
+    var glob_factorRET=0.087;
+    loc_almacen= $("#almacen_imp").val();    
+})
+
+
+$(document).on("change","#almacen_imp",function(){
+
+    var tablaaux=tablatoarray();
+    
+    if(tablaaux.length>0)
+    {
+        swal("Atencion!", "Al cambiar el almacen se quitaran los articulos de la tabla")
+        swal({
+          title: "Atencion!",
+          text: "Al cambiar el almacen se quitaran los articulos de la tabla",
+          type: "warning",
+          showCancelButton: true,
+          cancelButtonText: "Cancelar",
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Continuar",
+        
+        },
+        function(isConfirm){
+          if (isConfirm) {
+            limpiarArticulo();           
+            limpiarTabla();
+            loc_almacen= $("#almacen_imp").val();
+          } else {
+            $("#almacen_imp").val(loc_almacen);
+          }
+        });
+    }
+}); 
 
 
 $(document).ready(function(){ 
@@ -19,6 +52,7 @@ $(document).ready(function(){
     $("#articulo_imp").autocomplete(
     {      
       minLength: 1,
+      autoFocus: true,
       source: function (request, response) {        
         $("#cargandocodigo").show(150)
         $("#Descripcion_imp").val('');
@@ -252,7 +286,7 @@ function guardarmovimiento()
 {     
     var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
     var tablaaux=tablatoarray();
-    console.log(tablaaux);
+    //console.log(tablaaux);
     if(tablaaux.length>0)
     {
         var tabla=JSON.stringify(tablaaux);
@@ -285,7 +319,8 @@ function guardarmovimiento()
     }
     else
     {
-        alert("no se tiene datos en la tabla para guardar")
+        
+        swal("Error", "No se tiene datos en la tabla para guardar","error")
     }
 }
 function actualizarMovimiento()

@@ -138,7 +138,7 @@ class Ingresos_model extends CI_Model
         FROM articulos a
         INNER JOIN unidad u
         ON a.idUnidad=u.idUnidad
-        where CodigoArticulo like '$b%' or Descripcion like '$b%'";
+        where CodigoArticulo like '$b%' or Descripcion like '$b%' ORDER By CodigoArticulo asc";
 		
 		$query=$this->db->query($sql);
 		return $query;
