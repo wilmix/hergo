@@ -1,6 +1,7 @@
-$(document).ready(function(){
-    var glob_factorIVA=0.87;
-    var glob_factorRET=0.087;
+var glob_factorIVA=0.87;
+var glob_factorRET=0.087;
+var loc_almacen;
+$(document).ready(function(){    
     loc_almacen= $("#almacen_imp").val();    
 })
 
