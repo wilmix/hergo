@@ -81,42 +81,42 @@
           <div class="row"> <!--PRIMERA FILA-->
              <div class=" col-xs-6 col-sm-6 col-md-3">
               <label>Almacen:</label>
-              <input id="almacen_imp" type="text" class="form-control" name="almacen_imp" readonly="">
+              <input id="almacen_egr" type="text" class="form-control" name="almacen_egr" readonly="">
              </div>
              <div class=" col-xs-6 col-sm-6 col-md-3">
-              <label for="moneda_imp">Tipo de Egreso:</label>
-              <input id="tipomov_imp" type="text" class="form-control" name="tipomov_imp" readonly="">
+              <label for="moneda_egr">Tipo de Egreso:</label>
+              <input id="tipomov_egr" type="text" class="form-control" name="tipomov_egr" readonly="">
              </div>
              <div class="col-xs-6 col-sm-6 col-md-2">
-                <label for="fechamov_imp" >Fecha:</label>
-                <input id="fechamov_imp" type="text" class="form-control" name="fechamov_imp" readonly="">
+                <label for="fechamov_egr" >Fecha:</label>
+                <input id="fechamov_egr" type="text" class="form-control" name="fechamov_egr" readonly="">
              </div>
              <div class="col-xs-6 col-sm-6 col-md-2">
-                <label for="moneda_imp">Moneda:</label>
-                <input id="moneda_imp" type="text" class="form-control" name="moneda_imp" readonly="">
+                <label for="moneda_egr">Moneda:</label>
+                <input id="moneda_egr" type="text" class="form-control" name="moneda_egr" readonly="">
 
              </div>
              <div class="col-xs-12 col-sm-6 col-md-2">
-                <label for="fechamov_imp" ># Movimiento:</label>
-                <input id="nmov_imp" type="text" class="form-control" name="nmov_imp" readonly="">
+                <label for="fechamov_egr" ># Movimiento:</label>
+                <input id="nmov_egr" type="text" class="form-control" name="nmov_egr" readonly="">
              </div>
           </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
           <div class="row"> <!--SEGUNDA FILA-->
                  <div class="col-xs-12 col-lg-6 col-md-6">
                    <label >Cliente:</label>
-                   <input id="proveedor_imp" type="text" class="form-control" name="proveedor_imp" readonly="">
+                   <input id="proveedor_egr" type="text" class="form-control" name="proveedor_egr" readonly="">
                  </div>
                  <div class="col-xs-4 col-sm-4 col-md-2">
                        <label>Pedido Cliente:</label>
-                       <input id="ordcomp_imp" type="text" class="form-control" name="ordcomp_imp" readonly="">
+                       <input id="ordcomp_egr" type="text" class="form-control" name="ordcomp_egr" readonly="">
                  </div>
                  <div class="col-xs-4 col-sm-4 col-md-2">
                        <label>Fecha de Pago:</label>
-                       <input id="nfact_imp" type="text" class="form-control" name="nfact_imp" readonly="">
+                       <input id="nfact_egr" type="text" class="form-control" name="nfact_egr" readonly="">
                  </div>
                  <div class="col-xs-4 col-sm-4 col-md-2">
                        <label>VACIO:</label>
-                       <input id="ningalm_imp" type="text" class="form-control" name="ningalm_imp" readonly="">
+                       <input id="ningalm_egr" type="text" class="form-control" name="ningalm_egr" readonly="">
                  </div>
               </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
               <hr>
@@ -157,9 +157,10 @@
           <div class="row">
                 <div class="col-xs-12 col-md-12">
                   <!--insertar costo de articulo a ingresar-->
-                  <label for="observaciones_imp">Observaciones:</label>
-                  <input type="text" class="form-control" id="obs_imp" name="obs_imp"/> 
+                  <label for="observaciones_egr">Observaciones:</label>
+                  <input type="text" class="form-control" id="obs_egr" name="obs_egr"/> 
               </div>
+              
                 
           </div>
           <div class="clearfix"></div>
