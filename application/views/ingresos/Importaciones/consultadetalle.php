@@ -18,9 +18,11 @@
               </select>
 
               <select class="form-control" name="tipo_filtro" id="tipo_filtro">
-                 <option value="">COMPRAS LOCALES</option>
-                  <option value="">IMPORTACIONES</option>
-                  <option value="">ANULACION EGRESOS</option>
+                <?php foreach ($tipoingreso->result_array() as $fila): ?>
+                  <option value="<?= $fila['id'] ?>" <?= $fila['id']==2?"selected":""  ?>><?= strtoupper($fila['tipomov']) ?></option>
+                <?php endforeach ?>
+                
+                 
               </select>
            </div>
 
@@ -33,7 +35,7 @@
             
             data-height="550">
           </table>-->
-          <table id="tbconsultadetalle"></table>
+          <table id="tbconsultadetalle" data-height="550"></table>
 
           
 
@@ -54,7 +56,11 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Detalle de ingresos</h4>
+
+        <h4 class="modal-title">Detalle de ingresos 
+        <span id="titulo_modalIgresoDetalle"></span>
+        </h4>
+
       </div>
       <div class="modal-body">
          <!-- formulario PRIMERA FILA-->
@@ -102,21 +108,34 @@
               <hr>
          <table class="table-striped"
               data-toggle="table"
-              data-pagination="true"
-              data-search="true"
               id="tingresosdetalle">
           </table>
-
+          <!--TOTALES SISTEMA-->
           <div class="col-md-6 col-xs-12 pull-right" style="padding: 0px">
             <div class = "input-group col-md-12 col-xs-12">
-              <span class = "input-group-addon">$</span>
-              <!--mostrar el total de dolares-->
-              <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="totalsusdetalle" disabled="">
-              <span class = "input-group-addon">Bs</span>
-              <!--mostrar el total bolivivanos-->
+              <span class = "input-group-addon">Bs FAC</span>
+              <!--mostrar el total bolivianos factura-->
+              <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="" disabled="">
+              <span class = "input-group-addon">Bs SIS</span>
+              <!--mostrar el total bolivivanos sistema-->
               <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="totalbsdetalle" disabled="">
              </div>
           </div>
+          <hr>
+
+          <!--TOTALES DOCUMENTO O FACTURA-->
+
+          <div class="col-md-6 col-xs-12 pull-right" style="padding: 0px">
+            <div class = "input-group col-md-12 col-xs-12">
+              <span class = "input-group-addon">$ FAC</span>
+              <!--mostrar el total dolares factura-->
+              <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="" disabled="">
+              <span class = "input-group-addon">$ SIS</span>
+              <!--mostrar el total dolares sistema-->
+              <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="totalsusdetalle" disabled="">
+             </div>
+          </div>
+
           <div class="row">
                 <div class="col-xs-12 col-md-12">
                   <!--insertar costo de articulo a ingresar-->

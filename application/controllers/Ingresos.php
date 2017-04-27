@@ -109,7 +109,7 @@ class Ingresos extends CI_Controller
 
             $this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresodetalle.js');
             $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
-
+            $this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("+");
 
 			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();
 
