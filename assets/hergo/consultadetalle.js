@@ -101,6 +101,7 @@ function retornarTablaIngresos()
                     title: 'N',
                     align: 'center',
                     sortable:true,
+                    filter: {type: "input"},
                 },
                 {
                     field:'fechamov',

@@ -7,7 +7,8 @@ class Egresos extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->helper('url');
-		$this->load->model("");
+		$this->load->model("ingresos_model");
+		$this->load->model("egresos_model");
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
 		$this->cabeceras_css=array(
@@ -43,7 +44,7 @@ class Egresos extends CI_Controller
 				$this->datos['foto']=base_url('assets/imagenes/').$this->session->userdata('foto');
 	}
 	
-		public function index()
+	public function index()
 	{
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
@@ -61,14 +62,15 @@ class Egresos extends CI_Controller
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/consultadetalle.js');
+			
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
 
             $this->datos['cabeceras_script'][]=base_url('assets/hergo/egresos.js');
-            //$this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
+            $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
+            $this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
 
 
 			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();
@@ -119,7 +121,25 @@ class Egresos extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-
+	public function mostrarEgresos()
+	{
+		if($this->input->is_ajax_request())
+        {
+        	//$almacen=//retornar almacen al que corresponde el usuario!!!!!
+        	$ini=$this->security->xss_clean($this->input->post("i"));//fecha inicio
+        	$fin=$this->security->xss_clean($this->input->post("f"));//fecha fin
+        	$alm=$this->security->xss_clean($this->input->post("a"));//almacen
+        	$tin=$this->security->xss_clean($this->input->post("ti"));//tipo de ingreso
+        	
+			$res=$this->egresos_model->mostrarEgresos($id=null,$ini,$fin,$alm,$tin);
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 
 }
 

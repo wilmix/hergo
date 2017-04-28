@@ -23,18 +23,18 @@
 
 
               <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
-                  <option>ALMACEN</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
+                <?php foreach ($almacen->result_array() as $fila): ?>
+                <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
+                <?php endforeach ?>
+                <option value="">TODOS</option>
 
               </select>
               
               <select class="btn btn-primary btn-sm" name="tipo_filtro" id="tipo_filtro">
-                  <option>TIPOMOV</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
+                <?php foreach ($tipoingreso->result_array() as $fila): ?>
+                  <option value="<?= $fila['id'] ?>" <?= $fila['id']==2?"selected":""  ?>><?= strtoupper($fila['tipomov']) ?></option>
+                <?php endforeach ?>
+                <option value="">TODOS</option>
                  
               </select>
 
