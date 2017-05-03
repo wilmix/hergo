@@ -58,4 +58,14 @@ class Egresos_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
 	}
+	public function mostrarDetalle($id)
+	{
+		$sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario, FORMAT(e.total,3) total, e.descuento
+		FROM egredetalle e
+		INNER JOIN articulos a
+		ON e.articulo = a.idArticulos
+ 		WHERE e.idegreso=$id";
+		$query=$this->db->query($sql);
+		return $query;
+	}
 }

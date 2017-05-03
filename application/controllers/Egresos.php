@@ -62,16 +62,15 @@ class Egresos extends CI_Controller
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/egresos.js');
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
 
-            $this->datos['cabeceras_script'][]=base_url('assets/hergo/egresos.js');
+            
             $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
             $this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
-
 
 			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();
 
@@ -132,6 +131,21 @@ class Egresos extends CI_Controller
         	$tin=$this->security->xss_clean($this->input->post("ti"));//tipo de ingreso
         	
 			$res=$this->egresos_model->mostrarEgresos($id=null,$ini,$fin,$alm,$tin);
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function mostrarDetalle()
+	{
+	
+		if($this->input->is_ajax_request() && $this->input->post('id'))
+        {
+        	$id = addslashes($this->security->xss_clean($this->input->post('id')));
+			$res=$this->egresos_model->mostrarDetalle($id);
 			$res=$res->result_array();
 			echo json_encode($res);
 		}

@@ -71,10 +71,12 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-        <h4 class="modal-title">Detalle de Egresos 
+        <div class="modal-title"><h4>Detalle de Egresos 
+            <span id="facturadonofacturado">Facturado</span> 
+          </h4>          
+               
+        </div>
         
-        </h4>
-
       </div>
       <div class="modal-body">
          <!-- formulario PRIMERA FILA-->
@@ -104,30 +106,28 @@
           <div class="row"> <!--SEGUNDA FILA-->
                  <div class="col-xs-12 col-lg-6 col-md-6">
                    <label >Cliente:</label>
-                   <input id="proveedor_egr" type="text" class="form-control" name="proveedor_egr" readonly="">
+                   <input id="cliente_egr" type="text" class="form-control" name="cliente_egr" readonly="">
                  </div>
                  <div class="col-xs-4 col-sm-4 col-md-2">
                        <label>Pedido Cliente:</label>
-                       <input id="ordcomp_egr" type="text" class="form-control" name="ordcomp_egr" readonly="">
+                       <input id="pedido_egr" type="text" class="form-control" name="pedido_egr" readonly="">
                  </div>
                  <div class="col-xs-4 col-sm-4 col-md-2">
                        <label>Fecha de Pago:</label>
-                       <input id="nfact_egr" type="text" class="form-control" name="nfact_egr" readonly="">
+                       <input id="fechaPago" type="text" class="form-control" name="fechaPago" readonly="">
                  </div>
                  <div class="col-xs-4 col-sm-4 col-md-2">
                        <label>VACIO:</label>
-                       <input id="ningalm_egr" type="text" class="form-control" name="ningalm_egr" readonly="">
+                       <input id="vacioEgr" type="text" class="form-control" name="vacioEgr" readonly="">
                  </div>
               </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
               <hr>
          <table class="table-striped"
               data-toggle="table"
-              id="tingresosdetalle">
+              id="tegresosdetalle">
           </table>
           <!--TOTALES SISTEMA-->
-           <div class="col-md-6 col-xs-12 pull-left" style="padding: 0px">
-            <h2 style="background-color: #007da7" >Facturado</h2>
-          </div>
+          
 
           <div class="col-md-6 col-xs-12 pull-right" style="padding: 0px">
             <div class = "input-group col-md-12 col-xs-12">
@@ -139,6 +139,7 @@
               <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="totalbsdetalle" disabled="">
              </div>
           </div>
+          <div class="clearfix"></div>
           <hr>
 
           <!--TOTALES DOCUMENTO O FACTURA
@@ -158,7 +159,7 @@
                 <div class="col-xs-12 col-md-12">
                   <!--insertar costo de articulo a ingresar-->
                   <label for="observaciones_egr">Observaciones:</label>
-                  <input type="text" class="form-control" id="obs_egr" name="obs_egr"/> 
+                  <input type="text" class="form-control" id="obs_egr" name="obs_egr" readonly="" /> 
               </div>
               
                 

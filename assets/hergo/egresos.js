@@ -1,4 +1,3 @@
-
 var iniciofecha=moment().subtract(0, 'year').startOf('year')
 var finfecha=moment().subtract(0, 'year').endOf('year')
 
@@ -68,7 +67,7 @@ function retornarTablaEgresos()
     fin=finfecha.format('YYYY-MM-DD')
     alm=$("#almacen_filtro").val()
     tipoingreso=$("#tipo_filtro").val()
-  
+    console.log(tipoingreso)
     $.ajax({
         type:"POST",
         url: base_url('index.php/egresos/mostrarEgresos'),
@@ -76,118 +75,117 @@ function retornarTablaEgresos()
         data: {i:ini,f:fin,a:alm,ti:tipoingreso},
     }).done(function(res){
        datosselect= restornardatosSelect(res)
-
-       console.log((res))
-
         $("#tegresos").bootstrapTable('destroy');
-        
-        
         $('#tegresos').bootstrapTable({
-                    data:res,
-                    striped:true,
-                    pagination:true,
-                    pageSize:"10",
-                    clickToSelect:true,
-                    search:true,
-                    strictSearch:true,
-                    searchOnEnterKey:true,
-                    filter:true,
-                    showColumns:true,
-                    columns: [
-                    {
-                        field: 'n',
-                        width: '3%',
-                        title: 'N',
-                        align: 'center',
-                        sortable:true,
-                    },
-                    {
-                        field:'fechamov',
-                        width: '7%',
-                        title:"Fecha",
-                        sortable:true,
-                        align: 'center',
-                        formatter: formato_fecha_corta,
-                    },
-                    {
-                        field:'nombreCliente',
-                        title:"Cliente",
-                        width: '17%',
-                        sortable:true,
-                    },
-                    {
-                        field:'',
-                        title:"Factura",
-                        width: '7%',
-                        sortable:true,
-                        
-                    },
-                    {
-                        field:'total',
-                        title:"Total",
-                        width: '7%',
-                        align: 'right',
-                        sortable:true,
-                        formatter: operateFormatter3
+                   
+            data:res,
+            striped:true,
+            pagination:true,
+            pageSize:"10",
+            //height:"550", error con filtros
+            //clickToSelect:true,
+            search:true,
+            //strictSearch:true,
+            searchOnEnterKey:true,
+            filter:true,
+            showColumns:true,
 
-                    },
-                    {
-                        field:"estado",
-                        title:"Estado",
-                        width: '7%',
-                        sortable:true,
-                        align: 'center',
-                        formatter: operateFormatter2
-                    },                    
-                    {
-                        field:"",
-                        width: '8%',
-                        title:"N° Pedido",
-                        sortable:true,
-                        visible:false,
-                        align: 'center'
-                    },
-                                {
-                        field:"plazopago",
-                        width: '8%',
-                        title:"PlazoPago",
-                        sortable:true,
-                        visible:false,
-                        align: 'center',
-                        formatter: formato_fecha_corta,
-                    },
-                    {
-                        field:"autor",
-                        width: '8%',
-                        title:"Autor",
-                        sortable:true,
-                        visible:false,
-                        align: 'center'
-                    },
-                    {
-                        field:"fecha",
-                        width: '8%',
-                        title:"Fecha",
-                        sortable:true,
-                        visible:false,
-                        align: 'center',
-                        formatter: formato_fecha_corta,
-                    },
-                    {
-                        field:"",
-                        title:"Acciones",
-                        width: '7%',
-                        sortable:true,
-                        align: 'center',
-                        formatter: operateFormatter
-                    }]
+            columns: [
+            {
+                field: 'n',
+                width: '3%',
+                title: 'N',
+                align: 'center',
+                sortable:true,
+            },
+            {
+                field:'fechamov',
+                width: '7%',
+                title:"Fecha",
+                sortable:true,
+                align: 'center',
+                formatter: formato_fecha_corta,
+            },
+            {
+                field:'nombreCliente',
+                title:"Cliente",
+                width: '17%',
+                sortable:true,
+            },
+            {
+                field:'total',
+                title:"Factura",
+                width: '7%',
+                sortable:true,
+                
+            },
+            {
+                field:'total',
+                title:"Total",
+                width: '7%',
+                align: 'right',
+                sortable:true,
+                formatter: operateFormatter3
+
+            },  
+            {
+                field:"estado",
+                title:"Estado",
+                width: '7%',
+                sortable:true,
+                align: 'center',
+                formatter: operateFormatter2
+            },                  
+            {
+                field:"",
+                width: '8%',
+                title:"N° Pedido",
+                sortable:true,
+                visible:false,
+                align: 'center'
+            },
+            {
+                field:"plazopago",
+                width: '8%',
+                title:"PlazoPago",
+                sortable:true,
+                visible:false,
+                align: 'center',
+                formatter: formato_fecha_corta,
+            },
+            {
+                field:"autor",
+                width: '8%',
+                title:"Autor",
+                sortable:true,
+                visible:false,
+                align: 'center'
+            },
+            {
+                field:"fecha",
+                width: '8%',
+                title:"Fecha",
+                sortable:true,
+                visible:false,
+                align: 'center',
+                formatter: formato_fecha_corta,
+            },
+            {
+                title: 'Acciones',
+                align: 'center',
+                width: '10%',
+                events: operateEvents,
+                formatter: operateFormatter
+            }]
             
         });
         
-       // $("#tegresos").bootstrapTable('resetView');
+        $("#tegresos").bootstrapTable('hideLoading');
+        $("#tegresos").bootstrapTable('resetView');
 
-        if(Object.keys(res).length<=0) $("tbody td","table#tegresos").html("No se encontraron registros")        
-        else $("tbody","table#tegresos").show()            
+
+        /*if(Object.keys(res).length<=0) $("tbody td","table#tegresos").html("No se encontraron registros")        
+        else $("tbody","table#tegresos").show()            */
 
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
@@ -199,11 +197,11 @@ function retornarTablaEgresos()
 function operateFormatter(value, row, index)
 {
     return [
-        '<button type="button" class="btn btn-default verIngreso" aria-label="Right Align">',
+        '<button type="button" class="btn btn-default verEgreso" aria-label="Right Align">',
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-        '<button type="button" class="btn btn-default editarIngreso" aria-label="Right Align">',
+        '<button type="button" class="btn btn-default editarEgreso" aria-label="Right Align">',
         '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>',
-        '<button type="button" class="btn btn-default imprimirIngreso" aria-label="Right Align">',
+        '<button type="button" class="btn btn-default imprimirEgreso" aria-label="Right Align">',
         '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
     ].join('');
 }
@@ -211,6 +209,7 @@ function operateFormatter(value, row, index)
 function operateFormatter2(value, row, index)
 {
     $ret=''
+
     if(row.anulado==1)
     {        
         $ret='<span class="label label-warning">ANULADO</span>';
@@ -233,23 +232,35 @@ function operateFormatter3(value, row, index)
     return (formatNumber.new(num));
    //return(num)
 }
+/***********Eventos*************/
 window.operateEvents = {
-    'click .verIngreso': function (e, value, row, index) {
+    'click .verEgreso': function (e, value, row, index) {
      // fila=JSON.stringify(row);
         verdetalle(row)
-    },    
+
+    },
+    'click .editarEgreso': function (e, value, row, index) {
+      //console.log(row.idIngresos);
+
+      var editar=base_url("Ingresos/editarimportaciones/")+row.idIngresos;
+
+        window.location.href = editar;
+    },
+    'click .imprimirIngreso': function (e, value, row, index) {
+     //alert(JSON.stringify(row));
+    }
 };
 function verdetalle(fila)
 {
   console.log(fila)
-    id=fila.idIngresos
+    id=fila.idEgresos
     datos={id:id}
-    retornarajax(base_url("index.php/ingresos/mostrarDetalle"),datos,function(data)
+    retornarajax(base_url("index.php/egresos/mostrarDetalle"),datos,function(data)
     {
         estado=validarresultado_ajax(data);
         if(estado)
         {
-
+            console.log(data.respuesta)
             mostrarDetalle(data.respuesta);
             //console.log(glob_tipoCambio)
             var totalnn=fila.total
@@ -274,17 +285,18 @@ function verdetalle(fila)
 
             //console.log(sus)
             //sus=sus.toLocaleString()
-
-            $("#almacen_imp").val(fila.almacen)
-            $("#tipomov_imp").val(fila.tipomov)
-            $("#fechamov_imp").val(fila.fechamov)
-            $("#moneda_imp").val(fila.monedasigla)
-            $("#nmov_imp").val(fila.n)
-            $("#proveedor_imp").val(fila.nombreproveedor)
-            $("#ordcomp_imp").val(fila.ordcomp)
-            $("#nfact_imp").val(fila.nfact)
-            $("#ningalm_imp").val(fila.ningalm)
-            $("#obs_imp").val(fila.obs)
+      
+            $("#facturadonofacturado").html(operateFormatter2(fila.estado, fila))
+            $("#almacen_egr").val(fila.almacen)
+            $("#tipomov_egr").val(fila.tipomov)
+            $("#fechamov_egr").val(formato_fecha_corta(fila.fechamov));
+            $("#moneda_egr").val(fila.monedasigla)
+            $("#nmov_egr").val(fila.n)
+            $("#cliente_egr").val(fila.nombreCliente)
+            $("#pedido_egr").val("???????????????????")
+            $("#fechaPago").val(formato_fecha_corta(fila.plazopago));
+            $("#vacioEgr").val("?????????????????????")
+            $("#obs_egr").val(fila.obs)
 
             /***pendienteaprobado***/
             var boton="";
@@ -301,14 +313,14 @@ function verdetalle(fila)
             $("#totalsusdetalle").val(totalsus);
             $("#totalbsdetalle").val(totalbs);
             $("#titulo_modalIgresoDetalle").html(" - "+fila.tipomov+ " - "+csFact);
-            $("#modalIgresoDetalle").modal("show");
+            $("#modalEgresoDetalle").modal("show");
         }
     })
 }
 function mostrarDetalle(res)
 {
-    $("#tingresosdetalle").bootstrapTable('destroy');
-        $("#tingresosdetalle").bootstrapTable({
+    $("#tegresosdetalle").bootstrapTable('destroy');
+        $("#tegresosdetalle").bootstrapTable({
 
             data:res,
             striped:true,
@@ -338,24 +350,17 @@ function mostrarDetalle(res)
             },
             
             //PARA COMPARAR CON FACTURA
-            {
-                field:'',
-                title:"P/U Factura",
-                align: 'right',
-                width: '10%',
-                sortable:true,
-                formatter: punitariofac
-            },
-            {
-                field:'totaldoc',
-                title:"Total Factura",
-                align: 'right',
-                width: '10%',
-                sortable:true,
-            },
+           
             {
                 field:'punitario',
-                title:"C/U Sistema",
+                title:"P/U Bs",
+                align: 'right',
+                width: '10%',
+                sortable:true,
+            },
+            {
+                field:'descuento',
+                title:"% Dscnt",
                 align: 'right',
                 width: '10%',
                 sortable:true,
