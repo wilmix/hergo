@@ -94,9 +94,9 @@ input[type=date]::-webkit-inner-spin-button {
                          <label>Fecha de Pago: </label>
                          <input id="fechapago_ne" name="" type="date" class="form-control form-control-sm"  placeholder="Fecha Pago" value="fechapago_ne" tabindex=7>
                    </div>
-                  <div class="col-xs-12 col-md-2">
+                  <div class="col-xs-4 col-md-2">
                   <label></label>
-                  <button type="button" class="form-control btn btn-success" id="agregar_articulo" name="agregar_articulo" style="margin-top: 4px;" tabindex=11>Añadir Cliente</button>
+                  <button type="button" data-toggle="modal" data-target="#modalcliente" class="form-control btn btn-success" id="botonmodalcliente"  style="margin-top: 4px;" tabindex=11>Añadir Cliente</button>
                   </div>
                 </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
 
@@ -109,31 +109,34 @@ input[type=date]::-webkit-inner-spin-button {
                      <input class="form-control form-control-sm" type="text" id="articulo_ne" name="articulo_ne"/ tabindex=9>
                      <div style="right: 22px;top:32px;position: absolute;" id="codigocorrecto"><i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i></div>
                   </div>
-                  <div class="col-xs-12 col-md-4">
+                  <div class="col-xs-9 col-md-4">
                       <!--mostrar descripcion de articulo segun codigo-->
                      <label for="descripcion_ne">Descripcion:</label>
                      <input type="text" class="form-control form-control-sm" id="Descripcion_ne" name="Descripcion_ne" readonly/>
                   </div>
-                  <div class="col-xs-4 col-md-2">
+                  <div class="col-xs-3 col-md-2">
                        <!--mostrar unidad de articulo segun codigo-->
                      <label for="">Unidad:</label>
-                     <input type="text" class="form-control form-control-sm" id="unidad_ne
-                  <div class="col-xs-4 col-md-2">
+                     <input type="text" class="form-control form-control-sm" disabled/>
+                  </div>
+                  <div class="col-xs-6 col-md-2">
                       <!--mostrar costo promedio ponderado de articulo segun codigo-->
                      <label for="costo_ne">Precio Bs:</label>
                      <input type="text" class="form-control form-control-sm text-right tiponumerico" id="costo_ne" disabled/>
                   </div>
-                   <div class="col-xs-4 col-md-2">
+                   <div class="col-xs-6 col-md-2">
                       <!--mostrar saldo en almacen de articulo segun codigo-->
                      <label for="saldo_ne">Saldo:</label>
                       <input type="text" class="form-control form-control-sm text-right tiponumerico" id="saldo_ne" disabled/>
                   </div>
 
                  </div><!-- div class="form-group-sm row"  TERCERA FILA-->
+
+                 
                  <div class="form-group row"> <!--CUARTA FILA-->
 
                   <div class="col-xs-12 col-md-4">
-                      <!--insertar costo de articulo a ingresar-->
+                      <!--insertar PRECIO de articulo a ingresar-->
 
                   </div>
 
@@ -220,3 +223,126 @@ input[type=date]::-webkit-inner-spin-button {
     </div> <!-- /.class="box" -->
   </div> <!-- /.class="col-xs-12" -->
 </div> <!-- /.class="row" -->
+
+
+
+<!-- Modal -->
+<form action=" " method="post"  id="form_clientes" enctype="multipart/form-data">
+  <div class="modal fade" id="modalcliente" role="dialog">
+    <input type="" name="id_cliente" value="" id="id_cliente" hidden value="<?= "" ?>"> <!-- input oculto para el codigo de articulo-->
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h3 class="modal-title">Agregar Cliente</h3>
+              </div>
+                  <!--MODAL BODY-->
+              <div class="modal-body form form-horizontal">
+                <fieldset>
+                  <!-- Tipo Documento-->
+                  <div class="form-group"> 
+                    <label class="col-md-3 col-lg-3 control-label">Tipo de Documento</label>
+                    <div class="col-md-9 col-lg-9 selectContainer">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
+                        <select name="tipo_doc" id="tipo_doc" class="form-control selectpicker" >
+                          <option value=" " >Selecciona</option>
+
+                         
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Documento-->
+                  <div class="form-group">
+                    <label class="col-md-3 col-lg-3 control-label">N° Documento</label>  
+                    <div class="col-md-9 col-lg-9 inputGroupContainer">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
+                        <input  name="carnet" id="carnet" placeholder="00000000" class="form-control"  type="text">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Nombre de Cliente-->
+                  <div class="form-group">
+                    <label class="col-md-3 col-lg-3 control-label">Nombre de Cliente</label>  
+                    <div class="col-md-9 col-lg-9 inputGroupContainer">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input  name="nombre_cliente" id="nombre_cliente" placeholder="Nombre o Razon Social" class="form-control"  type="text">
+                      </div>
+                    </div>
+                  </div>
+                   <!-- Tipo Cliente-->
+                  <div class="form-group"> 
+                    <label class="col-md-3 col-lg-3 control-label">Tipo de Cliente</label>
+                    <div class="col-md-9 col-lg-9 selectContainer">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
+                        <select name="clientetipo" id="clientetipo" class="form-control selectpicker" >
+                          <option value=" " >Selecciona</option>
+
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Direccion-->
+                  <div class="form-group">
+                    <label class="col-md-3 col-lg-3 control-label">Direccion</label>  
+                    <div class="col-md-9 col-lg-9 inputGroupContainer">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
+                        <input name="direccion" id="direccion" placeholder="Dirección de Cliente" class="form-control" type="text">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Telefono -->
+                  <div class="form-group">
+                    <label class="col-md-3 col-lg-3 control-label">Telefono</label>  
+                    <div class="col-md-9 col-lg-9 inputGroupContainer">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
+                        <input name="phone" id="phone" placeholder="Telefono de Cliente" class="form-control" type="number">
+                      </div>
+                    </div>
+                  </div>
+                   <!-- Fax -->
+                  <div class="form-group">
+                    <label class="col-md-3 col-lg-3 control-label">Fax</label>  
+                    <div class="col-md-9 col-lg-9 inputGroupContainer">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
+                        <input name="fax" id="fax" placeholder="Fax" class="form-control" type="number">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Email-->
+                  <div class="form-group">
+                    <label class="col-md-3 col-lg-3 control-label">E-Mail</label>  
+                    <div class="col-md-9 col-lg-9 inputGroupContainer">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                        <input name="email" id="email"  placeholder="Dirección Email" class="form-control"  type="text">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- web-->
+                  <div class="form-group">
+                    <label class="col-md-3 col-lg-3 control-label">Sitio WEB</label>  
+                    <div class="col-md-9 col-lg-9 inputGroupContainer">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                        <input name="website" id="website" placeholder="Sitio Web Cliente" class="form-control" type="text">
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default botoncerrarmodal" data-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary bguardar">Guardar</button>
+              </div>
+          </div> <!-- /class="modal-body form form-horizontal"-->
+        </div> <!-- /. class="modal-dialog" -->
+      </div> <!-- /. class="modal-dialog" -->
+  </div> <!-- /. class="modal fade" -->
+</form>

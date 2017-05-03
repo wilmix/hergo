@@ -38,7 +38,6 @@
                  
               </select>
 
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEgresoDetalle">  Launch demo modal </button>
            </div>
 
 
@@ -117,8 +116,8 @@
                        <input id="fechaPago" type="text" class="form-control" name="fechaPago" readonly="">
                  </div>
                  <div class="col-xs-4 col-sm-4 col-md-2">
-                       <label>VACIO:</label>
-                       <input id="vacioEgr" type="text" class="form-control" name="vacioEgr" readonly="">
+                       <label>N° Factura:</label>
+                       <input id="nFacturaEgr" type="text" class="form-control" name="nFacturaEgr" readonly="">
                  </div>
               </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
               <hr>
