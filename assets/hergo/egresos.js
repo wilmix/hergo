@@ -137,7 +137,7 @@ function retornarTablaEgresos()
                 formatter: operateFormatter2
             },                  
             {
-                field:"",
+                field:"clientePedido",
                 width: '8%',
                 title:"N° Pedido",
                 sortable:true,
@@ -293,7 +293,7 @@ function verdetalle(fila)
             $("#moneda_egr").val(fila.monedasigla)
             $("#nmov_egr").val(fila.n)
             $("#cliente_egr").val(fila.nombreCliente)
-            $("#pedido_egr").val("???????????????????")
+            $("#pedido_egr").val(fila.clientePedido)
             $("#fechaPago").val(formato_fecha_corta(fila.plazopago));
             $("#vacioEgr").val("?????????????????????")
             $("#obs_egr").val(fila.obs)

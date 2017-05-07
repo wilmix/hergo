@@ -144,6 +144,15 @@ class Ingresos_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
     }
+     public function retornarClienteBusqueda($b)
+    {
+        $sql="SELECT *
+        FROM clientes a        
+        where nombreCliente like '$b%' or documento like '$b%' ORDER By nombreCliente asc";
+        
+        $query=$this->db->query($sql);
+        return $query;
+    }
     public function retornarcostoarticulo_model($id,$idAlmacen)
     {
         // quitar desc de la consulta para los ultimos datos de la tabla costoarticulo
@@ -167,6 +176,7 @@ class Ingresos_model extends CI_Model
     }
     public function guardarmovimiento_model($datos)
     {
+        
 		$almacen_imp=$datos['almacen_imp'];
     	$tipomov_imp=$datos['tipomov_imp'];
     	$fechamov_imp=$datos['fechamov_imp'];

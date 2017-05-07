@@ -1,3 +1,25 @@
+<?php
+
+    $cont=(isset($dcab))?true:false;//si existe datos cabecera true si existe => editar
+    $idalmacen=0;
+    $idtegreso=0;
+    $idmoneda=0;
+    $idcliente=0;
+    if($cont) //editar
+    {
+        $originalDate = $dcab->fechamov;      
+        $newDate = date("Y-m-d", strtotime($originalDate));//revisar mes y año    
+        $idalmacen=$dcab->idalmacen;
+        $idtegreso=$dcab->idtipomov;
+        $idmoneda=$dcab->idmoneda;
+        $idcliente=$dcab->idcliente;
+        $idegresocompraslocales=$idtegreso;
+    }
+    else
+    {
+      $idegresocompraslocales=$idtegreso;
+    }
+?>
 <style>
     input{
         height: 50px;
@@ -28,60 +50,58 @@ input[type=date]::-webkit-inner-spin-button {
         <!--<h3 class="box-title">Ingreso Importaciones</h3>-->
       </div>
       <div class="box-body">
-                <form action=" " method="post"  id="form_ingresoImportaciones">
+                <form action=" " method="post"  id="form_egreso">
           <div class="form">
           <!-- formulario PRIMERA FILA-->
-                        <div class="row"> <!--PRIMERA FILA-->
+                        <div class="row filacabecera"> <!--PRIMERA FILA-->
                <div class=" col-xs-6 col-sm-6 col-md-3">
                 <label>Almacen:</label>
-                <select class="form-control form-control-sm" id="" name="almacen_ne" tabindex=1 >
-                                        <option value=1  >CENTRAL HERGO</option>
-                                        <option value=2  >DEPOSITO EL ALTO</option>
-                                        <option value=3  >POTOSI</option>
-                                        <option value=4  >SANTA CRUZ</option>
-                                        <option value=5  >COCHABAMBA</option>
-                                        <option value=6  >TALLER</option>
-                                   </select>
+                <select class="form-control form-control-sm" id="almacen_ne" name="almacen_ne" tabindex=1 <?= ($cont)?"disabled":"" ?>>
+                    <?php foreach ($almacen->result_array() as $fila): ?>
+                     <option value=<?= $fila['idalmacen'] ?> <?= ($idalmacen==$fila['idalmacen'])?"selected":"" ?> ><?= $fila['almacen'] ?></option>
+                   <?php endforeach ?>
+                 </select>
                </div>
-               <div class=" col-xs-6 col-sm-6 col-md-3">
-                <input type="" name="tipomov_ne" value="2" class="hidden">
+               <div class=" col-xs-6 col-sm-6 col-md-3">                
+                <input type="" name="tipomov_ne" value="<?= (isset($idingreso)?$idingreso:7)?>" class="hidden"><!--7 para nota de entrega-->
                 <label for="tipomov_ne">Tipo de Ingreso:</label>
-                <select class="form-control form-control-sm" id="tipomov_ne" name="tipomov_ne" tabindex=2  disabled>  
-                <option value=2 selected>Nota de Entrega</option>                         
+                <select class="form-control form-control-sm" id="tipomov_ne2" name="tipomov_ne2" tabindex=2  disabled>  
+                    <?php foreach ($tegreso->result_array() as $fila): ?>
+                      <?php if ($cont): ?> <!--EDITAR-->
+                            <?php if ($idtegreso==$fila['id']): ?>
+                              <option value=<?= $fila['id'] ?> "selected"><?= $fila['tipomov'] ?></option>
+                            <?php endif ?>
+                      <?php else: ?><!--NUEVO-->                
+                            <?php if ($idegreso==$fila['id']): ?>
+                                  <option value=<?= $fila['id'] ?> <?= ($idegreso==$fila['id'])?"selected":"" ?>><?= $fila['tipomov'] ?></option>
+                            <?php endif ?>
+                      <?php endif ?>        
+                    <?php endforeach ?>
                 </select>
                </div>
                <div class="col-xs-6 col-sm-6 col-md-2">
 
                   <label for="fechamov_ne" >Fecha:</label>
-                  <input id="fechamov_ne" type="date" class="form-control form-control-sm" name="fechamov_ne" placeholder="Fecha" tabindex=3 >
+                  <input id="fechamov_ne" type="date" class="form-control form-control-sm" name="fechamov_ne" placeholder="Fecha" value="<?= ($cont)?$newDate:$fecha  ?>" tabindex=3 <?= ($cont)?"disabled":"" ?>>
                </div>
                <div class="col-xs-6 col-sm-6 col-md-2">
                   <label for="moneda_ne">Moneda:</label>
                   <select class="form-control form-control-sm" id="moneda_ne" name="moneda_ne" tabindex=4>
-                    <option value="1"  >BOLIVIANOS</option>
-                    <option value="2" >DOLARES </option>
+                    <option value="1" <?= ($idmoneda==1)?"selected":"" ?>>BOLIVIANOS</option>
+                    <option value="2" <?= ($idmoneda==2)?"selected":"" ?>>DOLARES </option>
                   </select>
                </div>
                <div class="col-xs-12 col-sm-6 col-md-2">
                   <label for="fechamov_ne" ># Movimiento:</label>
-                  <input id="nmov_ne" type="number" class="form-control" name="nmov_ne" placeholder="# Movimiento" disabled value=""/>
+                  <input id="nmov_ne" type="number" class="form-control" name="nmov_ne" placeholder="# Movimiento" disabled value="<?= ($cont)?$dcab->n:""  ?>"/>
                </div>
             </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
-            <div class="row"> <!--SEGUNDA FILA-->
+            <div class="row filacabecera"> <!--SEGUNDA FILA-->
                    <div class="col-xs-12 col-lg-6 col-md-6">
-                     <label >Cliente:</label>
-                       <select class="form-control selectpicker" data-size="5" data-live-search="true" id="" name="" tabindex=5>
-                                                <option value=1 >NOMBRE CLIENTE</option>
-                                                <option value=2 >INC</option>
-                                                <option value=3 >ALCARDUPLEX</option>
-                                                <option value=4 >CIENSA LTDA.</option>
-                                                <option value=5 >COLMENA</option>
-                                                <option value=6 >COMERCIAL</option>
-                                                <option value=7 >GABRIEL</option>
-                                                <option value=8 >OERLIKON</option>
-                                                <option value=9 >MURILLO</option>
-                                                <option value=10 >COSIM</option>
-                                             </select>
+                      <label for="articulo_ne" style="float: left;">Cliente:</label><span style="margin-left: 10px;display: none;" id="cargandocliente" ><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+                     <input class="form-control form-control-sm" type="text" id="cliente_egreso" name="cliente_egreso"/ >
+                     <input type="text" readonly="true" name="idCliente" id="idCliente" class="hidden">
+                     <div style="right: 22px;top:32px;position: absolute;" id="clientecorrecto"><i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i></div>
 
                       <!-- Busqueda con select cambiar a autocomplete-->
 
@@ -92,7 +112,7 @@ input[type=date]::-webkit-inner-spin-button {
                    </div>
                    <div class="col-xs-4 col-sm-4 col-md-2">
                          <label>Fecha de Pago: </label>
-                         <input id="fechapago_ne" name="" type="date" class="form-control form-control-sm"  placeholder="Fecha Pago" value="fechapago_ne" tabindex=7>
+                         <input id="fechapago_ne" name="fechapago_ne" type="date" class="form-control form-control-sm"  placeholder="Fecha Pago" value="fechapago_ne" tabindex=7>
                    </div>
                   <div class="col-xs-4 col-md-2">
                   <label></label>
@@ -102,11 +122,11 @@ input[type=date]::-webkit-inner-spin-button {
 
 
                 <hr>
-                <div class="row"> <!--TERCERA FILA-->
+                <div class="row filaarticulo"> <!--TERCERA FILA-->
                   <div class="col-xs-12 col-md-2 has-feedback has-feedback-left">
                       <!--seleccionar codigo de articulo de la base de datos-->
                      <label for="articulo_ne" style="float: left;">Codigo:</label><span style="margin-left: 10px;display: none;" id="cargandocodigo" ><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
-                     <input class="form-control form-control-sm" type="text" id="articulo_ne" name="articulo_ne"/ tabindex=9>
+                     <input class="form-control form-control-sm" type="text" id="articulo_imp" name="articulo_imp"/ tabindex=9>
                      <div style="right: 22px;top:32px;position: absolute;" id="codigocorrecto"><i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i></div>
                   </div>
                   <div class="col-xs-9 col-md-4">
@@ -117,23 +137,23 @@ input[type=date]::-webkit-inner-spin-button {
                   <div class="col-xs-3 col-md-2">
                        <!--mostrar unidad de articulo segun codigo-->
                      <label for="">Unidad:</label>
-                     <input type="text" class="form-control form-control-sm" disabled/>
+                     <input type="text" class="form-control form-control-sm" id="unidad_ne" name="unidad_ne" disabled/>
                   </div>
                   <div class="col-xs-6 col-md-2">
                       <!--mostrar costo promedio ponderado de articulo segun codigo-->
                      <label for="costo_ne">Precio Bs:</label>
-                     <input type="text" class="form-control form-control-sm text-right tiponumerico" id="costo_ne" disabled/>
+                     <input type="text" class="form-control form-control-sm text-right tiponumerico" name="costo_ne" id="costo_ne" disabled/>
                   </div>
                    <div class="col-xs-6 col-md-2">
                       <!--mostrar saldo en almacen de articulo segun codigo-->
                      <label for="saldo_ne">Saldo:</label>
-                      <input type="text" class="form-control form-control-sm text-right tiponumerico" id="saldo_ne" disabled/>
+                      <input type="text" class="form-control form-control-sm text-right tiponumerico" id="saldo_ne" name="saldo_ne" disabled/>
                   </div>
 
                  </div><!-- div class="form-group-sm row"  TERCERA FILA-->
 
                  
-                 <div class="form-group row"> <!--CUARTA FILA-->
+                 <div class="form-group row filaarticulo"> <!--CUARTA FILA-->
 
                   <div class="col-xs-12 col-md-4">
                       <!--insertar PRECIO de articulo a ingresar-->
@@ -178,8 +198,25 @@ input[type=date]::-webkit-inner-spin-button {
                       <th>&nbsp;</th>
                     </tr>
                   </thead>
-                  <tbody id="">
-                    
+                   <tbody id="tbodyarticulos">
+                    <?php if ($cont): ?>
+                        <?php foreach ($detalle as $fila): ?>
+                          <?php 
+                            $punitariofac= $fila['cantidad']==""?0:$fila['cantidad'];
+                            $punitariofac=$fila['totaldoc'] / $punitariofac;
+                          ?>
+                            <tr>
+                                <td><input type="text" class="estilofila" disabled value="<?= $fila['CodigoArticulo'] ?>"></input></td>
+                                <td><input type="text" class="estilofila" disabled value="<?= $fila['Descripcion'] ?>"></input</td>
+                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['cantidad'] ?>"></input></td>
+                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $punitario?>"></input></td><!--nuevo-->
+                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['descuento'] ?>"></input></td><!--nuevo-->
+                                <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="<?= $fila['total'] ?>"></input></td>
+                                <td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
+                            </tr>
+                        <?php endforeach ?>
+                    <?php endif ?>
+
                   </tbody>
                 </table>
               </div> <!--div class="table-responsive"-->

@@ -19,7 +19,7 @@ class Egresos extends CI_Controller
 				base_url("assets/hergo/estilos.css"),
 				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
 				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
-
+				base_url('assets/sweetalert/sweetalert.css'),
 
 			);
 		$this->cabecera_script=array(
@@ -36,6 +36,7 @@ class Egresos extends CI_Controller
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
         		base_url('assets/plugins/daterangepicker/moment.min.js'),
         		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
+        		base_url('assets/sweetalert/sweetalert.min.js'),
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 			if($this->session->userdata('foto')==NULL)
@@ -110,7 +111,14 @@ class Egresos extends CI_Controller
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
 
-
+			$this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
+            $this->datos['tegreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
+		  	$this->datos['fecha']=date('Y-m-d');
+		  	$this->datos['clientes']=$this->ingresos_model->retornar_tabla("clientes");
+		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
+			
+			$this->datos['opcion']="Compras locales";
+			$this->datos['idegreso']=7;
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
@@ -154,6 +162,62 @@ class Egresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	public function retornarcliente()
+	{
+		if($this->input->is_ajax_request() && $this->input->post('id'))
+        {
+        	$id = addslashes($this->security->xss_clean($this->input->post('id')));
+			$res=$this->egresos_model->mostrarDetalle($id);
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function retornararticulos()
+    {
+        if($this->input->is_ajax_request() && $this->input->get('b'))
+        {
+        	$b = $this->security->xss_clean($this->input->get('b'));
+        	$dato=$this->ingresos_model->retornarClienteBusqueda($b);        	
+			echo json_encode($dato->result_array());
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+    }
+    public function guardarmovimiento()
+    {
+    	if($this->input->is_ajax_request())
+        {
+        	
+        	$datos['almacen_ne'] = $this->security->xss_clean($this->input->post('almacen_ne'));
+        	$datos['tipomov_ne'] = $this->security->xss_clean($this->input->post('tipomov_ne'));
+        	$datos['fechamov_ne'] = $this->security->xss_clean($this->input->post('fechamov_ne'));
+        	$datos['fechapago_ne'] = $this->security->xss_clean($this->input->post('fechapago_ne'));
+        	$datos['moneda_ne'] = $this->security->xss_clean($this->input->post('moneda_ne'));
+        	$datos['idCliente'] = $this->security->xss_clean($this->input->post('idCliente'));
+        	$datos['pedido_ne'] = $this->security->xss_clean($this->input->post('pedido_ne'));        	
+        	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
+        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
 
+        	if($this->egresos_model->guardarmovimiento_model($datos))
+        	{
+        		//$this->retornarcostoarticulo_tabla($datos['tabla'],$datos['almacen_imp']);
+				echo json_encode("true");
+        	}
+			else
+			{				
+				echo json_encode("false");
+			}
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+    }
 }
 
