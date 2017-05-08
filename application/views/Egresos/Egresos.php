@@ -70,8 +70,10 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-        <div class="modal-title"><h4>Detalle de Egresos 
-            <span id="facturadonofacturado">Facturado</span> 
+        <div class="modal-title"><h4>
+            <span id="nombreModal"></span>
+            <!--<span id="facturadonofacturado">Facturado</span> -->
+            <span id="numeromovimiento"></span> 
           </h4>          
                
         </div>

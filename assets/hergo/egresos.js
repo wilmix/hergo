@@ -296,8 +296,9 @@ function verdetalle(fila)
             $("#pedido_egr").val(fila.clientePedido)
             $("#fechaPago").val(formato_fecha_corta(fila.plazopago));
             $("#vacioEgr").val("?????????????????????")
-            $("#obs_egr").val(fila.obs)
-
+            $("#obs_egr").val(fila.obs);
+            $("#numeromovimiento").html(fila.n);
+            $("#nombreModal").html(fila.tipomov);
             /***pendienteaprobado***/
             var boton="";
             //if(fila.estado=="0")
