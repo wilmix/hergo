@@ -207,8 +207,8 @@ input[type=date]::-webkit-inner-spin-button {
                       <th class="col-sm-1" >Código</th>
                       <th class="col-sm-6">Artículo</th>
                       <th class="col-sm-1" class="text-right">Cantidad</th>
-                      <th class="col-sm-1" class="text-right">P/U Factura</th> <!--nuevo-->
-                      <th class="col-sm-1" class="text-right">Total Factura</th> <!--nuevo-->
+                      <th class="col-sm-1" class="text-right">P/U Documento</th> <!--nuevo-->
+                      <th class="col-sm-1" class="text-right">Total Documento</th> <!--nuevo-->
                       <th class="text-right">C/U Sistema</th><!--CAMBIO PARA COMPRAS LOCALES "Costo Unitario":"Total" --> 
                       <th class="text-right">Total</th>
                       <th>&nbsp;</th>
@@ -244,11 +244,11 @@ input[type=date]::-webkit-inner-spin-button {
               </div>
               <div class="col-md-6 col-xs-12">
                 <div class = "input-group col-md-12 col-xs-12">
-                  <span class = "input-group-addon">$</span>
-                  <!--mostrar el total de dolares-->
+                  <span class = "input-group-addon">Bs Doc</span>
+                  <!--mostrar el total bolivianos factura o documento-->
                   <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostosus" tabindex=13>
-                  <span class = "input-group-addon" >Bs</span>
-                  <!--mostrar el total bolivivanos-->
+                  <span class = "input-group-addon" >Bs Sis</span>
+                  <!--mostrar el total bolivivanos sistema-->
                   <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostobs" tabindex=14>
                  </div>
               </div>
