@@ -116,7 +116,7 @@ input[type=date]::-webkit-inner-spin-button {
                    </div>
                   <div class="col-xs-4 col-md-2">
                   <label></label>
-                  <button type="button" data-toggle="modal" data-target="#modalcliente" class="form-control btn btn-success" id="botonmodalcliente"  style="margin-top: 4px;" tabindex=11>Añadir Cliente</button>
+                  <button type="button" data-toggle="modal" data-target="#modalcliente" class="form-control btn btn-success" id="botonmodalcliente"  style="margin-top: 4px;" tabindex=8>Añadir Cliente</button>
                   </div>
                 </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
 
@@ -173,12 +173,12 @@ input[type=date]::-webkit-inner-spin-button {
                   <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
                       <label>% Descuento:</label>
-                      <input type="text" class="form-control form-control-sm tiponumerico" id="descuento_ne" name="descuento_ne" />
+                      <input type="text" class="form-control form-control-sm tiponumerico" id="descuento_ne" name="descuento_ne" tabindex=12/>
                   </div>
 
                   <div class="col-xs-12 col-md-2">
                   <label></label>
-                  <button type="button" class="form-control btn btn-success" id="agregar_articulo" name="agregar_articulo" style="margin-top: 4px;" tabindex=11>Añadir</button>
+                  <button type="button" class="form-control btn btn-success" id="agregar_articulo" name="agregar_articulo" style="margin-top: 4px;" tabindex=13>Añadir</button>
                   </div>
                </div><!--row CUARTA FILA -->
 
@@ -190,11 +190,12 @@ input[type=date]::-webkit-inner-spin-button {
                   <thead>
                     <tr>
                       <th class="col-sm-1" >Código</th>
-                      <th class="col-sm-6">Artículo</th>
+                      <th class="col-sm-5">Artículo</th>
                       <th class="col-sm-1" class="text-right">Cantidad</th>
-                      <th class="col-sm-1" class="text-right">P/U Bs</th> <!--nuevo-->
-                      <th class="col-sm-1" class="text-right">% Dscnt</th> <!--nuevo-->
-                      <th class="text-right">Total</th>
+                      <th class="col-sm-1" class="text-right">P/U Bs</th> 
+                      <th class="col-sm-1" class="text-right">% Dscnt</th> 
+                      <th class="col-sm-1" class="text-right">Total</th>
+                      <th class="col-sm-1" class="text-right">CantFac</th><!--nuevo-->
                       <th>&nbsp;</th>
                     </tr>
                   </thead>
@@ -229,10 +230,10 @@ input[type=date]::-webkit-inner-spin-button {
                 <div class = "input-group col-md-12 col-xs-12">
                   <span class = "input-group-addon">$</span>
                   <!--mostrar el total de dolares-->
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostosus" tabindex=13>
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostosus" tabindex=14>
                   <span class = "input-group-addon" >Bs</span>
                   <!--mostrar el total bolivivanos-->
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostobs" tabindex=14>
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostobs" tabindex=15>
                  </div>
               </div>
             </div><!--row-->
@@ -248,7 +249,7 @@ input[type=date]::-webkit-inner-spin-button {
             <hr>
             <div class="row">
                 <div class="col-xs-12">
-                                    <button type="button" class="btn btn-primary" id="guardarMovimiento" tabindex=11>Guardar Movimiento</button>
+                                    <button type="button" class="btn btn-primary" id="guardarMovimiento" tabindex=16 >Guardar Movimiento</button>
                     <button type="button" class="btn btn-danger" id="cancelarMovimiento" tabindex=12>Cancelar Movimiento</button>
                 
 

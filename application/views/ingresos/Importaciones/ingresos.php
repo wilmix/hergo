@@ -128,31 +128,31 @@
               data-toggle="table"
               id="tingresosdetalle">
           </table>
-          <!--TOTALES SISTEMA-->
+          <!--TOTALES Bs-->
           <div class="col-md-6 col-xs-12 pull-right" style="padding: 0px">
             <div class = "input-group col-md-12 col-xs-12">
-              <span class = "input-group-addon">Bs FAC</span>
+              <span class = "input-group-addon">Bs Doc</span>
               <!--mostrar el total bolivianos factura-->
               <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="" disabled="">
-              <span class = "input-group-addon">Bs SIS</span>
+              <span class = "input-group-addon">Bs Sis</span>
               <!--mostrar el total bolivivanos sistema-->
               <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="totalbsdetalle" disabled="">
              </div>
           </div>
           <hr>
 
-          <!--TOTALES DOCUMENTO O FACTURA-->
+          <!--TOTALES DOCUMENTO O FACTURA
 
           <div class="col-md-6 col-xs-12 pull-right" style="padding: 0px">
             <div class = "input-group col-md-12 col-xs-12">
               <span class = "input-group-addon">$ FAC</span>
-              <!--mostrar el total dolares factura-->
+              <!--mostrar el total dolares factura
               <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="" disabled="">
               <span class = "input-group-addon">$ SIS</span>
-              <!--mostrar el total dolares sistema-->
+              
               <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="totalsusdetalle" disabled="">
              </div>
-          </div>
+          </div>-->
 
           <div class="row">
                 <div class="col-xs-12 col-md-12">

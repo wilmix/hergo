@@ -410,7 +410,7 @@ function mostrarDetalle(res)
             //PARA COMPARAR CON FACTURA
             {
                 field:'',
-                title:"P/U Factura",
+                title:"P/U Documento",
                 align: 'right',
                 width: '10%',
                 sortable:true,
@@ -418,7 +418,7 @@ function mostrarDetalle(res)
             },
             {
                 field:'totaldoc',
-                title:"Total Factura",
+                title:"Total Documento",
                 align: 'right',
                 width: '10%',
                 sortable:true,
