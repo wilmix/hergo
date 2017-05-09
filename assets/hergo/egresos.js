@@ -295,7 +295,7 @@ function verdetalle(fila)
             $("#cliente_egr").val(fila.nombreCliente)
             $("#pedido_egr").val(fila.clientePedido)
             $("#fechaPago").val(formato_fecha_corta(fila.plazopago));
-            $("#vacioEgr").val("?????????????????????")
+           // $("#vacioEgr").val("?????????????????????")
             $("#obs_egr").val(fila.obs);
             $("#numeromovimiento").html(fila.n);
             $("#nombreModal").html(fila.tipomov);

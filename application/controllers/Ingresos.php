@@ -421,6 +421,7 @@ class Ingresos extends CI_Controller
 			$total=$cant*$preciou;
 			$fila=$ca->row();    			
 			$ncantidad=$cant+$fila->cantidad;
+			$fila->total=$fila->cantidad*$fila->precioUnitario;
 			$nprecionu=($fila->total+$total)/$ncantidad;    		
 			$ntotal=$ncantidad*$nprecionu;
 			
@@ -444,7 +445,7 @@ class Ingresos extends CI_Controller
 		foreach ($tabla as $fila) 
 		{	
 			$aux=$this->get_costo_articulo($fila[0],$fila[2],$fila[3],$idalmacen);
-			$this->ingresos_model->actualizartablacostoarticulo($aux->idArticulo,$aux->ncantidad,$aux->nprecionu,$aux->ntotal,$idalmacen);
+			$this->ingresos_model->actualizartablacostoarticulo($aux->idArticulo,$aux->ncantidad,$aux->nprecionu,$idalmacen);
 		}
 		
 	}
@@ -461,13 +462,13 @@ class Ingresos extends CI_Controller
 			
 			$obj->ncantidad=$fila->cantidad;
 			$obj->nprecionu=$fila->precioUnitario;
-			$obj->ntotal=$fila->total;	
+			//$obj->ntotal=$fila->total;	
 		}
 		else
 		{
 			$obj->ncantidad=0;
 			$obj->nprecionu=0;
-			$obj->ntotal=0;
+			//$obj->ntotal=0;
 		}
 		
 		echo json_encode($obj);

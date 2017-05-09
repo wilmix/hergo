@@ -82,7 +82,7 @@ $(document).ready(function(){
         //agregar costo articulo
         //console.log(ui.item.CodigoArticulo);
         idAlmacen=$("#almacen_imp").val();
-        console.log(idAlmacen)
+       // console.log(idAlmacen)
          $.ajax({
 
             url: base_url("index.php/ingresos/retornarcostoarticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
