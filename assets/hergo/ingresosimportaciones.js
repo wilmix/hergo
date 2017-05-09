@@ -152,28 +152,35 @@ function limpiarTabla()
 function calcularTotal()
 {
     var moneda=$("#moneda_imp").val()
-    var totalCosto=0;
+    
     var totales=$(".totalCosto").toArray();
+    var totalDoc=$(".totalDoc").toArray();
+
     var total=0;
     var dato=0;
     $.each(totales,function(index, value){
-        dato=$(value).inputmask('unmaskedvalue');
-        //console.log(dato)
+        dato=$(value).inputmask('unmaskedvalue');        
         total+=(dato=="")?0:parseFloat(dato)
     })
-    //total=Math.round(total * 100) / 100
-    if(moneda==1)
+    var totald=0;
+    dato=0;
+    console.log(totalDoc)
+    $.each(totalDoc,function(index, value){
+        dato=$(value).inputmask('unmaskedvalue');        
+        totald+=(dato=="")?0:parseFloat(dato)
+    })    
+    if(moneda==2)
     {
-        var totalDolares=total/glob_tipoCambio;
+        $("#nombretotaldoc").html="Sus Doc";
+        $("#nombretotalsis").html="Sus Sis";
     }
     else
     {
-        var totalDolares=total;
-        total=total*glob_tipoCambio;
-
+        $("#nombretotaldoc").html="Bs Doc";
+        $("#nombretotalsis").html="Bs Sis";
     }
+    $("#totalacostodoc").val(totald)
     $("#totalacostobs").val(total)
-    $("#totalacostosus").val(totalDolares)
 }
 $(document).on("change","#moneda_imp",function(){
     calcularTotal()
@@ -234,7 +241,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
             '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
             '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
             '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+punitfac+'""></input></td>'+  //nuevo P/U Factura
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+totalfac+'""></input></td>'+ //nuevo Total Factura
+            '<td class="text-right"><input type="text" class="totalDoc estilofila tiponumerico" disabled value="'+totalfac+'""></input></td>'+ //nuevo Total Factura
             '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+
             '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
             '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+

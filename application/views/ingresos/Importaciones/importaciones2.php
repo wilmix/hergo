@@ -226,7 +226,7 @@ input[type=date]::-webkit-inner-spin-button {
                                 <td><input type="text" class="estilofila" disabled value="<?= $fila['Descripcion'] ?>"></input</td>
                                 <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['cantidad'] ?>"></input></td>
                                 <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $punitariofac ?>"></input></td><!--nuevo-->
-                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['totaldoc'] ?>"></input></td><!--nuevo-->
+                                <td class="text-right"><input type="text" class="totalDoc estilofila tiponumerico" disabled value="<?= $fila['totaldoc'] ?>"></input></td><!--nuevo-->
                                 <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['punitario'] ?>"></input></td>
                                 <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="<?= $fila['total'] ?>"></input></td>
                                 <td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
@@ -244,10 +244,10 @@ input[type=date]::-webkit-inner-spin-button {
               </div>
               <div class="col-md-6 col-xs-12">
                 <div class = "input-group col-md-12 col-xs-12">
-                  <span class = "input-group-addon">Bs Doc</span>
+                  <span class = "input-group-addon nombretotaldoc">Bs Doc</span>
                   <!--mostrar el total bolivianos factura o documento-->
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostosus" tabindex=13>
-                  <span class = "input-group-addon" >Bs Sis</span>
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostodoc" tabindex=13>
+                  <span class = "input-group-addon nombretotalsis" >Bs Sis</span>
                   <!--mostrar el total bolivivanos sistema-->
                   <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostobs" tabindex=14>
                  </div>

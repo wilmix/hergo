@@ -269,6 +269,7 @@ class Ingresos extends CI_Controller
     public function editarimportaciones($id=null)//cambiar nombre a editar ingresos!!!!
 	{
         //if("si no esta autorizado a editar redireccionar o enviar error!!!!")
+        if($id==null) redirect("error");
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -297,10 +298,24 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
             $this->datos['dcab']=$this->mostrarIngresosEdicion($id);//datos cabecera
             $this->datos['detalle']=$this->mostrarDetalleEditar($id);
-            /*echo "<pre>";
-            print_r($this->datos['dcab']);
-            echo "<pre>";*/
+            if($this->datos['dcab']->moneda==2)//si es dolares dividimos por el tipo de cambio
+            {
 
+            	$tipodecambiovalor=$this->ingresos_model->retornarValorTipoCambio($this->datos['dcab']->tipocambio);            	
+            	$tipodecambiovalor=$tipodecambiovalor->tipocambio;
+	            for ($i=0; $i < count($this->datos['detalle']) ; $i++) { 
+	            	$this->datos['detalle'][0]["totaldoc"]=$this->datos['detalle'][0]["totaldoc"]/$tipodecambiovalor;
+	            	$this->datos['detalle'][0]["punitario"]=$this->datos['detalle'][0]["punitario"]/$tipodecambiovalor;
+	            	
+	            	$this->datos['detalle'][0]["total"]=$this->datos['detalle'][0]["total"]/$tipodecambiovalor;	  
+
+	            }		
+	            /*echo "<pre>";
+            	print_r($this->datos['detalle']);
+            	echo "</pre>";*/
+            	//die();	
+            }
+            
             $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
             $this->datos['tingreso']=$this->ingresos_model->retornar_tablaMovimiento("+");
 		  	$this->datos['fecha']=date('Y-m-d');
