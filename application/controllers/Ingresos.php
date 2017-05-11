@@ -298,24 +298,23 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
             $this->datos['dcab']=$this->mostrarIngresosEdicion($id);//datos cabecera
             $this->datos['detalle']=$this->mostrarDetalleEditar($id);
+            
+
             if($this->datos['dcab']->moneda==2)//si es dolares dividimos por el tipo de cambio
             {
 
             	$tipodecambiovalor=$this->ingresos_model->retornarValorTipoCambio($this->datos['dcab']->tipocambio);            	
             	$tipodecambiovalor=$tipodecambiovalor->tipocambio;
+            	
 	            for ($i=0; $i < count($this->datos['detalle']) ; $i++) { 
-	            	$this->datos['detalle'][0]["totaldoc"]=$this->datos['detalle'][0]["totaldoc"]/$tipodecambiovalor;
-	            	$this->datos['detalle'][0]["punitario"]=$this->datos['detalle'][0]["punitario"]/$tipodecambiovalor;
-	            	
-	            	$this->datos['detalle'][0]["total"]=$this->datos['detalle'][0]["total"]/$tipodecambiovalor;	  
+	            	$this->datos['detalle'][$i]["totaldoc"]=$this->datos['detalle'][$i]["totaldoc"]/$tipodecambiovalor;
+	            	$this->datos['detalle'][$i]["punitario"]=$this->datos['detalle'][$i]["punitario"]/$tipodecambiovalor;	            	
+	            	$this->datos['detalle'][$i]["total"]=$this->datos['detalle'][$i]["total"]/$tipodecambiovalor;	  
 
 	            }		
-	            /*echo "<pre>";
-            	print_r($this->datos['detalle']);
-            	echo "</pre>";*/
-            	//die();	
+	           
             }
-            
+      
             $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
             $this->datos['tingreso']=$this->ingresos_model->retornar_tablaMovimiento("+");
 		  	$this->datos['fecha']=date('Y-m-d');
@@ -387,8 +386,28 @@ class Ingresos extends CI_Controller
 		if($this->input->is_ajax_request() && $this->input->post('id'))
         {
         	$id = addslashes($this->security->xss_clean($this->input->post('id')));
+        	$moneda = addslashes($this->security->xss_clean($this->input->post('mon')));
 			$res=$this->ingresos_model->mostrarDetalle($id);
 			$res=$res->result_array();
+			
+
+			$idtipocambio=$this->ingresos_model->retornaridtipocambio($id);
+			
+			if($moneda==2)//si es dolares dividimos por el tipo de cambio
+            {
+            	$tipodecambiovalor=$this->ingresos_model->retornarValorTipoCambio($idtipocambio);  
+            	$tipodecambiovalor=$tipodecambiovalor->tipocambio;
+            	 for ($i=0; $i < count($res) ; $i++) { 
+	            	$res[$i]["totaldoc"]=$res[$i]["totaldoc"]/$tipodecambiovalor;
+	            	$res[$i]["punitario"]=$res[$i]["punitario"]/$tipodecambiovalor;	            	
+	            	$res[$i]["total"]=$res[$i]["total"]/$tipodecambiovalor;	  
+
+	            }
+	            /*echo "<pre>";
+            	print_r($this->datos['detalle']);
+            	echo "</pre>";*/
+            	//die();	
+            }
 			echo json_encode($res);
 		}
 		else
@@ -455,12 +474,20 @@ class Ingresos extends CI_Controller
 		
 		return $obj;
 	}
-	public function retornarcostoarticulo_tabla($tabla,$idalmacen)
+	public function retornarcostoarticulo_tabla($tabla,$idalmacen,$moneda)
 	{
+		
 		foreach ($tabla as $fila) 
 		{	
 			$aux=$this->get_costo_articulo($fila[0],$fila[2],$fila[3],$idalmacen);
-			$this->ingresos_model->actualizartablacostoarticulo($aux->idArticulo,$aux->ncantidad,$aux->nprecionu,$idalmacen);
+			$preciounbitario=$aux->nprecionu;
+			if($moneda==2)
+			{
+				$tipodecambiovalor=$this->ingresos_model->retornarValorTipoCambio();            	
+            	$tipodecambiovalor=$tipodecambiovalor->tipocambio;
+            	$preciounbitario=$preciounbitario*$tipodecambiovalor;
+			}
+			$this->ingresos_model->actualizartablacostoarticulo($aux->idArticulo,$aux->ncantidad,$preciounbitario,$idalmacen);
 		}
 		
 	}
@@ -520,7 +547,7 @@ class Ingresos extends CI_Controller
 
         	if($this->ingresos_model->guardarmovimiento_model($datos))
         	{
-        		$this->retornarcostoarticulo_tabla($datos['tabla'],$datos['almacen_imp']);
+        		$this->retornarcostoarticulo_tabla($datos['tabla'],$datos['almacen_imp'],$datos['moneda_imp']);
 				echo json_encode("true");
         	}
 			else

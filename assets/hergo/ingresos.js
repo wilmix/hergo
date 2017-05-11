@@ -286,7 +286,8 @@ function verdetalle(fila)
 {
   console.log(fila)
 	id=fila.idIngresos
-	datos={id:id}
+
+	datos={id:id,mon:fila.moneda}
 	retornarajax(base_url("index.php/ingresos/mostrarDetalle"),datos,function(data)
 	{
 		estado=validarresultado_ajax(data);
