@@ -70,12 +70,12 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-        <div class="modal-title"><h4>
-            <span id="nombreModal"></span>
+        <div class="modal-title" ><h4>
+            <h2><span class="label label-primary" id="nombreModal"></span>
             <!--<span id="facturadonofacturado">Facturado</span> -->
-            <span id="numeromovimiento"></span> 
-          </h4>          
-               
+            <span class="label label-primary" id="numeromovimiento"></span> </h2>
+          <!--</h4>-->          
+              
         </div>
         
       </div>
@@ -99,10 +99,29 @@
                 <input id="moneda_egr" type="text" class="form-control" name="moneda_egr" readonly="">
 
              </div>
-             <div class="col-xs-12 col-sm-6 col-md-2">
+
+             <div style="position: fixed;right: 0;z-index:9999" class="col-xs-4 col-sm-4 col-md-2">
+                       <label>N° Factura:</label>
+                       <table  class="table table-condensed">
+                          <tbody>
+                            <tr class="success">
+                              <td>154</td>
+                            </tr>
+                            <tr class="success">
+                              <td>687</td>
+                            </tr>
+                            <tr class="success">
+                              <td>7813</td>
+                            </tr>
+                            </tr>
+                          </tbody>
+                        </table>
+                       <!--<input id="nFacturaEgr" type="text" class="form-control" name="nFacturaEgr" readonly="">-->
+                 </div>
+             <!--<div class="col-xs-12 col-sm-6 col-md-2">
                 <label for="fechamov_egr" ># Movimiento:</label>
                 <input id="nmov_egr" type="text" class="form-control" name="nmov_egr" readonly="">
-             </div>
+             </div>-->
           </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
           <div class="row"> <!--SEGUNDA FILA-->
                  <div class="col-xs-12 col-lg-6 col-md-6">
@@ -117,10 +136,10 @@
                        <label>Fecha de Pago:</label>
                        <input id="fechaPago" type="text" class="form-control" name="fechaPago" readonly="">
                  </div>
-                 <div class="col-xs-4 col-sm-4 col-md-2">
+                 <!--<div class="col-xs-4 col-sm-4 col-md-2">
                        <label>N° Factura:</label>
                        <input id="nFacturaEgr" type="text" class="form-control" name="nFacturaEgr" readonly="">
-                 </div>
+                 </div>-->
               </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
               <hr>
          <table class="table-striped"

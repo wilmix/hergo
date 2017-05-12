@@ -57,7 +57,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-        <h4 class="modal-title">Detalle de ingresos 
+        <h4 class="modal-title"> 
         <span id="titulo_modalIgresoDetalle"></span>
         </h4>
 

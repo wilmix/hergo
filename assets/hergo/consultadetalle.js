@@ -302,7 +302,8 @@ function verdetalle(fila)
             $("#pendienteaprobado").html(boton);
             $("#totalsusdetalle").val(totalsus);
             $("#totalbsdetalle").val(totalbs);
-            $("#titulo_modalIgresoDetalle").html(" - "+fila.tipomov+ " - "+csFact);
+            $("#titulo_modalIgresoDetalle").html(fila.tipomov);
+            $("#tituloDetalleFac").html(csFact);
             $("#modalIgresoDetalle").modal("show");
         }
     })

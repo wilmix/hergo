@@ -75,9 +75,11 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-        <h4 class="modal-title">Detalle de ingresos 
-        <span id="titulo_modalIgresoDetalle"></span>
-        </h4>
+        <h2 class="modal-title"> 
+        <span class="label label-primary" id="titulo_modalIgresoDetalle"></span>
+        <span class="label label-primary" id="nmovingre"></span>
+        <span class="label label-default" id="tituloDetalleFac"></span>
+        </h2>
 
       </div>
       <div class="modal-body">

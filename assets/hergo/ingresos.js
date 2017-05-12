@@ -329,6 +329,7 @@ function verdetalle(fila)
             $("#nfact_imp").val(fila.nfact)
             $("#ningalm_imp").val(fila.ningalm)
             $("#obs_imp").val(fila.obs)
+            $("#nmovingre").html(fila.n)
 
             /***pendienteaprobado***/
             var boton="";
@@ -344,7 +345,8 @@ function verdetalle(fila)
             $("#pendienteaprobado").html(boton);
 			$("#totalsusdetalle").val(totalsus);
 			$("#totalbsdetalle").val(totalbs);
-            $("#titulo_modalIgresoDetalle").html(" - "+fila.tipomov+ " - "+csFact);
+            $("#titulo_modalIgresoDetalle").html(fila.tipomov);
+            $("#tituloDetalleFac").html(csFact);
 			$("#modalIgresoDetalle").modal("show");
 		}
 	})
