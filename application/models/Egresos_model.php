@@ -97,7 +97,10 @@ class Egresos_model extends CI_Model
             
     		foreach ($datos['tabla'] as $fila) {
     			//print_r($fila);
-    			$idArticulo=$this->retornar_datosArticulo($fila[0]);
+    			$idArticulo=$this->retornar_datosArticulo($fila[0]);    			
+                $totalbs=$fila[6];
+                $punitariobs=$fila[5];
+                $totaldoc=$fila[4];
     			if($idArticulo)
     			{
     				$sql="INSERT INTO egredetalle(idegreso,nmov,articulo,moneda,cantidad,punitario,total,descuento) VALUES('$idIngreso','0','$idArticulo','$moneda_ne','$fila[2]','$fila[3]','$fila[5]','$fila[4]')";

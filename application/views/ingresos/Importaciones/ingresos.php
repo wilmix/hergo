@@ -133,14 +133,15 @@
           <!--TOTALES Bs-->
           <div class="col-md-6 col-xs-12 pull-right" style="padding: 0px">
             <div class = "input-group col-md-12 col-xs-12">
-              <span class = "input-group-addon">Bs Doc</span>
+              <span class = "input-group-addon" id="nombretotaldoc">Bs Doc</span>
               <!--mostrar el total bolivianos factura-->
-              <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="" disabled="">
-              <span class = "input-group-addon">Bs Sis</span>
+              <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="totaldocdetalle" disabled="">
+              <span class = "input-group-addon" id="nombretotalsis">Bs Sis</span>
               <!--mostrar el total bolivivanos sistema-->
-              <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="totalbsdetalle" disabled="">
+              <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="totalsisdetalle" disabled="">
              </div>
           </div>
+          <div class="clearfix"></div>
           <hr>
 
           <!--TOTALES DOCUMENTO O FACTURA

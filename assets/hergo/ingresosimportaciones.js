@@ -164,20 +164,20 @@ function calcularTotal()
     })
     var totald=0;
     dato=0;
-    console.log(totalDoc)
+    console.log(moneda)
     $.each(totalDoc,function(index, value){
         dato=$(value).inputmask('unmaskedvalue');        
         totald+=(dato=="")?0:parseFloat(dato)
     })    
-    if(moneda==2)
+    if(moneda=="2")
     {
-        $("#nombretotaldoc").html="Sus Doc";
-        $("#nombretotalsis").html="Sus Sis";
+        $("#nombretotaldoc").html("Sus Doc");
+        $("#nombretotalsis").html("Sus Sis");
     }
     else
     {
-        $("#nombretotaldoc").html="Bs Doc";
-        $("#nombretotalsis").html="Bs Sis";
+        $("#nombretotaldoc").html("Bs Doc");
+        $("#nombretotalsis").html("Bs Sis");        
     }
     $("#totalacostodoc").val(totald)
     $("#totalacostobs").val(total)

@@ -35,6 +35,14 @@ function base_url(complemento)
     var baseurl=$('#baseurl').val();
     return baseurl+complemento;
 }
+function agregarcargando()
+{
+    $("#cargando").css("display","block")
+}
+function quitarcargando()
+{
+    $("#cargando").css("display","none") 
+}
 /******************AJAX************************/
 /**********************************************/
 function retornarajax(url,datos,callback)
@@ -189,4 +197,9 @@ function redondeo(numero, decimales)
     var flotante = parseFloat(numero);
     var resultado = Math.round(flotante*Math.pow(10,decimales))/Math.pow(10,decimales);
     return resultado;
+}
+function mensajeregistrostabla(res,idtabla) //agrega o quita mensaje de registros encontrados
+{
+    if(Object.keys(res).length<=0) $("tbody td","table"+idtabla).html("No se encontraron registros")        
+    else $("tbody","table"+idtabla).show() 
 }

@@ -87,14 +87,16 @@ function retornarTablaIngresos()
     fin=finfecha.format('YYYY-MM-DD')
     alm=$("#almacen_filtro").val()
     tipoingreso=$("#tipo_filtro").val()
-    console.log(tipoingreso)
+    //console.log(tipoingreso)
+    agregarcargando();
     $.ajax({
         type:"POST",
         url: base_url('index.php/ingresos/mostrarIngresos'),
         dataType: "json",
         data: {i:ini,f:fin,a:alm,ti:tipoingreso},
     }).done(function(res){
-       datosselect= restornardatosSelect(res)
+        quitarcargando();
+        datosselect= restornardatosSelect(res)
        //console.log((datosselect))
         $("#tingresos").bootstrapTable('destroy');
         $("#tingresos").bootstrapTable({
@@ -223,7 +225,7 @@ function retornarTablaIngresos()
 
         $("#tarticulo").bootstrapTable('hideLoading');
         $("#tarticulo").bootstrapTable('resetView');
-
+        mensajeregistrostabla(res,"#tarticulo");
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
     console.log( "Request Failed: " + err );
@@ -293,32 +295,26 @@ function verdetalle(fila)
 		estado=validarresultado_ajax(data);
 		if(estado)
 		{
-
+            var totaldoc=0;
+            var totalsis=0;
 			mostrarDetalle(data.respuesta);
-			//console.log(glob_tipoCambio)
+			$.each(data.respuesta,function(index, value){
+                totaldoc+=value.totaldoc
+                totalsis+=value.total
+            })
             var totalnn=fila.total
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            var totalsus=totalnn;
-            var totalbs=totalnn;
-            if(fila.moneda==1)
+            
+            if(fila.moneda==2)
             {
-                totalsus=totalsus/glob_tipoCambio;
-                totalsus=parseFloat(totalsus)    
+ 
+               $("#nombretotaldoc").html("$us Doc")
+               $("#nombretotalsis").html("$us Sis")
             }
             else
-            {
-                totalbs=totalbs*glob_tipoCambio;
+            { 
+               $("#nombretotaldoc").html("Bs Doc")
+               $("#nombretotalsis").html("Bs Sis")
             }
-            
-
-            //console.log(sus)
-            //sus=sus.toLocaleString()
-
             $("#almacen_imp").val(fila.almacen)
             $("#tipomov_imp").val(fila.tipomov)
             $("#fechamov_imp").val(fila.fechamov)
@@ -343,8 +339,8 @@ function verdetalle(fila)
 
 
             $("#pendienteaprobado").html(boton);
-			$("#totalsusdetalle").val(totalsus);
-			$("#totalbsdetalle").val(totalbs);
+			$("#totaldocdetalle").val(totaldoc);
+			$("#totalsisdetalle").val(totalsis);
             $("#titulo_modalIgresoDetalle").html(fila.tipomov);
             $("#tituloDetalleFac").html(csFact);
 			$("#modalIgresoDetalle").modal("show");

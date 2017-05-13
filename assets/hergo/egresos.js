@@ -67,14 +67,15 @@ function retornarTablaEgresos()
     fin=finfecha.format('YYYY-MM-DD')
     alm=$("#almacen_filtro").val()
     tipoingreso=$("#tipo_filtro").val()
-    console.log(tipoingreso)
+    agregarcargando();
     $.ajax({
         type:"POST",
         url: base_url('index.php/egresos/mostrarEgresos'),
         dataType: "json",
         data: {i:ini,f:fin,a:alm,ti:tipoingreso},
     }).done(function(res){
-       datosselect= restornardatosSelect(res)
+       //datosselect= restornardatosSelect(res)
+       quitarcargando();
         $("#tegresos").bootstrapTable('destroy');
         $('#tegresos').bootstrapTable({
                    
@@ -182,7 +183,7 @@ function retornarTablaEgresos()
         
         $("#tegresos").bootstrapTable('hideLoading');
         $("#tegresos").bootstrapTable('resetView');
-
+        mensajeregistrostabla(res,"#tegresos");
 
         /*if(Object.keys(res).length<=0) $("tbody td","table#tegresos").html("No se encontraron registros")        
         else $("tbody","table#tegresos").show()            */

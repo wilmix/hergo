@@ -244,10 +244,10 @@ input[type=date]::-webkit-inner-spin-button {
               </div>
               <div class="col-md-6 col-xs-12">
                 <div class = "input-group col-md-12 col-xs-12">
-                  <span class = "input-group-addon nombretotaldoc">Bs Doc</span>
+                  <span class = "input-group-addon " id="nombretotaldoc">Bs Doc</span>
                   <!--mostrar el total bolivianos factura o documento-->
                   <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostodoc" tabindex=13>
-                  <span class = "input-group-addon nombretotalsis" >Bs Sis</span>
+                  <span class = "input-group-addon " id="nombretotalsis" >Bs Sis</span>
                   <!--mostrar el total bolivivanos sistema-->
                   <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostobs" tabindex=14>
                  </div>
