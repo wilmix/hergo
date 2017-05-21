@@ -94,9 +94,10 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">Emitir Factura</a></li>
+            <li><a href="<?php echo base_url("facturas") ?>">Consulta de Facturas</a></li>
+            <li><a href="<?php echo base_url("facturas/EmitirFactura") ?>">Emitir Factura</a></li>
             <li><a href="#">Ver Facturas</a></li>
-            <li><a href="#">Consulta de Facturas</a></li>
+            
           </ul>
         </li>
 
