@@ -99,6 +99,7 @@ function retornarTablaEgresos()
                 title: 'N',
                 align: 'center',
                 sortable:true,
+                filter: {type: "input"}
             },
             {
                 field:'fechamov',
@@ -113,6 +114,7 @@ function retornarTablaEgresos()
                 title:"Cliente",
                 width: '17%',
                 sortable:true,
+                filter: {type: "input"},
             },
             {
                 field:'factura',
@@ -120,6 +122,7 @@ function retornarTablaEgresos()
                 width: '7%',
                 sortable:true,
                 formatter:mostrarFactura,
+                filter: {type: "input"}
                 
             },
             {
@@ -137,7 +140,11 @@ function retornarTablaEgresos()
                 width: '7%',
                 sortable:true,
                 align: 'center',
-                formatter: operateFormatter2
+                filter: {
+                    type: "select",
+                    data: ["Facturado", "No facturado", "Parcial", "Anulado"],
+                        },
+                formatter: operateFormatter2,
             },                  
             {
                 field:"clientePedido",
@@ -145,7 +152,8 @@ function retornarTablaEgresos()
                 title:"N° Pedido",
                 sortable:true,
                 visible:false,
-                align: 'center'
+                align: 'center',
+                filter: {type: "input"},
             },
             {
                 field:"plazopago",
@@ -162,7 +170,9 @@ function retornarTablaEgresos()
                 title:"Autor",
                 sortable:true,
                 visible:false,
-                align: 'center'
+                align: 'center',
+                filter: {type: "input"},
+
             },
             {
                 field:"fecha",
@@ -183,7 +193,7 @@ function retornarTablaEgresos()
             
         });
         
-        $("#tegresos").bootstrapTable('hideLoading');
+        //$("#tegresos").bootstrapTable('showLoading');
         $("#tegresos").bootstrapTable('resetView');
         mensajeregistrostabla(res,"#tegresos");
 
