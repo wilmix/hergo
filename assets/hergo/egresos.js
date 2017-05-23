@@ -83,7 +83,7 @@ function retornarTablaEgresos()
             data:res,
             striped:true,
             pagination:true,
-            pageSize:"10",
+            pageSize:"100",
             //height:"550", error con filtros
             //clickToSelect:true,
             search:true,

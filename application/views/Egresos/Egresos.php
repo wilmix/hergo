@@ -40,15 +40,11 @@
 
            </div>
 
-
-
-
-
           <table 
             id="tegresos"
-            data-toolbar="#toolbar2">
+            data-toolbar="#toolbar2"
+            data-height="600">
           </table>
-
 
       </div>
 
