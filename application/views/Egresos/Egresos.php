@@ -68,8 +68,9 @@
 
         <div class="modal-title" ><h4>
             <h2><span class="label label-primary" id="nombreModal"></span>
-            <!--<span id="facturadonofacturado">Facturado</span> -->
-            <span class="label label-primary" id="numeromovimiento"></span> </h2>
+            <span class="label label-primary" id="numeromovimiento"></span>
+            <span id="facturadonofacturado"></span>
+            </h2>
           <!--</h4>-->          
               
         </div>

@@ -190,12 +190,11 @@ input[type=date]::-webkit-inner-spin-button {
                   <thead>
                     <tr>
                       <th class="col-sm-1" >Código</th>
-                      <th class="col-sm-5">Artículo</th>
+                      <th class="col-sm-7">Artículo</th>
                       <th class="col-sm-1" class="text-right">Cantidad</th>
                       <th class="col-sm-1" class="text-right">P/U Bs</th> 
-                      <th class="col-sm-1" class="text-right">% Dscnt</th> 
                       <th class="col-sm-1" class="text-right">Total</th>
-                      <th class="col-sm-1" class="text-right">CantFac</th><!--nuevo-->
+                      <th class="col-sm-1" class="text-right">% Dscnt</th> 
                       <th>&nbsp;</th>
                     </tr>
                   </thead>

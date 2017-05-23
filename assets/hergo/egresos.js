@@ -234,7 +234,7 @@ function operateFormatter2(value, row, index)
         if(value==1)
             $ret='<span class="label label-success">Facturado</span>';
         if(value==2)
-            $ret='<span class="label label-primary">Facturado Parcial</span>';
+            $ret='<span class="label label-info">Facturado Parcial</span>';
     }
     
     return ($ret);
@@ -404,6 +404,13 @@ function mostrarDetalle(res)
             {
                 field:'total',
                 title:"Total",
+                align: 'right',
+                width: '10%',
+                sortable:true,
+            },
+            {
+                field:'',
+                title:"CantFact",
                 align: 'right',
                 width: '10%',
                 sortable:true,
