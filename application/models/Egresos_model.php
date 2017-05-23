@@ -161,5 +161,16 @@ class Egresos_model extends CI_Model
     		return false;
     	}
     }
+    public function retornar_facturas($id_egreso)
+    {
+        $sql="SELECT f.nFactura
+            from factura_egresos fe
+            inner join factura f
+            on fe.idFactura=f.idFactura
+            where fe.idegresos=$id_egreso";
+        $query=$this->db->query($sql);
+        $res=$query->result_array();
+        return $res;
+    }
 	
 }

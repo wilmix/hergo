@@ -74,6 +74,7 @@ function retornarTablaEgresos()
         dataType: "json",
         data: {i:ini,f:fin,a:alm,ti:tipoingreso},
     }).done(function(res){
+       // console.log(res[0])
        //datosselect= restornardatosSelect(res)
        quitarcargando();
         $("#tegresos").bootstrapTable('destroy');
@@ -114,10 +115,11 @@ function retornarTablaEgresos()
                 sortable:true,
             },
             {
-                field:'total',
+                field:'factura',
                 title:"Factura",
                 width: '7%',
                 sortable:true,
+                formatter:mostrarFactura,
                 
             },
             {
@@ -227,18 +229,30 @@ function operateFormatter2(value, row, index)
     
     return ($ret);
 }
+
 function operateFormatter3(value, row, index)
 {       
     num=Math.round(value * 100) / 100
     return (formatNumber.new(num));
    //return(num)
 }
+function mostrarFactura(value, row, index)
+{       
+    var cadena=""
+    $.each(value,function(index,val){
+        cadena+=val.nFactura
+        // cadena+=" - ";
+        if(index<value.length-1)
+            cadena+=" - ";                           
+    })
+    
+    return (cadena); 
+}
 /***********Eventos*************/
 window.operateEvents = {
     'click .verEgreso': function (e, value, row, index) {
      // fila=JSON.stringify(row);
         verdetalle(row)
-
     },
     'click .editarEgreso': function (e, value, row, index) {
       //console.log(row.idIngresos);
@@ -256,12 +270,13 @@ function verdetalle(fila)
   console.log(fila)
     id=fila.idEgresos
     datos={id:id}
+    console.log(fila)
     retornarajax(base_url("index.php/egresos/mostrarDetalle"),datos,function(data)
     {
         estado=validarresultado_ajax(data);
         if(estado)
         {
-            console.log(data.respuesta)
+            //console.log(data.respuesta)
             mostrarDetalle(data.respuesta);
             //console.log(glob_tipoCambio)
             var totalnn=fila.total
@@ -316,6 +331,15 @@ function verdetalle(fila)
             $("#totalbsdetalle").val(totalbs);
             $("#titulo_modalIgresoDetalle").html(" - "+fila.tipomov+ " - "+csFact);
             $("#modalEgresoDetalle").modal("show");
+
+           //$("#nrofactura").html("")                    
+            var cadena=""
+            $.each(fila.factura,function(index,val){
+
+                cadena+="<option>"+val.nFactura+"</option>"
+            })
+            $("#facturasnum").html(cadena);                   
+
         }
     })
 }

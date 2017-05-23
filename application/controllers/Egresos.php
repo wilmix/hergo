@@ -140,12 +140,33 @@ class Egresos extends CI_Controller
         	
 			$res=$this->egresos_model->mostrarEgresos($id=null,$ini,$fin,$alm,$tin);
 			$res=$res->result_array();
-			echo json_encode($res);
+			$res2=$this->AgregarFActurasResultado($res);
+			
+			echo json_encode($res2);
 		}
 		else
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
+	}
+	public function AgregarFActurasResultado($tabla) //agrega la columna facturas a la tabla egreso
+	{
+		/*$tabla2 = array();
+		foreach ($tabla as $fila) {
+			$factura = array("factura" => "nuevo1111111111111111");
+			array_push($fila, $factura);
+			array_push($tabla2, $fila);			
+		}
+		return $tabla2;*/
+		$tabla2 = array();
+		
+
+		foreach ($tabla as $fila) {
+			$fila['factura']=$this->egresos_model->retornar_facturas($fila['idEgresos']);
+			array_push($tabla2, $fila);
+			
+		}
+		return $tabla2;
 	}
 	public function mostrarDetalle()
 	{

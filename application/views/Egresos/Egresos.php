@@ -102,7 +102,7 @@
 
              <div style="position: fixed;right: 0;z-index:9999" class="col-xs-4 col-sm-4 col-md-2">
                        <label>N° Factura:</label>
-                       <table  class="table table-condensed">
+                       <!--<table  class="table table-condensed">
                           <tbody>
                             <tr class="success">
                               <td>154</td>
@@ -115,7 +115,13 @@
                             </tr>
                             </tr>
                           </tbody>
-                        </table>
+                        </table>-->
+                        <select class="form-control" multiple style="height: 95px;" id="facturasnum"> 
+                       
+                          
+                        </select>
+
+
                        <!--<input id="nFacturaEgr" type="text" class="form-control" name="nFacturaEgr" readonly="">-->
                  </div>
              <!--<div class="col-xs-12 col-sm-6 col-md-2">
