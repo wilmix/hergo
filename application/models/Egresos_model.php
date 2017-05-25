@@ -34,27 +34,31 @@ class Egresos_model extends CI_Model
             ";
 
         }
-        else/*REVISAR!!!!!!!!!!!!!!!!!!*/
-        {
-            $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
-				(SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado
-			FROM ingresos i
-			INNER JOIN tmovimiento  t
-			ON i.tipomov = t.id
-			INNER JOIN provedores p
-			ON i.proveedor=p.idproveedor
-			INNER JOIN users u
-			ON u.id=i.autor
-			INNER JOIN almacenes a
-			ON a.idalmacen=i.almacen
-			INNER JOIN moneda m
-			ON i.moneda=m.id
-            WHERE idIngresos=$id
-			ORDER BY i.idIngresos DESC
-            LIMIT 1
+        else/*REVISAR!!!!!!!!!!!!!!!!!!SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
+                (SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio
+            FROM ingresos i*/
+        {            
+             $sql="
+            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido
+            FROM egresos e
+            INNER JOIN egredetalle d
+            on e.idegresos=d.idegreso
+            INNER JOIN tmovimiento t 
+            ON e.tipomov = t.id 
+            INNER JOIN clientes c 
+            ON e.cliente=c.idCliente
+            INNER JOIN users u 
+            ON u.id=e.autor 
+            INNER JOIN almacenes a 
+            ON a.idalmacen=e.almacen 
+            INNER JOIN moneda m 
+            ON e.moneda=m.id 
+            WHERE idEgresos=$id
+            ORDER BY e.idEgresos DESC
+            LIMIT 1   
             ";
         }
-       
+
 		$query=$this->db->query($sql);
 		return $query;
 	}
@@ -69,6 +73,19 @@ class Egresos_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
 	}
+    /*public function mostrarEgresosDetalle($id=null,$ini=null,$fin=null,$alm="",$tin="")
+    {       
+        $sql="SELECT *
+                FROM (SELECT i.nmov n,i.idIngresos, i.fechamov, p.nombreproveedor, i.nfact, CONCAT(u.first_name,' ', u.last_name) autor, i.fecha,t.tipomov,a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm FROM ingresos i INNER JOIN tmovimiento t ON i.tipomov = t.id INNER JOIN provedores p ON i.proveedor=p.idproveedor INNER JOIN users u ON u.id=i.autor INNER JOIN almacenes a ON a.idalmacen=i.almacen INNER JOIN moneda m ON i.moneda=m.id WHERE i.fechamov BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm' and t.id like '%$tin' ORDER BY i.idIngresos DESC) tabla
+                INNER JOIN ingdetalle id
+                ON tabla.idIngresos=id.idIngreso
+                INNER JOIN articulos ar
+                ON ar.idArticulos=id.articulo                
+                ";
+        die($sql);
+        $query=$this->db->query($sql);
+        return $query;
+    }*/
 	public function guardarmovimiento_model($datos)
     {
 

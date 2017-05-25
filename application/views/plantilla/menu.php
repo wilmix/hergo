@@ -82,7 +82,7 @@
           <ul class="treeview-menu">
             <li><a href="<?php echo base_url("egresos") ?>">Consultas</a></li>
             <li><a href="#">Venta Caja</a></li>
-            <li><a href="<?php echo base_url("egresos/Notaentrega") ?>">Nota de Entrega</a></li>
+            <li><a href="<?php echo base_url("egresos/notaentrega") ?>">Nota de Entrega</a></li>
             <li><a href="#">Baja de Producto</a></li>
           </ul>
         </li>

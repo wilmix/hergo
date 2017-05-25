@@ -204,15 +204,16 @@ input[type=date]::-webkit-inner-spin-button {
                         <?php foreach ($detalle as $fila): ?>
                           <?php 
                             $punitariofac= $fila['cantidad']==""?0:$fila['cantidad'];
-                            $punitariofac=$fila['totaldoc'] / $punitariofac;
+                            //$punitariofac=$fila['totaldoc'] / $punitariofac;
                           ?>
                             <tr>
                                 <td><input type="text" class="estilofila" disabled value="<?= $fila['CodigoArticulo'] ?>"></input></td>
                                 <td><input type="text" class="estilofila" disabled value="<?= $fila['Descripcion'] ?>"></input</td>
                                 <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['cantidad'] ?>"></input></td>
-                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $punitario?>"></input></td><!--nuevo-->
+                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['punitario']?>"></input></td><!--nuevo-->
                                 <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['descuento'] ?>"></input></td><!--nuevo-->
                                 <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="<?= $fila['total'] ?>"></input></td>
+                                <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value=""></input></td><!--nuevo-->
                                 <td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
                             </tr>
                         <?php endforeach ?>

@@ -314,7 +314,7 @@ class Ingresos extends CI_Controller
 	            }		
 	           
             }
-      
+           
             $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
             $this->datos['tingreso']=$this->ingresos_model->retornar_tablaMovimiento("+");
 		  	$this->datos['fecha']=date('Y-m-d');

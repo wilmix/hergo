@@ -270,6 +270,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
             '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+  //nuevo P/U Factura
             '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+descuento+'""></input></td>'+ //nuevo Total Factura            
             '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
+            '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value=" "></input></td>'+ //cantidad de facturas
             '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+
         '</tr>'
     $("#tbodyarticulos").append(articulo)

@@ -83,7 +83,7 @@ class Egresos extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-	public function Notaentrega()
+	public function notaentrega()
 	{
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
@@ -148,6 +148,92 @@ class Egresos extends CI_Controller
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
+	}
+	public function editarEgresos($id=null)//cambiar nombre a editar ingresos!!!!
+	{
+        //if("si no esta autorizado a editar redireccionar o enviar error!!!!")
+        if($id==null) redirect("error");
+		if(!$this->session->userdata('logeado'))
+			redirect('auth', 'refresh');
+
+			$this->datos['menu']="Ingresos";
+			$this->datos['opcion']="Importaciones";
+			$this->datos['titulo']="Editar";
+
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
+            /*************AUTOCOMPLETE**********/
+            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
+			/***************SELECT***********/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
+			/**************FUNCION***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/notasentrega.js');
+            /**************INPUT MASK***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+
+
+			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
+            $this->datos['dcab']=$this->mostrarEgresosEdicion($id);//datos cabecera
+            $this->datos['detalle']=$this->mostrarDetalleEditar($id);
+
+
+            if($this->datos['dcab']->moneda==2)//si es dolares dividimos por el tipo de cambio
+            {
+
+            	$tipodecambiovalor=$this->ingresos_model->retornarValorTipoCambio($this->datos['dcab']->tipocambio);            	
+            	$tipodecambiovalor=$tipodecambiovalor->tipocambio;
+            	
+	            for ($i=0; $i < count($this->datos['detalle']) ; $i++) { 
+	            //	$this->datos['detalle'][$i]["totaldoc"]=$this->datos['detalle'][$i]["totaldoc"]/$tipodecambiovalor;
+	            	$this->datos['detalle'][$i]["punitario"]=$this->datos['detalle'][$i]["punitario"]/$tipodecambiovalor;	            	
+	            	$this->datos['detalle'][$i]["total"]=$this->datos['detalle'][$i]["total"]/$tipodecambiovalor;	  
+
+	            }		
+	           
+            }
+            /*echo "<pre>";
+            print_r($this->datos['detalle']);
+            echo "</pre>";*/
+      
+            $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
+            $this->datos['tegreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
+		  	$this->datos['fecha']=date('Y-m-d');
+		  	$this->datos['proveedor']=$this->ingresos_model->retornar_tabla("provedores");
+		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
+		
+			
+			$this->load->view('plantilla/head.php',$this->datos);
+			$this->load->view('plantilla/header.php',$this->datos);
+			$this->load->view('plantilla/menu.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('egresos/notaentrega.php',$this->datos);
+			$this->load->view('plantilla/footcontainer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
+	}
+	 public function mostrarEgresosEdicion($id)
+	{
+        $res=$this->egresos_model->mostrarEgresos($id);
+        if($res->num_rows()>0)
+    	{
+    		$fila=$res->row();
+    		return $fila;
+    	}
+        else
+        {
+            return(false);
+        }
+	}
+	public function mostrarDetalleEditar($id)
+	{
+        $res=$this->egresos_model->mostrarDetalle($id);
+        $res=$res->result_array();
+        return($res);
 	}
 	public function AgregarFActurasResultado($tabla) //agrega la columna facturas a la tabla egreso
 	{

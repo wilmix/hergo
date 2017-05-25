@@ -75,7 +75,7 @@ function retornarTablaEgresos()
         data: {i:ini,f:fin,a:alm,ti:tipoingreso},
     }).done(function(res){
        // console.log(res[0])
-       //datosselect= restornardatosSelect(res)
+       datosselect= restornardatosSelect(res)
        quitarcargando();
         $("#tegresos").bootstrapTable('destroy');
         $('#tegresos').bootstrapTable({
@@ -99,6 +99,7 @@ function retornarTablaEgresos()
                 title: 'N',
                 align: 'center',
                 sortable:true,
+                filter: {type: "input"}
             },
             {
                 field:'fechamov',
@@ -113,6 +114,7 @@ function retornarTablaEgresos()
                 title:"Cliente",
                 width: '17%',
                 sortable:true,
+                filter: {type: "input"}
             },
             {
                 field:'factura',
@@ -120,7 +122,7 @@ function retornarTablaEgresos()
                 width: '7%',
                 sortable:true,
                 formatter:mostrarFactura,
-                
+                filter: {type: "input"}
             },
             {
                 field:'total',
@@ -128,8 +130,8 @@ function retornarTablaEgresos()
                 width: '7%',
                 align: 'right',
                 sortable:true,
-                formatter: operateFormatter3
-
+                formatter: operateFormatter3,
+                filter: {type: "input"}
             },  
             {
                 field:"estado",
@@ -137,7 +139,11 @@ function retornarTablaEgresos()
                 width: '7%',
                 sortable:true,
                 align: 'center',
-                formatter: operateFormatter2
+                formatter: operateFormatter2,
+                 filter: {
+                    type: "select",
+                    data:["FACTURADO","NO FACTURADO","PARCIAL"]
+                },
             },                  
             {
                 field:"clientePedido",
@@ -162,7 +168,11 @@ function retornarTablaEgresos()
                 title:"Autor",
                 sortable:true,
                 visible:false,
-                align: 'center'
+                align: 'center',
+                 filter: {
+                    type: "select",
+                    data: datosselect[2]
+                },
             },
             {
                 field:"fecha",
@@ -257,7 +267,7 @@ window.operateEvents = {
     'click .editarEgreso': function (e, value, row, index) {
       //console.log(row.idIngresos);
 
-      var editar=base_url("Ingresos/editarimportaciones/")+row.idIngresos;
+      var editar=base_url("egresos/editaregresos/")+row.idEgresos;
 
         window.location.href = editar;
     },
