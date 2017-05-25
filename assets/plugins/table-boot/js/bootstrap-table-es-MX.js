@@ -20,8 +20,8 @@
             return 'Buscar';
         },
         formatNoMatches: function () {
-            //return 'No se encontraron registros';
-            return 'Cargando, espere por favor...';//por mientras
+            return 'No se encontraron registros';
+            //return 'Cargando, espere por favor...';//por mientras
         },
         formatAllRows: function () {
             return 'Todo';

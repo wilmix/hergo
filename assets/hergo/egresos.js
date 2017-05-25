@@ -83,7 +83,7 @@ function retornarTablaEgresos()
             data:res,
             striped:true,
             pagination:true,
-            pageSize:"10",
+            pageSize:"100",
             //height:"550", error con filtros
             //clickToSelect:true,
             search:true,
@@ -114,7 +114,11 @@ function retornarTablaEgresos()
                 title:"Cliente",
                 width: '17%',
                 sortable:true,
+<<<<<<< HEAD
                 filter: {type: "input"}
+=======
+                filter: {type: "input"},
+>>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
             },
             {
                 field:'factura',
@@ -123,6 +127,10 @@ function retornarTablaEgresos()
                 sortable:true,
                 formatter:mostrarFactura,
                 filter: {type: "input"}
+<<<<<<< HEAD
+=======
+                
+>>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
             },
             {
                 field:'total',
@@ -139,11 +147,19 @@ function retornarTablaEgresos()
                 width: '7%',
                 sortable:true,
                 align: 'center',
+<<<<<<< HEAD
                 formatter: operateFormatter2,
                  filter: {
                     type: "select",
                     data:["FACTURADO","NO FACTURADO","PARCIAL"]
                 },
+=======
+                filter: {
+                    type: "select",
+                    data: ["Facturado", "No facturado", "Parcial", "Anulado"],
+                        },
+                formatter: operateFormatter2,
+>>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
             },                  
             {
                 field:"clientePedido",
@@ -151,7 +167,8 @@ function retornarTablaEgresos()
                 title:"N° Pedido",
                 sortable:true,
                 visible:false,
-                align: 'center'
+                align: 'center',
+                filter: {type: "input"},
             },
             {
                 field:"plazopago",
@@ -169,10 +186,15 @@ function retornarTablaEgresos()
                 sortable:true,
                 visible:false,
                 align: 'center',
+<<<<<<< HEAD
                  filter: {
                     type: "select",
                     data: datosselect[2]
                 },
+=======
+                filter: {type: "input"},
+
+>>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
             },
             {
                 field:"fecha",
@@ -193,7 +215,7 @@ function retornarTablaEgresos()
             
         });
         
-        $("#tegresos").bootstrapTable('hideLoading');
+        //$("#tegresos").bootstrapTable('showLoading');
         $("#tegresos").bootstrapTable('resetView');
         mensajeregistrostabla(res,"#tegresos");
 
@@ -234,7 +256,7 @@ function operateFormatter2(value, row, index)
         if(value==1)
             $ret='<span class="label label-success">Facturado</span>';
         if(value==2)
-            $ret='<span class="label label-primary">Facturado Parcial</span>';
+            $ret='<span class="label label-info">Facturado Parcial</span>';
     }
     
     return ($ret);
@@ -404,6 +426,13 @@ function mostrarDetalle(res)
             {
                 field:'total',
                 title:"Total",
+                align: 'right',
+                width: '10%',
+                sortable:true,
+            },
+            {
+                field:'',
+                title:"CantFact",
                 align: 'right',
                 width: '10%',
                 sortable:true,

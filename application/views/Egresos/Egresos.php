@@ -40,15 +40,11 @@
 
            </div>
 
-
-
-
-
           <table 
             id="tegresos"
-            data-toolbar="#toolbar2">
+            data-toolbar="#toolbar2"
+            data-height="500">
           </table>
-
 
       </div>
 
@@ -72,8 +68,9 @@
 
         <div class="modal-title" ><h4>
             <h2><span class="label label-primary" id="nombreModal"></span>
-            <!--<span id="facturadonofacturado">Facturado</span> -->
-            <span class="label label-primary" id="numeromovimiento"></span> </h2>
+            <span class="label label-primary" id="numeromovimiento"></span>
+            <span id="facturadonofacturado"></span>
+            </h2>
           <!--</h4>-->          
               
         </div>

@@ -50,9 +50,9 @@ class Egresos extends CI_Controller
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
-			$this->datos['menu']="Ingresos";
-			$this->datos['opcion']="Consultas Detalle";
-			$this->datos['titulo']="ConsultaDetalle";
+			$this->datos['menu']="Egresos";
+			$this->datos['opcion']="Consultas Egresos";
+			$this->datos['titulo']="Egresos";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
