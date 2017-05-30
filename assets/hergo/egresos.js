@@ -114,11 +114,12 @@ function retornarTablaEgresos()
                 title:"Cliente",
                 width: '17%',
                 sortable:true,
-<<<<<<< HEAD
                 filter: {type: "input"}
-=======
-                filter: {type: "input"},
->>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
+//<<<<<<< HEAD
+                
+//=======
+                //filter: {type: "input"},
+//>>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
             },
             {
                 field:'factura',
@@ -127,10 +128,10 @@ function retornarTablaEgresos()
                 sortable:true,
                 formatter:mostrarFactura,
                 filter: {type: "input"}
-<<<<<<< HEAD
-=======
+//<<<<<<< HEAD
+//=======
                 
->>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
+//>>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
             },
             {
                 field:'total',
@@ -147,19 +148,19 @@ function retornarTablaEgresos()
                 width: '7%',
                 sortable:true,
                 align: 'center',
-<<<<<<< HEAD
+//<<<<<<< HEAD
                 formatter: operateFormatter2,
                  filter: {
                     type: "select",
-                    data:["FACTURADO","NO FACTURADO","PARCIAL"]
+                    data:["T. FACTURADO","NO FACTURADO","PARCIAL"]
                 },
-=======
+//=======
                 filter: {
                     type: "select",
-                    data: ["Facturado", "No facturado", "Parcial", "Anulado"],
+                    data: ["T. Facturado", "No facturado", "Parcial", "Anulado"],
                         },
                 formatter: operateFormatter2,
->>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
+//>>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
             },                  
             {
                 field:"clientePedido",
@@ -186,15 +187,15 @@ function retornarTablaEgresos()
                 sortable:true,
                 visible:false,
                 align: 'center',
-<<<<<<< HEAD
+//<<<<<<< HEAD
                  filter: {
                     type: "select",
                     data: datosselect[2]
                 },
-=======
+//=======
                 filter: {type: "input"},
 
->>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
+//>>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
             },
             {
                 field:"fecha",
@@ -254,7 +255,7 @@ function operateFormatter2(value, row, index)
         if(value==0)
             $ret='<span class="label label-danger">No facturado</span>';
         if(value==1)
-            $ret='<span class="label label-success">Facturado</span>';
+            $ret='<span class="label label-success">T. Facturado</span>';
         if(value==2)
             $ret='<span class="label label-info">Facturado Parcial</span>';
     }

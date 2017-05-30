@@ -128,7 +128,7 @@ function retornarTablaEgresos()
                 sortable:true,
                 //formatter: operateFormatter3
             },
-                        {
+            {
                 field:'',
                 title:"TipoMov",
                 width: '7%',

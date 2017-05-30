@@ -53,7 +53,7 @@ input[type=date]::-webkit-inner-spin-button {
                 <form action=" " method="post"  id="form_egreso">
           <div class="form">
           <!-- formulario PRIMERA FILA-->
-                        <div class="row filacabecera"> <!--PRIMERA FILA-->
+            <div class="row filacabecera"> <!--PRIMERA FILA-->
                <div class=" col-xs-6 col-sm-6 col-md-3">
                 <label>Almacen:</label>
                 <select class="form-control form-control-sm" id="almacen_ne" name="almacen_ne" tabindex=1 <?= ($cont)?"disabled":"" ?>>
@@ -192,9 +192,9 @@ input[type=date]::-webkit-inner-spin-button {
                       <th class="col-sm-1" >Código</th>
                       <th class="col-sm-7">Artículo</th>
                       <th class="col-sm-1" class="text-right">Cantidad</th>
-                      <th class="col-sm-1" class="text-right">P/U Bs</th> 
-                      <th class="col-sm-1" class="text-right">Total</th>
-                      <th class="col-sm-1" class="text-right">% Dscnt</th> 
+                      <th class="col-sm-1" class="text-right">Precio</th> 
+                      <th class="col-sm-1" class="text-right">Descuento</th>
+                      <th class="col-sm-1" class="text-right">Total</th> 
                       <th>&nbsp;</th>
                     </tr>
                   </thead>

@@ -23,11 +23,134 @@
               </select>
               <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalFacturaDetalle">Open Modal</button>
            </div>
-          <table 
+
+         <table class="table table-condensed" class="table table-striped"
+            data-toggle="table"
+            data-height="550"
+            id=""
+            data-toolbar="#toolbar2"
+            data-mobile-responsive="true"
+            data-show-columns="true">
+            <thead>
+              <tr>
+                <th data-visible="false">Lote</th>
+                <th>N</th>
+                <th class="col-sm-1">Movimiento</th>
+                <th class="col-sm-1">Fecha</th>
+                <th data-visible="false" class="col-sm-1">N° Cliente</th>
+                <th class="col-sm-4">Cliente</th>
+                <th class="col-sm-1">Total</th>
+                <th data-align="center">Estado</th>
+                <th ></th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>38</td>
+              <td>1276</td>
+              <td>NE-554</td>
+              <td>24/05/2017</td>
+              <td>123456789</td>
+              <td>SOBOCE S.A.</td>
+              <td>1,816 </td>
+              <td><span class="label label-success">Facturado</span></td>
+              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button>
+              <button type="button" class="btn btn-default"><span class="fa fa-times"  aria-hidden="true"></span></button>
+
+
+              </td>
+            </tr>
+            <tr>
+              <td>38</td>
+              <td>1274</td>
+              <td>NE-874</td>
+              <td>23/05/2017</td>
+              <td>123456789</td>
+              <td>PAN AMERICAN SILVER BOLIVIA S.A.</td>
+              <td>2,127</td>
+              <td><span class="label label-success">Facturado</span></td>
+              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button>
+              <button type="button" class="btn btn-default"><span class="fa fa-times"  aria-hidden="true"></span></button></td>
+            </tr>
+            <tr>
+              <td>38</td>
+              <td>1273</td>
+              <td>NE-547</td>
+              <td>23/05/2017</td>
+              <td>123456789</td>
+              <td>BOLIVIAN FOODS S.A.</td>
+              <td>160</td>
+              <td><span class="label label-danger">Anulado</span></td>
+              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button>
+              <button type="button" class="btn btn-default"><span class="fa fa-times"  aria-hidden="true"></span></button></td>
+            </tr>
+            <tr>
+              <td>38</td>
+              <td>1270</td>
+              <td>NE-12</td>
+              <td>23/05/2017  </td>
+              <td>123456789</td>
+              <td>GRANJA AVICOLA INTEGRAL SOFIA LTDA.</td>
+              <td>195</td>
+              <td><span class="label label-success">Facturado</span></td>
+              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button>
+              <button type="button" class="btn btn-default"><span class="fa fa-times"  aria-hidden="true"></span></button></td>
+            </tr>
+            <tr>
+              <td>38</td>
+              <td>1269</td>
+              <td>VC-698</td>
+              <td>23/05/2017</td>
+              <td>123456789</td>
+              <td>OMNILIFE DE BOLIVIA S.A.</td>
+              <td>90</td>
+              <td><span class="label label-success">Facturado</span></td>
+              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button>
+              <button type="button" class="btn btn-default"><span class="fa fa-times"  aria-hidden="true"></span></button></td>
+            </tr>
+            <tr>
+              <td>38</td>
+              <td>1265</td>
+              <td>VC-784</td>
+              <td>23/05/2017</td>
+              <td>123456789</td>
+              <td>OSCAR VALDA</td>
+              <td>1,150.4</td>
+              <td><span class="label label-success">Facturado</span></td>
+              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button>
+              <button type="button" class="btn btn-default"><span class="fa fa-times"  aria-hidden="true"></span></button></td>
+            </tr>
+            <tr>
+              <td>38</td>
+              <td>1260</td>
+              <td>NE-987</td>
+              <td>23/05/2017</td>
+              <td>123456789</td>
+              <td>EMBOL S.A.</td>
+              <td>858</td>
+              <td><span class="label label-success">Facturado</span></td>
+              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button>
+              <button type="button" class="btn btn-default"><span class="fa fa-times"  aria-hidden="true"></span></button></td>
+            </tr>
+            <tr>
+              <td>38</td>
+              <td>1251  </td>
+              <td>VC-321</td>
+              <td>22/05/2017</td>
+              <td>123456789</td>
+              <td>SOBOCE S.A.</td>
+              <td>680</td>
+              <td><span class="label label-danger">Anulado</span></td>
+              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button>
+              <button type="button" class="btn btn-default"><span class="fa fa-times"  aria-hidden="true"></span></button></td>
+            </tr>
+            </tbody>    
+          </table>
+          <!--<table 
             cellspacing="0" 
             id="tfacturas"
             data-toolbar="#toolbar2">
-          </table>
+          </table>-->
       </div>
       <!-- /.box-body -->
     </div>
