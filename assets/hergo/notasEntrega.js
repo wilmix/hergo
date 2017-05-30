@@ -257,7 +257,10 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
         costo=calculocompraslocales(cant,costo)
 
     }*/
-    total=cant*costo;    
+    descuento=cant*costo*descuento/100;
+    costo=cant*costo;
+    
+    total=costo-descuento;    
     
     //console.log("cant",cant,"* costo",costo,"=",total)
     
