@@ -149,10 +149,12 @@ class Egresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+
 	public function editarEgresos($id=null)//cambiar nombre a editar ingresos!!!!
 	{
         //if("si no esta autorizado a editar redireccionar o enviar error!!!!")
         if($id==null) redirect("error");
+        if(!$this->egresos_model->puedeeditar($id)) redirect("error");
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -186,7 +188,7 @@ class Egresos extends CI_Controller
             if($this->datos['dcab']->moneda==2)//si es dolares dividimos por el tipo de cambio
             {
 
-            	$tipodecambiovalor=$this->ingresos_model->retornarValorTipoCambio($this->datos['dcab']->tipocambio);            	
+            	$tipodecambiovalor=$this->egresos_model->retornarValorTipoCambio($this->datos['dcab']->tipocambio);            	
             	$tipodecambiovalor=$tipodecambiovalor->tipocambio;
             	
 	            for ($i=0; $i < count($this->datos['detalle']) ; $i++) { 
@@ -197,10 +199,10 @@ class Egresos extends CI_Controller
 	            }		
 	           
             }
-            /*echo "<pre>";
-            print_r($this->datos['detalle']);
-            echo "</pre>";*/
-      
+           /*echo "<pre>";
+            print_r($this->datos['dcab']);
+            echo "</pre>";
+      		die();*/
             $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
             $this->datos['tegreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
 		  	$this->datos['fecha']=date('Y-m-d');
@@ -320,6 +322,32 @@ class Egresos extends CI_Controller
 			{				
 				echo json_encode("false");
 			}
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+    }
+    public function actualizarmovimiento()
+    {
+    	if($this->input->is_ajax_request())
+        {
+        	
+            $datos['idegreso'] = $this->security->xss_clean($this->input->post('idegreso'));        	
+        	$datos['tipomov_ne'] = $this->security->xss_clean($this->input->post('tipomov_ne'));        	
+        	$datos['fechapago_ne'] = $this->security->xss_clean($this->input->post('fechapago_ne'));
+        	$datos['moneda_ne'] = $this->security->xss_clean($this->input->post('moneda_ne'));
+        	$datos['idCliente'] = $this->security->xss_clean($this->input->post('idCliente'));
+        	$datos['pedido_ne'] = $this->security->xss_clean($this->input->post('pedido_ne'));        	
+        	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
+        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
+
+        
+
+        	if($this->egresos_model->actualizarmovimiento_model($datos))
+				echo json_encode("true");
+			else
+				echo json_encode("false");
 		}
         else
 		{

@@ -189,5 +189,101 @@ class Egresos_model extends CI_Model
         $res=$query->result_array();
         return $res;
     }
-	
+	public function actualizarmovimiento_model($datos)
+    {
+        
+
+        $idegreso=$datos['idegreso'];
+        $tipomov_ne=$datos['tipomov_ne'];
+        $fechapago_ne=$datos['fechapago_ne'];
+        $moneda_ne=$datos['moneda_ne'];
+        $idCliente=$datos['idCliente'];
+        $pedido_ne=$datos['pedido_ne'];
+        $obs_ne=$datos['obs_ne'];
+       
+        
+
+        $autor=$this->session->userdata('user_id');
+        $fecha = date('Y-m-d H:i:s');
+
+        //$idtipocambio=$this->retornaridtipocambio($idingresoimportacion);
+        $tipocambio=$this->retornarValorTipoCambio();
+        $tipocambioid=$tipocambio->id;
+        $tipocambiovalor=$tipocambio->tipocambio;
+        //$sql="UPDATE ingresos SET almacen='$almacen_imp',tipomov='$tipomov_imp',fechamov='$fechamov_imp',proveedor='$proveedor_imp',moneda='$moneda_imp',nfact='$nfact_imp',ningalm='$ningalm_imp',ordcomp='$ordcomp_imp',obs='$obs_imp',fecha='$fecha',autor='$autor' where idIngresos='$idingresoimportacion'";
+        $sql="UPDATE egresos SET tipomov='$tipomov_ne',plazopago='$fechapago_ne',moneda='$moneda_ne',cliente='$idCliente',clientePedido='$pedido_ne',obs='$obs_ne',fecha='$fecha',autor='$autor' where idEgresos='$idegreso'";
+        $query=$this->db->query($sql);
+
+        $sql="DELETE FROM egredetalle where idegreso='$idegreso'";
+
+        $this->db->query($sql);
+       /* echo "<pre>";
+        print_r($datos['tabla']);
+        echo "</pre>";*/
+       // die($tipocambiovalor);
+        foreach ($datos['tabla'] as $fila)
+        {
+            $idArticulo=$this->retornar_datosArticulo($fila[0]);
+            if($idArticulo)
+            {
+               // $sql="INSERT INTO ingdetalle(idIngreso,articulo,moneda,cantidad,punitario,total) VALUES('$idingresoimportacion','$idArticulo','$moneda_imp','$fila[2]','$fila[3]','$fila[4]')";
+                $totalbs=$fila[5];
+                $punitariobs=$fila[3];
+                //$totaldoc=$fila[4];
+                if($moneda_ne==2) //convertimos en bolivianos si la moneda es dolares
+                {
+                    $totalbs=$totalbs*$tipocambiovalor;
+                    //echo $totalbs." ";
+                    $punitariobs=$punitariobs*$tipocambiovalor;
+                   // echo $punitariobs." ";
+                    $totaldoc=$totaldoc*$tipocambiovalor;
+                   // echo $totaldoc." ";
+                }
+         
+                $sql="INSERT INTO egredetalle(idegreso,nmov,articulo,cantidad,punitario,total,descuento) VALUES('$idegreso','0','$idArticulo','$fila[2]','$punitariobs','$totalbs','$fila[4]')";
+                $this->db->query($sql);
+            }
+        }
+        return true;
+
+    }
+    public function retornarValorTipoCambio($id=null)/*retorna el ultimo tipo de cambio*/
+    {
+        //$sql="SELECT nmov from ingresos WHERE YEAR(fechamov)= '$gestion' and almacen='$almacen' and tipomov='$tipo' ORDER BY nmov DESC LIMIT 1";
+        if($id==null)//si es null retorna el ultimo tipo de cambio
+            $sql="SELECT * from tipocambio ORDER BY id DESC LIMIT 1";
+        else//si no retorna segun el id
+            $sql="SELECT * from tipocambio where id = '$id' ORDER BY id DESC LIMIT 1";
+        //die($sql);
+        $resultado=$this->db->query($sql);
+        if($resultado->num_rows()>0)
+        {
+            $fila=$resultado->row();
+            return ($fila);
+        }
+        else
+        {
+            return 1;
+        }
+    }
+    public function puedeeditar($id)
+    {
+       
+        $sql="SELECT estado from egresos where idegresos = '$id'"; 
+        
+        $resultado=$this->db->query($sql);
+        if($resultado->num_rows()>0)
+        {
+            $fila=$resultado->row();
+
+            if($fila->estado==0) // no esta facturado???
+                return true;
+            else
+                return false;
+        }
+        else
+        {            
+            return false;
+        }
+    }
 }

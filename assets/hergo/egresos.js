@@ -289,10 +289,15 @@ window.operateEvents = {
     },
     'click .editarEgreso': function (e, value, row, index) {
       //console.log(row.idIngresos);
-
       var editar=base_url("egresos/editaregresos/")+row.idEgresos;
-
+      if(row.estado==0)
+      {
         window.location.href = editar;
+      }
+      else
+      {
+        swal("Error", "No se puede editar el registro seleccionado","error")
+      }        
     },
     'click .imprimirIngreso': function (e, value, row, index) {
      //alert(JSON.stringify(row));

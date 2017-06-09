@@ -216,9 +216,9 @@ class Ingresos_model extends CI_Model
         $sql="DELETE FROM ingdetalle where idIngreso='$idingresoimportacion'";
 
         $this->db->query($sql);
-        echo "<pre>";
+       /* echo "<pre>";
         print_r($datos['tabla']);
-        echo "</pre>";
+        echo "</pre>";*/
        // die($tipocambiovalor);
         foreach ($datos['tabla'] as $fila)
         {
@@ -232,11 +232,11 @@ class Ingresos_model extends CI_Model
                 if($moneda_imp==2) //convertimos en bolivianos si la moneda es dolares
                 {
                     $totalbs=$totalbs*$tipocambiovalor;
-                    echo $totalbs." ";
+                   // echo $totalbs." ";
                     $punitariobs=$punitariobs*$tipocambiovalor;
-                    echo $punitariobs." ";
+                   // echo $punitariobs." ";
                     $totaldoc=$totaldoc*$tipocambiovalor;
-                    echo $totaldoc." ";
+                  //  echo $totaldoc." ";
                 }
          
                 $sql="INSERT INTO ingdetalle(idIngreso,nmov,articulo,cantidad,punitario,total,totaldoc) VALUES('$idingresoimportacion','0','$idArticulo','$fila[2]','$punitariobs','$totalbs','$totaldoc')";

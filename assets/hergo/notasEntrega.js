@@ -273,7 +273,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
             '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+  //nuevo P/U Factura
             '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+descuento+'""></input></td>'+ //nuevo Total Factura            
             '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
-            '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value=" "></input></td>'+ //cantidad de facturas
+            
             '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+
         '</tr>'
     $("#tbodyarticulos").append(articulo)
@@ -363,7 +363,7 @@ function guardarmovimiento()
 }
 function actualizarMovimiento()
 {     
-    var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
+    var valuesToSubmit = $("#form_egreso").serialize();
     var tablaaux=tablatoarray();
     console.log(valuesToSubmit)
     console.log(tablaaux);
@@ -372,7 +372,7 @@ function actualizarMovimiento()
         var tabla=JSON.stringify(tablaaux);
 
         valuesToSubmit+="&tabla="+tabla;    
-        retornarajax(base_url("index.php/ingresos/actualizarmovimiento"),valuesToSubmit,function(data)
+        retornarajax(base_url("index.php/egresos/actualizarmovimiento"),valuesToSubmit,function(data)
         {
             estado=validarresultado_ajax(data);
             if(estado)
@@ -380,13 +380,13 @@ function actualizarMovimiento()
                 if(data.respuesta)
                 {
                     
-                    $("#modalIgresoDetalle").modal("hide");
+                  //  $("#modalIgresoDetalle").modal("hide");
                     limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos actualizados correctamente");
                     $("#modal_ok").modal("show");
-                    window.location.href=base_url("ingresos");
+                    window.location.href=base_url("egresos");
                 }
                 else
                 {
@@ -402,7 +402,7 @@ function actualizarMovimiento()
         alert("no se tiene datos en la tabla para guardar")
     }
 }
-function anularMovimiento()
+function anularMovimiento()// X
 {     
     var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
     var tablaaux=tablatoarray();
@@ -443,7 +443,7 @@ function anularMovimiento()
         alert("no se tiene datos en la tabla para guardar")
     }
 }
-function recuperarMovimiento()
+function recuperarMovimiento()// X
 {     
     var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
     var tablaaux=tablatoarray();

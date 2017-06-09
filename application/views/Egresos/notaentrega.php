@@ -53,6 +53,9 @@ input[type=date]::-webkit-inner-spin-button {
                 <form action=" " method="post"  id="form_egreso">
           <div class="form">
           <!-- formulario PRIMERA FILA-->
+          <?php if ($cont): ?>
+                <input id="idegreso" name="idegreso" type="text" class="hidden"  hidden value="<?= $dcab->idEgresos ?>">
+            <?php endif ?>
             <div class="row filacabecera"> <!--PRIMERA FILA-->
                <div class=" col-xs-6 col-sm-6 col-md-3">
                 <label>Almacen:</label>
@@ -99,8 +102,8 @@ input[type=date]::-webkit-inner-spin-button {
             <div class="row filacabecera"> <!--SEGUNDA FILA-->
                    <div class="col-xs-12 col-lg-6 col-md-6">
                       <label for="articulo_ne" style="float: left;">Cliente:</label><span style="margin-left: 10px;display: none;" id="cargandocliente" ><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
-                     <input class="form-control form-control-sm" type="text" id="cliente_egreso" name="cliente_egreso"/ >
-                     <input type="text" readonly="true" name="idCliente" id="idCliente" class="hidden">
+                     <input class="form-control form-control-sm" type="text" id="cliente_egreso" name="cliente_egreso" value="<?= ($cont)?$dcab->nombreCliente:''  ?>">
+                     <input type="text" readonly="true" name="idCliente" id="idCliente" class="hidden" value="<?= ($cont)?$dcab->idcliente:'0'  ?>">
                      <div style="right: 22px;top:32px;position: absolute;" id="clientecorrecto"><i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i></div>
 
                       <!-- Busqueda con select cambiar a autocomplete-->
@@ -108,11 +111,11 @@ input[type=date]::-webkit-inner-spin-button {
                    </div>
                    <div class="col-xs-4 col-sm-4 col-md-2">
                          <label>Pedido Cliente:</label>
-                         <input id="pedido_ne" type="text" class="form-control form-control-sm" name="pedido_ne" placeholder="Orden de Compra" value="" tabindex=6>
+                         <input id="pedido_ne" type="text" class="form-control form-control-sm" name="pedido_ne" placeholder=""  tabindex=6 value="<?= ($cont)?$dcab->clientePedido:''  ?>">
                    </div>
                    <div class="col-xs-4 col-sm-4 col-md-2">
                          <label>Fecha de Pago: </label>
-                         <input id="fechapago_ne" name="fechapago_ne" type="date" class="form-control form-control-sm"  placeholder="Fecha Pago" value="fechapago_ne" tabindex=7>
+                         <input id="fechapago_ne" name="fechapago_ne" type="date" class="form-control form-control-sm"  placeholder="Fecha Pago" tabindex=7 value="<?= ($cont)?$dcab->plazopago:''  ?>">
                    </div>
                   <div class="col-xs-4 col-md-2">
                   <label></label>
@@ -212,7 +215,7 @@ input[type=date]::-webkit-inner-spin-button {
                                 <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['punitario']?>"></input></td><!--nuevo-->
                                 <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['descuento'] ?>"></input></td><!--nuevo-->
                                 <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="<?= $fila['total'] ?>"></input></td>
-                                <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value=""></input></td><!--nuevo-->
+                                <!--<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value=""></input></td>--><!--nuevo-->
                                 <td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
                             </tr>
                         <?php endforeach ?>
@@ -242,15 +245,21 @@ input[type=date]::-webkit-inner-spin-button {
                 <div class="col-xs-12 col-md-12">
                   <!--insertar costo de articulo a ingresar-->
                   <label for="observaciones_ne">Observaciones:</label>
-                  <input type="text" class="form-control" id="obs_ne" name="obs_ne" value="" />
+                  <input type="text" class="form-control" id="obs_ne" name="obs_ne" value="<?= ($cont)?$dcab->obs:''  ?>" />
               </div>
                 <hr>
             </div>
             <hr>
             <div class="row">
                 <div class="col-xs-12">
-                                    <button type="button" class="btn btn-primary" id="guardarMovimiento" tabindex=16 >Guardar Movimiento</button>
+                <?php if ($cont): ?>
+                    <button type="button" class="btn btn-primary" id="actualizarMovimiento">Actualizar Movimiento</button>                                            
+                    <button type="button" class="btn btn-danger" id="cancelarMovimiento">Cancelar Movimiento</button>
+                <?php else: ?>
+                    <button type="button" class="btn btn-primary" id="guardarMovimiento" tabindex=11>Guardar Movimiento</button>
                     <button type="button" class="btn btn-danger" id="cancelarMovimiento" tabindex=12>Cancelar Movimiento</button>
+                <?php endif ?>
+
                 
 
               </div>
