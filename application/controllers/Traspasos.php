@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Egresos extends CI_Controller
+class Traspasos extends CI_Controller
 {
 	private $datos;
 	public function __construct()
@@ -50,9 +50,9 @@ class Egresos extends CI_Controller
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
-			$this->datos['menu']="Egresos";
-			$this->datos['opcion']="Consultas Egresos";
-			$this->datos['titulo']="Egresos";
+			$this->datos['menu']="Traspasos";
+			$this->datos['opcion']="Consultas Traspasos";
+			$this->datos['titulo']="Consultas Traspasos";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
@@ -63,7 +63,7 @@ class Egresos extends CI_Controller
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/egresos.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/traspasos.js');
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
@@ -79,18 +79,18 @@ class Egresos extends CI_Controller
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('egresos/egresos.php',$this->datos);
+			$this->load->view('traspasos/traspasos.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-	public function notaentrega()
+		public function traspasoEgreso()
 	{
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
-			$this->datos['menu']="Egresos";
-			$this->datos['opcion']="Nota de Entrega";
-			$this->datos['titulo']="Nota de Entrega";
+			$this->datos['menu']="Traspasos";
+			$this->datos['opcion']="Formulario de Traspasos";
+			$this->datos['titulo']="Traspasos";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
@@ -102,7 +102,7 @@ class Egresos extends CI_Controller
 			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/notasEntrega.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/formTraspasos.js');
             /**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
@@ -117,18 +117,17 @@ class Egresos extends CI_Controller
 		  	$this->datos['clientes']=$this->ingresos_model->retornar_tabla("clientes");
 		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
 			
-			$this->datos['opcion']="Compras locales";
+			$this->datos['opcion']="Traspasos";
 			$this->datos['idegreso']=7;
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('egresos/notaentrega.php',$this->datos);
+			$this->load->view('Traspasos/traspasoEgreso.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-		
 	public function mostrarEgresos()
 	{
 		if($this->input->is_ajax_request())
@@ -286,74 +285,8 @@ class Egresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	public function retornararticulos()
-    {
-        if($this->input->is_ajax_request() && $this->input->get('b'))
-        {
-        	$b = $this->security->xss_clean($this->input->get('b'));
-        	$dato=$this->ingresos_model->retornarClienteBusqueda($b);        	
-			echo json_encode($dato->result_array());
-		}
-        else
-		{
-			die("PAGINA NO ENCONTRADA");
-		}
-    }
-    public function guardarmovimiento()
-    {
-    	if($this->input->is_ajax_request())
-        {
-        	
-        	$datos['almacen_ne'] = $this->security->xss_clean($this->input->post('almacen_ne'));
-        	$datos['tipomov_ne'] = $this->security->xss_clean($this->input->post('tipomov_ne'));
-        	$datos['fechamov_ne'] = $this->security->xss_clean($this->input->post('fechamov_ne'));
-        	$datos['fechapago_ne'] = $this->security->xss_clean($this->input->post('fechapago_ne'));
-        	$datos['moneda_ne'] = $this->security->xss_clean($this->input->post('moneda_ne'));
-        	$datos['idCliente'] = $this->security->xss_clean($this->input->post('idCliente'));
-        	$datos['pedido_ne'] = $this->security->xss_clean($this->input->post('pedido_ne'));        	
-        	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
-        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
 
-        	if($this->egresos_model->guardarmovimiento_model($datos))
-        	{
-        		//$this->retornarcostoarticulo_tabla($datos['tabla'],$datos['almacen_imp']);
-				echo json_encode("true");
-        	}
-			else
-			{				
-				echo json_encode("false");
-			}
-		}
-        else
-		{
-			die("PAGINA NO ENCONTRADA");
-		}
-    }
-    public function actualizarmovimiento()
-    {
-    	if($this->input->is_ajax_request())
-        {
-        	
-            $datos['idegreso'] = $this->security->xss_clean($this->input->post('idegreso'));        	
-        	$datos['tipomov_ne'] = $this->security->xss_clean($this->input->post('tipomov_ne'));        	
-        	$datos['fechapago_ne'] = $this->security->xss_clean($this->input->post('fechapago_ne'));
-        	$datos['moneda_ne'] = $this->security->xss_clean($this->input->post('moneda_ne'));
-        	$datos['idCliente'] = $this->security->xss_clean($this->input->post('idCliente'));
-        	$datos['pedido_ne'] = $this->security->xss_clean($this->input->post('pedido_ne'));        	
-        	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
-        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
 
-        
 
-        	if($this->egresos_model->actualizarmovimiento_model($datos))
-				echo json_encode("true");
-			else
-				echo json_encode("false");
-		}
-        else
-		{
-			die("PAGINA NO ENCONTRADA");
-		}
-    }
 }
 

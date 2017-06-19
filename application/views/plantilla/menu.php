@@ -108,7 +108,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">Consultas</a></li>
+            <li><a href="<?php echo base_url("Traspasos/index") ?>">Consultas</a></li>
+            <li><a href="<?php echo base_url("Traspasos/traspasoEgreso") ?>">FormTraspaso</a></li>
          </ul>
         </li>
 
