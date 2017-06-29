@@ -108,8 +108,8 @@ class Egresos_model extends CI_Model
         $nummov=$this->retornarNumMovimiento($tipomov_ne,$gestion,$almacen_ne);
     	$sql="INSERT INTO egresos (almacen,tipomov,nmov,fechamov,cliente,moneda,obs,tipocambio,autor,fecha,plazopago,clientePedido) VALUES('$almacen_ne','$tipomov_ne','$nummov','$fechamov_ne','$idCliente','$moneda_ne','$obs_ne','$tipocambio','$autor','$fecha','$fechapago_ne','$pedido_ne')";
     	$query=$this->db->query($sql);
-    	$idIngreso=$this->db->insert_id();
-    	if($idIngreso>0)/**Si se guardo correctamente se guarda la tabla*/
+    	$idEgreso=$this->db->insert_id();
+    	if($idEgreso>0)/**Si se guardo correctamente se guarda la tabla*/
     	{
             
     		foreach ($datos['tabla'] as $fila) {
@@ -120,11 +120,12 @@ class Egresos_model extends CI_Model
                 $totaldoc=$fila[4];
     			if($idArticulo)
     			{
-    				$sql="INSERT INTO egredetalle(idegreso,nmov,articulo,moneda,cantidad,punitario,total,descuento) VALUES('$idIngreso','0','$idArticulo','$moneda_ne','$fila[2]','$fila[3]','$fila[5]','$fila[4]')";
+    				$sql="INSERT INTO egredetalle(idegreso,nmov,articulo,moneda,cantidad,punitario,total,descuento) VALUES('$idEgreso','0','$idArticulo','$moneda_ne','$fila[2]','$fila[3]','$fila[5]','$fila[4]')";
     				$this->db->query($sql);
     			}
     		}
-    		return true;
+    		//return true;
+            return $idEgreso;
     	}
     	else
     	{
@@ -285,5 +286,44 @@ class Egresos_model extends CI_Model
         {            
             return false;
         }
+    }
+    public function retornarsaldoarticulo_model($id,$idAlmacen)
+    {
+        // quitar desc de la consulta para los ultimos datos de la tabla costoarticulo
+        $sql="SELECT c.*
+            FROM costoarticulos c
+            WHERE c.idArticulo=$id AND c.idAlmacen=$idAlmacen
+            ORDER By c.idtabla desc 
+            limit 1 
+            ";
+ 
+        $query=$this->db->query($sql);
+        if($query->num_rows()>0)
+        {                   
+            return $query;    
+        }
+        else
+        {
+            return false;
+        }        
+    }
+    
+    public function retornarpreciorticulo_model($idArticulo)
+    {
+        // quitar desc de la consulta para los ultimos datos de la tabla costoarticulo
+        $sql="SELECT *
+            FROM precio p
+            WHERE p.idArticulo=$idArticulo             
+            limit 1 
+            ";
+        $query=$this->db->query($sql);
+        if($query->num_rows()>0)
+        {                   
+            return $query;    
+        }
+        else
+        {
+            return false;
+        }        
     }
 }

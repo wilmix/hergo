@@ -162,6 +162,8 @@ class Ingresos_model extends CI_Model
     	$sql="INSERT INTO ingresos (almacen,tipomov,nmov,fechamov,proveedor,moneda,nfact,ningalm,ordcomp,obs,fecha,autor,tipocambio) VALUES('$almacen_imp','$tipomov_imp','$nummov','$fechamov_imp','$proveedor_imp','$moneda_imp','$nfact_imp','$ningalm_imp','$ordcomp_imp','$obs_imp','$fecha','$autor','$tipocambioid')";
     	$query=$this->db->query($sql);
     	$idIngreso=$this->db->insert_id();
+        
+
     	if($idIngreso>0)/**Si se guardo correctamente se guarda la tabla*/
     	{            
     		foreach ($datos['tabla'] as $fila) {
@@ -179,10 +181,11 @@ class Ingresos_model extends CI_Model
     			if($idArticulo)
     			{
     				$sql="INSERT INTO ingdetalle(idIngreso,nmov,articulo,moneda,cantidad,punitario,total,totaldoc) VALUES('$idIngreso','0','$idArticulo','$moneda_imp','$fila[2]','$punitariobs','$totalbs','$totaldoc')";
-    				$this->db->query($sql);
+    				$this->db->query($sql);                    
     			}
     		}
-    		return true;
+    		//return true;
+            return $idIngreso;
     	}
     	else
     	{
@@ -335,6 +338,7 @@ class Ingresos_model extends CI_Model
     public function actualizartablacostoarticulo($idArticulo,$cantidad,$costou,$idalmacen)
     {
         $sql="INSERT INTO costoarticulos(idArticulo,idAlmacen,cantidad,precioUnitario) VALUES('$idArticulo','$idalmacen','$cantidad','$costou')";
+        //die($sql);
         $this->db->query($sql);
     }
     public function retornaridtipocambio($id)

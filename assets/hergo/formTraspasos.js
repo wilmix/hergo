@@ -1,7 +1,7 @@
 var glob_factorIVA=0.87;
 var glob_factorRET=0.087;
 var loc_almacen;
-var glob_guardar=false;
+
 $(document).ready(function(){    
     loc_almacen= $("#almacen_imp").val();    
 })
@@ -45,7 +45,7 @@ $(document).ready(function(){
         autoUnmask:true
     }); 
     var glob_agregar=false;
-    glob_guardar=false;
+    var glob_guardar=false;
     calcularTotal()  
 })
 /*******************CLIENTE*****************/
@@ -115,7 +115,7 @@ $( function() {
 
       select: function( event, ui ) {
 
-        idAlmacen=$("#almacen_ne").val();
+        idAlmacen=$("#almacen_ori").val();
         console.log(idAlmacen)
          $.ajax({
 
@@ -178,10 +178,10 @@ function limpiarCabecera()
         $(value).val("")
     })        
     glob_agregar=false;
-    $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')   
+    $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')    
     $("#totalacostosus").val("");
     $("#totalacostobs").val("");
-    $("#obs_ne").val(""); 
+    $("#obs_ne").val("");
 }
 function limpiarTabla()
 {
@@ -196,7 +196,7 @@ function calcularTotal()
     var dato=0;
     $.each(totales,function(index, value){
         dato=$(value).inputmask('unmaskedvalue');
-        //console.log(dato)
+     //   console.log(dato)
         total+=(dato=="")?0:parseFloat(dato)
     })
     //total=Math.round(total * 100) / 100
@@ -210,6 +210,7 @@ function calcularTotal()
         total=total*glob_tipoCambio;
 
     }
+   // console.log(total)
     $("#totalacostobs").val(total)
     $("#totalacostosus").val(totalDolares)
 }
@@ -262,10 +263,11 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
         costo=calculocompraslocales(cant,costo)
 
     }*/
-    descuento=cant*costo*descuento/100;
-    costo=cant*costo;
+   // descuento=cant*costo*descuento/100;
+   
+    total=cant*costo;
     
-    total=costo-descuento;    
+    
     
     //console.log("cant",cant,"* costo",costo,"=",total)
     
@@ -275,8 +277,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
             '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
             '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
             '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+  //nuevo P/U Factura
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+descuento+'""></input></td>'+ //nuevo Total Factura            
+            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+  //nuevo P/U Factura                
             '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
             
             '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+
@@ -329,18 +330,14 @@ function guardarmovimiento()
 {     
     var valuesToSubmit = $("#form_egreso").serialize();
     var tablaaux=tablatoarray();
-    if(!glob_guardar)
-    {
-        swal("Error", "Seleccione el cliente","error")
-        return 0;
-    }    
+    
     if(tablaaux.length>0)
     {
         var tabla=JSON.stringify(tablaaux);
         console.log(valuesToSubmit)
         valuesToSubmit+="&tabla="+tabla;
 
-        retornarajax(base_url("index.php/egresos/guardarmovimiento"),valuesToSubmit,function(data)
+        retornarajax(base_url("index.php/traspasos/guardarmovimiento"),valuesToSubmit,function(data)
         {
             estado=validarresultado_ajax(data);
             if(estado)

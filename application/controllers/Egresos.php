@@ -128,6 +128,7 @@ class Egresos extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
+		
 	public function mostrarEgresos()
 	{
 		if($this->input->is_ajax_request())
@@ -315,8 +316,9 @@ class Egresos extends CI_Controller
 
         	if($this->egresos_model->guardarmovimiento_model($datos))
         	{
-        		//$this->retornarcostoarticulo_tabla($datos['tabla'],$datos['almacen_imp']);
-				echo json_encode("true");
+        		$this->actualizarCostoArticuloEgreso($datos['tabla'],$datos['almacen_ne']);
+
+				echo json_encode("true");			
         	}
 			else
 			{				
@@ -354,5 +356,75 @@ class Egresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
     }
+    public function retornarpreciorticulo($idarticulo,$idAlmacen)
+	{
+		$idArticulo=$this->ingresos_model->retornar_datosArticulo($idarticulo);		
+		$saldo=$this->egresos_model->retornarsaldoarticulo_model($idArticulo,$idAlmacen);
+		$precio=$this->egresos_model->retornarpreciorticulo_model($idArticulo);
+		$obj=new StdClass();
+		
+		if($saldo)
+		{
+			$fila=$saldo->row();    								
+			$obj->ncantidad=$fila->cantidad;						
+		}
+		else
+		{
+			$obj->ncantidad=0;			
+		}
+		if($precio)
+		{
+			$fila=$precio->row();    								
+			$obj->precio=$fila->precio;						
+		}
+		else
+		{
+			$obj->precio=0;			
+		}
+		
+		echo json_encode($obj);
+	}
+	public function get_costo_articuloEgreso($codigo,$cant=0,$preciou=0,$idAlmacen)	//para tabla
+	{		
+		$cant=$cant==""?0:$cant;
+		$preciou=$preciou==""?0:$preciou;
+		$ncantidad=0;
+    	$nprecionu=0;
+    	$ntotal=0;
+    	
+    	$idArticulo=$this->ingresos_model->retornar_datosArticulo($codigo);
+		$ca=$this->ingresos_model->retornarcostoarticulo_model($idArticulo,$idAlmacen);
+		$obj=new StdClass();
+		if($ca)
+		{			
+			$fila=$ca->row();    			
+			$ncantidad=$fila->cantidad-$cant;			
+			$nprecionu=$fila->precioUnitario;   					
+			
+			$obj->ncantidad=$ncantidad;
+			$obj->nprecionu=$nprecionu;
+			$obj->ntotal=$ntotal;
+			$obj->idArticulo=$idArticulo;
+		}
+		else
+		{
+			$obj->ncantidad=0;
+			$obj->nprecionu=0;
+			$obj->ntotal=0;
+			$obj->idArticulo=$idArticulo;
+		}
+		
+		return $obj;
+	}
+	public function actualizarCostoArticuloEgreso($tabla,$idalmacen)
+	{
+		
+		foreach ($tabla as $fila) 
+		{	
+			$aux=$this->get_costo_articuloEgreso($fila[0],$fila[2],$fila[4],$idalmacen);		
+					
+			$this->ingresos_model->actualizartablacostoarticulo($aux->idArticulo,$aux->ncantidad,$aux->nprecionu,$idalmacen);
+		}
+		
+	}
 }
-
