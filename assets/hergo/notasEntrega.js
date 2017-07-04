@@ -1,11 +1,10 @@
 var glob_factorIVA=0.87;
 var glob_factorRET=0.087;
 var loc_almacen;
+var glob_guardar=false;
 $(document).ready(function(){    
     loc_almacen= $("#almacen_imp").val();    
 })
-
-
 $(document).on("change","#almacen_imp",function(){
 
     var tablaaux=tablatoarray();
@@ -46,6 +45,7 @@ $(document).ready(function(){
         autoUnmask:true
     }); 
     var glob_agregar=false;
+    glob_guardar=false;
     calcularTotal()  
 })
 /*******************CLIENTE*****************/
@@ -57,7 +57,7 @@ $( function() {
       source: function (request, response) {        
         $("#cargandocliente").show(150)        
         $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
-        glob_agregar=false;
+        glob_guardar=false;
         $.ajax({
             url: base_url("index.php/egresos/retornararticulos"),
             dataType: "json",
@@ -77,7 +77,7 @@ $( function() {
           $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
           $("#cliente_egreso").val( ui.item.nombreCliente + " - " + ui.item.documento);
           $("#idCliente").val( ui.item.idCliente);
-          glob_agregar=true;
+          glob_guardar=true;
           return false;
       }
     })
@@ -119,14 +119,15 @@ $( function() {
         console.log(idAlmacen)
          $.ajax({
 
-            url: base_url("index.php/ingresos/retornarcostoarticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
+            url: base_url("index.php/egresos/retornarpreciorticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
             dataType: "json",
             data: {},
             success: function(data) {
                 //response(data);                   
                 console.log(data)
-                $("#costo_imp").val(data.nprecionu);
-                $("#saldo_imp").val(data.ncantidad);              
+                $("#costo_ne").val(data.precio);
+                $("#saldo_ne").val(data.ncantidad);              
+                $("#punitario_ne").val(data.precio);
             }
           });    
          //fin agregar costo articulo
@@ -165,7 +166,8 @@ function limpiarArticulo()
         $(value).val("")
     })        
     glob_agregar=false;
-    $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')    
+    $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')   
+    
 }
 function limpiarCabecera()
 {
@@ -176,7 +178,10 @@ function limpiarCabecera()
         $(value).val("")
     })        
     glob_agregar=false;
-    $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')    
+    $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')   
+    $("#totalacostosus").val("");
+    $("#totalacostobs").val("");
+    $("#obs_ne").val(""); 
 }
 function limpiarTabla()
 {
@@ -324,7 +329,11 @@ function guardarmovimiento()
 {     
     var valuesToSubmit = $("#form_egreso").serialize();
     var tablaaux=tablatoarray();
-    //console.log(tablaaux);
+    if(!glob_guardar)
+    {
+        swal("Error", "Seleccione el cliente","error")
+        return 0;
+    }    
     if(tablaaux.length>0)
     {
         var tabla=JSON.stringify(tablaaux);

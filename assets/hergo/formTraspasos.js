@@ -1,11 +1,10 @@
 var glob_factorIVA=0.87;
 var glob_factorRET=0.087;
 var loc_almacen;
+
 $(document).ready(function(){    
     loc_almacen= $("#almacen_imp").val();    
 })
-
-
 $(document).on("change","#almacen_imp",function(){
 
     var tablaaux=tablatoarray();
@@ -46,6 +45,7 @@ $(document).ready(function(){
         autoUnmask:true
     }); 
     var glob_agregar=false;
+    var glob_guardar=false;
     calcularTotal()  
 })
 /*******************CLIENTE*****************/
@@ -57,7 +57,7 @@ $( function() {
       source: function (request, response) {        
         $("#cargandocliente").show(150)        
         $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
-        glob_agregar=false;
+        glob_guardar=false;
         $.ajax({
             url: base_url("index.php/egresos/retornararticulos"),
             dataType: "json",
@@ -77,7 +77,7 @@ $( function() {
           $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
           $("#cliente_egreso").val( ui.item.nombreCliente + " - " + ui.item.documento);
           $("#idCliente").val( ui.item.idCliente);
-          glob_agregar=true;
+          glob_guardar=true;
           return false;
       }
     })
@@ -115,18 +115,19 @@ $( function() {
 
       select: function( event, ui ) {
 
-        idAlmacen=$("#almacen_ne").val();
+        idAlmacen=$("#almacen_ori").val();
         console.log(idAlmacen)
          $.ajax({
 
-            url: base_url("index.php/ingresos/retornarcostoarticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
+            url: base_url("index.php/egresos/retornarpreciorticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
             dataType: "json",
             data: {},
             success: function(data) {
                 //response(data);                   
                 console.log(data)
-                $("#costo_imp").val(data.nprecionu);
-                $("#saldo_imp").val(data.ncantidad);              
+                $("#costo_ne").val(data.precio);
+                $("#saldo_ne").val(data.ncantidad);              
+                $("#punitario_ne").val(data.precio);
             }
           });    
          //fin agregar costo articulo
@@ -165,7 +166,8 @@ function limpiarArticulo()
         $(value).val("")
     })        
     glob_agregar=false;
-    $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')    
+    $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')   
+    
 }
 function limpiarCabecera()
 {
@@ -177,6 +179,9 @@ function limpiarCabecera()
     })        
     glob_agregar=false;
     $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')    
+    $("#totalacostosus").val("");
+    $("#totalacostobs").val("");
+    $("#obs_ne").val("");
 }
 function limpiarTabla()
 {
@@ -191,7 +196,7 @@ function calcularTotal()
     var dato=0;
     $.each(totales,function(index, value){
         dato=$(value).inputmask('unmaskedvalue');
-        //console.log(dato)
+     //   console.log(dato)
         total+=(dato=="")?0:parseFloat(dato)
     })
     //total=Math.round(total * 100) / 100
@@ -205,6 +210,7 @@ function calcularTotal()
         total=total*glob_tipoCambio;
 
     }
+   // console.log(total)
     $("#totalacostobs").val(total)
     $("#totalacostosus").val(totalDolares)
 }
@@ -242,23 +248,36 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     //idcosto=12;
     var codigo=$("#articulo_imp").val()
     var descripcion=$("#Descripcion_ne").val()
-    var cant=$("#cantidad_tra").inputmask('unmaskedvalue');
-    var costo=$("#punitario_tra").inputmask('unmaskedvalue');
-    var descuento=$("#descuento_tra").inputmask('unmaskedvalue');
+    var cant=$("#cantidad_ne").inputmask('unmaskedvalue');
+    var costo=$("#punitario_ne").inputmask('unmaskedvalue');
+    var descuento=$("#descuento_ne").inputmask('unmaskedvalue');
     var totalfac=costo;
     var cant=(cant=="")?0:cant;
     var costo=(costo=="")?0:costo;
     var tipoingreso=$("#tipomov_imp2").val()
     var total;
+    //console.log(tipoingreso)
+   /* if(tipoingreso==2)//si es compra local idcompralocal=2
+    {
+ 
+        costo=calculocompraslocales(cant,costo)
+
+    }*/
+   // descuento=cant*costo*descuento/100;
+   
+    total=cant*costo;
     
-    total=costo*cant;    
     
+    
+    //console.log("cant",cant,"* costo",costo,"=",total)
+    
+    //var articulo='<tr caid="'+idcosto+'">'+ //costo articulo id
+   // var punitfac=cant==0?0:(totalfac/cant);
     var articulo='<tr>'+ 
             '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
             '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
             '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+  //nuevo P/U Factura
-           // '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+descuento+'""></input></td>'+ //nuevo Total Factura            
+            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+  //nuevo P/U Factura                
             '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
             
             '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+
@@ -311,14 +330,14 @@ function guardarmovimiento()
 {     
     var valuesToSubmit = $("#form_egreso").serialize();
     var tablaaux=tablatoarray();
-    //console.log(tablaaux);
+    
     if(tablaaux.length>0)
     {
         var tabla=JSON.stringify(tablaaux);
-        console.log(valuesToSubmit)
+        
         valuesToSubmit+="&tabla="+tabla;
 
-        retornarajax(base_url("index.php/egresos/guardarmovimiento"),valuesToSubmit,function(data)
+        retornarajax(base_url("index.php/traspasos/guardarmovimiento"),valuesToSubmit,function(data)
         {
             estado=validarresultado_ajax(data);
             if(estado)

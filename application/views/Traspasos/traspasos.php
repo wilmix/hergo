@@ -18,7 +18,7 @@
              </button>
 
 
-              <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
+             <!-- <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
                 <?php foreach ($almacen->result_array() as $fila): ?>
                 <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
                 <?php endforeach ?>
@@ -32,7 +32,7 @@
                 <?php endforeach ?>
                 <option value="">TODOS</option>
                  
-              </select>
+              </select>-->
 
            </div>
 

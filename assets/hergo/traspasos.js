@@ -47,34 +47,32 @@ $(document).ready(function(){
 
     });
     $('#fechapersonalizada').on('apply.daterangepicker', function(ev, picker) {
-      retornarTablaEgresos();
+      retornarTablaTraspasos();
     });
-    retornarTablaEgresos();
+    retornarTablaTraspasos();
 })
 $(document).on("change","#almacen_filtro",function(){
-    retornarTablaEgresos();
+    retornarTablaTraspasos();
 })
 $(document).on("change","#tipo_filtro",function(){
-    retornarTablaEgresos();
+    retornarTablaTraspasos();
 })
 
 
-function retornarTablaEgresos()
+function retornarTablaTraspasos()
 {
 
 
     ini=iniciofecha.format('YYYY-MM-DD')
-    fin=finfecha.format('YYYY-MM-DD')
-    alm=$("#almacen_filtro").val()
-    tipoingreso=$("#tipo_filtro").val()
+    fin=finfecha.format('YYYY-MM-DD')    
     agregarcargando();
     $.ajax({
         type:"POST",
-        url: base_url('index.php/egresos/mostrarEgresos'),
+        url: base_url('index.php/traspasos/motrarTraspasos'),
         dataType: "json",
-        data: {i:ini,f:fin,a:alm,ti:tipoingreso},
+        data: {i:ini,f:fin},
     }).done(function(res){
-       // console.log(res[0])
+        console.log(res)
        datosselect= restornardatosSelect(res)
        quitarcargando();
         $("#tTraspasos").bootstrapTable('destroy');
@@ -91,18 +89,9 @@ function retornarTablaEgresos()
             searchOnEnterKey:true,
             filter:true,
             showColumns:true,
-
-            columns: [
-            {
-                field: 'n',
-                width: '3%',
-                title: 'N',
-                align: 'center',
-                sortable:true,
-                filter: {type: "input"}
-            },
-            {
-                field:'fechamov',
+                    
+            columns:[{
+                field:'fecha',
                 width: '7%',
                 title:"Fecha",
                 sortable:true,
@@ -111,18 +100,24 @@ function retornarTablaEgresos()
             },
 
             {
-                field:'almOrigen',
+                field:'origen',
                 title:"Almacen Origen",
                 width: '17%',
-                sortable:true,
-                filter: {type: "input"}
+                sortable:true,                 
+                filter: {
+                        type: "select",
+                        data: datosselect[0]
+                    }
             },
             {
-                field:'almDestino',
+                field:'destino',
                 title:"Almacen Destino",
                 width: '17%',
-                sortable:true,
-                filter: {type: "input"}
+                sortable:true,                 
+                filter: {
+                        type: "select",
+                        data: datosselect[1]
+                    }
             },
             {
                 field:'total',
@@ -151,39 +146,7 @@ function retornarTablaEgresos()
                         },
                 formatter: operateFormatter2,
             },                  
-            {
-                field:"clientePedido",
-                width: '8%',
-                title:"N° Pedido",
-                sortable:true,
-                visible:false,
-                align: 'center',
-                filter: {type: "input"},
-            },
-            {
-                field:"autor",
-                width: '8%',
-                title:"Autor",
-                sortable:true,
-                visible:false,
-                align: 'center',
-
-                 filter: {
-                    type: "select",
-                    data: datosselect[2]
-                },
-
-                filter: {type: "input"},
-            },
-            {
-                field:"fecha",
-                width: '8%',
-                title:"Fecha",
-                sortable:true,
-                visible:false,
-                align: 'center',
-                formatter: formato_fecha_corta,
-            },
+            
             {
                 title: 'Acciones',
                 align: 'center',
@@ -211,10 +174,8 @@ function retornarTablaEgresos()
 function operateFormatter(value, row, index)
 {
     return [
-        '<button type="button" class="btn btn-default verEgreso" aria-label="Right Align">',
-        '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-        '<button type="button" class="btn btn-default editarEgreso" aria-label="Right Align">',
-        '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>',
+        '<button type="button" class="btn btn-default verTraspaso" aria-label="Right Align">',
+        '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',        
         '<button type="button" class="btn btn-default imprimirEgreso" aria-label="Right Align">',
         '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
     ].join('');
@@ -261,7 +222,7 @@ function mostrarFactura(value, row, index)
 }
 /***********Eventos*************/
 window.operateEvents = {
-    'click .verEgreso': function (e, value, row, index) {
+    'click .verTraspaso': function (e, value, row, index) {
      // fila=JSON.stringify(row);
         verdetalle(row)
     },
@@ -284,10 +245,11 @@ window.operateEvents = {
 function verdetalle(fila)
 {
   console.log(fila)
-    id=fila.idEgresos
+    id=fila.idEgreso
+    console.log(id);
     datos={id:id}
     console.log(fila)
-    retornarajax(base_url("index.php/egresos/mostrarDetalle"),datos,function(data)
+    retornarajax(base_url("index.php/traspasos/mostrarDetalle"),datos,function(data)
     {
         estado=validarresultado_ajax(data);
         if(estado)
@@ -296,13 +258,8 @@ function verdetalle(fila)
             mostrarDetalle(data.respuesta);
             //console.log(glob_tipoCambio)
             var totalnn=fila.total
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            var totalsus=totalnn;
+            
+           /* var totalsus=totalnn;
             var totalbs=totalnn;
             if(fila.moneda==1)
             {
@@ -312,16 +269,16 @@ function verdetalle(fila)
             else
             {
                 totalbs=totalbs*glob_tipoCambio;
-            }
+            }*/
             
 
             //console.log(sus)
             //sus=sus.toLocaleString()
       
             $("#facturadonofacturado").html(operateFormatter2(fila.estado, fila))
-            $("#almacen_egr").val(fila.almacen)
-            $("#tipomov_egr").val(fila.tipomov)
-            $("#fechamov_egr").val(formato_fecha_corta(fila.fechamov));
+            $("#almacen_ori").val(fila.origen)
+            $("#almacen_des").val(fila.destino)
+            $("#fechamov_egr").val(formato_fecha_corta(fila.fecha));
             $("#moneda_egr").val(fila.monedasigla)
             $("#nmov_egr").val(fila.n)
             $("#cliente_egr").val(fila.nombreCliente)
@@ -343,8 +300,8 @@ function verdetalle(fila)
 
 
             $("#pendienteaprobado").html(boton);
-            $("#totalsusdetalle").val(totalsus);
-            $("#totalbsdetalle").val(totalbs);
+            $("#totalsusdetalle").val();
+            $("#totalbsdetalle").val(totalnn);
             $("#titulo_modalIgresoDetalle").html(" - "+fila.tipomov+ " - "+csFact);
             $("#modalEgresoDetalle").modal("show");
 
@@ -361,6 +318,7 @@ function verdetalle(fila)
 }
 function mostrarDetalle(res)
 {
+    console.log(res)
     $("#tTraspasodetalle").bootstrapTable('destroy');
         $("#tTraspasodetalle").bootstrapTable({
 
@@ -425,22 +383,20 @@ function punitariofac(value, row, index)
 function restornardatosSelect(res)
 {
 
-    var proveedor = new Array()
-    var tipo = new Array()
-    var autor = new Array()
+    var origen = new Array()
+    var destino = new Array()
+    
     var datos =new Array()
     $.each(res, function(index, value){
 
-        proveedor.push(value.nombreproveedor)
-        tipo.push(value.sigla)
-        autor.push(value.autor)
+        origen.push(value.origen)
+        destino.push(value.destino)
     })
-    proveedor.sort();
-    tipo.sort();
-    autor.sort();
-    datos.push(proveedor.unique());
-    datos.push(tipo.unique());
-    datos.push(autor.unique());
+    origen.sort();
+    destino.sort();
+   
+    datos.push(origen.unique());
+    datos.push(destino.unique());    
     return(datos);
 }
 Array.prototype.unique=function(a){
