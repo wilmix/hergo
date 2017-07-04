@@ -179,6 +179,8 @@ class Traspasos extends CI_Controller
         	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
         	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
 
+        	$totalTabla=$this->retornarTotal($datos['tabla']);
+
         	$egreso['almacen_ne'] = $datos['almacen_ori'];
 	    	$egreso['tipomov_ne'] = $datos['tipomov_ne'];
 	    	$egreso['fechamov_ne'] = $datos['fechamov_ne'];
@@ -187,7 +189,7 @@ class Traspasos extends CI_Controller
 	    	$egreso['idCliente'] = 1801;
 	    	$egreso['pedido_ne'] = $datos['pedido_ne'];
 	    	$egreso['obs_ne'] = $datos['obs_ne'];
-	    	$egreso['tabla']=$datos['tabla'];
+	    	$egreso['tabla']=$this->convertirTablaEgresos($datos['tabla']);
 
 	    	$ingreso['almacen_imp'] = $datos['almacen_des'];
         	$ingreso['tipomov_imp'] = $datos['tipomov_ni'];
@@ -198,7 +200,7 @@ class Traspasos extends CI_Controller
         	$ingreso['nfact_imp'] = null;
         	$ingreso['ningalm_imp'] = null;
         	$ingreso['obs_imp'] = $datos['obs_ne'];
-        	$ingreso['tabla']=$datos['tabla'];
+        	$ingreso['tabla']=$this->convertirTablaIngresos($datos['tabla']);
 
 
 	    	$idEgreso=$this->transefernciaEgreso($egreso);
@@ -207,7 +209,7 @@ class Traspasos extends CI_Controller
 			$this->traspasos->idEgreso=$idEgreso;
 			$this->traspasos->estado=1;
 			$this->traspasos->fecha=$datos['fechamov_ne'];
-			$this->traspasos->total=10000000;
+			$this->traspasos->total=$totalTabla;
         	if($this->traspasos->guardar())
         	{
         		//$this->retornarcostoarticulo_tabla($datos['tabla'],$datos['almacen_imp']);
@@ -348,6 +350,56 @@ class Traspasos extends CI_Controller
 		return $obj;
 	}
 	/***********FIN**********************************************/
-
+	private function convertirTablaIngresos($tabla)//convierte tabla a ingresos
+	{
+		$tablaIngresos= array();
+		for ($i=0; $i < count($tabla) ; $i++) { 
+			$tablaIngresos[$i][0]=$tabla[$i][0];
+			$tablaIngresos[$i][1]=$tabla[$i][1];
+			$tablaIngresos[$i][2]=$tabla[$i][2];
+			$tablaIngresos[$i][3]=$tabla[$i][3];
+			$tablaIngresos[$i][4]=0;
+			$tablaIngresos[$i][5]=$tabla[$i][3];
+			$tablaIngresos[$i][6]=$tabla[$i][4];
+		}
+		return $tablaIngresos;	
+	}
+	private function convertirTablaEgresos($tabla)//convierte tabla a Egresos
+	{
+		$tablaIngresos= array();
+		for ($i=0; $i < count($tabla) ; $i++) { 
+			$tablaIngresos[$i][0]=$tabla[$i][0];
+			$tablaIngresos[$i][1]=$tabla[$i][1];
+			$tablaIngresos[$i][2]=$tabla[$i][2];
+			$tablaIngresos[$i][3]=$tabla[$i][3];
+			$tablaIngresos[$i][4]=0;
+			$tablaIngresos[$i][5]=$tabla[$i][4];			
+			$tablaIngresos[$i][6]=$tabla[$i][6];	
+		}
+		return $tablaIngresos;	
+	}
+	private function retornarTotal($tabla)
+	{
+		$total=0;
+		foreach ($tabla as $fila) {
+			$total+=$fila[4];
+		}
+		return $total;
+	}
+	public function mostrarDetalle()
+	{
+	
+		if($this->input->is_ajax_request() && $this->input->post('id'))
+        {
+        	$id = addslashes($this->security->xss_clean($this->input->post('id')));
+			$res=$this->egresos_model->mostrarDetalle($id);
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 }
 

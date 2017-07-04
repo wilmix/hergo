@@ -314,6 +314,10 @@ class Egresos extends CI_Controller
         	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
         	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
 
+        	/*echo "<pre>";
+        	print_r($datos['tabla']);
+        	echo "</pre>";*/
+
         	if($this->egresos_model->guardarmovimiento_model($datos))
         	{
         		$this->actualizarCostoArticuloEgreso($datos['tabla'],$datos['almacen_ne']);

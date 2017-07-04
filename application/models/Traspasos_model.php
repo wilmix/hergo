@@ -17,7 +17,7 @@ class Traspasos_model extends CI_Model
 	}
 	public function listar($ini=null,$fin=null)
 	{
-		$sql="SELECT t.idTraspasos, a.almacen as origen,b.almacen as destino,t.estado,t.fecha, t.total
+		$sql="SELECT t.idTraspasos, a.almacen as origen,b.almacen as destino,t.estado,t.fecha, t.total, t.idEgreso
 		FROM traspasos t
 		INNER JOIN ingresos i
 		ON t.idIngreso=i.idIngresos

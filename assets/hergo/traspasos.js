@@ -174,7 +174,7 @@ function retornarTablaTraspasos()
 function operateFormatter(value, row, index)
 {
     return [
-        '<button type="button" class="btn btn-default verEgreso" aria-label="Right Align">',
+        '<button type="button" class="btn btn-default verTraspaso" aria-label="Right Align">',
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',        
         '<button type="button" class="btn btn-default imprimirEgreso" aria-label="Right Align">',
         '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
@@ -222,7 +222,7 @@ function mostrarFactura(value, row, index)
 }
 /***********Eventos*************/
 window.operateEvents = {
-    'click .verEgreso': function (e, value, row, index) {
+    'click .verTraspaso': function (e, value, row, index) {
      // fila=JSON.stringify(row);
         verdetalle(row)
     },
@@ -245,10 +245,11 @@ window.operateEvents = {
 function verdetalle(fila)
 {
   console.log(fila)
-    id=fila.idEgresos
+    id=fila.idEgreso
+    console.log(id);
     datos={id:id}
     console.log(fila)
-    retornarajax(base_url("index.php/egresos/mostrarDetalle"),datos,function(data)
+    retornarajax(base_url("index.php/traspasos/mostrarDetalle"),datos,function(data)
     {
         estado=validarresultado_ajax(data);
         if(estado)
@@ -257,13 +258,8 @@ function verdetalle(fila)
             mostrarDetalle(data.respuesta);
             //console.log(glob_tipoCambio)
             var totalnn=fila.total
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            var totalsus=totalnn;
+            
+           /* var totalsus=totalnn;
             var totalbs=totalnn;
             if(fila.moneda==1)
             {
@@ -273,16 +269,16 @@ function verdetalle(fila)
             else
             {
                 totalbs=totalbs*glob_tipoCambio;
-            }
+            }*/
             
 
             //console.log(sus)
             //sus=sus.toLocaleString()
       
             $("#facturadonofacturado").html(operateFormatter2(fila.estado, fila))
-            $("#almacen_egr").val(fila.almacen)
-            $("#tipomov_egr").val(fila.tipomov)
-            $("#fechamov_egr").val(formato_fecha_corta(fila.fechamov));
+            $("#almacen_ori").val(fila.origen)
+            $("#almacen_des").val(fila.destino)
+            $("#fechamov_egr").val(formato_fecha_corta(fila.fecha));
             $("#moneda_egr").val(fila.monedasigla)
             $("#nmov_egr").val(fila.n)
             $("#cliente_egr").val(fila.nombreCliente)
@@ -304,8 +300,8 @@ function verdetalle(fila)
 
 
             $("#pendienteaprobado").html(boton);
-            $("#totalsusdetalle").val(totalsus);
-            $("#totalbsdetalle").val(totalbs);
+            $("#totalsusdetalle").val();
+            $("#totalbsdetalle").val(totalnn);
             $("#titulo_modalIgresoDetalle").html(" - "+fila.tipomov+ " - "+csFact);
             $("#modalEgresoDetalle").modal("show");
 
@@ -322,6 +318,7 @@ function verdetalle(fila)
 }
 function mostrarDetalle(res)
 {
+    console.log(res)
     $("#tTraspasodetalle").bootstrapTable('destroy');
         $("#tTraspasodetalle").bootstrapTable({
 
