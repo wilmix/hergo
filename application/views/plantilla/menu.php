@@ -1,4 +1,4 @@
-<!-- Left side column. contains the logo and sidebar -->
+<!-- ***MENU***Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
 
     <!-- sidebar: style can be found in sidebar.less -->
@@ -46,6 +46,7 @@
             <li><a href="<?php echo base_url("index.php/unidad") ?>"><i class="fa fa fa-columns"></i> Unidad</a></li>
             <li><a href="<?php echo base_url("index.php/clientes") ?>"><i class="fa fa-users"></i> Clientes</a></li>
             <li><a href="<?php echo base_url("index.php/Provedores") ?>"><i class="fa fa-users"></i> Provedores</a></li>
+            <li><a href="<?php echo base_url("index.php/CodigoControl") ?>"><i class="fa fa-qrcode"></i> CodigoControl QR</a></li>
             <!--<li><a href="<?php echo base_url("index.php/usuarios") ?>"> FormFuncionarios</a></li>
             <!--<li><a href="#">Modificar Precis Articulos</a></li>
             <li><a href="#">Datos Factura</a></li>
