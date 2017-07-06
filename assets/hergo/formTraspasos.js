@@ -246,16 +246,28 @@ function calculocompraslocales(cant,costo)
 function agregarArticulo() //faltaria el id costo; si se guarda en la base primero
 {
     //idcosto=12;
-    var codigo=$("#articulo_imp").val()
-    var descripcion=$("#Descripcion_ne").val()
+    var codigo=$("#articulo_imp").val();
+    var descripcion=$("#Descripcion_ne").val();
     var cant=$("#cantidad_ne").inputmask('unmaskedvalue');
     var costo=$("#punitario_ne").inputmask('unmaskedvalue');
     var descuento=$("#descuento_ne").inputmask('unmaskedvalue');
     var totalfac=costo;
     var cant=(cant=="")?0:cant;
     var costo=(costo=="")?0:costo;
-    var tipoingreso=$("#tipomov_imp2").val()
+    var tipoingreso=$("#tipomov_imp2").val();
     var total;
+    var saldoAlmacen =$("#saldo_ne").val();
+    console.log(saldoAlmacen)
+
+
+    if (saldoAlmacen <= 0) 
+    {
+        swal("Error", "No se tiene saldo suficiente del articulo. ","error")
+    }
+    else
+    {
+        swal("Se ejecuta esta bien")
+       
     //console.log(tipoingreso)
    /* if(tipoingreso==2)//si es compra local idcompralocal=2
     {
@@ -291,7 +303,8 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     });
     calcularTotal()
     limpiarArticulo();
-}
+    }
+} 
 $(document).on("keyup","#cantidad_imp,#punitario_imp",function(){
     var cant=$("#cantidad_imp").inputmask('unmaskedvalue');
     var costo=$("#punitario_imp").inputmask('unmaskedvalue'); 
@@ -330,8 +343,21 @@ function guardarmovimiento()
 {     
     var valuesToSubmit = $("#form_egreso").serialize();
     var tablaaux=tablatoarray();
+
+    //prueba
+    var almOrigen=$("#almacen_ori").val();
+    var almDestino=$("#almacen_des").val();
+
+    if (almOrigen === almDestino) 
+    {
+        swal("Error", "Almacen de destino es el mismo que el origen","error")
+    }
+    else
+    {
+
+
     
-    if(tablaaux.length>0)
+    if(tablaaux.length>0 && !(almOrigen === almDestino))
     {
         var tabla=JSON.stringify(tablaaux);
         
@@ -364,8 +390,10 @@ function guardarmovimiento()
     else
     {
         
-        swal("Error", "No se tiene datos en la tabla para guardar","error")
+        swal("Error", "No se tiene datos para guardar. ","error")
     }
+    }
+
 }
 function actualizarMovimiento()
 {     
@@ -503,6 +531,7 @@ function tablatoarray()
     return(tabla)
     //console.log(filas)
 }
+
 $(document).on("click","#guardarMovimiento",function(){
     guardarmovimiento();
 })
