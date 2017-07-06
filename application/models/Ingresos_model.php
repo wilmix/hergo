@@ -96,7 +96,25 @@ class Ingresos_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
 	}
-	
+	public function esTraspaso($id)
+    {
+        $sql="SELECT * FROM ingresos where idIngresos=$id"; 
+        //die($sql)       ;
+        $query=$this->db->query($sql);
+        if($query->num_rows()>0)
+        {
+            $fila=$query->row();
+            if($fila->tipomov==3)
+                return $fila;
+            else
+                return false;
+        }
+        else
+        {
+
+            return false;
+        }        
+    }
     public function retornarArticulosBusqueda($b)
     {
 		$sql="SELECT a.CodigoArticulo, a.Descripcion, u.Unidad
@@ -354,6 +372,20 @@ class Ingresos_model extends CI_Model
         else
         {
             return 0;
+        }
+    }
+    public function retornarIngresosTabla($idIngreso)
+    {
+         $sql="SELECT * FROM ingdetalle WHERE idIngreso=$idIngreso";
+ 
+        $query=$this->db->query($sql);
+        if($query->num_rows()>0)
+        {                   
+            return $query;    
+        }
+        else
+        {
+            return false;
         }
     }
 }

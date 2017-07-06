@@ -243,7 +243,8 @@ class Traspasos extends CI_Controller
     	$idIngreso=$this->ingresos_model->guardarmovimiento_model($datos);
     	if($idIngreso)
     	{
-    		$this->retornarcostoarticulo_tabla($datos['tabla'],$datos['almacen_imp'],$datos['moneda_imp']);				
+    		//queda pendiente la actualizacion
+    		//$this->actualizarCostoArticuloIngreso($datos['tabla'],$datos['almacen_imp'],$datos['moneda_imp']);				
     		return $idIngreso;
     	}
 		else
@@ -257,8 +258,7 @@ class Traspasos extends CI_Controller
 		
 		foreach ($tabla as $fila) 
 		{	
-			$aux=$this->get_costo_articuloEgreso($fila[0],$fila[2],$fila[4],$idalmacen);		
-					
+			$aux=$this->get_costo_articuloEgreso($fila[0],$fila[2],$fila[4],$idalmacen);							
 			$this->ingresos_model->actualizartablacostoarticulo($aux->idArticulo,$aux->ncantidad,$aux->nprecionu,$idalmacen);
 		}
 		
@@ -297,9 +297,8 @@ class Traspasos extends CI_Controller
 	}
 	/****************FIN**************************************/
     /*************FUNCIONES DE INGRESOS***********************/
-    public function retornarcostoarticulo_tabla($tabla,$idalmacen,$moneda)
-	{
-		
+    public function actualizarCostoArticuloIngreso($tabla,$idalmacen,$moneda)
+	{		
 		foreach ($tabla as $fila) 
 		{	
 			$aux=$this->get_costo_articulo($fila[0],$fila[2],$fila[3],$idalmacen);
@@ -390,11 +389,13 @@ class Traspasos extends CI_Controller
 	{
 	
 		if($this->input->is_ajax_request() && $this->input->post('id'))
-        {
-        	$id = addslashes($this->security->xss_clean($this->input->post('id')));
+                {
+                        $id = addslashes($this->security->xss_clean($this->input->post('id')));
 			$res=$this->egresos_model->mostrarDetalle($id);
 			$res=$res->result_array();
 			echo json_encode($res);
+                        
+                    
 		}
 		else
 		{

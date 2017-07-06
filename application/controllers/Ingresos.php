@@ -429,8 +429,16 @@ class Ingresos extends CI_Controller
         {
         	$d = addslashes($this->security->xss_clean($this->input->post('d')));
         	$id = addslashes($this->security->xss_clean($this->input->post('id')));
-			$res=$this->ingresos_model->editarestado_model($d,$id);
+        	/****REVISAR SI ES TRASPASO PARA PROCEDER CON LA SUMA DE COSTO ARTICULO tipo de movimiento 3**/
+        	$res=$this->ingresos_model->esTraspaso($id);
+			if($res && $d==1)
+			{
+				//die("Es traspaso");
+				$tabla=$this->retornaTablaIngresos($id);
+				$this->retornarcostoarticulo_tabla($tabla,$res->almacen,$res->moneda,true);
+			}
 
+			$res=$this->ingresos_model->editarestado_model($d,$id);
 			echo json_encode("{estado:ok}");
 		}
 		else
@@ -438,16 +446,40 @@ class Ingresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	public function retornaTablaIngresos($idIngreso)
+	{
+		$tabla=array();
+		$res=$this->ingresos_model->retornarIngresosTabla($idIngreso);
+		$i=0;
+
+		foreach ($res->result_array() as $fila) 
+		{
+			$tabla[$i][0]="ninguno";
+			$tabla[$i][1]=$fila['articulo'];
+			$tabla[$i][2]=$fila['cantidad'];
+			$tabla[$i][3]=$fila['punitario'];
+			$tabla[$i][4]=$fila['total'];
+		}
+		/*echo "<pre>";
+		print_r($tabla);
+		echo "</pre>";
+		die();*/
+		return $tabla;
+	}
+	
+	
 	//actualizar tabla costoarticulo
-	public function get_costo_articulo($codigo,$cant=0,$preciou=0,$idAlmacen)	//para tabla
+	public function get_costo_articulo($codigo,$cant=0,$preciou=0,$idAlmacen,$_idArticulo=0)	//para tabla, si $_idArticulo==0 buscar id segun el codigo
 	{		
 		$cant=$cant==""?0:$cant;
 		$preciou=$preciou==""?0:$preciou;
 		$ncantidad=0;
     	$nprecionu=0;
     	$ntotal=0;
-    	
-    	$idArticulo=$this->ingresos_model->retornar_datosArticulo($codigo);
+    	if($_idArticulo==0)
+    		$idArticulo=$this->ingresos_model->retornar_datosArticulo($codigo);
+    	else
+    		$idArticulo=$_idArticulo;
 		$ca=$this->ingresos_model->retornarcostoarticulo_model($idArticulo,$idAlmacen);
 		$obj=new StdClass();
 		if($ca)
@@ -474,12 +506,15 @@ class Ingresos extends CI_Controller
 		
 		return $obj;
 	}
-	public function retornarcostoarticulo_tabla($tabla,$idalmacen,$moneda)
+	public function retornarcostoarticulo_tabla($tabla,$idalmacen,$moneda,$_traspaso=false)//si $_traspaso == true es traspaso 
 	{
 		
 		foreach ($tabla as $fila) 
 		{	
-			$aux=$this->get_costo_articulo($fila[0],$fila[2],$fila[3],$idalmacen);
+			if($_traspaso)
+				$aux=$this->get_costo_articulo($fila[0],$fila[2],$fila[3],$idalmacen,$fila[1]); // en tabla[1] se encuentra almacenado el idArticulo cuando es traspaso
+			else
+				$aux=$this->get_costo_articulo($fila[0],$fila[2],$fila[3],$idalmacen);
 			$preciounbitario=$aux->nprecionu;
 			if($moneda==2)
 			{
