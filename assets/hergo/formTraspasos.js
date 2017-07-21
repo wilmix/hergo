@@ -266,7 +266,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     }
     else
     {
-        swal("Se ejecuta esta bien")
+        //swal("Se ejecuta esta bien")
        
     //console.log(tipoingreso)
    /* if(tipoingreso==2)//si es compra local idcompralocal=2
