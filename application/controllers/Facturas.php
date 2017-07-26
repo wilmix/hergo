@@ -8,8 +8,9 @@ class Facturas extends CI_Controller
 		parent::__construct();
 		$this->load->helper('url');
 		//$this->load->model("ingresos_model");
-		//$this->load->model("egresos_model");
+		$this->load->model("egresos_model");
 		$this->load->helper('date');
+		$this->load->helper('cookie');
 		date_default_timezone_set("America/La_Paz");
 		$this->cabeceras_css=array(
 				base_url('assets/bootstrap/css/bootstrap.min.css'),
@@ -84,7 +85,7 @@ class Facturas extends CI_Controller
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
 
-		public function EmitirFactura()
+	public function EmitirFactura()
 	{
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
@@ -121,6 +122,106 @@ class Facturas extends CI_Controller
 			$this->load->view('Facturas/emitirFactura.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
+			/*borrar cookie facturacion*/
+			
+			if( isset( $_COOKIE['factsistemhergo'] ) ) {			     
+			     delete_cookie("factsistemhergo");
+			}
+	}
+	public function MostrarTablaFacturacion()
+	{
+		if($this->input->is_ajax_request() && $this->input->post('ini')&& $this->input->post('fin'))
+        {
+        	$ini = addslashes($this->security->xss_clean($this->input->post('ini')));
+        	$fin = addslashes($this->security->xss_clean($this->input->post('fin')));
+        	$alm = addslashes($this->security->xss_clean($this->input->post('alm')));
+        	$tipo = addslashes($this->security->xss_clean($this->input->post('tipo')));
+			
+			$tabla=$this->egresos_model->ListarparaFacturacion($ini,$fin,$alm,$tipo);
+			
+			echo json_encode($tabla);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function retornarTabla2()
+	{
+		
+		
+		if($this->input->is_ajax_request() && $this->input->post('idegreso') )
+        {
+        	$idegreso= addslashes($this->security->xss_clean($this->input->post('idegreso')));
+        	$egresoDetalle=FALSE;
+        	/***Retornar idcliente***/
+			$datosEgreso=$this->egresos_model->mostrarEgresos($idegreso);
+        	$fila=$datosEgreso->row();
+        	$idcliente=$fila->idcliente; 
+        	/************************/
+	        if( isset( $_COOKIE['factsistemhergo'] ) ) 
+	        {	
+	        	$cookie=json_decode($this->desencriptar(get_cookie('factsistemhergo')));  
+							
+	        	if($cookie->cliente==$idcliente)// es el mismo cliente que ya se agrego en la tabla?
+	        	{
+	        		if(!in_array($idegreso, $cookie->egresos))
+	        		{
+	        			//no existe en el array entonces agregarlo	        			
+	        			array_push($cookie->egresos,$idegreso);
+	        			$egresoDetalle=$this->egresos_model->mostrarDetalle($idegreso)->result();
+	        			$mensaje="Registro agregado correctamente";
+	        			//return $egresoDetalle;
+	        		}
+	        		else
+	        		{
+	        			//existe entonces no se puede agregar el detalle	        			
+	        			$egresoDetalle=FALSE;//return FALSE;
+	        			$mensaje="Ya se agrego este registro";
+	        		}	        		
+	        	}
+	        	else
+	        	{
+	        		//es otro cliente no hacer nada	        		
+	        		$egresoDetalle=FALSE;//return FALSE;
+	        		$mensaje="No se pueden agregar registros de otro cliente";
+	        	}
+			}	
+			else
+			{
+				//no existe cookie entonces crear nuevo
+				//si no existe la tabla 2 esta vacia y no se selecciono ningun egreso, 
+				$egresoDetalle=$this->egresos_model->mostrarDetalle($idegreso)->result();
+				$mensaje="Se agrego el primer registro en la tabla correctamente";
+				$obj= new stdclass();
+				$obj->egresos= array($idegreso);
+				$obj->cliente=$idcliente;
+				$cookie=$obj;
+			}
+			$cookienew=json_encode($cookie);
+			$cookienew=$this->encriptar($cookienew);
+			set_cookie('factsistemhergo',$cookienew,'3600'); 	
+			$obj2=new stdclass();
+			$obj2->detalle=$egresoDetalle;
+			$obj2->mensaje=$mensaje;
+			echo json_encode($obj2);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	private function encriptar($cadena){
+	    $key='SistemaHergo';  // Una clave de codificacion, debe usarse la misma para encriptar y desencriptar
+	    $encrypted = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($key), $cadena, MCRYPT_MODE_CBC, md5(md5($key))));
+	    return $encrypted; //Devuelve el string encriptado
+	 
+	}
+	 
+	private function desencriptar($cadena){
+	     $key='SistemaHergo';  // Una clave de codificacion, debe usarse la misma para encriptar y desencriptar
+	     $decrypted = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($key), base64_decode($cadena), MCRYPT_MODE_CBC, md5(md5($key))), "\0");
+	    return $decrypted;  //Devuelve el string desencriptado
 	}
 }
 

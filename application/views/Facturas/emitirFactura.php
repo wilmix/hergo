@@ -20,209 +20,73 @@
             <option value="4">SANTA CRUZ</option>
             <option value="5">COCHABAMBA</option>
             <option value="6">TALLER</option>
-            <option value="">TODOS</option>
+            <option value="0">TODOS</option>
           </select>
           <select class="btn btn-primary btn-sm" name="tipo_filtro" id="tipo_filtro">
-            <option value="">TODOS</option>
+            <option value="0">TODOS</option>
             <option value="6">VENTAS CAJA</option>
             <option value="7">NOTA DE ENTREGA</option>
           </select>
          </div>
 
-         <table class="table table-condensed" class="table table-striped"
-            data-toggle="table"
+         <table
             data-height="250"
-            id=""
+            id="tfacturas"
             data-toolbar="#toolbar2"
-            data-mobile-responsive="true">
-            <thead>
-              <tr>
-                <th class="col-sm-1">N</th>
-                <th class="col-sm-1">Tipo</th>
-                <th class="col-sm-1">Fecha</th>
-                <th class="col-sm-1">N° Cliente</th>
-                <th class="col-sm-6">Cliente</th>
-                <th class="col-sm-1">Total</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>1276</td>
-              <td>NE</td>
-              <td>24/05/2017</td>
-              <td>123456789</td>
-              <td>SOBOCE S.A.</td>
-              <td>1,816 </td>
-              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button></td>
-            </tr>
-            <tr>
-              <td>1274</td>
-              <td>NE</td>
-              <td>23/05/2017</td>
-              <td>123456789</td>
-              <td>PAN AMERICAN SILVER BOLIVIA S.A.</td>
-              <td>2,127</td>
-              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button></td>
-            </tr>
-            <tr>
-              <td>1273</td>
-              <td>NE</td>
-              <td>23/05/2017</td>
-              <td>123456789</td>
-              <td>BOLIVIAN FOODS S.A.</td>
-              <td>160</td>
-              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button></td>
-            </tr>
-            <tr>
-              <td>1270</td>
-              <td>NE</td>
-              <td>23/05/2017  </td>
-              <td>123456789</td>
-              <td>GRANJA AVICOLA INTEGRAL SOFIA LTDA.</td>
-              <td>195</td>
-              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button></td>
-            </tr>
-            <tr>
-              <td>1269</td>
-              <td>VC</td>
-              <td>23/05/2017</td>
-              <td>123456789</td>
-              <td>OMNILIFE DE BOLIVIA S.A.</td>
-              <td>90</td>
-              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button></td>
-            </tr>
-            <tr>
-              <td>1265</td>
-              <td>VC</td>
-              <td>23/05/2017</td>
-              <td>123456789</td>
-              <td>OSCAR VALDA</td>
-              <td>1,150.4</td>
-              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button></td>
-            </tr>
-            <tr>
-              <td>1260</td>
-              <td>NE</td>
-              <td>23/05/2017</td>
-              <td>123456789</td>
-              <td>EMBOL S.A.</td>
-              <td>858</td>
-              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button></td>
-            </tr>
-            <tr>
-              <td>1251  </td>
-              <td>VC</td>
-              <td>22/05/2017</td>
-              <td>123456789</td>
-              <td>SOBOCE S.A.</td>
-              <td>680</td>
-              <td><button type="button" class="btn btn-default"><span class="fa fa-search" aria-hidden="true"></span></button></td>
-            </tr>
-            </tbody>    
+            >              
           </table>
+
 <br>
           
           <div>
             <form class="pull-right">
               Fecha Factura:
-              <input  type="date" name="">
-              <select class="btn btn-default btn-sm" name="tipo_filtro" id="tipo_filtro">
+              <input  type="date">
+              <select class="btn btn-default btn-sm" id="">
                 <option class="success">QR</option>
                 <option >MANUAL</option>
               </select>
-              <select class="btn btn-default btn-sm" name="tipo_filtro" id="tipo_filtro">
+              <select class="btn btn-default btn-sm"  id="">
                 <option class="success">Bolivianos</option>
                 <option >Dolares</option>
               </select>
-              <a class="btn btn-default text-center btnnuevo"><span class="fa fa-print"></span> Factura</a>
+              <a class="btn btn-default text-center btnnuevo" id="" data-toggle="modal" data-target="#facPrev"><span class="fa fa-print"></span> Factura</a>
               
             </form>
           </div>
+          <div class="clearfix"></div>
+          <input id="valuecliente" hidden="true" class="hidden">
 <hr>
 
         
         <div class="table-responsive" class="table table-condensed">
             <div class="col-md-6 col-xs-12">
-              <table
-                class="table"
+             <!-- <table
+                id="tabla2detalle"              
                 data-toggle="table"
-                data-height="250"
-                data-mobile-responsive="true">
+                data-height="250"                        
+                >
                 <thead>
                   <tr >
-                    <th class="col-sm-1">Codigo</th>
-                    <th class="col-sm-7">Articulo</th>
-                    <th class="col-sm-1">Cantidad</th>
-                    <th class="col-sm-1">P/U Bs</th>
-                    <th class="col-sm-1">Total Bs</th>
-                    <th class="col-sm-1"><button type="button" class="btn btn-default"><span class="fa fa-arrow-circle-right" aria-hidden="true"></span></button></th>
+                    <th class="col-sm-1" data-field="id" data-visible="false">id</th>
+                    <th class="col-sm-1" data-field="codigo">Codigo</th>
+                    <th class="col-sm-7" data-field="articulo">Articulo</th>
+                    <th class="col-sm-1" data-field="cantidado">Cantidad</th>
+                    <th class="col-sm-1" data-field="punitario">P/U Bs</th>
+                    <th class="col-sm-1" data-field="total">Total Bs</th>
+                    <th class="col-sm-1" data-field="btn"><button type="button" class="btn btn-default"><span class="fa fa-arrow-circle-right" aria-hidden="true"></span></button></th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr class="danger">
-                    <td>AS1600</td>
-                    <td>TRIANGULO REFLECTIVO DE SEGURIDAD VEHICULAR</td>
-                    <td>8</td>
-                    <td>87.00</td>
-                    <td>696.00</td>
-                    <td><button type="button" class="btn btn-default"><span class="fa fa-arrow-right" aria-hidden="true"></span></button></td>
-                  </tr>
-                   <tr class="danger">
-                    <td>CL4940</td>
-                    <td>BOTIQUINES CON ELEMENTOS ESENCIALES</td>
-                    <td>8</td>
-                    <td>77.00</td>
-                    <td>616.00</td>
-                    <td><button type="button" class="btn btn-default"><span class="fa fa-arrow-right" aria-hidden="true"></span></button></td>
-                  </tr>
-                   <tr>
-                    <td>KY0012</td>
-                    <td>EXTINTOR PQ ABC 1 KL C/CACHA DE PLASTICO</td>
-                    <td>8</td>
-                    <td>63.00</td>
-                    <td>504.00</td>
-                    <td><button type="button" class="btn btn-default"><span class="fa fa-arrow-right" aria-hidden="true"></span></button></td>
-                  </tr>
+                <tbody id="tbodytabla2">
+                                              
                 </tbody>    
-              </table>
+              </table>-->
+              <table id="tabla2detalle"></table>
             </div>
 
             <div class="table-responsive">
               <div class = "col-md-12 col-xs-12">
-                <table
-                 class="table"
-                data-toggle="table"
-                data-height="250"
-                data-mobile-responsive="true">
-                  <thead>
-                    <tr>
-                      <th><button type="button" class="btn btn-default"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span></button></th>
-                      <th>Codigo</th>
-                      <th>Articulo</th>
-                      <th>Cantidad</th>
-                      <th>P/U Bs</th>
-                      <th>Total Bs</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><button type="button" class="btn btn-default"><span class="fa fa-arrow-left" aria-hidden="true"></span></button></td>
-                      <td>AS1600</td>
-                      <td>TRIANGULO REFLECTIVO DE SEGURIDAD VEHICULAR</td>
-                      <td>8</td>
-                      <td data-field="name" data-editable="true">87.00</td>
-                      <td>696.00</td>
-                    </tr>
-                     <tr>
-                      <td><button type="button" class="btn btn-default"><span class="fa fa-arrow-left" aria-hidden="true"></span></button></td>
-                      <td>CL4940</td>
-                      <td>BOTIQUINES CON ELEMENTOS ESENCIALES</td>
-                      <td>8</td>
-                      <td>77.00</td>
-                      <td>616.00</td>
-                    </tr>
-                 </tbody> 
+                <table id="tabla3Factura">                 
                 </table>
               </div>
             </div>
@@ -236,10 +100,8 @@
               <div class="col-md-6 col-xs-12">
                 <div class = "input-group col-md-12 col-xs-12">
                   <span class = "input-group-addon">$</span>
-                  <!--mostrar el total de dolares-->
                   <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="" value="188.51">
                   <span class = "input-group-addon" >Bs</span>
-                  <!--mostrar el total bolivivanos-->
                   <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="" value="1,312.00">
                  </div>
               </div>
@@ -249,17 +111,17 @@
                 <div class="col-xs-12 col-md-12">
                   <!--insertar costo de articulo a ingresar-->
                   <label for="observaciones_ne">Observaciones:</label>
-                  <input type="text" class="form-control" id="obs_ne" name="obs_ne" value="" />
+                  <input type="text" class="form-control" id="" value="" />
               </div>
             </div>
             <br>
-            <div class="pull-right" class="row">
+            <!--<div class="pull-right" class="row">
               <div class="col-xs-12">
-                <button type="button" class="btn btn-primary" id="guardarMovimiento" tabindex=16 >GrabarFactura</button>
+                <button type="button" class="btn btn-primary" id="" data-toggle="modal" data-target="#facPrev" >GrabarFactura</button>
                 <button type="button" class="btn btn-danger" id="cancelarMovimiento" tabindex=12>Cancelar</button>
-                <!--<button type="button" class="btn btn-info" id="cancelarMovimiento" tabindex=12>Imprimir</button>-->
+                <button type="button" class="btn btn-info" id="cancelarMovimiento" tabindex=12>Imprimir</button>
             </div>
-            </div>
+            </div>-->
 
        <!-- /.box-body -->
       </div>
@@ -269,6 +131,118 @@
   </div>
 </div>
 <!-- /.class="row" EMITIR FACTURA-->
+<style>
+#direction {
+     font-size: 80%;
+     text-align: center;
+}
+#nitcss {
+     font-size: 140%;
+     text-align: center;
+}
 
+</style>
+
+<!-- Modal -->
+<div id="facPrev" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <!--<h1 class="modal-title modal-ce">FACTURA</h1>-->
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-4" class="text-center">
+          <img align="center" src="http://localhost:8080/hergo/images/hergo.jpeg" alt="hergo" width="200" height="40">
+          <div id="direction">
+            <p><b>Casa Matriz - 0</b> <br>
+            Av. Montes N° 611 * Zona Challapampa * Casilla 1024 <br>
+            Telfs.:2285837 - 2285854 * Fax 2126283 <br>
+            La Paz - Bolvia </p>
+          </div>
+          </div>
+          <div class="col-md-4" class="text-center">
+          <h1 class="text-center"><b>FACTURA</b></h1>
+          </div>
+          <div class="text-center" class="col-md-4">
+            <p id="nitcss"><b>NIT: 1000991026 </b></p>
+            <p>FACTURA N°: <b>59</b> <br>
+            AUTORIZACION N°: 265656700006546</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8">
+          <p>Lugar y Fecha: La Paz, 23 de Junio de 2017 <br>
+          Señor(es): MINERA SAN CRISTOBAL SA  <br>
+          OC/Pedido: OL - 65435132</p>
+          </div>
+            <div class="col-md-4">
+            <p class="text-center">NIT/CI:  <b>1020415021</b></p>
+            <p id="direction" class="text-center">Actividad economica: VENTA AL POR MAYOR DE MAQUINARIA, EQUIPO Y MATERIALES</p>
+          </div>
+        </div>
+        <div>
+           <table class="table">
+            <thead>
+              <tr>
+                <th>Cantidad</th>
+                <th>Unid.</th>
+                <th>Codigo</th>
+                <th>Articulo</th>
+                <th>Precio Unit.</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>5</td>
+                <td>PZA</td>
+                <td>SR7060</td>
+                <td>RECARGA DE CILINDRO DE GAS CARBONICO DE 25 LT.</td>
+                <td>80.35</td>
+                <td>401.75</td>
+              </tr>
+              <tr>
+                <td> </td>
+                <td> </td>
+                <td> </td>
+                <td> </td>
+                <td> </td>
+                <td> </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+          <div class="col-md-10">
+            <p>SON: <b>DOS MIL SETECIENTOS NOVENTA YY SEIS 18/100 BOLIVIANOS</b></p>
+            <p>NOTA: </p>
+            <br>
+            <br>
+            <p>CODIGO DE CONTROL: 80-45-A6-A3</p>
+            <p>FECHA LIMITE DE EMISIÓN: 13/12/16</p>
+          </div>
+          <div class="col-md-2">
+            <p>Total $US:   401.75</p>
+            <p>Total Bs:  2.796,18</p>
+            <p>           T/C 6.96</p>
+            <p>Codigo QR</p>
+
+          </div>
+        </div>
+
+  
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="">GrabarFactura</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 

@@ -2,6 +2,8 @@ var iniciofecha=moment().subtract(0, 'year').startOf('year')
 var finfecha=moment().subtract(0, 'year').endOf('year')
 
 $(document).ready(function(){
+    mostrarTablaDetalle();
+   // mostrarTablaFactura();
      $(".tiponumerico").inputmask({
         alias:"decimal",
         digits:2,
@@ -47,32 +49,32 @@ $(document).ready(function(){
 
     });
     $('#fechapersonalizada').on('apply.daterangepicker', function(ev, picker) {
-      retornarTablaEgresos();
+      retornarTablaFacturacion();
     });
-    retornarTablaEgresos();
+    retornarTablaFacturacion();
 })
 $(document).on("change","#almacen_filtro",function(){
-    retornarTablaEgresos();
+    retornarTablaFacturacion();
 })
 $(document).on("change","#tipo_filtro",function(){
-    retornarTablaEgresos();
+    retornarTablaFacturacion();
 })
 
 
-function retornarTablaEgresos()
+function retornarTablaFacturacion()
 {
 
 
     ini=iniciofecha.format('YYYY-MM-DD')
     fin=finfecha.format('YYYY-MM-DD')
     alm=$("#almacen_filtro").val()
-    tipoingreso=$("#tipo_filtro").val()
-    console.log(tipoingreso)
+    tipo=$("#tipo_filtro").val()
+    console.log({ini:ini,fin:fin,alm:alm,tipo:tipo})
     $.ajax({
         type:"POST",
-        url: base_url('index.php/egresos/mostrarEgresos'),
+        url: base_url('index.php/facturas/MostrarTablaFacturacion'),
         dataType: "json",
-        data: {i:ini,f:fin,a:alm,ti:tipoingreso},
+        data: {ini:ini,fin:fin,alm:alm,tipo:tipo},
     }).done(function(res){
        //datosselect= restornardatosSelect(res)
         $("#tfacturas").bootstrapTable('destroy');
@@ -90,15 +92,7 @@ function retornarTablaEgresos()
             filter:true,
             showColumns:true,
 
-            columns: [
-            {
-                field: '',
-                width: '3%',
-                title: 'Lote',
-                align: 'center',
-                visible:false,
-                sortable:true,
-            },
+            columns: [            
             {
                 field: 'n',
                 width: '3%',
@@ -106,13 +100,14 @@ function retornarTablaEgresos()
                 align: 'center',
                 sortable:true,
             },
+       
             {
                 field:'fechamov',
                 width: '7%',
                 title:"Fecha",
                 sortable:true,
                 align: 'center',
-                //formatter: formato_fecha_corta,
+                formatter: formato_fecha_corta,
             },
             {
                 field:'nombreCliente',
@@ -126,24 +121,24 @@ function retornarTablaEgresos()
                 width: '7%',
                 align: 'right',
                 sortable:true,
-                //formatter: operateFormatter3
+                formatter: operateFormatter3
             },
             {
-                field:'',
+                field:'sigla',
                 title:"TipoMov",
                 width: '7%',
                 sortable:true,
                 
             },
             {
-                field:'',
+                field:'n',
                 title:"N Mov",
                 width: '7%',
                 sortable:true,
                 
             },
             {
-                field:'',
+                field:'monedasigla',
                 title:"Moneda",
                 width: '7%',
                 visible:false,
@@ -156,7 +151,7 @@ function retornarTablaEgresos()
                 width: '7%',
                 sortable:true,
                 align: 'center',
-                //formatter: operateFormatter2
+                formatter: operateFormatter2
             },                  
             {
                 field:"autor",
@@ -179,72 +174,189 @@ function retornarTablaEgresos()
                 title: 'Acciones',
                 align: 'center',
                 width: '10%',
-                //events: operateEvents,
-                //formatter: operateFormatter
+                events: operateEvents,
+                formatter: operateFormatter
             }]
             
         });
         
-        $("#tegresos").bootstrapTable('hideLoading');
-        $("#tegresos").bootstrapTable('resetView');
+        $("#tfacturas").bootstrapTable('hideLoading');
+        $("#tfacturas").bootstrapTable('resetView');
 
 
-        /*if(Object.keys(res).length<=0) $("tbody td","table#tegresos").html("No se encontraron registros")        
-        else $("tbody","table#tegresos").show()            */
 
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
     console.log( "Request Failed: " + err );
     });
-    //$("body").css("padding-right","0px");
+    
 
 }
-function mostrarDetalle(res)
+function mostrarTablaDetalle()
 {
-    $("#tFacturaDetalle").bootstrapTable('destroy');
-        $("#tFacturaDetalle").bootstrapTable({
-
-            data:res,
-            striped:true,
-            pagination:true,
+    $("#tabla2detalle").bootstrapTable('destroy');
+        $("#tabla2detalle").bootstrapTable({
+        
+            height:250,        
             clickToSelect:true,
             search:false,
             columns:[
             {
+                field: 'idEgreDetalle',
+                title: 'id',
+                align: 'center',
+                width: '0%',                
+                visible:false,
+            },
+            {
                 field: 'CodigoArticulo',
                 title: 'Código',
-                align: 'center',
-                width: '10%',
-                sortable:true,
+                align: 'center',            
+                class:"col-sm-1",
             },
             {
                 field: 'Descripcion',
-                title: 'Descripcion',
-                width: '50%',
-                sortable:true,
+                title: 'Descripcion',                
+                class:"col-sm-7",                
             },
             {
                 field:'cantidad',
                 title:"Cantidad",
-                align: 'right',
-                width: '10%',
-                sortable:true,
+                align: 'right',                
+                class:"col-sm-1",                
             },
             {
                 field:'punitario',
                 title:"P/U Bs",
                 align: 'right',
-                width: '10%',
-                sortable:true,
+                class:"col-sm-1",                
             },
             {
                 field:'total',
                 title:"Total",
                 align: 'right',
-                width: '10%',
-                sortable:true,
+                class:"col-sm-1",                                
+            },
+            {
+                
+                title:'<button type="button" class="btn btn-default"><span class="fa fa-arrow-circle-right" aria-hidden="true"></span></button></th>',
+                align: 'center',
+                class:"col-sm-1",
+                events: operateEvents,
+                formatter: retornarBoton
             },
             ]
         });
 }
+function operateFormatter2(value, row, index)
+{
+    $ret=''
 
+    if(row.anulado==1)
+    {        
+        $ret='<span class="label label-warning">ANULADO</span>';
+    }
+    else
+    {
+        if(value==0)
+            $ret='<span class="label label-danger">No facturado</span>';
+        if(value==1)
+            $ret='<span class="label label-success">T. Facturado</span>';
+        if(value==2)
+            $ret='<span class="label label-info">Facturado Parcial</span>';
+    }
+    
+    return ($ret);
+}
+function operateFormatter3(value, row, index)
+{       
+    num=Math.round(value * 100) / 100
+    return (formatNumber.new(num));   
+}
+
+window.operateEvents = {
+    'click .agregartabla': function (e, value, row, index) {          
+     AgregarTabla(row.idEgresos);
+    },
+    'click .quitardetabla': function (e, value, row, index) {          
+     QuitardeTabla(row.idEgresos);
+    },
+    'click .enviartabla3': function (e, value, row, index) {
+     console.log(row);
+    },
+  
+};
+function operateFormatter(value, row, index)
+{
+    return [
+        '<button type="button" class="btn btn-default agregartabla" data-view="'+row.idEgresos+'" aria-label="Right Align">',
+        '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
+        '<button type="button" class="btn btn-default quitardetabla hidden" data-remove="'+row.idEgresos+'" aria-label="Right Align">',
+        '<span class="fa fa-minus-square-o " aria-hidden="true"></span></button>',
+
+    ].join('');
+}
+function retornarBoton(value, row, index)
+{
+    return [
+       '<button type="button" class="btn btn-default enviartabla3"><span class="fa fa-arrow-right" aria-hidden="true"></span></button>',
+    ].join('');
+}
+function QuitardeTabla(dato)
+{
+    var view=$('[data-view="'+dato+'"]').removeClass("hidden");
+    var remove=$('[data-remove="'+dato+'"]').addClass("hidden");
+    var tr=view.parents("tr");              
+    tr.removeClass("view")
+}
+function AgregarTabla(dato)
+{   
+    console.log(dato);
+    $.ajax({
+        type:"POST",
+        url: base_url('index.php/facturas/retornarTabla2'),
+        dataType: "json",
+        data: {idegreso:dato},
+    }).done(function(res){
+       if(res.detalle)
+       {
+            $("#valuecliente").val(res.cliente);           
+            swal({
+              title: "Agregado!",
+              text: res.mensaje,
+              type: "success",                                                  
+            },
+            function(){              
+              agregarRegistrosTabla2(res.detalle);
+              var view=$('[data-view="'+dato+'"]').addClass("hidden");
+              var remove=$('[data-remove="'+dato+'"]').removeClass("hidden");
+              var tr=view.parents("tr");              
+              tr.addClass("view")
+            });            
+       }
+       else
+       {
+            swal("Error", res.mensaje,"error")
+       }
+    }).fail(function( jqxhr, textStatus, error ) {
+    var err = textStatus + ", " + error;
+    console.log( "Request Failed: " + err );
+    });
+}
+function agregarRegistrosTabla2(detalle)
+{
+    var rows=[];
+    $.each(detalle,function(index,value){  
+        var boton='<button type="button" class="btn btn-default enviartabla3"><span class="fa fa-arrow-right" aria-hidden="true"></span></button>';       
+        rows.push({
+                    idEgreDetalle:value.idingdetalle,
+                    CodigoArticulo:value.CodigoArticulo,
+                    Descripcion:value.Descripcion,
+                    cantidad:value.cantidad,
+                    punitario:value.punitario,
+                    total:value.total,
+            
+                } )
+    })
+    $("#tabla2detalle").bootstrapTable('append', rows);
+}

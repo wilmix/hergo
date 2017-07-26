@@ -13,7 +13,7 @@ class Egresos_model extends CI_Model
 		if($id==null) //no tiene id de entrada
         {
 		  $sql="
-			SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido
+			SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente
 			FROM egresos e
 			INNER JOIN egredetalle d
 			on e.idegresos=d.idegreso
@@ -64,7 +64,7 @@ class Egresos_model extends CI_Model
 	}
 	public function mostrarDetalle($id)
 	{
-		$sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario, FORMAT(e.total,3) total, e.descuento
+		$sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario, FORMAT(e.total,3) total, e.descuento, e.idingdetalle
 		FROM egredetalle e
 		INNER JOIN articulos a
 		ON e.articulo = a.idArticulos
@@ -325,5 +325,69 @@ class Egresos_model extends CI_Model
         {
             return false;
         }        
+    }
+    public function ListarparaFacturacion($ini,$fin,$alm,$tipo)
+    {
+        /*$inicio=date('Y-m-d', strtotime($ini));
+        $final=date('Y-m-d', strtotime($fin));*/
+ 
+      /*  $this->db->select("e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido");
+        $this->db->from("egresos e");
+        $this->db->join("egredetalle d","e.idegresos=d.idegreso");
+        $this->db->join("tmovimiento t","e.tipomov=t.id");
+        $this->db->join("clientes c","e.cliente=c.idCliente");
+        $this->db->join("users u","u.id=e.autor");
+        $this->db->join("almacenes a","a.idalmacen=e.almacen");
+        $this->db->join("moneda m","e.moneda=m.id");
+        $this->db->where("e.fechamov BETWEEN '$ini' and '$fin'",NULL,FALSE);
+        if($alm>0)
+            $this->db->where("e.almacen",$alm);            
+        if($tipo>0)
+        {
+
+            $this->db->where("e.tipomov",$tipo);
+        }
+        else
+        {
+            $this->db->where("e.tipomov",6);   
+            $this->db->where("e.tipomov",7);
+        }
+        $query = $this->db->get();*/
+        $sql="
+            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente
+            FROM egresos e
+            INNER JOIN egredetalle d
+            on e.idegresos=d.idegreso
+            INNER JOIN tmovimiento t 
+            ON e.tipomov = t.id 
+            INNER JOIN clientes c 
+            ON e.cliente=c.idCliente
+            INNER JOIN users u 
+            ON u.id=e.autor 
+            INNER JOIN almacenes a 
+            ON a.idalmacen=e.almacen 
+            INNER JOIN moneda m 
+            ON e.moneda=m.id 
+            WHERE e.fechamov 
+            BETWEEN '$ini' AND '$fin' and (e.estado=0 or e.estado=2) and e.anulado!=1";        
+        if($alm>0)         
+            $sql.=" and e.almacen=$alm";                
+        if($tipo>0)
+        {
+
+            $sql.=" and e.tipomov=$tipo";
+        }
+        else
+        {
+            $sql.=" and (e.tipomov=6 or e.tipomov=7)";                        
+        }
+            $sql.=" Group By e.idegresos
+            ORDER BY e.idEgresos DESC";
+        
+        $query=$this->db->query($sql);
+        if($query->num_rows() > 0 )
+            return $query->result();
+        else
+            return false;
     }
 }

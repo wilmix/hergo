@@ -115,11 +115,7 @@ function retornarTablaEgresos()
                 width: '17%',
                 sortable:true,
                 filter: {type: "input"}
-//<<<<<<< HEAD
-                
-//=======
-                //filter: {type: "input"},
-//>>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
+
             },
             {
                 field:'factura',
@@ -128,10 +124,7 @@ function retornarTablaEgresos()
                 sortable:true,
                 formatter:mostrarFactura,
                 filter: {type: "input"}
-//<<<<<<< HEAD
-//=======
-                
-//>>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
+
             },
             {
                 field:'total',
@@ -147,20 +140,13 @@ function retornarTablaEgresos()
                 title:"Estado",
                 width: '7%',
                 sortable:true,
-                align: 'center',
-//<<<<<<< HEAD
-                formatter: operateFormatter2,
-                 filter: {
-                    type: "select",
-                    data:["T. FACTURADO","NO FACTURADO","PARCIAL"]
-                },
-//=======
+                align: 'center',            
                 filter: {
                     type: "select",
                     data: ["T. Facturado", "No facturado", "Parcial", "Anulado"],
                         },
                 formatter: operateFormatter2,
-//>>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
+
             },                  
             {
                 field:"clientePedido",

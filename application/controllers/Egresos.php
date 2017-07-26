@@ -428,7 +428,7 @@ class Egresos extends CI_Controller
 			$aux=$this->get_costo_articuloEgreso($fila[0],$fila[2],$fila[4],$idalmacen);		
 					
 			$this->ingresos_model->actualizartablacostoarticulo($aux->idArticulo,$aux->ncantidad,$aux->nprecionu,$idalmacen);
-		}
-		
+		}		
 	}
+        
 }
