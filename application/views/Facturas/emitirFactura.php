@@ -60,34 +60,13 @@
 
         
         <div class="table-responsive" class="table table-condensed">
-            <div class="col-md-6 col-xs-12">
-             <!-- <table
-                id="tabla2detalle"              
-                data-toggle="table"
-                data-height="250"                        
-                >
-                <thead>
-                  <tr >
-                    <th class="col-sm-1" data-field="id" data-visible="false">id</th>
-                    <th class="col-sm-1" data-field="codigo">Codigo</th>
-                    <th class="col-sm-7" data-field="articulo">Articulo</th>
-                    <th class="col-sm-1" data-field="cantidado">Cantidad</th>
-                    <th class="col-sm-1" data-field="punitario">P/U Bs</th>
-                    <th class="col-sm-1" data-field="total">Total Bs</th>
-                    <th class="col-sm-1" data-field="btn"><button type="button" class="btn btn-default"><span class="fa fa-arrow-circle-right" aria-hidden="true"></span></button></th>
-                  </tr>
-                </thead>
-                <tbody id="tbodytabla2">
-                                              
-                </tbody>    
-              </table>-->
+            <div class="col-md-6 col-xs-12">             
               <table id="tabla2detalle"></table>
             </div>
 
             <div class="table-responsive">
               <div class = "col-md-12 col-xs-12">
-                <table id="tabla3Factura">                 
-                </table>
+                <table id="tabla3Factura"></table>
               </div>
             </div>
           </div><!--row-->
@@ -100,9 +79,9 @@
               <div class="col-md-6 col-xs-12">
                 <div class = "input-group col-md-12 col-xs-12">
                   <span class = "input-group-addon">$</span>
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="" value="188.51">
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="" value="">
                   <span class = "input-group-addon" >Bs</span>
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="" value="1,312.00">
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="" value="">
                  </div>
               </div>
             </div><!--row-->

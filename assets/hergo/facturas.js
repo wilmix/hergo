@@ -3,7 +3,7 @@ var finfecha=moment().subtract(0, 'year').endOf('year')
 
 $(document).ready(function(){
     mostrarTablaDetalle();
-   // mostrarTablaFactura();
+    mostrarTablaFactura();
      $(".tiponumerico").inputmask({
         alias:"decimal",
         digits:2,
@@ -192,20 +192,25 @@ function retornarTablaFacturacion()
     
 
 }
-function mostrarTablaDetalle()
+function mostrarTablaDetalle(res)
 {
+ //   console.log(res)
     $("#tabla2detalle").bootstrapTable('destroy');
         $("#tabla2detalle").bootstrapTable({
-        
+            data:res,
             height:250,        
             clickToSelect:true,
             search:false,
-            columns:[
+            rowStyle:rowStyle,
+            columns:[            
             {
                 field: 'idEgreDetalle',
-                title: 'id',
-                align: 'center',
-                width: '0%',                
+                title: 'idEgreDetalle',                        
+                visible:false,
+            },
+            {
+                field: 'idegreso',
+                title: 'idegreso',                        
                 visible:false,
             },
             {
@@ -239,7 +244,95 @@ function mostrarTablaDetalle()
             },
             {
                 
-                title:'<button type="button" class="btn btn-default"><span class="fa fa-arrow-circle-right" aria-hidden="true"></span></button></th>',
+                title:'<button type="button" class="btn btn-default"><span class="fa fa-arrow-circle-right" aria-hidden="true"></span></button>',
+                align: 'center',
+                class:"col-sm-1",
+                events: operateEvents,
+                formatter: retornarBoton
+            },
+            ]
+        });
+}
+function rowStyle(row, index) 
+{
+//console.log(row)
+    var existe=false;
+    var tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
+    $.each(tabla3factura,function(index, value){
+       
+        if(value.idEgreDetalle==row.idingdetalle)
+        {
+           existe=true
+
+        }
+
+    })
+  
+     if(existe)
+     {
+        return {
+                    classes: "danger",
+                };
+     }
+     else
+     {
+        return {};
+     }  
+            
+    
+}
+function mostrarTablaFactura()
+{
+    
+    $("#tabla3Factura").bootstrapTable('destroy');
+        $("#tabla3Factura").bootstrapTable({
+           
+            height:250,        
+            clickToSelect:true,
+            search:false,
+            columns:[
+            {
+                field: 'idEgreDetalle',
+                title: 'idEgreDetalle',                        
+                visible:false,
+            },
+            {
+                field: 'idegreso',
+                title: 'idegreso',                        
+                visible:false,
+            },
+            {
+                field: 'CodigoArticulo',
+                title: 'Código',
+                align: 'center',            
+                class:"col-sm-1",
+            },
+            {
+                field: 'Descripcion',
+                title: 'Descripcion',                
+                class:"col-sm-7",                
+            },
+            {
+                field:'cantidad',
+                title:"Cantidad",
+                align: 'right',                
+                class:"col-sm-1",                
+            },
+            {
+                field:'punitario',
+                title:"P/U Bs",
+                align: 'right',
+                class:"col-sm-1",                
+            },
+            {
+                field:'total',
+                title:"Total",
+                align: 'right',
+                class:"col-sm-1",                                
+            },
+            {
+                
+                title:'<button type="button" class="btn btn-default"><span class="fa fa-arrow-circle-right" aria-hidden="true"></span></button>',
                 align: 'center',
                 class:"col-sm-1",
                 events: operateEvents,
@@ -281,8 +374,8 @@ window.operateEvents = {
     'click .quitardetabla': function (e, value, row, index) {          
      QuitardeTabla(row.idEgresos);
     },
-    'click .enviartabla3': function (e, value, row, index) {
-     console.log(row);
+    'click .enviartabla3': function (e, value, row, index) {     
+     AgregarRegistroTabla3(row);
     },
   
 };
@@ -295,6 +388,7 @@ function operateFormatter(value, row, index)
         '<span class="fa fa-minus-square-o " aria-hidden="true"></span></button>',
 
     ].join('');
+    
 }
 function retornarBoton(value, row, index)
 {
@@ -302,21 +396,24 @@ function retornarBoton(value, row, index)
        '<button type="button" class="btn btn-default enviartabla3"><span class="fa fa-arrow-right" aria-hidden="true"></span></button>',
     ].join('');
 }
-function QuitardeTabla(dato)
+/*function QuitardeTabla(dato)
 {
     var view=$('[data-view="'+dato+'"]').removeClass("hidden");
     var remove=$('[data-remove="'+dato+'"]').addClass("hidden");
     var tr=view.parents("tr");              
     tr.removeClass("view")
-}
-function AgregarTabla(dato)
-{   
-    console.log(dato);
-    $.ajax({
+}*/
+function AgregarRegistroTabla3(row)
+{
+    //si no existe ningun registro agregar de cualquier cliente //registro
+    //si ya existe=> verificar si ya fue agregado el mismo //false
+    //si ya existe=>verificar si es otro cliente //false
+
+     $.ajax({
         type:"POST",
-        url: base_url('index.php/facturas/retornarTabla2'),
+        url: base_url('index.php/facturas/retornarTabla3'),
         dataType: "json",
-        data: {idegreso:dato},
+        data: {idegreso:row.idegreso,idegresoDetalle:row.idingdetalle},
     }).done(function(res){
        if(res.detalle)
        {
@@ -327,12 +424,56 @@ function AgregarTabla(dato)
               type: "success",                                                  
             },
             function(){              
+             agregarRegistrosTabla3(res.detalle);
+             /* var view=$('[data-view="'+dato+'"]').addClass("hidden");
+              var remove=$('[data-remove="'+dato+'"]').removeClass("hidden");
+              var tr=view.parents("tr");              
+              tr.addClass("view")*/
+            });  
+             
+           /*   var view=$('[data-view="'+dato+'"]').addClass("hidden");
+              var remove=$('[data-remove="'+dato+'"]').removeClass("hidden");
+              var tr=view.parents("tr");              
+              tr.addClass("view")        */
+       }
+       else
+       {
+            swal("Error", res.mensaje,"error")
+       }
+    }).fail(function( jqxhr, textStatus, error ) {
+    var err = textStatus + ", " + error;
+    console.log( "Request Failed: " + err );
+    });
+}
+function AgregarTabla(dato)
+{   
+    //console.log(dato);
+    $.ajax({
+        type:"POST",
+        url: base_url('index.php/facturas/retornarTabla2'),
+        dataType: "json",
+        data: {idegreso:dato},
+    }).done(function(res){
+       if(res.detalle)
+       {
+            $("#valuecliente").val(res.cliente);           
+         /*   swal({
+              title: "Agregado!",
+              text: res.mensaje,
+              type: "success",                                                  
+            },
+            function(){              
               agregarRegistrosTabla2(res.detalle);
               var view=$('[data-view="'+dato+'"]').addClass("hidden");
               var remove=$('[data-remove="'+dato+'"]').removeClass("hidden");
               var tr=view.parents("tr");              
               tr.addClass("view")
-            });            
+            });    */
+             agregarRegistrosTabla2(res.detalle);
+            /*  var view=$('[data-view="'+dato+'"]').addClass("hidden");
+              var remove=$('[data-remove="'+dato+'"]').removeClass("hidden");
+              var tr=view.parents("tr");              
+              tr.addClass("view")        */
        }
        else
        {
@@ -344,19 +485,23 @@ function AgregarTabla(dato)
     });
 }
 function agregarRegistrosTabla2(detalle)
-{
+{  
+    mostrarTablaDetalle(detalle);    
+    $("#tabla2detalle").bootstrapTable('resetView');    
+}
+function agregarRegistrosTabla3(detalle)
+{//   console.log(detalle[0])
+    detalle=detalle[0];
     var rows=[];
-    $.each(detalle,function(index,value){  
-        var boton='<button type="button" class="btn btn-default enviartabla3"><span class="fa fa-arrow-right" aria-hidden="true"></span></button>';       
-        rows.push({
-                    idEgreDetalle:value.idingdetalle,
-                    CodigoArticulo:value.CodigoArticulo,
-                    Descripcion:value.Descripcion,
-                    cantidad:value.cantidad,
-                    punitario:value.punitario,
-                    total:value.total,
-            
-                } )
-    })
-    $("#tabla2detalle").bootstrapTable('append', rows);
+    rows.push({
+                idEgreDetalle:detalle.idingdetalle,
+                idegreso:detalle.idegreso,
+                CodigoArticulo:detalle.CodigoArticulo,
+                Descripcion:detalle.Descripcion,
+                cantidad:detalle.cantidad,
+                punitario:detalle.punitario,
+                total:detalle.total,
+        
+            } )         
+    $("#tabla3Factura").bootstrapTable('append', rows);
 }
