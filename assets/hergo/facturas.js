@@ -214,6 +214,11 @@ function mostrarTablaDetalle(res)
                 visible:false,
             },
             {
+                field: 'Sigla',
+                title: 'unidad',                        
+                visible:false,
+            },
+            {
                 field: 'CodigoArticulo',
                 title: 'Código',
                 align: 'center',            
@@ -291,6 +296,7 @@ function mostrarTablaFactura()
             clickToSelect:true,
             search:false,
             columns:[
+
             {
                 field: 'idEgreDetalle',
                 title: 'idEgreDetalle',                        
@@ -299,6 +305,11 @@ function mostrarTablaFactura()
             {
                 field: 'idegreso',
                 title: 'idegreso',                        
+                visible:false,
+            },
+             {
+                field: 'Sigla',
+                title: 'unidad',                        
                 visible:false,
             },
             {
@@ -375,7 +386,7 @@ window.operateEvents = {
      QuitardeTabla(row.idEgresos);
     },
     'click .enviartabla3': function (e, value, row, index) {     
-     AgregarRegistroTabla3(row);
+     AgregarRegistroTabla3(row,index);
     },
   
 };
@@ -393,7 +404,7 @@ function operateFormatter(value, row, index)
 function retornarBoton(value, row, index)
 {
     return [
-       '<button type="button" class="btn btn-default enviartabla3"><span class="fa fa-arrow-right" aria-hidden="true"></span></button>',
+       '<button type="button" class="btn btn-default enviartabla3" data-view="'+row.idingdetalle+'"><span class="fa fa-arrow-right" aria-hidden="true"></span></button>',
     ].join('');
 }
 /*function QuitardeTabla(dato)
@@ -403,7 +414,7 @@ function retornarBoton(value, row, index)
     var tr=view.parents("tr");              
     tr.removeClass("view")
 }*/
-function AgregarRegistroTabla3(row)
+function AgregarRegistroTabla3(row,index)
 {
     //si no existe ningun registro agregar de cualquier cliente //registro
     //si ya existe=> verificar si ya fue agregado el mismo //false
@@ -423,12 +434,12 @@ function AgregarRegistroTabla3(row)
               text: res.mensaje,
               type: "success",                                                  
             },
-            function(){              
-             agregarRegistrosTabla3(res.detalle);
-             /* var view=$('[data-view="'+dato+'"]').addClass("hidden");
-              var remove=$('[data-remove="'+dato+'"]').removeClass("hidden");
-              var tr=view.parents("tr");              
-              tr.addClass("view")*/
+            function(){          
+            console.log(res);
+             agregarRegistrosTabla3(res.detalle);              
+              var tr=$('[data-index="'+index+'"]',"#tabla2detalle").addClass("danger")
+              $("#clienteFactura").html(res.cliente);
+              $("#clienteFacturaNit").html(res.clienteNit)
             });  
              
            /*   var view=$('[data-view="'+dato+'"]').addClass("hidden");
@@ -494,8 +505,10 @@ function agregarRegistrosTabla3(detalle)
     detalle=detalle[0];
     var rows=[];
     rows.push({
+
                 idEgreDetalle:detalle.idingdetalle,
                 idegreso:detalle.idegreso,
+                Sigla:detalle.Sigla,
                 CodigoArticulo:detalle.CodigoArticulo,
                 Descripcion:detalle.Descripcion,
                 cantidad:detalle.cantidad,
@@ -505,3 +518,23 @@ function agregarRegistrosTabla3(detalle)
             } )         
     $("#tabla3Factura").bootstrapTable('append', rows);
 }
+$(document).on("click","#crearFactura",function(){
+    
+    $("#cuerpoTablaFActura").html("");
+
+    var tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
+    $.each(tabla3factura,function(index, value){
+       
+       console.log(value)
+        var row =' <tr>'+
+                '<td>'+value.cantidad+'</td>'+
+                '<td>'+value.Sigla+'</td>'+
+                '<td>'+value.CodigoArticulo+'</td>'+
+                '<td>'+value.Descripcion+'</td>'+
+                '<td>'+value.punitario+'</td>'+
+                '<td>'+value.total+'</td>'+
+              '</tr>'
+        $("#cuerpoTablaFActura").append(row);
+
+    })
+})

@@ -37,11 +37,12 @@
           </table>
 
 <br>
-          
+
           <div>
             <form class="pull-right">
+             
               Fecha Factura:
-              <input  type="date">
+              <input  type="date" value="<?php echo $fecha ?>">
               <select class="btn btn-default btn-sm" id="">
                 <option class="success">QR</option>
                 <option >MANUAL</option>
@@ -50,7 +51,7 @@
                 <option class="success">Bolivianos</option>
                 <option >Dolares</option>
               </select>
-              <a class="btn btn-default text-center btnnuevo" id="" data-toggle="modal" data-target="#facPrev"><span class="fa fa-print"></span> Factura</a>
+              <a class="btn btn-default text-center btnnuevo" id="crearFactura" data-toggle="modal" data-target="#facPrev"><span class="fa fa-print"></span> Factura</a>
               
             </form>
           </div>
@@ -154,12 +155,12 @@
         </div>
         <div class="row">
           <div class="col-md-8">
-          <p>Lugar y Fecha: La Paz, 23 de Junio de 2017 <br>
-          Señor(es): MINERA SAN CRISTOBAL SA  <br>
+          <p>Lugar y Fecha: <span id="fechaFactura"><?= $fecha?><span><br>
+          Señor(es): <span id="clienteFactura"></span>  <br>
           OC/Pedido: OL - 65435132</p>
           </div>
             <div class="col-md-4">
-            <p class="text-center">NIT/CI:  <b>1020415021</b></p>
+            <p class="text-center">NIT/CI:  <b><span id="clienteFacturaNit"></span></b></p>
             <p id="direction" class="text-center">Actividad economica: VENTA AL POR MAYOR DE MAQUINARIA, EQUIPO Y MATERIALES</p>
           </div>
         </div>
@@ -175,7 +176,7 @@
                 <th>Total</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="cuerpoTablaFActura">
               <tr>
                 <td>5</td>
                 <td>PZA</td>

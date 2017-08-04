@@ -13,7 +13,7 @@ class Egresos_model extends CI_Model
 		if($id==null) //no tiene id de entrada
         {
 		  $sql="
-			SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente
+			SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,c.documento
 			FROM egresos e
 			INNER JOIN egredetalle d
 			on e.idegresos=d.idegreso
@@ -39,7 +39,7 @@ class Egresos_model extends CI_Model
             FROM ingresos i*/
         {            
              $sql="
-            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido
+            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido,c.documento
             FROM egresos e
             INNER JOIN egredetalle d
             on e.idegresos=d.idegreso
@@ -64,10 +64,12 @@ class Egresos_model extends CI_Model
 	}
 	public function mostrarDetalle($id)//lista todos los detalles de un egreso
 	{
-		$sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario, FORMAT(e.total,3) total, e.descuento, e.idingdetalle, e.idegreso
+		$sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario, FORMAT(e.total,3) total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla
 		FROM egredetalle e
 		INNER JOIN articulos a
 		ON e.articulo = a.idArticulos
+        INNER JOIN unidad u
+        ON a.idUnidad=u.idUnidad
  		WHERE e.idegreso=$id";
 
 		$query=$this->db->query($sql);
@@ -75,10 +77,12 @@ class Egresos_model extends CI_Model
 	}
     public function ObtenerDetalle($id)//btiene por idingdetalle // deberia ser egredetalle
     {
-        $sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario, FORMAT(e.total,3) total, e.descuento, e.idingdetalle, e.idegreso
+        $sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario, FORMAT(e.total,3) total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla
         FROM egredetalle e
         INNER JOIN articulos a
         ON e.articulo = a.idArticulos
+        INNER JOIN unidad u
+        ON a.idUnidad=u.idUnidad
         WHERE e.idingdetalle=$id";
 
         $query=$this->db->query($sql);

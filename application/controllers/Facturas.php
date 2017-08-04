@@ -114,7 +114,7 @@ class Facturas extends CI_Controller
             //$this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
 
 			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();
-
+            $this->datos["fecha"]=date('Y-m-d');
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
@@ -155,9 +155,9 @@ class Facturas extends CI_Controller
         	$idegreso= addslashes($this->security->xss_clean($this->input->post('idegreso')));
         	$egresoDetalle=FALSE;
         	/***Retornar idcliente***/
-			$datosEgreso=$this->egresos_model->mostrarEgresos($idegreso);
-        	$fila=$datosEgreso->row();
-        	$idcliente=$fila->idcliente; 
+			//$datosEgreso=$this->egresos_model->mostrarEgresos($idegreso);
+        	//$fila=$datosEgreso->row();
+        	//$idcliente=$fila->idcliente; 
         	/************************/
 	      /*  if( isset( $_COOKIE['factsistemhergo'] ) ) 
 	        {	
@@ -226,6 +226,8 @@ class Facturas extends CI_Controller
 			$datosEgreso=$this->egresos_model->mostrarEgresos($idegreso);//para obtener el cliente
         	$fila=$datosEgreso->row();
         	$idcliente=$fila->idcliente; 
+        	$cliente=$fila->nombreCliente; 
+        	$clienteNit=$fila->documento;
         	/************************/
 	        if( isset( $_COOKIE['factsistemhergo'] ) ) // existe cookies?
 	        {	
@@ -264,6 +266,7 @@ class Facturas extends CI_Controller
 				$obj= new stdclass();
 				$obj->egresos= array($idegresoDetalle);//solo agrega el unico egreso al ser el primero
 				$obj->cliente=$idcliente;
+
 				$cookie=$obj;
 			}
 			$cookienew=json_encode($cookie);
@@ -273,6 +276,8 @@ class Facturas extends CI_Controller
 			$obj2=new stdclass();
 			$obj2->detalle=$egresoDetalle;
 			$obj2->mensaje=$mensaje;
+			$obj2->cliente=$cliente;
+			$obj2->clienteNit=$clienteNit;
 			echo json_encode($obj2);
 		}
 		else
