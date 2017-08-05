@@ -42,7 +42,7 @@
             <form class="pull-right">
              
               Fecha Factura:
-              <input  type="date" value="<?php echo $fecha ?>">
+              <input  type="date" value="<?php echo $fecha ?>" id="fechaFactura">
               <select class="btn btn-default btn-sm" id="">
                 <option class="success">QR</option>
                 <option >MANUAL</option>
@@ -80,9 +80,9 @@
               <div class="col-md-6 col-xs-12">
                 <div class = "input-group col-md-12 col-xs-12">
                   <span class = "input-group-addon">$</span>
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="" value="">
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalFacturaSus" value="">
                   <span class = "input-group-addon" >Bs</span>
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="" value="">
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalFacturaBs" value="">
                  </div>
               </div>
             </div><!--row-->
@@ -91,7 +91,7 @@
                 <div class="col-xs-12 col-md-12">
                   <!--insertar costo de articulo a ingresar-->
                   <label for="observaciones_ne">Observaciones:</label>
-                  <input type="text" class="form-control" id="" value="" />
+                  <input type="text" class="form-control" id="observacionesFactura" value="" />
               </div>
             </div>
             <br>
@@ -155,9 +155,9 @@
         </div>
         <div class="row">
           <div class="col-md-8">
-          <p>Lugar y Fecha: <span id="fechaFactura"><?= $fecha?><span><br>
+          <p>Lugar y Fecha: <span id="fechaFacturaModal"><?= $fecha?></span><br>
           Señor(es): <span id="clienteFactura"></span>  <br>
-          OC/Pedido: OL - 65435132</p>
+          OC/Pedido: OL - <span id="clientePedido"></span></p>
           </div>
             <div class="col-md-4">
             <p class="text-center">NIT/CI:  <b><span id="clienteFacturaNit"></span></b></p>
@@ -177,38 +177,23 @@
               </tr>
             </thead>
             <tbody id="cuerpoTablaFActura">
-              <tr>
-                <td>5</td>
-                <td>PZA</td>
-                <td>SR7060</td>
-                <td>RECARGA DE CILINDRO DE GAS CARBONICO DE 25 LT.</td>
-                <td>80.35</td>
-                <td>401.75</td>
-              </tr>
-              <tr>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
-              </tr>
+            
             </tbody>
           </table>
         </div>
         <div class="row">
           <div class="col-md-10">
-            <p>SON: <b>DOS MIL SETECIENTOS NOVENTA YY SEIS 18/100 BOLIVIANOS</b></p>
-            <p>NOTA: </p>
+            <p>SON: <b id="totalTexto"></b></p>
+            <p>NOTA: <span id="notaFactura"></span></p>
             <br>
             <br>
             <p>CODIGO DE CONTROL: 80-45-A6-A3</p>
             <p>FECHA LIMITE DE EMISIÓN: 13/12/16</p>
           </div>
           <div class="col-md-2">
-            <p>Total $US:   401.75</p>
-            <p>Total Bs:  2.796,18</p>
-            <p>           T/C 6.96</p>
+            <p>Total $US:   <span id="totalFacturaSusModal"></span></p>
+            <p>Total Bs: <span id="totalFacturaBsModal"></span></p>
+            <p>T/C <span id="tipoCambioFacturaModal"></span></p>
             <p>Codigo QR</p>
 
           </div>

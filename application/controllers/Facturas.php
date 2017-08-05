@@ -38,6 +38,7 @@ class Facturas extends CI_Controller
         		base_url('assets/plugins/daterangepicker/moment.min.js'),
         		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
         		base_url('assets/sweetalert/sweetalert.min.js'),
+
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 			if($this->session->userdata('foto')==NULL)
@@ -104,6 +105,7 @@ class Facturas extends CI_Controller
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/facturas.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/NumeroALetras.js');
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
@@ -228,6 +230,7 @@ class Facturas extends CI_Controller
         	$idcliente=$fila->idcliente; 
         	$cliente=$fila->nombreCliente; 
         	$clienteNit=$fila->documento;
+        	$clientePedido=$fila->clientePedido;
         	/************************/
 	        if( isset( $_COOKIE['factsistemhergo'] ) ) // existe cookies?
 	        {	
@@ -278,6 +281,7 @@ class Facturas extends CI_Controller
 			$obj2->mensaje=$mensaje;
 			$obj2->cliente=$cliente;
 			$obj2->clienteNit=$clienteNit;
+			$obj2->clientePedido=$clientePedido;
 			echo json_encode($obj2);
 		}
 		else
@@ -296,6 +300,13 @@ class Facturas extends CI_Controller
 	     $key='SistemaHergo';  // Una clave de codificacion, debe usarse la misma para encriptar y desencriptar
 	     $decrypted = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($key), base64_decode($cadena), MCRYPT_MODE_CBC, md5(md5($key))), "\0");
 	    return $decrypted;  //Devuelve el string desencriptado
+	}
+	public function tipoCambio()
+	{
+		$tipoCambio=$this->egresos_model->retornarValorTipoCambio();
+		$obj2=new stdclass();
+		$obj2->tipoCambio=$tipoCambio->tipocambio;	
+		echo json_encode($obj2);
 	}
 }
 

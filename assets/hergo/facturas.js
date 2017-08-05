@@ -245,7 +245,8 @@ function mostrarTablaDetalle(res)
                 field:'total',
                 title:"Total",
                 align: 'right',
-                class:"col-sm-1",                                
+                class:"col-sm-1",
+                formatter: operateFormatter3                                
             },
             {
                 
@@ -339,7 +340,8 @@ function mostrarTablaFactura()
                 field:'total',
                 title:"Total",
                 align: 'right',
-                class:"col-sm-1",                                
+                class:"col-sm-1", 
+                formatter: operateFormatter3                               
             },
             {
                 
@@ -429,18 +431,20 @@ function AgregarRegistroTabla3(row,index)
        if(res.detalle)
        {
             $("#valuecliente").val(res.cliente);           
-            swal({
-              title: "Agregado!",
-              text: res.mensaje,
-              type: "success",                                                  
-            },
-            function(){          
-            console.log(res);
+         //   swal({
+          //    title: "Agregado!",
+           //   text: res.mensaje,
+            //  type: "success",                                                  
+           // },
+           // function(){          
+            //console.log(res);
              agregarRegistrosTabla3(res.detalle);              
               var tr=$('[data-index="'+index+'"]',"#tabla2detalle").addClass("danger")
               $("#clienteFactura").html(res.cliente);
               $("#clienteFacturaNit").html(res.clienteNit)
-            });  
+              $("#clientePedido").html(res.clientePedido)
+              calcularTotalFactura();
+           // });  
              
            /*   var view=$('[data-view="'+dato+'"]').addClass("hidden");
               var remove=$('[data-remove="'+dato+'"]').removeClass("hidden");
@@ -518,6 +522,25 @@ function agregarRegistrosTabla3(detalle)
             } )         
     $("#tabla3Factura").bootstrapTable('append', rows);
 }
+function calcularTotalFactura()
+{
+    var tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
+    var total=0;
+    $.each(tabla3factura,function(index, value){
+        console.log(value.total)
+        total=total+parseFloat(value.total);
+    })
+    /****************Bs**************/
+    $("#totalFacturaBs").val(total);    
+    /*************SUS***************/
+    $("#totalFacturaSus").val(total/glob_tipoCambio);
+    /***********LITERAL**************/
+    $("#totalTexto").html(NumeroALetras(total));
+    /**********************************/
+    $("#totalFacturaBsModal").html(total);
+    $("#totalFacturaSusModal").html(total/glob_tipoCambio);
+    $("#tipoCambioFacturaModal").html(glob_tipoCambio);
+}
 $(document).on("click","#crearFactura",function(){
     
     $("#cuerpoTablaFActura").html("");
@@ -536,5 +559,14 @@ $(document).on("click","#crearFactura",function(){
               '</tr>'
         $("#cuerpoTablaFActura").append(row);
 
-    })
+    });
+    /******LUGAR y fecha*****/
+    var fecha=$("#fechaFactura").val()       
+    var fechaFormato = moment(fecha, 'YYYY-MM-DD');
+    var dia=fechaFormato.format("DD");
+    var mes=fechaFormato.format("MMMM");
+    var anio=fechaFormato.format("YYYY");    
+    var LugarFecha=("La Paz, "+dia+" de "+mes+" de "+anio);
+    $("#fechaFacturaModal").html(LugarFecha);
+    $("#notaFactura").html($("#observacionesFactura").val())
 })

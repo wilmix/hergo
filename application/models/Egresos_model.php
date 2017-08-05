@@ -64,7 +64,7 @@ class Egresos_model extends CI_Model
 	}
 	public function mostrarDetalle($id)//lista todos los detalles de un egreso
 	{
-		$sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario, FORMAT(e.total,3) total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla
+		$sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla
 		FROM egredetalle e
 		INNER JOIN articulos a
 		ON e.articulo = a.idArticulos
@@ -77,7 +77,7 @@ class Egresos_model extends CI_Model
 	}
     public function ObtenerDetalle($id)//btiene por idingdetalle // deberia ser egredetalle
     {
-        $sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario, FORMAT(e.total,3) total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla
+        $sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla
         FROM egredetalle e
         INNER JOIN articulos a
         ON e.articulo = a.idArticulos
@@ -179,6 +179,22 @@ class Egresos_model extends CI_Model
             return 1;
         }
     }
+   // public function retornarValorTipoCambio()/*retorna el ultimo tipo de cambio*/
+  /*  {
+        //$sql="SELECT nmov from ingresos WHERE YEAR(fechamov)= '$gestion' and almacen='$almacen' and tipomov='$tipo' ORDER BY nmov DESC LIMIT 1";
+        $sql="SELECT * from tipocambio ORDER BY id DESC LIMIT 1";
+
+        $resultado=$this->db->query($sql);
+        if($resultado->num_rows()>0)
+        {
+            $fila=$resultado->row();
+            return ($fila->tipocambio);
+        }
+        else
+        {
+            return 1;
+        }
+    }*/
      public function retornar_datosArticulo($dato)
     {
     	$sql="SELECT idArticulos from articulos where CodigoArticulo='$dato' LIMIT 1";

@@ -27,8 +27,25 @@ $(document).ready(function()
         },
         "responsive": true,
     });*/
+    setTipoCambio();
 })
 var glob_tipoCambio=6.96;   
+function setTipoCambio()
+{
+     $.ajax({
+        type:"POST",
+        url: base_url('index.php/facturas/tipoCambio'),
+        dataType: "json",
+        data: {},
+    }).done(function(res){
+        console.log(res.tipoCambio);
+        glob_tipoCambio=res.tipoCambio;
+    }).fail(function( jqxhr, textStatus, error ) {
+    var err = textStatus + ", " + error;
+    console.log( "Request Failed: " + err );
+    });
+
+}
 function base_url(complemento)
 {
      complemento = (complemento) ? complemento : '';
