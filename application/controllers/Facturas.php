@@ -110,7 +110,10 @@ class Facturas extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-
+            /**************EDITABLE***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-table-editable.js');
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.js');
             
             //$this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
             //$this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
@@ -129,6 +132,7 @@ class Facturas extends CI_Controller
 			if( isset( $_COOKIE['factsistemhergo'] ) ) {			     
 			     delete_cookie("factsistemhergo");
 			}
+			
 	}
 	public function MostrarTablaFacturacion()
 	{
@@ -215,10 +219,39 @@ class Facturas extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	public function retornarTabla3()
+	public function eliminarElementoTabla3()
+	{		
+		if($this->input->is_ajax_request() && $this->input->post('idegresoDetalle'))
+        {
+        	$idegresoDetalle= addslashes($this->security->xss_clean($this->input->post('idegresoDetalle')));
+        	if( isset( $_COOKIE['factsistemhergo'] ) ) // existe cookies?
+	        {	
+        		$cookie=json_decode((get_cookie('factsistemhergo'))); 
+        		$egresosnew = array();
+        		foreach ($cookie->egresos as $fila) {
+        			if($fila!=$idegresoDetalle)
+        				array_push($egresosnew,$fila);
+        		}
+        		$cookie->egresos=$egresosnew;
+        	}
+        	$cookienew=json_encode($cookie);
+        	set_cookie('factsistemhergo',$cookienew,'3600'); 
+        	echo json_encode("");
+        }
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function eliminarTodosElementoTabla3()
 	{
-		
-		
+		if( isset( $_COOKIE['factsistemhergo'] ) ) {			     
+			     delete_cookie("factsistemhergo");
+			}
+			echo json_encode("");
+	}
+	public function retornarTabla3()
+	{			
 		if($this->input->is_ajax_request() && $this->input->post('idegresoDetalle') )
         {
         	$idegresoDetalle= addslashes($this->security->xss_clean($this->input->post('idegresoDetalle')));
@@ -231,10 +264,12 @@ class Facturas extends CI_Controller
         	$cliente=$fila->nombreCliente; 
         	$clienteNit=$fila->documento;
         	$clientePedido=$fila->clientePedido;
+        	
         	/************************/
 	        if( isset( $_COOKIE['factsistemhergo'] ) ) // existe cookies?
 	        {	
-	        	$cookie=json_decode($this->desencriptar(get_cookie('factsistemhergo')));  
+	        	//$cookie=json_decode($this->desencriptar(get_cookie('factsistemhergo')));  
+	        	$cookie=json_decode((get_cookie('factsistemhergo')));  
 							
 	        	if($cookie->cliente==$idcliente)// es el mismo cliente que ya se agrego en la tabla?
 	        	{
@@ -244,6 +279,7 @@ class Facturas extends CI_Controller
 	        			array_push($cookie->egresos,$idegresoDetalle);
 	        			$egresoDetalle=$this->egresos_model->ObtenerDetalle($idegresoDetalle)->result();
 	        			$mensaje="Registro agregado correctamente";
+	        			
 	        			//return $egresoDetalle;
 	        		}
 	        		else
@@ -251,6 +287,7 @@ class Facturas extends CI_Controller
 	        			//existe entonces no se puede agregar el detalle	        			
 	        			$egresoDetalle=FALSE;//return FALSE;
 	        			$mensaje="Ya se agrego este registro";
+	        			$cook=$cookie;
 	        		}	        		
 	        	}
 	        	else
@@ -258,6 +295,7 @@ class Facturas extends CI_Controller
 	        		//es otro cliente no hacer nada	        		
 	        		$egresoDetalle=FALSE;//return FALSE;
 	        		$mensaje="No se pueden agregar registros de otro cliente";
+	        		
 	        	}
 			}	
 			else
@@ -266,14 +304,16 @@ class Facturas extends CI_Controller
 				//si no existe la tabla 2 esta vacia y no se selecciono ningun egreso, 
 				$egresoDetalle=$this->egresos_model->ObtenerDetalle($idegresoDetalle)->result();
 				$mensaje="Se agrego el primer registro en la tabla correctamente";
+
 				$obj= new stdclass();
 				$obj->egresos= array($idegresoDetalle);//solo agrega el unico egreso al ser el primero
 				$obj->cliente=$idcliente;
 
+
 				$cookie=$obj;
 			}
 			$cookienew=json_encode($cookie);
-			$cookienew=$this->encriptar($cookienew);
+			//$cookienew=$this->encriptar($cookienew);
 			set_cookie('factsistemhergo',$cookienew,'3600'); 	
 		
 			$obj2=new stdclass();
@@ -282,6 +322,97 @@ class Facturas extends CI_Controller
 			$obj2->cliente=$cliente;
 			$obj2->clienteNit=$clienteNit;
 			$obj2->clientePedido=$clientePedido;
+			
+			echo json_encode($obj2);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function retornarTabla3Array()
+	{			
+		if($this->input->is_ajax_request() && $this->input->post('rows') )
+        {
+
+        	$datos= ($this->security->xss_clean($this->input->post('rows')));
+        	$datos=json_decode($datos);  
+        	$datosRetornar=array();
+			/******verificamos si existe cookie*****/
+	        	if( isset( $_COOKIE['factsistemhergo'] ) ) // existe cookies?
+	        	{
+	        		//$cookie=json_decode($this->desencriptar(get_cookie('factsistemhergo')));  
+		        	$cookie=json_decode((get_cookie('factsistemhergo')));  
+	        	}
+	        	else
+	        	{
+	        		$cookie= new stdclass();
+					$cookie->egresos= array();//solo agrega el unico egreso al ser el primero
+					$cookie->cliente=0;
+	        	}
+	        	
+	        	/************************/
+        	foreach ($datos as $fila) 
+        	{
+        		$idegresoDetalle= $fila->idingdetalle;
+        		$idegreso= $fila->idegreso;
+        		$egresoDetalle=FALSE;
+	        	/***Retornar idcliente***/
+				$datosEgreso=$this->egresos_model->mostrarEgresos($idegreso);//para obtener el cliente
+	        	$fila=$datosEgreso->row();
+	        	$idcliente=$fila->idcliente; 
+	        	$cliente=$fila->nombreCliente; 
+	        	$clienteNit=$fila->documento;
+	        	$clientePedido=$fila->clientePedido;
+	        	
+		      
+	        	//$cookie=json_decode($this->desencriptar(get_cookie('factsistemhergo')));  
+	        	//$cookie=json_decode((get_cookie('factsistemhergo')));  
+				
+				if($cookie->cliente==$idcliente || $cookie->cliente==0)// es el mismo cliente que ya se agrego en la tabla?
+	        	{
+	        		if(!in_array($idegresoDetalle, $cookie->egresos))
+	        		{
+	        			//no existe en el array entonces agregarlo	        			
+	        			array_push($cookie->egresos,$idegresoDetalle);
+	        			$egresoDetalle=$this->egresos_model->ObtenerDetalle($idegresoDetalle)->result();
+	        			$mensaje="Registro agregado correctamente";
+	        			$cookie->cliente=$idcliente;
+	        		//	var_dump($datosRetornar);
+	        		//	var_dump($egresoDetalle);
+	        			array_push($datosRetornar,$egresoDetalle);
+	        			//return $egresoDetalle;
+	        		}
+	        		else
+	        		{
+	        			//existe entonces no se puede agregar el detalle	        			
+	        			//$egresoDetalle=FALSE;//return FALSE;
+	        			$mensaje="Algunos registros ya se agregaron";
+	        			//$datosRetornar=$egresoDetalle;
+	        		}	        		
+	        	}
+	        	else
+	        	{
+	        		//es otro cliente no hacer nada	        		
+	        		$egresoDetalle=FALSE;//return FALSE;
+	        		$mensaje="No se pueden agregar registros de otro cliente";
+	        		$datosRetornar=$egresoDetalle;
+	        	}	
+        	}
+        	$cookienew=json_encode($cookie);
+				//$cookienew=$this->encriptar($cookienew);
+        	
+			set_cookie('factsistemhergo',$cookienew,'3600'); 
+        	        		
+		
+			$obj2=new stdclass();
+			$obj2->detalle=$datosRetornar;
+			$obj2->mensaje=$mensaje;
+			$obj2->cliente=$cliente;
+			$obj2->clienteNit=$clienteNit;
+			$obj2->clientePedido=$clientePedido;
+			//$obj2->array=$datosRetornar;
+			
 			echo json_encode($obj2);
 		}
 		else

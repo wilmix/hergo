@@ -1,5 +1,6 @@
 $(document).ready(function()
 {
+    
    /*  $(".tablahergo").DataTable({
          "language": {
             "sProcessing":     "Procesando...",

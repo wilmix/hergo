@@ -64,7 +64,7 @@ class Egresos_model extends CI_Model
 	}
 	public function mostrarDetalle($id)//lista todos los detalles de un egreso
 	{
-		$sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla
+		$sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario1, e.punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal
 		FROM egredetalle e
 		INNER JOIN articulos a
 		ON e.articulo = a.idArticulos
@@ -77,7 +77,7 @@ class Egresos_model extends CI_Model
 	}
     public function ObtenerDetalle($id)//btiene por idingdetalle // deberia ser egredetalle
     {
-        $sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla
+        $sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario1,e.punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla,(e.cantidad-e.cantFact) cantidadReal
         FROM egredetalle e
         INNER JOIN articulos a
         ON e.articulo = a.idArticulos

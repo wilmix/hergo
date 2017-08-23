@@ -3,6 +3,11 @@
     /* el tamaño por defecto es 14px */
     font-size: 14px;
 }
+div.collapse {
+    overflow:visible;
+    /*or*/
+    position:static;
+}
 </style>
 <div class="row">
   <div class="col-xs-12">
@@ -68,6 +73,7 @@
             <div class="table-responsive">
               <div class = "col-md-12 col-xs-12">
                 <table id="tabla3Factura"></table>
+                <!--<table id="table"></table>-->
               </div>
             </div>
           </div><!--row-->
@@ -208,6 +214,8 @@
     </div>
 
   </div>
+  
 </div>
 
-
+<input id="valuecliente " class="tiponumerico">
+<table id="table"></table>
