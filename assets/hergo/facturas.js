@@ -396,24 +396,26 @@ function mostrarTablaFactura()
             },
             ]
         });
-        $table.on('editable-save.bs.table', function (e, field, row, old, $el) {      
-            var total=row.punitario*row.cantidadRealAux;            
+        $table.on('editable-save.bs.table', function (e, field, row, old, $el) {     
+        //console.log(parseFloat(row.punitario),parseFloat(row.cantidadRealAux)) 
+        console.log(row)
+            var total=parseFloat(row.punitario)*parseFloat(row.cantidadReal);
              $("#tabla3Factura").bootstrapTable('updateByUniqueId', {
                 id: row.idEgreDetalle,
                 row: {                   
                     total: total
                 }
             });
-             calcularTotalFactura();
+            calcularTotalFactura();
         });
 }
 
-  var scope = this;
-  scope.formatoMoneda = function(value) {
+var scope = this;
+scope.formatoMoneda = function(value) {
         
     //console.log(value)
     $(this).html(operateFormatter3(value));
-  };
+};
 
 
 function operateFormatter2(value, row, index)
@@ -547,7 +549,8 @@ function AgregarRegistroTabla3(row,index)
        if(res.detalle)
        {
         console.log(res.detalle)
-            $("#valuecliente").val(res.cliente);           
+            $("#valuecliente").val(res.cliente);   
+            $("#valueidcliente").val(res.idCliente);        
          //   swal({
           //    title: "Agregado!",
            //   text: res.mensaje,
@@ -588,8 +591,8 @@ function AgregarTabla(dato)
     }).done(function(res){
        if(res.detalle)
        {
-            $("#valuecliente").val(res.cliente);           
-         
+           // $("#valuecliente").val(res.cliente);           
+            //$("#valueidcliente").val(res.idCliente);
              agregarRegistrosTabla2(res.detalle);
            
        }
@@ -647,14 +650,17 @@ function calcularTotalFactura()
 }
 $(document).on("click","#crearFactura",function(){
     
-    $("#cuerpoTablaFActura").html("");
-
     var tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
-    $.each(tabla3factura,function(index, value){
+    if(tabla3factura.length>0)
+    {
+         $("#cuerpoTablaFActura").html("");
+
+    
+        $.each(tabla3factura,function(index, value){
        
        console.log(value)
         var row =' <tr>'+
-                '<td>'+value.cantidad+'</td>'+
+                '<td>'+value.cantidadReal+'</td>'+
                 '<td>'+value.Sigla+'</td>'+
                 '<td>'+value.CodigoArticulo+'</td>'+
                 '<td>'+value.Descripcion+'</td>'+
@@ -663,16 +669,21 @@ $(document).on("click","#crearFactura",function(){
               '</tr>'
         $("#cuerpoTablaFActura").append(row);
 
-    });
-    /******LUGAR y fecha*****/
-    var fecha=$("#fechaFactura").val()       
-    var fechaFormato = moment(fecha, 'YYYY-MM-DD');
-    var dia=fechaFormato.format("DD");
-    var mes=fechaFormato.format("MMMM");
-    var anio=fechaFormato.format("YYYY");    
-    var LugarFecha=("La Paz, "+dia+" de "+mes+" de "+anio);
-    $("#fechaFacturaModal").html(LugarFecha);
-    $("#notaFactura").html($("#observacionesFactura").val())
+        });
+        /******LUGAR y fecha*****/
+        var fecha=$("#fechaFactura").val()       
+        var fechaFormato = moment(fecha, 'YYYY-MM-DD');
+        var dia=fechaFormato.format("DD");
+        var mes=fechaFormato.format("MMMM");
+        var anio=fechaFormato.format("YYYY");    
+        var LugarFecha=("La Paz, "+dia+" de "+mes+" de "+anio);
+        $("#fechaFacturaModal").html(LugarFecha);
+        $("#notaFactura").html($("#observacionesFactura").val())
+        
+        $("#facPrev").modal("show");    
+
+    }
+   
 })
 $(document).on("click",".agregarTodos",function(){
 
@@ -697,9 +708,11 @@ function AgregarRegistroTabla3Array(row)
         
        if(res.detalle  && res.detalle.length!=0)
        {
-            
+           // console.log(res)
             
             $("#valuecliente").val(res.cliente);           
+            $("#valueidcliente").val(res.idCliente);           
+
          
                          
               //var tr=$('[data-index="'+index+'"]',"#tabla2detalle").addClass("danger")
@@ -825,7 +838,7 @@ function validateNum(value) {
     row=(data[index]);
     console.log(row.cantidadRealAux)
 
-    if(value>row.cantidadRealAux)
+    if(parseInt(value)>parseInt(row.cantidadRealAux))
     {
         return 'No puede ser mayor a '+row.cantidadRealAux;   
     }
@@ -840,4 +853,43 @@ $(document).on("click",".editable-click",function(){
         autoGroup: true,
         autoUnmask:true
     });
+})
+$(document).on("click","#guardarFactura",function()
+{
+    var tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
+    tabla3factura=JSON.stringify(tabla3factura);
+    var datos={
+        almacen:$("#almacen_filtro").val(),
+        fechaFac:$("#fechaFactura").val(),
+        moneda:$("#moneda").val(),
+        total:$("#totalFacturaBs").val(),
+        observaciones:$("#observacionesFactura").val(),
+        tabla:tabla3factura,
+    
+    }
+    $.ajax({
+            type:"POST",
+            url: base_url('index.php/facturas/guardarFactura'),
+            dataType: "json",
+            data: datos,
+        }).done(function(res){
+           if(res)
+           {
+                $("#tabla3Factura").bootstrapTable('removeAll');
+                swal({
+                    title: "Agregado!",
+                    text: "Datos almacenados correctamente",
+                    type: "success",                                                  
+                    })
+
+           }
+           else
+           {
+                swal("Error", res.mensaje,"error")
+           }
+        }).fail(function( jqxhr, textStatus, error ) {
+        var err = textStatus + ", " + error;
+        console.log( "Request Failed: " + err );
+    });
+    
 })

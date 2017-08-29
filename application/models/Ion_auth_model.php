@@ -961,7 +961,7 @@ class Ion_auth_model extends CI_Model
 
 		$this->trigger_events('extra_where');
 
-		$query = $this->db->select($this->identity_column . ', email, id, password, active, last_login,first_name, last_name, foto')
+		$query = $this->db->select($this->identity_column . ', email, id, password, active, last_login,first_name, last_name, foto, almacen')
 		                  ->where($this->identity_column, $identity)
 		                  ->limit(1)
 		    			  ->order_by('id', 'desc')
@@ -1729,6 +1729,7 @@ class Ion_auth_model extends CI_Model
 		    'logeado'				=> 'true', /*AGREGADO LGC*/
 		    'nombre'				=> $user->first_name." ".$user->last_name,
 		    'foto'					=> $user->foto,
+		    'idalmacen'				=>$user->almacen
 		);
 		
 

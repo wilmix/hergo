@@ -52,16 +52,17 @@ div.collapse {
                 <option class="success">QR</option>
                 <option >MANUAL</option>
               </select>
-              <select class="btn btn-default btn-sm"  id="">
-                <option class="success">Bolivianos</option>
-                <option >Dolares</option>
+              <select class="btn btn-default btn-sm"  id="moneda">
+                <option class="success" value="1">Bolivianos</option>
+                <option value="2">Dolares</option>
               </select>
-              <a class="btn btn-default text-center btnnuevo" id="crearFactura" data-toggle="modal" data-target="#facPrev"><span class="fa fa-print"></span> Factura</a>
+              <a class="btn btn-default text-center btnnuevo" id="crearFactura"><span class="fa fa-print"></span> Factura</a>
               
             </form>
           </div>
           <div class="clearfix"></div>
-          <input id="valuecliente" hidden="true" class="hidden">
+          <input id="valuecliente"  class="hidden">
+          <input id="valueidcliente"  class="hidden">
 <hr>
 
         
@@ -208,8 +209,8 @@ div.collapse {
   
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="">GrabarFactura</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="guardarFactura">Grabar Factura</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
 
@@ -217,5 +218,5 @@ div.collapse {
   
 </div>
 
-<input id="valuecliente " class="tiponumerico">
+
 <table id="table"></table>

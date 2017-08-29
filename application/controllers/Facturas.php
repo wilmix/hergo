@@ -9,9 +9,14 @@ class Facturas extends CI_Controller
 		$this->load->helper('url');
 		//$this->load->model("ingresos_model");
 		$this->load->model("egresos_model");
+		$this->load->model("cliente_model");
+		$this->load->model("Facturacion_model");
+		$this->load->model("DatosFactura_model");
+		$this->load->model("FacturaDetalle_model");
 		$this->load->helper('date');
 		$this->load->helper('cookie');
 		date_default_timezone_set("America/La_Paz");
+
 		$this->cabeceras_css=array(
 				base_url('assets/bootstrap/css/bootstrap.min.css'),
 				base_url("assets/fa/css/font-awesome.min.css"),
@@ -364,6 +369,7 @@ class Facturas extends CI_Controller
 	        	$cliente=$fila->nombreCliente; 
 	        	$clienteNit=$fila->documento;
 	        	$clientePedido=$fila->clientePedido;
+	        	$idCliente=$fila->idcliente;
 	        	
 		      
 	        	//$cookie=json_decode($this->desencriptar(get_cookie('factsistemhergo')));  
@@ -411,6 +417,7 @@ class Facturas extends CI_Controller
 			$obj2->cliente=$cliente;
 			$obj2->clienteNit=$clienteNit;
 			$obj2->clientePedido=$clientePedido;
+			$obj2->idCliente=$idCliente;
 			//$obj2->array=$datosRetornar;
 			
 			echo json_encode($obj2);
@@ -439,5 +446,86 @@ class Facturas extends CI_Controller
 		$obj2->tipoCambio=$tipoCambio->tipocambio;	
 		echo json_encode($obj2);
 	}
+	public function guardarFactura()
+	{
+		if($this->input->is_ajax_request())
+        {
+        	if( isset( $_COOKIE['factsistemhergo'] ) ) // existe cookies?
+        	{        	
+	        	$cookie=json_decode((get_cookie('factsistemhergo')));  	        	
+	        	$cliente=$this->cliente_model->obtenerCliente($cookie->cliente);
+        	}
+        	$datosFactura=$this->DatosFactura_model->obtenerUltimoLote();   
+        	$ultimaFactura=$this->Facturacion_model->obtenerRegistro();
+        //	var_dump($datosFactura);
+        //	die();
+        	$factura=new stdclass();
+        	//$factura->idFactura=0
+        	$factura->lote=$datosFactura->lote;
+        	$factura->almacen=$this->session->userdata('idalmacen');
+        	$factura->nFactura=intval($ultimaFactura->nFactura)+1;
+        	$factura->fechaFac= addslashes($this->security->xss_clean($this->input->post('fechaFac')));
+        	$factura->cliente=$cliente->idCliente;
+        	$factura->moneda= addslashes($this->security->xss_clean($this->input->post('moneda')));
+        	$factura->total= addslashes($this->security->xss_clean($this->input->post('total')));
+        	$factura->glosa=addslashes($this->security->xss_clean($this->input->post('observaciones')));;
+        	$factura->pagada=0;
+        	$factura->anulada=0;
+        	$factura->codigoControl="";
+        	$factura->qr="";
+        	$factura->tipoCambio=$this->egresos_model->retornarTipoCambio();
+        	$factura->ClienteFactura=$cliente->nombreCliente;
+        	$factura->ClienteNit=$cliente->documento;
+        	$factura->autor=$this->session->userdata('user_id');
+        	$factura->fecha=date('Y-m-d H:i:s');        	
+        	$tabla= ($this->security->xss_clean($this->input->post('tabla')));
+        	$tabla=json_decode($tabla);
+        	
+        	$idFactura=$this->Facturacion_model->guardar($factura);
+        	//$idFactura=1;
+
+        	if($idFactura>0) //se registro correctamente => almacenar la tabla
+        	{
+				$detalle=array();
+
+	        	foreach ($tabla as $fila) 
+	        	{
+	        		$idArticulo=$this->egresos_model->retornar_datosArticulo($fila->CodigoArticulo);
+	        		/**********************PReparar tabla detalle*************/
+	        		$registro = array(
+	        			'idFactura' => $idFactura,
+	        			'articulo'=>$idArticulo,
+	        			'moneda'=>$factura->moneda,
+	        			'facturaCantidad'=>$fila->cantidadReal,
+	        			'facturaPUnitario'=>$fila->punitario,
+	        			'nMovimiento'=>"",
+	        			'movTipo'=>"",
+	        			'ArticuloNombre'=>$fila->Descripcion,
+	        			'ArticuloCodigo'=>$fila->CodigoArticulo,
+	        			 );	
+	        		array_push($detalle, $registro);        		
+	        	}
+	        	$this->FacturaDetalle_model->guardar($detalle);
+	        	echo 1;
+        	}
+        	else
+        	{
+        		echo 0;
+        	}
+
+        	//var_dump($factura);
+
+        	
+        }
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function sessionver()
+	{
+		var_dump($this->session);
+	}
 }
+
 

@@ -43,4 +43,22 @@ class Cliente_model extends CI_Model
 		$sql="UPDATE clientes SET idDocumentoTipo='$tipo_doc', documento='$carnet', nombreCliente='$nombre_cliente', idClientetipo='$clientetipo', direccion='$direccion', telefono='$phone', fax='$fax', email='$email', web='$website', autor='$autor', fecha='$fecha' WHERE idCliente=$id";
 		$query=$this->db->query($sql);		
 	}
+	public function obtenerCliente($id)
+	{
+
+		$sql="SELECT *
+		FROM clientes c
+		WHERE c.idCliente=$id";
+		
+		$query=$this->db->query($sql);	
+		if($query->num_rows()>0)
+        {
+            $fila=$query->row();
+            return $fila;
+        }
+        else
+        {
+            return false;
+        }			
+	}
 }
