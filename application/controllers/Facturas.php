@@ -231,7 +231,7 @@ class Facturas extends CI_Controller
 			//$cookienew=json_encode($cookie);
 			//$cookienew=$this->encriptar($cookienew);
 			//set_cookie('factsistemhergo',$cookienew,'3600'); 	
-			$egresoDetalle=$this->egresos_model->mostrarDetalle($idegreso)->result();
+			$egresoDetalle=$this->egresos_model->mostrarDetalleFacturas($idegreso)->result();
 			$mensaje="Datos cargados correctamente";
 			$obj2=new stdclass();
 			$obj2->detalle=$egresoDetalle;

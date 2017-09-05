@@ -423,7 +423,7 @@ function mostrarDetalle(res)
                 sortable:true,
             },
             {
-                field:'',
+                field:'cantFact',
                 title:"CantFact",
                 align: 'right',
                 width: '10%',
