@@ -13,6 +13,7 @@ class Facturas extends CI_Controller
 		$this->load->model("Facturacion_model");
 		$this->load->model("DatosFactura_model");
 		$this->load->model("FacturaDetalle_model");
+		$this->load->model("FacturaEgresos_model");
 		$this->load->helper('date');
 		$this->load->helper('cookie');
 		date_default_timezone_set("America/La_Paz");
@@ -70,7 +71,7 @@ class Facturas extends CI_Controller
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/facturas.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/facturasConsulta.js');
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
@@ -138,6 +139,24 @@ class Facturas extends CI_Controller
 			     delete_cookie("factsistemhergo");
 			}
 			
+	}
+	public function MostrarTablaConsultaFacturacion()
+	{
+		if($this->input->is_ajax_request() && $this->input->post('ini')&& $this->input->post('fin'))
+        {
+        	$ini = addslashes($this->security->xss_clean($this->input->post('ini')));
+        	$fin = addslashes($this->security->xss_clean($this->input->post('fin')));
+        	$alm = addslashes($this->security->xss_clean($this->input->post('alm')));
+        	$tipo = addslashes($this->security->xss_clean($this->input->post('tipo')));
+			
+			$tabla=$this->Facturacion_model->Listar($ini,$fin,$alm);
+			
+			echo json_encode($tabla);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
 	}
 	public function MostrarTablaFacturacion()
 	{
@@ -487,9 +506,10 @@ class Facturas extends CI_Controller
         	if($idFactura>0) //se registro correctamente => almacenar la tabla
         	{
 				$detalle=array();
-
+				$facturaEgreso=array();
 	        	foreach ($tabla as $fila) 
 	        	{
+
 	        		$idArticulo=$this->egresos_model->retornar_datosArticulo($fila->CodigoArticulo);
 	        		/**********************PReparar tabla detalle*************/
 	        		$registro = array(
@@ -503,9 +523,18 @@ class Facturas extends CI_Controller
 	        			'ArticuloNombre'=>$fila->Descripcion,
 	        			'ArticuloCodigo'=>$fila->CodigoArticulo,
 	        			 );	
-	        		array_push($detalle, $registro);        		
+	        		array_push($detalle, $registro);   
+	        		$factura_egresoRegistro=array(
+	        			'idegresos'=>$fila->idegreso,
+	        			'idFactura'=>$idFactura,
+	        			);	
+	        		array_push($facturaEgreso, $factura_egresoRegistro);
+	        		$this->egresos_model->actualizarCantFact($fila->idEgreDetalle,$fila->cantidadReal);
+	        		$this->actualizarEstado($fila->idegreso);
 	        	}
 	        	$this->FacturaDetalle_model->guardar($detalle);
+	        	$this->FacturaEgresos_model->guardarArray($facturaEgreso);
+
 	        	echo 1;
         	}
         	else
@@ -525,6 +554,17 @@ class Facturas extends CI_Controller
 	public function sessionver()
 	{
 		var_dump($this->session);
+	}
+	public function actualizarEstado($idEgreso)//cambia el estado si esta pendiente o facturado
+	{
+		$estado=0;
+		$cantidad=$this->egresos_model->evaluarFacturadoTotal($idEgreso); //si es 0 facturado total si no parcial
+		if(count($cantidad)==0)//Facturado
+			$estado=1;
+		else
+			$estado=2;
+		$this->egresos_model->actualizarEstado($idEgreso,$estado);
+		echo $estado;
 	}
 }
 

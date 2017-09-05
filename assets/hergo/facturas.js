@@ -352,7 +352,7 @@ function mostrarTablaFactura()
                             params:{a:1,b:2}, 
                             inputclass:"tiponumerico",                
                             validate: validateNum,
-                            display: formatoMoneda,
+                          //  display: formatoMoneda,
 
                         },              
             },
@@ -413,7 +413,7 @@ function mostrarTablaFactura()
 var scope = this;
 scope.formatoMoneda = function(value) {
         
-    //console.log(value)
+    console.log(value)
     $(this).html(operateFormatter3(value));
 };
 
@@ -611,7 +611,9 @@ function agregarRegistrosTabla2(detalle)
     $("#tabla2detalle").bootstrapTable('resetView');    
 }
 function agregarRegistrosTabla3(detalle)
-{   console.log(detalle[0])
+{   
+
+    console.log(detalle[0])
     detalle=detalle[0];
     var rows=[];
     rows.push({

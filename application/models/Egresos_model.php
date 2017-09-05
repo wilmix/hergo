@@ -421,4 +421,26 @@ class Egresos_model extends CI_Model
         else
             return false;
     }
+    public function actualizarCantFact($idIngDetalle,$cantFacturado)
+    {
+         $sql="UPDATE egredetalle
+            set cantFact=cantFact+$cantFacturado
+            WHERE idingdetalle=$idIngDetalle          
+            ";
+        $query=$this->db->query($sql);        
+    }
+    public function evaluarFacturadoTotal($idEgreso)
+    {
+        $sql="SELECT * from egredetalle where idegreso=$idEgreso and (cantidad-cantFact >0)";
+        $query=$this->db->query($sql);
+        return $query->result();
+    }
+     public function actualizarEstado($idEgreso,$estado)
+    {
+         $sql="UPDATE egresos
+            set estado=$estado
+            WHERE idEgresos=$idEgreso          
+            ";
+        $query=$this->db->query($sql);        
+    }
 }
