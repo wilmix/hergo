@@ -49,8 +49,32 @@ class Facturacion_model extends CI_Model
 		$query=$this->db->query($sql);
         
         return ($query->result_array());
-        
-        
+               
 	}
-
+	public function obtenerFactura($idFactura)
+	{
+		$sql="SELECT * from factura Where idFactura=$idFactura";
+		$query=$this->db->query($sql);
+        if($query->num_rows()>0)
+        {
+            $fila=$query->row();
+            return ($fila);
+        }
+        else
+        {
+            return 1;
+        }
+	}
+	public function obtenerDetalleFactura($idFactura)
+	{
+		$sql=" 
+		SELECT f.*, u.Sigla from facturadetalle f 
+		INNER JOIN articulos a
+		ON a.idArticulos=f.articulo
+		INNER JOIN unidad u
+		ON u.idUnidad=a.idUnidad
+		Where idFactura=$idFactura";
+		$query=$this->db->query($sql);        
+        return ($query->result_array());
+	}
 }

@@ -21,7 +21,7 @@
                 <option value="6">VENTAS CAJA</option>
                 <option value="7">NOTA DE ENTREGA</option>
               </select>
-              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalFacturaDetalle">Open Modal</button>
+              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#facPrev">Open Modal</button>
            </div>
 
          <table class="table table-condensed" class="table table-striped"
@@ -48,104 +48,92 @@
 </div>
 
 
-
-
 <!-- Modal -->
-<div id="modalFacturaDetalle" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-95">
+<div id="facPrev" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-        <div class="modal-title" ><h4>
-            <h2><span class="label label-primary" id="nombreModal">Factura</span>
-            <!--<span id="facturadonofacturado">Facturado</span> -->
-            <span class="label label-primary" id="numeromovimiento">546</span> </h2>
-          <!--</h4>-->          
-              
-        </div>
-        
+        <!--<h1 class="modal-title modal-ce">FACTURA</h1>-->
       </div>
       <div class="modal-body">
-         <!-- formulario PRIMERA FILA-->
-          <div class="row"> <!--PRIMERA FILA-->
-             <div class=" col-xs-6 col-sm-6 col-md-3">
-              <label>Almacen:</label>
-              <input id="almacen_fac" type="text" class="form-control" name="almacen_fac" readonly="">
-             </div>
-            <div class=" col-xs-6 col-sm-6 col-md-3">
-              <label for="moneda_fac">Fecha:</label>
-              <input id="tipomov_fac" type="text" class="form-control" name="tipomov_fac" readonly="">
-             </div>
-             <div class="col-xs-6 col-sm-6 col-md-2">
-                <label for="fechamov_fac" >Moneda:</label>
-                <input id="fechamov_fac" type="text" class="form-control" name="fechamov_fac" readonly="">
-             </div>
-             <div class="col-xs-6 col-sm-6 col-md-2">
-                <label for="moneda_fac">Tipo Mov:</label>
-                <input id="moneda_fac" type="text" class="form-control" name="moneda_fac" readonly="">
-
-             </div>
-
-             <div style="position: fixed;right: 0;z-index:9999" class="col-xs-4 col-sm-4 col-md-2">
-                       <label>N° Movimiento:</label>
-                       <table  class="table table-condensed">
-                          <tbody>
-                            <tr class="success">
-                              <td>154</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                 </div>
-
-          </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
-          <div class="row"> <!--SEGUNDA FILA-->
-                 <div class="col-xs-12 col-lg-6 col-md-6">
-                   <label >Cliente:</label>
-                   <input id="cliente_fac" type="text" class="form-control" name="cliente_fac" readonly="">
-                 </div>
-                
-              </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
-              <hr>
-         <table class="table-striped"
-              data-toggle="table"
-              id="tFacturaDetalle">
+        <div class="row">
+          <div class="col-md-4" class="text-center">
+          <img align="center" src="http://localhost:8080/hergo/images/hergo.jpeg" alt="hergo" width="200" height="40">
+          <div id="direction">
+            <p><b>Casa Matriz - 0</b> <br>
+            Av. Montes N° 611 * Zona Challapampa * Casilla 1024 <br>
+            Telfs.:2285837 - 2285854 * Fax 2126283 <br>
+            La Paz - Bolvia </p>
+          </div>
+          </div>
+          <div class="col-md-4" class="text-center">
+          <h1 class="text-center"><b>FACTURA</b></h1>
+          </div>
+          <div class="text-center" class="col-md-4">
+            <p id="nitcss"><b>NIT: 1000991026 </b></p>
+            <p>FACTURA N°: <b>59</b> <br>
+            AUTORIZACION N°: 265656700006546</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8">
+          <p>Lugar y Fecha: <span id="fechaFacturaModal"></span><br>
+          Señor(es): <span id="clienteFactura"></span>  <br>
+          OC/Pedido: OL - <span id="clientePedido"></span></p>
+          </div>
+            <div class="col-md-4">
+            <p class="text-center">NIT/CI:  <b><span id="clienteFacturaNit"></span></b></p>
+            <p id="direction" class="text-center">Actividad economica: VENTA AL POR MAYOR DE MAQUINARIA, EQUIPO Y MATERIALES</p>
+          </div>
+        </div>
+        <div>
+           <table class="table">
+            <thead>
+              <tr>
+                <th>Cantidad</th>
+                <th>Unid.</th>
+                <th>Codigo</th>
+                <th>Articulo</th>
+                <th>Precio Unit.</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="cuerpoTablaFActura">
+            
+            </tbody>
           </table>
-          
-          
-
-          <div class="col-md-6 col-xs-12 pull-right" style="padding: 0px">
-            <div class = "input-group col-md-12 col-xs-12">
-              <span class = "input-group-addon">$</span>
-              <!--mostrar el total dolares factura-->
-              <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="" disabled="">
-              <span class = "input-group-addon">Bs</span>
-              <!--mostrar el total bolivivanos sistema-->
-              <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="totalbsdetalle" disabled="">
-             </div>
+        </div>
+        <div class="row">
+          <div class="col-md-10">
+            <p>SON: <b id="totalTexto"></b></p>
+            <p>NOTA: <span id="notaFactura"></span></p>
+            <br>
+            <br>
+            <p>CODIGO DE CONTROL: 80-45-A6-A3</p>
+            <p>FECHA LIMITE DE EMISIÓN: 13/12/16</p>
           </div>
-          <div class="clearfix"></div>
-          <hr>
-          <div class="row">
-                <div class="col-xs-12 col-md-12">
+          <div class="col-md-2">
+            <p>Total $US:   <span id="totalFacturaSusModal"></span></p>
+            <p>Total Bs: <span id="totalFacturaBsModal"></span></p>
+            <p>T/C <span id="tipoCambioFacturaModal"></span></p>
+            <p>Codigo QR</p>
 
-                  <label for="observaciones_fac">Observaciones:</label>
-                  <input type="text" class="form-control" id="observaciones_fac" name="observaciones_fac" readonly="" /> 
-              </div>
-              
-                
           </div>
-          <div class="clearfix"></div>
+        </div>
 
+  
       </div>
       <div class="modal-footer">
-        <span id="pendienteaprobado"></span>
+        <button type="button" class="btn btn-primary" id="guardarFactura">Grabar Factura</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
 
   </div>
+  
 </div>
 <script>
 $(document).ready(function(){

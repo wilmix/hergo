@@ -72,6 +72,7 @@ class Facturas extends CI_Controller
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/facturasConsulta.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/NumeroALetras.js');
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
@@ -149,7 +150,7 @@ class Facturas extends CI_Controller
         	$alm = addslashes($this->security->xss_clean($this->input->post('alm')));
         	$tipo = addslashes($this->security->xss_clean($this->input->post('tipo')));
 			
-			$tabla=$this->Facturacion_model->Listar($ini,$fin,$alm);
+			$tabla=$this->FacturaEgresos_model->Listar($ini,$fin,$alm,$tipo);
 			
 			echo json_encode($tabla);
 		}
@@ -565,6 +566,21 @@ class Facturas extends CI_Controller
 			$estado=2;
 		$this->egresos_model->actualizarEstado($idEgreso,$estado);
 		echo $estado;
+	}
+	public function mostrarDetalleFactura()
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$idFactura= addslashes($this->security->xss_clean($this->input->post('idFactura')));
+			$obj=new stdclass();
+			$obj->data1=$this->Facturacion_model->obtenerFactura($idFactura);
+			$obj->data2=$this->Facturacion_model->obtenerDetalleFactura($idFactura);
+			echo json_encode($obj);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
 	}
 }
 

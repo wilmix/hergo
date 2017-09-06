@@ -92,7 +92,7 @@ function retornarTablaFacturacion()
             },
        
             {
-                field:'nmovimiento',
+                field:'nmov',
                 title:"Moviemiento",
                 sortable:true,
                 class:"col-sm-1",
@@ -104,6 +104,7 @@ function retornarTablaFacturacion()
                 title:"Fecha",
                 class:"col-sm-1",
                 sortable:true,
+                formatter: formato_fecha_corta,
             },
             {
                 field:'Ncliente',
@@ -113,7 +114,7 @@ function retornarTablaFacturacion()
                 visible:false
             },
             {
-                field:'cliente',
+                field:'ClienteFactura',
                 title:"Cliente",                
                 class:"col-sm-4",         
                 sortable:true,
@@ -128,14 +129,15 @@ function retornarTablaFacturacion()
                 field:'estado',
                 title:"Estado",
                 width: '7%',
-                sortable:true,                
+                sortable:true,
+                formatter: formatoEstadoFactura                
             },           
             {
                 title: 'Acciones',
                 align: 'center',
                 width: '10%',
-              //  events: operateEvents,
-              //  formatter: operateFormatter
+                events: eventosBotones,                
+                formatter: formatoBotones
             }]
             
         });
@@ -146,6 +148,108 @@ function retornarTablaFacturacion()
     var err = textStatus + ", " + error;
     console.log( "Request Failed: " + err );
     });
+}
+function formatoBotones(value, row, index)
+{
+    return [
+        '<button type="button" class="btn btn-default verFactura"  aria-label="Right Align">',
+        '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
+        '<button type="button" class="btn btn-default "  aria-label="Right Align">',
+        '<span class="fa fa-times " aria-hidden="true"></span></button>',
+
+    ].join('');
+}
+function formatoEstadoFactura(value, row, index)
+{
+    $ret=''
+
+    if(row.anulado==1)
+    {        
+        $ret='<span class="label label-warning">ANULADO</span>';
+    }
+    else
+    {
+        if(value==0)
+            $ret='<span class="label label-danger">No facturado</span>';
+        if(value==1)
+            $ret='<span class="label label-success">T. Facturado</span>';
+        if(value==2)
+            $ret='<span class="label label-info">Facturado Parcial</span>';
+    }
     
+    return ($ret);
+}
+
+window.eventosBotones = {
+    'click .verFactura': function (e, value, row, index) {          
+    //console.log(row);
+        verFacturaModal(row);
+    },
+    'click .quitardetabla': function (e, value, row, index) {          
+     QuitardeTabla(row.idEgresos);
+    },      
+};
+function verFacturaModal(row)
+{     
+    var data={
+        idFactura:row.idFactura
+    }
+     $.ajax({
+        type:"POST",
+        url: base_url('index.php/facturas/mostrarDetalleFactura'),
+        dataType: "json",
+        data:data
+    }).done(function(res){
+        console.log(res)
+        mostrardatosmodal(res);
+       
+      // calcularTotalFactura();
+    }).fail(function( jqxhr, textStatus, error ) {
+    var err = textStatus + ", " + error;
+    console.log( "Request Failed: " + err );
+    }); 
+}
+function mostrardatosmodal(data)
+{
+
+    $("#cuerpoTablaFActura").html("");
+
+        var totalfact=0;
+        $.each(data.data2,function(index, value){   
+            totalfact+=parseFloat(value.facturaCantidad*value.facturaPUnitario);
+            var row =' <tr>'+
+                    '<td>'+value.facturaCantidad+'</td>'+
+                    '<td>'+value.Sigla+'</td>'+
+                    '<td>'+value.ArticuloCodigo+'</td>'+
+                    '<td>'+value.ArticuloNombre+'</td>'+
+                    '<td>'+value.facturaPUnitario+'</td>'+
+                    '<td>'+value.facturaCantidad*value.facturaPUnitario+'</td>'+
+                  '</tr>'
+            $("#cuerpoTablaFActura").append(row);
+        });
+        /******LUGAR y fecha*****/
+        var fecha=data.data1.fechaFac;  
+        var fechaFormato = moment(fecha, 'YYYY-MM-DD');
+        var dia=fechaFormato.format("DD");
+        var mes=fechaFormato.format("MMMM");
+        var anio=fechaFormato.format("YYYY");    
+        var LugarFecha=("La Paz, "+dia+" de "+mes+" de "+anio);
+        $("#fechaFacturaModal").html(LugarFecha);
+        $("#clienteFactura").html(data.data1.ClienteFactura)
+        $("#clienteFacturaNit").html(data.data1.ClienteNit)
+        $("#notaFactura").html(data.data1.glosa)        
+        $("#facPrev").modal("show"); 
+
+        console.log("REVISAR TIPO DE CAMBIO GUARDADO EN EL MOMENTO DE FACTURA")
+         /****************Bs**************/
+        $("#totalFacturaBs").val(totalfact);    
+        /*************SUS***************/
+        $("#totalFacturaSus").val(totalfact/glob_tipoCambio);
+        /***********LITERAL**************/
+        $("#totalTexto").html(NumeroALetras(totalfact));
+        /**********************************/
+        $("#totalFacturaBsModal").html(totalfact);
+        $("#totalFacturaSusModal").html(totalfact/glob_tipoCambio);
+        $("#tipoCambioFacturaModal").html(glob_tipoCambio);
 
 }
