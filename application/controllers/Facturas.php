@@ -177,6 +177,7 @@ class Facturas extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+
 	public function retornarTabla2()
 	{
 		
@@ -576,6 +577,19 @@ class Facturas extends CI_Controller
 			$obj->data1=$this->Facturacion_model->obtenerFactura($idFactura);
 			$obj->data2=$this->Facturacion_model->obtenerDetalleFactura($idFactura);
 			echo json_encode($obj);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function anularFactura()
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$idFactura= addslashes($this->security->xss_clean($this->input->post('idFactura')));			
+			$this->Facturacion_model->anularFactura($idFactura);
+			echo json_encode(1);
 		}
 		else
 		{

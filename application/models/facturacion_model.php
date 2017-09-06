@@ -44,7 +44,8 @@ class Facturacion_model extends CI_Model
             $sql.=" and e.almacen=$alm";                
        
             $sql.="
-            ORDER BY e.idFactura DESC";
+            ORDER BY e.idFactura DESC           
+            ";
        
 		$query=$this->db->query($sql);
         
@@ -53,7 +54,10 @@ class Facturacion_model extends CI_Model
 	}
 	public function obtenerFactura($idFactura)
 	{
-		$sql="SELECT * from factura Where idFactura=$idFactura";
+		$sql="SELECT f.*,t.tipocambio cambiovalor from factura f
+		INNER JOIN tipocambio t 
+		ON f.tipoCambio=t.id
+		Where f.idFactura=$idFactura";
 		$query=$this->db->query($sql);
         if($query->num_rows()>0)
         {
@@ -76,5 +80,13 @@ class Facturacion_model extends CI_Model
 		Where idFactura=$idFactura";
 		$query=$this->db->query($sql);        
         return ($query->result_array());
+	}
+	public function anularFactura($idFactura)
+	{
+		$sql="UPDATE factura set anulada=1 where idFactura=$idFactura";
+       
+		$query=$this->db->query($sql);
+        
+        return $query;
 	}
 }

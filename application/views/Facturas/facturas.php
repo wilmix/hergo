@@ -21,7 +21,7 @@
                 <option value="6">VENTAS CAJA</option>
                 <option value="7">NOTA DE ENTREGA</option>
               </select>
-              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#facPrev">Open Modal</button>
+             
            </div>
 
          <table class="table table-condensed" class="table table-striped"
@@ -97,8 +97,8 @@
                 <th>Unid.</th>
                 <th>Codigo</th>
                 <th>Articulo</th>
-                <th>Precio Unit.</th>
-                <th>Total</th>
+                <th class="text-right">Precio Unit.</th>
+                <th class="text-right">Total</th>
               </tr>
             </thead>
             <tbody id="cuerpoTablaFActura">
@@ -127,7 +127,7 @@
   
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="guardarFactura">Grabar Factura</button>
+     
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
       </div>
     </div>

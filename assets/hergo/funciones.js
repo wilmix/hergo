@@ -188,6 +188,11 @@ function asignarselect(text1,select)
         return aux.toUpperCase() == text1.toUpperCase();
     }).prop('selected', true);
 }
+function formato_moneda(value, row, index)
+{       
+    num=Math.round(value * 100) / 100
+    return (formatNumber.new(num));   
+}
 /*******************formato de numeros***************/
 var formatNumber = {
 

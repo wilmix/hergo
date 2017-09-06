@@ -179,8 +179,8 @@ div.collapse {
                 <th>Unid.</th>
                 <th>Codigo</th>
                 <th>Articulo</th>
-                <th>Precio Unit.</th>
-                <th>Total</th>
+                 <th class="text-right">Precio Unit.</th>
+                <th class="text-right">Total</th>
               </tr>
             </thead>
             <tbody id="cuerpoTablaFActura">

@@ -65,7 +65,7 @@ $(document).on("change","#tipo_filtro",function(){
 function retornarTablaFacturacion()
 {
 
-
+    agregarcargando();
     ini=iniciofecha.format('YYYY-MM-DD')
     fin=finfecha.format('YYYY-MM-DD')
     alm=$("#almacen_filtro").val()
@@ -77,6 +77,7 @@ function retornarTablaFacturacion()
         dataType: "json",
         data: {ini:ini,fin:fin,alm:alm,tipo:tipo},
     }).done(function(res){
+        quitarcargando();
        //datosselect= restornardatosSelect(res)
         $("#tfacturas").bootstrapTable('destroy');
         $('#tfacturas').bootstrapTable({
@@ -646,8 +647,8 @@ function calcularTotalFactura()
     /***********LITERAL**************/
     $("#totalTexto").html(NumeroALetras(total));
     /**********************************/
-    $("#totalFacturaBsModal").html(total);
-    $("#totalFacturaSusModal").html(total/glob_tipoCambio);
+    $("#totalFacturaBsModal").html(formato_moneda(total));
+    $("#totalFacturaSusModal").html(formato_moneda(total/glob_tipoCambio));
     $("#tipoCambioFacturaModal").html(glob_tipoCambio);
 }
 $(document).on("click","#crearFactura",function(){
@@ -666,8 +667,8 @@ $(document).on("click","#crearFactura",function(){
                 '<td>'+value.Sigla+'</td>'+
                 '<td>'+value.CodigoArticulo+'</td>'+
                 '<td>'+value.Descripcion+'</td>'+
-                '<td>'+value.punitario+'</td>'+
-                '<td>'+value.total+'</td>'+
+                '<td class="text-right">'+formato_moneda(value.punitario)+'</td>'+
+                '<td class="text-right">'+formato_moneda(value.total)+'</td>'+
               '</tr>'
         $("#cuerpoTablaFActura").append(row);
 

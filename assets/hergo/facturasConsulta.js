@@ -60,6 +60,7 @@ $(document).on("change","#tipo_filtro",function(){
 
 function retornarTablaFacturacion()
 {
+     agregarcargando();
     ini=iniciofecha.format('YYYY-MM-DD')
     fin=finfecha.format('YYYY-MM-DD')
     alm=$("#almacen_filtro").val()
@@ -71,6 +72,7 @@ function retornarTablaFacturacion()
         dataType: "json",
         data: {ini:ini,fin:fin,alm:alm,tipo:tipo},
     }).done(function(res){
+         quitarcargando();
        //datosselect= restornardatosSelect(res)
         $("#facturasConsulta").bootstrapTable('destroy');
         $('#facturasConsulta').bootstrapTable({
@@ -118,12 +120,14 @@ function retornarTablaFacturacion()
                 title:"Cliente",                
                 class:"col-sm-4",         
                 sortable:true,
+
             },
             {
                 field:'total',
                 title:"Total",                
                 sortable:true,
-                
+                align: 'right',
+                formatter:formato_moneda,
             },
             {
                 field:'estado',
@@ -154,7 +158,7 @@ function formatoBotones(value, row, index)
     return [
         '<button type="button" class="btn btn-default verFactura"  aria-label="Right Align">',
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-        '<button type="button" class="btn btn-default "  aria-label="Right Align">',
+        '<button type="button" class="btn btn-default anularFactura"  aria-label="Right Align">',
         '<span class="fa fa-times " aria-hidden="true"></span></button>',
 
     ].join('');
@@ -163,7 +167,7 @@ function formatoEstadoFactura(value, row, index)
 {
     $ret=''
 
-    if(row.anulado==1)
+    if(row.anulada==1)
     {        
         $ret='<span class="label label-warning">ANULADO</span>';
     }
@@ -185,10 +189,41 @@ window.eventosBotones = {
     //console.log(row);
         verFacturaModal(row);
     },
-    'click .quitardetabla': function (e, value, row, index) {          
-     QuitardeTabla(row.idEgresos);
+    'click .anularFactura': function (e, value, row, index) {         
+    swal({
+      title: "Esta seguro?",
+      text: "Se anulara la factura seleccionada",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Si, continuar",
+      cancelButtonText: "Cancelar",
+  
+    },
+    function(){
+      anularFactura(row);
+    }); 
+        
     },      
 };
+function anularFactura(row)
+{
+     var data={
+        idFactura:row.idFactura
+    }
+     $.ajax({
+        type:"POST",
+        url: base_url('index.php/facturas/anularFactura'),
+        dataType: "json",
+        data:data
+    }).done(function(res){        
+       retornarTablaFacturacion();
+      
+    }).fail(function( jqxhr, textStatus, error ) {
+    var err = textStatus + ", " + error;
+    console.log( "Request Failed: " + err );
+    }); 
+}
 function verFacturaModal(row)
 {     
     var data={
@@ -218,12 +253,12 @@ function mostrardatosmodal(data)
         $.each(data.data2,function(index, value){   
             totalfact+=parseFloat(value.facturaCantidad*value.facturaPUnitario);
             var row =' <tr>'+
-                    '<td>'+value.facturaCantidad+'</td>'+
+                    '<td>'+formato_moneda(value.facturaCantidad)+'</td>'+
                     '<td>'+value.Sigla+'</td>'+
                     '<td>'+value.ArticuloCodigo+'</td>'+
                     '<td>'+value.ArticuloNombre+'</td>'+
-                    '<td>'+value.facturaPUnitario+'</td>'+
-                    '<td>'+value.facturaCantidad*value.facturaPUnitario+'</td>'+
+                    '<td class="text-right">'+formato_moneda(value.facturaPUnitario)+'</td>'+
+                    '<td class="text-right">'+formato_moneda(value.facturaCantidad*value.facturaPUnitario)+'</td>'+
                   '</tr>'
             $("#cuerpoTablaFActura").append(row);
         });
@@ -239,17 +274,15 @@ function mostrardatosmodal(data)
         $("#clienteFacturaNit").html(data.data1.ClienteNit)
         $("#notaFactura").html(data.data1.glosa)        
         $("#facPrev").modal("show"); 
-
+        tipocambioFactura=data.data1.cambiovalor;
         console.log("REVISAR TIPO DE CAMBIO GUARDADO EN EL MOMENTO DE FACTURA")
-         /****************Bs**************/
-        $("#totalFacturaBs").val(totalfact);    
-        /*************SUS***************/
-        $("#totalFacturaSus").val(totalfact/glob_tipoCambio);
+      
         /***********LITERAL**************/
         $("#totalTexto").html(NumeroALetras(totalfact));
         /**********************************/
-        $("#totalFacturaBsModal").html(totalfact);
-        $("#totalFacturaSusModal").html(totalfact/glob_tipoCambio);
-        $("#tipoCambioFacturaModal").html(glob_tipoCambio);
+        $("#totalFacturaBsModal").html(formato_moneda(totalfact));
+        $("#totalFacturaSusModal").html(formato_moneda(totalfact/tipocambioFactura));
+        $("#tipoCambioFacturaModal").html(tipocambioFactura);
+
 
 }

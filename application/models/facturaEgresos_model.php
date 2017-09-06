@@ -43,7 +43,9 @@ class FacturaEgresos_model extends CI_Model
             $sql.=" and e.tipomov=$tipo";            
        
             $sql.="
-            ORDER BY f.idFactura DESC";
+             GROUP BY fe.idFactura
+            ORDER BY f.idFactura DESC
+            ";
        
 		$query=$this->db->query($sql);
         
