@@ -89,7 +89,7 @@ function retornarTablaFacturacion()
             //height:"550", error con filtros
             //clickToSelect:true,
             search:true,
-            //strictSearch:true,
+            filter:true,
             searchOnEnterKey:true,
             filter:true,
             showColumns:true,
@@ -101,6 +101,7 @@ function retornarTablaFacturacion()
                 title: 'N',
                 align: 'center',
                 sortable:true,
+                filter: {type: "input"}
             },
        
             {
@@ -110,12 +111,14 @@ function retornarTablaFacturacion()
                 sortable:true,
                 align: 'center',
                 formatter: formato_fecha_corta,
+
             },
             {
                 field:'nombreCliente',
                 title:"Cliente",
                 width: '17%',
                 sortable:true,
+                filter: {type: "input"}
             },
             {
                 field:'total',
@@ -123,13 +126,15 @@ function retornarTablaFacturacion()
                 width: '7%',
                 align: 'right',
                 sortable:true,
-                formatter: operateFormatter3
+                formatter: operateFormatter3,
+           
             },
             {
                 field:'sigla',
                 title:"TipoMov",
                 width: '7%',
                 sortable:true,
+                filter: {type: "input"}
                 
             },
             {
@@ -137,6 +142,7 @@ function retornarTablaFacturacion()
                 title:"N Mov",
                 width: '7%',
                 sortable:true,
+      
                 
             },
             {
@@ -153,7 +159,11 @@ function retornarTablaFacturacion()
                 width: '7%',
                 sortable:true,
                 align: 'center',
-                formatter: operateFormatter2
+                formatter: operateFormatter2,
+                filter: {
+                    type: "select",
+                    data:["No facturado","Parcial"]
+                },
             },                  
             {
                 field:"autor",
@@ -859,6 +869,7 @@ $(document).on("click",".editable-click",function(){
 })
 $(document).on("click","#guardarFactura",function()
 {
+    agregarcargando();
     var tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
     tabla3factura=JSON.stringify(tabla3factura);
     var datos={
@@ -882,7 +893,11 @@ $(document).on("click","#guardarFactura",function()
                 swal({
                     title: "Agregado!",
                     text: "Datos almacenados correctamente",
-                    type: "success",                                                  
+                    type: "success",
+                    closeOnConfirm: false                                                
+                    },
+                    function(){
+                        location.reload();
                     })
 
            }
