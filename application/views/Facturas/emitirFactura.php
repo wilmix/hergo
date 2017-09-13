@@ -35,7 +35,7 @@ div.collapse {
          </div>
 
          <table
-            data-height="250"
+            data-height="350"
             id="tfacturas"
             data-toolbar="#toolbar2"
             >              

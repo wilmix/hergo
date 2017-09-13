@@ -263,9 +263,9 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
 
     }*/
     descuento=cant*costo*descuento/100;
-    costo=cant*costo;
+    costo=costo;
     
-    total=costo-descuento;    
+    total=(cant*costo)-descuento;   
     
     //console.log("cant",cant,"* costo",costo,"=",total)
     
