@@ -92,7 +92,25 @@ function retornarTablaFacturacion()
                 title: 'lote',                            
                 visible:false,
             },
-       
+            //agregado para que muestre el tipo de movimiento (NOTA DE EGRESO = NE o VENTA CAJA =)
+            {
+                field:'tMov',
+                title:"Tipo",
+                sortable:true,
+                visible:false,
+                class:"col-sm-1",
+                align: 'center',
+                
+            },
+            //agregado para que muestre el numero de factura 
+            {
+                field:'nFac',
+                title:"N° Fac",
+                sortable:true,
+                class:"col-sm-1",
+                align: 'center',
+                
+            },
             {
                 field:'nmov',
                 title:"Moviemiento",
