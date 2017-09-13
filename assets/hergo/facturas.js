@@ -605,6 +605,7 @@ function AgregarTabla(dato)
            // $("#valuecliente").val(res.cliente);           
             //$("#valueidcliente").val(res.idCliente);
              agregarRegistrosTabla2(res.detalle);
+             $("#idAlm").val(res.alm);
            
        }
        else
@@ -662,7 +663,50 @@ function calcularTotalFactura()
     $("#tipoCambioFacturaModal").html(glob_tipoCambio);
 }
 $(document).on("click","#crearFactura",function(){
+    var tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
+    if(tabla3factura.length>0)
+    {
+        var datos={
+            idAlmacen:$("#idAlm").val(),
+            tipoFacturacion:$("#tipoFacturacion").val(),
+            fechaFactura:$("#fechaFactura").val()
+        }
+        console.log(datos)
+         $.ajax({
+            type:"POST",
+            url: base_url('index.php/facturas/consultarDatosFactura'),
+            dataType: "json",
+            data: datos,
+        }).done(function(res){
+            
+           if(res.response)
+           {
+              vistaPreviaFactura()          
+           }
+           else
+           {
+                var error="";
+                $.each(res.error,function(index,value){
+                    error+=value+"\n";
+                })
+       
+                swal("Error", error,"error")
+           }
+        }).fail(function( jqxhr, textStatus, error ) {
+        var err = textStatus + ", " + error;
+        console.log( "Request Failed: " + err );
+        });
+    }
     
+   
+})
+$(document).on("click",".agregarTodos",function(){
+
+    var tabla2detalle=$("#tabla2detalle").bootstrapTable('getData');    
+        AgregarRegistroTabla3Array(tabla2detalle)            
+})
+function vistaPreviaFactura()
+{
     var tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
     if(tabla3factura.length>0)
     {
@@ -696,14 +740,7 @@ $(document).on("click","#crearFactura",function(){
         $("#facPrev").modal("show");    
 
     }
-   
-})
-$(document).on("click",".agregarTodos",function(){
-
-    var tabla2detalle=$("#tabla2detalle").bootstrapTable('getData');    
-        AgregarRegistroTabla3Array(tabla2detalle)            
-})
-
+}
 function AgregarRegistroTabla3Array(row)
 {
     //si no existe ningun registro agregar de cualquier cliente //registro

@@ -48,9 +48,9 @@ div.collapse {
              
               Fecha Factura:
               <input  type="date" value="<?php echo $fecha ?>" id="fechaFactura">
-              <select class="btn btn-default btn-sm" id="">
-                <option class="success">QR</option>
-                <option >MANUAL</option>
+              <select class="btn btn-default btn-sm" id="tipoFacturacion">
+                <option class="success" value="0">QR</option>
+                <option value="1">MANUAL</option>
               </select>
               <select class="btn btn-default btn-sm"  id="moneda">
                 <option class="success" value="1">Bolivianos</option>
@@ -63,6 +63,7 @@ div.collapse {
           <div class="clearfix"></div>
           <input id="valuecliente"  class="hidden">
           <input id="valueidcliente"  class="hidden">
+          <input id="idAlm"  class="hidden">
 <hr>
 
         

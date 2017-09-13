@@ -234,10 +234,12 @@ class Facturas extends CI_Controller
 			//$cookienew=$this->encriptar($cookienew);
 			//set_cookie('factsistemhergo',$cookienew,'3600'); 	
 			$egresoDetalle=$this->egresos_model->mostrarDetalleFacturas($idegreso)->result();
+			$datosEgreso=$this->egresos_model->retornarEgreso($idegreso);
 			$mensaje="Datos cargados correctamente";
 			$obj2=new stdclass();
 			$obj2->detalle=$egresoDetalle;
 			$obj2->mensaje=$mensaje;
+			$obj2->alm=$datosEgreso->almacen;
 			echo json_encode($obj2);
 		}
 		else
@@ -596,6 +598,54 @@ class Facturas extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	public function consultarDatosFactura()
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$idAlmacen= ($this->security->xss_clean($this->input->post('idAlmacen')));			
+        	$tipoFacturacion= ($this->security->xss_clean($this->input->post('tipoFacturacion')));
+        	$fechaFactura= ($this->security->xss_clean($this->input->post('fechaFactura')));
+        	
+        	//$idAlmacen=$this->session->userdata('idalmacen');//para usuarios no administradores
+			$resultado=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
+			$errores=array();
+			$obj=new stdclass();
+			$obj->detalle=$resultado;
+			$obj->response=true;
+
+			if(!$this->validarFechaLimite($resultado->fechaLimite, $fechaFactura))
+			{
+				$obj->response=false;
+				$obj->resultado=null;
+				array_push($errores, "Error fecha limite de emision");
+			}
+			if(!$this->validarLimiteFactura($resultado->hasta))
+			{
+				$obj->response=false;
+				$obj->resultado=null;
+				array_push($errores, "Error limite de facturas");
+			}
+			$obj->error=$errores;
+			echo json_encode($obj);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	private function validarFechaLimite($fechalimite, $fechaactual) 
+	{
+	    $flimite = strtotime($fechalimite);
+	    $factual = strtotime($fechaactual);
+	    return (($factual <= $flimite));
+	}
+	private function validarLimiteFactura($hasta)
+	{
+		$ultimaFactura=$this->Facturacion_model->obtenerRegistro();
+		$actual=intval($ultimaFactura->nFactura)+1;
+		return($actual<=$hasta);
+	}
+
 }
 
 

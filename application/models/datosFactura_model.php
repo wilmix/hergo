@@ -22,5 +22,28 @@ class DatosFactura_model extends CI_Model
             return 1;
         }
 	}
+	public function obtenerUltimoLote2($idAlmacen, $tipoFacturacion) 
+	{
+		/*
+		Tipo de facturacion: 
+			manual=1
+			QR=0
+		*/
+		$sql="SELECT * 
+			FROM datosfactura 
+			WHERE almacen = $idAlmacen
+			AND manual=$tipoFacturacion
+			ORDER BY idDatosFactura desc Limit 1";
+		$query=$this->db->query($sql);
+        if($query->num_rows()>0)
+        {
+            $fila=$query->row();
+            return ($fila);
+        }
+        else
+        {
+            return false;
+        }
+	}
 	
 }

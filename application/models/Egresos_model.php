@@ -75,6 +75,24 @@ class Egresos_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
 	}
+    public function retornarEgreso($id)
+    {
+        $sql="SELECT *
+        FROM egresos e        
+        WHERE e.idEgresos=$id";     
+
+        $query=$this->db->query($sql);
+        if($query->num_rows()>0)
+        {
+            $fila=$query->row();
+            return $fila;
+        }
+        else
+        {
+
+            return false;
+        }
+    }
     public function mostrarDetalleFacturas($id)//lista todos los detalles de un egreso
     {
         $sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario1, e.punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal
