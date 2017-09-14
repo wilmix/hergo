@@ -45,5 +45,13 @@ class DatosFactura_model extends CI_Model
             return false;
         }
 	}
+	public function actualizarEnUso($idDatosFactura)
+	{
+		$sql="UPDATE datosFactura set enUso=1 where idDatosFactura=$idDatosFactura";
+       
+		$query=$this->db->query($sql);
+        
+        return $query;
+	}
 	
 }

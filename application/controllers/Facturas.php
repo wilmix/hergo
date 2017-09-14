@@ -478,16 +478,42 @@ class Facturas extends CI_Controller
 	        	$cookie=json_decode((get_cookie('factsistemhergo')));  	        	
 	        	$cliente=$this->cliente_model->obtenerCliente($cookie->cliente);
         	}
-        	$datosFactura=$this->DatosFactura_model->obtenerUltimoLote();   
-        	$ultimaFactura=$this->Facturacion_model->obtenerRegistro();
-        //	var_dump($datosFactura);
-        //	die();
+        	$tipoFacturacion= ($this->security->xss_clean($this->input->post('tipoFacturacion')));
+        	$fechaFac=addslashes($this->security->xss_clean($this->input->post('fechaFac')));
+
+        	//$idAlmacen= ($this->security->xss_clean($this->input->post('idAlmacen')));	//para seleccionar almacen si es administrador
+        	$idAlmacen=$this->session->userdata('idalmacen');//si no es usuario administrador solo guarda segun su almacen asignado
+        	
+        	 
+        	$datosFactura=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
+        	$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$tipoFacturacion);
+        	/*VALIDAR FECHA*/
+        	if(!$this->validarFechaLimite($datosFactura->fechaLimite, $fechaFac))
+			{
+				echo 0;
+				die();
+			}
+			/*VALIDAR LIMITE FACTURA*/
+			if(!$this->validarLimiteFactura($datosFactura->hasta, $ultimaFactura))
+			{
+				echo 0;
+				die();
+			}
+			if($datosFactura->enUso==0)
+			{				
+				$numeroFactura=$datosFactura->desde;
+				$this->DatosFactura_model->actualizarEnUso($datosFactura->idDatosFactura);
+			}
+			else
+			{
+				$numeroFactura=intval($ultimaFactura->nFactura)+1;
+			}
         	$factura=new stdclass();
         	//$factura->idFactura=0
         	$factura->lote=$datosFactura->lote;
-        	$factura->almacen=$this->session->userdata('idalmacen');
-        	$factura->nFactura=intval($ultimaFactura->nFactura)+1;
-        	$factura->fechaFac= addslashes($this->security->xss_clean($this->input->post('fechaFac')));
+        	$factura->almacen=$idAlmacen;
+        	$factura->nFactura=$numeroFactura;
+        	$factura->fechaFac= $fechaFac;
         	$factura->cliente=$cliente->idCliente;
         	$factura->moneda= addslashes($this->security->xss_clean($this->input->post('moneda')));
         	$factura->total= addslashes($this->security->xss_clean($this->input->post('total')));
@@ -608,6 +634,7 @@ class Facturas extends CI_Controller
         	
         	//$idAlmacen=$this->session->userdata('idalmacen');//para usuarios no administradores
 			$resultado=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
+			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$tipoFacturacion);
 			$errores=array();
 			$obj=new stdclass();
 			$obj->detalle=$resultado;
@@ -619,13 +646,14 @@ class Facturas extends CI_Controller
 				$obj->resultado=null;
 				array_push($errores, "Error fecha limite de emision");
 			}
-			if(!$this->validarLimiteFactura($resultado->hasta))
+			if(!$this->validarLimiteFactura($resultado->hasta, $ultimaFactura))
 			{
 				$obj->response=false;
 				$obj->resultado=null;
 				array_push($errores, "Error limite de facturas");
 			}
 			$obj->error=$errores;
+			$obj->nfac=intval($ultimaFactura->nFactura)+1;
 			echo json_encode($obj);
 		}
 		else
@@ -639,9 +667,9 @@ class Facturas extends CI_Controller
 	    $factual = strtotime($fechaactual);
 	    return (($factual <= $flimite));
 	}
-	private function validarLimiteFactura($hasta)
+	private function validarLimiteFactura($hasta,$ultimaFactura)
 	{
-		$ultimaFactura=$this->Facturacion_model->obtenerRegistro();
+		
 		$actual=intval($ultimaFactura->nFactura)+1;
 		return($actual<=$hasta);
 	}

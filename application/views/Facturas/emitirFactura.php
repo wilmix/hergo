@@ -156,9 +156,9 @@ div.collapse {
           <h1 class="text-center"><b>FACTURA</b></h1>
           </div>
           <div class="text-center" class="col-md-4">
-            <p id="nitcss"><b>NIT: 1000991026 </b></p>
-            <p>FACTURA N°: <b>59</b> <br>
-            AUTORIZACION N°: 265656700006546</p>
+            <p id="nitcss"><b>NIT: <span id="fNit">1000991026 </span></b></p>
+            <p>FACTURA N°: <b id="fnumero"></b> <br>
+            AUTORIZACION N°: <span id="fauto"></span></p>
           </div>
         </div>
         <div class="row">

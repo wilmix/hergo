@@ -681,7 +681,8 @@ $(document).on("click","#crearFactura",function(){
             
            if(res.response)
            {
-              vistaPreviaFactura()          
+                agregarDatosFactura(res);
+                vistaPreviaFactura()          
            }
            else
            {
@@ -700,6 +701,13 @@ $(document).on("click","#crearFactura",function(){
     
    
 })
+function agregarDatosFactura(res)
+{
+    console.log(res);
+    $("#fNit").html(res.detalle.nit);
+    $("#fnumero").html(res.nfac);
+    $("#fauto").html(res.detalle.autorizacion)
+}
 $(document).on("click",".agregarTodos",function(){
 
     var tabla2detalle=$("#tabla2detalle").bootstrapTable('getData');    
@@ -915,6 +923,7 @@ $(document).on("click","#guardarFactura",function()
         moneda:$("#moneda").val(),
         total:$("#totalFacturaBs").val(),
         observaciones:$("#observacionesFactura").val(),
+        tipoFacturacion:$("#tipoFacturacion").val(),
         tabla:tabla3factura,
     
     }
