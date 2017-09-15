@@ -121,7 +121,14 @@ class Facturas extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-table-editable.js');
 			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.js');
-            
+            /*************CODIGO CONTROL***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/AllegedRC4.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Base64SIN.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/ControlCode.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Verhoeff.js');
+			/***********************************/
+			/*************CODIGO QR***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/qrcode.min.js');
             //$this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
             //$this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
 

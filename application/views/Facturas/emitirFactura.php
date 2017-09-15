@@ -195,15 +195,16 @@ div.collapse {
             <p>NOTA: <span id="notaFactura"></span></p>
             <br>
             <br>
-            <p>CODIGO DE CONTROL: 80-45-A6-A3</p>
+            <p>CODIGO DE CONTROL: <span id="codigoControl">-------</span></p>
             <p>FECHA LIMITE DE EMISIÓN: 13/12/16</p>
           </div>
           <div class="col-md-2">
+            <input id="totalsinformatobs" class="hidden">
             <p>Total $US:   <span id="totalFacturaSusModal"></span></p>
             <p>Total Bs: <span id="totalFacturaBsModal"></span></p>
             <p>T/C <span id="tipoCambioFacturaModal"></span></p>
-            <p>Codigo QR</p>
-
+           
+            <div id="qrcodeimg"></div>
           </div>
         </div>
 
@@ -221,3 +222,8 @@ div.collapse {
 
 
 <table id="table"></table>
+<script>
+
+    
+  
+</script>

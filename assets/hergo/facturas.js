@@ -659,6 +659,7 @@ function calcularTotalFactura()
     $("#totalTexto").html(NumeroALetras(total));
     /**********************************/
     $("#totalFacturaBsModal").html(formato_moneda(total));
+    $("#totalsinformatobs").val(total);
     $("#totalFacturaSusModal").html(formato_moneda(total/glob_tipoCambio));
     $("#tipoCambioFacturaModal").html(glob_tipoCambio);
 }
@@ -680,9 +681,9 @@ $(document).on("click","#crearFactura",function(){
         }).done(function(res){
             
            if(res.response)
-           {
+           {                
+                vistaPreviaFactura();
                 agregarDatosFactura(res);
-                vistaPreviaFactura()          
            }
            else
            {
@@ -703,10 +704,17 @@ $(document).on("click","#crearFactura",function(){
 })
 function agregarDatosFactura(res)
 {
-    console.log(res);
+    
     $("#fNit").html(res.detalle.nit);
     $("#fnumero").html(res.nfac);
-    $("#fauto").html(res.detalle.autorizacion)
+    $("#fauto").html(res.detalle.autorizacion);
+    var datos={
+        nit:$("#clienteFacturaNit").html(),
+        fecha:$("#fechaFactura").val(),
+        monto:$("#totalsinformatobs").val()
+    }
+    console.log(datos);
+    codigoControl(res,datos);
 }
 $(document).on("click",".agregarTodos",function(){
 
@@ -957,3 +965,53 @@ $(document).on("click","#guardarFactura",function()
     });
     
 })
+function codigoControl(res,datos)
+    {
+          
+            var autor    = res.detalle.autorizacion;
+            var nFactura = res.nfac;
+            var idNIT    = datos.nit;
+            var fecha    = datos.fecha;
+            var monto    = datos.monto;
+            var llave    = res.detalle.llaveDosificacion;
+            var nitCasa  = res.detalle.nit;
+          
+            var gestion = fecha.substring(0, 4);
+            var mes     = fecha.substring(5, 7);
+            var dia     = fecha.substring(8, 11);
+
+            fecha = gestion + mes + dia;
+           
+            console.log(autor,
+                        nFactura,
+                        idNIT,
+                        fecha,
+                        monto,
+                        llave);
+
+            codigo = generateControlCode(
+                        autor,
+                        nFactura,
+                        idNIT,
+                        fecha,
+                        monto,
+                        llave
+                     );
+        
+            
+            $('#codigoControl').html(codigo)
+            var gestion = fecha.substring(0, 4);
+            var mes     = fecha.substring(4, 6);
+            var dia     = fecha.substring(6, 8);
+
+            var codigoqr = (nitCasa + "|" + nFactura + "|" + autor + "|" + dia + "/" + mes + "/" + gestion + "|" + monto+ "|" + monto +"|" + codigo +"|" + idNIT + "|0|0|0|0");
+          
+            $("#micapa").html(codigoqr);
+           // $("#qr").html(codigoqr);
+           $("#qrcodeimg").html("");
+            new QRCode(document.getElementById("qrcodeimg"), {
+              text: codigoqr,
+              width: 128,
+              height: 128,
+            });        
+    }
