@@ -196,7 +196,7 @@ div.collapse {
             <br>
             <br>
             <p>CODIGO DE CONTROL: <span id="codigoControl">-------</span></p>
-            <p>FECHA LIMITE DE EMISIÓN: 13/12/16</p>
+            <p>FECHA LIMITE DE EMISIÓN: <span id="fechaLimiteEmision"></span></p>
           </div>
           <div class="col-md-2">
             <input id="totalsinformatobs" class="hidden">

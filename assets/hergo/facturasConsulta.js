@@ -104,7 +104,7 @@ function retornarTablaFacturacion()
             },
             //agregado para que muestre el numero de factura 
             {
-                field:'nFac',
+                field:'nFactura',
                 title:"N° Fac",
                 sortable:true,
                 class:"col-sm-1",
@@ -112,7 +112,7 @@ function retornarTablaFacturacion()
                 
             },
             {
-                field:'nmov',
+                field:'movimientos',
                 title:"Moviemiento",
                 sortable:true,
                 class:"col-sm-1",

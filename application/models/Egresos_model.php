@@ -249,7 +249,8 @@ class Egresos_model extends CI_Model
             from factura_egresos fe
             inner join factura f
             on fe.idFactura=f.idFactura
-            where fe.idegresos=$id_egreso";
+            where fe.idegresos=$id_egreso
+            Group by fe.idFactura";
         $query=$this->db->query($sql);
         $res=$query->result_array();
         return $res;

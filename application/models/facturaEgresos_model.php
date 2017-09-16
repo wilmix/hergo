@@ -31,8 +31,10 @@ class FacturaEgresos_model extends CI_Model
 	public function Listar($ini,$fin,$alm=0,$tipo=0)
 	{
 		$sql="
-		SELECT * 
-		FROM factura_egresos fe
+		SELECT *, GROUP_CONCAT(DISTINCT e.nmov
+					ORDER BY e.nmov ASC
+					SEPARATOR ' - ') as movimientos
+		FROM factura_egresos fe 
 		INNER JOIN egresos e on e.idegresos=fe.idegresos
 		INNER JOIN factura f on f.idFactura=fe.idFactura
 		WHERE f.fechaFac
@@ -46,6 +48,7 @@ class FacturaEgresos_model extends CI_Model
              GROUP BY fe.idFactura
             ORDER BY f.idFactura DESC
             ";
+       // die($sql);
        
 		$query=$this->db->query($sql);
         

@@ -261,11 +261,11 @@ function mostrarTablaDetalle(res)
                 formatter: operateFormatter3,             
             },
             {
-                field:'total',
+                
                 title:"Total",
                 align: 'right',
                 class:"col-sm-1",
-                formatter: operateFormatter3                                
+                formatter: totalTabla2                                
             },
             {
                 
@@ -453,6 +453,10 @@ function operateFormatter3(value, row, index)
 {       
     num=Math.round(value * 100) / 100
     return (formatNumber.new(num));   
+}
+function totalTabla2(value, row, index)
+{           
+    return (operateFormatter3(row.punitario*row.cantidadReal));   
 }
 
 window.operateEvents = {
@@ -708,6 +712,7 @@ function agregarDatosFactura(res)
     $("#fNit").html(res.detalle.nit);
     $("#fnumero").html(res.nfac);
     $("#fauto").html(res.detalle.autorizacion);
+    $("#fechaLimiteEmision").html(formato_fecha_corta(res.detalle.fechaLimite))
     var datos={
         nit:$("#clienteFacturaNit").html(),
         fecha:$("#fechaFactura").val(),
