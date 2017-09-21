@@ -38,7 +38,7 @@ class Facturacion_model extends CI_Model
         }
         else
         {
-            return 1;
+            return false;
         }
 	}
 	public function Listar($ini,$fin,$alm)

@@ -642,11 +642,24 @@ class Facturas extends CI_Controller
         	//$idAlmacen=$this->session->userdata('idalmacen');//para usuarios no administradores
 			$resultado=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
 			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$tipoFacturacion);
+			
 			$errores=array();
 			$obj=new stdclass();
 			$obj->detalle=$resultado;
 			$obj->response=true;
-
+			if(!$resultado)
+			{
+				$obj->response=false;
+				$obj->resultado=null;
+				array_push($errores, "No se tiene un lote para este almacen");
+			}
+			/*if(!$ultimaFactura)
+			{
+				$obj->response=false;
+				$obj->resultado=null;
+				array_push($errores, "Error no se uso el ultimo lote de facturas");
+				
+			}*/
 			if(!$this->validarFechaLimite($resultado->fechaLimite, $fechaFactura))
 			{
 				$obj->response=false;
@@ -660,7 +673,10 @@ class Facturas extends CI_Controller
 				array_push($errores, "Error limite de facturas");
 			}
 			$obj->error=$errores;
-			$obj->nfac=intval($ultimaFactura->nFactura)+1;
+			if(!$ultimaFactura)
+				$obj->nfac=$resultado->desde;
+			else
+				$obj->nfac=intval($ultimaFactura->nFactura)+1;
 			echo json_encode($obj);
 		}
 		else
@@ -676,7 +692,8 @@ class Facturas extends CI_Controller
 	}
 	private function validarLimiteFactura($hasta,$ultimaFactura)
 	{
-		
+		if(!$ultimaFactura)
+			return true;
 		$actual=intval($ultimaFactura->nFactura)+1;
 		return($actual<=$hasta);
 	}

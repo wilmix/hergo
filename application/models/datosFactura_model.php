@@ -19,7 +19,7 @@ class DatosFactura_model extends CI_Model
         }
         else
         {
-            return 1;
+            return 0;
         }
 	}
 	public function obtenerUltimoLote2($idAlmacen, $tipoFacturacion) 
