@@ -45,6 +45,27 @@ class DatosFactura_model extends CI_Model
             return false;
         }
 	}
+	public function obtenerLote($lote) 
+	{
+		/*
+		Tipo de facturacion: 
+			manual=1
+			QR=0
+		*/
+		$sql="SELECT * 
+			FROM datosfactura 
+			WHERE lote=$lote";
+		$query=$this->db->query($sql);
+        if($query->num_rows()>0)
+        {
+            $fila=$query->row();
+            return ($fila);
+        }
+        else
+        {
+            return false;
+        }
+	}
 	public function actualizarEnUso($idDatosFactura)
 	{
 		$sql="UPDATE datosFactura set enUso=1 where idDatosFactura=$idDatosFactura";

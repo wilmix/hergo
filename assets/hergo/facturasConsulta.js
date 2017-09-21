@@ -204,8 +204,10 @@ function formatoEstadoFactura(value, row, index)
 
 window.eventosBotones = {
     'click .verFactura': function (e, value, row, index) {          
-    //console.log(row);
+    //console.log(row);        
+        agregarDatosInicialesFacturaModal(row);
         verFacturaModal(row);
+
     },
     'click .anularFactura': function (e, value, row, index) {         
     swal({
@@ -241,6 +243,42 @@ function anularFactura(row)
     var err = textStatus + ", " + error;
     console.log( "Request Failed: " + err );
     }); 
+}
+function agregarDatosInicialesFacturaModal(row)
+{
+    var data={
+        nFactura:row.nFactura,
+        lote:row.lote,
+    }
+     $.ajax({
+        type:"POST",
+        url: base_url('index.php/facturas/mostrarDatosFactura'),
+        dataType: "json",
+        data:data
+    }).done(function(res){
+        if(res.response)
+        {
+            agregarDatosFacturaModal(res,row);
+        }      
+    }).fail(function( jqxhr, textStatus, error ) {
+    var err = textStatus + ", " + error;
+    console.log( "Request Failed: " + err );
+    }); 
+}
+function agregarDatosFacturaModal(res,row)
+{
+    
+    $("#fNit").html(res.detalle.nit);
+    $("#fnumero").html(res.nfac);
+    $("#fauto").html(res.detalle.autorizacion);
+    $("#fechaLimiteEmision").html(formato_fecha_corta(res.detalle.fechaLimite))
+    var datos={
+        nit:row.ClienteNit,
+        fecha:row.fechaFac,
+        monto:row.total,
+    }
+  //  console.log(datos);
+    codigoControl(res,datos);
 }
 function verFacturaModal(row)
 {     

@@ -73,9 +73,9 @@
           <h1 class="text-center"><b>FACTURA</b></h1>
           </div>
           <div class="text-center" class="col-md-4">
-            <p id="nitcss"><b>NIT: 1000991026 </b></p>
-            <p>FACTURA N°: <b>59</b> <br>
-            AUTORIZACION N°: 265656700006546</p>
+            <p id="nitcss"><b>NIT: <span id="fNit">1000991026 </span></b></p>
+            <p>FACTURA N°: <b id="fnumero"></b> <br>
+            AUTORIZACION N°: <span id="fauto"></span></p>
           </div>
         </div>
         <div class="row">
@@ -97,7 +97,7 @@
                 <th>Unid.</th>
                 <th>Codigo</th>
                 <th>Articulo</th>
-                <th class="text-right">Precio Unit.</th>
+                 <th class="text-right">Precio Unit.</th>
                 <th class="text-right">Total</th>
               </tr>
             </thead>
@@ -112,22 +112,23 @@
             <p>NOTA: <span id="notaFactura"></span></p>
             <br>
             <br>
-            <p>CODIGO DE CONTROL: 80-45-A6-A3</p>
-            <p>FECHA LIMITE DE EMISIÓN: 13/12/16</p>
+            <p>CODIGO DE CONTROL: <span id="codigoControl">-------</span></p>
+            <p>FECHA LIMITE DE EMISIÓN: <span id="fechaLimiteEmision"></span></p>
           </div>
           <div class="col-md-2">
+            <input id="totalsinformatobs" class="hidden">
             <p>Total $US:   <span id="totalFacturaSusModal"></span></p>
             <p>Total Bs: <span id="totalFacturaBsModal"></span></p>
             <p>T/C <span id="tipoCambioFacturaModal"></span></p>
-            <p>Codigo QR</p>
-
+           
+            <div id="qrcodeimg"></div>
           </div>
         </div>
 
   
       </div>
       <div class="modal-footer">
-     
+       
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
       </div>
     </div>

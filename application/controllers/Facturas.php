@@ -71,6 +71,7 @@ class Facturas extends CI_Controller
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/facturasConsulta.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/NumeroALetras.js');
 			/**************INPUT MASK***************/
@@ -78,6 +79,14 @@ class Facturas extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
 
+ 			/*************CODIGO CONTROL***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/AllegedRC4.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Base64SIN.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/ControlCode.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Verhoeff.js');
+			/***********************************/
+			/*************CODIGO QR***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/qrcode.min.js');
             
             //$this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
             //$this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
@@ -684,6 +693,25 @@ class Facturas extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	public function mostrarDatosFactura()
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$nFact= ($this->security->xss_clean($this->input->post('nFactura')));
+        	$lote= ($this->security->xss_clean($this->input->post('lote')));
+			$resultado=$this->DatosFactura_model->obtenerLote($lote);
+			$errores=array();
+			$obj=new stdclass();
+			$obj->detalle=$resultado;
+			$obj->nfac=$nFact;
+			$obj->response=true;
+			echo json_encode($obj);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 	private function validarFechaLimite($fechalimite, $fechaactual) 
 	{
 	    $flimite = strtotime($fechalimite);
@@ -697,7 +725,6 @@ class Facturas extends CI_Controller
 		$actual=intval($ultimaFactura->nFactura)+1;
 		return($actual<=$hasta);
 	}
-
 }
 
 
