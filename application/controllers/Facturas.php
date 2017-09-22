@@ -545,7 +545,7 @@ class Facturas extends CI_Controller
         	$factura->fecha=date('Y-m-d H:i:s');        	
         	$tabla= ($this->security->xss_clean($this->input->post('tabla')));
         	$tabla=json_decode($tabla);
-        	
+        	//var_dump($tabla);
         	$idFactura=$this->Facturacion_model->guardar($factura);
         	//$idFactura=1;
 
@@ -568,6 +568,7 @@ class Facturas extends CI_Controller
 	        			'movTipo'=>"",
 	        			'ArticuloNombre'=>$fila->Descripcion,
 	        			'ArticuloCodigo'=>$fila->CodigoArticulo,
+	        			'idEgresoDetalle'=>$fila->idEgreDetalle,
 	        			 );	
 	        		array_push($detalle, $registro);   
 	        		$factura_egresoRegistro=array(
@@ -632,13 +633,31 @@ class Facturas extends CI_Controller
 		if($this->input->is_ajax_request())
         {
         	$idFactura= addslashes($this->security->xss_clean($this->input->post('idFactura')));			
+        	
+        	$facturaEgresos=$this->FacturaEgresos_model->obtenerPorFactura($idFactura);
+
 			$this->Facturacion_model->anularFactura($idFactura);
+			$this->actualizarRestarCantFact($idFactura);
+			$this->actualizarEstado($facturaEgresos->idegresos);
+
 			echo json_encode(1);
 		}
 		else
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
+	}
+	private function actualizarRestarCantFact($idFactura)
+	{
+		$obj=new stdclass();		
+		$facturaDetalle=$this->Facturacion_model->obtenerDetalleFactura($idFactura);		
+		foreach ($facturaDetalle as $fila) 
+		{
+			
+			if($fila["idEgresoDetalle"]!=null)
+				$this->egresos_model->actualizarRestarCantFact($fila["idEgresoDetalle"],$fila["facturaCantidad"]);		
+		}		
+		
 	}
 	public function consultarDatosFactura()
 	{

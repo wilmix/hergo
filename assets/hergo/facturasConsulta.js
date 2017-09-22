@@ -173,13 +173,27 @@ function retornarTablaFacturacion()
 }
 function formatoBotones(value, row, index)
 {
-    return [
+    if(row.anulada==1)
+    {
+        return [
         '<button type="button" class="btn btn-default verFactura"  aria-label="Right Align">',
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
+        '<button type="button" class="btn btn-default "  disabled aria-label="Right Align">',
+        '<span class="fa fa-times " aria-hidden="true"></span></button>',
+
+        ].join('');    
+    }
+    else
+    {
+        return [
+        '<button type="button" class="btn btn-default verFactura"  aria-label="Right Align">',
+        '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',        
         '<button type="button" class="btn btn-default anularFactura"  aria-label="Right Align">',
         '<span class="fa fa-times " aria-hidden="true"></span></button>',
 
-    ].join('');
+        ].join('');    
+    }
+    
 }
 function formatoEstadoFactura(value, row, index)
 {

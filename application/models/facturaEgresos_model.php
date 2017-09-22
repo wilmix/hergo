@@ -56,5 +56,25 @@ class FacturaEgresos_model extends CI_Model
         
         
 	}
+	public function obtenerPorFactura($idFactura)
+	{
+		$sql="SELECT *
+            FROM factura_egresos
+            WHERE idFactura=$idFactura
+            limit 1 
+            ";
+        $query=$this->db->query($sql);
+        if($query->num_rows()>0)
+        {                   
+             $fila=$query->row();
+            return ($fila); 
+        }
+        else
+        {
+            return false;
+        }    
 
+
+      
+	}
 }
