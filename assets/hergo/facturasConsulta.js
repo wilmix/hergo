@@ -94,7 +94,7 @@ function retornarTablaFacturacion()
             },
             //agregado para que muestre el tipo de movimiento (NOTA DE EGRESO = NE o VENTA CAJA =)
             {
-                field:'tMov',
+                field:'sigla',
                 title:"Tipo",
                 sortable:true,
                 visible:false,
@@ -127,7 +127,7 @@ function retornarTablaFacturacion()
                 formatter: formato_fecha_corta,
             },
             {
-                field:'Ncliente',
+                field:'ClienteNit',
                 title:"N° Cliente",                
                 class:"col-sm-1",                                
                 sortable:true,
@@ -180,7 +180,6 @@ function formatoBotones(value, row, index)
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
         '<button type="button" class="btn btn-default "  disabled aria-label="Right Align">',
         '<span class="fa fa-times " aria-hidden="true"></span></button>',
-
         ].join('');    
     }
     else
@@ -190,7 +189,6 @@ function formatoBotones(value, row, index)
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',        
         '<button type="button" class="btn btn-default anularFactura"  aria-label="Right Align">',
         '<span class="fa fa-times " aria-hidden="true"></span></button>',
-
         ].join('');    
     }
     

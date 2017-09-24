@@ -45,7 +45,8 @@ div.collapse {
 
           <div>
             <form class="pull-right">
-             
+              Nombre Cliente:
+              <input  type="text" value="" id="nombreCliente" disabled="">
               Fecha Factura:
               <input  type="date" value="<?php echo $fecha ?>" id="fechaFactura">
               <select class="btn btn-default btn-sm" id="tipoFacturacion">

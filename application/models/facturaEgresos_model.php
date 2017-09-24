@@ -37,6 +37,7 @@ class FacturaEgresos_model extends CI_Model
 		FROM factura_egresos fe 
 		INNER JOIN egresos e on e.idegresos=fe.idegresos
 		INNER JOIN factura f on f.idFactura=fe.idFactura
+		INNER JOIN tmovimiento t on e.tipomov=t.id
 		WHERE f.fechaFac
 		BETWEEN '$ini' AND '$fin'";        
         if($alm>0)         

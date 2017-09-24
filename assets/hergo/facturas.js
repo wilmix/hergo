@@ -391,11 +391,12 @@ function mostrarTablaFactura()
                 formatter: operateFormatter3,
             },
             {
-                field:'total',
+                
                 title:"Total",
                 align: 'right',
                 class:"col-sm-1", 
-                formatter: operateFormatter3                               
+               // formatter: operateFormatter3,                               
+                formatter:totalTabla2,
             },
             {
                 
@@ -455,7 +456,8 @@ function operateFormatter3(value, row, index)
     return (formatNumber.new(num));   
 }
 function totalTabla2(value, row, index)
-{           
+{    
+  
     return (operateFormatter3(row.punitario*row.cantidadReal));   
 }
 
@@ -539,6 +541,9 @@ function quitarTodosElementosTabla3()
         $.each($("#tabla2detalle").find("tbody tr"),function(index,value){    
             $(value).removeClass("danger");
         }) 
+        $("#nombreCliente").val("");   
+        $("#valuecliente").val("");   
+        $("#valueidcliente").val("");        
         calcularTotalFactura();
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
@@ -563,7 +568,8 @@ function AgregarRegistroTabla3(row,index)
     }).done(function(res){
        if(res.detalle)
        {
-        console.log(res.detalle)
+        //console.log(res.detalle)
+            $("#nombreCliente").val(res.cliente);   
             $("#valuecliente").val(res.cliente);   
             $("#valueidcliente").val(res.idCliente);        
          //   swal({
@@ -606,8 +612,7 @@ function AgregarTabla(dato)
     }).done(function(res){
        if(res.detalle)
        {
-           // $("#valuecliente").val(res.cliente);           
-            //$("#valueidcliente").val(res.idCliente);
+           
              agregarRegistrosTabla2(res.detalle);
              $("#idAlm").val(res.alm);
            
@@ -781,7 +786,8 @@ function AgregarRegistroTabla3Array(row)
        {
            // console.log(res)
             
-            $("#valuecliente").val(res.cliente);           
+            $("#valuecliente").val(res.cliente);   
+            $("#nombreCliente").val(res.cliente);          
             $("#valueidcliente").val(res.idCliente);           
 
          
