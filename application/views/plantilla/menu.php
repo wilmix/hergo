@@ -125,8 +125,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">Consulta Pagos</a></li>
-            <li><a href="#">Recibir Pagos</a></li>
+            <li><a href="<?php echo base_url("Pagos/index") ?>">Consulta Pagos</a></li>
+            <li><a href="<?php echo base_url("Pagos/RecibirPago") ?>">Recibir Pagos</a></li>
             <li><a href="#">Modificar Pagos</a></li>
           </ul>
         </li>
