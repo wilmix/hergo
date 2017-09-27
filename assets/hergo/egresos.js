@@ -282,7 +282,7 @@ window.operateEvents = {
       }
       else
       {
-        swal("Error", "No se puede editar el registro seleccionado","error")
+        swal("Error", "No se puede editar el registro seleccionado. El registro ya se encuentra Facturado.","error")
       }        
     },
     'click .imprimirIngreso': function (e, value, row, index) {

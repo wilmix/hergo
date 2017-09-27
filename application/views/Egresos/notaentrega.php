@@ -95,8 +95,17 @@ input[type=date]::-webkit-inner-spin-button {
                   </select>
                </div>
                <div class="col-xs-12 col-sm-6 col-md-2">
+                <!-- AGREGAR VENDEDOR EN VES DE NUM DE MOVIMIENTO
                   <label for="fechamov_ne" ># Movimiento:</label>
-                  <input id="nmov_ne" type="number" class="form-control" name="nmov_ne" placeholder="# Movimiento" disabled value="<?= ($cont)?$dcab->n:""  ?>"/>
+                  <input id="nmov_ne" type="number" class="form-control" name="nmov_ne" placeholder="# Movimiento" disabled value="<?= ($cont)?$dcab->n:""  ?>"/>-->
+                  <!--AGREGAR NOMBRES DE VENDEDORES SEGUN TABLA DE USER  -->
+                   <label for="fechamov_ne" ># Vendedor:</label>
+                   <select class="form-control form-control-sm" id="vendedor_ne" name="vendedor_ne" tabindex=4>
+                    <option value="1">VENDEDOR 1</option>
+                    <option value="2">VENDEDOR 2 </option>
+                    <option value="2">VENDEDOR 3 </option>
+                  </select>
+                  
                </div>
             </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
             <div class="row filacabecera"> <!--SEGUNDA FILA-->
@@ -253,15 +262,14 @@ input[type=date]::-webkit-inner-spin-button {
             <div class="row">
                 <div class="col-xs-12">
                 <?php if ($cont): ?>
-                    <button type="button" class="btn btn-primary" id="actualizarMovimiento">Actualizar Movimiento</button>                                            
+                    <button type="button" class="btn btn-primary" id="actualizarMovimiento">Actualizar Movimiento</button>
+                    <button type="button" class="btn btn-warning" id="anularMovimientoEgreso">Anular Movimiento</button>
                     <button type="button" class="btn btn-danger" id="cancelarMovimiento">Cancelar Movimiento</button>
+
                 <?php else: ?>
                     <button type="button" class="btn btn-primary" id="guardarMovimiento" tabindex=11>Guardar Movimiento</button>
                     <button type="button" class="btn btn-danger" id="cancelarMovimiento" tabindex=12>Cancelar Movimiento</button>
                 <?php endif ?>
-
-                
-
               </div>
             </div>
         </form>

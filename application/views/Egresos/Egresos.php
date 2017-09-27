@@ -156,7 +156,7 @@
             <div class = "input-group col-md-12 col-xs-12">
               <span class = "input-group-addon">$</span>
               <!--mostrar el total bolivianos factura-->
-              <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="" disabled="">
+              <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="totalsusdetalle" disabled="">
               <span class = "input-group-addon">Bs</span>
               <!--mostrar el total bolivivanos sistema-->
               <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="totalbsdetalle" disabled="">
