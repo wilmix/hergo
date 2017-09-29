@@ -13,7 +13,7 @@ class Egresos_model extends CI_Model
 		if($id==null) //no tiene id de entrada
         {
 		  $sql="
-			SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,c.documento
+			SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,c.documento,e.tipocambio
 			FROM egresos e
 			INNER JOIN egredetalle d
 			on e.idegresos=d.idegreso
@@ -39,7 +39,7 @@ class Egresos_model extends CI_Model
             FROM ingresos i*/
         {            
              $sql="
-            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido,c.documento
+            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido,c.documento,e.tipocambio
             FROM egresos e
             INNER JOIN egredetalle d
             on e.idegresos=d.idegreso
