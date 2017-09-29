@@ -9,6 +9,7 @@ class Egresos extends CI_Controller
 		$this->load->helper('url');
 		$this->load->model("ingresos_model");
 		$this->load->model("egresos_model");
+		$this->load->model("cliente_model");
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
 		$this->cabeceras_css=array(
@@ -73,6 +74,7 @@ class Egresos extends CI_Controller
             $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
             $this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
 
+
 			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();
 
 			$this->load->view('plantilla/head.php',$this->datos);
@@ -103,6 +105,60 @@ class Egresos extends CI_Controller
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/notasEntrega.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/clientes.js');
+            /**************INPUT MASK***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+
+			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
+
+			$this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
+            $this->datos['tegreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
+		  	$this->datos['fecha']=date('Y-m-d');
+		  	$this->datos['clientes']=$this->ingresos_model->retornar_tabla("clientes");
+		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
+
+		  	//clientes
+
+		  	$this->datos['tipodocumento']=$this->cliente_model->retornar_tabla("documentotipo");			
+			$this->datos['tipocliente']=$this->cliente_model->retornar_tabla("clientetipo");
+			
+			//$this->datos['opcion']="Compras locales";
+			$this->datos['idegreso']=7;
+
+			$this->load->view('plantilla/head.php',$this->datos);
+			$this->load->view('plantilla/header.php',$this->datos);
+			$this->load->view('plantilla/menu.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('egresos/notaentrega.php',$this->datos);
+			$this->load->view('plantilla/footcontainer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
+	}
+
+	//nuevo para VENTAS CAJA
+	public function VentasCaja()
+	{
+		if(!$this->session->userdata('logeado'))
+			redirect('auth', 'refresh');
+
+			$this->datos['menu']="Egresos";
+			$this->datos['opcion']="Ventas Caja";
+			$this->datos['titulo']="Ventas Caja";
+
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
+            /*************AUTOCOMPLETE**********/
+            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
+			/***************SELECT***********/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
+			/**************FUNCION***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/notasEntrega.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/clientes.js');
             /**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
@@ -117,14 +173,61 @@ class Egresos extends CI_Controller
 		  	$this->datos['clientes']=$this->ingresos_model->retornar_tabla("clientes");
 		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
 			
-			$this->datos['opcion']="Compras locales";
-			$this->datos['idegreso']=7;
+			//$this->datos['opcion']="Compras locales";
+			$this->datos['idegreso']=6;
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('egresos/notaentrega.php',$this->datos);
+			$this->load->view('egresos/ventasCaja.php',$this->datos);
+			$this->load->view('plantilla/footcontainer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
+	}
+
+		//nuevo para BAJA DE PRODUCTO
+	public function BajaProducto()
+	{
+		if(!$this->session->userdata('logeado'))
+			redirect('auth', 'refresh');
+
+			$this->datos['menu']="Egresos";
+			$this->datos['opcion']="Baja de Producto";
+			$this->datos['titulo']="Baja de Producto";
+
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
+            /*************AUTOCOMPLETE**********/
+            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
+			/***************SELECT***********/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
+			/**************FUNCION***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/notasEntrega.js');
+            /**************INPUT MASK***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+
+			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
+
+			$this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
+            $this->datos['tegreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
+		  	$this->datos['fecha']=date('Y-m-d');
+		  	$this->datos['clientes']=$this->ingresos_model->retornar_tabla("clientes");
+		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
+			
+			//$this->datos['opcion']="Compras locales";
+			$this->datos['idegreso']=9;
+
+			$this->load->view('plantilla/head.php',$this->datos);
+			$this->load->view('plantilla/header.php',$this->datos);
+			$this->load->view('plantilla/menu.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('egresos/bajaProducto.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
