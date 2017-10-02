@@ -30,7 +30,7 @@ $(document).ready(function()
     });*/
     setTipoCambio();
 })
-var glob_tipoCambio=6.96;   
+var glob_tipoCambio=0;   
 function setTipoCambio()
 {
      $.ajax({

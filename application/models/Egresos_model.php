@@ -302,7 +302,7 @@ class Egresos_model extends CI_Model
                     //echo $totalbs." ";
                     $punitariobs=$punitariobs*$tipocambiovalor;
                    // echo $punitariobs." ";
-                    $totaldoc=$totaldoc*$tipocambiovalor;
+                    //$totaldoc=$totaldoc*$tipocambiovalor;
                    // echo $totaldoc." ";
                 }
          

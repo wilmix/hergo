@@ -2,6 +2,7 @@ var glob_factorIVA=0.87;
 var glob_factorRET=0.087;
 var loc_almacen;
 var glob_guardar=false;
+var glob_precio_egreso=0;
 $(document).ready(function(){    
     loc_almacen= $("#almacen_imp").val();    
 })
@@ -125,9 +126,11 @@ $( function() {
             success: function(data) {
                 //response(data);                   
                 console.log(data)
+                glob_precio_egreso=data.precio;
                 $("#costo_ne").val(data.precio);
                 $("#saldo_ne").val(data.ncantidad);              
                 $("#punitario_ne").val(data.precio);
+                cambiarMoneda()
             }
           });    
          //fin agregar costo articulo
@@ -533,3 +536,23 @@ $(document).on("click","#recuperarMovimiento",function(){
     limpiarCabecera();
     limpiarTabla();
 })
+
+$(document).on("change","#moneda_ne",function(){
+    cambiarMoneda()
+    
+})
+
+function cambiarMoneda()
+{
+    if ($("#moneda_ne").val()==1) 
+    {
+        $(".costo_ne_label").html("Precio Bs")
+        $(".punitario_ne_class").val(glob_precio_egreso)   
+
+    }
+    else
+    {
+        $(".costo_ne_label").html("Precio Dolares")
+        $(".punitario_ne_class").val(glob_precio_egreso/glob_tipoCambio)
+    }
+}
