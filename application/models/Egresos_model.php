@@ -146,7 +146,14 @@ class Egresos_model extends CI_Model
     	$pedido_ne=$datos['pedido_ne'];
     	$obs_ne=$datos['obs_ne'];
     
-        $tipocambio=$this->retornarTipoCambio();
+        $tipocambio=$this->retornarTipoCambio();      
+
+        $tipocambiov=$this->retornarValorTipoCambio();
+  
+        $tipocambiovalor=$tipocambiov->tipocambio;
+
+
+
 
         
         $gestion= date("Y", strtotime($fechamov_ne));
@@ -157,20 +164,32 @@ class Egresos_model extends CI_Model
     	$sql="INSERT INTO egresos (almacen,tipomov,nmov,fechamov,cliente,moneda,obs,tipocambio,autor,fecha,plazopago,clientePedido) VALUES('$almacen_ne','$tipomov_ne','$nummov','$fechamov_ne','$idCliente','$moneda_ne','$obs_ne','$tipocambio','$autor','$fecha','$fechapago_ne','$pedido_ne')";
     	$query=$this->db->query($sql);
     	$idEgreso=$this->db->insert_id();
+      // var_dump($idEgreso);
+       // die();
     	if($idEgreso>0)/**Si se guardo correctamente se guarda la tabla*/
     	{
             
     		foreach ($datos['tabla'] as $fila) {
     			//print_r($fila);
     			$idArticulo=$this->retornar_datosArticulo($fila[0]);    			
-                $totalbs=$fila[6];
-                $punitariobs=$fila[5];
-                $totaldoc=$fila[4];
+              
+                $totalbs=$fila[5];
+                $punitariobs=$fila[3];
     			if($idArticulo)
     			{
-    				$sql="INSERT INTO egredetalle(idegreso,nmov,articulo,moneda,cantidad,punitario,total,descuento) VALUES('$idEgreso','0','$idArticulo','$moneda_ne','$fila[2]','$fila[3]','$fila[5]','$fila[4]')";
+                    if($moneda_ne==2) //convertimos en bolivianos si la moneda es dolares
+                    {
+                        $totalbs=$totalbs*$tipocambiovalor;                       
+                        $punitariobs=$punitariobs*$tipocambiovalor;
+                    
+                    }
+    			//	$sql="INSERT INTO egredetalle(idegreso,nmov,articulo,moneda,cantidad,punitario,total,descuento) VALUES('$idEgreso','0','$idArticulo','$moneda_ne','$fila[2]','$fila[3]','$fila[5]','$fila[4]')";
+                    $sql="INSERT INTO egredetalle(idegreso,nmov,articulo,moneda,cantidad,punitario,total,descuento) VALUES('$idEgreso','0','$idArticulo','$moneda_ne','$fila[2]','$punitariobs','$totalbs','$fila[4]')";
     				$this->db->query($sql);
     			}
+                // $sql="INSERT INTO ingdetalle(idIngreso,articulo,moneda,cantidad,punitario,total) VALUES('$idingresoimportacion','$idArticulo','$moneda_imp','$fila[2]','$fila[3]','$fila[4]')";
+               
+                
     		}
     		//return true;
             return $idEgreso;
@@ -302,7 +321,10 @@ class Egresos_model extends CI_Model
                     //echo $totalbs." ";
                     $punitariobs=$punitariobs*$tipocambiovalor;
                    // echo $punitariobs." ";
+
                    // $totaldoc=$totaldoc*$tipocambiovalor;
+
+
                    // echo $totaldoc." ";
                 }
          

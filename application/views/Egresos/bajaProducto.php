@@ -94,40 +94,19 @@ input[type=date]::-webkit-inner-spin-button {
                     <option value="2" <?= ($idmoneda==2)?"selected":"" ?>>DOLARES </option>
                   </select>
                </div>
-               <div class="col-xs-12 col-sm-6 col-md-2">
-                <!-- AGREGAR VENDEDOR EN VES DE NUM DE MOVIMIENTO
-                  <label for="fechamov_ne" ># Movimiento:</label>
-                  <input id="nmov_ne" type="number" class="form-control" name="nmov_ne" placeholder="# Movimiento" disabled value="<?= ($cont)?$dcab->n:""  ?>"/>-->
-                  <!--AGREGAR NOMBRES DE VENDEDORES SEGUN TABLA DE USER  -->
-                   <label for="fechamov_ne" ># Vendedor:</label>
-                   <select class="form-control form-control-sm" id="vendedor_ne" name="vendedor_ne" tabindex=4>
-                    <option value="1">VENDEDOR 1</option>
-                    <option value="2">VENDEDOR 2 </option>
-                    <option value="2">VENDEDOR 3 </option>
-                  </select>
-                  
+
+               <div class="col-xs-4 col-sm-4 col-md-2">
+                  <label>Pedido Cliente:</label>
+                  <input id="pedido_ne" type="text" class="form-control form-control-sm" name="pedido_ne" placeholder=""  tabindex=6 value="<?= ($cont)?$dcab->clientePedido:''  ?>">
                </div>
-            </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
+           </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
+
             <div class="row filacabecera"> <!--SEGUNDA FILA-->
-                   <div class="col-xs-12 col-lg-6 col-md-6">
-                      <label for="articulo_ne" style="float: left;">Cliente:</label><span style="margin-left: 10px;display: none;" id="cargandocliente" ><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
-                     <input class="form-control form-control-sm" type="text" id="cliente_egreso" name="cliente_egreso" value="<?= ($cont)?$dcab->nombreCliente:''  ?>">
-                     <input type="text" readonly="true" name="idCliente" id="idCliente" class="hidden" value="<?= ($cont)?$dcab->idcliente:'0'  ?>">
-                     <div style="right: 22px;top:32px;position: absolute;" id="clientecorrecto"><i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i></div>
-                   </div>
-                   <div class="col-xs-4 col-sm-4 col-md-2">
-                         <label>Pedido Cliente:</label>
-                         <input id="pedido_ne" type="text" class="form-control form-control-sm" name="pedido_ne" placeholder=""  tabindex=6 value="<?= ($cont)?$dcab->clientePedido:''  ?>">
-                   </div>
-                   <div class="col-xs-4 col-sm-4 col-md-2">
-                         <label>Fecha de Pago: </label>
-                         <input id="fechapago_ne" name="fechapago_ne" type="date" class="form-control form-control-sm"  placeholder="Fecha Pago" tabindex=7 value="<?= ($cont)?$dcab->plazopago:''  ?>">
-                   </div>
-                  <div class="col-xs-4 col-md-2">
-                  <label></label>
-                  <button type="button" data-toggle="modal" data-target="#modalcliente" class="form-control btn btn-success" id="botonmodalcliente"  style="margin-top: 4px;" tabindex=8>Añadir Cliente</button>
-                  </div>
-                </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
+
+
+                  
+            </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
+
 
 
                 <hr>
@@ -150,8 +129,8 @@ input[type=date]::-webkit-inner-spin-button {
                   </div>
                   <div class="col-xs-6 col-md-2">
                       <!--mostrar costo promedio ponderado de articulo segun codigo-->
-                     <label class="costo_ne_label" for="costo_ne">Precio Bs:</label>
-                     <input type="text" class="form-control form-control-sm text-right tiponumerico punitario_ne_class" name="costo_ne" id="costo_ne" disabled/>
+                     <label for="costo_ne">Precio Bs:</label>
+                     <input type="text" class="form-control form-control-sm text-right tiponumerico" name="costo_ne" id="costo_ne" disabled/>
                   </div>
                    <div class="col-xs-6 col-md-2">
                       <!--mostrar saldo en almacen de articulo segun codigo-->
@@ -176,8 +155,8 @@ input[type=date]::-webkit-inner-spin-button {
                   </div>
                   <div class="col-xs-4 col-md-2">
                       <!--insertar costo de articulo a ingresar-->
-                      <label class="costo_ne_label">Precio Bs:</label> <!--CAMBIO PARA COMPRAS LOCALES-->
-                      <input type="text" class="form-control form-control-sm tiponumerico punitario_ne_class" id="punitario_ne" name="punitario_ne" tabindex=11/>
+                      <label>Precio Bs:</label> <!--CAMBIO PARA COMPRAS LOCALES-->
+                      <input type="text" class="form-control form-control-sm tiponumerico" id="punitario_ne" name="punitario_ne" tabindex=11/>
                   </div>
                   <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
@@ -270,6 +249,7 @@ input[type=date]::-webkit-inner-spin-button {
               </div>
             </div>
         </form>
+
       </div> <!-- /.box-body -->
     </div> <!-- /.class="box" -->
   </div> <!-- /.class="col-xs-12" -->
@@ -298,6 +278,8 @@ input[type=date]::-webkit-inner-spin-button {
                         <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
                         <select name="tipo_doc" id="tipo_doc" class="form-control selectpicker" >
                           <option value=" " >Selecciona</option>
+
+                         
                         </select>
                       </div>
                     </div>

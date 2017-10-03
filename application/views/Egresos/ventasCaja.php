@@ -114,6 +114,9 @@ input[type=date]::-webkit-inner-spin-button {
                      <input class="form-control form-control-sm" type="text" id="cliente_egreso" name="cliente_egreso" value="<?= ($cont)?$dcab->nombreCliente:''  ?>">
                      <input type="text" readonly="true" name="idCliente" id="idCliente" class="hidden" value="<?= ($cont)?$dcab->idcliente:'0'  ?>">
                      <div style="right: 22px;top:32px;position: absolute;" id="clientecorrecto"><i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i></div>
+
+                      <!-- Busqueda con select cambiar a autocomplete-->
+
                    </div>
                    <div class="col-xs-4 col-sm-4 col-md-2">
                          <label>Pedido Cliente:</label>
@@ -150,8 +153,8 @@ input[type=date]::-webkit-inner-spin-button {
                   </div>
                   <div class="col-xs-6 col-md-2">
                       <!--mostrar costo promedio ponderado de articulo segun codigo-->
-                     <label class="costo_ne_label" for="costo_ne">Precio Bs:</label>
-                     <input type="text" class="form-control form-control-sm text-right tiponumerico punitario_ne_class" name="costo_ne" id="costo_ne" disabled/>
+                     <label for="costo_ne">Precio Bs:</label>
+                     <input type="text" class="form-control form-control-sm text-right tiponumerico" name="costo_ne" id="costo_ne" disabled/>
                   </div>
                    <div class="col-xs-6 col-md-2">
                       <!--mostrar saldo en almacen de articulo segun codigo-->
@@ -176,8 +179,8 @@ input[type=date]::-webkit-inner-spin-button {
                   </div>
                   <div class="col-xs-4 col-md-2">
                       <!--insertar costo de articulo a ingresar-->
-                      <label class="costo_ne_label">Precio Bs:</label> <!--CAMBIO PARA COMPRAS LOCALES-->
-                      <input type="text" class="form-control form-control-sm tiponumerico punitario_ne_class" id="punitario_ne" name="punitario_ne" tabindex=11/>
+                      <label>Precio Bs:</label> <!--CAMBIO PARA COMPRAS LOCALES-->
+                      <input type="text" class="form-control form-control-sm tiponumerico" id="punitario_ne" name="punitario_ne" tabindex=11/>
                   </div>
                   <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
@@ -270,6 +273,7 @@ input[type=date]::-webkit-inner-spin-button {
               </div>
             </div>
         </form>
+
       </div> <!-- /.box-body -->
     </div> <!-- /.class="box" -->
   </div> <!-- /.class="col-xs-12" -->
@@ -298,6 +302,8 @@ input[type=date]::-webkit-inner-spin-button {
                         <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
                         <select name="tipo_doc" id="tipo_doc" class="form-control selectpicker" >
                           <option value=" " >Selecciona</option>
+
+                         
                         </select>
                       </div>
                     </div>

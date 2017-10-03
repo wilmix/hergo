@@ -82,11 +82,25 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="<?php echo base_url("egresos") ?>">Consultas</a></li>
-            <li><a href="#">Venta Caja</a></li>
+            <li><a href="<?php echo base_url("egresos/VentasCaja") ?>">Venta Caja</a></li>
             <li><a href="<?php echo base_url("egresos/notaentrega") ?>">Nota de Entrega</a></li>
-            <li><a href="#">Baja de Producto</a></li>
+            <li><a href="<?php echo base_url("egresos/BajaProducto") ?>">Baja de Producto</a></li>
           </ul>
         </li>
+
+
+        <li class="treeview">
+          <a href="#"><i class="fa fa fa-exchange"></i> <span>Traspasos </span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="<?php echo base_url("Traspasos/index") ?>">Consultas</a></li>
+            <li><a href="<?php echo base_url("Traspasos/traspasoEgreso") ?>">FormTraspaso</a></li>
+         </ul>
+        </li>
+
 
           <li class="treeview">
           <a href="#"><i class="fa fa-money"></i> <span>Facturas</span>
@@ -102,17 +116,7 @@
           </ul>
         </li>
 
-          <li class="treeview">
-          <a href="#"><i class="fa fa fa-exchange"></i> <span>Traspasos </span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="<?php echo base_url("Traspasos/index") ?>">Consultas</a></li>
-            <li><a href="<?php echo base_url("Traspasos/traspasoEgreso") ?>">FormTraspaso</a></li>
-         </ul>
-        </li>
+
 
 
 
