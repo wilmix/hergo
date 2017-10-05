@@ -236,16 +236,16 @@ function calculocompraslocales(cant,costo)
     var ret;    
     var pu//preciounitario
     pu=costo/cant;// calculamos el costo unitario      
-    if($("#nfact_imp").val()!="SF")  //si tiene el texto SF es sin factura         
-        ret=pu*glob_factorIVA; //confactura
-    else                        
-        ret=pu*glob_factorRET+pu; //sinfactura            
-    return ret;
+    //if($("#nfact_imp").val()!="SF")  //si tiene el texto SF es sin factura         
+     //   ret=pu*glob_factorIVA; //confactura
+    //else                        
+    //    ret=pu*glob_factorRET+pu; //sinfactura            
+   // return ret;
 
 }
 function agregarArticulo() //faltaria el id costo; si se guarda en la base primero
 {
-    //idcosto=12;
+
     var codigo=$("#articulo_imp").val();
     var descripcion=$("#Descripcion_ne").val();
     var cant=$("#cantidad_ne").inputmask('unmaskedvalue');
@@ -260,51 +260,64 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     console.log(saldoAlmacen)
 
 
-    if (saldoAlmacen <= 0) 
+   if (saldoAlmacen > 0) 
     {
-        swal("Error", "No se tiene saldo suficiente del articulo. ","error")
+        total=cant*costo;
+        var articulo='<tr>'+ 
+        '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
+        '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
+        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
+        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+  //nuevo P/U Factura                
+        '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
+        '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+'</tr>'
+        $("#tbodyarticulos").append(articulo)
+        $(".tiponumerico").inputmask({
+            alias:"decimal",
+            digits:3,
+            groupSeparator: ',',
+            autoGroup: true
+        });
+        calcularTotal()
+        limpiarArticulo();
     }
     else
     {
-        //swal("Se ejecuta esta bien")
-       
-    //console.log(tipoingreso)
-   /* if(tipoingreso==2)//si es compra local idcompralocal=2
-    {
- 
-        costo=calculocompraslocales(cant,costo)
+          swal
+          ({
+              title: "Atencion!",
+              text: "Su almacen no tiene saldo suficiente",
+              type: "warning",
+              showCancelButton: true,
+              cancelButtonText: "Cancelar",
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "Continuar",},
+              function(isConfirm){
+              if (isConfirm) 
+              {
+                total=cant*costo;
+                var articulo='<tr>'+ 
+                '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
+                '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
+                '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
+                '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+  //nuevo P/U Factura                
+                '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
+                '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+'</tr>'
+                $("#tbodyarticulos").append(articulo)
+                $(".tiponumerico").inputmask({
+                    alias:"decimal",
+                    digits:3,
+                    groupSeparator: ',',
+                    autoGroup: true
+                });
+                calcularTotal();
+                limpiarArticulo();
+              }
 
-    }*/
-   // descuento=cant*costo*descuento/100;
-   
-    total=cant*costo;
-    
-    
-    
-    //console.log("cant",cant,"* costo",costo,"=",total)
-    
-    //var articulo='<tr caid="'+idcosto+'">'+ //costo articulo id
-   // var punitfac=cant==0?0:(totalfac/cant);
-    var articulo='<tr>'+ 
-            '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
-            '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+  //nuevo P/U Factura                
-            '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
-            
-            '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+
-        '</tr>'
-    $("#tbodyarticulos").append(articulo)
-    $(".tiponumerico").inputmask({
-        alias:"decimal",
-        digits:3,
-        groupSeparator: ',',
-        autoGroup: true
-    });
-    calcularTotal()
-    limpiarArticulo();
+        });
     }
-} 
+   
+}
+
 $(document).on("keyup","#cantidad_imp,#punitario_imp",function(){
     var cant=$("#cantidad_imp").inputmask('unmaskedvalue');
     var costo=$("#punitario_imp").inputmask('unmaskedvalue'); 
@@ -375,8 +388,13 @@ function guardarmovimiento()
                     limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
-                    $(".mensaje_ok").html("Datos almacenados correctamente");
-                    $("#modal_ok").modal("show");
+                    //$(".mensaje_ok").html("Datos almacenados correctamente");
+                    //$("#modal_ok").modal("show");
+                    swal(
+                          'Buen trabajo!',
+                          'El Traspaso se realizo con éxito!',
+                          'success'
+                        )
                 }
                 else
                 {

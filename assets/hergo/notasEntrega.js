@@ -355,8 +355,14 @@ function guardarmovimiento()
                     limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
-                    $(".mensaje_ok").html("Datos almacenados correctamente");
-                    $("#modal_ok").modal("show");
+                    swal(
+                          'Egreso realizado!',
+                          'El egreso se guardo con éxito!',
+                          'success'
+                        )
+                    location.reload();
+                    //$(".mensaje_ok").html("Datos almacenados correctamente");
+                    //$("#modal_ok").modal("show");
                 }
                 else
                 {
@@ -396,8 +402,13 @@ function actualizarMovimiento()
                     limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
-                    $(".mensaje_ok").html("Datos actualizados correctamente");
-                    $("#modal_ok").modal("show");
+                    //$(".mensaje_ok").html("Datos actualizados correctamente");
+                    //$("#modal_ok").modal("show");
+                    swal(
+                          'Modificación realizada!',
+                          'La modificación se realizó con éxito!',
+                          'success'
+                        )
                     window.location.href=base_url("egresos");
                 }
                 else
@@ -557,43 +568,64 @@ function cambiarMoneda()
     }
 }
 
+
+
+
 function anularMovimientoEgreso()
 {     
-    var valuesToSubmit = $("#form_egreso").serialize();
-    var tablaaux=tablatoarray();
-    console.log(valuesToSubmit)
-    console.log(tablaaux);
-    if(tablaaux.length>0)
+    swal
+    ({
+      title: 'Quiere anular el movimiento Egreso?',
+      text: "Esta a punto de anular el movimiento",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, anular movimiento!'
+    }).then(function () 
     {
-        var tabla=JSON.stringify(tablaaux);
-        valuesToSubmit+="&tabla="+tabla;    
-        retornarajax(base_url("index.php/egresos/anularmovimiento"),valuesToSubmit,function(data)
+        var valuesToSubmit = $("#form_egreso").serialize();
+        var tablaaux=tablatoarray();
+        console.log(valuesToSubmit)
+        console.log(tablaaux);
+        if(tablaaux.length>0)
         {
-            estado=validarresultado_ajax(data);
-            if(estado)
-            {               
-                if(data.respuesta)
-                {
+            var tabla=JSON.stringify(tablaaux);
+            valuesToSubmit+="&tabla="+tabla;    
+            retornarajax(base_url("index.php/egresos/anularmovimiento"),valuesToSubmit,function(data)
+            {
+                estado=validarresultado_ajax(data);
+                if(estado)
+                {               
+                    if(data.respuesta)
+                    {
+                        
+                        swal(
+                                'Anulado!',
+                                'El movimiento ha sido anulado.',
+                                'success'
+                            )
+                        window.location.href=base_url("egresos");
+                    }
+                    else
+                    {
+                        $(".mensaje_error").html("Error al anular los datos, intente nuevamente");
+                        $("#modal_error").modal("show");
+                    }
                     
-                 
-                    window.location.href=base_url("egresos");
                 }
-                else
-                {
-                    $(".mensaje_error").html("Error al anular los datos, intente nuevamente");
-                    $("#modal_error").modal("show");
-                }
-                
-            }
-        })      
-    }
-    else
-    {
-        alert("no se tiene datos en la tabla para guardar")
-    }
+            })      
+        }
+        else
+        {
+            alert("no se tiene datos en la tabla para guardar")
+        }
+
+    })
+
 }
 function recuperarMovimientoEgreso()
-{     
+{
     var valuesToSubmit = $("#form_egreso").serialize();
     var tablaaux=tablatoarray();
     console.log(valuesToSubmit)
@@ -609,8 +641,11 @@ function recuperarMovimientoEgreso()
             {               
                 if(data.respuesta)
                 {
-                    
-                 
+                swal(
+                        'Recuperado!',
+                        'El movimiento ha sido recuperado.',
+                        'success' 
+                    )
                     window.location.href=base_url("egresos");
                 }
                 else
@@ -627,12 +662,12 @@ function recuperarMovimientoEgreso()
         alert("no se tiene datos en la tabla para guardar")
     }
 }
+
 $(document).on("click","#anularMovimientoEgreso",function(){
     anularMovimientoEgreso();
-    
 })
+
 $(document).on("click","#recuperarMovimientoEgreso",function(){
     recuperarMovimientoEgreso();
-    
 })
 

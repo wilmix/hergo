@@ -59,7 +59,7 @@ input[type=date]::-webkit-inner-spin-button {
             <div class="row filacabecera"> <!--PRIMERA FILA-->
                <div class=" col-xs-6 col-sm-6 col-md-3">
                 <label>Almacen:</label>
-                <select class="form-control form-control-sm" id="almacen_ne" name="almacen_ne" tabindex=1 <?= ($cont)?"disabled":"" ?>>
+                <select class="form-control form-control-sm" id="almacen_ne" name="almacen_ne" <?= ($cont)?"disabled":"" ?>>
                     <?php foreach ($almacen->result_array() as $fila): ?>
                      <option value=<?= $fila['idalmacen'] ?> <?= ($idalmacen==$fila['idalmacen'])?"selected":"" ?> ><?= $fila['almacen'] ?></option>
                    <?php endforeach ?>
@@ -68,7 +68,7 @@ input[type=date]::-webkit-inner-spin-button {
                <div class=" col-xs-6 col-sm-6 col-md-3">                
                 <input type="" name="tipomov_ne" value="<?= (isset($idingreso)?$idingreso:7)?>" class="hidden"><!--7 para nota de entrega-->
                 <label for="tipomov_ne">Tipo de Ingreso:</label>
-                <select class="form-control form-control-sm" id="tipomov_ne2" name="tipomov_ne2" tabindex=2  disabled>  
+                <select class="form-control form-control-sm" id="tipomov_ne2" name="tipomov_ne2" disabled>  
                     <?php foreach ($tegreso->result_array() as $fila): ?>
                       <?php if ($cont): ?> <!--EDITAR-->
                             <?php if ($idtegreso==$fila['id']): ?>
@@ -85,11 +85,11 @@ input[type=date]::-webkit-inner-spin-button {
                <div class="col-xs-6 col-sm-6 col-md-2">
 
                   <label for="fechamov_ne" >Fecha:</label>
-                  <input id="fechamov_ne" type="date" class="form-control form-control-sm" name="fechamov_ne" placeholder="Fecha" value="<?= ($cont)?$newDate:$fecha  ?>" tabindex=3 <?= ($cont)?"disabled":"" ?>>
+                  <input id="fechamov_ne" type="date" class="form-control form-control-sm" name="fechamov_ne" placeholder="Fecha" value="<?= ($cont)?$newDate:$fecha  ?>" <?= ($cont)?"disabled":"" ?>>
                </div>
                <div class="col-xs-6 col-sm-6 col-md-2">
                   <label for="moneda_ne">Moneda:</label>
-                  <select class="form-control form-control-sm" id="moneda_ne" name="moneda_ne" tabindex=4>
+                  <select class="form-control form-control-sm" id="moneda_ne" name="moneda_ne">
                     <option value="1" <?= ($idmoneda==1)?"selected":"" ?>>BOLIVIANOS</option>
                     <option value="2" <?= ($idmoneda==2)?"selected":"" ?>>DOLARES </option>
                   </select>
@@ -100,7 +100,7 @@ input[type=date]::-webkit-inner-spin-button {
                   <input id="nmov_ne" type="number" class="form-control" name="nmov_ne" placeholder="# Movimiento" disabled value="<?= ($cont)?$dcab->n:""  ?>"/>-->
                   <!--AGREGAR NOMBRES DE VENDEDORES SEGUN TABLA DE USER  -->
                    <label for="fechamov_ne" ># Vendedor:</label>
-                   <select class="form-control form-control-sm" id="vendedor_ne" name="vendedor_ne" tabindex=4>
+                   <select class="form-control form-control-sm" id="vendedor_ne" name="vendedor_ne">
                     <option value="1">VENDEDOR 1</option>
                     <option value="2">VENDEDOR 2 </option>
                     <option value="2">VENDEDOR 3 </option>
@@ -117,15 +117,15 @@ input[type=date]::-webkit-inner-spin-button {
                    </div>
                    <div class="col-xs-4 col-sm-4 col-md-2">
                          <label>Pedido Cliente:</label>
-                         <input id="pedido_ne" type="text" class="form-control form-control-sm" name="pedido_ne" placeholder=""  tabindex=6 value="<?= ($cont)?$dcab->clientePedido:''  ?>">
+                         <input id="pedido_ne" type="text" class="form-control form-control-sm" name="pedido_ne" placeholder=""  value="<?= ($cont)?$dcab->clientePedido:''  ?>">
                    </div>
                    <div class="col-xs-4 col-sm-4 col-md-2">
                          <label>Fecha de Pago: </label>
-                         <input id="fechapago_ne" name="fechapago_ne" type="date" class="form-control form-control-sm"  placeholder="Fecha Pago" tabindex=7 value="<?= ($cont)?$dcab->plazopago:''  ?>">
+                         <input id="fechapago_ne" name="fechapago_ne" type="date" class="form-control form-control-sm"  placeholder="Fecha Pago" value="<?= ($cont)?$dcab->plazopago:''  ?>">
                    </div>
                   <div class="col-xs-4 col-md-2">
                   <label></label>
-                  <button type="button" data-toggle="modal" data-target="#modalcliente" class="form-control btn btn-success" id="botonmodalcliente"  style="margin-top: 4px;" tabindex=8>Añadir Cliente</button>
+                  <button type="button" data-toggle="modal" data-target="#modalcliente" class="form-control btn btn-success" id="botonmodalcliente"  style="margin-top: 4px;">Añadir Cliente</button>
                   </div>
                 </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
 
@@ -135,13 +135,13 @@ input[type=date]::-webkit-inner-spin-button {
                   <div class="col-xs-12 col-md-2 has-feedback has-feedback-left">
                       <!--seleccionar codigo de articulo de la base de datos-->
                      <label for="articulo_ne" style="float: left;">Codigo:</label><span style="margin-left: 10px;display: none;" id="cargandocodigo" ><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
-                     <input class="form-control form-control-sm" type="text" id="articulo_imp" name="articulo_imp"/ tabindex=9>
+                     <input class="form-control form-control-sm" type="text" id="articulo_imp" name="articulo_imp">
                      <div style="right: 22px;top:32px;position: absolute;" id="codigocorrecto"><i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i></div>
                   </div>
                   <div class="col-xs-9 col-md-4">
                       <!--mostrar descripcion de articulo segun codigo-->
                      <label for="descripcion_ne">Descripcion:</label>
-                     <input type="text" class="form-control form-control-sm" id="Descripcion_ne" name="Descripcion_ne" readonly/>
+                     <input type="text" class="form-control form-control-sm" id="Descripcion_ne" name="Descripcion_ne" disabled/>
                   </div>
                   <div class="col-xs-3 col-md-2">
                        <!--mostrar unidad de articulo segun codigo-->
@@ -172,22 +172,22 @@ input[type=date]::-webkit-inner-spin-button {
                   <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
                       <label>Cantidad:</label>
-                      <input type="text" class="form-control form-control-sm" id="cantidad_ne" name="cantidad_ne" tabindex=10/>
+                      <input type="number" class="form-control form-control-sm" id="cantidad_ne" name="cantidad_ne"/>
                   </div>
                   <div class="col-xs-4 col-md-2">
                       <!--insertar costo de articulo a ingresar-->
                       <label class="costo_ne_label">Precio Bs:</label> <!--CAMBIO PARA COMPRAS LOCALES-->
-                      <input type="text" class="form-control form-control-sm tiponumerico punitario_ne_class" id="punitario_ne" name="punitario_ne" tabindex=11/>
+                      <input type="text" class="form-control form-control-sm tiponumerico punitario_ne_class" id="punitario_ne" name="punitario_ne"/>
                   </div>
                   <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
                       <label>% Descuento:</label>
-                      <input type="text" class="form-control form-control-sm tiponumerico" id="descuento_ne" name="descuento_ne" tabindex=12/>
+                      <input type="text" class="form-control form-control-sm tiponumerico" id="descuento_ne" name="descuento_ne" />
                   </div>
 
                   <div class="col-xs-12 col-md-2">
                   <label></label>
-                  <button type="button" class="form-control btn btn-success" id="agregar_articulo" name="agregar_articulo" style="margin-top: 4px;" tabindex=13>Añadir</button>
+                  <button type="button" class="form-control btn btn-success" id="agregar_articulo" name="agregar_articulo" style="margin-top: 4px;" >Añadir</button>
                   </div>
                </div><!--row CUARTA FILA -->
 
@@ -239,10 +239,10 @@ input[type=date]::-webkit-inner-spin-button {
                 <div class = "input-group col-md-12 col-xs-12">
                   <span class = "input-group-addon">$</span>
                   <!--mostrar el total de dolares-->
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostosus" tabindex=14>
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostosus">
                   <span class = "input-group-addon" >Bs</span>
                   <!--mostrar el total bolivivanos-->
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostobs" tabindex=15>
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostobs">
                  </div>
               </div>
             </div><!--row-->
@@ -268,13 +268,13 @@ input[type=date]::-webkit-inner-spin-button {
                     <button type="button" class="btn btn-danger" id="cancelarMovimiento">Cancelar Movimiento</button>
 
                 <?php else: ?>
-                    <button type="button" class="btn btn-primary" id="guardarMovimiento" tabindex=11>Guardar Movimiento</button>
-                    <button type="button" class="btn btn-danger" id="cancelarMovimiento" tabindex=12>Cancelar Movimiento</button>
+                    <button type="button" class="btn btn-primary" id="guardarMovimiento" >Guardar Movimiento</button>
+                    <button type="button" class="btn btn-danger" id="cancelarMovimiento" >Cancelar Movimiento</button>
                 <?php endif ?>
               </div>
             </div>
         </form>
-      </div> <!-- /.box-body -->
+      </div> <!-- /.box-body    onclick="nuevoAlerta();" -->
     </div> <!-- /.class="box" -->
   </div> <!-- /.class="col-xs-12" -->
 </div> <!-- /.class="row" -->

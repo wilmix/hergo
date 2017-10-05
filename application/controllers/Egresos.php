@@ -21,6 +21,7 @@ class Egresos extends CI_Controller
 				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
 				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
 				base_url('assets/sweetalert/sweetalert.css'),
+				base_url('assets/sweetalert/sweetalert2.min.css'),
 
 			);
 		$this->cabecera_script=array(
@@ -38,6 +39,8 @@ class Egresos extends CI_Controller
         		base_url('assets/plugins/daterangepicker/moment.min.js'),
         		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
         		base_url('assets/sweetalert/sweetalert.min.js'),
+        		base_url('assets/sweetalert/sweetalert2.min.js'),
+
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 			if($this->session->userdata('foto')==NULL)

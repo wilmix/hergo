@@ -313,8 +313,13 @@ function guardarmovimiento()
                     limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
-                    $(".mensaje_ok").html("Datos almacenados correctamente");
-                    $("#modal_ok").modal("show");
+                    //$(".mensaje_ok").html("Datos almacenados correctamente");
+                    //$("#modal_ok").modal("show");
+                    swal(
+                          'Ingreso realizado!',
+                          'El ingreso se guardo con éxito!',
+                          'success'
+                        )
                 }
                 else
                 {
