@@ -13,7 +13,7 @@ class Egresos_model extends CI_Model
 		if($id==null) //no tiene id de entrada
         {
 		  $sql="
-			SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,c.documento,e.tipocambio
+			SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,c.documento,e.tipocambio, sum(d.total)/tc.tipocambio totalsus
 			FROM egresos e
 			INNER JOIN egredetalle d
 			on e.idegresos=d.idegreso
@@ -27,6 +27,8 @@ class Egresos_model extends CI_Model
 			ON a.idalmacen=e.almacen 
 			INNER JOIN moneda m 
 			ON e.moneda=m.id 
+            INNER JOIN tipocambio tc
+            ON e.tipocambio=tc.id
 			WHERE e.fechamov 
 			BETWEEN '$ini' AND '$fin' and e.almacen like '%$alm' and t.id like '%$tin'
 			Group By e.idegresos
@@ -39,7 +41,7 @@ class Egresos_model extends CI_Model
             FROM ingresos i*/
         {            
              $sql="
-            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido,c.documento,e.tipocambio
+            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido,c.documento,e.tipocambio,total/tc.tipocambio totalsus
             FROM egresos e
             INNER JOIN egredetalle d
             on e.idegresos=d.idegreso
@@ -53,6 +55,8 @@ class Egresos_model extends CI_Model
             ON a.idalmacen=e.almacen 
             INNER JOIN moneda m 
             ON e.moneda=m.id 
+            INNER JOIN tipocambio tc
+            ON e.tipocambio=tc.id
             WHERE idEgresos=$id
             ORDER BY e.idEgresos DESC
             LIMIT 1   
@@ -64,7 +68,7 @@ class Egresos_model extends CI_Model
 	}
 	public function mostrarDetalle($id)//lista todos los detalles de un egreso
 	{
-		$sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario1, e.punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal, e.cantFact
+		$sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, e.punitario punitario1, e.punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal, e.cantFact
 		FROM egredetalle e
 		INNER JOIN articulos a
 		ON e.articulo = a.idArticulos
@@ -506,5 +510,25 @@ class Egresos_model extends CI_Model
             WHERE idEgresos=$idEgreso          
             ";
         $query=$this->db->query($sql);        
+    }
+
+    public function anularRecuperarMovimiento_model($datos,$anuladorecuperado)
+    {        
+
+        $idegreso=$datos['idegreso'];
+        $tipomov_ne=$datos['tipomov_ne'];
+        $fechapago_ne=$datos['fechapago_ne'];
+        $moneda_ne=$datos['moneda_ne'];
+        $idCliente=$datos['idCliente'];
+        $pedido_ne=$datos['pedido_ne'];
+        $obs_ne=$datos['obs_ne'];               
+
+        $autor=$this->session->userdata('user_id');
+        $fecha = date('Y-m-d H:i:s');
+
+        $sql="UPDATE egresos SET tipomov='$tipomov_ne',plazopago='$fechapago_ne',moneda='$moneda_ne',cliente='$idCliente',clientePedido='$pedido_ne',obs='$obs_ne',fecha='$fecha',autor='$autor', anulado='$anuladorecuperado' where idEgresos='$idegreso'";
+        $query=$this->db->query($sql);
+
+        return true;
     }
 }

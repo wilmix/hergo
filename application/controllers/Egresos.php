@@ -366,9 +366,35 @@ class Egresos extends CI_Controller
 		if($this->input->is_ajax_request() && $this->input->post('id'))
         {
         	$id = addslashes($this->security->xss_clean($this->input->post('id')));
+        	$moneda = addslashes($this->security->xss_clean($this->input->post('moneda')));
+        	$idtipocambio = addslashes($this->security->xss_clean($this->input->post('tipocambio')));
 			$res=$this->egresos_model->mostrarDetalle($id);
 			$res=$res->result_array();
-			echo json_encode($res);
+			
+			/******evaluar moneda************/
+			$obj=new StdClass();
+			
+			$tipocambio=$this->egresos_model->retornarValorTipoCambio($idtipocambio)->tipocambio;
+			if($moneda==2)
+			{
+				
+				$resultado = array();
+				foreach ($res as $fila) 
+				{
+					
+					$fila["punitario1"] = $fila["punitario1"]/$tipocambio;
+				    $fila["punitario"] = $fila["punitario"]/$tipocambio;
+				    $fila["total"] = $fila["total"]/$tipocambio;
+				    array_push($resultado, $fila);
+				}
+				$res=$resultado;
+				
+			}
+			$obj->tipocambio=$tipocambio;
+			$obj->resultado=$res;
+			
+			/********************************/
+			echo json_encode($obj);
 		}
 		else
 		{
@@ -533,5 +559,50 @@ class Egresos extends CI_Controller
 			$this->ingresos_model->actualizartablacostoarticulo($aux->idArticulo,$aux->ncantidad,$aux->nprecionu,$idalmacen);
 		}		
 	}
+	public function anularmovimiento()
+    {
+    	if($this->input->is_ajax_request())
+        {
+            $datos['idegreso'] = $this->security->xss_clean($this->input->post('idegreso'));        	
+        	$datos['tipomov_ne'] = $this->security->xss_clean($this->input->post('tipomov_ne'));        	
+        	$datos['fechapago_ne'] = $this->security->xss_clean($this->input->post('fechapago_ne'));
+        	$datos['moneda_ne'] = $this->security->xss_clean($this->input->post('moneda_ne'));
+        	$datos['idCliente'] = $this->security->xss_clean($this->input->post('idCliente'));
+        	$datos['pedido_ne'] = $this->security->xss_clean($this->input->post('pedido_ne'));        	
+        	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
+        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
+        	if($this->egresos_model->anularRecuperarMovimiento_model($datos,1))
+				echo json_encode("true");
+			else
+				echo json_encode("false");
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}		
+    }
+    public function recuperarmovimiento()
+    {
+    	if($this->input->is_ajax_request())
+        {
+            $datos['idegreso'] = $this->security->xss_clean($this->input->post('idegreso'));        	
+        	$datos['tipomov_ne'] = $this->security->xss_clean($this->input->post('tipomov_ne'));        	
+        	$datos['fechapago_ne'] = $this->security->xss_clean($this->input->post('fechapago_ne'));
+        	$datos['moneda_ne'] = $this->security->xss_clean($this->input->post('moneda_ne'));
+        	$datos['idCliente'] = $this->security->xss_clean($this->input->post('idCliente'));
+        	$datos['pedido_ne'] = $this->security->xss_clean($this->input->post('pedido_ne'));        	
+        	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
+        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
+
+        	if($this->egresos_model->anularRecuperarMovimiento_model($datos,0))
+				echo json_encode("true");
+			else
+				echo json_encode("false");
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+    }
         
 }

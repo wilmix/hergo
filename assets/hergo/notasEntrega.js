@@ -556,3 +556,83 @@ function cambiarMoneda()
         $(".punitario_ne_class").val(glob_precio_egreso/glob_tipoCambio)
     }
 }
+
+function anularMovimientoEgreso()
+{     
+    var valuesToSubmit = $("#form_egreso").serialize();
+    var tablaaux=tablatoarray();
+    console.log(valuesToSubmit)
+    console.log(tablaaux);
+    if(tablaaux.length>0)
+    {
+        var tabla=JSON.stringify(tablaaux);
+        valuesToSubmit+="&tabla="+tabla;    
+        retornarajax(base_url("index.php/egresos/anularmovimiento"),valuesToSubmit,function(data)
+        {
+            estado=validarresultado_ajax(data);
+            if(estado)
+            {               
+                if(data.respuesta)
+                {
+                    
+                 
+                    window.location.href=base_url("egresos");
+                }
+                else
+                {
+                    $(".mensaje_error").html("Error al anular los datos, intente nuevamente");
+                    $("#modal_error").modal("show");
+                }
+                
+            }
+        })      
+    }
+    else
+    {
+        alert("no se tiene datos en la tabla para guardar")
+    }
+}
+function recuperarMovimientoEgreso()
+{     
+    var valuesToSubmit = $("#form_egreso").serialize();
+    var tablaaux=tablatoarray();
+    console.log(valuesToSubmit)
+    console.log(tablaaux);
+    if(tablaaux.length>0)
+    {
+        var tabla=JSON.stringify(tablaaux);
+        valuesToSubmit+="&tabla="+tabla;    
+        retornarajax(base_url("index.php/egresos/recuperarmovimiento"),valuesToSubmit,function(data)
+        {
+            estado=validarresultado_ajax(data);
+            if(estado)
+            {               
+                if(data.respuesta)
+                {
+                    
+                 
+                    window.location.href=base_url("egresos");
+                }
+                else
+                {
+                    $(".mensaje_error").html("Error al anular los datos, intente nuevamente");
+                    $("#modal_error").modal("show");
+                }
+                
+            }
+        })      
+    }
+    else
+    {
+        alert("no se tiene datos en la tabla para guardar")
+    }
+}
+$(document).on("click","#anularMovimientoEgreso",function(){
+    anularMovimientoEgreso();
+    
+})
+$(document).on("click","#recuperarMovimientoEgreso",function(){
+    recuperarMovimientoEgreso();
+    
+})
+

@@ -127,8 +127,17 @@ function retornarTablaEgresos()
 
             },
             {
+                field:'totalsus',
+                title:"Total Sus",
+                width: '7%',
+                align: 'right',
+                sortable:true,
+                formatter: operateFormatter3,
+                filter: {type: "input"}
+            }, 
+            {
                 field:'total',
-                title:"Total",
+                title:"Total Bs",
                 width: '7%',
                 align: 'right',
                 sortable:true,
@@ -289,38 +298,49 @@ window.operateEvents = {
      //alert(JSON.stringify(row));
     }
 };
+function calcularTotalDetalle(detalle)
+{
+    var total=0;
+    $.each(detalle,function(index, value){
+        
+        total+=parseFloat(value.total)
+        console.log(total);
+    })
+    return total;
+}
 function verdetalle(fila)
 {
-  console.log(fila)
-    id=fila.idEgresos
-    datos={id:id}
     console.log(fila)
+    id=fila.idEgresos
+    datos={
+        id:id,
+        moneda:fila.moneda,
+        tipocambio:fila.tipocambio
+    }    
     retornarajax(base_url("index.php/egresos/mostrarDetalle"),datos,function(data)
     {
         estado=validarresultado_ajax(data);
+        console.log(data);
         if(estado)
         {
-            //console.log(data.respuesta)
-            mostrarDetalle(data.respuesta);
-            //console.log(glob_tipoCambio)
-            var totalnn=fila.total
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
-            totalnn=totalnn.replace(',','')
+            
+            mostrarDetalle(data.respuesta.resultado);
+              
+            var totalnn=calcularTotalDetalle(data.respuesta.resultado)
+
+          
+            var tipocambioEgreso=data.respuesta.tipocambio;
             var totalsus=totalnn;
             var totalbs=totalnn;
-            if(fila.moneda==1)
-            {
-                totalsus=totalsus/glob_tipoCambio;
-                totalsus=parseFloat(totalsus)    
+            if(fila.moneda==1)   
+            {         
+                totalsus=totalsus/tipocambioEgreso;                 
+                console.log(tipocambioEgreso)
             }
-            else
-            {
-                totalbs=totalbs*glob_tipoCambio;
-            }
+            if(fila.moneda==2)            
+                totalbs=totalbs*tipocambioEgreso;                             
+           
+           
             
 
             //console.log(sus)
@@ -396,16 +416,16 @@ function mostrarDetalle(res)
                 title:"Cantidad",
                 align: 'right',
                 width: '10%',
+                formatter: operateFormatter3,
                 sortable:true,
-            },
-            
-            //PARA COMPARAR CON FACTURA
-           
+            },            
+            //PARA COMPARAR CON FACTURA           
             {
                 field:'punitario',
                 title:"P/U Bs",
                 align: 'right',
                 width: '10%',
+                formatter: operateFormatter3,
                 sortable:true,
             },
             {
@@ -413,6 +433,7 @@ function mostrarDetalle(res)
                 title:"% Dscnt",
                 align: 'right',
                 width: '10%',
+                formatter: operateFormatter3,
                 sortable:true,
             },
             {
@@ -420,6 +441,7 @@ function mostrarDetalle(res)
                 title:"Total",
                 align: 'right',
                 width: '10%',
+                formatter: operateFormatter3,
                 sortable:true,
             },
             {
