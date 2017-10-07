@@ -264,8 +264,8 @@ function operateFormatter2(value, row, index)
 function operateFormatter3(value, row, index)
 {       
     num=Math.round(value * 100) / 100
+    num=num.toFixed(2);
     return (formatNumber.new(num));
-   //return(num)
 }
 /***********Eventos*************/
 window.operateEvents = {
@@ -337,7 +337,10 @@ function verdetalle(fila)
             if(fila.nfact!="SF")
                 csFact="Con factura";
 
-
+            totaldoc=totaldoc*100/100;
+            totaldoc=totaldoc.toFixed(2);
+            totalsis=totalsis*100/100;
+            totalsis=totalsis.toFixed(2);
             $("#pendienteaprobado").html(boton);
 			$("#totaldocdetalle").val(totaldoc);
 			$("#totalsisdetalle").val(totalsis);
@@ -377,7 +380,6 @@ function mostrarDetalle(res)
 {
 	$("#tingresosdetalle").bootstrapTable('destroy');
         $("#tingresosdetalle").bootstrapTable({
-
             data:res,
             striped:true,
             pagination:true,
@@ -413,7 +415,8 @@ function mostrarDetalle(res)
                 align: 'right',
                 width: '10%',
                 sortable:true,
-                formatter: punitariofac
+                formatter: punitariofac,
+                //formatter: operateFormatter3,
             },
             {
                 field:'totaldoc',
@@ -421,6 +424,7 @@ function mostrarDetalle(res)
                 align: 'right',
                 width: '10%',
                 sortable:true,
+                formatter: operateFormatter3,
             },
 
 
@@ -432,6 +436,7 @@ function mostrarDetalle(res)
                 align: 'right',
                 width: '10%',
                 sortable:true,
+                formatter: operateFormatter3,
             },
             {
                 field:'total',
@@ -439,6 +444,7 @@ function mostrarDetalle(res)
                 align: 'right',
                 width: '10%',
                 sortable:true,
+                formatter: operateFormatter3,
             },
             ]
         });
@@ -449,7 +455,8 @@ function punitariofac(value, row, index)
     console.log(row);
     var punit=row.cantidad==""?0:row.cantidad;
     punit=row.totaldoc/punit;
-    punit=redondeo(punit,3)
+    punit=redondeo(punit,3);
+    punit=punit.toFixed(2);
     
     return (formatNumber.new(punit));
    //return(num)

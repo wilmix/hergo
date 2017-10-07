@@ -84,10 +84,7 @@ function retornarTablaEgresos()
             striped:true,
             pagination:true,
             pageSize:"100",
-            //height:"550", error con filtros
-            //clickToSelect:true,
             search:true,
-            //strictSearch:true,
             searchOnEnterKey:true,
             filter:true,
             showColumns:true,
@@ -114,7 +111,11 @@ function retornarTablaEgresos()
                 title:"Cliente",
                 width: '17%',
                 sortable:true,
-                filter: {type: "input"}
+                filter: 
+                    {
+                        type: "select",
+                        data: datosselect[1]
+                    },
 
             },
             {
@@ -164,7 +165,6 @@ function retornarTablaEgresos()
                 sortable:true,
                 visible:false,
                 align: 'center',
-                filter: {type: "input"},
             },
             {
                 field:"plazopago",
@@ -182,15 +182,11 @@ function retornarTablaEgresos()
                 sortable:true,
                 visible:false,
                 align: 'center',
-//<<<<<<< HEAD
-                 filter: {
-                    type: "select",
-                    data: datosselect[2]
-                },
-//=======
-                filter: {type: "input"},
-
-//>>>>>>> f819dc692e694fd3fa2c082dbd2195630a638a65
+                filter: 
+                    {
+                        type: "select",
+                        data: datosselect[0]
+                    },
             },
             {
                 field:"fecha",
@@ -468,22 +464,27 @@ function punitariofac(value, row, index)
 function restornardatosSelect(res)
 {
 
-    var proveedor = new Array()
-    var tipo = new Array()
+    //var proveedor = new Array()
+    //var tipo = new Array()
     var autor = new Array()
+    var cliente = new Array()
     var datos =new Array()
     $.each(res, function(index, value){
 
-        proveedor.push(value.nombreproveedor)
-        tipo.push(value.sigla)
+        //proveedor.push(value.nombreproveedor)
+        //tipo.push(value.sigla)
         autor.push(value.autor)
+        cliente.push(value.nombreCliente)
     })
-    proveedor.sort();
-    tipo.sort();
+    //proveedor.sort();
+    //tipo.sort();
     autor.sort();
-    datos.push(proveedor.unique());
-    datos.push(tipo.unique());
+    cliente.sort();
+    //datos.push(proveedor.unique());
+    //datos.push(tipo.unique());
     datos.push(autor.unique());
+    datos.push(cliente.unique());
+    console.log(cliente);
     return(datos);
 }
 Array.prototype.unique=function(a){
