@@ -355,14 +355,16 @@ function guardarmovimiento()
                     limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
-                    swal(
-                          'Egreso realizado!',
-                          'El egreso se guardo con éxito!',
-                          'success'
-                        )
-                    location.reload();
-                    //$(".mensaje_ok").html("Datos almacenados correctamente");
-                    //$("#modal_ok").modal("show");
+                    swal({
+                        title: "Egreso realizado!",
+                        text: "El egreso se guardo con éxito",
+                        type: "success",
+                        closeOnConfirm: false                                                
+                        },
+                        function(){
+                            location.reload();
+                        })
+                    //location.reload();
                 }
                 else
                 {
