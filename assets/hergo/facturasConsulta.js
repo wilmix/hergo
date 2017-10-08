@@ -73,7 +73,9 @@ function retornarTablaFacturacion()
         data: {ini:ini,fin:fin,alm:alm,tipo:tipo},
     }).done(function(res){
          quitarcargando();
-       //datosselect= restornardatosSelect(res)
+         console.log(res);
+        datosselect= restornardatosSelect(res)
+
         $("#facturasConsulta").bootstrapTable('destroy');
         $('#facturasConsulta').bootstrapTable({
                    
@@ -109,6 +111,7 @@ function retornarTablaFacturacion()
                 sortable:true,
                 class:"col-sm-1",
                 align: 'center',
+                filter: { type: "input" },
                 
             },
             {
@@ -138,6 +141,11 @@ function retornarTablaFacturacion()
                 title:"Cliente",                
                 class:"col-sm-4",         
                 sortable:true,
+                filter: 
+                {
+                    type: "select",
+                    data: datosselect[1]
+                },
 
             },
             {
@@ -145,14 +153,21 @@ function retornarTablaFacturacion()
                 title:"Total",                
                 sortable:true,
                 align: 'right',
-                formatter:formato_moneda,
+                formatter:operateFormatter3,
+                filter: { type: "input" },
             },
             {
                 field:'estado',
                 title:"Estado",
                 width: '7%',
                 sortable:true,
-                formatter: formatoEstadoFactura                
+                align: 'center',
+                formatter: formatoEstadoFactura,
+                filter: 
+                {
+                type: "select",
+                data: ["T. Facturado", "Facturado Parcial","ANULADO"],
+                },                
             },           
             {
                 title: 'Acciones',
@@ -163,14 +178,39 @@ function retornarTablaFacturacion()
             }]
             
         });
-        
-    
-
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
     console.log( "Request Failed: " + err );
     });
 }
+function operateFormatter3(value, row, index)
+    {       
+        num=Math.round(value * 100) / 100
+        num=num.toFixed(2);
+        return (formatNumber.new(num));
+    }
+function restornardatosSelect(res)
+{
+
+    var autor = new Array()
+    var cliente = new Array()
+    var datos =new Array()
+    $.each(res, function(index, value){
+
+        autor.push(value.autor)
+        cliente.push(value.ClienteFactura)
+    })
+
+    autor.sort();
+    cliente.sort();
+    datos.push(autor.unique());
+    datos.push(cliente.unique());
+    return(datos);
+}
+Array.prototype.unique=function(a){
+  return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
+});
+
 function formatoBotones(value, row, index)
 {
     if(row.anulada==1)

@@ -102,7 +102,11 @@ function retornarTablaPagos() //*******************************
                         visible:true,
                         sortable:true,
                         width: '4%',
-                        filter: { type: "input" }
+                        filter: 
+                            {
+                                type: "select",
+                                data: datosselect[2]
+                            },
                     },
                     {   
                         field: 'fechaPago',            
@@ -124,11 +128,27 @@ function retornarTablaPagos() //*******************************
                         title: 'Cliente',
                         visible:true,
                         sortable:true,
+                        width: '15%',
                         filter: 
                             {
                                 type: "select",
                                 data: datosselect[1]
                             },
+                    },
+                    {   
+                        field: 'nFactura',            
+                        title: 'N°Fac',
+                        visible:true,
+                        sortable:true,
+                        filter: { type: "input" },
+                    },
+                    {   
+                        field: 'totalFactura',            
+                        title: 'Factura',
+                        visible:true,
+                        sortable:true,
+                        align: 'right',
+                        formatter: operateFormatter3,
                     },
                     {   
                         field: 'montoPago',            
@@ -153,11 +173,17 @@ function retornarTablaPagos() //*******************************
                         sortable:true,
                     },
                     {   
-                        field: 'anulado',            
+                        field: 'estadoPago',            
                         title: 'Estado',
                         visible:true,
                         sortable:true,
-                        operateFormatter2
+                        align: 'center',
+                        filter: 
+                                {
+                                type: "select",
+                                data: ["A Cuenta", "Pagada",],
+                                },
+                        formatter: operateFormatter2,
                     },
                     {   
                         field: 'autor',            
@@ -207,11 +233,13 @@ function retornarTablaPagos() //*******************************
     function operateFormatter2(value, row, index)
     {
         $ret=''
-
-        if(row.anulado==1)
-        {        
-            $ret='<span class="label label-warning">ANULADO</span>';
-        }
+        // 0=factura pagada totalmente 1=Factura pagada parcialmente 2=Pago Anulado
+        if(value==0)
+            $ret='<span class="label label-danger">No Pagada</span>';
+         if(value==1)
+            $ret='<span class="label label-success">Pagada</span>';
+        if(value==2)
+            $ret='<span class="label label-info">A Cuenta</span>';
         return ($ret);
     }
 
@@ -220,18 +248,22 @@ function restornardatosSelect(res)
 
     var autor = new Array()
     var cliente = new Array()
+    var nPago = new Array()
     var datos =new Array()
     $.each(res, function(index, value){
 
         autor.push(value.autor)
         cliente.push(value.nombreCliente)
+        nPago.push(value.numPago)
     })
 
     autor.sort();
     cliente.sort();
-    console.log(cliente);
+    nPago.sort();
+    console.log(nPago);
     datos.push(autor.unique());
     datos.push(cliente.unique());
+    datos.push(nPago.unique());
     return(datos);
 }
 Array.prototype.unique=function(a){

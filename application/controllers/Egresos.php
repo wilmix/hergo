@@ -265,8 +265,8 @@ class Egresos extends CI_Controller
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
-			$this->datos['menu']="Ingresos";
-			$this->datos['opcion']="Importaciones";
+			$this->datos['menu']="Egresos";
+			$this->datos['opcion']="Editar Egresos";
 			$this->datos['titulo']="Editar";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
@@ -315,6 +315,12 @@ class Egresos extends CI_Controller
 		  	$this->datos['fecha']=date('Y-m-d');
 		  	$this->datos['proveedor']=$this->ingresos_model->retornar_tabla("provedores");
 		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
+		  			  	//clientes
+
+		  	$this->datos['tipodocumento']=$this->cliente_model->retornar_tabla("documentotipo");			
+			$this->datos['tipocliente']=$this->cliente_model->retornar_tabla("clientetipo");
+			//user vendedor
+			$this->datos['user']=$this->egresos_model->retornar_tablaUsers("nombre");
 		
 			
 			$this->load->view('plantilla/head.php',$this->datos);

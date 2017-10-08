@@ -74,7 +74,7 @@ function retornarTablaEgresos()
         dataType: "json",
         data: {i:ini,f:fin,a:alm,ti:tipoingreso},
     }).done(function(res){
-       // console.log(res[0])
+        console.log(res)
        datosselect= restornardatosSelect(res)
        quitarcargando();
         $("#tegresos").bootstrapTable('destroy');
@@ -85,7 +85,7 @@ function retornarTablaEgresos()
             pagination:true,
             pageSize:"100",
             search:true,
-            searchOnEnterKey:true,
+            //searchOnEnterKey:true,
             filter:true,
             showColumns:true,
 
@@ -121,12 +121,26 @@ function retornarTablaEgresos()
             {
                 field:'factura',
                 title:"Factura",
-                width: '7%',
+                width: '4%',
                 sortable:true,
                 formatter:mostrarFactura,
                 filter: {type: "input"}
 
             },
+            {
+                field:'monedasigla',
+                title:"Mon",
+                width: '1%',
+                align: 'right',
+                sortable:true,
+                visible:true,
+                filter: {
+                    type: "select",
+                    data: ["$US", "BS."],
+                        },
+                //formatter: operateFormatter3,
+                //filter: {type: "input"}
+            }, 
             {
                 field:'totalsus',
                 title:"Total Sus",
@@ -200,7 +214,7 @@ function retornarTablaEgresos()
             {
                 title: 'Acciones',
                 align: 'center',
-                width: '10%',
+                width: '11%',
                 events: operateEvents,
                 formatter: operateFormatter
             }]
@@ -257,8 +271,8 @@ function operateFormatter2(value, row, index)
 function operateFormatter3(value, row, index)
 {       
     num=Math.round(value * 100) / 100
+    num=num.toFixed(2);
     return (formatNumber.new(num));
-   //return(num)
 }
 function mostrarFactura(value, row, index)
 {       
@@ -279,7 +293,7 @@ window.operateEvents = {
         verdetalle(row)
     },
     'click .editarEgreso': function (e, value, row, index) {
-      //console.log(row.idIngresos);
+      console.log(row.idIngresos);
       var editar=base_url("egresos/editaregresos/")+row.idEgresos;
       if(row.estado==0)
       {
@@ -484,7 +498,7 @@ function restornardatosSelect(res)
     //datos.push(tipo.unique());
     datos.push(autor.unique());
     datos.push(cliente.unique());
-    console.log(cliente);
+    //console.log(cliente);
     return(datos);
 }
 Array.prototype.unique=function(a){

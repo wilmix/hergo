@@ -14,6 +14,7 @@ class Facturas extends CI_Controller
 		$this->load->model("DatosFactura_model");
 		$this->load->model("FacturaDetalle_model");
 		$this->load->model("FacturaEgresos_model");
+		$this->load->model("Almacen_model");
 		$this->load->helper('date');
 		$this->load->helper('cookie');
 		date_default_timezone_set("America/La_Paz");
@@ -88,7 +89,7 @@ class Facturas extends CI_Controller
 			/*************CODIGO QR***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/qrcode.min.js');
             
-            //$this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
+            $this->datos['almacen']=$this->Almacen_model->retornar_tabla("almacenes");
             //$this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
 
 			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();

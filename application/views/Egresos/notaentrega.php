@@ -98,13 +98,12 @@ input[type=date]::-webkit-inner-spin-button {
                 <!-- AGREGAR VENDEDOR EN VES DE NUM DE MOVIMIENTO
                   <label for="fechamov_ne" ># Movimiento:</label>
                   <input id="nmov_ne" type="number" class="form-control" name="nmov_ne" placeholder="# Movimiento" disabled value="<?= ($cont)?$dcab->n:""  ?>"/>-->
-                  <!--AGREGAR NOMBRES DE VENDEDORES SEGUN TABLA DE USER  -->
-                   <label for="fechamov_ne" ># Vendedor:</label>
-                   <select class="form-control form-control-sm" id="vendedor_ne" name="vendedor_ne">
-                    <option value="1">VENDEDOR 1</option>
-                    <option value="2">VENDEDOR 2 </option>
-                    <option value="2">VENDEDOR 3 </option>
-                  </select>
+                  <label for="fechamov_ne" ># Vendedor:</label>
+                  <select   class="form-control form-control-sm" id="user_filtro">
+                    <?php foreach ($user->result_array() as $fila): ?>
+                    <option value=<?= $fila['id'] ?> ><?= $fila['nombre'] ?></option>
+                    <?php endforeach ?>
+                    </select>
                   
                </div>
             </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
@@ -302,6 +301,10 @@ input[type=date]::-webkit-inner-spin-button {
                         <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
                         <select name="tipo_doc" id="tipo_doc" class="form-control selectpicker" >
                           <option value=" " >Selecciona</option>
+                          <?php foreach ($tipodocumento->result_array() as $fila):  ?>
+                            <option value="<?= $fila['idDocumentoTipo'] ?>"><?= $fila['documentotipo']?></option>
+                          <?php endforeach ?>
+                         
                         </select>
                       </div>
                     </div>
@@ -334,7 +337,9 @@ input[type=date]::-webkit-inner-spin-button {
                         <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
                         <select name="clientetipo" id="clientetipo" class="form-control selectpicker" >
                           <option value=" " >Selecciona</option>
-
+                          <?php foreach ($tipocliente->result_array() as $fila):  ?>
+                            <option value="<?= $fila['idClientetipo'] ?>"><?= $fila['clientetipo']?></option>
+                          <?php endforeach ?>
                         </select>
                       </div>
                     </div>
@@ -399,3 +404,5 @@ input[type=date]::-webkit-inner-spin-button {
       </div> <!-- /. class="modal-dialog" -->
   </div> <!-- /. class="modal fade" -->
 </form>
+
+
