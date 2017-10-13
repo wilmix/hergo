@@ -199,7 +199,18 @@ class Ingresos_model extends CI_Model
     			if($idArticulo)
     			{
     				$sql="INSERT INTO ingdetalle(idIngreso,nmov,articulo,moneda,cantidad,punitario,total,totaldoc) VALUES('$idIngreso','0','$idArticulo','$moneda_imp','$fila[2]','$punitariobs','$totalbs','$totaldoc')";
-    				$this->db->query($sql);                    
+    				$this->db->query($sql);
+
+               /*     $costoArticulo=new stdclass();
+                    
+                    $costoArticulo->idArticulo=$idArticulo
+                    $costoArticulo->idAlmacen=$almacen_imp;
+                    $costoArticulo->cantidad=;
+                    $costoArticulo->precioUnitario= calcular;
+                    $costoArticulo->total=;
+                    $costoArticulo->idEgresoDetalle= ;
+                    $costoArticulo->idIngresoDetalle= ;
+                    $costoArticulo->anulado= 0;*/
     			}
     		}
     		//return true;
@@ -387,5 +398,46 @@ class Ingresos_model extends CI_Model
         {
             return false;
         }
+    }
+    public function retornarSaldo1($idArticulo,$idAlmacen) /*consulta procedure con parametros de salida @out_param*/
+    {
+        $this->db->trans_start();
+
+        $success = $this->db->query("call consultar_saldo1('idAlmacen','$idArticulo',@out_param);");
+        $out_param_query = $this->db->query('select @out_param as out_param;');
+
+        $this->db->trans_complete();
+
+        if($out_param_query->num_rows()>0)
+        {
+            $fila=$out_param_query->row(); 
+            return $fila->out_param;      
+        }
+        else
+        {
+            return 0;
+        }
+
+     
+    }
+    public function retornarSaldo($idArticulo,$idAlmacen) /*retorna tabla*/
+    {
+        $this->db->trans_start();
+        $sql="call consultar_saldo1($idAlmacen,$idArticulo)";
+
+        $success = $this->db->query($sql);       
+
+        $this->db->trans_complete();
+      
+        if($success->num_rows()>0)
+        {
+            $fila=$success->row();             
+            return $fila;      
+        }
+        else
+        {
+            return false;
+        }
+
     }
 }

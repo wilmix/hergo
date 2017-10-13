@@ -530,22 +530,23 @@ class Ingresos extends CI_Controller
 	{
 		$idArticulo=$this->ingresos_model->retornar_datosArticulo($id);
 		
-		$ca=$this->ingresos_model->retornarcostoarticulo_model($idArticulo,$idAlmacen);
+		//$ca=$this->ingresos_model->retornarcostoarticulo_model($idArticulo,$idAlmacen);
+		$ca=$this->ingresos_model->retornarSaldo($idArticulo,$idAlmacen);
 		$obj=new StdClass();
 		//print_r($obj);
 		if($ca)
 		{
-			$fila=$ca->row();    					
+			//$fila=$ca->row();    					
 			
-			$obj->ncantidad=$fila->cantidad;
-			$obj->nprecionu=$fila->precioUnitario;
-			//$obj->ntotal=$fila->total;	
+			$obj->ncantidad=$ca->cantidadSaldo;
+			$obj->nprecionu=$ca->punitarioSaldo;
+			
 		}
 		else
 		{
 			$obj->ncantidad=0;
 			$obj->nprecionu=0;
-			//$obj->ntotal=0;
+			
 		}
 		
 		echo json_encode($obj);
@@ -582,7 +583,7 @@ class Ingresos extends CI_Controller
 
         	if($this->ingresos_model->guardarmovimiento_model($datos))
         	{
-        		$this->retornarcostoarticulo_tabla($datos['tabla'],$datos['almacen_imp'],$datos['moneda_imp']);
+        		$this->retornarcostoarticulo_tabla($datos['tabla'],$datos['almacen_imp'],$datos['moneda_imp']); //se eliminaria el dato
 				echo json_encode("true");
         	}
 			else
