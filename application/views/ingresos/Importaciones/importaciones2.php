@@ -156,14 +156,14 @@ input[type=date]::-webkit-inner-spin-button {
                      <label for="">Unidad:</label>
                      <input type="text" class="form-control form-control-sm" id="unidad_imp" disabled/>
                   </div>
-                  <div class="col-xs-4 col-md-2">
+                  <div class="col-xs-4 col-md-2 ">
                       <!--mostrar costo promedio ponderado de articulo segun codigo-->
-                     <label for="costo_imp">CostoPromedio:</label>
+                     <label for="costo_imp">CostoPromedio:<span style="margin-left: 10px; display: none;" class="cargandoCostoSaldo"><i class="fa fa-spinner fa-pulse fa-fw"></i></span></label>
                      <input type="text" class="form-control form-control-sm text-right tiponumerico" id="costo_imp" disabled/>
                   </div>
                    <div class="col-xs-4 col-md-2">
                       <!--mostrar saldo en almacen de articulo segun codigo-->
-                     <label for="saldo_imp">Saldo:</label>
+                     <label for="saldo_imp">Saldo:<span style="margin-left: 10px; display: none;" class="cargandoCostoSaldo"><i class="fa fa-spinner fa-pulse fa-fw"></i></span></label>
                       <input type="text" class="form-control form-control-sm text-right tiponumerico" id="saldo_imp" disabled/>
                   </div>
 

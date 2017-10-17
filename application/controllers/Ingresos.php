@@ -531,26 +531,22 @@ class Ingresos extends CI_Controller
 		$idArticulo=$this->ingresos_model->retornar_datosArticulo($id);
 		
 		//$ca=$this->ingresos_model->retornarcostoarticulo_model($idArticulo,$idAlmacen);
-		$ca=$this->ingresos_model->retornarSaldo($idArticulo,$idAlmacen);
+		$ca=$this->ingresos_model->retornarCosto($idArticulo);
+		$sa=$this->ingresos_model->retornarSaldo($idArticulo,$idAlmacen);
 		$obj=new StdClass();
-		//print_r($obj);
+		
 		if($ca)
-		{
-			//$fila=$ca->row();    					
-			
-			$obj->ncantidad=$ca->cantidadSaldo;
-			$obj->nprecionu=$ca->punitarioSaldo;
-			
-		}
-		else
-		{
-			$obj->ncantidad=0;
+			$obj->nprecionu=$ca->punitarioSaldo;			
+		else			
 			$obj->nprecionu=0;
-			
-		}
+					
+		if($sa)
+			$obj->ncantidad=$sa->saldo;
+		else
+			$obj->ncantidad=0;
 		
 		echo json_encode($obj);
-		//return $obj;
+		
 	}
     public function retornararticulos()
     {

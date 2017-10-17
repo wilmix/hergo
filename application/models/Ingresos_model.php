@@ -26,9 +26,14 @@ class Ingresos_model extends CI_Model
 	{
 		if($id==null) //no tiene id de entrada
         {
-		  $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
-				(SELECT SUM(d.total) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio
+		  /*$sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
+				(SELECT SUM(d.total) from ingdetalle d where  d.idIngreso=i.idIngresos) as total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, total*valorTipoCambio totalsus*/
+            $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
+            SUM(id.total) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, SUM(id.total)/tc.tipoCambio totalsus
+
 			FROM ingresos i
+            INNER JOIN ingdetalle id
+            on i.idingresos=id.idingreso
 			INNER JOIN tmovimiento  t
 			ON i.tipomov = t.id
 			INNER JOIN provedores p
@@ -39,15 +44,20 @@ class Ingresos_model extends CI_Model
 			ON a.idalmacen=i.almacen
 			INNER JOIN moneda m
 			ON i.moneda=m.id
+            INNER JOIN tipoCambio tc
+            ON i.tipocambio=tc.id
             WHERE i.fechamov BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm' and t.id like '%$tin'
+            Group By i.idIngresos 
 			ORDER BY i.idIngresos DESC
             ";
         }
         else
         {
             $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
-				(SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio
+				SUM(id.total) total as total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, SUM(id.total)/tc.tipoCambio totalsus
 			FROM ingresos i
+            INNER JOIN ingdetalle id
+            on i.idingresos=id.idingreso
 			INNER JOIN tmovimiento  t
 			ON i.tipomov = t.id
 			INNER JOIN provedores p
@@ -58,6 +68,8 @@ class Ingresos_model extends CI_Model
 			ON a.idalmacen=i.almacen
 			INNER JOIN moneda m
 			ON i.moneda=m.id
+            INNER JOIN tipoCambio tc
+            ON i.tipocambio=tc.id
             WHERE idIngresos=$id
 			ORDER BY i.idIngresos DESC
             LIMIT 1
@@ -420,7 +432,7 @@ class Ingresos_model extends CI_Model
 
      
     }
-    public function retornarSaldo($idArticulo,$idAlmacen) /*retorna tabla*/
+    public function retornarSaldo2($idArticulo,$idAlmacen) /*retorna tabla*/
     {
         $this->db->trans_start();
         $sql="call consultar_saldo1($idAlmacen,$idArticulo)";
@@ -439,5 +451,68 @@ class Ingresos_model extends CI_Model
             return false;
         }
 
+    }
+    public function retornarCosto($idArticulo) /*retorna tabla*/
+    {
+      /*  $this->db->trans_start();
+        $sql="call consultarCostoArticulo($idArticulo)";
+
+        $success = $this->db->query($sql);       
+
+        $this->db->trans_complete();
+      
+        if($success->num_rows()>0)
+        {
+            $fila=$success->row();             
+            return $fila;      
+        }
+        else
+        {
+            return false;
+        }*/
+        $sql="call consultarCostoArticulo($idArticulo)";
+        $query= $this->db->query($sql);
+        mysqli_next_result($this->db->conn_id);
+        if($query->num_rows()>0)
+        {
+            $fila=$query->row();             
+            return $fila;      
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public function retornarSaldo($idArticulo,$idAlmacen) /*retorna tabla*/
+    {
+      /*  $this->db->trans_start();
+        $sql="call consultarSaldoArticulo($idArticulo,$idAlmacen)";
+
+        $success = $this->db->query($sql);       
+
+        $this->db->trans_complete();
+      
+        if($success->num_rows()>0)
+        {
+            $fila=$success->row();             
+            return $fila;      
+        }
+        else
+        {
+            return false;
+        }*/
+        $sql="call consultarSaldoArticulo($idArticulo,$idAlmacen)";
+        $query= $this->db->query($sql);
+        mysqli_next_result($this->db->conn_id);
+        if($query->num_rows()>0)
+        {
+            $fila=$query->row();             
+            return $fila;      
+        }
+        else
+        {
+            return false;
+        }
+        
     }
 }

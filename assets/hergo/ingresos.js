@@ -169,8 +169,27 @@ function retornarTablaIngresos()
                 
             },
             {
+                field:'monedasigla',
+                title:"Moneda",
+                width: '7%',
+                align: 'right',
+                sortable:true,
+                
+                
+            },
+            {
+                field:'totalsus',
+                title:"Total Sus",
+                width: '7%',
+                align: 'right',
+                sortable:true,
+                formatter: operateFormatter3,
+                filter: {type: "input"},
+                
+            },
+            {
                 field:'total',
-                title:"Total",
+                title:"Total Bs",
                 width: '7%',
                 align: 'right',
                 sortable:true,

@@ -56,7 +56,15 @@ $(document).ready(function(){
       autoFocus: true,
       source: function (request, response) {        
         $("#cargandocodigo").show(150)
-        $("#Descripcion_imp").val('');
+        //$("#Descripcion_imp").val('');
+       $("#Descripcion_imp").val("");
+       $("#cantidad_imp").val("");
+       $("#punitario_imp").val("");
+       $("#constounitario").val("");
+       $("#unidad_imp").val("");
+       $("#costo_imp").val("");
+       $("#saldo_imp").val("");
+       /********/
         $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
         glob_agregar=false;
         $.ajax({
@@ -83,13 +91,16 @@ $(document).ready(function(){
         //console.log(ui.item.CodigoArticulo);
         idAlmacen=$("#almacen_imp").val();
        // console.log(idAlmacen)
+       //agregar cargando
+       cargandoSaldoCosto();
          $.ajax({
 
             url: base_url("index.php/ingresos/retornarcostoarticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
             dataType: "json",
             data: {},
-            success: function(data) {
-                //response(data);                   
+            success: function(data) {                
+                //quitar cargando
+                finCargaSaldoCosto()                 
                 console.log(data)
                 $("#costo_imp").val(data.nprecionu);
                 $("#saldo_imp").val(data.ncantidad);              
@@ -111,6 +122,15 @@ $(document).ready(function(){
         .appendTo( ul );
     };
  });
+function cargandoSaldoCosto()
+{
+    $(".cargandoCostoSaldo").css("display","");
+}
+function finCargaSaldoCosto()
+{
+    $(".cargandoCostoSaldo").css("display","none");
+}
+
 $(document).on("click","#agregar_articulo",function(){
     if(glob_agregar)
     {

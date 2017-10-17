@@ -182,5 +182,21 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	{
 		return $this->result_id->fetch_object($class_name);
 	}
+	//---------------------------------------------------------------------
+	// corrije el error  Commands out of sync; you can't run this command now
+	/**
+	* Read the next result
+	*
+	* @return  null
+	*/   
+	function next_result()
+	{
+	    if (is_object($this->conn_id))
+	    {
+	        return mysqli_next_result($this->conn_id);
+	    }
+	}
+
+	// --------------------------------------------------------------------
 
 }
