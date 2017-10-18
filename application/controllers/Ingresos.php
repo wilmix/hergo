@@ -339,8 +339,10 @@ class Ingresos extends CI_Controller
         	$fin=$this->security->xss_clean($this->input->post("f"));//fecha fin
         	$alm=$this->security->xss_clean($this->input->post("a"));//almacen
         	$tin=$this->security->xss_clean($this->input->post("ti"));//tipo de ingreso
-        	
-			$res=$this->ingresos_model->mostrarIngresos($id=null,$ini,$fin,$alm,$tin);
+        	if($tin==3)
+        		$res=$this->ingresos_model->mostrarIngresosTraspasos($id=null,$ini,$fin,$alm,$tin);
+        	else	
+				$res=$this->ingresos_model->mostrarIngresos($id=null,$ini,$fin,$alm,$tin);
 			$res=$res->result_array();
 			echo json_encode($res);
 		}

@@ -77,12 +77,298 @@ $(document).on("change","#almacen_filtro",function(){
 $(document).on("change","#tipo_filtro",function(){
     retornarTablaIngresos();
 })
+function mostrarTablaIngresosTraspaso(res)
+{
+    $("#tingresos").bootstrapTable({
+
+        data:res,
+        striped:true,
+        pagination:true,
+        pageSize:"100",
+        //height:"550", error con filtros
+        //clickToSelect:true,
+        search:true,
+        //strictSearch:true,
+        searchOnEnterKey:true,
+        filter:true,
+        showColumns:true,
 
 
+
+        columns:[
+        {
+            field: 'n',
+            width: '5%',
+            title: 'N',
+            align: 'center',
+            sortable:true,
+            filter: {type: "input"}
+        },
+        {
+            field: 'sigla',
+            width: '5%',
+            title: 'Tipo',
+            align: 'center',
+            visible:false,
+            sortable:true,
+            
+            filter: {
+                    type: "select",
+                    data: datosselect[1]
+                }
+        },
+        {
+            field:'fechamov',
+            width: '7%',
+            title:"Fecha",
+            align: 'right',
+            sortable:true,
+            //align: 'center',
+            
+            formatter: formato_fecha_corta,
+        },
+        {
+            field:'origen', //para traspasos
+            title:"Origen",
+            width: '20%',
+            filter: {
+                type: "select",
+                data: datosselect[3]
+            },
+            sortable:true,
+            
+        },
+        {
+            field:'nfact',
+            title:"Factura",
+            width: '7%',
+            sortable:true,
+            //searchable:false,
+            filter: {type: "input"},
+            
+            
+        },
+        {
+            field:'monedasigla',
+            title:"Moneda",
+            width: '7%',
+            align: 'right',
+            sortable:true,
+            
+            
+        },
+        {
+            field:'totalsus',
+            title:"Total Sus",
+            width: '7%',
+            align: 'right',
+            sortable:true,
+            formatter: operateFormatter3,
+            filter: {type: "input"},
+            
+        },
+        {
+            field:'total',
+            title:"Total Bs",
+            width: '7%',
+            align: 'right',
+            sortable:true,
+            formatter: operateFormatter3,
+            filter: {type: "input"},
+            
+        },
+        {
+            field:"estado",
+            title:"Estado",
+            width: '7%',
+            sortable:true,
+            filter: {
+                type: "select",
+                data:["APROBADO","PENDIENTE","ANULADO"]
+            },
+            formatter: operateFormatter2,
+            align: 'center',
+            
+        },
+        {
+            field:"autor",
+            width: '10%',
+            title:"Autor",
+            sortable:true,
+            filter: {
+                type: "select",
+                data: datosselect[2]
+            },
+            visible:false,
+            align: 'center',
+            
+        },
+        {
+            field:"fecha",
+            width: '10%',
+            title:"Fecha",
+            sortable:true,
+            formatter: formato_fecha_corta,
+            visible:false,
+            align: 'center',
+            
+        },
+        {
+            title: 'Acciones',
+            align: 'center',
+            width: '10%',
+            events: operateEvents,
+            formatter: operateFormatter
+        }]
+    });
+}
+function mostrarTablaIngresos(res)
+{
+    $("#tingresos").bootstrapTable({
+
+        data:res,
+        striped:true,
+        pagination:true,
+        pageSize:"100",
+        //height:"550", error con filtros
+        //clickToSelect:true,
+        search:true,
+        //strictSearch:true,
+        searchOnEnterKey:true,
+        filter:true,
+        showColumns:true,
+
+
+
+        columns:[
+        {
+            field: 'n',
+            width: '5%',
+            title: 'N',
+            align: 'center',
+            sortable:true,
+            filter: {type: "input"}
+        },
+        {
+            field: 'sigla',
+            width: '5%',
+            title: 'Tipo',
+            align: 'center',
+            visible:false,
+            sortable:true,
+            
+            filter: {
+                    type: "select",
+                    data: datosselect[1]
+                }
+        },
+        {
+            field:'fechamov',
+            width: '7%',
+            title:"Fecha",
+            align: 'right',
+            sortable:true,
+            //align: 'center',
+            
+            formatter: formato_fecha_corta,
+        },
+        {
+            field:'nombreproveedor',
+            title:"Proveedor",
+            width: '20%',
+            filter: {
+                type: "select",
+                data: datosselect[0]
+            },
+            sortable:true,
+            
+        },
+        {
+            field:'nfact',
+            title:"Factura",
+            width: '7%',
+            sortable:true,
+            //searchable:false,
+            filter: {type: "input"},
+            
+            
+        },
+        {
+            field:'monedasigla',
+            title:"Moneda",
+            width: '7%',
+            align: 'right',
+            sortable:true,
+            
+            
+        },
+        {
+            field:'totalsus',
+            title:"Total Sus",
+            width: '7%',
+            align: 'right',
+            sortable:true,
+            formatter: operateFormatter3,
+            filter: {type: "input"},
+            
+        },
+        {
+            field:'total',
+            title:"Total Bs",
+            width: '7%',
+            align: 'right',
+            sortable:true,
+            formatter: operateFormatter3,
+            filter: {type: "input"},
+            
+        },
+        {
+            field:"estado",
+            title:"Estado",
+            width: '7%',
+            sortable:true,
+            filter: {
+                type: "select",
+                data:["APROBADO","PENDIENTE","ANULADO"]
+            },
+            formatter: operateFormatter2,
+            align: 'center',
+            
+        },
+        {
+            field:"autor",
+            width: '10%',
+            title:"Autor",
+            sortable:true,
+            filter: {
+                type: "select",
+                data: datosselect[2]
+            },
+            visible:false,
+            align: 'center',
+            
+        },
+        {
+            field:"fecha",
+            width: '10%',
+            title:"Fecha",
+            sortable:true,
+            formatter: formato_fecha_corta,
+            visible:false,
+            align: 'center',
+            
+        },
+        {
+            title: 'Acciones',
+            align: 'center',
+            width: '10%',
+            events: operateEvents,
+            formatter: operateFormatter
+        }]
+    });
+}
 function retornarTablaIngresos()
 {
-
-
     ini=iniciofecha.format('YYYY-MM-DD')
     fin=finfecha.format('YYYY-MM-DD')
     alm=$("#almacen_filtro").val()
@@ -97,150 +383,12 @@ function retornarTablaIngresos()
     }).done(function(res){
         quitarcargando();
         datosselect= restornardatosSelect(res)
-       //console.log((datosselect))
+       
         $("#tingresos").bootstrapTable('destroy');
-        $("#tingresos").bootstrapTable({
-
-            data:res,
-            striped:true,
-            pagination:true,
-            pageSize:"100",
-            //height:"550", error con filtros
-            //clickToSelect:true,
-            search:true,
-            //strictSearch:true,
-            searchOnEnterKey:true,
-            filter:true,
-            showColumns:true,
-
-
-
-            columns:[
-            {
-                field: 'n',
-                width: '5%',
-                title: 'N',
-                align: 'center',
-                sortable:true,
-                filter: {type: "input"}
-            },
-            {
-                field: 'sigla',
-                width: '5%',
-                title: 'Tipo',
-                align: 'center',
-                visible:false,
-                sortable:true,
-                
-                filter: {
-                        type: "select",
-                        data: datosselect[1]
-                    }
-            },
-            {
-                field:'fechamov',
-                width: '7%',
-                title:"Fecha",
-                align: 'right',
-                sortable:true,
-                //align: 'center',
-                
-                formatter: formato_fecha_corta,
-            },
-            {
-                field:'nombreproveedor',
-                title:"Proveedor",
-                width: '20%',
-                filter: {
-                    type: "select",
-                    data: datosselect[0]
-                },
-                sortable:true,
-                
-            },
-            {
-                field:'nfact',
-                title:"Factura",
-                width: '7%',
-                sortable:true,
-                //searchable:false,
-                filter: {type: "input"},
-                
-                
-            },
-            {
-                field:'monedasigla',
-                title:"Moneda",
-                width: '7%',
-                align: 'right',
-                sortable:true,
-                
-                
-            },
-            {
-                field:'totalsus',
-                title:"Total Sus",
-                width: '7%',
-                align: 'right',
-                sortable:true,
-                formatter: operateFormatter3,
-                filter: {type: "input"},
-                
-            },
-            {
-                field:'total',
-                title:"Total Bs",
-                width: '7%',
-                align: 'right',
-                sortable:true,
-                formatter: operateFormatter3,
-                filter: {type: "input"},
-                
-            },
-            {
-                field:"estado",
-                title:"Estado",
-                width: '7%',
-                sortable:true,
-                filter: {
-                    type: "select",
-                    data:["APROBADO","PENDIENTE","ANULADO"]
-                },
-                formatter: operateFormatter2,
-                align: 'center',
-                
-            },
-            {
-                field:"autor",
-                width: '10%',
-                title:"Autor",
-                sortable:true,
-                filter: {
-                    type: "select",
-                    data: datosselect[2]
-                },
-                visible:false,
-                align: 'center',
-                
-            },
-            {
-                field:"fecha",
-                width: '10%',
-                title:"Fecha",
-                sortable:true,
-                formatter: formato_fecha_corta,
-                visible:false,
-                align: 'center',
-                
-            },
-            {
-                title: 'Acciones',
-                align: 'center',
-                width: '10%',
-                events: operateEvents,
-                formatter: operateFormatter
-            }]
-        });
+        if(tipoingreso==3)
+            mostrarTablaIngresosTraspaso(res);
+        else
+            mostrarTablaIngresos(res);
 
         $("#tarticulo").bootstrapTable('hideLoading');
         $("#tarticulo").bootstrapTable('resetView');
@@ -485,12 +633,14 @@ function restornardatosSelect(res)
     var proveedor = new Array()
     var tipo = new Array()
     var autor = new Array()
+    var origen = new Array()
     var datos =new Array()
     $.each(res, function(index, value){
 
         proveedor.push(value.nombreproveedor)
         tipo.push(value.sigla)
         autor.push(value.autor)
+        origen.push(value.origen)
     })
     proveedor.sort();
     tipo.sort();
@@ -498,6 +648,7 @@ function restornardatosSelect(res)
     datos.push(proveedor.unique());
     datos.push(tipo.unique());
     datos.push(autor.unique());
+    datos.push(origen.unique());
     return(datos);
 }
 Array.prototype.unique=function(a){

@@ -244,8 +244,10 @@ class Egresos extends CI_Controller
         	$fin=$this->security->xss_clean($this->input->post("f"));//fecha fin
         	$alm=$this->security->xss_clean($this->input->post("a"));//almacen
         	$tin=$this->security->xss_clean($this->input->post("ti"));//tipo de ingreso
-        	
-			$res=$this->egresos_model->mostrarEgresos($id=null,$ini,$fin,$alm,$tin);
+        	if($tin==8)
+        		$res=$this->egresos_model->mostrarEgresosTraspasos($id=null,$ini,$fin,$alm,$tin);
+        	else        		
+				$res=$this->egresos_model->mostrarEgresos($id=null,$ini,$fin,$alm,$tin);
 			$res=$res->result_array();
 			$res2=$this->AgregarFActurasResultado($res);
 			

@@ -50,11 +50,12 @@ class Ingresos_model extends CI_Model
             Group By i.idIngresos 
 			ORDER BY i.idIngresos DESC
             ";
+
         }
         else
         {
             $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
-				SUM(id.total) total as total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, SUM(id.total)/tc.tipoCambio totalsus
+				SUM(id.total) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, SUM(id.total)/tc.tipoCambio totalsus
 			FROM ingresos i
             INNER JOIN ingdetalle id
             on i.idingresos=id.idingreso
@@ -74,11 +75,77 @@ class Ingresos_model extends CI_Model
 			ORDER BY i.idIngresos DESC
             LIMIT 1
             ";
+            
+
         }
         
 		$query=$this->db->query($sql);
 		return $query;
 	}
+    public function mostrarIngresosTraspasos($id=null,$ini=null,$fin=null,$alm="",$tin="")
+    {
+        if($id==null) //no tiene id de entrada
+        {
+          /*$sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
+                (SELECT SUM(d.total) from ingdetalle d where  d.idIngreso=i.idIngresos) as total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, total*valorTipoCambio totalsus*/
+            $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
+            SUM(id.total) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, SUM(id.total)/tc.tipoCambio totalsus, a1.almacen origen
+
+            FROM ingresos i
+            INNER JOIN ingdetalle id
+            on i.idingresos=id.idingreso
+            INNER JOIN tmovimiento  t
+            ON i.tipomov = t.id
+            INNER JOIN provedores p
+            ON i.proveedor=p.idproveedor
+            INNER JOIN users u
+            ON u.id=i.autor
+            INNER JOIN almacenes a
+            ON a.idalmacen=i.almacen
+            INNER JOIN moneda m
+            ON i.moneda=m.id
+            INNER JOIN tipoCambio tc
+            ON i.tipocambio=tc.id
+              INNER JOIN traspasos t1
+              ON t1.idIngreso=i.idIngresos
+              INNER JOIN egresos e
+              ON t1.idEgreso=e.idegresos
+              INNER JOIN almacenes a1
+              ON a1.idalmacen=e.almacen
+            WHERE i.fechamov BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm' and t.id like '%$tin'
+            Group By i.idIngresos 
+            ORDER BY i.idIngresos DESC
+            ";
+            
+        }
+        else
+        {
+            $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
+                SUM(id.total) total as total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, SUM(id.total)/tc.tipoCambio totalsus
+            FROM ingresos i
+            INNER JOIN ingdetalle id
+            on i.idingresos=id.idingreso
+            INNER JOIN tmovimiento  t
+            ON i.tipomov = t.id
+            INNER JOIN provedores p
+            ON i.proveedor=p.idproveedor
+            INNER JOIN users u
+            ON u.id=i.autor
+            INNER JOIN almacenes a
+            ON a.idalmacen=i.almacen
+            INNER JOIN moneda m
+            ON i.moneda=m.id
+            INNER JOIN tipoCambio tc
+            ON i.tipocambio=tc.id
+            WHERE idIngresos=$id
+            ORDER BY i.idIngresos DESC
+            LIMIT 1
+            ";
+        }
+        
+        $query=$this->db->query($sql);
+        return $query;
+    }
     public function mostrarIngresosDetalle($id=null,$ini=null,$fin=null,$alm="",$tin="")
     {       
         $sql="SELECT *

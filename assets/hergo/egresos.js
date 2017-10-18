@@ -57,28 +57,154 @@ $(document).on("change","#almacen_filtro",function(){
 $(document).on("change","#tipo_filtro",function(){
     retornarTablaEgresos();
 })
-
-
-function retornarTablaEgresos()
+function mostrarTablaEgresosTraspasos(res)
 {
+    $('#tegresos').bootstrapTable({
+                   
+            data:res,
+            striped:true,
+            pagination:true,
+            pageSize:"100",
+            search:true,
+            //searchOnEnterKey:true,
+            filter:true,
+            showColumns:true,
 
+            columns: [
+            {
+                field: 'n',
+                width: '3%',
+                title: 'N',
+                align: 'center',
+                sortable:true,
+                filter: {type: "input"}
+            },
+            {
+                field:'fechamov',
+                width: '7%',
+                title:"Fecha",
+                sortable:true,
+                align: 'center',
+                formatter: formato_fecha_corta,
+            },
+            {
+                field:'destino',
+                title:"Destino",
+                width: '17%',
+                sortable:true,
+                filter: 
+                    {
+                        type: "select",
+                        data: datosselect[2]
+                    },
 
-    ini=iniciofecha.format('YYYY-MM-DD')
-    fin=finfecha.format('YYYY-MM-DD')
-    alm=$("#almacen_filtro").val()
-    tipoingreso=$("#tipo_filtro").val()
-    agregarcargando();
-    $.ajax({
-        type:"POST",
-        url: base_url('index.php/egresos/mostrarEgresos'),
-        dataType: "json",
-        data: {i:ini,f:fin,a:alm,ti:tipoingreso},
-    }).done(function(res){
-        console.log(res)
-       datosselect= restornardatosSelect(res)
-       quitarcargando();
-        $("#tegresos").bootstrapTable('destroy');
-        $('#tegresos').bootstrapTable({
+            },
+            {
+                field:'factura',
+                title:"Factura",
+                width: '4%',
+                sortable:true,
+                formatter:mostrarFactura,
+                filter: {type: "input"}
+
+            },
+            {
+                field:'monedasigla',
+                title:"Mon",
+                width: '1%',
+                align: 'right',
+                sortable:true,
+                visible:true,
+                filter: {
+                    type: "select",
+                    data: ["$US", "BS."],
+                        },
+                //formatter: operateFormatter3,
+                //filter: {type: "input"}
+            }, 
+            {
+                field:'totalsus',
+                title:"Total Sus",
+                width: '7%',
+                align: 'right',
+                sortable:true,
+                formatter: operateFormatter3,
+                filter: {type: "input"}
+            }, 
+            {
+                field:'total',
+                title:"Total Bs",
+                width: '7%',
+                align: 'right',
+                sortable:true,
+                formatter: operateFormatter3,
+                filter: {type: "input"}
+            },  
+            {
+                field:"estado",
+                title:"Estado",
+                width: '7%',
+                sortable:true,
+                align: 'center',            
+                filter: {
+                    type: "select",
+                    data: ["T. Facturado", "No facturado", "Parcial", "Anulado"],
+                        },
+                formatter: operateFormatter2,
+
+            },                  
+            {
+                field:"clientePedido",
+                width: '8%',
+                title:"N° Pedido",
+                sortable:true,
+                visible:false,
+                align: 'center',
+            },
+            {
+                field:"plazopago",
+                width: '8%',
+                title:"PlazoPago",
+                sortable:true,
+                visible:false,
+                align: 'center',
+                formatter: formato_fecha_corta,
+            },
+            {
+                field:"autor",
+                width: '8%',
+                title:"Autor",
+                sortable:true,
+                visible:false,
+                align: 'center',
+                filter: 
+                    {
+                        type: "select",
+                        data: datosselect[0]
+                    },
+            },
+            {
+                field:"fecha",
+                width: '8%',
+                title:"Fecha",
+                sortable:true,
+                visible:false,
+                align: 'center',
+                formatter: formato_fecha_corta,
+            },
+            {
+                title: 'Acciones',
+                align: 'center',
+                width: '11%',
+                events: operateEvents,
+                formatter: operateFormatter
+            }]
+            
+        });
+}
+function mostrarTablaEgresos(res)
+{
+    $('#tegresos').bootstrapTable({
                    
             data:res,
             striped:true,
@@ -220,7 +346,31 @@ function retornarTablaEgresos()
             }]
             
         });
-        
+}
+
+function retornarTablaEgresos()
+{
+
+
+    ini=iniciofecha.format('YYYY-MM-DD')
+    fin=finfecha.format('YYYY-MM-DD')
+    alm=$("#almacen_filtro").val()
+    tipoingreso=$("#tipo_filtro").val()
+    agregarcargando();
+    $.ajax({
+        type:"POST",
+        url: base_url('index.php/egresos/mostrarEgresos'),
+        dataType: "json",
+        data: {i:ini,f:fin,a:alm,ti:tipoingreso},
+    }).done(function(res){
+        console.log(res)
+       datosselect= restornardatosSelect(res)
+       quitarcargando();
+        $("#tegresos").bootstrapTable('destroy');
+        if(tipoingreso==8)
+            mostrarTablaEgresosTraspasos(res)
+        else
+            mostrarTablaEgresos(res)
         //$("#tegresos").bootstrapTable('showLoading');
         $("#tegresos").bootstrapTable('resetView');
         mensajeregistrostabla(res,"#tegresos");
@@ -483,12 +633,14 @@ function restornardatosSelect(res)
     var autor = new Array()
     var cliente = new Array()
     var datos =new Array()
+    var destino =new Array()
     $.each(res, function(index, value){
 
         //proveedor.push(value.nombreproveedor)
         //tipo.push(value.sigla)
         autor.push(value.autor)
         cliente.push(value.nombreCliente)
+        destino.push(value.destino)
     })
     //proveedor.sort();
     //tipo.sort();
@@ -498,10 +650,12 @@ function restornardatosSelect(res)
     //datos.push(tipo.unique());
     datos.push(autor.unique());
     datos.push(cliente.unique());
+    datos.push(destino.unique());
     //console.log(cliente);
     return(datos);
 }
 Array.prototype.unique=function(a){
   return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
 });
+
 

@@ -34,7 +34,7 @@ class Egresos_model extends CI_Model
 			Group By e.idegresos
 			ORDER BY e.idEgresos DESC	
             ";
-
+            
         }
         else/*REVISAR!!!!!!!!!!!!!!!!!!SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
                 (SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio
@@ -66,6 +66,70 @@ class Egresos_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
 	}
+    public function mostrarEgresosTraspasos($id=null,$ini=null,$fin=null,$alm="",$tin="")
+    {
+        if($id==null) //no tiene id de entrada
+        {
+          $sql="
+            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,c.documento,e.tipocambio, sum(d.total)/tc.tipocambio totalsus, a1.almacen destino
+            FROM egresos e
+            INNER JOIN egredetalle d
+            on e.idegresos=d.idegreso
+            INNER JOIN tmovimiento t 
+            ON e.tipomov = t.id 
+            INNER JOIN clientes c 
+            ON e.cliente=c.idCliente
+            INNER JOIN users u 
+            ON u.id=e.autor 
+            INNER JOIN almacenes a 
+            ON a.idalmacen=e.almacen 
+            INNER JOIN moneda m 
+            ON e.moneda=m.id 
+            INNER JOIN tipocambio tc
+            ON e.tipocambio=tc.id
+              INNER JOIN traspasos t1
+              ON t1.idEgreso=e.idEgresos
+              INNER JOIN ingresos i
+              ON t1.idIngreso=i.idIngresos
+              INNER JOIN almacenes a1
+              ON a1.idalmacen=i.almacen
+            WHERE e.fechamov 
+            BETWEEN '$ini' AND '$fin' and e.almacen like '%$alm' and t.id like '%$tin'
+            Group By e.idegresos
+            ORDER BY e.idEgresos DESC   
+            ";
+
+        }
+        else/*REVISAR!!!!!!!!!!!!!!!!!!SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
+                (SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio
+            FROM ingresos i*/
+        {            
+             $sql="
+            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido,c.documento,e.tipocambio,total/tc.tipocambio totalsus
+            FROM egresos e
+            INNER JOIN egredetalle d
+            on e.idegresos=d.idegreso
+            INNER JOIN tmovimiento t 
+            ON e.tipomov = t.id 
+            INNER JOIN clientes c 
+            ON e.cliente=c.idCliente
+            INNER JOIN users u 
+            ON u.id=e.autor 
+            INNER JOIN almacenes a 
+            ON a.idalmacen=e.almacen 
+            INNER JOIN moneda m 
+            ON e.moneda=m.id 
+            INNER JOIN tipocambio tc
+            ON e.tipocambio=tc.id
+            WHERE idEgresos=$id
+            ORDER BY e.idEgresos DESC
+            LIMIT 1   
+            ";
+        }
+
+        $query=$this->db->query($sql);
+        return $query;
+    }
 	public function mostrarDetalle($id)//lista todos los detalles de un egreso
 	{
 		$sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, e.punitario punitario1, e.punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal, e.cantFact
