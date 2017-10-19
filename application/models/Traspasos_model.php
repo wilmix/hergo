@@ -83,7 +83,7 @@ class Traspasos_model extends CI_Model
 		INNER JOIN almacenes b
 		on i.almacen=b.idalmacen 
 		WHERE e.tipomov=8 /*tipo de egreso traspaso*/
-		AND e.anulado<>1 /*distinto de anulado*/
+		/*AND e.anulado<>1 distinto de anulado*/
 		AND e.idegresos=$idEgreso
 		LIMIT 1";	
 		
@@ -105,5 +105,6 @@ class Traspasos_model extends CI_Model
         $this->db->query($sql);
         return true;
     }
+  
 
 }

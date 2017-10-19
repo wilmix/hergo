@@ -454,9 +454,9 @@ function actualizarMovimiento()
         alert("no se tiene datos en la tabla para guardar")
     }
 }
-function anularMovimiento()// X
+function anularTraspaso()// X
 {     
-    var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
+    var valuesToSubmit = $("#form_egreso").serialize();
     var tablaaux=tablatoarray();
     console.log(valuesToSubmit)
     console.log(tablaaux);
@@ -465,7 +465,7 @@ function anularMovimiento()// X
         var tabla=JSON.stringify(tablaaux);
 
         valuesToSubmit+="&tabla="+tabla;    
-        retornarajax(base_url("index.php/ingresos/anularmovimiento"),valuesToSubmit,function(data)
+        retornarajax(base_url("index.php/traspasos/anularTransferencia"),valuesToSubmit,function(data)
         {
             estado=validarresultado_ajax(data);
             if(estado)
@@ -479,7 +479,7 @@ function anularMovimiento()// X
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos anulados correctamente");
                     $("#modal_ok").modal("show");
-                    window.location.href=base_url("ingresos");
+                    window.location.href=base_url("egresos");
                 }
                 else
                 {
@@ -495,9 +495,9 @@ function anularMovimiento()// X
         alert("no se tiene datos en la tabla para guardar")
     }
 }
-function recuperarMovimiento()// X
+function recuperarTraspaso()// X
 {     
-    var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
+    var valuesToSubmit = $("#form_egreso").serialize();
     var tablaaux=tablatoarray();
     console.log(valuesToSubmit)
     console.log(tablaaux);
@@ -506,7 +506,7 @@ function recuperarMovimiento()// X
         var tabla=JSON.stringify(tablaaux);
 
         valuesToSubmit+="&tabla="+tabla;    
-        retornarajax(base_url("index.php/ingresos/recuperarmovimiento"),valuesToSubmit,function(data)
+        retornarajax(base_url("index.php/traspasos/recuperarTransferencia"),valuesToSubmit,function(data)
         {
             estado=validarresultado_ajax(data);
             if(estado)
@@ -520,7 +520,7 @@ function recuperarMovimiento()// X
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos recuperados correctamente");
                     $("#modal_ok").modal("show");
-                    window.location.href=base_url("ingresos");
+                    window.location.href=base_url("egresos");
                 }
                 else
                 {
@@ -563,17 +563,17 @@ $(document).on("click","#actualizarMovimiento",function(){
     actualizarMovimiento();
 })
 $(document).on("click","#cancelarMovimientoActualizar",function(){
-    window.location.href=base_url("ingresos");
+    window.location.href=base_url("egresos");
 })
 
-$(document).on("click","#anularMovimiento",function(){
-    anularMovimiento();
+$(document).on("click","#anularTraspaso",function(){
+    anularTraspaso();
     limpiarArticulo();
     limpiarCabecera();
     limpiarTabla();
 })
-$(document).on("click","#recuperarMovimiento",function(){
-    recuperarMovimiento();
+$(document).on("click","#recuperarTraspaso",function(){
+    recuperarTraspaso();
     limpiarArticulo();
     limpiarCabecera();
     limpiarTabla();

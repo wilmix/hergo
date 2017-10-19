@@ -228,9 +228,10 @@ class Traspasos extends CI_Controller
     }
     public function actualizar()
     {
+
     	if($this->input->is_ajax_request())
         {
-        	
+        		
         	$datos['almacen_ori'] = $this->security->xss_clean($this->input->post('almacen_ori'));
         	$datos['almacen_des'] = $this->security->xss_clean($this->input->post('almacen_des'));
         	$datos['tipomov_ne'] = 8; //egreso
@@ -244,6 +245,7 @@ class Traspasos extends CI_Controller
         	$datos['idingreso'] = $this->security->xss_clean($this->input->post('idIngreso'));
 
         	$totalTabla=$this->retornarTotal($datos['tabla']);
+
 
         	$egreso['idegreso'] = $datos['idegreso'];
         	$egreso['almacen_ne'] = $datos['almacen_ori'];
@@ -561,5 +563,114 @@ class Traspasos extends CI_Controller
         $res=$res->result_array();
         return($res);
 	}
+	public function anularTransferencia()
+    {
+    	if($this->input->is_ajax_request())
+        {        
+
+        	$datos['almacen_ori'] = $this->security->xss_clean($this->input->post('almacen_ori'));
+        	$datos['almacen_des'] = $this->security->xss_clean($this->input->post('almacen_des'));
+        	$datos['tipomov_ne'] = 8; //egreso
+        	$datos['tipomov_ni'] = 3; //ingreso
+        	$datos['fechamov_ne'] = $this->security->xss_clean($this->input->post('fechamov_ne'));        	        
+        	$datos['moneda_ne'] = $this->security->xss_clean($this->input->post('moneda_ne'));        	
+        	$datos['pedido_ne'] = $this->security->xss_clean($this->input->post('pedido_ne'));        	
+        	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
+        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
+        	$datos['idegreso'] = $this->security->xss_clean($this->input->post('idEgreso'));
+        	$datos['idingreso'] = $this->security->xss_clean($this->input->post('idIngreso'));
+
+        	$totalTabla=$this->retornarTotal($datos['tabla']);
+
+
+        	$egreso['idegreso'] = $datos['idegreso'];
+        	$egreso['almacen_ne'] = $datos['almacen_ori'];
+	    	$egreso['tipomov_ne'] = $datos['tipomov_ne'];
+	    	$egreso['fechamov_ne'] = $datos['fechamov_ne'];
+	    	$egreso['fechapago_ne'] = null;
+	    	$egreso['moneda_ne'] = $datos['moneda_ne'];
+	    	$egreso['idCliente'] = 1801;
+	    	$egreso['pedido_ne'] = $datos['pedido_ne'];
+	    	$egreso['obs_ne'] = $datos['obs_ne'];
+	    	$egreso['tabla']=$this->convertirTablaEgresos($datos['tabla']);
+
+			
+			$this->egresos_model->anularRecuperarMovimiento_model($egreso,1);
+
+			$ingreso['idingresoimportacion']=$datos['idingreso'];
+	    	$ingreso['almacen_imp'] = $datos['almacen_des'];
+        	$ingreso['tipomov_imp'] = $datos['tipomov_ni'];
+        	$ingreso['fechamov_imp'] = $datos['fechamov_ne'];
+        	$ingreso['moneda_imp'] = $datos['moneda_ne'];
+        	$ingreso['proveedor_imp'] = 69;
+        	$ingreso['ordcomp_imp'] = $datos['pedido_ne'];
+        	$ingreso['nfact_imp'] = null;
+        	$ingreso['ningalm_imp'] = null;
+        	$ingreso['obs_imp'] = $datos['obs_ne'];
+        	$ingreso['tabla']=$this->convertirTablaIngresos($datos['tabla']);
+
+        	$this->ingresos_model->anularRecuperarMovimiento_model($ingreso,1);
+
+        	echo json_encode("true");
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+    }
+    public function recuperarTransferencia()
+    {
+    	if($this->input->is_ajax_request())
+        {
+           $datos['almacen_ori'] = $this->security->xss_clean($this->input->post('almacen_ori'));
+        	$datos['almacen_des'] = $this->security->xss_clean($this->input->post('almacen_des'));
+        	$datos['tipomov_ne'] = 8; //egreso
+        	$datos['tipomov_ni'] = 3; //ingreso
+        	$datos['fechamov_ne'] = $this->security->xss_clean($this->input->post('fechamov_ne'));        	        
+        	$datos['moneda_ne'] = $this->security->xss_clean($this->input->post('moneda_ne'));        	
+        	$datos['pedido_ne'] = $this->security->xss_clean($this->input->post('pedido_ne'));        	
+        	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
+        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
+        	$datos['idegreso'] = $this->security->xss_clean($this->input->post('idEgreso'));
+        	$datos['idingreso'] = $this->security->xss_clean($this->input->post('idIngreso'));
+
+        	$totalTabla=$this->retornarTotal($datos['tabla']);
+
+
+        	$egreso['idegreso'] = $datos['idegreso'];
+        	$egreso['almacen_ne'] = $datos['almacen_ori'];
+	    	$egreso['tipomov_ne'] = $datos['tipomov_ne'];
+	    	$egreso['fechamov_ne'] = $datos['fechamov_ne'];
+	    	$egreso['fechapago_ne'] = null;
+	    	$egreso['moneda_ne'] = $datos['moneda_ne'];
+	    	$egreso['idCliente'] = 1801;
+	    	$egreso['pedido_ne'] = $datos['pedido_ne'];
+	    	$egreso['obs_ne'] = $datos['obs_ne'];
+	    	$egreso['tabla']=$this->convertirTablaEgresos($datos['tabla']);
+
+			
+			$this->egresos_model->anularRecuperarMovimiento_model($egreso,0);
+
+			$ingreso['idingresoimportacion']=$datos['idingreso'];
+	    	$ingreso['almacen_imp'] = $datos['almacen_des'];
+        	$ingreso['tipomov_imp'] = $datos['tipomov_ni'];
+        	$ingreso['fechamov_imp'] = $datos['fechamov_ne'];
+        	$ingreso['moneda_imp'] = $datos['moneda_ne'];
+        	$ingreso['proveedor_imp'] = 69;
+        	$ingreso['ordcomp_imp'] = $datos['pedido_ne'];
+        	$ingreso['nfact_imp'] = null;
+        	$ingreso['ningalm_imp'] = null;
+        	$ingreso['obs_imp'] = $datos['obs_ne'];
+        	$ingreso['tabla']=$this->convertirTablaIngresos($datos['tabla']);
+
+        	$this->ingresos_model->anularRecuperarMovimiento_model($ingreso,0);
+
+        	echo json_encode("true");
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+    }
 }
 

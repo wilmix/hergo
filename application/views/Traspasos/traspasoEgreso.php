@@ -9,7 +9,7 @@
     $idalmacenOrigen=0;
     if($cont) //editar
     {
-     
+
         $originalDate = $dcab->fechamov;      
         $newDate = date("Y-m-d", strtotime($originalDate));//revisar mes y año    
         $idalmacenDestino=$dTransferencia->iddestino;
@@ -81,8 +81,8 @@ input[type=date]::-webkit-inner-spin-button {
                    <?php endforeach ?>
                  </select>
                </div>
-              <input  name="idEgreso" value="<?= ($cont)?$dTransferencia->idEgreso:"" ?>" >
-              <input  name="idIngreso" value="<?= ($cont)?$dTransferencia->idIngreso:"" ?>">
+              <input  name="idEgreso" value="<?= ($cont)?$dTransferencia->idEgreso:"" ?>" class="hidden">
+              <input  name="idIngreso" value="<?= ($cont)?$dTransferencia->idIngreso:"" ?>" class="hidden">
 
                <div class="col-xs-6 col-sm-6 col-md-2">
                   <label>Fecha:</label>
@@ -231,11 +231,16 @@ input[type=date]::-webkit-inner-spin-button {
             <div class="row">
                 <div class="col-xs-12">
                 <?php if ($cont): ?>
-                    <button type="button" class="btn btn-primary" id="actualizarMovimiento">Actualizar Movimiento</button>                                            
-                    <button type="button" class="btn btn-danger" id="cancelarMovimiento">Cancelar Movimiento</button>
+                    <button type="button" class="btn btn-primary" id="actualizarMovimiento">Actualizar Traspaso</button>   
+                    <?php if ($dcab->anulado==0): ?>
+                        <button type="button" class="btn btn-warning" id="anularTraspaso">Anular Traspaso</button>  
+                      <?php else: ?>
+                        <button type="button" class="btn btn-info" id="recuperarTraspaso">Recuperar Traspaso</button>  
+                      <?php endif ?>                                            
+                    <button type="button" class="btn btn-danger" id="cancelarMovimiento">Cancelar Traspaso</button>
                 <?php else: ?>
-                    <button type="button" class="btn btn-primary" id="guardarMovimiento" tabindex=11>Guardar Movimiento</button>
-                    <button type="button" class="btn btn-danger" id="cancelarMovimiento" tabindex=12>Cancelar Movimiento</button>
+                    <button type="button" class="btn btn-primary" id="guardarMovimiento" tabindex=11>Guardar Traspaso</button>
+                    <button type="button" class="btn btn-danger" id="cancelarMovimiento" tabindex=12>Cancelar Traspaso</button>
                 <?php endif ?>
 
                 
