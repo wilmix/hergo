@@ -149,12 +149,12 @@ input[type=date]::-webkit-inner-spin-button {
                   </div>
                   <div class="col-xs-6 col-md-2">
                       <!--mostrar costo promedio ponderado de articulo segun codigo-->
-                     <label class="costo_ne_label" for="costo_ne">Precio Bs:</label>
+                     <label class="costo_ne_label" for="costo_ne">Precio Bs:</label><span style="margin-left: 10px; display: none;" class="cargandoPrecioSaldo"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
                      <input type="text" class="form-control form-control-sm text-right tiponumerico punitario_ne_class" name="costo_ne" id="costo_ne" disabled/>
                   </div>
                    <div class="col-xs-6 col-md-2">
                       <!--mostrar saldo en almacen de articulo segun codigo-->
-                     <label for="saldo_ne">Saldo:</label>
+                     <label for="saldo_ne">Saldo:</label><span style="margin-left: 10px; display: none;" class="cargandoPrecioSaldo"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
                       <input type="text" class="form-control form-control-sm text-right tiponumerico" id="saldo_ne" name="saldo_ne" disabled/>
                   </div>
 

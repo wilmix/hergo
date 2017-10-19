@@ -125,9 +125,9 @@ $( function() {
             success: function(data) {
                 //response(data);                   
                 console.log(data)
-                $("#costo_ne").val(data.precio);
+                $("#costo_ne").val(data.nprecionu);
                 $("#saldo_ne").val(data.ncantidad);              
-                $("#punitario_ne").val(data.precio);
+                $("#punitario_ne").val(data.nprecionu);
             }
           });    
          //fin agregar costo articulo

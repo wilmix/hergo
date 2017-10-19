@@ -117,15 +117,17 @@ $( function() {
       select: function( event, ui ) {
 
         idAlmacen=$("#almacen_ne").val();
+        cargandoSaldoPrecioArticulo()
         console.log(idAlmacen)
          $.ajax({
 
-            url: base_url("index.php/ingresos/retornarcostoarticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
+            url: base_url("index.php/ingresos/retornarSaldoPrecioArticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
             dataType: "json",
             data: {},
             success: function(data) {
                 //response(data);                   
                 console.log(data)
+                finCargaSaldoPrecioArticulo()
                 glob_precio_egreso=data.precio;
                 $("#costo_ne").val(data.precio);
                 $("#saldo_ne").val(data.ncantidad);              
@@ -149,6 +151,14 @@ $( function() {
         .appendTo( ul );
     };
  });
+function cargandoSaldoPrecioArticulo()
+{
+    $(".cargandoPrecioSaldo").css("display","");
+}
+function finCargaSaldoPrecioArticulo()
+{
+    $(".cargandoPrecioSaldo").css("display","none");
+}
 $(document).on("click","#agregar_articulo",function(){
     if(glob_agregar)
     {

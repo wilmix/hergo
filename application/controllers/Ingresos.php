@@ -8,6 +8,7 @@ class Ingresos extends CI_Controller
 		parent::__construct();
 		$this->load->helper('url');
 		$this->load->model("ingresos_model");
+		$this->load->model("egresos_model");
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
 		$this->cabeceras_css=array(
@@ -547,6 +548,32 @@ class Ingresos extends CI_Controller
 		else
 			$obj->ncantidad=0;
 		
+		echo json_encode($obj);
+		
+	}
+	public function retornarSaldoPrecioArticulo($id,$idAlmacen) /*retorna solo el saldo*/
+	{
+		$idArticulo=$this->ingresos_model->retornar_datosArticulo($id);
+		
+		//$ca=$this->ingresos_model->retornarcostoarticulo_model($idArticulo,$idAlmacen);
+		$ca=$this->ingresos_model->retornarCosto($idArticulo);		
+		$precio=$this->egresos_model->retornarpreciorticulo_model($idArticulo);
+		$obj=new StdClass();
+		
+		if($ca)
+			$obj->ncantidad=$ca->punitarioSaldo;			
+		else			
+			$obj->ncantidad=0;
+		if($precio)
+		{
+			$fila=$precio->row();    								
+			$obj->precio=$fila->precio;						
+		}
+		else
+		{
+			$obj->precio=0;			
+		}
+						
 		echo json_encode($obj);
 		
 	}
