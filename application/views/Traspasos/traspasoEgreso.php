@@ -5,15 +5,20 @@
     $idtegreso=0;
     $idmoneda=0;
     $idcliente=0;
+    $idalmacenDestino=0;
+    $idalmacenOrigen=0;
     if($cont) //editar
     {
+     
         $originalDate = $dcab->fechamov;      
         $newDate = date("Y-m-d", strtotime($originalDate));//revisar mes y año    
-        $idalmacen=$dcab->idalmacen;
+        $idalmacenDestino=$dTransferencia->iddestino;
+        $idalmacenOrigen=$dTransferencia->idorigen;
         $idtegreso=$dcab->idtipomov;
         $idmoneda=$dcab->idmoneda;
         $idcliente=$dcab->idcliente;
         $idegresocompraslocales=$idtegreso;
+   
     }
     else
     {
@@ -62,7 +67,7 @@ input[type=date]::-webkit-inner-spin-button {
                 <label>Almacen Origen:</label>
                 <select class="form-control form-control-sm" id="almacen_ori" name="almacen_ori" tabindex=1 <?= ($cont)?"disabled":"" ?>>
                     <?php foreach ($almacen->result_array() as $fila): ?>
-                     <option value=<?= $fila['idalmacen'] ?> <?= ($idalmacen==$fila['idalmacen'])?"selected":"" ?> ><?= $fila['almacen'] ?></option>
+                     <option value=<?= $fila['idalmacen'] ?> <?= ($idalmacenOrigen==$fila['idalmacen'])?"selected":"" ?> ><?= $fila['almacen'] ?></option>
                    <?php endforeach ?>
                  </select>
                </div>
@@ -72,11 +77,12 @@ input[type=date]::-webkit-inner-spin-button {
                 <label>Almacen Destino:</label>
                 <select class="form-control form-control-sm" id="almacen_des" name="almacen_des" tabindex=1 <?= ($cont)?"disabled":"" ?>>
                     <?php foreach ($almacen->result_array() as $fila): ?>
-                     <option value=<?= $fila['idalmacen'] ?> <?= ($idalmacen==$fila['idalmacen'])?"selected":"" ?> ><?= $fila['almacen'] ?></option>
+                     <option value=<?= $fila['idalmacen'] ?> <?= ($idalmacenDestino==$fila['idalmacen'])?"selected":"" ?> ><?= $fila['almacen'] ?></option>
                    <?php endforeach ?>
                  </select>
                </div>
-
+              <input  name="idEgreso" value="<?= ($cont)?$dTransferencia->idEgreso:"" ?>" >
+              <input  name="idIngreso" value="<?= ($cont)?$dTransferencia->idIngreso:"" ?>">
 
                <div class="col-xs-6 col-sm-6 col-md-2">
                   <label>Fecha:</label>
@@ -185,7 +191,7 @@ input[type=date]::-webkit-inner-spin-button {
                                 <td><input type="text" class="estilofila" disabled value="<?= $fila['Descripcion'] ?>"></input</td>
                                 <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['cantidad'] ?>"></input></td>
                                 <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['punitario']?>"></input></td><!--nuevo-->
-                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['descuento'] ?>"></input></td><!--nuevo-->
+                                
                                 <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="<?= $fila['total'] ?>"></input></td>
                                 <!--<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value=""></input></td>--><!--nuevo-->
                                 <td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
@@ -203,7 +209,7 @@ input[type=date]::-webkit-inner-spin-button {
               </div>
               <div class="col-md-6 col-xs-12">
                 <div class = "input-group col-md-12 col-xs-12">
-                  <span class = "input-group-addon">$</span>
+                  <span class = "input-group-addon">Sus</span>
                   <!--mostrar el total de dolares-->
                   <input type = "text" class="form-control form-control-sm text-right tiponumerico" readonly id="totalacostosus" tabindex=14>
                   <span class = "input-group-addon" >Bs</span>

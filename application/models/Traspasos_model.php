@@ -17,7 +17,7 @@ class Traspasos_model extends CI_Model
 	}
 	public function listar($ini=null,$fin=null)
 	{
-		$sql="SELECT t.idTraspasos, a.almacen as origen,b.almacen as destino,t.estado,t.fecha, t.total, t.idEgreso
+		$sql="SELECT t.idTraspasos, a.almacen as origen,b.almacen as destino,i.estado,t.fecha, t.total, t.idEgreso, e.anulado
 		FROM traspasos t
 		INNER JOIN ingresos i
 		ON t.idIngreso=i.idIngresos
@@ -43,7 +43,7 @@ class Traspasos_model extends CI_Model
 		INNER JOIN almacenes a
 		on e.almacen=a.idalmacen 
 		INNER JOIN almacenes b
-		on e.almacen=b.idalmacen 
+		on i.almacen=b.idalmacen 
 		WHERE t.idTraspasos=$id
 		LIMIT 1";				
 		$query=$this->db->query($sql);	
@@ -70,5 +70,40 @@ class Traspasos_model extends CI_Model
 		$sql="UPDATE traspasos SET estado='$estado' where idTraspasos='$this.idTraspasos'";     
         $this->db->query($sql);	
 	}
-	
+	public function obtenerUltimoTraspaso($idEgreso)
+	{
+		$sql="SELECT t.idTraspasos, a.almacen as origen,b.almacen as destino,t.estado,t.fecha, t.total,a.idalmacen as idorigen,b.idalmacen as iddestino, t.idIngreso, t.idEgreso
+		FROM traspasos t
+		INNER JOIN ingresos i
+		ON t.idIngreso=i.idIngresos
+		INNER JOIN egresos e
+		ON t.idEgreso=e.idEgresos
+		INNER JOIN almacenes a
+		on e.almacen=a.idalmacen 
+		INNER JOIN almacenes b
+		on i.almacen=b.idalmacen 
+		WHERE e.tipomov=8 /*tipo de egreso traspaso*/
+		AND e.anulado<>1 /*distinto de anulado*/
+		AND e.idegresos=$idEgreso
+		LIMIT 1";	
+		
+		$query=$this->db->query($sql);	
+		if($query->num_rows()>0)
+    	{
+    		$fila=$query->row();
+    		return $fila;
+    	}
+    	else
+    	{
+    		return false;
+    	}	
+	}
+	public function actualizar()
+	{
+
+		$sql="UPDATE traspasos SET total=$this->total where idIngreso=$this->idIngreso AND idEgreso=$this->idEgreso";	
+        $this->db->query($sql);
+        return true;
+    }
+
 }

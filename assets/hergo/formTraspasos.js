@@ -119,7 +119,7 @@ $( function() {
         console.log(idAlmacen)
          $.ajax({
 
-            url: base_url("index.php/egresos/retornarpreciorticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
+            url: base_url("index.php/ingresos/retornarcostoarticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
             dataType: "json",
             data: {},
             success: function(data) {
@@ -424,7 +424,7 @@ function actualizarMovimiento()
         var tabla=JSON.stringify(tablaaux);
 
         valuesToSubmit+="&tabla="+tabla;    
-        retornarajax(base_url("index.php/egresos/actualizarmovimiento"),valuesToSubmit,function(data)
+        retornarajax(base_url("index.php/traspasos/actualizar"),valuesToSubmit,function(data)
         {
             estado=validarresultado_ajax(data);
             if(estado)
@@ -557,6 +557,7 @@ $(document).on("click","#cancelarMovimiento",function(){
     limpiarArticulo();
     limpiarCabecera();
     limpiarTabla();
+    window.location.href=base_url("ingresos");
 })
 $(document).on("click","#actualizarMovimiento",function(){
     actualizarMovimiento();

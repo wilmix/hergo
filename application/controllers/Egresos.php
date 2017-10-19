@@ -244,6 +244,7 @@ class Egresos extends CI_Controller
         	$fin=$this->security->xss_clean($this->input->post("f"));//fecha fin
         	$alm=$this->security->xss_clean($this->input->post("a"));//almacen
         	$tin=$this->security->xss_clean($this->input->post("ti"));//tipo de ingreso
+        	
         	if($tin==8)
         		$res=$this->egresos_model->mostrarEgresosTraspasos($id=null,$ini,$fin,$alm,$tin);
         	else        		
@@ -292,8 +293,7 @@ class Egresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
             $this->datos['dcab']=$this->mostrarEgresosEdicion($id);//datos cabecera
             $this->datos['detalle']=$this->mostrarDetalleEditar($id);
-
-
+            if($this->datos['dcab']->idtipomov==8) redirect("error");
             if($this->datos['dcab']->moneda==2)//si es dolares dividimos por el tipo de cambio
             {
 
@@ -318,17 +318,15 @@ class Egresos extends CI_Controller
 		  	$this->datos['proveedor']=$this->ingresos_model->retornar_tabla("provedores");
 		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
 		  			  	//clientes
-
 		  	$this->datos['tipodocumento']=$this->cliente_model->retornar_tabla("documentotipo");			
 			$this->datos['tipocliente']=$this->cliente_model->retornar_tabla("clientetipo");
 			//user vendedor
-			$this->datos['user']=$this->egresos_model->retornar_tablaUsers("nombre");
-		
+			$this->datos['user']=$this->egresos_model->retornar_tablaUsers("nombre");		
 			
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);			
 			$this->load->view('egresos/notaentrega.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);

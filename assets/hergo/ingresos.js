@@ -401,7 +401,15 @@ function retornarTablaIngresos()
 
 }
 function operateFormatter(value, row, index)
-{
+{    
+    if(row.sigla=="IT")
+    return [
+        '<button type="button" class="btn btn-default verIngreso" aria-label="Right Align">',
+        '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',        
+        '<button type="button" class="btn btn-default imprimirIngreso" aria-label="Right Align">',
+        '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
+    ].join('');    
+    else        
     return [
         '<button type="button" class="btn btn-default verIngreso" aria-label="Right Align">',
 	    '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',

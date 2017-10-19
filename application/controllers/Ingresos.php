@@ -298,7 +298,7 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
             $this->datos['dcab']=$this->mostrarIngresosEdicion($id);//datos cabecera
             $this->datos['detalle']=$this->mostrarDetalleEditar($id);
-            
+            if($this->datos['dcab']->idtipomov==3) redirect("error");//evita editar si el tipo de moviemiento es traspaso                  
 
             if($this->datos['dcab']->moneda==2)//si es dolares dividimos por el tipo de cambio
             {

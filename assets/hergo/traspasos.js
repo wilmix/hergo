@@ -133,12 +133,7 @@ function retornarTablaTraspasos()
                 title:"Estado",
                 width: '7%',
                 sortable:true,
-                align: 'center',
-                formatter: operateFormatter2,
-                 filter: {
-                    type: "select",
-                    data:["T. FACTURADO","NO FACTURADO","PARCIAL"]
-                },
+                align: 'center',                    
 
                 filter: {
                     type: "select",
@@ -183,6 +178,7 @@ function operateFormatter(value, row, index)
 
 function operateFormatter2(value, row, index)
 {
+
     $ret=''
 
     if(row.anulado==1)
@@ -191,12 +187,10 @@ function operateFormatter2(value, row, index)
     }
     else
     {
-        if(value==0)
-            $ret='<span class="label label-danger">No facturado</span>';
+       if(value==0)
+            $ret='<span class="label label-danger">PENDIENTE</span>';
         if(value==1)
-            $ret='<span class="label label-success">T. Facturado</span>';
-        if(value==2)
-            $ret='<span class="label label-info">Facturado Parcial</span>';
+            $ret='<span class="label label-success">APROBADO</span>';
     }
     
     return ($ret);

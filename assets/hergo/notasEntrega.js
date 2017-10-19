@@ -120,7 +120,7 @@ $( function() {
         console.log(idAlmacen)
          $.ajax({
 
-            url: base_url("index.php/egresos/retornarpreciorticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
+            url: base_url("index.php/ingresos/retornarcostoarticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
             dataType: "json",
             data: {},
             success: function(data) {

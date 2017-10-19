@@ -363,7 +363,7 @@ function retornarTablaEgresos()
         dataType: "json",
         data: {i:ini,f:fin,a:alm,ti:tipoingreso},
     }).done(function(res){
-        console.log(res)
+      //  console.log(res)
        datosselect= restornardatosSelect(res)
        quitarcargando();
         $("#tegresos").bootstrapTable('destroy');
@@ -386,7 +386,17 @@ function retornarTablaEgresos()
 
 }
 function operateFormatter(value, row, index)
-{
+{       
+    if(row.sigla=="ET")
+        return [
+        '<button type="button" class="btn btn-default verEgreso" aria-label="Right Align">',
+        '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
+        '<button type="button" class="btn btn-default editarEgresoTraspaso" aria-label="Right Align">',
+        '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>',
+        '<button type="button" class="btn btn-default imprimirEgreso" aria-label="Right Align">',
+        '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
+    ].join('');
+    else
     return [
         '<button type="button" class="btn btn-default verEgreso" aria-label="Right Align">',
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
@@ -445,6 +455,18 @@ window.operateEvents = {
     'click .editarEgreso': function (e, value, row, index) {
       console.log(row.idIngresos);
       var editar=base_url("egresos/editaregresos/")+row.idEgresos;
+      if(row.estado==0)
+      {
+        window.location.href = editar;
+      }
+      else
+      {
+        swal("Error", "No se puede editar el registro seleccionado. El registro ya se encuentra Facturado.","error")
+      }        
+    },
+    'click .editarEgresoTraspaso': function (e, value, row, index) {
+      console.log(row.idIngresos);
+      var editar=base_url("traspasos/edicion/")+row.idEgresos;
       if(row.estado==0)
       {
         window.location.href = editar;

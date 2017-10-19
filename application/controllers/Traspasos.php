@@ -9,6 +9,7 @@ class Traspasos extends CI_Controller
 		$this->load->helper('url');
 		$this->load->model("ingresos_model");
 		$this->load->model("egresos_model");
+		$this->load->model("cliente_model");
 		$this->load->helper('date');
 		$this->load->model("traspasos_model");
 		$this->traspasos= new $this->traspasos_model();
@@ -225,6 +226,74 @@ class Traspasos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
     }
+    public function actualizar()
+    {
+    	if($this->input->is_ajax_request())
+        {
+        	
+        	$datos['almacen_ori'] = $this->security->xss_clean($this->input->post('almacen_ori'));
+        	$datos['almacen_des'] = $this->security->xss_clean($this->input->post('almacen_des'));
+        	$datos['tipomov_ne'] = 8; //egreso
+        	$datos['tipomov_ni'] = 3; //ingreso
+        	$datos['fechamov_ne'] = $this->security->xss_clean($this->input->post('fechamov_ne'));        	        
+        	$datos['moneda_ne'] = $this->security->xss_clean($this->input->post('moneda_ne'));        	
+        	$datos['pedido_ne'] = $this->security->xss_clean($this->input->post('pedido_ne'));        	
+        	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
+        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
+        	$datos['idegreso'] = $this->security->xss_clean($this->input->post('idEgreso'));
+        	$datos['idingreso'] = $this->security->xss_clean($this->input->post('idIngreso'));
+
+        	$totalTabla=$this->retornarTotal($datos['tabla']);
+
+        	$egreso['idegreso'] = $datos['idegreso'];
+        	$egreso['almacen_ne'] = $datos['almacen_ori'];
+	    	$egreso['tipomov_ne'] = $datos['tipomov_ne'];
+	    	$egreso['fechamov_ne'] = $datos['fechamov_ne'];
+	    	$egreso['fechapago_ne'] = null;
+	    	$egreso['moneda_ne'] = $datos['moneda_ne'];
+	    	$egreso['idCliente'] = 1801;
+	    	$egreso['pedido_ne'] = $datos['pedido_ne'];
+	    	$egreso['obs_ne'] = $datos['obs_ne'];
+	    	$egreso['tabla']=$this->convertirTablaEgresos($datos['tabla']);
+
+			$this->egresos_model->actualizarmovimiento_model($egreso);
+
+			$ingreso['idingresoimportacion']=$datos['idingreso'];
+	    	$ingreso['almacen_imp'] = $datos['almacen_des'];
+        	$ingreso['tipomov_imp'] = $datos['tipomov_ni'];
+        	$ingreso['fechamov_imp'] = $datos['fechamov_ne'];
+        	$ingreso['moneda_imp'] = $datos['moneda_ne'];
+        	$ingreso['proveedor_imp'] = 69;
+        	$ingreso['ordcomp_imp'] = $datos['pedido_ne'];
+        	$ingreso['nfact_imp'] = null;
+        	$ingreso['ningalm_imp'] = null;
+        	$ingreso['obs_imp'] = $datos['obs_ne'];
+        	$ingreso['tabla']=$this->convertirTablaIngresos($datos['tabla']);
+
+        	$this->ingresos_model->actualizarmovimiento_model($ingreso);
+
+	    	$idEgreso=$datos['idegreso'];
+	    	$idIngreso=$datos['idingreso'];	    	
+	    	$this->traspasos->idIngreso=$idIngreso;
+			$this->traspasos->idEgreso=$idEgreso;
+			$this->traspasos->estado=1;
+			$this->traspasos->fecha=$datos['fechamov_ne'];
+			$this->traspasos->total=$totalTabla;
+        	if($this->traspasos->actualizar())
+        	{
+        		//$this->retornarcostoarticulo_tabla($datos['tabla'],$datos['almacen_imp']);
+				echo json_encode("true");
+        	}
+			else
+			{				
+				echo json_encode("false");
+			}
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+    }
     private function transefernciaEgreso($datos)
     {
     	$idEgreso=$this->egresos_model->guardarmovimiento_model($datos);    	    	
@@ -401,6 +470,96 @@ class Traspasos extends CI_Controller
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
+	}
+	public function edicion($id=null)//cambiar nombre a editar ingresos!!!!
+	{
+        //if("si no esta autorizado a editar redireccionar o enviar error!!!!")
+        if($id==null) redirect("error");
+        if(!$this->egresos_model->puedeeditar($id)) redirect("error");
+		if(!$this->session->userdata('logeado'))
+			redirect('auth', 'refresh');
+
+			$this->datos['menu']="Egresos";
+			$this->datos['opcion']="Editar Egresos";
+			$this->datos['titulo']="Editar";
+
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
+            /*************AUTOCOMPLETE**********/
+            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
+			/***************SELECT***********/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
+			/**************FUNCION***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/formTraspasos.js');
+            /**************INPUT MASK***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+
+
+			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
+            $this->datos['dcab']=$this->mostrarEgresosEdicion($id);//datos cabecera
+            $this->datos['detalle']=$this->mostrarDetalleEditar($id);
+            $this->datos['dTransferencia']=$this->traspasos_model->obtenerUltimoTraspaso($id);
+
+            if($this->datos['dcab']->moneda==2)//si es dolares dividimos por el tipo de cambio
+            {
+
+            	$tipodecambiovalor=$this->egresos_model->retornarValorTipoCambio($this->datos['dcab']->tipocambio);            	
+            	$tipodecambiovalor=$tipodecambiovalor->tipocambio;
+            	
+	            for ($i=0; $i < count($this->datos['detalle']) ; $i++) { 
+	            //	$this->datos['detalle'][$i]["totaldoc"]=$this->datos['detalle'][$i]["totaldoc"]/$tipodecambiovalor;
+	            	$this->datos['detalle'][$i]["punitario"]=$this->datos['detalle'][$i]["punitario"]/$tipodecambiovalor;	            	
+	            	$this->datos['detalle'][$i]["total"]=$this->datos['detalle'][$i]["total"]/$tipodecambiovalor;	  
+
+	            }		
+	           
+            }
+         
+            $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
+            $this->datos['tegreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
+		  	$this->datos['fecha']=date('Y-m-d');
+		  	$this->datos['proveedor']=$this->ingresos_model->retornar_tabla("provedores");
+		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
+		  			  	//clientes
+
+		  	$this->datos['tipodocumento']=$this->cliente_model->retornar_tabla("documentotipo");			
+			$this->datos['tipocliente']=$this->cliente_model->retornar_tabla("clientetipo");
+			//user vendedor
+			$this->datos['user']=$this->egresos_model->retornar_tablaUsers("nombre");
+		
+			
+			$this->load->view('plantilla/head.php',$this->datos);
+			$this->load->view('plantilla/header.php',$this->datos);
+			$this->load->view('plantilla/menu.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);			
+			$this->load->view('traspasos/traspasoEgreso.php',$this->datos);
+			$this->load->view('plantilla/footcontainer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
+	}
+	public function mostrarEgresosEdicion($id)
+	{
+        $res=$this->egresos_model->mostrarEgresos($id);
+        if($res->num_rows()>0)
+    	{
+    		$fila=$res->row();
+    		return $fila;
+    	}
+        else
+        {
+            return(false);
+        }
+	}
+	public function mostrarDetalleEditar($id)
+	{
+        $res=$this->egresos_model->mostrarDetalle($id);
+        $res=$res->result_array();
+        return($res);
 	}
 }
 
