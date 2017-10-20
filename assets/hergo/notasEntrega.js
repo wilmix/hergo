@@ -585,17 +585,7 @@ function cambiarMoneda()
 
 function anularMovimientoEgreso()
 {     
-    swal
-    ({
-      title: 'Quiere anular el movimiento Egreso?',
-      text: "Esta a punto de anular el movimiento",
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, anular movimiento!'
-    }).then(function () 
-    {
+   
         var valuesToSubmit = $("#form_egreso").serialize();
         var tablaaux=tablatoarray();
         console.log(valuesToSubmit)
@@ -612,12 +602,12 @@ function anularMovimientoEgreso()
                     if(data.respuesta)
                     {
                         
-                        swal(
+                       /* swal(
                                 'Anulado!',
                                 'El movimiento ha sido anulado.',
                                 'success'
-                            )
-                        window.location.href=base_url("egresos");
+                            )*/
+                       
                     }
                     else
                     {
@@ -633,7 +623,7 @@ function anularMovimientoEgreso()
             alert("no se tiene datos en la tabla para guardar")
         }
 
-    })
+    
 
 }
 function recuperarMovimientoEgreso()
@@ -653,12 +643,12 @@ function recuperarMovimientoEgreso()
             {               
                 if(data.respuesta)
                 {
-                swal(
+               /* swal(
                         'Recuperado!',
                         'El movimiento ha sido recuperado.',
                         'success' 
                     )
-                    window.location.href=base_url("egresos");
+                    window.location.href=base_url("egresos");*/
                 }
                 else
                 {
@@ -676,10 +666,25 @@ function recuperarMovimientoEgreso()
 }
 
 $(document).on("click","#anularMovimientoEgreso",function(){
-    anularMovimientoEgreso();
+    mensajeAnular("#obs_ne",
+        function(){
+            anularMovimientoEgreso();
+        },
+        function(){
+            window.location.href=base_url("egresos");
+        }
+    );
+    
 })
 
 $(document).on("click","#recuperarMovimientoEgreso",function(){
-    recuperarMovimientoEgreso();
+     mensajeRecuperar("#obs_ne",
+        function(){
+            recuperarMovimientoEgreso();
+        },
+        function(){
+             window.location.href=base_url("egresos");
+        }
+    );
 })
 

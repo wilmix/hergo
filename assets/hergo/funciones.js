@@ -276,3 +276,55 @@ function codigoControl(res,datos)
               height: 128,
             });        
     }
+    function mensajeAnular(idObservacion,funcionAnular,postAlert)
+    {        
+        swal({
+          title: 'Anular movimiento',
+          text: 'Cual es el motivo de anulacion?',
+          input: 'text',
+          type: 'info',
+          showCancelButton: true,
+          confirmButtonText: 'Aceptar',
+          cancelButtonText:'Cancelar',                
+        }).then(function (texto) {
+            var txt=$(idObservacion).val();
+            txt+=" ANULADO: "+texto
+            $(idObservacion).val(txt);
+            console.log(txt)
+            funcionAnular();
+            swal({
+              type: 'success',
+              title: 'Anulado!',
+              allowOutsideClick: false, 
+              html: 'Movimiento anulado: ' + texto
+            }).then(function(){                
+              postAlert();
+            })
+        })
+    }
+    function mensajeRecuperar(idObservacion,funcionAnular,postAlert)
+    {        
+        swal({
+          title: 'Recuperar movimiento',
+          text: 'Cual es el motivo de la recuperacion?',
+          input: 'text',
+          type: 'info',
+          showCancelButton: true,
+          confirmButtonText: 'Aceptar',
+          cancelButtonText:'Cancelar',                
+        }).then(function (texto) {
+            var txt=$(idObservacion).val();
+            txt+=" RECUPERADO: "+texto
+            $(idObservacion).val(txt);
+            console.log(txt)
+            funcionAnular();
+            swal({
+              type: 'success',
+              title: 'Recuperado!',
+              allowOutsideClick: false, 
+              html: 'Movimiento recuperado: ' + texto
+            }).then(function(){                
+              postAlert();
+            })
+        })
+    }

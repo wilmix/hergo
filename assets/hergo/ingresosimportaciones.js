@@ -406,8 +406,8 @@ function anularMovimiento()
 {     
     var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
     var tablaaux=tablatoarray();
-    console.log(valuesToSubmit)
-    console.log(tablaaux);
+   // console.log(valuesToSubmit)
+   // console.log(tablaaux);
     if(tablaaux.length>0)
     {
         var tabla=JSON.stringify(tablaaux);
@@ -427,7 +427,7 @@ function anularMovimiento()
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos anulados correctamente");
                     $("#modal_ok").modal("show");
-                    window.location.href=base_url("ingresos");
+                   // window.location.href=base_url("ingresos");
                 }
                 else
                 {
@@ -468,7 +468,7 @@ function recuperarMovimiento()
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos recuperados correctamente");
                     $("#modal_ok").modal("show");
-                    window.location.href=base_url("ingresos");
+                    
                 }
                 else
                 {
@@ -513,14 +513,24 @@ $(document).on("click","#cancelarMovimientoActualizar",function(){
 })
 
 $(document).on("click","#anularMovimiento",function(){
-    anularMovimiento();
-    limpiarArticulo();
-    limpiarCabecera();
-    limpiarTabla();
+    mensajeAnular("#obs_imp",
+        function(){
+            anularMovimiento();
+        },
+        function(){
+            window.location.href=base_url("ingresos");  
+        }
+    );
+    
+  
 })
-$(document).on("click","#recuperarMovimiento",function(){
-    recuperarMovimiento();
-    limpiarArticulo();
-    limpiarCabecera();
-    limpiarTabla();
+$(document).on("click","#recuperarMovimiento",function(){   
+    mensajeRecuperar("#obs_imp",
+        function(){
+             recuperarMovimiento();
+        },
+        function(){
+            window.location.href=base_url("ingresos");  
+        }
+    );
 })

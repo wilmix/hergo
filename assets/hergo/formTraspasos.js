@@ -476,13 +476,13 @@ function anularTraspaso()// X
                 if(data.respuesta)
                 {
                     
-                    $("#modalIgresoDetalle").modal("hide");
+                  /*  $("#modalIgresoDetalle").modal("hide");
                     limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos anulados correctamente");
-                    $("#modal_ok").modal("show");
-                    window.location.href=base_url("egresos");
+                    $("#modal_ok").modal("show");*/
+                    
                 }
                 else
                 {
@@ -517,13 +517,13 @@ function recuperarTraspaso()// X
                 if(data.respuesta)
                 {
                     
-                    $("#modalIgresoDetalle").modal("hide");
+                    /*$("#modalIgresoDetalle").modal("hide");
                     limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos recuperados correctamente");
-                    $("#modal_ok").modal("show");
-                    window.location.href=base_url("egresos");
+                    $("#modal_ok").modal("show");*/
+                    
                 }
                 else
                 {
@@ -570,14 +570,26 @@ $(document).on("click","#cancelarMovimientoActualizar",function(){
 })
 
 $(document).on("click","#anularTraspaso",function(){
-    anularTraspaso();
-    limpiarArticulo();
-    limpiarCabecera();
-    limpiarTabla();
+    
+    mensajeAnular("#obs_ne",
+        function(){
+            anularTraspaso();
+        },
+        function(){
+            window.location.href=base_url("egresos"); 
+        }
+    );
+   
 })
 $(document).on("click","#recuperarTraspaso",function(){
-    recuperarTraspaso();
-    limpiarArticulo();
-    limpiarCabecera();
-    limpiarTabla();
+    
+    mensajeRecuperar("#obs_ne",
+        function(){
+            recuperarTraspaso();
+        },
+        function(){
+            window.location.href=base_url("egresos"); 
+        }
+    );
+    
 })
