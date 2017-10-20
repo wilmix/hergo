@@ -245,7 +245,71 @@ function calculocompraslocales(cant,costo)
 }
 function agregarArticulo() //faltaria el id costo; si se guarda en la base primero
 {
+var codigo=$("#articulo_imp").val();
+    var descripcion=$("#Descripcion_ne").val();
+    var cant=$("#cantidad_ne").inputmask('unmaskedvalue');
+    var costo=$("#punitario_ne").inputmask('unmaskedvalue');
+    var descuento=$("#descuento_ne").inputmask('unmaskedvalue');
+    var totalfac=costo;
+    var cant=(cant=="")?0:cant;
+    var costo=(costo=="")?0:costo;
+    var tipoingreso=$("#tipomov_imp2").val();
+    var total;
+    var saldoAlmacen =$("#saldo_ne").val();
+    var codigoArticulo =$("#articulo_imp").val();
 
+    if (cant>0) //valida cantidad mayor a cero
+    {
+
+           if (saldoAlmacen > 0) // mensaje para  saldo de almacen 
+            {
+                agregarArticuloTraspasos();
+            }
+            else
+            {
+                 swal({
+                          title: 'Saldo Insuficiente',
+                          html: "No tiene suficiente <b>"+codigoArticulo+ "</b> en su almacen.<br>"+"Desea generar <b>NEGATIVO</b>?",
+                          type: 'warning',
+                          showCancelButton: true,
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                          confirmButtonText: 'Si, Agregar',
+                          cancelButtonText: 'No, Cancelar'
+                }).then(
+                  function(result) {
+                    agregarArticuloTraspasos();
+                    swal({
+                          type: 'warning',
+                          html: 'Usted generó un NEGATIVO en <b>'+codigoArticulo,
+                          showConfirmButton: false,
+                          timer: 4000
+                        })
+                  }, function(dismiss) {
+                    if (dismiss === 'cancel')
+                    {
+                    swal(
+                      'No agregado',
+                      'Gracias por no generar negativos :)',
+                      'error'
+                    )}
+                });
+            }
+    
+    }
+    else
+    {
+            swal(
+                  'Oops...',
+                  'Ingrese cantidad valida!',
+                  'error'
+                )
+    }
+
+}
+
+function agregarArticuloTraspasos()
+{
     var codigo=$("#articulo_imp").val();
     var descripcion=$("#Descripcion_ne").val();
     var cant=$("#cantidad_ne").inputmask('unmaskedvalue');
@@ -258,11 +322,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     var total;
     var saldoAlmacen =$("#saldo_ne").val();
     console.log(saldoAlmacen)
-
-
-   if (saldoAlmacen > 0) 
-    {
-        total=cant*costo;
+    total=cant*costo;
         var articulo='<tr>'+ 
         '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
         '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
@@ -279,43 +339,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
         });
         calcularTotal()
         limpiarArticulo();
-    }
-    else
-    {
-          swal
-          ({
-              title: "Atencion!",
-              text: "Su almacen no tiene saldo suficiente",
-              type: "warning",
-              showCancelButton: true,
-              cancelButtonText: "Cancelar",
-              confirmButtonColor: "#DD6B55",
-              confirmButtonText: "Continuar",},
-              function(isConfirm){
-              if (isConfirm) 
-              {
-                total=cant*costo;
-                var articulo='<tr>'+ 
-                '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
-                '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
-                '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
-                '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+  //nuevo P/U Factura                
-                '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
-                '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+'</tr>'
-                $("#tbodyarticulos").append(articulo)
-                $(".tiponumerico").inputmask({
-                    alias:"decimal",
-                    digits:3,
-                    groupSeparator: ',',
-                    autoGroup: true
-                });
-                calcularTotal();
-                limpiarArticulo();
-              }
 
-        });
-    }
-   
 }
 
 $(document).on("keyup","#cantidad_imp,#punitario_imp",function(){
@@ -365,6 +389,10 @@ function guardarmovimiento()
     {
         swal("Error", "Almacen de destino es el mismo que el origen","error")
     }
+    else if (almDestino === "")
+     {
+        swal("Error", "Seleccione almacen de destino","error")
+    } 
     else
     {
 
@@ -385,19 +413,16 @@ function guardarmovimiento()
                 {
                     
                     $("#modalIgresoDetalle").modal("hide");
-                   /* limpiarArticulo();
+                    limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
-                   */
-                    swal({
-                        title: "Buen trabajo!",
-                        text: "El Traspaso se realizo con éxito!",
-                        type: "success",        
-                        allowOutsideClick: false,                                                                        
-                        }).then(function(){
-                            location.reload();
-                        })
-
+                    //$(".mensaje_ok").html("Datos almacenados correctamente");
+                    //$("#modal_ok").modal("show");
+                    swal(
+                          'Buen trabajo!',
+                          'El Traspaso se realizo con éxito!',
+                          'success'
+                        )
                 }
                 else
                 {
@@ -476,13 +501,13 @@ function anularTraspaso()// X
                 if(data.respuesta)
                 {
                     
-                  /*  $("#modalIgresoDetalle").modal("hide");
+                    $("#modalIgresoDetalle").modal("hide");
                     limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos anulados correctamente");
-                    $("#modal_ok").modal("show");*/
-                    
+                    $("#modal_ok").modal("show");
+                    window.location.href=base_url("egresos");
                 }
                 else
                 {
@@ -517,13 +542,13 @@ function recuperarTraspaso()// X
                 if(data.respuesta)
                 {
                     
-                    /*$("#modalIgresoDetalle").modal("hide");
+                    $("#modalIgresoDetalle").modal("hide");
                     limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos recuperados correctamente");
-                    $("#modal_ok").modal("show");*/
-                    
+                    $("#modal_ok").modal("show");
+                    window.location.href=base_url("egresos");
                 }
                 else
                 {
@@ -570,26 +595,14 @@ $(document).on("click","#cancelarMovimientoActualizar",function(){
 })
 
 $(document).on("click","#anularTraspaso",function(){
-    
-    mensajeAnular("#obs_ne",
-        function(){
-            anularTraspaso();
-        },
-        function(){
-            window.location.href=base_url("egresos"); 
-        }
-    );
-   
+    anularTraspaso();
+    limpiarArticulo();
+    limpiarCabecera();
+    limpiarTabla();
 })
 $(document).on("click","#recuperarTraspaso",function(){
-    
-    mensajeRecuperar("#obs_ne",
-        function(){
-            recuperarTraspaso();
-        },
-        function(){
-            window.location.href=base_url("egresos"); 
-        }
-    );
-    
+    recuperarTraspaso();
+    limpiarArticulo();
+    limpiarCabecera();
+    limpiarTabla();
 })
