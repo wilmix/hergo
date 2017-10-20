@@ -266,24 +266,77 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     var totalfac=costo;
     var cant=(cant=="")?0:cant;
     var costo=(costo=="")?0:costo;
-    var tipoingreso=$("#tipomov_imp2").val()
+    var tipoingreso=$("#tipomov_imp2").val();
+    var saldoAlmacen=$("#saldo_ne").val();
+    var codigoArticulo=$("#articulo_imp").val();
     var total;
-    //console.log(tipoingreso)
-   /* if(tipoingreso==2)//si es compra local idcompralocal=2
-    {
- 
-        costo=calculocompraslocales(cant,costo)
 
-    }*/
+
+        if (cant>0) //valida cantidad mayor a cero
+        {
+           if (saldoAlmacen > 0) // mensaje para  saldo de almacen 
+            {
+                agregarArticuloEgresos();
+            }
+            else
+            {
+                 swal({
+                          title: 'Saldo Insuficiente',
+                          html: "No tiene suficiente <b>"+codigoArticulo+ "</b> en su almacen.<br>"+"Desea generar <b>NEGATIVO</b>?",
+                          type: 'warning',
+                          showCancelButton: true,
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                          confirmButtonText: 'Si, Agregar',
+                          cancelButtonText: 'No, Cancelar'
+                }).then(
+                  function(result) {
+                    agregarArticuloEgresos();
+                    swal({
+                          type: 'warning',
+                          html: 'Usted generó un NEGATIVO en <b>'+codigoArticulo,
+                          showConfirmButton: false,
+                          timer: 4000
+                        })
+                  }, function(dismiss) {
+                    if (dismiss === 'cancel')
+                    {
+                    swal(
+                      'No agregado',
+                      'Gracias por no generar negativos :)',
+                      'error'
+                    )}
+                });
+            }
+        
+        }
+        else
+        {
+                swal(
+                      'Oops...',
+                      'Ingrese cantidad valida!',
+                      'error'
+                    )
+        }
+}
+
+function agregarArticuloEgresos()
+{
+    var codigo=$("#articulo_imp").val()
+    var descripcion=$("#Descripcion_ne").val()
+    var cant=$("#cantidad_ne").inputmask('unmaskedvalue');
+    var costo=$("#punitario_ne").inputmask('unmaskedvalue');
+    var descuento=$("#descuento_ne").inputmask('unmaskedvalue');
+    var totalfac=costo;
+    var cant=(cant=="")?0:cant;
+    var costo=(costo=="")?0:costo;
+    var tipoingreso=$("#tipomov_imp2").val();
+    var total;
+
     descuento=cant*costo*descuento/100;
     costo=costo;
-    
     total=(cant*costo)-descuento;   
-    
-    //console.log("cant",cant,"* costo",costo,"=",total)
-    
-    //var articulo='<tr caid="'+idcosto+'">'+ //costo articulo id
-   // var punitfac=cant==0?0:(totalfac/cant);
+
     var articulo='<tr>'+ 
             '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
             '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
@@ -342,6 +395,7 @@ function guardarmovimiento()
 {     
     console.log($("#_tipomov_ne").val())
     var valuesToSubmit = $("#form_egreso").serialize();
+    var tipoEgreso=$("#tipomov_ne2").text();
     var tablaaux=tablatoarray();
     if($("#_tipomov_ne").val()==9) //continuar en el caso de que el tipo de movimiento es baja de producto
         var auxContinuar=true
@@ -352,6 +406,7 @@ function guardarmovimiento()
     if(!glob_guardar && !auxContinuar)
     {
         swal("Error", "Seleccione el cliente","error")
+        console.log("este tipo "+tipoEgreso);
         return 0;
     }    
     if(tablaaux.length>0)
@@ -369,19 +424,15 @@ function guardarmovimiento()
                 {
                     
                     $("#modalIgresoDetalle").modal("hide");
-                    /*limpiarArticulo();
-                    limpiarCabecera();
-                    limpiarTabla();*/
                     swal({
-                        title: "Egreso realizado!",
-                        text: "El egreso se guardo con éxito",
-                        type: "success",        
-                        allowOutsideClick: false,                                                                        
-                        }).then(function(){
+                        title: 'Egreso realizado!',
+                        text: tipoEgreso+" guardada con éxito",
+                        type: 'success', 
+                        showCancelButton: false
+                    }).then(
+                          function(result) {
                             location.reload();
-                        })
-                        
-                    //location.reload();
+                          });
                 }
                 else
                 {

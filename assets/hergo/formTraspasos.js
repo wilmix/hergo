@@ -416,13 +416,15 @@ function guardarmovimiento()
                     limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
-                    //$(".mensaje_ok").html("Datos almacenados correctamente");
-                    //$("#modal_ok").modal("show");
-                    swal(
-                          'Buen trabajo!',
-                          'El Traspaso se realizo con éxito!',
-                          'success'
-                        )
+                    swal({
+                        title: 'Traspaso realizado!',
+                        text: "Traspaso guardada con éxito",
+                        type: 'success', 
+                        showCancelButton: false
+                    }).then(
+                          function(result) {
+                            location.reload();
+                          });
                 }
                 else
                 {
