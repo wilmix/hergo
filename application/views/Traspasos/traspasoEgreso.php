@@ -76,6 +76,7 @@ input[type=date]::-webkit-inner-spin-button {
                <div class=" col-xs-6 col-sm-6 col-md-3">
                 <label>Almacen Destino:</label>
                 <select class="form-control form-control-sm" id="almacen_des" name="almacen_des" tabindex=1 <?= ($cont)?"disabled":"" ?>>
+                  <option value="">SELECCIONE ALMACEN</option>
                     <?php foreach ($almacen->result_array() as $fila): ?>
                      <option value=<?= $fila['idalmacen'] ?> <?= ($idalmacenDestino==$fila['idalmacen'])?"selected":"" ?> ><?= $fila['almacen'] ?></option>
                    <?php endforeach ?>
@@ -88,9 +89,9 @@ input[type=date]::-webkit-inner-spin-button {
                   <label>Fecha:</label>
                   <input id="fechamov_ne" type="date" class="form-control form-control-sm" name="fechamov_ne" placeholder="Fecha" value="<?= ($cont)?$newDate:$fecha  ?>" tabindex=3 <?= ($cont)?"disabled":"" ?>>
                </div>
-               <div class="col-xs-6 col-sm-6 col-md-2">
-                  <label>Moneda:</label>
-                  <select class="form-control form-control-sm" id="moneda_ne" name="moneda_ne" tabindex=4>
+               <div>
+                  <label class="hidden">Moneda:</label>
+                  <select id="moneda_ne" name="moneda_ne" class="hidden">
                     <option value="1" <?= ($idmoneda==1)?"selected":"" ?>>BOLIVIANOS</option>
                     <option value="2" <?= ($idmoneda==2)?"selected":"" ?>>DOLARES </option>
                   </select>
