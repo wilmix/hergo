@@ -537,7 +537,7 @@ class Ingresos_model extends CI_Model
         {
             return false;
         }*/
-        $sql="call consultarCostoArticulo($idArticulo)";
+        $sql="call consultarCostoArticulo($idArticulo)";        
         $query= $this->db->query($sql);
         mysqli_next_result($this->db->conn_id);
         if($query->num_rows()>0)

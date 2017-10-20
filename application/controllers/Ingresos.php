@@ -556,12 +556,12 @@ class Ingresos extends CI_Controller
 		$idArticulo=$this->ingresos_model->retornar_datosArticulo($id);
 		
 		//$ca=$this->ingresos_model->retornarcostoarticulo_model($idArticulo,$idAlmacen);
-		$ca=$this->ingresos_model->retornarCosto($idArticulo);		
+		$sa=$this->ingresos_model->retornarSaldo($idArticulo,$idAlmacen);		
 		$precio=$this->egresos_model->retornarpreciorticulo_model($idArticulo);
 		$obj=new StdClass();
 		
-		if($ca)
-			$obj->ncantidad=$ca->punitarioSaldo;			
+		if($sa)
+			$obj->ncantidad=$sa->saldo;			
 		else			
 			$obj->ncantidad=0;
 		if($precio)
