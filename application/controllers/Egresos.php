@@ -145,8 +145,8 @@ class Egresos extends CI_Controller
 			redirect('auth', 'refresh');
 
 			$this->datos['menu']="Egresos";
-			$this->datos['opcion']="Ventas Caja";
-			$this->datos['titulo']="Ventas Caja";
+			$this->datos['opcion']="Ventas caja";
+			$this->datos['titulo']="Ventas caja";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
@@ -173,15 +173,19 @@ class Egresos extends CI_Controller
 		  	$this->datos['fecha']=date('Y-m-d');
 		  	$this->datos['clientes']=$this->ingresos_model->retornar_tabla("clientes");
 		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
-			
-			//$this->datos['opcion']="Compras locales";
+		  	$this->datos['user']=$this->egresos_model->retornar_tablaUsers("nombre");
+		  	//clientes
+
+		  	$this->datos['tipodocumento']=$this->cliente_model->retornar_tabla("documentotipo");			
+			$this->datos['tipocliente']=$this->cliente_model->retornar_tabla("clientetipo");
+						
 			$this->datos['idegreso']=6;
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('egresos/ventasCaja.php',$this->datos);
+			$this->load->view('egresos/notaentrega.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
@@ -207,6 +211,7 @@ class Egresos extends CI_Controller
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/notasEntrega.js');
+		
             /**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
@@ -220,6 +225,12 @@ class Egresos extends CI_Controller
 		  	$this->datos['fecha']=date('Y-m-d');
 		  	$this->datos['clientes']=$this->ingresos_model->retornar_tabla("clientes");
 		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
+		  	$this->datos['user']=$this->egresos_model->retornar_tablaUsers("nombre");
+		  	$this->datos['auxIdCliente']=1801; //cliente hergo
+		  	//clientes
+
+		  	$this->datos['tipodocumento']=$this->cliente_model->retornar_tabla("documentotipo");			
+			$this->datos['tipocliente']=$this->cliente_model->retornar_tabla("clientetipo");
 			
 			//$this->datos['opcion']="Compras locales";
 			$this->datos['idegreso']=9;
@@ -228,7 +239,7 @@ class Egresos extends CI_Controller
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('egresos/bajaProducto.php',$this->datos);
+			$this->load->view('egresos/notaentrega.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
@@ -292,6 +303,7 @@ class Egresos extends CI_Controller
             $this->datos['dcab']=$this->mostrarEgresosEdicion($id);//datos cabecera
             $this->datos['detalle']=$this->mostrarDetalleEditar($id);
             if($this->datos['dcab']->idtipomov==8) redirect("error");
+            if($this->datos['dcab']->idtipomov==9) $this->datos['auxIdCliente']=1801; //cliente hergo
             if($this->datos['dcab']->moneda==2)//si es dolares dividimos por el tipo de cambio
             {
 

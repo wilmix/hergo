@@ -340,9 +340,16 @@ function alertacosto(costounitario,costobase)
 }
 function guardarmovimiento()
 {     
+    console.log($("#_tipomov_ne").val())
     var valuesToSubmit = $("#form_egreso").serialize();
     var tablaaux=tablatoarray();
-    if(!glob_guardar)
+    if($("#_tipomov_ne").val()==9) //continuar en el caso de que el tipo de movimiento es baja de producto
+        var auxContinuar=true
+    else
+        var auxContinuar=false
+
+    console.log(!glob_guardar,!auxContinuar);
+    if(!glob_guardar && !auxContinuar)
     {
         swal("Error", "Seleccione el cliente","error")
         return 0;

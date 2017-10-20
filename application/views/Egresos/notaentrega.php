@@ -42,7 +42,7 @@ input[type=date]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 </style>
-
+<?php $auxIdTipoIngreso=($cont)?$idtegreso:$idegreso ?>
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
@@ -66,7 +66,7 @@ input[type=date]::-webkit-inner-spin-button {
                  </select>
                </div>
                <div class=" col-xs-6 col-sm-6 col-md-3">                
-                <input type="" name="tipomov_ne" value="<?= (isset($idingreso)?$idingreso:7)?>" class="hidden"><!--7 para nota de entrega-->
+                <input type="" name="tipomov_ne" id="_tipomov_ne" value="<?= ($auxIdTipoIngreso)?>" class="hidden"><!--7 para nota de entrega-->
                 <label for="tipomov_ne">Tipo de Ingreso:</label>
                 <select class="form-control form-control-sm" id="tipomov_ne2" name="tipomov_ne2" disabled>  
                     <?php foreach ($tegreso->result_array() as $fila): ?>
@@ -107,26 +107,32 @@ input[type=date]::-webkit-inner-spin-button {
                   
                </div>
             </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
-            <div class="row filacabecera"> <!--SEGUNDA FILA-->
-                   <div class="col-xs-12 col-lg-6 col-md-6">
-                      <label for="articulo_ne" style="float: left;">Cliente:</label><span style="margin-left: 10px;display: none;" id="cargandocliente" ><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
-                     <input class="form-control form-control-sm" type="text" id="cliente_egreso" name="cliente_egreso" value="<?= ($cont)?$dcab->nombreCliente:''  ?>">
-                     <input type="text" readonly="true" name="idCliente" id="idCliente" class="hidden" value="<?= ($cont)?$dcab->idcliente:'0'  ?>">
-                     <div style="right: 22px;top:32px;position: absolute;" id="clientecorrecto"><i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i></div>
-                   </div>
-                   <div class="col-xs-4 col-sm-4 col-md-2">
-                         <label>Pedido Cliente:</label>
-                         <input id="pedido_ne" type="text" class="form-control form-control-sm" name="pedido_ne" placeholder=""  value="<?= ($cont)?$dcab->clientePedido:''  ?>">
-                   </div>
-                   <div class="col-xs-4 col-sm-4 col-md-2">
-                         <label>Fecha de Pago: </label>
-                         <input id="fechapago_ne" name="fechapago_ne" type="date" class="form-control form-control-sm"  placeholder="Fecha Pago" value="<?= ($cont)?$dcab->plazopago:''  ?>">
-                   </div>
-                  <div class="col-xs-4 col-md-2">
-                  <label></label>
-                  <button type="button" data-toggle="modal" data-target="#modalcliente" class="form-control btn btn-success" id="botonmodalcliente"  style="margin-top: 4px;">Añadir Cliente</button>
-                  </div>
-                </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
+
+            <?php if ($auxIdTipoIngreso!=9): ?>
+              <div class="row filacabecera"> <!--SEGUNDA FILA-->
+                     <div class="col-xs-12 col-lg-6 col-md-6">
+                        <label for="articulo_ne" style="float: left;">Cliente:</label><span style="margin-left: 10px;display: none;" id="cargandocliente" ><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+                       <input class="form-control form-control-sm" type="text" id="cliente_egreso" name="cliente_egreso" value="<?= ($cont)?$dcab->nombreCliente:''  ?>">
+                       <input type="text" readonly="true" name="idCliente" id="idCliente" class="hidden" value="<?= ($cont)?$dcab->idcliente:'0'  ?>">
+                       <div style="right: 22px;top:32px;position: absolute;" id="clientecorrecto"><i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i></div>
+                     </div>
+                     <div class="col-xs-4 col-sm-4 col-md-2">
+                           <label>Pedido Cliente:</label>
+                           <input id="pedido_ne" type="text" class="form-control form-control-sm" name="pedido_ne" placeholder=""  value="<?= ($cont)?$dcab->clientePedido:''  ?>">
+                     </div>
+                     <div class="col-xs-4 col-sm-4 col-md-2">
+                           <label>Fecha de Pago: </label>
+                           <input id="fechapago_ne" name="fechapago_ne" type="date" class="form-control form-control-sm"  placeholder="Fecha Pago" value="<?= ($cont)?$dcab->plazopago:''  ?>">
+                     </div>
+                    <div class="col-xs-4 col-md-2">
+                    <label></label>
+                    <button type="button" data-toggle="modal" data-target="#modalcliente" class="form-control btn btn-success" id="botonmodalcliente"  style="margin-top: 4px;">Añadir Cliente</button>
+                    </div>
+                  </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
+            <?php else : ?>
+              <input type="text" readonly="true" name="idCliente" id="idCliente" class="hidden" value="<?= $auxIdCliente ?>" >
+            <?php endif ?>
+            
 
 
                 <hr>
