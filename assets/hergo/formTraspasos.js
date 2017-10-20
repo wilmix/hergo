@@ -385,16 +385,19 @@ function guardarmovimiento()
                 {
                     
                     $("#modalIgresoDetalle").modal("hide");
-                    limpiarArticulo();
+                   /* limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
-                    //$(".mensaje_ok").html("Datos almacenados correctamente");
-                    //$("#modal_ok").modal("show");
-                    swal(
-                          'Buen trabajo!',
-                          'El Traspaso se realizo con éxito!',
-                          'success'
-                        )
+                   */
+                    swal({
+                        title: "Buen trabajo!",
+                        text: "El Traspaso se realizo con éxito!",
+                        type: "success",        
+                        allowOutsideClick: false,                                                                        
+                        }).then(function(){
+                            location.reload();
+                        })
+
                 }
                 else
                 {

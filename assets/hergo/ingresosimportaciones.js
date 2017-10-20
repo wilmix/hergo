@@ -330,16 +330,21 @@ function guardarmovimiento()
                 {
                     
                     $("#modalIgresoDetalle").modal("hide");
-                    limpiarArticulo();
+                    /*limpiarArticulo();
                     limpiarCabecera();
-                    limpiarTabla();
+                    limpiarTabla();*/
                     //$(".mensaje_ok").html("Datos almacenados correctamente");
                     //$("#modal_ok").modal("show");
-                    swal(
-                          'Ingreso realizado!',
-                          'El ingreso se guardo con éxito!',
-                          'success'
-                        )
+                  
+                    swal({
+                        title: "Ingreso realizado!",
+                        text: "El egreso se guardo con éxito",
+                        type: "success",        
+                        allowOutsideClick: false,                                                                        
+                        }).then(function(){
+                            location.reload();
+                        })
+
                 }
                 else
                 {

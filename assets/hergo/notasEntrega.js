@@ -362,18 +362,18 @@ function guardarmovimiento()
                 {
                     
                     $("#modalIgresoDetalle").modal("hide");
-                    limpiarArticulo();
+                    /*limpiarArticulo();
                     limpiarCabecera();
-                    limpiarTabla();
+                    limpiarTabla();*/
                     swal({
                         title: "Egreso realizado!",
                         text: "El egreso se guardo con éxito",
-                        type: "success",
-                        closeOnConfirm: false                                                
-                        },
-                        function(){
+                        type: "success",        
+                        allowOutsideClick: false,                                                                        
+                        }).then(function(){
                             location.reload();
                         })
+                        
                     //location.reload();
                 }
                 else

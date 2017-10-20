@@ -237,7 +237,7 @@ class Ingresos_model extends CI_Model
     }
     public function guardarmovimiento_model($datos)
     {
-        
+
 		$almacen_imp=$datos['almacen_imp'];
     	$tipomov_imp=$datos['tipomov_imp'];
     	$fechamov_imp=$datos['fechamov_imp'];
@@ -255,6 +255,8 @@ class Ingresos_model extends CI_Model
        // echo $almacen_imp;
     	$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
+        if(date("Y-m-d",strtotime($fecha))==$fechamov_imp) //si son iguales le agrega la hora
+            $fechamov_imp=$fecha;            
         $nummov=$this->retornarNumMovimiento($tipomov_imp,$gestion,$almacen_imp);
     	$sql="INSERT INTO ingresos (almacen,tipomov,nmov,fechamov,proveedor,moneda,nfact,ningalm,ordcomp,obs,fecha,autor,tipocambio) VALUES('$almacen_imp','$tipomov_imp','$nummov','$fechamov_imp','$proveedor_imp','$moneda_imp','$nfact_imp','$ningalm_imp','$ordcomp_imp','$obs_imp','$fecha','$autor','$tipocambioid')";
     	$query=$this->db->query($sql);

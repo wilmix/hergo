@@ -228,6 +228,8 @@ class Egresos_model extends CI_Model
        // echo $almacen_imp;
     	$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
+        if(date("Y-m-d",strtotime($fecha))==$fechamov_ne) //si son iguales le agrega la hora
+            $fechamov_ne=$fecha;            
         $nummov=$this->retornarNumMovimiento($tipomov_ne,$gestion,$almacen_ne);
     	$sql="INSERT INTO egresos (almacen,tipomov,nmov,fechamov,cliente,moneda,obs,tipocambio,autor,fecha,plazopago,clientePedido) VALUES('$almacen_ne','$tipomov_ne','$nummov','$fechamov_ne','$idCliente','$moneda_ne','$obs_ne','$tipocambio','$autor','$fecha','$fechapago_ne','$pedido_ne')";
     	$query=$this->db->query($sql);
