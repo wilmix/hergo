@@ -40,7 +40,17 @@
   <!-- /.col -->
 </div>
 
+<style>
+#direction {
+     font-size: 80%;
+     text-align: center;
+}
+#nitcss {
+     font-size: 140%;
+     text-align: center;
+}
 
+</style>
 <!-- Modal -->
 <div id="facPrev" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
@@ -75,7 +85,7 @@
           <div class="col-md-8">
           <p>Lugar y Fecha: <span id="fechaFacturaModal"></span><br>
           Señor(es): <span id="clienteFactura"></span>  <br>
-          OC/Pedido: OL - <span id="clientePedido"></span></p>
+          OC/Pedido: <span id="clientePedido"></span></p>
           </div>
             <div class="col-md-4">
             <p class="text-center">NIT/CI:  <b><span id="clienteFacturaNit"></span></b></p>

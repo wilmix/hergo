@@ -43,29 +43,49 @@ div.collapse {
 
 <br>
 
-          <div>
-            <form class="pull-right">
-              Nombre Cliente:
-              <input  type="text" value="" id="nombreCliente" disabled="">
-              Fecha Factura:
-              <input  type="date" value="<?php echo $fecha ?>" id="fechaFactura">
-              <select class="btn btn-default btn-sm" id="tipoFacturacion">
-                <option class="success" value="0">QR</option>
-                <option value="1">MANUAL</option>
-              </select>
-              <select class="btn btn-default btn-sm"  id="moneda">
-                <option class="success" value="1">Bolivianos</option>
-                <option value="2">Dolares</option>
-              </select>
-              <a class="btn btn-default text-center btnnuevo" id="crearFactura"><span class="fa fa-print"></span> Factura</a>
-              
+          <div class="col-md-6 col-xs-12">
+            <form class="form-inline">
+            <div class="form-group">
+              <label >Cliente:</label>
+              <input  type="text" value="" id="nombreClienteTabla1" disabled="" placeholder="Cliente de Tabla1">
+            </div>
+            <div class="form-group">
+              <label>Movimiento:</label> 
+              <input  type="text" value="" id="tipoNumEgreso" disabled="" placeholder="NE - 2120">
+            </div>
+           </form>
+          </div>
+
+          <div class="col-md-6 col-xs-12">
+            <form class="form-inline">
+              <div class="form-group">
+                <label for="">Fecha:</label>
+                <input  type="date" value="<?php echo $fecha ?>" id="fechaFactura">
+                <select class="btn btn-default btn-sm" id="tipoFacturacion">
+                  <option class="success" value="0">QR</option>
+                  <option value="1">MANUAL</option>
+                </select>
+                <select class="btn btn-default btn-sm"  id="moneda">
+                  <option class="success" value="1">Bolivianos</option>
+                  <option value="2">Dolares</option>
+                </select>
+                <a class="btn btn-default text-center btnnuevo" id="crearFactura"><span class="fa fa-print"></span> Factura</a>            
+              </div>
+            
+              <div class="form-group">
+                <label for="">Cliente:</label>
+                <input  type="text" value="" id="nombreCliente" disabled="">
+                <label>Movimiento:</label> 
+                <input  type="text" value="" id="tipoNumEgreso" disabled="" placeholder="NE - 2120">
+                <!--Cliente:<b>BANCO SOLIDARIO S.A.</b> Movimiento:<b>NE-265 NE-98 NE-541</b>-->
+              </div>
             </form>
           </div>
           <div class="clearfix"></div>
           <input id="valuecliente"  class="hidden">
           <input id="valueidcliente"  class="hidden">
           <input id="idAlm"  class="hidden">
-<hr>
+<br>
 
         
         <div class="table-responsive" class="table table-condensed">

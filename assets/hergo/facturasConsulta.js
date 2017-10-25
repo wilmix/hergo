@@ -82,7 +82,7 @@ function retornarTablaFacturacion()
             data:res,
             striped:true,
             pagination:true,
-            pageSize:"10",    
+            pageSize:"100",    
             search:true,        
             searchOnEnterKey:true,
             filter:true,
@@ -123,9 +123,9 @@ function retornarTablaFacturacion()
                 
             },
             {
-                field:'fecha',
+                field:'fechaFac',
                 title:"Fecha",
-                class:"col-sm-1",
+                class:"col-sm-1CF",
                 sortable:true,
                 formatter: formato_fecha_corta,
             },

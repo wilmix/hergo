@@ -933,7 +933,7 @@ $(document).on("click",".editable-click",function(){
 })
 $(document).on("click","#guardarFactura",function()
 {
-    agregarcargando();
+    //agregarcargando();
     var tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
     tabla3factura=JSON.stringify(tabla3factura);
     var datos={
@@ -956,14 +956,14 @@ $(document).on("click","#guardarFactura",function()
            {
                 $("#tabla3Factura").bootstrapTable('removeAll');
                 swal({
-                    title: "Agregado!",
-                    text: "Datos almacenados correctamente",
-                    type: "success",
-                    closeOnConfirm: false                                                
-                    },
-                    function(){
+                        title: 'Factura Grabada!',
+                        text: "La factura se guardó con éxito",
+                        type: 'success', 
+                        showCancelButton: false
+                        }).then(
+                          function(result) {
                         location.reload();
-                    })
+                    });
 
            }
            else
