@@ -460,6 +460,7 @@ class Egresos extends CI_Controller
         	$datos['idCliente'] = $this->security->xss_clean($this->input->post('idCliente'));
         	$datos['pedido_ne'] = $this->security->xss_clean($this->input->post('pedido_ne'));        	
         	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
+        	$datos['vendedor'] = $this->security->xss_clean($this->input->post('idUsuarioVendedor'));
         	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
 
         	/*echo "<pre>";
@@ -494,6 +495,7 @@ class Egresos extends CI_Controller
         	$datos['idCliente'] = $this->security->xss_clean($this->input->post('idCliente'));
         	$datos['pedido_ne'] = $this->security->xss_clean($this->input->post('pedido_ne'));        	
         	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
+        	$datos['vendedor'] = $this->security->xss_clean($this->input->post('idUsuarioVendedor'));
         	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
 
         

@@ -323,14 +323,18 @@ function agregarDatosFacturaModal(res,row)
     $("#fNit").html(res.detalle.nit);
     $("#fnumero").html(res.nfac);
     $("#fauto").html(res.detalle.autorizacion);
-    $("#fechaLimiteEmision").html(formato_fecha_corta(res.detalle.fechaLimite))
+    $("#fechaLimiteEmision").html(formato_fecha_corta(res.detalle.fechaLimite));
+    $("#codigoControl").html(row.codigoControl)
+    console.log(row)
+    var fecha = moment(row.fechaFac, 'YYYY-MM-DD');
+    fechaFormato = fecha.format('YYYY-MM-DD');
     var datos={
         nit:row.ClienteNit,
-        fecha:row.fechaFac,
+        fecha:fechaFormato,
         monto:row.total,
     }
-  //  console.log(datos);
     codigoControl(res,datos);
+    
 }
 function verFacturaModal(row)
 {     

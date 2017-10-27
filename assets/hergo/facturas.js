@@ -718,12 +718,13 @@ function agregarDatosFactura(res)
     $("#fnumero").html(res.nfac);
     $("#fauto").html(res.detalle.autorizacion);
     $("#fechaLimiteEmision").html(formato_fecha_corta(res.detalle.fechaLimite))
+    
     var datos={
         nit:$("#clienteFacturaNit").html(),
         fecha:$("#fechaFactura").val(),
         monto:$("#totalsinformatobs").val()
     }
-  //  console.log(datos);
+    console.log(datos);
     codigoControl(res,datos);
 }
 $(document).on("click",".agregarTodos",function(){
@@ -943,6 +944,8 @@ $(document).on("click","#guardarFactura",function()
         total:$("#totalFacturaBs").val(),
         observaciones:$("#observacionesFactura").val(),
         tipoFacturacion:$("#tipoFacturacion").val(),
+        codigoControl:$("#codigoControl").html(),
+        textqr:$("#textqr").val(),
         tabla:tabla3factura,
     
     }

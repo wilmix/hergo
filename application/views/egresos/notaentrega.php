@@ -1,10 +1,11 @@
 <?php
-
+   
     $cont=(isset($dcab))?true:false;//si existe datos cabecera true si existe => editar
     $idalmacen=0;
     $idtegreso=0;
     $idmoneda=0;
     $idcliente=0;
+    $idvendedor=0;
     if($cont) //editar
     {
         $originalDate = $dcab->fechamov;      
@@ -14,6 +15,7 @@
         $idmoneda=$dcab->idmoneda;
         $idcliente=$dcab->idcliente;
         $idegresocompraslocales=$idtegreso;
+        $idvendedor=$dcab->vendedor;
     }
     else
     {
@@ -50,7 +52,7 @@ input[type=date]::-webkit-inner-spin-button {
         <!--<h3 class="box-title">Ingreso Importaciones</h3>-->
       </div>
       <div class="box-body">
-                <form action=" " method="post"  id="form_egreso">
+        <form action=" " method="post"  id="form_egreso">
           <div class="form">
           <!-- formulario PRIMERA FILA-->
           <?php if ($cont): ?>
@@ -98,10 +100,10 @@ input[type=date]::-webkit-inner-spin-button {
                 <!-- AGREGAR VENDEDOR EN VES DE NUM DE MOVIMIENTO
                   <label for="fechamov_ne" ># Movimiento:</label>
                   <input id="nmov_ne" type="number" class="form-control" name="nmov_ne" placeholder="# Movimiento" disabled value="<?= ($cont)?$dcab->n:""  ?>"/>-->
-                  <label for="fechamov_ne" ># Vendedor:</label>
-                  <select   class="form-control form-control-sm" id="user_filtro">
+                  <label for="fechamov_ne" >Vendedor:</label>
+                  <select   class="form-control form-control-sm" id="idUsuarioVendedor" name="idUsuarioVendedor">
                     <?php foreach ($user->result_array() as $fila): ?>
-                    <option value=<?= $fila['id'] ?> ><?= $fila['nombre'] ?></option>
+                    <option value=<?= $fila['id'] ?> <?=($fila['id']==$idvendedor)?"selected":""  ?> ><?= $fila['nombre']?></option>
                     <?php endforeach ?>
                     </select>
                   
@@ -122,7 +124,7 @@ input[type=date]::-webkit-inner-spin-button {
                      </div>
                      <div class="col-xs-4 col-sm-4 col-md-2">
                            <label>Fecha de Pago: </label>
-                           <input id="fechapago_ne" name="fechapago_ne" type="date" class="form-control form-control-sm"  placeholder="Fecha Pago" value="<?= ($cont)?$dcab->plazopago:''  ?>">
+                           <input id="fechapago_ne" name="fechapago_ne" type="date" class="form-control form-control-sm"  placeholder="Fecha Pago" value="<?= ($cont)?$dcab->plazopago: $fecha ?>">
                      </div>
                     <div class="col-xs-4 col-md-2">
                     <label></label>

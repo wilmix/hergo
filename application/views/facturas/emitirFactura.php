@@ -226,6 +226,7 @@ div.collapse {
             <p>T/C <span id="tipoCambioFacturaModal"></span></p>
            
             <div id="qrcodeimg"></div>
+            <input type="text" name="textqr" id="textqr" class="">
           </div>
         </div>
 

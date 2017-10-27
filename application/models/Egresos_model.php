@@ -41,7 +41,7 @@ class Egresos_model extends CI_Model
             FROM ingresos i*/
         {            
              $sql="
-            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido,c.documento,e.tipocambio,total/tc.tipocambio totalsus
+            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido,c.documento,e.tipocambio,total/tc.tipocambio totalsus , e.vendedor
             FROM egresos e
             INNER JOIN egredetalle d
             on e.idegresos=d.idegreso
@@ -212,6 +212,7 @@ class Egresos_model extends CI_Model
     	$moneda_ne=$datos['moneda_ne'];
     	$idCliente=$datos['idCliente'];
     	$pedido_ne=$datos['pedido_ne'];
+        $idUsuarioVendedor=$datos['vendedor'];
     	$obs_ne=$datos['obs_ne'];
     
         $tipocambio=$this->retornarTipoCambio();      
@@ -231,7 +232,7 @@ class Egresos_model extends CI_Model
         if(date("Y-m-d",strtotime($fecha))==$fechamov_ne) //si son iguales le agrega la hora
             $fechamov_ne=$fecha;            
         $nummov=$this->retornarNumMovimiento($tipomov_ne,$gestion,$almacen_ne);
-    	$sql="INSERT INTO egresos (almacen,tipomov,nmov,fechamov,cliente,moneda,obs,tipocambio,autor,fecha,plazopago,clientePedido) VALUES('$almacen_ne','$tipomov_ne','$nummov','$fechamov_ne','$idCliente','$moneda_ne','$obs_ne','$tipocambio','$autor','$fecha','$fechapago_ne','$pedido_ne')";
+    	$sql="INSERT INTO egresos (almacen,tipomov,nmov,fechamov,cliente,moneda,obs,tipocambio,autor,fecha,plazopago,clientePedido,vendedor) VALUES('$almacen_ne','$tipomov_ne','$nummov','$fechamov_ne','$idCliente','$moneda_ne','$obs_ne','$tipocambio','$autor','$fecha','$fechapago_ne','$pedido_ne','$idUsuarioVendedor')";
     	$query=$this->db->query($sql);
     	$idEgreso=$this->db->insert_id();
       // var_dump($idEgreso);
@@ -354,6 +355,7 @@ class Egresos_model extends CI_Model
         $moneda_ne=$datos['moneda_ne'];
         $idCliente=$datos['idCliente'];
         $pedido_ne=$datos['pedido_ne'];
+        $idUsuarioVendedor=$datos['vendedor'];
         $obs_ne=$datos['obs_ne'];
        
         
@@ -366,7 +368,7 @@ class Egresos_model extends CI_Model
         $tipocambioid=$tipocambio->id;
         $tipocambiovalor=$tipocambio->tipocambio;
         //$sql="UPDATE ingresos SET almacen='$almacen_imp',tipomov='$tipomov_imp',fechamov='$fechamov_imp',proveedor='$proveedor_imp',moneda='$moneda_imp',nfact='$nfact_imp',ningalm='$ningalm_imp',ordcomp='$ordcomp_imp',obs='$obs_imp',fecha='$fecha',autor='$autor' where idIngresos='$idingresoimportacion'";
-        $sql="UPDATE egresos SET tipomov='$tipomov_ne',plazopago='$fechapago_ne',moneda='$moneda_ne',cliente='$idCliente',clientePedido='$pedido_ne',obs='$obs_ne',fecha='$fecha',autor='$autor' where idEgresos='$idegreso'";
+        $sql="UPDATE egresos SET tipomov='$tipomov_ne',plazopago='$fechapago_ne',moneda='$moneda_ne',cliente='$idCliente',clientePedido='$pedido_ne',obs='$obs_ne',fecha='$fecha',autor='$autor',vendedor='$idUsuarioVendedor' where idEgresos='$idegreso'";
         $query=$this->db->query($sql);
 
         $sql="DELETE FROM egredetalle where idegreso='$idegreso'";

@@ -14,7 +14,7 @@ class Cliente_model extends CI_Model
 		FROM clientes c
 		INNER JOIN documentotipo d
 		ON c.idDocumentoTipo=d.idDocumentoTipo
-		INNER JOIN clienteTipo cl
+		INNER JOIN clientetipo cl
 		ON cl.idClienteTipo=c.idClientetipo
 		INNER JOIN users u
 		ON u.id=c.autor";

@@ -537,8 +537,8 @@ class Facturas extends CI_Controller
         	$factura->glosa=addslashes($this->security->xss_clean($this->input->post('observaciones')));;
         	$factura->pagada=0;
         	$factura->anulada=0;
-        	$factura->codigoControl="";
-        	$factura->qr="";
+        	$factura->codigoControl=addslashes($this->security->xss_clean($this->input->post('codigoControl')));;;
+        	$factura->qr=addslashes($this->security->xss_clean($this->input->post('textqr')));;;;
         	$factura->tipoCambio=$this->Egresos_model->retornarTipoCambio();
         	$factura->ClienteFactura=$cliente->nombreCliente;
         	$factura->ClienteNit=$cliente->documento;

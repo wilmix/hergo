@@ -395,6 +395,7 @@ function guardarmovimiento()
 {     
     console.log($("#_tipomov_ne").val())
     var valuesToSubmit = $("#form_egreso").serialize();
+    console.log(valuesToSubmit);
     var tipoEgreso=$("#tipomov_ne2").text();
     var tablaaux=tablatoarray();
     if($("#_tipomov_ne").val()==9) //continuar en el caso de que el tipo de movimiento es baja de producto

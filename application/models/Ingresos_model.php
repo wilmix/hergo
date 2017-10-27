@@ -87,7 +87,7 @@ class Ingresos_model extends CI_Model
         {
           /*$sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
                 (SELECT SUM(d.total) from ingdetalle d where  d.idIngreso=i.idIngresos) as total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, total*valorTipoCambio totalsus*/
-            $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
+            $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact, 
             SUM(id.total) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, SUM(id.total)/tc.tipoCambio totalsus, a1.almacen origen
 
             FROM ingresos i
@@ -245,6 +245,7 @@ class Ingresos_model extends CI_Model
     	$ordcomp_imp=$datos['ordcomp_imp'];
     	$nfact_imp=$datos['nfact_imp'];
     	$ningalm_imp=$datos['ningalm_imp'];
+        
     	$obs_imp=$datos['obs_imp'];
         $tipocambio=$this->retornarValorTipoCambio();
         $tipocambioid=$tipocambio->id;
