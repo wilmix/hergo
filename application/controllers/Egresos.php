@@ -72,11 +72,11 @@ class Egresos extends CI_Controller
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
 
             
-            $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
-            $this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
+            $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+            $this->datos['tipoingreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
 
 
-			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();
+			//$this->datos['ingresos']=$this->Ingresos_model->mostrarIngresos();
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
@@ -115,16 +115,16 @@ class Egresos extends CI_Controller
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
 
-			$this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
-            $this->datos['tegreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
+			$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+            $this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
 		  	$this->datos['fecha']=date('Y-m-d');
-		  	$this->datos['clientes']=$this->ingresos_model->retornar_tabla("clientes");
-		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
-		  	$this->datos['user']=$this->egresos_model->retornar_tablaUsers("nombre");
+		  	$this->datos['clientes']=$this->Ingresos_model->retornar_tabla("clientes");
+		  	$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
+		  	$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
 		  	//clientes
 
-		  	$this->datos['tipodocumento']=$this->cliente_model->retornar_tabla("documentotipo");			
-			$this->datos['tipocliente']=$this->cliente_model->retornar_tabla("clientetipo");
+		  	$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
+			$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
 			
 			//$this->datos['opcion']="Compras locales";
 			$this->datos['idegreso']=7;
@@ -168,16 +168,16 @@ class Egresos extends CI_Controller
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
 
-			$this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
-            $this->datos['tegreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
+			$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+            $this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
 		  	$this->datos['fecha']=date('Y-m-d');
-		  	$this->datos['clientes']=$this->ingresos_model->retornar_tabla("clientes");
-		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
-		  	$this->datos['user']=$this->egresos_model->retornar_tablaUsers("nombre");
+		  	$this->datos['clientes']=$this->Ingresos_model->retornar_tabla("clientes");
+		  	$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
+		  	$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
 		  	//clientes
 
-		  	$this->datos['tipodocumento']=$this->cliente_model->retornar_tabla("documentotipo");			
-			$this->datos['tipocliente']=$this->cliente_model->retornar_tabla("clientetipo");
+		  	$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
+			$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
 						
 			$this->datos['idegreso']=6;
 
@@ -220,17 +220,17 @@ class Egresos extends CI_Controller
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
 
-			$this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
-            $this->datos['tegreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
+			$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+            $this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
 		  	$this->datos['fecha']=date('Y-m-d');
-		  	$this->datos['clientes']=$this->ingresos_model->retornar_tabla("clientes");
-		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
-		  	$this->datos['user']=$this->egresos_model->retornar_tablaUsers("nombre");
+		  	$this->datos['clientes']=$this->Ingresos_model->retornar_tabla("clientes");
+		  	$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
+		  	$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
 		  	$this->datos['auxIdCliente']=1801; //cliente hergo
 		  	//clientes
 
-		  	$this->datos['tipodocumento']=$this->cliente_model->retornar_tabla("documentotipo");			
-			$this->datos['tipocliente']=$this->cliente_model->retornar_tabla("clientetipo");
+		  	$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
+			$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
 			
 			//$this->datos['opcion']="Compras locales";
 			$this->datos['idegreso']=9;
@@ -255,9 +255,9 @@ class Egresos extends CI_Controller
         	$tin=$this->security->xss_clean($this->input->post("ti"));//tipo de ingreso
         	
         	if($tin==8)
-        		$res=$this->egresos_model->mostrarEgresosTraspasos($id=null,$ini,$fin,$alm,$tin);
+        		$res=$this->Egresos_model->mostrarEgresosTraspasos($id=null,$ini,$fin,$alm,$tin);
         	else        		
-				$res=$this->egresos_model->mostrarEgresos($id=null,$ini,$fin,$alm,$tin);
+				$res=$this->Egresos_model->mostrarEgresos($id=null,$ini,$fin,$alm,$tin);
 			$res=$res->result_array();
 			$res2=$this->AgregarFActurasResultado($res);
 			
@@ -273,7 +273,7 @@ class Egresos extends CI_Controller
 	{
         //if("si no esta autorizado a editar redireccionar o enviar error!!!!")
         if($id==null) redirect("error");
-        if(!$this->egresos_model->puedeeditar($id)) redirect("error");
+        if(!$this->Egresos_model->puedeeditar($id)) redirect("error");
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -307,7 +307,7 @@ class Egresos extends CI_Controller
             if($this->datos['dcab']->moneda==2)//si es dolares dividimos por el tipo de cambio
             {
 
-            	$tipodecambiovalor=$this->egresos_model->retornarValorTipoCambio($this->datos['dcab']->tipocambio);            	
+            	$tipodecambiovalor=$this->Egresos_model->retornarValorTipoCambio($this->datos['dcab']->tipocambio);            	
             	$tipodecambiovalor=$tipodecambiovalor->tipocambio;
             	
 	            for ($i=0; $i < count($this->datos['detalle']) ; $i++) { 
@@ -322,16 +322,16 @@ class Egresos extends CI_Controller
             print_r($this->datos['dcab']);
             echo "</pre>";
       		die();*/
-            $this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
-            $this->datos['tegreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
+            $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+            $this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
 		  	$this->datos['fecha']=date('Y-m-d');
-		  	$this->datos['proveedor']=$this->ingresos_model->retornar_tabla("provedores");
-		  	$this->datos['articulo']=$this->ingresos_model->retornar_tabla("articulos");
+		  	$this->datos['proveedor']=$this->Ingresos_model->retornar_tabla("provedores");
+		  	$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
 		  			  	//clientes
-		  	$this->datos['tipodocumento']=$this->cliente_model->retornar_tabla("documentotipo");			
-			$this->datos['tipocliente']=$this->cliente_model->retornar_tabla("clientetipo");
+		  	$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
+			$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
 			//user vendedor
-			$this->datos['user']=$this->egresos_model->retornar_tablaUsers("nombre");		
+			$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");		
 			
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
@@ -343,7 +343,7 @@ class Egresos extends CI_Controller
 	}
 	 public function mostrarEgresosEdicion($id)
 	{
-        $res=$this->egresos_model->mostrarEgresos($id);
+        $res=$this->Egresos_model->mostrarEgresos($id);
         if($res->num_rows()>0)
     	{
     		$fila=$res->row();
@@ -356,7 +356,7 @@ class Egresos extends CI_Controller
 	}
 	public function mostrarDetalleEditar($id)
 	{
-        $res=$this->egresos_model->mostrarDetalle($id);
+        $res=$this->Egresos_model->mostrarDetalle($id);
         $res=$res->result_array();
         return($res);
 	}
@@ -373,7 +373,7 @@ class Egresos extends CI_Controller
 		
 
 		foreach ($tabla as $fila) {
-			$fila['factura']=$this->egresos_model->retornar_facturas($fila['idEgresos']);
+			$fila['factura']=$this->Egresos_model->retornar_facturas($fila['idEgresos']);
 			array_push($tabla2, $fila);
 			
 		}
@@ -387,13 +387,13 @@ class Egresos extends CI_Controller
         	$id = addslashes($this->security->xss_clean($this->input->post('id')));
         	$moneda = addslashes($this->security->xss_clean($this->input->post('moneda')));
         	$idtipocambio = addslashes($this->security->xss_clean($this->input->post('tipocambio')));
-			$res=$this->egresos_model->mostrarDetalle($id);
+			$res=$this->Egresos_model->mostrarDetalle($id);
 			$res=$res->result_array();
 			
 			/******evaluar moneda************/
 			$obj=new StdClass();
 			
-			$tipocambio=$this->egresos_model->retornarValorTipoCambio($idtipocambio)->tipocambio;
+			$tipocambio=$this->Egresos_model->retornarValorTipoCambio($idtipocambio)->tipocambio;
 			if($moneda==2)
 			{
 				
@@ -425,7 +425,7 @@ class Egresos extends CI_Controller
 		if($this->input->is_ajax_request() && $this->input->post('id'))
         {
         	$id = addslashes($this->security->xss_clean($this->input->post('id')));
-			$res=$this->egresos_model->mostrarDetalle($id);
+			$res=$this->Egresos_model->mostrarDetalle($id);
 			$res=$res->result_array();
 			echo json_encode($res);
 		}
@@ -439,7 +439,7 @@ class Egresos extends CI_Controller
         if($this->input->is_ajax_request() && $this->input->get('b'))
         {
         	$b = $this->security->xss_clean($this->input->get('b'));
-        	$dato=$this->ingresos_model->retornarClienteBusqueda($b);        	
+        	$dato=$this->Ingresos_model->retornarClienteBusqueda($b);        	
 			echo json_encode($dato->result_array());
 		}
         else
@@ -466,7 +466,7 @@ class Egresos extends CI_Controller
         	print_r($datos['tabla']);
         	echo "</pre>";*/
 
-        	if($this->egresos_model->guardarmovimiento_model($datos))
+        	if($this->Egresos_model->guardarmovimiento_model($datos))
         	{
         		$this->actualizarCostoArticuloEgreso($datos['tabla'],$datos['almacen_ne']);
 
@@ -498,7 +498,7 @@ class Egresos extends CI_Controller
 
         
 
-        	if($this->egresos_model->actualizarmovimiento_model($datos))
+        	if($this->Egresos_model->actualizarmovimiento_model($datos))
 				echo json_encode("true");
 			else
 				echo json_encode("false");
@@ -510,9 +510,9 @@ class Egresos extends CI_Controller
     }
     public function retornarpreciorticulo($idarticulo,$idAlmacen)
 	{
-		$idArticulo=$this->ingresos_model->retornar_datosArticulo($idarticulo);		
-		$saldo=$this->egresos_model->retornarsaldoarticulo_model($idArticulo,$idAlmacen);
-		$precio=$this->egresos_model->retornarpreciorticulo_model($idArticulo);
+		$idArticulo=$this->Ingresos_model->retornar_datosArticulo($idarticulo);		
+		$saldo=$this->Egresos_model->retornarsaldoarticulo_model($idArticulo,$idAlmacen);
+		$precio=$this->Egresos_model->retornarpreciorticulo_model($idArticulo);
 		$obj=new StdClass();
 		
 		if($saldo)
@@ -544,8 +544,8 @@ class Egresos extends CI_Controller
     	$nprecionu=0;
     	$ntotal=0;
     	
-    	$idArticulo=$this->ingresos_model->retornar_datosArticulo($codigo);
-		$ca=$this->ingresos_model->retornarcostoarticulo_model($idArticulo,$idAlmacen);
+    	$idArticulo=$this->Ingresos_model->retornar_datosArticulo($codigo);
+		$ca=$this->Ingresos_model->retornarcostoarticulo_model($idArticulo,$idAlmacen);
 		$obj=new StdClass();
 		if($ca)
 		{			
@@ -575,7 +575,7 @@ class Egresos extends CI_Controller
 		{	
 			$aux=$this->get_costo_articuloEgreso($fila[0],$fila[2],$fila[4],$idalmacen);		
 					
-			$this->ingresos_model->actualizartablacostoarticulo($aux->idArticulo,$aux->ncantidad,$aux->nprecionu,$idalmacen);
+			$this->Ingresos_model->actualizartablacostoarticulo($aux->idArticulo,$aux->ncantidad,$aux->nprecionu,$idalmacen);
 		}		
 	}
 	public function anularmovimiento()
@@ -590,7 +590,7 @@ class Egresos extends CI_Controller
         	$datos['pedido_ne'] = $this->security->xss_clean($this->input->post('pedido_ne'));        	
         	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
         	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
-        	if($this->egresos_model->anularRecuperarMovimiento_model($datos,1))
+        	if($this->Egresos_model->anularRecuperarMovimiento_model($datos,1))
 				echo json_encode("true");
 			else
 				echo json_encode("false");
@@ -613,7 +613,7 @@ class Egresos extends CI_Controller
         	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
         	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
 
-        	if($this->egresos_model->anularRecuperarMovimiento_model($datos,0))
+        	if($this->Egresos_model->anularRecuperarMovimiento_model($datos,0))
 				echo json_encode("true");
 			else
 				echo json_encode("false");

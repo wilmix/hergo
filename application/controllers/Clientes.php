@@ -58,9 +58,9 @@ class Clientes extends CI_Controller
 			/***********************************/
 			/***********************************/
 
-			//$this->datos['clientes']=$this->cliente_model->mostrarclientes();
-			$this->datos['tipodocumento']=$this->cliente_model->retornar_tabla("documentotipo");			
-			$this->datos['tipocliente']=$this->cliente_model->retornar_tabla("clientetipo");		
+			//$this->datos['clientes']=$this->Cliente_model->mostrarclientes();
+			$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
+			$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");		
 			
 
 
@@ -79,7 +79,7 @@ class Clientes extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-			$res=$this->cliente_model->mostrarclientes_model();
+			$res=$this->Cliente_model->mostrarclientes_model();
 			$res=$res->result_array();
 			echo json_encode($res);
 		}
@@ -108,12 +108,12 @@ class Clientes extends CI_Controller
         	if($id=="")//es nuevo, agregar
         	{
         		
-        		$this->cliente_model->agregarcliente_model($id,$tipo_doc,$carnet,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website);
+        		$this->Cliente_model->agregarCliente_model($id,$tipo_doc,$carnet,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website);
         	}
         	else //existe, editar
         	{
         		
-        		$this->cliente_model->editarcliente_model($id,$tipo_doc,$carnet,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website);
+        		$this->Cliente_model->editarCliente_model($id,$tipo_doc,$carnet,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website);
         	}
         }
         echo "{}";

@@ -57,7 +57,7 @@ class Almacen extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/tableExport.js');
 			/***********************************/
 
-			$this->datos['almacen']=$this->almacen_model->retornar_tabla("almacenes");
+			$this->datos['almacen']=$this->Almacen_model->retornar_tabla("almacenes");
 			//print_r($this->datos['almacen']);
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
@@ -85,7 +85,7 @@ class Almacen extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js');
 			/***********************************/
 
-			$this->datos['almacen']=$this->almacen_model->retornar_tabla("almacen");
+			$this->datos['almacen']=$this->Almacen_model->retornar_tabla("almacen");
 			//print_r($this->datos['almacen']);
 			$this->load->view('plantilla/head.php',$this->datos);
 			
@@ -106,9 +106,9 @@ class Almacen extends CI_Controller
         	$enu = $this->security->xss_clean($this->input->post('enuso'));
         	$cod = $this->security->xss_clean($this->input->post('cod'));     
         	if($cod=="")
-        		$this->almacen_model->agregarAlmacen_model($alm,$dir,$ciu,$enu);
+        		$this->Almacen_model->agregarAlmacen_model($alm,$dir,$ciu,$enu);
         	else
-        		$this->almacen_model->editarAlmacen_model($alm,$dir,$ciu,$enu,$cod);
+        		$this->Almacen_model->editarAlmacen_model($alm,$dir,$ciu,$enu,$cod);
         }
         echo "{}";       
 	}
@@ -121,7 +121,7 @@ class Almacen extends CI_Controller
         	$ciu = $this->security->xss_clean($this->input->post('ciudad'));
         	$enu = $this->security->xss_clean($this->input->post('enuso'));
         	$cod = $this->security->xss_clean($this->input->post('cod'));
-        	$this->almacen_model->editarAlmacen_model($alm,$dir,$ciu,$enu,$cod);
+        	$this->Almacen_model->editarAlmacen_model($alm,$dir,$ciu,$enu,$cod);
         }
         echo "{}";
 	}

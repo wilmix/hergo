@@ -185,7 +185,7 @@ class Facturas extends CI_Controller
         	$alm = addslashes($this->security->xss_clean($this->input->post('alm')));
         	$tipo = addslashes($this->security->xss_clean($this->input->post('tipo')));
 			
-			$tabla=$this->egresos_model->ListarparaFacturacion($ini,$fin,$alm,$tipo);
+			$tabla=$this->Egresos_model->ListarparaFacturacion($ini,$fin,$alm,$tipo);
 			
 			echo json_encode($tabla);
 		}
@@ -204,7 +204,7 @@ class Facturas extends CI_Controller
         	$idegreso= addslashes($this->security->xss_clean($this->input->post('idegreso')));
         	$egresoDetalle=FALSE;
         	/***Retornar idcliente***/
-			//$datosEgreso=$this->egresos_model->mostrarEgresos($idegreso);
+			//$datosEgreso=$this->Egresos_model->mostrarEgresos($idegreso);
         	//$fila=$datosEgreso->row();
         	//$idcliente=$fila->idcliente; 
         	/************************/
@@ -218,7 +218,7 @@ class Facturas extends CI_Controller
 	        		{
 	        			//no existe en el array entonces agregarlo	        			
 	        			array_push($cookie->egresos,$idegreso);
-	        			$egresoDetalle=$this->egresos_model->mostrarDetalle($idegreso)->result();
+	        			$egresoDetalle=$this->Egresos_model->mostrarDetalle($idegreso)->result();
 	        			$mensaje="Registro agregado correctamente";
 	        			//return $egresoDetalle;
 	        		}
@@ -240,7 +240,7 @@ class Facturas extends CI_Controller
 			{
 				//no existe cookie entonces crear nuevo
 				//si no existe la tabla 2 esta vacia y no se selecciono ningun egreso, 
-				$egresoDetalle=$this->egresos_model->mostrarDetalle($idegreso)->result();
+				$egresoDetalle=$this->Egresos_model->mostrarDetalle($idegreso)->result();
 				$mensaje="Se agrego el primer registro en la tabla correctamente";
 				$obj= new stdclass();
 				$obj->egresos= array($idegreso);
@@ -250,8 +250,8 @@ class Facturas extends CI_Controller
 			//$cookienew=json_encode($cookie);
 			//$cookienew=$this->encriptar($cookienew);
 			//set_cookie('factsistemhergo',$cookienew,'3600'); 	
-			$egresoDetalle=$this->egresos_model->mostrarDetalleFacturas($idegreso)->result();
-			$datosEgreso=$this->egresos_model->retornarEgreso($idegreso);
+			$egresoDetalle=$this->Egresos_model->mostrarDetalleFacturas($idegreso)->result();
+			$datosEgreso=$this->Egresos_model->retornarEgreso($idegreso);
 			$mensaje="Datos cargados correctamente";
 			$obj2=new stdclass();
 			$obj2->detalle=$egresoDetalle;
@@ -303,7 +303,7 @@ class Facturas extends CI_Controller
         	$idegreso= addslashes($this->security->xss_clean($this->input->post('idegreso')));
         	$egresoDetalle=FALSE;
         	/***Retornar idcliente***/
-			$datosEgreso=$this->egresos_model->mostrarEgresos($idegreso);//para obtener el cliente
+			$datosEgreso=$this->Egresos_model->mostrarEgresos($idegreso);//para obtener el cliente
         	$fila=$datosEgreso->row();
         	$idcliente=$fila->idcliente; 
         	$cliente=$fila->nombreCliente; 
@@ -322,7 +322,7 @@ class Facturas extends CI_Controller
 	        		{
 	        			//no existe en el array entonces agregarlo	        			
 	        			array_push($cookie->egresos,$idegresoDetalle);
-	        			$egresoDetalle=$this->egresos_model->ObtenerDetalle($idegresoDetalle)->result();
+	        			$egresoDetalle=$this->Egresos_model->ObtenerDetalle($idegresoDetalle)->result();
 	        			$mensaje="Registro agregado correctamente";
 	        			
 	        			//return $egresoDetalle;
@@ -347,7 +347,7 @@ class Facturas extends CI_Controller
 			{
 				//no existe cookie entonces crear nuevo
 				//si no existe la tabla 2 esta vacia y no se selecciono ningun egreso, 
-				$egresoDetalle=$this->egresos_model->ObtenerDetalle($idegresoDetalle)->result();
+				$egresoDetalle=$this->Egresos_model->ObtenerDetalle($idegresoDetalle)->result();
 				$mensaje="Se agrego el primer registro en la tabla correctamente";
 
 				$obj= new stdclass();
@@ -403,7 +403,7 @@ class Facturas extends CI_Controller
         		$idegreso= $fila->idegreso;
         		$egresoDetalle=FALSE;
 	        	/***Retornar idcliente***/
-				$datosEgreso=$this->egresos_model->mostrarEgresos($idegreso);//para obtener el cliente
+				$datosEgreso=$this->Egresos_model->mostrarEgresos($idegreso);//para obtener el cliente
 	        	$fila=$datosEgreso->row();
 	        	$idcliente=$fila->idcliente; 
 	        	$cliente=$fila->nombreCliente; 
@@ -421,7 +421,7 @@ class Facturas extends CI_Controller
 	        		{
 	        			//no existe en el array entonces agregarlo	        			
 	        			array_push($cookie->egresos,$idegresoDetalle);
-	        			$egresoDetalle=$this->egresos_model->ObtenerDetalle($idegresoDetalle)->result();
+	        			$egresoDetalle=$this->Egresos_model->ObtenerDetalle($idegresoDetalle)->result();
 	        			$mensaje="Registro agregado correctamente";
 	        			$cookie->cliente=$idcliente;
 	        		//	var_dump($datosRetornar);
@@ -481,7 +481,7 @@ class Facturas extends CI_Controller
 	}
 	public function tipoCambio()
 	{
-		$tipoCambio=$this->egresos_model->retornarValorTipoCambio();
+		$tipoCambio=$this->Egresos_model->retornarValorTipoCambio();
 		$obj2=new stdclass();
 		$obj2->tipoCambio=$tipoCambio->tipocambio;	
 		echo json_encode($obj2);
@@ -493,7 +493,7 @@ class Facturas extends CI_Controller
         	if( isset( $_COOKIE['factsistemhergo'] ) ) // existe cookies?
         	{        	
 	        	$cookie=json_decode((get_cookie('factsistemhergo')));  	        	
-	        	$cliente=$this->cliente_model->obtenerCliente($cookie->cliente);
+	        	$cliente=$this->Cliente_model->obtenerCliente($cookie->cliente);
         	}
         	$tipoFacturacion= ($this->security->xss_clean($this->input->post('tipoFacturacion')));
         	$fechaFac=addslashes($this->security->xss_clean($this->input->post('fechaFac')));
@@ -539,7 +539,7 @@ class Facturas extends CI_Controller
         	$factura->anulada=0;
         	$factura->codigoControl="";
         	$factura->qr="";
-        	$factura->tipoCambio=$this->egresos_model->retornarTipoCambio();
+        	$factura->tipoCambio=$this->Egresos_model->retornarTipoCambio();
         	$factura->ClienteFactura=$cliente->nombreCliente;
         	$factura->ClienteNit=$cliente->documento;
         	$factura->autor=$this->session->userdata('user_id');
@@ -557,7 +557,7 @@ class Facturas extends CI_Controller
 	        	foreach ($tabla as $fila) 
 	        	{
 
-	        		$idArticulo=$this->egresos_model->retornar_datosArticulo($fila->CodigoArticulo);
+	        		$idArticulo=$this->Egresos_model->retornar_datosArticulo($fila->CodigoArticulo);
 	        		/**********************PReparar tabla detalle*************/
 	        		$registro = array(
 	        			'idFactura' => $idFactura,
@@ -577,7 +577,7 @@ class Facturas extends CI_Controller
 	        			'idFactura'=>$idFactura,
 	        			);	
 	        		array_push($facturaEgreso, $factura_egresoRegistro);
-	        		$this->egresos_model->actualizarCantFact($fila->idEgreDetalle,$fila->cantidadReal);
+	        		$this->Egresos_model->actualizarCantFact($fila->idEgreDetalle,$fila->cantidadReal);
 	        		$this->actualizarEstado($fila->idegreso);
 	        	}
 	        	$this->FacturaDetalle_model->guardar($detalle);
@@ -606,12 +606,12 @@ class Facturas extends CI_Controller
 	public function actualizarEstado($idEgreso)//cambia el estado si esta pendiente o facturado
 	{
 		$estado=0;
-		$cantidad=$this->egresos_model->evaluarFacturadoTotal($idEgreso); //si es 0 facturado total si no parcial
+		$cantidad=$this->Egresos_model->evaluarFacturadoTotal($idEgreso); //si es 0 facturado total si no parcial
 		if(count($cantidad)==0)//Facturado
 			$estado=1;
 		else
 			$estado=2;
-		$this->egresos_model->actualizarEstado($idEgreso,$estado);
+		$this->Egresos_model->actualizarEstado($idEgreso,$estado);
 		echo $estado;
 	}
 	public function mostrarDetalleFactura()
@@ -656,7 +656,7 @@ class Facturas extends CI_Controller
 		{
 			
 			if($fila["idEgresoDetalle"]!=null)
-				$this->egresos_model->actualizarRestarCantFact($fila["idEgresoDetalle"],$fila["facturaCantidad"]);		
+				$this->Egresos_model->actualizarRestarCantFact($fila["idEgresoDetalle"],$fila["facturaCantidad"]);		
 		}		
 		
 	}

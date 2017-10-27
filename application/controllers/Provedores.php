@@ -61,7 +61,7 @@ class Provedores extends CI_Controller
 			/***********************************/
 			/***********************************/
 	
-			$this->datos['tipodocumento']=$this->proveedores_model->retornar_tabla("documentotipo");			
+			$this->datos['tipodocumento']=$this->Proveedores_model->retornar_tabla("documentotipo");			
 
 			/***********************************/
 			/***********************************/
@@ -78,7 +78,7 @@ class Provedores extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-			$res=$this->proveedores_model->mostrarProveedores_model();
+			$res=$this->Proveedores_model->mostrarProveedores_model();
 			$res=$res->result_array();
 			echo json_encode($res);
 		}
@@ -107,12 +107,12 @@ class Provedores extends CI_Controller
         	if($id=="")//es nuevo, agregar
         	{
         		
-        		$this->proveedores_model->agregarProveedor_model($id,$tipo_doc,$carnet,$nombre,$direccion,$nombre_res,$phone,$fax,$email,$website);
+        		$this->Proveedores_model->agregarProveedor_model($id,$tipo_doc,$carnet,$nombre,$direccion,$nombre_res,$phone,$fax,$email,$website);
         	}
         	else //existe, editar
         	{
         		
-        		$this->proveedores_model->editarProveedor_model($id,$tipo_doc,$carnet,$nombre,$direccion,$nombre_res,$phone,$fax,$email,$website);
+        		$this->Proveedores_model->editarProveedor_model($id,$tipo_doc,$carnet,$nombre,$direccion,$nombre_res,$phone,$fax,$email,$website);
         	}
         }
         echo "{}";

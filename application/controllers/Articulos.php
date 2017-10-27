@@ -56,11 +56,11 @@ class Articulos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
 			/****************MOMENT*******************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/moment.min.js');
-			$this->datos['unidad']=$this->articulo_model->retornar_tabla("unidad");			
-			$this->datos['marca']=$this->articulo_model->retornar_tabla("marca");
-			$this->datos['linea']=$this->articulo_model->retornar_tabla("linea");
-			$this->datos['requisito']=$this->articulo_model->retornar_tabla("requisito");
-			$this->datos['articulos']=$this->articulo_model->mostrarArticulos();
+			$this->datos['unidad']=$this->Articulo_model->retornar_tabla("unidad");			
+			$this->datos['marca']=$this->Articulo_model->retornar_tabla("marca");
+			$this->datos['linea']=$this->Articulo_model->retornar_tabla("linea");
+			$this->datos['requisito']=$this->Articulo_model->retornar_tabla("requisito");
+			$this->datos['articulos']=$this->Articulo_model->mostrarArticulos();
 					
 			
 			$this->load->view('plantilla/head.php',$this->datos);
@@ -91,12 +91,12 @@ class Articulos extends CI_Controller
         	if($id=="")
         	{
         		$nom_imagen=$this->subir_imagen($id,$_FILES);
-        		$this->articulo_model->agregarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen);
+        		$this->Articulo_model->agregarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen);
         	}
         	else
         	{
         		$nom_imagen=$this->subir_imagen($id,$_FILES);
-        		$this->articulo_model->editarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen);
+        		$this->Articulo_model->editarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen);
         	}
         }
         echo "{}";       
@@ -105,7 +105,7 @@ class Articulos extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-			$res=$this->articulo_model->mostrarArticulos();
+			$res=$this->Articulo_model->mostrarArticulos();
 			$res=$res->result_array();
 			echo json_encode($res);
 		}

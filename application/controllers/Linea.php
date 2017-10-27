@@ -79,9 +79,9 @@ class Linea extends CI_Controller {
             $cod = $this->security->xss_clean($this->input->post('cod'));
             $enu = $this->security->xss_clean($this->input->post('enuso'));
             if ($cod == "")
-                $this->linea_model->agregarLinea_model($mar, $sig);
+                $this->Linea_model->agregarLinea_model($mar, $sig);
             else
-                $this->linea_model->editarLinea_model($mar, $sig, $cod);
+                $this->Linea_model->editarLinea_model($mar, $sig, $cod);
         }
         echo "{}";
     }
