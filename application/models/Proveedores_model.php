@@ -10,9 +10,9 @@ class Proveedores_model extends CI_Model
 	}
 	public function mostrarProveedores_model()
 	{
-		$sql="SELECT p.idproveedor, d.documentoTipo, p.documento, p.nombreproveedor, p.direccion, p.responsable, p.telefono, p.fax, p.email, p.web, Concat(u.first_name,' ',u.last_name) as autor, p.fecha, p.logo
+		$sql="SELECT p.idproveedor, d.documentotipo, p.documento, p.nombreproveedor, p.direccion, p.responsable, p.telefono, p.fax, p.email, p.web, Concat(u.first_name,' ',u.last_name) as autor, p.fecha, p.logo
 		FROM provedores p
-		INNER JOIN documentoTipo d
+		INNER JOIN documentotipo d
 		ON p.idDocumentoTipo=d.idDocumentoTipo
 		INNER JOIN users u
 		ON u.id=p.autor";

@@ -58,7 +58,7 @@ class Linea extends CI_Controller {
         /*         * ******************************** */
         //$this->datos['unidad'] = $this->articulo_model->retornar_tabla("unidad");
         //$this->datos['marca'] = $this->articulo_model->retornar_tabla("marca");
-        $this->datos['linea'] = $this->articulo_model->retornar_tabla("linea");
+        $this->datos['linea'] = $this->Articulo_model->retornar_tabla("linea");
         //$this->datos['requisito'] = $this->articulo_model->retornar_tabla("requisito");
         //$this->datos['articulos'] = $this->articulo_model->retornar_tabla("linea");
 
