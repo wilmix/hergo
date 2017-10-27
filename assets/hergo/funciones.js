@@ -266,7 +266,7 @@ function codigoControl(res,datos)
             var dia     = fecha.substring(6, 8);
 
             var codigoqr = (nitCasa + "|" + nFactura + "|" + autor + "|" + dia + "/" + mes + "/" + gestion + "|" + monto+ "|" + monto +"|" + codigo +"|" + idNIT + "|0|0|0|0");
-            $("#textqr").val(codigoqr);
+           // $("#textqr").val(codigoqr);
             $("#micapa").html(codigoqr);
            // $("#qr").html(codigoqr);
            $("#qrcodeimg").html("");
