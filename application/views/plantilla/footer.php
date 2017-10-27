@@ -5,7 +5,7 @@
       <strong>Sistema Diseñado por Luis Chavez y Willy Salas</strong> 
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2016 <a href="#">Hergo Ltda.</a></strong> 
+    <strong>Copyright &copy; 2016 <a href="#">Hergo Ltda.</a> Pruebas</strong> 
   </footer>
 </div>
 <!-- ./wrapper -->
