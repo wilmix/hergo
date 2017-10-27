@@ -44,7 +44,7 @@ class Ingresos_model extends CI_Model
 			ON a.idalmacen=i.almacen
 			INNER JOIN moneda m
 			ON i.moneda=m.id
-            INNER JOIN tipoCambio tc
+            INNER JOIN tipocambio tc
             ON i.tipocambio=tc.id
             WHERE i.fechamov BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm' and t.id like '%$tin'
             Group By i.idIngresos 

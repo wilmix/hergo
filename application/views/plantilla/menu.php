@@ -41,7 +41,7 @@
           <ul class="treeview-menu">
             <li><a href="<?php echo base_url("index.php/almacen") ?>"><i class="fa fa-industry"></i> Almacen</a></li>
             <li><a href="<?php echo base_url("index.php/articulos") ?>"><i class="fa fa-list-ol"></i> Articulos</a></li>
-            <li><a href="<?php echo base_url("index.php/marcaarticulos") ?>"><i class="fa fa fa-columns"></i> Marca Articulos</a></li>
+            <li><a href="<?php echo base_url("index.php/MarcaArticulos") ?>"><i class="fa fa fa-columns"></i> Marca Articulos</a></li>
             <li><a href="<?php echo base_url("index.php/linea") ?>"><i class="fa fa fa-columns"></i> Linea</a></li>
             <li><a href="<?php echo base_url("index.php/unidad") ?>"><i class="fa fa fa-columns"></i> Unidad</a></li>
             <li><a href="<?php echo base_url("index.php/clientes") ?>"><i class="fa fa-users"></i> Clientes</a></li>

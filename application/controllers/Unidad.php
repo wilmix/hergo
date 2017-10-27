@@ -56,11 +56,11 @@ class Unidad extends CI_Controller {
         $this->datos['cabeceras_script'][] = base_url('assets/plugins/FileInput/js/fileinput.min.js');
         $this->datos['cabeceras_script'][] = base_url('assets/plugins/FileInput/js/locales/es.js');
         /*         * ******************************** */
-        $this->datos['unidad'] = $this->articulo_model->retornar_tabla("unidad");
-        //$this->datos['marca'] = $this->articulo_model->retornar_tabla("marca");
-        //$this->datos['linea'] = $this->articulo_model->retornar_tabla("linea");
-        //$this->datos['requisito'] = $this->articulo_model->retornar_tabla("requisito");
-        //$this->datos['articulos'] = $this->articulo_model->retornar_tabla("linea");
+        $this->datos['unidad'] = $this->Articulo_model->retornar_tabla("unidad");
+        //$this->datos['marca'] = $this->Articulo_model->retornar_tabla("marca");
+        //$this->datos['linea'] = $this->Articulo_model->retornar_tabla("linea");
+        //$this->datos['requisito'] = $this->Articulo_model->retornar_tabla("requisito");
+        //$this->datos['articulos'] = $this->Articulo_model->retornar_tabla("linea");
 
 
         $this->load->view('plantilla/head.php', $this->datos);
@@ -79,9 +79,9 @@ class Unidad extends CI_Controller {
             $cod = $this->security->xss_clean($this->input->post('cod'));
             $enu = $this->security->xss_clean($this->input->post('enuso'));
             if ($cod == "")
-                $this->unidad_model->agregarUnidad_model($uni, $sig);
+                $this->Unidad_model->agregarUnidad_model($uni, $sig);
             else
-                $this->unidad_model->editarUnidad_model($uni, $sig, $cod);
+                $this->Unidad_model->editarUnidad_model($uni, $sig, $cod);
         }
         echo "{}";
     }
