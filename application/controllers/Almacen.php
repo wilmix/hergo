@@ -7,7 +7,7 @@ class Almacen extends CI_Controller
 	{	
 		parent::__construct();
 		$this->load->helper('url');	
-		$this->load->model("almacen_model");
+		$this->load->model("Almacen_model");
 		$this->cabeceras_css=array(
 				base_url('assets/bootstrap/css/bootstrap.min.css'),
 				base_url("assets/fa/css/font-awesome.min.css"),

@@ -88,7 +88,7 @@ $(document).ready(function() {
             var formData = new FormData($('#form_provedor')[0]);  
             console.log(formData)              
             $.ajax({
-                url: base_url("index.php/provedores/agregarProveedor"),
+                url: base_url("index.php/Provedores/agregarProveedor"),
                 type: 'POST',
                 data: formData,
                 cache: false,
@@ -139,7 +139,7 @@ function retornarTablaProveedor()
 {
     $.ajax({
         type:"POST",
-        url: base_url('index.php/provedores/mostrarProveedores'),
+        url: base_url('index.php/Provedores/mostrarProveedores'),
         dataType: "json",
         data: {},
     }).done(function(res){

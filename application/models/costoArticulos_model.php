@@ -1,6 +1,6 @@
 <?php
     require_once APPPATH."/third_party/fpdf/fpdf.php";
-class costoArticulos_model extends CI_Model {         //**********cambiar al mismo nombre de archivo
+class CostoArticulos_model extends CI_Model {         //**********cambiar al mismo nombre de archivo
  
     function __construct()
     {

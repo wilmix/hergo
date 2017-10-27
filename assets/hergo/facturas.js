@@ -73,7 +73,7 @@ function retornarTablaFacturacion()
     console.log({ini:ini,fin:fin,alm:alm,tipo:tipo})
     $.ajax({
         type:"POST",
-        url: base_url('index.php/facturas/MostrarTablaFacturacion'),
+        url: base_url('index.php/Facturas/MostrarTablaFacturacion'),
         dataType: "json",
         data: {ini:ini,fin:fin,alm:alm,tipo:tipo},
     }).done(function(res){
@@ -516,7 +516,7 @@ function quitarElementoTabla(row)
     console.log(row)
     $.ajax({
         type:"POST",
-        url: base_url('index.php/facturas/eliminarElementoTabla3'),
+        url: base_url('index.php/Facturas/eliminarElementoTabla3'),
         dataType: "json",
         data: {idegresoDetalle:row.idEgreDetalle},
     }).done(function(res){
@@ -533,7 +533,7 @@ function quitarTodosElementosTabla3()
     $("#tabla3Factura").bootstrapTable('removeAll');
      $.ajax({
         type:"POST",
-        url: base_url('index.php/facturas/eliminarTodosElementoTabla3'),
+        url: base_url('index.php/Facturas/eliminarTodosElementoTabla3'),
         dataType: "json",
         
     }).done(function(res){
@@ -562,7 +562,7 @@ function AgregarRegistroTabla3(row,index)
 
      $.ajax({
         type:"POST",
-        url: base_url('index.php/facturas/retornarTabla3'),
+        url: base_url('index.php/Facturas/retornarTabla3'),
         dataType: "json",
         data: {idegreso:row.idegreso,idegresoDetalle:row.idingdetalle},
     }).done(function(res){
@@ -606,7 +606,7 @@ function AgregarTabla(dato)
     //console.log(dato);
     $.ajax({
         type:"POST",
-        url: base_url('index.php/facturas/retornarTabla2'),
+        url: base_url('index.php/Facturas/retornarTabla2'),
         dataType: "json",
         data: {idegreso:dato},
     }).done(function(res){
@@ -684,7 +684,7 @@ $(document).on("click","#crearFactura",function(){
         console.log(datos)
          $.ajax({
             type:"POST",
-            url: base_url('index.php/facturas/consultarDatosFactura'),
+            url: base_url('index.php/Facturas/consultarDatosFactura'),
             dataType: "json",
             data: datos,
         }).done(function(res){
@@ -777,7 +777,7 @@ function AgregarRegistroTabla3Array(row)
     console.log(row)
      $.ajax({
         type:"POST",
-        url: base_url('index.php/facturas/retornarTabla3Array'),
+        url: base_url('index.php/Facturas/retornarTabla3Array'),
         dataType: "json",
         data: {rows:datos},
     }).done(function(res){
@@ -948,7 +948,7 @@ $(document).on("click","#guardarFactura",function()
     }
     $.ajax({
             type:"POST",
-            url: base_url('index.php/facturas/guardarFactura'),
+            url: base_url('index.php/Facturas/guardarFactura'),
             dataType: "json",
             data: datos,
         }).done(function(res){

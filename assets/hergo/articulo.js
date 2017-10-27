@@ -135,7 +135,7 @@ $(document).ready(function(){
                 }
             }) */
             $.ajax({
-                url: base_url("index.php/articulos/agregarArticulo"),
+                url: base_url("index.php/Articulos/agregarArticulo"),
                 type: 'POST',
                 data: formData,
                 cache: false,
@@ -206,7 +206,7 @@ function retornarTabla()
 {
     $.ajax({
         type:"POST",
-        url: base_url('index.php/articulos/mostrarArticulos'),
+        url: base_url('index.php/Articulos/mostrarArticulos'),
         dataType: "json",
         data: {},
     }).done(function(res){

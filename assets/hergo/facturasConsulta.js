@@ -68,7 +68,7 @@ function retornarTablaFacturacion()
     console.log({ini:ini,fin:fin,alm:alm,tipo:tipo})
     $.ajax({
         type:"POST",
-        url: base_url('index.php/facturas/MostrarTablaConsultaFacturacion'),
+        url: base_url('index.php/Facturas/MostrarTablaConsultaFacturacion'),
         dataType: "json",
         data: {ini:ini,fin:fin,alm:alm,tipo:tipo},
     }).done(function(res){
@@ -285,7 +285,7 @@ function anularFactura(row)
     }
      $.ajax({
         type:"POST",
-        url: base_url('index.php/facturas/anularFactura'),
+        url: base_url('index.php/Facturas/anularFactura'),
         dataType: "json",
         data:data
     }).done(function(res){        
@@ -304,7 +304,7 @@ function agregarDatosInicialesFacturaModal(row)
     }
      $.ajax({
         type:"POST",
-        url: base_url('index.php/facturas/mostrarDatosFactura'),
+        url: base_url('index.php/Facturas/mostrarDatosFactura'),
         dataType: "json",
         data:data
     }).done(function(res){
@@ -339,7 +339,7 @@ function verFacturaModal(row)
     }
      $.ajax({
         type:"POST",
-        url: base_url('index.php/facturas/mostrarDetalleFactura'),
+        url: base_url('index.php/Facturas/mostrarDetalleFactura'),
         dataType: "json",
         data:data
     }).done(function(res){

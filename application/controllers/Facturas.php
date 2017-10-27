@@ -8,8 +8,8 @@ class Facturas extends CI_Controller
 		parent::__construct();
 		$this->load->helper('url');
 		//$this->load->model("ingresos_model");
-		$this->load->model("egresos_model");
-		$this->load->model("cliente_model");
+		$this->load->model("Egresos_model");
+		$this->load->model("Cliente_model");
 		$this->load->model("Facturacion_model");
 		$this->load->model("DatosFactura_model");
 		$this->load->model("FacturaDetalle_model");
@@ -98,7 +98,7 @@ class Facturas extends CI_Controller
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('Facturas/Facturas.php',$this->datos);
+			$this->load->view('facturas/facturas.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}

@@ -9,8 +9,8 @@ class MarcaArticulos extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->helper('url');
-        $this->load->model("articulo_model");
-        $this->load->model("marcaArticulo_model");
+        $this->load->model("Articulo_model");
+        $this->load->model("MarcaArticulo_model");
         $this->cabeceras_css = array(
             base_url('assets/bootstrap/css/bootstrap.min.css'),
             base_url("assets/fa/css/font-awesome.min.css"),

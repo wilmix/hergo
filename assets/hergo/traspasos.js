@@ -68,7 +68,7 @@ function retornarTablaTraspasos()
     agregarcargando();
     $.ajax({
         type:"POST",
-        url: base_url('index.php/traspasos/motrarTraspasos'),
+        url: base_url('index.php/Traspasos/motrarTraspasos'),
         dataType: "json",
         data: {i:ini,f:fin},
     }).done(function(res){
@@ -222,7 +222,7 @@ window.operateEvents = {
     },
     'click .editarEgreso': function (e, value, row, index) {
       //console.log(row.idIngresos);
-      var editar=base_url("egresos/editaregresos/")+row.idEgresos;
+      var editar=base_url("Egresos/editaregresos/")+row.idEgresos;
       if(row.estado==0)
       {
         window.location.href = editar;
@@ -243,7 +243,7 @@ function verdetalle(fila)
     console.log(id);
     datos={id:id}
     console.log(fila)
-    retornarajax(base_url("index.php/traspasos/mostrarDetalle"),datos,function(data)
+    retornarajax(base_url("index.php/Traspasos/mostrarDetalle"),datos,function(data)
     {
         estado=validarresultado_ajax(data);
         if(estado)

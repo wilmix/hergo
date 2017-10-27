@@ -80,7 +80,7 @@
             var formData = new FormData($('#form_clientes')[0]);  
             console.log(formData)              
             $.ajax({
-                url: base_url("index.php/clientes/agregarCliente"),
+                url: base_url("index.php/Clientes/agregarCliente"),
                 type: 'POST',
                 data: formData,
                 cache: false,
@@ -133,7 +133,7 @@ function retornarTablaClientes()
 {
     $.ajax({
         type:"POST",
-        url: base_url('index.php/clientes/mostrarclientes'),
+        url: base_url('index.php/Clientes/mostrarclientes'),
         dataType: "json",
         data: {},
     }).done(function(res){

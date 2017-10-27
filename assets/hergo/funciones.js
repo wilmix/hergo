@@ -35,7 +35,7 @@ function setTipoCambio()
 {
      $.ajax({
         type:"POST",
-        url: base_url('index.php/facturas/tipoCambio'),
+        url: base_url('index.php/Facturas/tipoCambio'),
         dataType: "json",
         data: {},
     }).done(function(res){

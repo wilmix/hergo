@@ -377,7 +377,7 @@ function retornarTablaIngresos()
     agregarcargando();
     $.ajax({
         type:"POST",
-        url: base_url('index.php/ingresos/mostrarIngresos'),
+        url: base_url('index.php/Ingresos/mostrarIngresos'),
         dataType: "json",
         data: {i:ini,f:fin,a:alm,ti:tipoingreso},
     }).done(function(res){
@@ -465,7 +465,7 @@ function verdetalle(fila)
 	id=fila.idIngresos
 
 	datos={id:id,mon:fila.moneda}
-	retornarajax(base_url("index.php/ingresos/mostrarDetalle"),datos,function(data)
+	retornarajax(base_url("index.php/Ingresos/mostrarDetalle"),datos,function(data)
 	{
 		estado=validarresultado_ajax(data);
 		if(estado)
@@ -528,7 +528,7 @@ function verdetalle(fila)
 $(document).on("click","#btnaprobado",function(){
     id=$(this).attr("datastd");
     datos={d:1,id:id}
-    retornarajax(base_url("index.php/ingresos/revisarStd"),datos,function(data)
+    retornarajax(base_url("index.php/Ingresos/revisarStd"),datos,function(data)
     {
         estado=validarresultado_ajax(data);
         if(estado)
@@ -541,7 +541,7 @@ $(document).on("click","#btnaprobado",function(){
 $(document).on("click","#btnpendiente",function(){
     id=$(this).attr("datastd");
     datos={d:0,id:id}
-    retornarajax(base_url("index.php/ingresos/revisarStd"),datos,function(data)
+    retornarajax(base_url("index.php/Ingresos/revisarStd"),datos,function(data)
     {
         estado=validarresultado_ajax(data);
         if(estado)

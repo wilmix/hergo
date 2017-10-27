@@ -59,7 +59,7 @@ $( function() {
         $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
         glob_guardar=false;
         $.ajax({
-            url: base_url("index.php/egresos/retornararticulos"),
+            url: base_url("index.php/Egresos/retornararticulos"),
             dataType: "json",
             data: {
                 b: request.term
@@ -100,7 +100,7 @@ $( function() {
         $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
         glob_agregar=false;
         $.ajax({
-            url: base_url("index.php/ingresos/retornararticulos"),
+            url: base_url("index.php/Ingresos/retornararticulos"),
             dataType: "json",
             data: {
                 b: request.term
@@ -119,7 +119,7 @@ $( function() {
         console.log(idAlmacen)
          $.ajax({
 
-            url: base_url("index.php/ingresos/retornarcostoarticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
+            url: base_url("index.php/Ingresos/retornarcostoarticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
             dataType: "json",
             data: {},
             success: function(data) {
@@ -404,7 +404,7 @@ function guardarmovimiento()
         
         valuesToSubmit+="&tabla="+tabla;
 
-        retornarajax(base_url("index.php/traspasos/guardarmovimiento"),valuesToSubmit,function(data)
+        retornarajax(base_url("index.php/Traspasos/guardarmovimiento"),valuesToSubmit,function(data)
         {
             estado=validarresultado_ajax(data);
             if(estado)
@@ -454,7 +454,7 @@ function actualizarMovimiento()
         var tabla=JSON.stringify(tablaaux);
 
         valuesToSubmit+="&tabla="+tabla;    
-        retornarajax(base_url("index.php/traspasos/actualizar"),valuesToSubmit,function(data)
+        retornarajax(base_url("index.php/Traspasos/actualizar"),valuesToSubmit,function(data)
         {
             estado=validarresultado_ajax(data);
             if(estado)
@@ -468,7 +468,7 @@ function actualizarMovimiento()
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos actualizados correctamente");
                     $("#modal_ok").modal("show");
-                    window.location.href=base_url("egresos");
+                    window.location.href=base_url("Egresos");
                 }
                 else
                 {
@@ -495,7 +495,7 @@ function anularTraspaso()// X
         var tabla=JSON.stringify(tablaaux);
 
         valuesToSubmit+="&tabla="+tabla;    
-        retornarajax(base_url("index.php/traspasos/anularTransferencia"),valuesToSubmit,function(data)
+        retornarajax(base_url("index.php/Traspasos/anularTransferencia"),valuesToSubmit,function(data)
         {
             estado=validarresultado_ajax(data);
             if(estado)
@@ -509,7 +509,7 @@ function anularTraspaso()// X
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos anulados correctamente");
                     $("#modal_ok").modal("show");
-                    window.location.href=base_url("egresos");
+                    window.location.href=base_url("Egresos");
                 }
                 else
                 {
@@ -536,7 +536,7 @@ function recuperarTraspaso()// X
         var tabla=JSON.stringify(tablaaux);
 
         valuesToSubmit+="&tabla="+tabla;    
-        retornarajax(base_url("index.php/traspasos/recuperarTransferencia"),valuesToSubmit,function(data)
+        retornarajax(base_url("index.php/Traspasos/recuperarTransferencia"),valuesToSubmit,function(data)
         {
             estado=validarresultado_ajax(data);
             if(estado)
@@ -550,7 +550,7 @@ function recuperarTraspaso()// X
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos recuperados correctamente");
                     $("#modal_ok").modal("show");
-                    window.location.href=base_url("egresos");
+                    window.location.href=base_url("Egresos");
                 }
                 else
                 {
@@ -587,13 +587,13 @@ $(document).on("click","#cancelarMovimiento",function(){
     limpiarArticulo();
     limpiarCabecera();
     limpiarTabla();
-    window.location.href=base_url("ingresos");
+    window.location.href=base_url("Ingresos");
 })
 $(document).on("click","#actualizarMovimiento",function(){
     actualizarMovimiento();
 })
 $(document).on("click","#cancelarMovimientoActualizar",function(){
-    window.location.href=base_url("egresos");
+    window.location.href=base_url("Egresos");
 })
 
 $(document).on("click","#anularTraspaso",function(){

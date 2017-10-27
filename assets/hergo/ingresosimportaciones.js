@@ -68,7 +68,7 @@ $(document).ready(function(){
         $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
         glob_agregar=false;
         $.ajax({
-            url: base_url("index.php/ingresos/retornararticulos"),
+            url: base_url("index.php/Ingresos/retornararticulos"),
             dataType: "json",
             data: {
                 b: request.term
@@ -95,7 +95,7 @@ $(document).ready(function(){
        cargandoSaldoCosto();
          $.ajax({
 
-            url: base_url("index.php/ingresos/retornarcostoarticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
+            url: base_url("index.php/Ingresos/retornarcostoarticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
             dataType: "json",
             data: {},
             success: function(data) {                
@@ -321,7 +321,7 @@ function guardarmovimiento()
         console.log(valuesToSubmit)
         valuesToSubmit+="&tabla="+tabla;
 
-        retornarajax(base_url("index.php/ingresos/guardarmovimiento"),valuesToSubmit,function(data)
+        retornarajax(base_url("index.php/Ingresos/guardarmovimiento"),valuesToSubmit,function(data)
         {
             estado=validarresultado_ajax(data);
             if(estado)
@@ -372,7 +372,7 @@ function actualizarMovimiento()
         var tabla=JSON.stringify(tablaaux);
 
         valuesToSubmit+="&tabla="+tabla;    
-        retornarajax(base_url("index.php/ingresos/actualizarmovimiento"),valuesToSubmit,function(data)
+        retornarajax(base_url("index.php/Ingresos/actualizarmovimiento"),valuesToSubmit,function(data)
         {
             estado=validarresultado_ajax(data);
             if(estado)
@@ -386,7 +386,7 @@ function actualizarMovimiento()
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos actualizados correctamente");
                     $("#modal_ok").modal("show");
-                    window.location.href=base_url("ingresos");
+                    window.location.href=base_url("Ingresos");
                 }
                 else
                 {
@@ -413,7 +413,7 @@ function anularMovimiento()
         var tabla=JSON.stringify(tablaaux);
 
         valuesToSubmit+="&tabla="+tabla;    
-        retornarajax(base_url("index.php/ingresos/anularmovimiento"),valuesToSubmit,function(data)
+        retornarajax(base_url("index.php/Ingresos/anularmovimiento"),valuesToSubmit,function(data)
         {
             estado=validarresultado_ajax(data);
             if(estado)
@@ -454,7 +454,7 @@ function recuperarMovimiento()
         var tabla=JSON.stringify(tablaaux);
 
         valuesToSubmit+="&tabla="+tabla;    
-        retornarajax(base_url("index.php/ingresos/recuperarmovimiento"),valuesToSubmit,function(data)
+        retornarajax(base_url("index.php/Ingresos/recuperarmovimiento"),valuesToSubmit,function(data)
         {
             estado=validarresultado_ajax(data);
             if(estado)
@@ -509,7 +509,7 @@ $(document).on("click","#actualizarMovimiento",function(){
     actualizarMovimiento();
 })
 $(document).on("click","#cancelarMovimientoActualizar",function(){
-    window.location.href=base_url("ingresos");
+    window.location.href=base_url("Ingresos");
 })
 
 $(document).on("click","#anularMovimiento",function(){
@@ -518,7 +518,7 @@ $(document).on("click","#anularMovimiento",function(){
             anularMovimiento();
         },
         function(){
-            window.location.href=base_url("ingresos");  
+            window.location.href=base_url("Ingresos");  
         }
     );
     
@@ -530,7 +530,7 @@ $(document).on("click","#recuperarMovimiento",function(){
              recuperarMovimiento();
         },
         function(){
-            window.location.href=base_url("ingresos");  
+            window.location.href=base_url("Ingresos");  
         }
     );
 })

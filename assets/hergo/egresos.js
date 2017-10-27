@@ -359,7 +359,7 @@ function retornarTablaEgresos()
     agregarcargando();
     $.ajax({
         type:"POST",
-        url: base_url('index.php/egresos/mostrarEgresos'),
+        url: base_url('index.php/Egresos/mostrarEgresos'),
         dataType: "json",
         data: {i:ini,f:fin,a:alm,ti:tipoingreso},
     }).done(function(res){
@@ -454,7 +454,7 @@ window.operateEvents = {
     },
     'click .editarEgreso': function (e, value, row, index) {
       console.log(row.idIngresos);
-      var editar=base_url("egresos/editaregresos/")+row.idEgresos;
+      var editar=base_url("Egresos/editarEgresos/")+row.idEgresos;
       if(row.estado==0)
       {
         window.location.href = editar;
@@ -466,7 +466,7 @@ window.operateEvents = {
     },
     'click .editarEgresoTraspaso': function (e, value, row, index) {
       console.log(row.idIngresos);
-      var editar=base_url("traspasos/edicion/")+row.idEgresos;
+      var editar=base_url("Traspasos/edicion/")+row.idEgresos;
       if(row.estado==0)
       {
         window.location.href = editar;
@@ -499,7 +499,7 @@ function verdetalle(fila)
         moneda:fila.moneda,
         tipocambio:fila.tipocambio
     }    
-    retornarajax(base_url("index.php/egresos/mostrarDetalle"),datos,function(data)
+    retornarajax(base_url("index.php/Egresos/mostrarDetalle"),datos,function(data)
     {
         estado=validarresultado_ajax(data);
         console.log(data);

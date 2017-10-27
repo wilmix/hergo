@@ -5,7 +5,7 @@ class Reporte extends CI_Controller {
   public function index()
   {
     // Se carga el modelo alumno
-    $this->load->model('articulospdf_modelo');    //********cambiar nombre de modelo
+    $this->load->model('Articulospdf_modelo');    //********cambiar nombre de modelo
     // Se carga la libreria fpdf
     $this->load->library('pdf');
  

@@ -70,7 +70,7 @@ function retornarTablaIngresos()
   
     $.ajax({
         type:"POST",
-        url: base_url('index.php/ingresos/mostrarIngresosDetalle'),
+        url: base_url('index.php/Ingresos/mostrarIngresosDetalle'),
         dataType: "json",
         data: {i:ini,f:fin,a:alm,ti:tipoingreso},
     }).done(function(res){
@@ -246,7 +246,7 @@ function verdetalle(fila)
   console.log(fila)
     id=fila.idIngresos
     datos={id:id}
-    retornarajax(base_url("index.php/ingresos/mostrarDetalle"),datos,function(data)
+    retornarajax(base_url("index.php/Ingresos/mostrarDetalle"),datos,function(data)
     {
         estado=validarresultado_ajax(data);
         if(estado)

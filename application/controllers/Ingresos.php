@@ -7,8 +7,8 @@ class Ingresos extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->helper('url');
-		$this->load->model("ingresos_model");
-		$this->load->model("egresos_model");
+		$this->load->model("Ingresos_model");
+		$this->load->model("Egresos_model");
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
 		$this->cabeceras_css=array(
