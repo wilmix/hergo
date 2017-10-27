@@ -1,0 +1,104 @@
+.upload_image .file-thumbnail-footer
+{
+	display:none;
+}
+.contimg {
+	height: auto;
+	width: 70px;
+	max-height: 150px;
+}
+.contimg img {
+	
+    width: 100%;
+	transition: all .2s ease-in-out;
+}
+.contimg img:hover 
+{ 
+	transform: scale(1.1); 
+	cursor: pointer;
+}
+img.maximizada
+{
+	width: 80%;
+
+}
+.file-preview-frame 
+{
+	height: auto !important;	
+}
+.file-preview-frame img
+{
+	width: 200px !important;
+	height: auto !important;	
+}
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #f3f0f0;
+}
+.table-striped>tbody>tr:hover {
+    background-color: #ccc;
+}
+.espera
+{
+    /*display: none;
+    width: 100%;
+    height: 100%;
+    position:absolute;
+    background-color: rgba(218,218,218,0.87);
+   opacity: .5;
+    top:0;
+    z-index: 9999;*/
+
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10000;
+    /*background-color: #000;*/
+     background-color: rgba(218,218,218,0.87);
+     
+}
+.centro
+{
+    position: absolute;
+    top:50%;
+    left: 50%;
+    margin-top: -60px;
+    margin-left: -30px;
+}
+.centro img
+{
+    width: 60px;
+    height: 60px;
+}
+.modal-95 {
+    width: 90% !important;
+}
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+  
+    overflow-x: hidden;
+}
+.estilofila
+{
+    border: none;
+    background-color: transparent;
+    width: 100%;
+}
+.ui-tooltip
+ {
+     display: none!important;
+ }
+.select2-container .select2-selection--single .select2-selection__rendered {
+    
+    padding-left: 0px !important;
+    padding-right: 8px !important;  
+}
+.bootstrap-table #tingresos > thead > tr > th {
+    vertical-align: super !important;
+}
+tr.view
+{
+    background-color: rgba(60, 141, 188, 0.26) !important;
+}
