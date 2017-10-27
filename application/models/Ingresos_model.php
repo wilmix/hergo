@@ -1,5 +1,4 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
 class Ingresos_model extends CI_Model
 {
 	public function __construct()
@@ -24,7 +23,7 @@ class Ingresos_model extends CI_Model
     }
 	public function mostrarIngresos($id=null,$ini=null,$fin=null,$alm="",$tin="")
 	{
-		if($id==null) //no tiene id de entrada
+		if($id==null) //no tiene id de entrada 
         {
 		  /*$sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
 				(SELECT SUM(d.total) from ingdetalle d where  d.idIngreso=i.idIngresos) as total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, total*valorTipoCambio totalsus*/
