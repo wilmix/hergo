@@ -23,6 +23,7 @@ class Linea extends CI_Controller {
             base_url('assets/bootstrap/js/bootstrap.min.js'),
             base_url('assets/dist/js/app.min.js'),
             base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
+            base_url('assets/plugins/slimscroll/slimscroll.min.js'),
         );
         $this->datos['nombre_usuario'] = $this->session->userdata('nombre');
         if ($this->session->userdata('foto') == NULL)

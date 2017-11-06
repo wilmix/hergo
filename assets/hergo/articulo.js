@@ -204,13 +204,14 @@ function mostrarModal(fila)
 }
 function retornarTabla()
 {
+    agregarcargando();
     $.ajax({
         type:"POST",
         url: base_url('index.php/Articulos/mostrarArticulos'),
         dataType: "json",
         data: {},
     }).done(function(res){
-
+        quitarcargando();
         $("#tarticulo").bootstrapTable('destroy');
         
         $("#tarticulo").bootstrapTable({

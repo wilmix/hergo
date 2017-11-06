@@ -460,16 +460,24 @@ function totalTabla2(value, row, index)
   
     return (operateFormatter3(row.punitario*row.cantidadReal));   
 }
+function mostrarDatosCliente(row)
+{
+    console.log(row);
+    $("#nombreClienteTabla1").val(row.nombreCliente);
+    $("#tipoNumEgreso").val(row.sigla+"-"+row.n);
+}
 
 window.operateEvents = {
     'click .agregartabla': function (e, value, row, index) {          
      AgregarTabla(row.idEgresos);
+     mostrarDatosCliente(row);
     },
     'click .quitardetabla': function (e, value, row, index) {          
      QuitardeTabla(row.idEgresos);
     },
     'click .enviartabla3': function (e, value, row, index) {     
      AgregarRegistroTabla3(row,index);
+     alert("t3");
     },
     'click .eliminarElemento': function (e, value, row, index) {     
         quitarElementoTabla(row);
@@ -566,10 +574,13 @@ function AgregarRegistroTabla3(row,index)
         dataType: "json",
         data: {idegreso:row.idegreso,idegresoDetalle:row.idingdetalle},
     }).done(function(res){
+        console.info("este es el res");
+        console.info(res);
        if(res.detalle)
        {
-        //console.log(res.detalle)
-            $("#nombreCliente").val(res.cliente);   
+        
+            $("#nombreCliente").val(res.cliente);  
+            //$("#tipoNumEgreso").val()
             $("#valuecliente").val(res.cliente);   
             $("#valueidcliente").val(res.idCliente);        
          //   swal({
@@ -730,7 +741,7 @@ function agregarDatosFactura(res)
 $(document).on("click",".agregarTodos",function(){
 
     var tabla2detalle=$("#tabla2detalle").bootstrapTable('getData');    
-        AgregarRegistroTabla3Array(tabla2detalle)            
+        AgregarRegistroTabla3Array(tabla2detalle);
 })
 function vistaPreviaFactura()
 {
@@ -782,10 +793,9 @@ function AgregarRegistroTabla3Array(row)
         dataType: "json",
         data: {rows:datos},
     }).done(function(res){
-        
+
        if(res.detalle  && res.detalle.length!=0)
        {
-           // console.log(res)
             
             $("#valuecliente").val(res.cliente);   
             $("#nombreCliente").val(res.cliente);          

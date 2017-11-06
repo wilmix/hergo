@@ -131,13 +131,15 @@ function mostrarModal(fila)
 
 function retornarTablaClientes()
 {
+    agregarcargando();
     $.ajax({
         type:"POST",
         url: base_url('index.php/Clientes/mostrarclientes'),
         dataType: "json",
         data: {},
     }).done(function(res){
-console.log(res)
+        quitarcargando();
+        //console.log(res)
         $("#tclientes").bootstrapTable('destroy');
         $("#tclientes").bootstrapTable({
             

@@ -16,6 +16,7 @@ class Login extends CI_Controller
 		$this->cabecera_script=array(
 				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
 				base_url('assets/bootstrap/js/bootstrap.min.js'),
+				base_url('assets/plugins/slimscroll/slimscroll.min.js'),
 				
 			);
 	}

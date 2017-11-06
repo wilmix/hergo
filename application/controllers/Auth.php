@@ -24,6 +24,7 @@ class Auth extends CI_Controller {
 				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
 				base_url('assets/bootstrap/js/bootstrap.min.js'),
 				base_url('assets/dist/js/app.min.js'),
+				base_url('assets/plugins/slimscroll/slimscroll.min.js'),
 				
 			);
 		$this->data['nombre_usuario']= $this->session->userdata('nombre');

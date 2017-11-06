@@ -137,13 +137,15 @@ function mostrarModal(fila)
 
 function retornarTablaProveedor()
 {
+    agregarcargando();
     $.ajax({
         type:"POST",
         url: base_url('index.php/Provedores/mostrarProveedores'),
         dataType: "json",
         data: {},
     }).done(function(res){
-console.log(res)
+        quitarcargando();
+        //console.log(res)
         $("#tproveedores").bootstrapTable('destroy');
         $("#tproveedores").bootstrapTable({
             

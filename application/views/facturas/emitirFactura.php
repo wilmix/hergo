@@ -47,11 +47,11 @@ div.collapse {
             <form class="form-inline">
             <div class="form-group">
               <label >Cliente:</label>
-              <input  type="text" value="" id="nombreClienteTabla1" disabled="" placeholder="Cliente de Tabla1">
+              <input  type="text" value="" id="nombreClienteTabla1" class="form-control form-control-sm" disabled="" >
             </div>
             <div class="form-group">
               <label>Movimiento:</label> 
-              <input  type="text" value="" id="tipoNumEgreso" disabled="" placeholder="NE - 2120">
+              <input  type="text" value="" id="tipoNumEgreso" class="form-control form-control-sm" disabled="">
             </div>
            </form>
           </div>
@@ -60,7 +60,7 @@ div.collapse {
             <form class="form-inline">
               <div class="form-group">
                 <label for="">Fecha:</label>
-                <input  type="date" value="<?php echo $fecha ?>" id="fechaFactura">
+                <input  class="form-control form-control-sm" type="date" value="<?php echo $fecha ?>" id="fechaFactura">
                 <select class="btn btn-default btn-sm" id="tipoFacturacion">
                   <option class="success" value="0">QR</option>
                   <option value="1">MANUAL</option>
@@ -74,9 +74,9 @@ div.collapse {
             
               <div class="form-group">
                 <label for="">Cliente:</label>
-                <input  type="text" value="" id="nombreCliente" disabled="">
+                <input  class="form-control form-control-sm" type="text" value="" id="nombreCliente" disabled="">
                 <label>Movimiento:</label> 
-                <input  type="text" value="" id="tipoNumEgreso" disabled="" placeholder="NE - 2120">
+                <input  class="form-control form-control-sm" type="text" value="" id="tipoNumEgreso" disabled="" placeholder="NE - 2120">
                 <!--Cliente:<b>BANCO SOLIDARIO S.A.</b> Movimiento:<b>NE-265 NE-98 NE-541</b>-->
               </div>
             </form>
@@ -165,7 +165,7 @@ div.collapse {
       <div class="modal-body">
         <div class="row">
           <div class="col-md-4" class="text-center">
-          <img align="center" src="http://localhost:8080/hergo/images/hergo.jpeg" alt="hergo" width="200" height="40">
+          <img align="center" src="<?php echo base_url("images/hergo.jpeg") ?>" alt="hergo" width="200" height="40">
           <div id="direction">
             <p><b>Casa Matriz - 0</b> <br>
             Av. Montes N° 611 * Zona Challapampa * Casilla 1024 <br>
