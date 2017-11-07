@@ -78,7 +78,7 @@ function retornarTablaFacturacion()
         data: {ini:ini,fin:fin,alm:alm,tipo:tipo},
     }).done(function(res){
         quitarcargando();
-       //datosselect= restornardatosSelect(res)
+       datosselect= restornardatosSelect(res)
         $("#tfacturas").bootstrapTable('destroy');
         $('#tfacturas').bootstrapTable({
                    
@@ -101,7 +101,10 @@ function retornarTablaFacturacion()
                 title: 'N',
                 align: 'center',
                 sortable:true,
-                filter: {type: "input"}
+                filter: {
+                    type: "select",
+                    data: datosselect[0]
+                }
             },
        
             {
@@ -118,7 +121,10 @@ function retornarTablaFacturacion()
                 title:"Cliente",
                 width: '17%',
                 sortable:true,
-                filter: {type: "input"}
+                filter: {
+                    type: "select",
+                    data: datosselect[1]
+                }
             },
             {
                 field:'total',
@@ -134,7 +140,10 @@ function retornarTablaFacturacion()
                 title:"TipoMov",
                 width: '7%',
                 sortable:true,
-                filter: {type: "input"}
+                filter: {
+                    type: "select",
+                    data:["NE","VC"]
+                }
                 
             },
             {
@@ -200,16 +209,35 @@ function retornarTablaFacturacion()
     var err = textStatus + ", " + error;
     console.log( "Request Failed: " + err );
     });
-    
-
 }
+
+function restornardatosSelect(res)
+{
+    var numeroFactura = new Array()
+    var cliente = new Array()
+    var datos =new Array()
+    $.each(res, function(index, value){
+
+        numeroFactura.push(value.n)
+        cliente.push(value.nombreCliente)
+    })
+    numeroFactura.sort();
+    cliente.sort();
+    datos.push(numeroFactura.unique());
+    datos.push(cliente.unique());
+    return(datos);
+}
+Array.prototype.unique=function(a){
+  return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
+});
+
 function mostrarTablaDetalle(res)
 {
     console.log(res)
     $("#tabla2detalle").bootstrapTable('destroy');
         $("#tabla2detalle").bootstrapTable({
             data:res,
-            height:250,        
+            //height:250,        
             clickToSelect:true,
             search:false,
             rowStyle:rowStyle,
@@ -467,6 +495,7 @@ function mostrarDatosCliente(row)
     $("#tipoNumEgreso").val(row.sigla+"-"+row.n);
 }
 
+
 window.operateEvents = {
     'click .agregartabla': function (e, value, row, index) {          
      AgregarTabla(row.idEgresos);
@@ -477,7 +506,6 @@ window.operateEvents = {
     },
     'click .enviartabla3': function (e, value, row, index) {     
      AgregarRegistroTabla3(row,index);
-     alert("t3");
     },
     'click .eliminarElemento': function (e, value, row, index) {     
         quitarElementoTabla(row);
@@ -574,8 +602,6 @@ function AgregarRegistroTabla3(row,index)
         dataType: "json",
         data: {idegreso:row.idegreso,idegresoDetalle:row.idingdetalle},
     }).done(function(res){
-        console.info("este es el res");
-        console.info(res);
        if(res.detalle)
        {
         

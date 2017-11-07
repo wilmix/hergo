@@ -84,7 +84,7 @@ function retornarTablaFacturacion()
             pagination:true,
             pageSize:"100",    
             search:true,        
-            searchOnEnterKey:true,
+            //searchOnEnterKey:true,
             filter:true,
             showColumns:true,
 
@@ -111,8 +111,7 @@ function retornarTablaFacturacion()
                 sortable:true,
                 class:"col-sm-1",
                 align: 'center',
-                filter: { type: "input" },
-                
+               
             },
             {
                 field:'movimientos',
@@ -141,12 +140,10 @@ function retornarTablaFacturacion()
                 title:"Cliente",                
                 class:"col-sm-4",         
                 sortable:true,
-                filter: 
-                {
+                 filter: {
                     type: "select",
-                    data: datosselect[1]
-                },
-
+                    data: datosselect[0]
+                }
             },
             {
                 field:'total',
@@ -183,30 +180,30 @@ function retornarTablaFacturacion()
     console.log( "Request Failed: " + err );
     });
 }
+
+function restornardatosSelect(res)
+{
+    var cliente = new Array()
+    var datos =new Array()
+    $.each(res, function(index, value){
+
+        cliente.push(value.ClienteFactura)
+    })
+    cliente.sort();
+    datos.push(cliente.unique());
+    return(datos);
+}
+Array.prototype.unique=function(a){
+  return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
+});
+
 function operateFormatter3(value, row, index)
     {       
         num=Math.round(value * 100) / 100
         num=num.toFixed(2);
         return (formatNumber.new(num));
     }
-function restornardatosSelect(res)
-{
 
-    var autor = new Array()
-    var cliente = new Array()
-    var datos =new Array()
-    $.each(res, function(index, value){
-
-        autor.push(value.autor)
-        cliente.push(value.ClienteFactura)
-    })
-
-    autor.sort();
-    cliente.sort();
-    datos.push(autor.unique());
-    datos.push(cliente.unique());
-    return(datos);
-}
 Array.prototype.unique=function(a){
   return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
 });

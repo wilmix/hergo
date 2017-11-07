@@ -14,19 +14,18 @@ div.collapse {
     <div class="box">
       <div class="box-body">
         <div id="toolbar2" class="form-inline">
-          <button type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
-           <span>1 enero, 2017 - 31 diciembre, 2017</span>
-            <i class="fa fa-caret-down"></i>
-         </button>
-          <select class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
-            <option value="1">CENTRAL HERGO</option>
-            <option value="2">DEPOSITO EL ALT</option>
-            <option value="3">POTOSI</option>
-            <option value="4">SANTA CRUZ</option>
-            <option value="5">COCHABAMBA</option>
-            <option value="6">TALLER</option>
-            <option value="0">TODOS</option>
-          </select>
+        <button  type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
+          <span>
+             <i class="fa fa-calendar"></i> Fecha
+          </span>
+              <i class="fa fa-caret-down"></i>
+          </button>
+          <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
+                <?php foreach ($almacen->result_array() as $fila): ?>
+                  <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
+                <?php endforeach ?>
+                  <option value="">TODOS</option>
+              </select>
           <select class="btn btn-primary btn-sm" name="tipo_filtro" id="tipo_filtro">
             <option value="0">TODOS</option>
             <option value="6">VENTAS CAJA</option>
@@ -41,52 +40,54 @@ div.collapse {
             >              
           </table>
 
-<br>
+          <div class="form-inline">
+              <div class="col-md-3 col-xs-12 input-group">
+                <span class="input-group-addon" id="basic-addon3">Cliente</span>
+                <input type="text" class="form-control" id="nombreClienteTabla1" aria-describedby="sizing-addon2" disabled="">
+              </div>
+              <div class="col-md-3 col-xs-12 input-group">
+                <span class="input-group-addon" id="sizing-addon2">Movimiento:</span>
+                <input type="text" class="form-control" id="tipoNumEgreso" aria-describedby="sizing-addon2" disabled="">
+              </div>
 
-          <div class="col-md-6 col-xs-12">
-            <form class="form-inline">
-            <div class="form-group">
-              <label >Cliente:</label>
-              <input  type="text" value="" id="nombreClienteTabla1" class="form-control form-control-sm" disabled="" >
-            </div>
-            <div class="form-group">
-              <label>Movimiento:</label> 
-              <input  type="text" value="" id="tipoNumEgreso" class="form-control form-control-sm" disabled="">
-            </div>
-           </form>
-          </div>
-
-          <div class="col-md-6 col-xs-12">
-            <form class="form-inline">
-              <div class="form-group">
-                <label for="">Fecha:</label>
-                <input  class="form-control form-control-sm" type="date" value="<?php echo $fecha ?>" id="fechaFactura">
-                <select class="btn btn-default btn-sm" id="tipoFacturacion">
-                  <option class="success" value="0">QR</option>
-                  <option value="1">MANUAL</option>
+              <div class="col-md-2 col-xs-12 input-group">
+                <span class="input-group-addon" id="sizing-addon2">Fecha:</span>
+                <input type="date" class="form-control" value="<?php echo $fecha ?>" id="fechaFactura" aria-describedby="sizing-addon2" >
+              </div>
+              <div class="col-md-1 col-xs-12 input-group">
+                <select class="input-group-addon" id="tipoFacturacion">
+                    <option class="success" value="0">QR</option>
+                    <option value="1">MANUAL</option>
                 </select>
-                <select class="btn btn-default btn-sm"  id="moneda">
+               </div>
+              <div class="col-md-1 col-xs-12 input-group">
+                <select class="input-group-addon"  id="moneda">
                   <option class="success" value="1">Bolivianos</option>
                   <option value="2">Dolares</option>
                 </select>
-                <a class="btn btn-default text-center btnnuevo" id="crearFactura"><span class="fa fa-print"></span> Factura</a>            
               </div>
-            
-              <div class="form-group">
-                <label for="">Cliente:</label>
-                <input  class="form-control form-control-sm" type="text" value="" id="nombreCliente" disabled="">
-                <label>Movimiento:</label> 
-                <input  class="form-control form-control-sm" type="text" value="" id="tipoNumEgreso" disabled="" placeholder="NE - 2120">
-                <!--Cliente:<b>BANCO SOLIDARIO S.A.</b> Movimiento:<b>NE-265 NE-98 NE-541</b>-->
-              </div>
-            </form>
-          </div>
-          <div class="clearfix"></div>
-          <input id="valuecliente"  class="hidden">
-          <input id="valueidcliente"  class="hidden">
-          <input id="idAlm"  class="hidden">
-<br>
 
+              <div class="col-md-1 col-xs-12 input-group">
+                <a class="btn btn-default text-center btnnuevo" id="crearFactura"><span class="fa fa-print"></span> Factura</a>
+              </div>
+          </div>
+          
+          <div class="form-group row">
+              <div class="col-md-6 col-xs-12"></div>
+              <div class="col-md-6 col-xs-12">
+                <div class = "input-group col-md-12 col-xs-12">
+                  <span class="input-group-addon" id="basic-addon3">Cliente:</span>
+                  <input type="text" class="form-control" id="nombreCliente" aria-describedby="sizing-addon2" disabled="">
+                   <span class="input-group-addon" id="sizing-addon2">Mov:</span>
+                   <input type="text" class="form-control" id="numeroMovT3" aria-describedby="sizing-addon2" disabled="">
+                 </div>
+              </div>
+            </div><!--row-->
+
+
+           <input id="valuecliente"  class="hidden">
+           <input id="valueidcliente"  class="hidden">
+           <input id="idAlm"  class="hidden">
         
         <div class="table-responsive" class="table table-condensed">
             <div class="col-md-6 col-xs-12">             
@@ -123,14 +124,7 @@ div.collapse {
                   <input type="text" class="form-control" id="observacionesFactura" value="" />
               </div>
             </div>
-            <br>
-            <!--<div class="pull-right" class="row">
-              <div class="col-xs-12">
-                <button type="button" class="btn btn-primary" id="" data-toggle="modal" data-target="#facPrev" >GrabarFactura</button>
-                <button type="button" class="btn btn-danger" id="cancelarMovimiento" tabindex=12>Cancelar</button>
-                <button type="button" class="btn btn-info" id="cancelarMovimiento" tabindex=12>Imprimir</button>
-            </div>
-            </div>-->
+
 
        <!-- /.box-body -->
       </div>
@@ -140,6 +134,11 @@ div.collapse {
   </div>
 </div>
 <!-- /.class="row" EMITIR FACTURA-->
+
+
+
+
+
 <style>
 #direction {
      font-size: 80%;

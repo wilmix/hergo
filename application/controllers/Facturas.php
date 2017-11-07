@@ -139,6 +139,7 @@ class Facturas extends CI_Controller
 			/***********************************/
 			/*************CODIGO QR***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/qrcode.min.js');
+			$this->datos['almacen']=$this->Almacen_model->retornar_tabla("almacenes");
             //$this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
             //$this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
 

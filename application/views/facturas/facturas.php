@@ -4,17 +4,17 @@
       <div class="box-body">
           <div id="toolbar2" class="form-inline">
               <button  type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
-             <span>
-               <i class="fa fa-calendar"></i> Fecha
-             </span>
-              <i class="fa fa-caret-down"></i>
-           </button>
+                <span>
+                  <i class="fa fa-calendar"></i> Fecha
+                </span>
+                  <i class="fa fa-caret-down"></i>
+              </button>
               <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
-              <?php foreach ($almacen->result_array() as $fila): ?>
-              <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
-              <?php endforeach ?>
-              <option value="">TODOS</option>
-            </select>
+                <?php foreach ($almacen->result_array() as $fila): ?>
+                  <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
+                <?php endforeach ?>
+                  <option value="">TODOS</option>
+              </select>
               <select class="btn btn-primary btn-sm" name="tipo_filtro" id="tipo_filtro">
                 <option value="">TODOS</option>
                 <option value="6">VENTAS CAJA</option>
@@ -64,7 +64,7 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-md-4" class="text-center">
-          <img align="center" src="http://localhost:8080/hergo/images/hergo.jpeg" alt="hergo" width="200" height="40">
+          <img align="center" src="<?php echo base_url("images/hergo.jpeg") ?>" alt="hergo" width="200" height="40">
           <div id="direction">
             <p><b>Casa Matriz - 0</b> <br>
             Av. Montes N° 611 * Zona Challapampa * Casilla 1024 <br>
