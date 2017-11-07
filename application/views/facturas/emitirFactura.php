@@ -40,39 +40,83 @@ div.collapse {
             >              
           </table>
 
-          <div class="form-inline">
-              <div class="col-md-3 col-xs-12 input-group">
+            <div class="form-group row">
+              <div class="col-md-6 col-xs-12">
+                <div class = "input-group col-md-12 col-xs-12">
+                  <span class="input-group-addon">Cliente:</span>
+                  <input type="text" class="form-control"  id="nombreClienteTabla1" aria-describedby="sizing-addon2" disabled="">
+                  <span class="input-group-addon">Mov:</span>
+                  <input type="text" class="form-control" id="tipoNumEgreso" aria-describedby="sizing-addon2" disabled="">
+                </div>
+              </div>
+              <div class="col-md-6 col-xs-12">
+                <div class = "input-group col-md-12 col-xs-12">
+                  <span class="input-group-addon" id="basic-addon3">Cliente:</span>
+                  <input type="text" class="form-control" id="nombreCliente" aria-describedby="sizing-addon2" disabled="">
+                  <span class="input-group-addon" id="sizing-addon2">Mov:</span>
+                  <input type="text" class="form-control" id="numeroMovT3" aria-describedby="sizing-addon2" disabled="">
+                </div>
+              </div>
+            </div><!--row-->
+
+            <div class="form-group row">
+              <div class="col-md-6 col-xs-12"></div>
+              <div class="col-md-6 col-xs-12">
+                <div class = "input-group col-md-12 col-xs-12">
+                  <span class="input-group-addon" id="basic-addon3"></span>
+                  <input type="date" class="form-control" value="<?php echo $fecha ?>" id="fechaFactura" aria-describedby="sizing-addon2">
+                   <span class="input-group-addon" id="sizing-addon2"></span>
+                   <select class="form-control" id="tipoFacturacion">
+                    <option class="success" value="0">QR</option>
+                    <option value="1">MANUAL</option>
+                  </select>
+                  <span class="input-group-addon" id="sizing-addon2"></span>
+                  <select class="form-control"  id="moneda">
+                  <option class="success" value="1">Bs.</option>
+                  <option value="2">$u$</option>
+                </select>
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button" id="crearFactura"><span class="fa fa-print"></span> Factura</button>
+                </span>
+                 </div>
+              </div>
+            </div>
+
+
+<!--row          <div class="form-inline">
+              <div class="col-md-3 col-xs-6 input-group">
                 <span class="input-group-addon" id="basic-addon3">Cliente</span>
                 <input type="text" class="form-control" id="nombreClienteTabla1" aria-describedby="sizing-addon2" disabled="">
               </div>
-              <div class="col-md-3 col-xs-12 input-group">
+              <div class="col-md-3 col-xs-6 input-group">
                 <span class="input-group-addon" id="sizing-addon2">Movimiento:</span>
                 <input type="text" class="form-control" id="tipoNumEgreso" aria-describedby="sizing-addon2" disabled="">
               </div>
 
-              <div class="col-md-2 col-xs-12 input-group">
+              <div class="col-md-2 col-xs-6 input-group">
                 <span class="input-group-addon" id="sizing-addon2">Fecha:</span>
                 <input type="date" class="form-control" value="<?php echo $fecha ?>" id="fechaFactura" aria-describedby="sizing-addon2" >
               </div>
-              <div class="col-md-1 col-xs-12 input-group">
+              <div class="col-md-1 col-xs-6 input-group">
                 <select class="input-group-addon" id="tipoFacturacion">
                     <option class="success" value="0">QR</option>
                     <option value="1">MANUAL</option>
                 </select>
                </div>
-              <div class="col-md-1 col-xs-12 input-group">
+              <div class="col-md-1 col-xs-6 input-group">
                 <select class="input-group-addon"  id="moneda">
                   <option class="success" value="1">Bolivianos</option>
                   <option value="2">Dolares</option>
                 </select>
               </div>
 
-              <div class="col-md-1 col-xs-12 input-group">
+              <div class="col-md-1 col-xs-6 input-group">
                 <a class="btn btn-default text-center btnnuevo" id="crearFactura"><span class="fa fa-print"></span> Factura</a>
               </div>
-          </div>
+          </div>-->
+
           
-          <div class="form-group row">
+          <!--<div class="form-group row">
               <div class="col-md-6 col-xs-12"></div>
               <div class="col-md-6 col-xs-12">
                 <div class = "input-group col-md-12 col-xs-12">
@@ -82,7 +126,7 @@ div.collapse {
                    <input type="text" class="form-control" id="numeroMovT3" aria-describedby="sizing-addon2" disabled="">
                  </div>
               </div>
-            </div><!--row-->
+            </div>row-->
 
 
            <input id="valuecliente"  class="hidden">
