@@ -63,77 +63,38 @@ div.collapse {
               <div class="col-md-6 col-xs-12"></div>
               <div class="col-md-6 col-xs-12">
                 <div class = "input-group col-md-12 col-xs-12">
-                  <span class="input-group-addon" id="basic-addon3"></span>
-                  <input type="date" class="form-control" value="<?php echo $fecha ?>" id="fechaFactura" aria-describedby="sizing-addon2">
-                   <span class="input-group-addon" id="sizing-addon2"></span>
-                   <select class="form-control" id="tipoFacturacion">
-                    <option class="success" value="0">QR</option>
-                    <option value="1">MANUAL</option>
-                  </select>
-                  <span class="input-group-addon" id="sizing-addon2"></span>
-                  <select class="form-control"  id="moneda">
-                  <option class="success" value="1">Bs.</option>
-                  <option value="2">$u$</option>
-                </select>
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button" id="crearFactura"><span class="fa fa-print"></span> Factura</button>
-                </span>
-                 </div>
+                  <span class="input-group-addon" id="">
+                      <span class="fa fa-calendar"></span>
+                  </span>
+                    <input type="date" class="form-control" value="<?php echo $fecha ?>" id="fechaFactura" aria-describedby="sizing-addon2">
+                  <span class="input-group-addon">
+                     <span class="fa fa-qrcode"></span>
+                  </span>
+                    <select class="form-control" id="tipoFacturacion">
+                      <option class="success" value="0">QR</option>
+                      <option value="1">MANUAL</option>
+                    </select>
+                  <span class="input-group-addon">
+                    <span class="fa fa-money"></span>
+                  </span>
+                    <select class="form-control"  id="moneda">
+                      <option class="success" value="1">Bs.</option>
+                      <option value="2">$u$</option>
+                    </select>
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" id="crearFactura"><span class="fa fa-print"></span> Factura</button>
+                  </span>
+                </div>
               </div>
             </div>
 
-
-<!--row          <div class="form-inline">
-              <div class="col-md-3 col-xs-6 input-group">
-                <span class="input-group-addon" id="basic-addon3">Cliente</span>
-                <input type="text" class="form-control" id="nombreClienteTabla1" aria-describedby="sizing-addon2" disabled="">
-              </div>
-              <div class="col-md-3 col-xs-6 input-group">
-                <span class="input-group-addon" id="sizing-addon2">Movimiento:</span>
-                <input type="text" class="form-control" id="tipoNumEgreso" aria-describedby="sizing-addon2" disabled="">
-              </div>
-
-              <div class="col-md-2 col-xs-6 input-group">
-                <span class="input-group-addon" id="sizing-addon2">Fecha:</span>
-                <input type="date" class="form-control" value="<?php echo $fecha ?>" id="fechaFactura" aria-describedby="sizing-addon2" >
-              </div>
-              <div class="col-md-1 col-xs-6 input-group">
-                <select class="input-group-addon" id="tipoFacturacion">
-                    <option class="success" value="0">QR</option>
-                    <option value="1">MANUAL</option>
-                </select>
-               </div>
-              <div class="col-md-1 col-xs-6 input-group">
-                <select class="input-group-addon"  id="moneda">
-                  <option class="success" value="1">Bolivianos</option>
-                  <option value="2">Dolares</option>
-                </select>
-              </div>
-
-              <div class="col-md-1 col-xs-6 input-group">
-                <a class="btn btn-default text-center btnnuevo" id="crearFactura"><span class="fa fa-print"></span> Factura</a>
-              </div>
-          </div>-->
-
-          
-          <!--<div class="form-group row">
-              <div class="col-md-6 col-xs-12"></div>
-              <div class="col-md-6 col-xs-12">
-                <div class = "input-group col-md-12 col-xs-12">
-                  <span class="input-group-addon" id="basic-addon3">Cliente:</span>
-                  <input type="text" class="form-control" id="nombreCliente" aria-describedby="sizing-addon2" disabled="">
-                   <span class="input-group-addon" id="sizing-addon2">Mov:</span>
-                   <input type="text" class="form-control" id="numeroMovT3" aria-describedby="sizing-addon2" disabled="">
-                 </div>
-              </div>
-            </div>row-->
 
 
            <input id="valuecliente"  class="hidden">
            <input id="valueidcliente"  class="hidden">
            <input id="idAlm"  class="hidden">
         
-        <div class="table-responsive" class="table table-condensed">
+          <div class="table-responsive" class="table table-condensed">
             <div class="col-md-6 col-xs-12">             
               <table id="tabla2detalle"></table>
             </div>
@@ -148,24 +109,20 @@ div.collapse {
 
 
           <div class="form-group row">
-              <div class="col-md-6 col-xs-12">
-                
-              </div>
+            <div class="col-md-6 col-xs-12"></div>
               <div class="col-md-6 col-xs-12">
                 <div class = "input-group col-md-12 col-xs-12">
                   <span class = "input-group-addon">$</span>
                   <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalFacturaSus" value="">
                   <span class = "input-group-addon" >Bs</span>
                   <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalFacturaBs" value="">
-                 </div>
+                </div>
               </div>
             </div><!--row-->
-            
             <div class="row">
-                <div class="col-xs-12 col-md-12">
-                  <!--insertar costo de articulo a ingresar-->
-                  <label for="observaciones_ne">Observaciones:</label>
-                  <input type="text" class="form-control" id="observacionesFactura" value="" />
+              <div class="col-xs-12 col-md-12">
+                <label for="observaciones_ne">Observaciones:</label>
+                <input type="text" class="form-control" id="observacionesFactura" value="" />
               </div>
             </div>
 
@@ -272,10 +229,10 @@ div.collapse {
            
           </div>
         </div>
-
-  
       </div>
       <div class="modal-footer">
+        <p align="center">"ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAÍS, EL USO ILÍCITO DE ÉSTA SERÁ SANCIONADO DE ACUERDO A LA LEY"</p>
+        <p align="center">Ley Nº 453: Está prohibido importar, distribuir  o comercializar productos expirados o prontos a expirar </p>
         <button type="button" class="btn btn-primary" id="guardarFactura">Grabar Factura</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
       </div>
@@ -285,10 +242,3 @@ div.collapse {
   
 </div>
 
-
-<table id="table"></table>
-<script>
-
-    
-  
-</script>
