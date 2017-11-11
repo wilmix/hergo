@@ -111,16 +111,8 @@
           <ul class="treeview-menu">
             <li><a href="<?php echo base_url("facturas") ?>">Consulta de Facturas</a></li>
             <li><a href="<?php echo base_url("facturas/EmitirFactura") ?>">Emitir Factura</a></li>
-            <li><a href="#">Ver Facturas</a></li>
-            
           </ul>
         </li>
-
-
-
-
-
-
 
         <li class="treeview">
           <a href="#"><i class="fa fa-book"></i> <span>Pagos</span>
@@ -143,18 +135,22 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">Lista de Precios</a></li>
-            <li><a href="#">Saldos Actuales</a></li>
-            <li><a href="#">Estado de Ventas y Costos</a></li>
-            <li><a href="#">Modificar Precios Articulos</a></li>
-            <li><a href="#">Kardex Individual Valorado</a></li>
-            <li><a href="#">Kardex Individual Itemes</a></li>
-            <li><a href="#">Resumen de Ventas Mes</a></li>
-            <li><a href="#">Facturas Pendientes Pago</a></li>
-            <li><a href="#">Notas de Entrega por Facturar</a></li>
-            <li><a href="#">Facturacion Clientes</a></li>
-            <li><a href="#">Nota de Ingreso</a></li>
-            <li><a href="#">Libro de Ventas</a></li>
+            <li><a href="<?php echo base_url("reportes/listaPrecios") ?>">Lista de Precios</a></li>
+            <li><a href="<?php echo base_url("reportes/saldosActuales") ?>">Saldos Actuales</a></li>
+            <li><a href="<?php echo base_url("reportes/estadoVentasCostoItem") ?>">Estado de Ventas y Costos</a></li>
+            <li><a href="<?php echo base_url("reportes/kardexIndividualValorado") ?>">Kardex Individual Valorado</a></li>
+            <li><a href="<?php echo base_url("reportes/kardexIndividual") ?>">Kardex Individual Itemes</a></li>
+            <li><a href="<?php echo base_url("reportes/kardexIndividualClientes") ?>">Kardex Individual Clientes</a></li>
+            <li><a href="<?php echo base_url("reportes/resumenVentasLineaMes") ?>">Resumen de Ventas Linea Mes</a></li>
+            <li><a href="<?php echo base_url("reportes/facturasPendietesPago") ?>">Facturas Pendientes Pago</a></li>
+            <li><a href="<?php echo base_url("reportes/notasEntregaPorFacturar") ?>">Notas de Entrega por Facturar</a></li>
+            <li><a href="<?php echo base_url("reportes/facturacionClientes") ?>">Facturacion Clientes</a></li>
+            <li><a href="<?php echo base_url("reportes/movimientosClientes") ?>">Movimientos Item Clientes</a></li>
+            <li><a href="<?php echo base_url("reportes/resumenVentaCliente") ?>">Resumen de Ventas por Cliente</a></li>
+            <li><a href="<?php echo base_url("reportes/diarioIngresos") ?>">Diario de Ingreso</a></li>
+            <li><a href="<?php echo base_url("reportes/diarioPagos") ?>">Diario de Pagos</a></li>
+            <li><a href="<?php echo base_url("reportes/resumenProductosUnidades") ?>">Resumen de Productos en Unidades</a></li>
+            <li><a href="<?php echo base_url("reportes/libroVentas") ?>">Libro de Ventas</a></li>
           </ul>
         </li>
         <li class="treeview">

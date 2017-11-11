@@ -1,0 +1,1 @@
+<h1>kardexIndividualValorado.php</h1>
