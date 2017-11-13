@@ -19,8 +19,7 @@
           <table 
             id="tablaNotasEntregaFacturar" 
             data-toolbar="#toolbar2"
-            data-toggle="table"
-            data-height="550">
+            data-toggle="table">
           </table>
       </div>
       <!-- /.box-body -->
