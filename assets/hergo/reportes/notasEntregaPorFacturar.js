@@ -84,6 +84,15 @@ function retornarNEporFac() //*******************************
                     searchOnEnterKey:true,
                     showColumns:true,
                     filter:true,
+                    showExport:true,
+                    exportTypes:['xlsx'],
+                    exportDataType:'basic',
+                    /*exportOptions:{
+                                    bookType:"xlsx",
+                                    type:'excel',
+                                    fileName: 'Notas',
+                                    worksheetName: "Notas"
+                                  },*/
                     //groupBy:true,
                     //groupByField:'nombreCliente',
                     stickyHeader: true,

@@ -31,10 +31,12 @@ class Reportes extends CI_Controller
 				base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
 				base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
 				base_url('assets/plugins/table-boot/js/tableExport.js'),
+				base_url('assets/plugins/table-boot/js/xlsx.core.min.js'),
 				base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
 				base_url('assets/plugins/table-boot/plugin/select2.min.js'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.js'),
+				base_url('assets/plugins/table-boot/plugin/FileSaver.min.js'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
         		base_url('assets/plugins/daterangepicker/moment.min.js'),
         		base_url('assets/plugins/slimscroll/slimscroll.min.js'),        		
@@ -54,8 +56,8 @@ class Reportes extends CI_Controller
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Lista de Precios";
+			$this->datos['menu']="Lista de Precios";
+			$this->datos['opcion']="Reportes";
 			$this->datos['titulo']="Lista de Precios";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
@@ -67,12 +69,11 @@ class Reportes extends CI_Controller
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes.js'); 				//*******agregar js********
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/listaPrecios.js'); 				//*******agregar js********
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            $this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");				//*******agregar alm********
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
@@ -86,10 +87,7 @@ class Reportes extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-        	$ini=$this->security->xss_clean($this->input->post("i"));//fecha inicio
-        	$fin=$this->security->xss_clean($this->input->post("f"));//FECHA FIN
-        	$alm=$this->security->xss_clean($this->input->post("a")); //almacen
-			$res=$this->Reportes_model->mostrarListaPrecios($ini,$fin,$alm); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+			$res=$this->Reportes_model->mostrarListaPrecios(); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
 			$res=$res->result_array();
 			echo json_encode($res);
 		}
@@ -103,8 +101,8 @@ class Reportes extends CI_Controller
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Saldos Actuales";
+			$this->datos['menu']="Saldos Actuales";
+			$this->datos['opcion']="Reportes";
 			$this->datos['titulo']="Saldos Actuales";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
@@ -116,7 +114,7 @@ class Reportes extends CI_Controller
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			//$this->datos['cabeceras_script'][]=base_url('assets/hergo/egresos.js'); 				//*******agregar js********
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/saldosActuales.js'); 				//*******agregar js********
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
@@ -131,6 +129,20 @@ class Reportes extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
+	public function mostrarSaldos()  //******cambiar a funcion del modelo
+	{
+		if($this->input->is_ajax_request())
+        {
+			$res=$this->Reportes_model->mostrarSaldos(); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+
 
 	public function estadoVentasCostoItem()
 	{
@@ -335,8 +347,8 @@ class Reportes extends CI_Controller
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Notas de Entrega por Facturar";
+			$this->datos['menu']="Notas de Entrega por Facturar";
+			$this->datos['opcion']="Reportes";
 			$this->datos['titulo']="Notas de Entrega por Facturar";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
