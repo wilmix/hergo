@@ -4,13 +4,13 @@ $(document).ready(function(){
 
 function retornarSaldosActuales() //*******************************
 {   
-    //agregarcargando();
+    agregarcargando();
     $.ajax({
         type:"POST",
         url: base_url('index.php/Reportes/mostrarSaldos'), //******controlador
         dataType: "json",
     }).done(function(res){
-    	//quitarcargando();
+    	quitarcargando();
         $("#tablaSaldosActuales").bootstrapTable('destroy');
         $("#tablaSaldosActuales").bootstrapTable({            ////********cambiar nombre tabla viata
 

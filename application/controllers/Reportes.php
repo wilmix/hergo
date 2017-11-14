@@ -294,12 +294,12 @@ class Reportes extends CI_Controller
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			//$this->datos['cabeceras_script'][]=base_url('assets/hergo/egresos.js'); 				//*******agregar js********
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/resumenVentasLineaMes.js');				//*******agregar js********
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            //$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");				//*******agregar alm********
+            $this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");					//*******agregar alm********
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
@@ -308,6 +308,22 @@ class Reportes extends CI_Controller
 			$this->load->view('reportes/resumenVentasLineaMes.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
+	}
+	public function mostrarVentasLineaMes()  //******cambiar a funcion del modelo
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$ini=$this->security->xss_clean($this->input->post("i"));//fecha inicio
+        	$fin=$this->security->xss_clean($this->input->post("f"));//FECHA FIN
+        	$alm=$this->security->xss_clean($this->input->post("a")); //almacen
+			$res=$this->Reportes_model->mostrarVentasLineaMes($ini,$fin,$alm); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
 	}
 	public function facturasPendietesPago()
 	{
@@ -396,8 +412,8 @@ class Reportes extends CI_Controller
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Facturación Clientes";
+			$this->datos['menu']="Facturación Clientes";
+			$this->datos['opcion']="Reportes";
 			$this->datos['titulo']="Facturación Clientes";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
@@ -409,12 +425,12 @@ class Reportes extends CI_Controller
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			//$this->datos['cabeceras_script'][]=base_url('assets/hergo/egresos.js'); 				//*******agregar js********
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/facturacionClientes.js'); 				//*******agregar js********
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            //$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");				//*******agregar alm********
+            $this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");					//*******agregar alm********
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
@@ -423,6 +439,22 @@ class Reportes extends CI_Controller
 			$this->load->view('reportes/facturacionClientes.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
+	}
+	public function mostrarFacturacionClientes()  //******cambiar a funcion del modelo
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$ini=$this->security->xss_clean($this->input->post("i"));//fecha inicio
+        	$fin=$this->security->xss_clean($this->input->post("f"));//FECHA FIN
+        	$alm=$this->security->xss_clean($this->input->post("a")); //almacen
+			$res=$this->Reportes_model->mostrarFacturacionClientes($ini,$fin,$alm); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
 	}
 	public function movimientosClientes()
 	{
