@@ -752,7 +752,8 @@ $(document).on("click","#crearFactura",function(){
 function agregarDatosFactura(res)
 {
     
-    //$("#fNit").html(res.detalle.nit);
+    //$("#fNit").html(res.detalle.nit);}
+    vmVistaPrevia.guardar=true;
     vmVistaPrevia.nit=res.detalle.nit;    
     //$("#fnumero").html(res.nfac);
     vmVistaPrevia.numero=res.nfac
@@ -990,7 +991,8 @@ $(document).on("click",".editable-click",function(){
 })
 $(document).on("click","#guardarFactura",function()
 {
-    //agregarcargando();
+    agregarcargando();
+    $("#guardarFactura").css("disabled","true");
     var tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
     tabla3factura=JSON.stringify(tabla3factura);
     var datos={
@@ -1013,15 +1015,18 @@ $(document).on("click","#guardarFactura",function()
         }).done(function(res){
            if(res)
            {
+               quitarcargando();
                 $("#tabla3Factura").bootstrapTable('removeAll');
                 swal({
                         title: 'Factura Grabada!',
                         text: "La factura se guardó con éxito",
                         type: 'success', 
-                        showCancelButton: false
+                        showCancelButton: false,
+                        allowOutsideClick: false,  
                         }).then(
                           function(result) {
-                        location.reload();
+                            agregarcargando();
+                            location.reload();
                     });
 
            }
