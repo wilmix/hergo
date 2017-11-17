@@ -1715,6 +1715,24 @@ class Ion_auth_model extends CI_Model
 	 * @return bool
 	 * @author jrmadsen67
 	 **/
+	public function retornarAlmacen($idAlmacen)
+	{
+		$sql="SELECT *
+        FROM almacenes a        
+        WHERE a.idalmacen=$idAlmacen";     
+
+        $query=$this->db->query($sql);
+        if($query->num_rows()>0)
+        {
+            $fila=$query->row();
+            return $fila;
+        }
+        else
+        {
+
+            return false;
+        }
+	}
 	public function set_session($user)
 	{
 
@@ -1729,7 +1747,8 @@ class Ion_auth_model extends CI_Model
 		    'logeado'				=> 'true', /*AGREGADO LGC*/
 		    'nombre'				=> $user->first_name." ".$user->last_name,
 		    'foto'					=> $user->foto,
-		    'idalmacen'				=>$user->almacen
+		    'idalmacen'				=>$user->almacen,
+			'datosAlmacen'			=>$this->retornarAlmacen($user->almacen),
 		);
 		
 

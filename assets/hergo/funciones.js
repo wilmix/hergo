@@ -30,7 +30,8 @@ $(document).ready(function()
     });*/
     setTipoCambio();
 })
-var glob_tipoCambio=0;   
+var glob_tipoCambio=0; 
+  
 function setTipoCambio()
 {
      $.ajax({
@@ -177,7 +178,7 @@ function formato_fecha_corta(value, row, index)
         fecha="sin fecha de registro"
     else
         fecha = moment(value,"YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY")
-    return [fecha]
+    return fecha
 }
 function asignarselect(text1,select)
 {

@@ -605,10 +605,11 @@ function AgregarRegistroTabla3(row,index)
        if(res.detalle)
        {
         
-            $("#nombreCliente").val(res.cliente);  
-            //$("#tipoNumEgreso").val()
+            $("#nombreCliente").val(res.cliente);              
             $("#valuecliente").val(res.cliente);   
-            $("#valueidcliente").val(res.idCliente);        
+            $("#valueidcliente").val(res.idCliente);  
+            $("#nitCliente").val(res.clienteNit);
+                  
          //   swal({
           //    title: "Agregado!",
            //   text: res.mensaje,
@@ -727,7 +728,7 @@ $(document).on("click","#crearFactura",function(){
         }).done(function(res){
             
            if(res.response)
-           {                
+           {                            
                 vistaPreviaFactura();
                 agregarDatosFactura(res);
            }
@@ -751,18 +752,35 @@ $(document).on("click","#crearFactura",function(){
 function agregarDatosFactura(res)
 {
     
-    $("#fNit").html(res.detalle.nit);
-    $("#fnumero").html(res.nfac);
-    $("#fauto").html(res.detalle.autorizacion);
-    $("#fechaLimiteEmision").html(formato_fecha_corta(res.detalle.fechaLimite))
-    
-    var datos={
-        nit:$("#clienteFacturaNit").html(),
-        fecha:$("#fechaFactura").val(),
-        monto:$("#totalsinformatobs").val()
-    }
-    console.log(datos);
-    codigoControl(res,datos);
+    //$("#fNit").html(res.detalle.nit);
+    vmVistaPrevia.nit=res.detalle.nit;    
+    //$("#fnumero").html(res.nfac);
+    vmVistaPrevia.numero=res.nfac
+    //$("#fauto").html(res.detalle.autorizacion);
+    vmVistaPrevia.autorizacion=res.detalle.autorizacion;
+    //$("#fechaLimiteEmision").html(formato_fecha_corta(res.detalle.fechaLimite))
+    vmVistaPrevia.fechaLimiteEmision=res.detalle.fechaLimite
+    vmVistaPrevia.llave=res.detalle.llaveDosificacion;    
+ 
+    vmVistaPrevia.manual=$("#tipoFacturacion").val();
+
+
+
+
+        //$("#clienteFactura").html(data.data1.ClienteFactura)
+        vmVistaPrevia.ClienteFactura=$("#nombreCliente").val();
+        //$("#clienteFacturaNit").html(data.data1.ClienteNit);
+        vmVistaPrevia.ClienteNit=$("#nitCliente").val();
+        //$("#notaFactura").html(data.data1.glosa);
+               
+        vmVistaPrevia.tipocambio=glob_tipoCambio;
+        vmVistaPrevia.moneda=$("#moneda").val();
+
+        vmVistaPrevia.generarCodigoControl() //este dato se extrae de la base de datos, solo se usa para generar el codigo
+        vmVistaPrevia.generarCodigoQr();
+        console.log("REVISAR TIPO DE CAMBIO GUARDADO EN EL MOMENTO DE FACTURA")
+     
+       $("#facPrev").modal("show"); 
 }
 $(document).on("click",".agregarTodos",function(){
 
@@ -774,35 +792,36 @@ function vistaPreviaFactura()
     var tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
     if(tabla3factura.length>0)
     {
-         $("#cuerpoTablaFActura").html("");
+         /*$.each(data.data2,function(index, value){   
+            totalfact+=parseFloat(value.facturaCantidad*value.facturaPUnitario);
+            var row =' <tr>'+
+                    '<td>'+formato_moneda(value.facturaCantidad)+'</td>'+
+                    '<td>'+value.Sigla+'</td>'+
+                    '<td>'+value.ArticuloCodigo+'</td>'+
+                    '<td>'+value.ArticuloNombre+'</td>'+
+                    '<td class="text-right">'+formato_moneda(value.facturaPUnitario)+'</td>'+
+                    '<td class="text-right">'+formato_moneda(value.facturaCantidad*value.facturaPUnitario)+'</td>'+
+                  '</tr>'
+            $("#cuerpoTablaFActura").append(row);
+        });*/
+     //    $("#cuerpoTablaFActura").html("");
+        var arreglo= tabla3factura.map(item=>{
+            return {
+                facturaCantidad:item.cantidadReal,
+                Sigla:item.Sigla,
+                ArticuloCodigo:item.CodigoArticulo,
+                ArticuloNombre:item.Descripcion,
+                facturaPUnitario:item.punitario
+            }
+        })  
 
-    
-        $.each(tabla3factura,function(index, value){
-       
-       console.log(value)
-        var row =' <tr>'+
-                '<td>'+value.cantidadReal+'</td>'+
-                '<td>'+value.Sigla+'</td>'+
-                '<td>'+value.CodigoArticulo+'</td>'+
-                '<td>'+value.Descripcion+'</td>'+
-                '<td class="text-right">'+formato_moneda(value.punitario)+'</td>'+
-                '<td class="text-right">'+formato_moneda(value.total)+'</td>'+
-              '</tr>'
-        $("#cuerpoTablaFActura").append(row);
-
-        });
-        /******LUGAR y fecha*****/
-        var fecha=$("#fechaFactura").val()       
-        var fechaFormato = moment(fecha, 'YYYY-MM-DD');
-        var dia=fechaFormato.format("DD");
-        var mes=fechaFormato.format("MMMM");
-        var anio=fechaFormato.format("YYYY");    
-        var LugarFecha=("La Paz, "+dia+" de "+mes+" de "+anio);
-        $("#fechaFacturaModal").html(LugarFecha);
-        $("#notaFactura").html($("#observacionesFactura").val())
+        vmVistaPrevia.datosFactura=arreglo;
         
-        $("#facPrev").modal("show");    
+        vmVistaPrevia.fecha=$("#fechaFactura").val();
+        
 
+        vmVistaPrevia.glosa=$("#observacionesFactura").val()
+        
     }
 }
 function AgregarRegistroTabla3Array(row)
@@ -825,7 +844,8 @@ function AgregarRegistroTabla3Array(row)
             
             $("#valuecliente").val(res.cliente);   
             $("#nombreCliente").val(res.cliente);          
-            $("#valueidcliente").val(res.idCliente);           
+            $("#valueidcliente").val(res.idCliente);   
+            $("#nitCliente").val(res.clienteNit);
 
          
                          

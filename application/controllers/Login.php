@@ -34,4 +34,8 @@ class Login extends CI_Controller
 		$this->load->view('login/login.php',$datos);
 		$this->load->view('login/footerlogin.php',$datos);
 	}
+	public function verLogin()
+	{
+		print_r($_SESSION['datosAlmacen']); 
+	}
 }

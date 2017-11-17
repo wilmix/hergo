@@ -44,8 +44,14 @@ class Facturas extends CI_Controller
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
         		base_url('assets/plugins/daterangepicker/moment.min.js'),
         		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
-        		base_url('assets/sweetalert/sweetalert2.min.js'),
+				base_url('assets/sweetalert/sweetalert2.min.js'),        		
+				base_url('assets/plugins/numeral/numeral.min.js'),
 
+			);
+		$this->foot_script=array(				
+        		base_url('assets/vue/vue.js'),								
+				base_url('assets/vue/vue-resource.min.js'),
+				base_url('assets/hergo/vistaPreviaFacturacion/principal.js'),				
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 			if($this->session->userdata('foto')==NULL)
@@ -65,6 +71,7 @@ class Facturas extends CI_Controller
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
+			$this->datos['foot_script']= $this->foot_script;
 
 	        /*************DATERANGEPICKER**********/
 	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
@@ -73,7 +80,8 @@ class Facturas extends CI_Controller
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/facturasConsulta.js');
+			//$this->datos['cabeceras_script'][]=base_url('assets/hergo/facturasConsulta.js');
+			$this->datos['foot_script'][]=base_url('assets/hergo/facturasConsulta.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/NumeroALetras.js');
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
@@ -99,8 +107,9 @@ class Facturas extends CI_Controller
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('facturas/facturas.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+			$this->load->view('facturas/vistaPrevia.php',$this->datos);
+			$this->load->view('plantilla/footcontainer.php',$this->datos);			
+			$this->load->view('plantilla/footerscript.php',$this->datos);
 	}
 
 	public function EmitirFactura()
@@ -114,6 +123,7 @@ class Facturas extends CI_Controller
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
+			$this->datos['foot_script']= $this->foot_script;
 
 	        /*************DATERANGEPICKER**********/
 	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
@@ -121,7 +131,7 @@ class Facturas extends CI_Controller
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/facturas.js');
+			$this->datos['foot_script'][]=base_url('assets/hergo/facturas.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/NumeroALetras.js');
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
@@ -150,8 +160,10 @@ class Facturas extends CI_Controller
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('facturas/emitirFactura.php',$this->datos);
+			$this->load->view('facturas/vistaPrevia.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+			//$this->load->view('plantilla/footer.php',$this->datos);
+			$this->load->view('plantilla/footerscript.php',$this->datos);
 			/*borrar cookie facturacion*/
 			
 			if( isset( $_COOKIE['factsistemhergo'] ) ) {			     
@@ -613,7 +625,7 @@ class Facturas extends CI_Controller
 		else
 			$estado=2;
 		$this->Egresos_model->actualizarEstado($idEgreso,$estado);
-		echo $estado;
+		return $estado;
 	}
 	public function mostrarDetalleFactura()
 	{
@@ -727,6 +739,18 @@ class Facturas extends CI_Controller
 			$obj->nfac=$nFact;
 			$obj->response=true;
 			echo json_encode($obj);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function datosAlmacen()
+	{
+		if($this->input->is_ajax_request())
+        {
+			$almacen=$_SESSION['datosAlmacen']; 
+			echo json_encode($almacen);
 		}
 		else
 		{

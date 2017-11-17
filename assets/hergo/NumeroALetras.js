@@ -172,14 +172,19 @@ function NumeroALetras(num) {
         letrasMonedaCentavoSingular: "CENTAVO"
     };
 
-    if (data.centavos > 0) {
+    if (data.centavos > 0) 
+    {
         data.letrasCentavos =  (function (){
             if (data.centavos == 1)
                 return data.centavos+"/100";
             else
                 return data.centavos+"/100";
             })();
-    };
+    }
+    else
+    {
+       data.letrasCentavos = "00/100";
+    }
 
     if(data.enteros == 0)
         return "CERO " + data.letrasMonedaPlural + " " + data.letrasCentavos;

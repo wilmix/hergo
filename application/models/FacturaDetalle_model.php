@@ -11,7 +11,7 @@ class FacturaDetalle_model extends CI_Model
 	
 	public function guardar($obj)
 	{		
-		$sql=$this->db->insert_batch("facturaDetalle", $obj);
+		$sql=$this->db->insert_batch("facturadetalle", $obj);
 		return $sql;
 	}
 	

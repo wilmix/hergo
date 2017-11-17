@@ -2,6 +2,7 @@ var iniciofecha=moment().subtract(0, 'year').startOf('year')
 var finfecha=moment().subtract(0, 'year').endOf('year')
 
 $(document).ready(function(){ 
+    
      $(".tiponumerico").inputmask({
         alias:"decimal",
         digits:2,
@@ -73,7 +74,7 @@ function retornarTablaFacturacion()
         data: {ini:ini,fin:fin,alm:alm,tipo:tipo},
     }).done(function(res){
          quitarcargando();
-         console.log(res);
+      //   console.log(res);
         datosselect= restornardatosSelect(res)
 
         $("#facturasConsulta").bootstrapTable('destroy');
@@ -253,7 +254,8 @@ function formatoEstadoFactura(value, row, index)
 
 window.eventosBotones = {
     'click .verFactura': function (e, value, row, index) {          
-    //console.log(row);        
+    //console.log(row);    
+        agregarcargando();    
         agregarDatosInicialesFacturaModal(row);
         verFacturaModal(row);
 
@@ -317,21 +319,31 @@ function agregarDatosInicialesFacturaModal(row)
 function agregarDatosFacturaModal(res,row)
 {
     
-    $("#fNit").html(res.detalle.nit);
-    $("#fnumero").html(res.nfac);
-    $("#fauto").html(res.detalle.autorizacion);
-    $("#fechaLimiteEmision").html(formato_fecha_corta(res.detalle.fechaLimite));
-    $("#codigoControl").html(row.codigoControl)
-    console.log(row)
+    //$("#fNit").html(res.detalle.nit);
+    vmVistaPrevia.nit=res.detalle.nit;    
+    //$("#fnumero").html(res.nfac);
+    vmVistaPrevia.numero=res.nfac;
+    //$("#fauto").html(res.detalle.autorizacion);
+    vmVistaPrevia.autorizacion=res.detalle.autorizacion;
+    //$("#fechaLimiteEmision").html(formato_fecha_corta(res.detalle.fechaLimite));
+    vmVistaPrevia.fechaLimiteEmision=res.detalle.fechaLimite//formato_fecha_corta(res.detalle.fechaLimite);
+    //$("#codigoControl").html(row.codigoControl)
+    vmVistaPrevia.codigoControl=row.codigoControl;
+    vmVistaPrevia.llave=res.detalle.llaveDosificacion;    
     var fecha = moment(row.fechaFac, 'YYYY-MM-DD');
-    fechaFormato = fecha.format('YYYY-MM-DD');
+    vmVistaPrevia.fecha=fecha;
+    vmVistaPrevia.manual=parseInt(res.detalle.manual);
+
+
+
+  /*  fechaFormato = fecha.format('YYYY-MM-DD');
     var datos={
         nit:row.ClienteNit,
         fecha:fechaFormato,
         monto:row.total,
     }
     codigoControl(res,datos);
-    
+    */
 }
 function verFacturaModal(row)
 {     
@@ -344,7 +356,7 @@ function verFacturaModal(row)
         dataType: "json",
         data:data
     }).done(function(res){
-        console.log(res)
+       // console.log(res)
         mostrardatosmodal(res);
        
       // calcularTotalFactura();
@@ -356,10 +368,13 @@ function verFacturaModal(row)
 function mostrardatosmodal(data)
 {
 
-    $("#cuerpoTablaFActura").html("");
+    //$("#cuerpoTablaFActura").html("");
 
-        var totalfact=0;
-        $.each(data.data2,function(index, value){   
+     //   var totalfact=0;
+        
+              
+
+        /*$.each(data.data2,function(index, value){   
             totalfact+=parseFloat(value.facturaCantidad*value.facturaPUnitario);
             var row =' <tr>'+
                     '<td>'+formato_moneda(value.facturaCantidad)+'</td>'+
@@ -370,28 +385,39 @@ function mostrardatosmodal(data)
                     '<td class="text-right">'+formato_moneda(value.facturaCantidad*value.facturaPUnitario)+'</td>'+
                   '</tr>'
             $("#cuerpoTablaFActura").append(row);
-        });
+        });*/
         /******LUGAR y fecha*****/
-        var fecha=data.data1.fechaFac;  
+        /*var fecha=data.data1.fechaFac;  
         var fechaFormato = moment(fecha, 'YYYY-MM-DD');
         var dia=fechaFormato.format("DD");
         var mes=fechaFormato.format("MMMM");
         var anio=fechaFormato.format("YYYY");    
         var LugarFecha=("La Paz, "+dia+" de "+mes+" de "+anio);
-        $("#fechaFacturaModal").html(LugarFecha);
-        $("#clienteFactura").html(data.data1.ClienteFactura)
-        $("#clienteFacturaNit").html(data.data1.ClienteNit)
-        $("#notaFactura").html(data.data1.glosa)        
-        $("#facPrev").modal("show"); 
+        $("#fechaFacturaModal").html(LugarFecha);*/
+        //console.log(data.data2)
+        vmVistaPrevia.datosFactura=data.data2;
+        //$("#clienteFactura").html(data.data1.ClienteFactura)
+        vmVistaPrevia.ClienteFactura=data.data1.ClienteFactura;        
+        //$("#clienteFacturaNit").html(data.data1.ClienteNit);
+        vmVistaPrevia.ClienteNit=data.data1.ClienteNit;
+        //$("#notaFactura").html(data.data1.glosa);
+        vmVistaPrevia.glosa=data.data1.glosa;
+
         tipocambioFactura=data.data1.cambiovalor;
+        vmVistaPrevia.tipocambio=data.data1.cambiovalor;
+        vmVistaPrevia.moneda=parseInt(data.data1.moneda);
+
+        //vmVistaPrevia.generarCodigoControl() //este dato se extrae de la base de datos, solo se usa para generar el codigo
+        vmVistaPrevia.generarCodigoQr();
         console.log("REVISAR TIPO DE CAMBIO GUARDADO EN EL MOMENTO DE FACTURA")
       
         /***********LITERAL**************/
-        $("#totalTexto").html(NumeroALetras(totalfact));
+      //  $("#totalTexto").html(NumeroALetras(totalfact));
         /**********************************/
-        $("#totalFacturaBsModal").html(formato_moneda(totalfact));
+       /* $("#totalFacturaBsModal").html(formato_moneda(totalfact));
         $("#totalFacturaSusModal").html(formato_moneda(totalfact/tipocambioFactura));
-        $("#tipoCambioFacturaModal").html(tipocambioFactura);
-
+        $("#tipoCambioFacturaModal").html(tipocambioFactura);*/
+        $("#facPrev").modal("show"); 
+        quitarcargando();
 
 }
