@@ -47,17 +47,17 @@ $(document).ready(function(){
 
     });
     $('#fechapersonalizada').on('apply.daterangepicker', function(ev, picker) {
-      retornarNEporFac();
+      retornarfacturacionClientes();
     });
-    retornarNEporFac();
+    retornarfacturacionClientes();
 })
 $(document).on("change","#almacen_filtro",function(){
-    retornarNEporFac();
+    retornarfacturacionClientes();
 }) //para cambio filtro segun cada uno
 
 
 
-function retornarNEporFac() //*******************************
+function retornarfacturacionClientes() //*******************************
 {   
     ini=iniciofecha.format('YYYY-MM-DD')
     fin=finfecha.format('YYYY-MM-DD')
@@ -65,16 +65,16 @@ function retornarNEporFac() //*******************************
     agregarcargando();
     $.ajax({
         type:"POST",
-        url: base_url('index.php/Reportes/mostrarNEporFac'), //******controlador
+        url: base_url('index.php/Reportes/mostrarFacturacionClientes'), //******controlador
         dataType: "json",
         data: {i:ini,f:fin,a:alm}, //**** variables para filtro
     }).done(function(res){
     	quitarcargando();
-        //console.log(res);
+        console.log(res);
         //console.log(alm);
-        datosselect= restornardatosSelect(res);
-        $("#tablaNotasEntregaFacturar").bootstrapTable('destroy');
-        $("#tablaNotasEntregaFacturar").bootstrapTable({            ////********cambiar nombre tabla viata
+        //datosselect= restornardatosSelect(res);
+        $("#tablaFacturacionClientes").bootstrapTable('destroy');
+        $("#tablaFacturacionClientes").bootstrapTable({            ////********cambiar nombre tabla viata
 
                 data:res,    
                     striped:true,
@@ -100,66 +100,16 @@ function retornarNEporFac() //*******************************
                 columns:
                 [
                    {   
-                        field: 'fechamov',            
-                        title: 'Fecha',
-                        sortable:true,
-                        formatter: formato_fecha_corta
-                    },
-                    {   
-                        field: 'almacen',            
-                        title: 'Almacen',
-                        visible:true,
-                        sortable:true,
-                        filter: 
-                        {
-                            type: "select",
-                            data: datosselect[0]
-                        }
-                    },
-                    {   
                         field: 'nombreCliente',            
                         title: 'Cliente',
-                        visible:true,
                         sortable:true,
-                        filter: 
-                        {
-                            type: "select",
-                            data: datosselect[1]
-                        }
-                    },
-                    {   
-                        field: 'n',            
-                        title: 'Número',
-                        visible:true,
-                        sortable:true,
-                        align: 'center',
                         filter: { type: "input" }
                     },
-                    {   
-                        field: 'total',            
-                        title: 'Importe',
-                        visible:true,
-                        sortable:true,
+                    {
+                    	field: 'total',
+                        title: 'Total ',
                         align: 'right',
                         formatter: operateFormatter3
-                    },
-                    {   
-                        field: 'autor',            
-                        title: 'Responsable',
-                        visible:true,
-                        sortable:true,
-                        align: 'center',
-                        filter: 
-                        {
-                            type: "select",
-                            data: datosselect[2]
-                        }
-                    },
-                    {
-                    	field: 'monedasigla',
-                        title: 'Moneda',
-                        align: 'Moneda',
-                        visible:false
                     }
                 ]
             });

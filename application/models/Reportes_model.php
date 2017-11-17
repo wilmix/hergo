@@ -65,5 +65,36 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function mostrarFacturacionClientes($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
+	{ //cambiar la consulta
+		$sql="SELECT clientes.nombreCliente, SUM(total) AS total
+			FROM factura
+			INNER JOIN clientes ON clientes.idCliente = factura.cliente
+			WHERE fechaFac BETWEEN '$ini' AND '$fin'
+			and factura.almacen LIKE '%$alm'
+			AND factura.anulada = 1
+			GROUP BY clientes.nombreCliente
+			ORDER BY total DESC";
+		
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+	public function mostrarVentasLineaMes($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
+	{ //cambiar la consulta
+		$sql="	SELECT linea.Sigla, linea.Linea, sum(facturadetalle.facturaCantidad*facturadetalle.facturaPUnitario) as total
+				from facturadetalle
+				inner join articulos on articulos.idArticulos = facturadetalle.articulo
+				inner join linea on linea.idLinea=articulos.idLinea
+				inner join factura on factura.idFactura=facturadetalle.idFactura
+				where fechaFac between '$ini' and '$fin'
+				and factura.anulada = 0
+				and factura.almacen LIKE '%$alm'
+				group by linea
+				order by sigla";
+		
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+
 
 }
