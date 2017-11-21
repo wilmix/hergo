@@ -60,7 +60,8 @@ class Facturacion_model extends CI_Model
 	}
 	public function obtenerFactura($idFactura)
 	{
-		$sql="SELECT f.*,t.tipocambio cambiovalor from factura f
+		$sql="SELECT f.*,t.tipocambio cambiovalor 
+		From factura f
 		INNER JOIN tipocambio t 
 		ON f.tipoCambio=t.id
 		Where f.idFactura=$idFactura";
@@ -73,6 +74,26 @@ class Facturacion_model extends CI_Model
         else
         {
             return 1;
+        }
+	}
+	public function obtenerPedido($idFactura)
+	{
+		$sql="SELECT GROUP_CONCAT(e.clientePedido SEPARATOR '-') pedido
+		FROM factura_egresos fe
+		INNER JOIN egresos e
+		ON fe.idegresos=e.idegresos
+		Where fe.idFactura=$idFactura
+		GROUP BY fe.id  
+		";
+		$query=$this->db->query($sql);
+        if($query->num_rows()>0)
+        {
+            $fila=$query->row();
+            return ($fila);
+        }
+        else
+        {
+            return false;
         }
 	}
 	public function obtenerDetalleFactura($idFactura)

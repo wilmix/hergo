@@ -63,6 +63,7 @@ var EventBus = new Vue;
             manual:'',   
             moneda:'',
             guardar:false,
+            pedido:'',
             datosFactura:[],
 
         },
@@ -130,12 +131,12 @@ var EventBus = new Vue;
             },     
             generarCodigoQr: function(){
                 $("#qrcodeimg").html("");
-                console.log(this.manual)
+              
                 if(parseInt(this.manual)==0) {
                     
                     var fecha    = moment(this.fecha, 'YYYY-MM-DD').format('DD/MM/YYYY');
                     var monto    = this.retornarTotal().toString();
-                    console.log(monto);
+              
                     var codigoqr = (this.nit + "|" + this.numero + "|" + this.autorizacion + "|" +fecha + "|" + monto+ "|" + monto +"|" + this.codigoControl +"|" + this.ClienteNit + "|0|0|0|0");
                     
                     console.log(codigoqr)

@@ -31,7 +31,7 @@
                 <div class="col-md-8">
                 <p>Lugar y Fecha: <span id="fechaFacturaModal">{{lugarFecha()}}</span><br>
                 Señor(es): <span id="clienteFactura">{{ClienteFactura}}</span>  <br>
-                OC/Pedido: OL - <span id="clientePedido"></span></p>
+                OC/Pedido: <span id="clientePedido">{{pedido}}</span></p>
                 </div>
                     <div class="col-md-4">
                     <p class="text-center">NIT/CI:  <b><span id="clienteFacturaNit">{{ClienteNit}}</span></b></p>

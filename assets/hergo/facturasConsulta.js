@@ -257,7 +257,7 @@ window.eventosBotones = {
     //console.log(row);    
         agregarcargando();    
         agregarDatosInicialesFacturaModal(row);
-        verFacturaModal(row);
+     //   verFacturaModal(row);
 
     },
     'click .anularFactura': function (e, value, row, index) {         
@@ -300,16 +300,18 @@ function agregarDatosInicialesFacturaModal(row)
     var data={
         nFactura:row.nFactura,
         lote:row.lote,
+        idFactura:row.idFactura
     }
      $.ajax({
         type:"POST",
-        url: base_url('index.php/Facturas/mostrarDatosFactura'),
+        url: base_url('index.php/Facturas/mostrarDatosDetallesFactura'),
         dataType: "json",
         data:data
     }).done(function(res){
         if(res.response)
         {
-            agregarDatosFacturaModal(res,row);
+            agregarDatosFacturaModal(res.datosFactura,row);
+            mostrardatosmodal(res.detalleFactura);
         }      
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
@@ -344,26 +346,6 @@ function agregarDatosFacturaModal(res,row)
     }
     codigoControl(res,datos);
     */
-}
-function verFacturaModal(row)
-{     
-    var data={
-        idFactura:row.idFactura
-    }
-     $.ajax({
-        type:"POST",
-        url: base_url('index.php/Facturas/mostrarDetalleFactura'),
-        dataType: "json",
-        data:data
-    }).done(function(res){
-       // console.log(res)
-        mostrardatosmodal(res);
-       
-      // calcularTotalFactura();
-    }).fail(function( jqxhr, textStatus, error ) {
-    var err = textStatus + ", " + error;
-    console.log( "Request Failed: " + err );
-    }); 
 }
 function mostrardatosmodal(data)
 {
@@ -407,6 +389,7 @@ function mostrardatosmodal(data)
         vmVistaPrevia.tipocambio=data.data1.cambiovalor;
         vmVistaPrevia.moneda=parseInt(data.data1.moneda);
 
+        vmVistaPrevia.pedido=data.data3.pedido;
         //vmVistaPrevia.generarCodigoControl() //este dato se extrae de la base de datos, solo se usa para generar el codigo
         vmVistaPrevia.generarCodigoQr();
         console.log("REVISAR TIPO DE CAMBIO GUARDADO EN EL MOMENTO DE FACTURA")

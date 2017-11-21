@@ -1005,7 +1005,7 @@ $(document).on("click","#guardarFactura",function()
         codigoControl:$("#codigoControl").html(),
         textqr:$("#textqr").val(),
         tabla:tabla3factura,
-    
+
     }
     $.ajax({
             type:"POST",

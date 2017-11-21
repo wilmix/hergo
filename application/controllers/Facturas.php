@@ -629,13 +629,18 @@ class Facturas extends CI_Controller
 	}
 	public function mostrarDetalleFactura()
 	{
+		echo json_encode($this->mostrarDetalleFacturaFunction());
+	}
+	public function mostrarDetalleFacturaFunction()
+	{
 		if($this->input->is_ajax_request())
         {
         	$idFactura= addslashes($this->security->xss_clean($this->input->post('idFactura')));
 			$obj=new stdclass();
 			$obj->data1=$this->Facturacion_model->obtenerFactura($idFactura);
 			$obj->data2=$this->Facturacion_model->obtenerDetalleFactura($idFactura);
-			echo json_encode($obj);
+			$obj->data3=$this->Facturacion_model->obtenerPedido($idFactura);
+			return($obj);
 		}
 		else
 		{
@@ -726,7 +731,19 @@ class Facturas extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	public function mostrarDatosDetallesFactura()
+	{
+		$obj=new stdClass();
+		$obj->datosFactura=$this->mostrarDatosFacturaFunction();
+		$obj->detalleFactura=$this->mostrarDetalleFacturaFunction();
+		$obj->response=true;
+		echo json_encode($obj);
+	}
 	public function mostrarDatosFactura()
+	{
+		echo json_encode($this->mostrarDatosFacturaFunction());
+	}
+	public function mostrarDatosFacturaFunction()
 	{
 		if($this->input->is_ajax_request())
         {
@@ -738,7 +755,7 @@ class Facturas extends CI_Controller
 			$obj->detalle=$resultado;
 			$obj->nfac=$nFact;
 			$obj->response=true;
-			echo json_encode($obj);
+			return($obj);
 		}
 		else
 		{

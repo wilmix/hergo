@@ -284,6 +284,7 @@ function codigoControl(res,datos)
               width: 128,
               height: 128,
             });  
+        console.log("Codigo generado",codigo);
     }
     function mensajeAnular(idObservacion,funcionAnular,postAlert)
     {        
