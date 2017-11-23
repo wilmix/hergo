@@ -13,35 +13,45 @@ class Egresos_model extends CI_Model
 		if($id==null) //no tiene id de entrada
         {
 		  $sql="
-			SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,c.documento,e.tipocambio, sum(d.total)/tc.tipocambio totalsus
-			FROM egresos e
-			INNER JOIN egredetalle d
-			on e.idegresos=d.idegreso
-			INNER JOIN tmovimiento t 
-			ON e.tipomov = t.id 
-			INNER JOIN clientes c 
-			ON e.cliente=c.idCliente
-			INNER JOIN users u 
-			ON u.id=e.autor 
-			INNER JOIN almacenes a 
-			ON a.idalmacen=e.almacen 
-			INNER JOIN moneda m 
-			ON e.moneda=m.id 
+			SELECT *, SUM(total1) total, SUM( total1)/tipocambiovalor totalsus
+            FROM(
+                    SELECT DISTINCTROW d.idingdetalle, e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, ( d.total) total1,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,c.documento,e.tipocambio, tc.tipocambio tipocambiovalor,f.nFactura,GROUP_CONCAT(DISTINCTROW f.nfactura SEPARATOR '-') factura 
+                    FROM egresos e
+                    INNER JOIN egredetalle d
+                    on e.idegresos=d.idegreso
+                    INNER JOIN tmovimiento t 
+                    ON e.tipomov = t.id 
+                    INNER JOIN clientes c 
+                    ON e.cliente=c.idCliente
+                    INNER JOIN users u 
+                    ON u.id=e.autor 
+                    INNER JOIN almacenes a 
+                    ON a.idalmacen=e.almacen 
+                    INNER JOIN moneda m 
+                    ON e.moneda=m.id 
             INNER JOIN tipocambio tc
             ON e.tipocambio=tc.id
-			WHERE e.fechamov 
-			BETWEEN '$ini' AND '$fin' and e.almacen like '%$alm' and t.id like '%$tin'
-			Group By e.idegresos
-			ORDER BY e.idEgresos DESC	
+            LEFT JOIN factura_egresos fe
+            ON e.idegresos=fe.idegresos
+            left JOIN factura f
+            ON f.idFactura=fe.idFactura
+            WHERE e.fechamov 
+            BETWEEN '2017-01-01' AND '2017-12-31' and e.almacen like '%1' and t.id like '%7'   
+            GROUP BY d.idingdetalle 
+          
+                ) tabla    
+         
+            GROUP BY tabla.idegresos
+            ORDER BY tabla.idEgresos DESC				
             ";
-   
+           
         }
         else/*REVISAR!!!!!!!!!!!!!!!!!!SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
                 (SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio
             FROM ingresos i*/
         {            
              $sql="
-            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido,c.documento,e.tipocambio,total/tc.tipocambio totalsus , e.vendedor
+            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido,c.documento,e.tipocambio,total/tc.tipocambio totalsus , e.vendedor 
             FROM egresos e
             INNER JOIN egredetalle d
             on e.idegresos=d.idegreso
@@ -55,7 +65,7 @@ class Egresos_model extends CI_Model
             ON a.idalmacen=e.almacen 
             INNER JOIN moneda m 
             ON e.moneda=m.id 
-            INNER JOIN tipocambio tc
+            INNER JOIN tipocambio tc            
             ON e.tipocambio=tc.id
             WHERE idEgresos=$id
             ORDER BY e.idEgresos DESC
@@ -96,7 +106,7 @@ class Egresos_model extends CI_Model
             WHERE e.fechamov 
             BETWEEN '$ini' AND '$fin' and e.almacen like '%$alm' and t.id like '%$tin'
             Group By e.idegresos
-            ORDER BY e.idEgresos DESC   
+            ORDER BY e.idEgresos DESC  
             ";
 
         }

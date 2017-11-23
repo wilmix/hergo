@@ -104,7 +104,7 @@ function mostrarTablaEgresosTraspasos(res)
                 title:"Factura",
                 width: '4%',
                 sortable:true,
-                formatter:mostrarFactura,
+                //formatter:mostrarFactura,
                 filter: {type: "input"}
 
             },
@@ -249,7 +249,7 @@ function mostrarTablaEgresos(res)
                 title:"Factura",
                 width: '4%',
                 sortable:true,
-                formatter:mostrarFactura,
+               // formatter:mostrarFactura,
                 filter: {type: "input"}
 
             },
@@ -558,11 +558,11 @@ function verdetalle(fila)
             $("#titulo_modalIgresoDetalle").html(" - "+fila.tipomov+ " - "+csFact);
             $("#modalEgresoDetalle").modal("show");
 
-           //$("#nrofactura").html("")                    
+            arrayFactura= fila.factura.split("-");
             var cadena=""
-            $.each(fila.factura,function(index,val){
+            $.each(arrayFactura,function(index,val){
 
-                cadena+="<option>"+val.nFactura+"</option>"
+                cadena+="<option>"+val+"</option>"
             })
             $("#facturasnum").html(cadena);                   
 

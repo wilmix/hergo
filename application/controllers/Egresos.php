@@ -259,9 +259,9 @@ class Egresos extends CI_Controller
         	else        		
 				$res=$this->Egresos_model->mostrarEgresos($id=null,$ini,$fin,$alm,$tin);
 			$res=$res->result_array();
-			$res2=$this->AgregarFActurasResultado($res);
+		//	$res2=$this->AgregarFActurasResultado($res);
 			
-			echo json_encode($res2);
+			echo json_encode($res);
 		}
 		else
 		{
