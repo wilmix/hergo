@@ -1,6 +1,6 @@
 
-var iniciofecha=moment().subtract(0, 'year').startOf('year')
-var finfecha=moment().subtract(0, 'year').endOf('year')
+var iniciofecha=moment().subtract(0, 'month').startOf('month')
+var finfecha=moment().subtract(0, 'month').endOf('month')
 $(document).ready(function(){
      $(".tiponumerico").inputmask({
         alias:"decimal",
@@ -61,7 +61,6 @@ $(document).on("change","#almacen_filtro",function(){
 
 
 function retornarLibroVentas (){
-    console.log("lizto");
     ini=iniciofecha.format('YYYY-MM-DD')
     fin=finfecha.format('YYYY-MM-DD')
     alm=$("#almacen_filtro").val();
@@ -73,9 +72,9 @@ function retornarLibroVentas (){
         data: {i:ini,f:fin,a:alm}, //**** variables para filtro
     }).done(function(res){
       quitarcargando();
-        //console.log(res);
-        //console.log(alm);
-        //datosselect= restornardatosSelect(res);
+        console.log(ini);
+        console.log(fin);
+        datosselect= restornardatosSelect(res);
         $("#tablaLibroVentas").bootstrapTable('destroy');
         $("#tablaLibroVentas").bootstrapTable({            ////********cambiar nombre tabla viata
 
@@ -84,12 +83,9 @@ function retornarLibroVentas (){
                     pagination:true,
                     pageSize:"100",
                     search:true,
-                    searchOnEnterKey:true,
+                    //searchOnEnterKey:true,
                     showColumns:true,
                     filter:true,
-                    showExport:true,
-                    exportTypes:['xlsx'],
-                    exportDataType:'basic',
                     stickyHeader: true,
                     stickyHeaderOffsetY: '50px',
                 columns:
@@ -121,11 +117,22 @@ function retornarLibroVentas (){
                   field: 'autorizacion',            
                   title: 'N° Autorización',
                   sortable:true,
+                  filter: 
+                    {
+                        type: "select",
+                        data: datosselect[0]
+                    }
                 },
                 {   
                   field: 'anulada',            
                   title: 'Estado',
                   sortable:true,
+                  align: 'center',
+                  filter: {
+                    type: "select",
+                    data: ["A", "V"]
+                        },
+                  formatter: estadoFactura
                 },
                 {   
                   field: 'documento',            
@@ -136,6 +143,11 @@ function retornarLibroVentas (){
                   field: 'nombreCliente',            
                   title: 'Nombre | Razón Social',
                   sortable:true,
+                  filter: 
+                    {
+                      type: "select",
+                      data: datosselect[1]
+                    }
                 },
                 {   
                   field: 'sumaDetalle',            
@@ -196,6 +208,12 @@ function retornarLibroVentas (){
                   field: 'manual',            
                   title: 'Tipo',
                   sortable:true,
+                  align: 'center',
+                  filter: {
+                    type: "select",
+                    data: ["M", "C"]
+                        },
+                  formatter: tipoFactura
                 }
                 ]
             });
@@ -210,4 +228,43 @@ function operateFormatter3(value, row, index){
     return (formatNumber.new(num));
 }
 
+function tipoFactura(value, row, index){
+$ret=''
+  if(row.manual==1){        
+    $ret='<span class="label label-warning">M</span>';
+  } else {
+    $ret='<span class="label label-default">C</span>';
+  }
+return ($ret);
+}
 
+function estadoFactura(value, row, index){
+$ret=''
+  if(row.anulada==1){        
+    $ret='<span class="label label-danger ">A</span>';
+  } else {
+    $ret='<span class="label label-success">V</span>';
+  }
+return ($ret);
+}
+
+function restornardatosSelect(res){
+var autor = new Array()
+var cliente = new Array()
+var datos =new Array()
+var destino =new Array()
+  $.each(res, function(index, value){
+    autor.push(value.autorizacion)
+    cliente.push(value.nombreCliente)
+    destino.push(value.destino)
+  })
+  autor.sort();
+  cliente.sort();
+  datos.push(autor.unique());
+  datos.push(cliente.unique());
+  datos.push(destino.unique());
+  return(datos);
+}
+Array.prototype.unique=function(a){
+  return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
+});
