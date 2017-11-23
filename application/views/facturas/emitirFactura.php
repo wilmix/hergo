@@ -60,7 +60,15 @@ div.collapse {
             </div><!--row-->
 
             <div class="form-group row">
-              <div class="col-md-6 col-xs-12"></div>
+              <div class="col-md-6 col-xs-12">
+                <div class = "input-group col-md-12 col-xs-12">
+                  <span class="input-group-addon" id="basic-addon3">Pedido:</span>
+                  <input type="text" class="form-control" id="pedidoClienteT2" aria-describedby="sizing-addon2" disabled="">
+                  <span class="input-group-addon" id="sizing-addon2">Moneda:</span>
+                  <input type="text" class="form-control" id="monedaT2" aria-describedby="sizing-addon2" disabled="">
+                </div>
+
+              </div>
               <div class="col-md-6 col-xs-12">
                 <div class = "input-group col-md-12 col-xs-12">
                   <span class="input-group-addon" id="">

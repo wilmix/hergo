@@ -493,6 +493,9 @@ function mostrarDatosCliente(row)
     console.log(row);
     $("#nombreClienteTabla1").val(row.nombreCliente);
     $("#tipoNumEgreso").val(row.sigla+"-"+row.n);
+    $("#pedidoClienteT2").val(row.clientePedido);
+    $("#monedaT2").val(row.monedasigla);
+
 }
 
 
