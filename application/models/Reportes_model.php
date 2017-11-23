@@ -71,7 +71,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 			FROM factura
 			INNER JOIN clientes ON clientes.idCliente = factura.cliente
 			WHERE fechaFac BETWEEN '$ini' AND '$fin'
-			and factura.almacen LIKE '%$alm'
+			AND factura.almacen LIKE '%$alm'
 			AND factura.anulada = 1
 			GROUP BY clientes.nombreCliente
 			ORDER BY total DESC";
@@ -91,6 +91,21 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 				and factura.almacen LIKE '%$alm'
 				group by linea
 				order by sigla";
+		
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+	public function mostrarLibroVentas($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
+	{ //cambiar la consulta
+		$sql="SELECT fechaFac, nFactura, df.autorizacion, anulada, c.documento,/*clienteNit,*/c.nombreCliente, /*      ClienteFactura,*/ total AS totalFactura, SUM(fd.facturaPUnitario*fd.facturaCantidad) AS sumaDetalle,   total*13/100 AS debito, IFNULL(codigoControl, 0) AS codigoControl , df.manual
+				FROM factura AS f
+				INNER JOIN datosfactura AS df ON df.lote=f.lote
+				INNER JOIN clientes AS c ON c.idCliente = f.cliente
+				INNER JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura
+				WHERE fechaFac BETWEEN '$ini' AND '$fin'
+				AND f.almacen LIKE '%$alm'
+				GROUP BY f.idFactura
+				ORDER BY  df.manual, nFactura";
 		
 		$query=$this->db->query($sql);		
 		return $query;
