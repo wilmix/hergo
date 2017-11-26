@@ -149,7 +149,9 @@ var EventBus = new Vue;
         },
         filters:{
             literal:function(value){
-                return NumeroALetras(value)
+                
+                var _moneda=$("#moneda").val();
+                return NumeroALetras(value,parseInt(_moneda))
             },
             moneda:function(value){
                 return numeral(value).format('0,0.00');

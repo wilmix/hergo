@@ -87,8 +87,8 @@
                 </div>
                 <div class="col-md-3">
                     <input id="totalsinformatobs" class="hidden">
-                    <template v-if="moneda==2"><p>Total $US:   <span id="totalFacturaSusModal1">{{ dolares(retornarTotal()) | moneda }}</span></p></template>
-                    <p>Total Bs: <span id="totalFacturaBsModal1">{{retornarTotal()| moneda}}</span></p>
+                    <template v-if="moneda==2"><p>Total $US:   <span id="totalFacturaSusModal1">{{ retornarTotal()| moneda }}</span></p></template>
+                    <p>Total Bs: <span id="totalFacturaBsModal1">{{moneda==2?retornarTotal()*tipocambio:retornarTotal() | moneda}}</span></p>
                     <template v-if="moneda==2"><p>T/C <span id="tipoCambioFacturaModal">{{tipocambio}}</span></p></template>
                 
                     <div id="qrcodeimg"></div>                

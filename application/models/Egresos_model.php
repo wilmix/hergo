@@ -142,7 +142,7 @@ class Egresos_model extends CI_Model
     }
 	public function mostrarDetalle($id)//lista todos los detalles de un egreso
 	{
-		$sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, e.punitario punitario1, e.punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal, e.cantFact
+		$sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, e.punitario punitario11, e.punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal, e.cantFact
 		FROM egredetalle e
 		INNER JOIN articulos a
 		ON e.articulo = a.idArticulos
@@ -156,7 +156,9 @@ class Egresos_model extends CI_Model
     public function retornarEgreso($id)
     {
         $sql="SELECT *
-        FROM egresos e        
+        FROM egresos e 
+        INNER JOIN tipocambio tc
+        ON tc.id=e.tipoCambio       
         WHERE e.idEgresos=$id";     
 
         $query=$this->db->query($sql);
@@ -173,7 +175,7 @@ class Egresos_model extends CI_Model
     }
     public function mostrarDetalleFacturas($id)//lista todos los detalles de un egreso
     {
-        $sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario1, e.punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal
+        $sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario11, e.punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal
         FROM egredetalle e
         INNER JOIN articulos a
         ON e.articulo = a.idArticulos
@@ -187,7 +189,7 @@ class Egresos_model extends CI_Model
     }
     public function ObtenerDetalle($id)//obtiene por idingdetalle // deberia ser egredetalle
     {
-        $sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario1,e.punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla,(e.cantidad-e.cantFact) cantidadReal
+        $sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario11,e.punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla,(e.cantidad-e.cantFact) cantidadReal
         FROM egredetalle e
         INNER JOIN articulos a
         ON e.articulo = a.idArticulos
@@ -496,34 +498,9 @@ class Egresos_model extends CI_Model
         }        
     }
     public function ListarparaFacturacion($ini,$fin,$alm,$tipo)
-    {
-        /*$inicio=date('Y-m-d', strtotime($ini));
-        $final=date('Y-m-d', strtotime($fin));*/
- 
-      /*  $this->db->select("e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido");
-        $this->db->from("egresos e");
-        $this->db->join("egredetalle d","e.idegresos=d.idegreso");
-        $this->db->join("tmovimiento t","e.tipomov=t.id");
-        $this->db->join("clientes c","e.cliente=c.idCliente");
-        $this->db->join("users u","u.id=e.autor");
-        $this->db->join("almacenes a","a.idalmacen=e.almacen");
-        $this->db->join("moneda m","e.moneda=m.id");
-        $this->db->where("e.fechamov BETWEEN '$ini' and '$fin'",NULL,FALSE);
-        if($alm>0)
-            $this->db->where("e.almacen",$alm);            
-        if($tipo>0)
-        {
-
-            $this->db->where("e.tipomov",$tipo);
-        }
-        else
-        {
-            $this->db->where("e.tipomov",6);   
-            $this->db->where("e.tipomov",7);
-        }
-        $query = $this->db->get();*/
+    {        
         $sql="
-            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente
+            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,sum(d.total)/tc.tipocambio totalsus , tc.tipocambio
             FROM egresos e
             INNER JOIN egredetalle d
             on e.idegresos=d.idegreso
@@ -537,6 +514,8 @@ class Egresos_model extends CI_Model
             ON a.idalmacen=e.almacen 
             INNER JOIN moneda m 
             ON e.moneda=m.id 
+            INNER JOIN tipocambio tc
+            ON tc.id=e.tipoCambio
             WHERE e.fechamov 
             BETWEEN '$ini' AND '$fin' and (e.estado=0 or e.estado=2) and e.anulado!=1";        
         if($alm>0)         
@@ -615,4 +594,5 @@ class Egresos_model extends CI_Model
         $query=$this->db->query($sql);
         return $query;
     }
+  
 }

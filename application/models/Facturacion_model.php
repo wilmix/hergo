@@ -83,8 +83,8 @@ class Facturacion_model extends CI_Model
 		INNER JOIN egresos e
 		ON fe.idegresos=e.idegresos
 		Where fe.idFactura=$idFactura
-		GROUP BY fe.id  
-		";
+		GROUP BY fe.idFactura  
+		";		
 		$query=$this->db->query($sql);
         if($query->num_rows()>0)
         {

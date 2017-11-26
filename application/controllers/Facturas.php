@@ -265,11 +265,22 @@ class Facturas extends CI_Controller
 			//set_cookie('factsistemhergo',$cookienew,'3600'); 	
 			$egresoDetalle=$this->Egresos_model->mostrarDetalleFacturas($idegreso)->result();
 			$datosEgreso=$this->Egresos_model->retornarEgreso($idegreso);
+		//	print_r($datosEgreso);
+			if($datosEgreso->moneda==2)
+			{
+				for ($i=0; $i < count($egresoDetalle); $i++) 
+				{ 
+					$egresoDetalle[$i]->punitario=$egresoDetalle[$i]->punitario/$datosEgreso->tipocambio;
+					$egresoDetalle[$i]->total=$egresoDetalle[$i]->total/$datosEgreso->tipocambio;
+					
+				}
+			}
 			$mensaje="Datos cargados correctamente";
 			$obj2=new stdclass();
 			$obj2->detalle=$egresoDetalle;
 			$obj2->mensaje=$mensaje;
 			$obj2->alm=$datosEgreso->almacen;
+			$obj2->moneda=$datosEgreso->moneda;
 			echo json_encode($obj2);
 		}
 		else

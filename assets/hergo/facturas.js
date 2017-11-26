@@ -3,7 +3,10 @@ var finfecha=moment().subtract(0, 'year').endOf('year')
 
 $(document).ready(function(){
     //tablaprueba()
-    mostrarTablaDetalle();
+    var res={
+        detalle:0
+    }
+    mostrarTablaDetalle(res);
     mostrarTablaFactura();
      $(".tiponumerico").inputmask({
         alias:"decimal",
@@ -127,8 +130,25 @@ function retornarTablaFacturacion()
                 }
             },
             {
+                field:'monedasigla',
+                title:"Moneda",
+                width: '7%',
+                visible:true,
+                sortable:true,
+                
+            }, 
+            {
                 field:'total',
-                title:"Total",
+                title:"Total Bs",
+                width: '7%',
+                align: 'right',
+                sortable:true,
+                formatter: operateFormatter3,
+           
+            },
+            {
+                field:'totalsus',
+                title:"Total Sus",
                 width: '7%',
                 align: 'right',
                 sortable:true,
@@ -154,14 +174,7 @@ function retornarTablaFacturacion()
       
                 
             },
-            {
-                field:'monedasigla',
-                title:"Moneda",
-                width: '7%',
-                visible:false,
-                sortable:true,
-                
-            },    
+               
             {   //Estado poner Pagado - Pendiente - Anulado
                 field:"estado",
                 title:"Estado",
@@ -234,9 +247,10 @@ Array.prototype.unique=function(a){
 function mostrarTablaDetalle(res)
 {
     console.log(res)
+    
     $("#tabla2detalle").bootstrapTable('destroy');
         $("#tabla2detalle").bootstrapTable({
-            data:res,
+            data:res.detalle,
             //height:250,        
             clickToSelect:true,
             search:false,
@@ -283,7 +297,7 @@ function mostrarTablaDetalle(res)
             },
             {
                 field:'punitario',
-                title:"P/U Bs",
+                title: res.moneda==1?"P/U Bs":"P/U Sus",
                 align: 'right',
                 class:"col-sm-1",
                 formatter: operateFormatter3,             
@@ -397,7 +411,7 @@ function mostrarTablaFactura()
             },
             {
                 field:'punitario',
-                title:"P/U Bs",
+                title:"P/U",
                 align: 'right',
                 class:"col-sm-1",  
                               
@@ -501,7 +515,7 @@ function mostrarDatosCliente(row)
 
 window.operateEvents = {
     'click .agregartabla': function (e, value, row, index) {          
-     AgregarTabla(row.idEgresos);
+     AgregarTabla(row);
      mostrarDatosCliente(row);
     },
     'click .quitardetabla': function (e, value, row, index) {          
@@ -598,70 +612,63 @@ function AgregarRegistroTabla3(row,index)
     //si no existe ningun registro agregar de cualquier cliente //registro
     //si ya existe=> verificar si ya fue agregado el mismo //false
     //si ya existe=>verificar si es otro cliente //false
-
+    $("#tabla3Factura").bootstrapTable('showLoading');    
      $.ajax({
         type:"POST",
         url: base_url('index.php/Facturas/retornarTabla3'),
         dataType: "json",
         data: {idegreso:row.idegreso,idegresoDetalle:row.idingdetalle},
     }).done(function(res){
+        console.log(res);
        if(res.detalle)
        {
-        
+            
             $("#nombreCliente").val(res.cliente);              
             $("#valuecliente").val(res.cliente);   
             $("#valueidcliente").val(res.idCliente);  
             $("#nitCliente").val(res.clienteNit);
-                  
-         //   swal({
-          //    title: "Agregado!",
-           //   text: res.mensaje,
-            //  type: "success",                                                  
-           // },
-           // function(){          
-            //console.log(res);
-             agregarRegistrosTabla3(res.detalle);              
-              var tr=$('[data-index="'+index+'"]',"#tabla2detalle").addClass("danger")
-              $("#clienteFactura").html(res.cliente);
-              $("#clienteFacturaNit").html(res.clienteNit)
-              $("#clientePedido").html(res.clientePedido)
-              calcularTotalFactura();
-           // });  
-             
-           /*   var view=$('[data-view="'+dato+'"]').addClass("hidden");
-              var remove=$('[data-remove="'+dato+'"]').removeClass("hidden");
-              var tr=view.parents("tr");              
-              tr.addClass("view")        */
+                     
+            agregarRegistrosTabla3(res.detalle);              
+            var tr=$('[data-index="'+index+'"]',"#tabla2detalle").addClass("danger")
+            $("#clienteFactura").html(res.cliente);
+            $("#clienteFacturaNit").html(res.clienteNit)
+            $("#clientePedido").html(res.clientePedido)
+            calcularTotalFactura();           
        }
        else
        {
             swal("Error", res.mensaje,"error")
        }
+       $("#tabla3Factura").bootstrapTable('hideLoading');
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
     console.log( "Request Failed: " + err );
     });
 }
-function AgregarTabla(dato)
+function AgregarTabla(datos)
 {   
     //console.log(dato);
+    $("#tabla2detalle").bootstrapTable('showLoading');  
     $.ajax({
         type:"POST",
         url: base_url('index.php/Facturas/retornarTabla2'),
         dataType: "json",
-        data: {idegreso:dato},
+        data: {idegreso:datos.idEgresos},
     }).done(function(res){
+        console.log(res)
        if(res.detalle)
        {
            
-             agregarRegistrosTabla2(res.detalle);
+             agregarRegistrosTabla2(res);
              $("#idAlm").val(res.alm);
+             
            
        }
        else
        {
             swal("Error", res.mensaje,"error")
        }
+       $("#tabla2detalle").bootstrapTable('hideLoading');
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
     console.log( "Request Failed: " + err );
@@ -674,8 +681,9 @@ function agregarRegistrosTabla2(detalle)
 }
 function agregarRegistrosTabla3(detalle)
 {   
+    var moneda=$("#moneda").val();
 
-    console.log(detalle[0])
+    console.log(moneda);
     detalle=detalle[0];
     var rows=[];
     rows.push({
@@ -687,31 +695,37 @@ function agregarRegistrosTabla3(detalle)
                 Descripcion:detalle.Descripcion,
                 cantidadRealAux:detalle.cantidadReal,
                 cantidadReal:detalle.cantidadReal,
-                punitario:detalle.punitario,
-                total:detalle.total,
+                punitario:moneda==2?detalle.punitario/glob_tipoCambio:detalle.punitario,
+                total:moneda==2?detalle.total/glob_tipoCambio:detalle.total,
         
             } )         
     $("#tabla3Factura").bootstrapTable('append', rows);
 }
 function calcularTotalFactura()
 {
+    var moneda=$("#moneda").val();
     var tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
     var total=0;
+ //   console.log(tabla3factura);
     $.each(tabla3factura,function(index, value){
-        console.log(value.total)
+      //  console.log(value.total)
         total=total+parseFloat(value.total);
     })
     /****************Bs**************/
-    $("#totalFacturaBs").val(total);    
+  //  console.log(total);
+    var totalBs=moneda==2?(parseFloat(total)*parseFloat(glob_tipoCambio)):total;
+   // console.log(totalBs);
+    $("#totalFacturaBs").val(totalBs);    
     /*************SUS***************/
-    $("#totalFacturaSus").val(total/glob_tipoCambio);
+    var totalSus=moneda==2?total:parseFloat(total)/parseFloat(glob_tipoCambio);
+    $("#totalFacturaSus").val(totalSus);
     /***********LITERAL**************/
-    $("#totalTexto").html(NumeroALetras(total));
+    //$("#totalTexto").html(NumeroALetras(total));
     /**********************************/
-    $("#totalFacturaBsModal").html(formato_moneda(total));
+   /* $("#totalFacturaBsModal").html(formato_moneda(total));
     $("#totalsinformatobs").val(total);
     $("#totalFacturaSusModal").html(formato_moneda(total/glob_tipoCambio));
-    $("#tipoCambioFacturaModal").html(glob_tipoCambio);
+    $("#tipoCambioFacturaModal").html(glob_tipoCambio);*/
 }
 $(document).on("click","#crearFactura",function(){
     var tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
@@ -795,20 +809,7 @@ function vistaPreviaFactura()
 {
     var tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
     if(tabla3factura.length>0)
-    {
-         /*$.each(data.data2,function(index, value){   
-            totalfact+=parseFloat(value.facturaCantidad*value.facturaPUnitario);
-            var row =' <tr>'+
-                    '<td>'+formato_moneda(value.facturaCantidad)+'</td>'+
-                    '<td>'+value.Sigla+'</td>'+
-                    '<td>'+value.ArticuloCodigo+'</td>'+
-                    '<td>'+value.ArticuloNombre+'</td>'+
-                    '<td class="text-right">'+formato_moneda(value.facturaPUnitario)+'</td>'+
-                    '<td class="text-right">'+formato_moneda(value.facturaCantidad*value.facturaPUnitario)+'</td>'+
-                  '</tr>'
-            $("#cuerpoTablaFActura").append(row);
-        });*/
-     //    $("#cuerpoTablaFActura").html("");
+    {      
         var arreglo= tabla3factura.map(item=>{
             return {
                 facturaCantidad:item.cantidadReal,
@@ -833,7 +834,7 @@ function AgregarRegistroTabla3Array(row)
     //si no existe ningun registro agregar de cualquier cliente //registro
     //si ya existe=> verificar si ya fue agregado el mismo //false
     //si ya existe=>verificar si es otro cliente //false
-
+    $("#tabla3Factura").bootstrapTable('showLoading');
     var datos=JSON.stringify(row);
     console.log(row)
      $.ajax({
@@ -842,7 +843,7 @@ function AgregarRegistroTabla3Array(row)
         dataType: "json",
         data: {rows:datos},
     }).done(function(res){
-
+       $("#tabla3Factura").bootstrapTable('hideLoading');
        if(res.detalle  && res.detalle.length!=0)
        {
             
@@ -1043,3 +1044,27 @@ $(document).on("click","#guardarFactura",function()
     });
     
 })
+
+$(document).on("change","#moneda",function(){
+    cambiarMonedaTabla3();
+})
+function cambiarMonedaTabla3()
+{    
+    var moneda=$("#moneda").val();
+    var totalRows=($('#tabla3Factura').bootstrapTable('getOptions').data.length)    
+    for (let index = 0; index < totalRows; index++) 
+    {
+        var punitario=$('#tabla3Factura').bootstrapTable('getOptions').data[index].punitario;
+        var cantidad=$('#tabla3Factura').bootstrapTable('getOptions').data[index].cantidadReal;
+        var nuevopunitario=moneda==2?punitario/glob_tipoCambio:punitario*glob_tipoCambio;        
+        $('#tabla3Factura').bootstrapTable('updateRow', {
+            index: index,
+            row: {                
+                punitario:nuevopunitario,
+                total:cantidad*nuevopunitario
+            }
+        });
+    }
+   
+    calcularTotalFactura();
+}
