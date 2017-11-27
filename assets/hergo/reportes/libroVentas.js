@@ -52,11 +52,14 @@ $(document).ready(function(){
     });
     $('#fechapersonalizada').on('apply.daterangepicker', function(ev, picker) {
       retornarLibroVentas();
+      retornarDatosTotales ();
     });
     retornarLibroVentas();
+    retornarDatosTotales ();
 })
 $(document).on("change","#almacen_filtro",function(){
     retornarLibroVentas();
+    retornarDatosTotales ();
 }) //para cambio filtro segun cada uno
 
 
@@ -130,19 +133,21 @@ function retornarLibroVentas (){
                   align: 'center',
                   filter: {
                     type: "select",
-                    data: ["A", "V"]
+                    data: ["Anulada", "Válida"]
                         },
                   formatter: estadoFactura
                 },
                 {   
                   field: 'documento',            
                   title: 'Nit Cliente',
+                  formatter: estadoAnuladoNIT,
                   sortable:true,
                 },
                 {   
                   field: 'nombreCliente',            
                   title: 'Nombre | Razón Social',
                   sortable:true,
+                  formatter: estadoAnuladoCliente,
                   filter: 
                     {
                       type: "select",
@@ -154,7 +159,8 @@ function retornarLibroVentas (){
                   title: 'Total Venta',
                   sortable:true,
                   align: 'right',
-                  formatter: operateFormatter3
+                  formatter: estadoAnuladoTotal
+                  //formatter: estadoAnuladoTotal
                 },
                 {   
                   field: '',            
@@ -197,7 +203,7 @@ function retornarLibroVentas (){
                   title: 'Debito Fiscal',
                   sortable:true,
                   align: 'right',
-                  formatter: operateFormatter3
+                  formatter: estadoAnuladoDebito
                 },
                 {   
                   field: 'codigoControl',            
@@ -222,6 +228,39 @@ function retornarLibroVentas (){
     console.log( "Request Failed: " + err );
     });
  }
+
+ function retornarDatosTotales (){
+    ini=iniciofecha.format('YYYY-MM-DD')
+    fin=finfecha.format('YYYY-MM-DD')
+    alm=$("#almacen_filtro").val();
+    $.ajax({
+        type:"POST",
+        url: base_url('index.php/Reportes/mostrarLibroVentasTotales'), //******controlador
+        dataType: "json",
+        data: {i:ini,f:fin,a:alm}, //**** variables para filtro
+    }).done(function(res){
+      console.log(res[0].titulo + ':0 ' + res[0].resultado);
+      console.log(res[1].titulo + ':1 ' + res[1].resultado);
+      console.log(res[2].titulo + ':2 ' + res[2].resultado);
+      console.log(res[3].titulo + ':3 ' + res[3].resultado);
+      console.log(res[4].titulo + ':4 ' + res[4].resultado);
+      console.log(res[5].titulo + ':5 ' + res[5].resultado);
+      console.log(res[6].titulo + ':6 ' + res[6].resultado);
+
+      
+      $('#fTotal').val(res[0].resultado);
+      $('#fValidas').val(res[1].resultado);
+      $('#fAnuladas').val(res[2].resultado);
+      $('#fManuales').val(res[3].resultado);
+      $('#fComputarizadas').val(res[4].resultado);
+      $('#totalFacturas').val(res[5].resultado);
+      $('#totalDebito').val(res[6].resultado);
+
+    }).fail(function( jqxhr, textStatus, error ) {
+    var err = textStatus + ", " + error;
+    console.log( "Request Failed: " + err );
+    });
+}
 function operateFormatter3(value, row, index){       
     num=Math.round(value * 100) / 100
     num=num.toFixed(2);
@@ -237,13 +276,53 @@ $ret=''
   }
 return ($ret);
 }
+function estadoAnuladoCliente(value, row, index){
+$ret=''
+  if(row.anulada==1){        
+    $ret='0';
+  } else {
+     $ret=row.nombreCliente;
+  }
+  return ($ret);
+}
+function estadoAnuladoNIT(value, row, index){
+$ret=''
+  if(row.anulada==1){        
+    $ret='0';
+  } else {
+     $ret=row.documento;
+  }
+  return ($ret);
+}
+function estadoAnuladoTotal(value, row, index){
+$ret=''
+  if(row.anulada==1){        
+    $ret='0';
+  } else {
+     $ret=row.sumaDetalle;
+  }
+  num=Math.round($ret * 100) / 100
+  num=num.toFixed(2);
+  return (formatNumber.new(num));
+}
+function estadoAnuladoDebito(value, row, index){
+$ret=''
+  if(row.anulada==1){        
+    $ret='0';
+  } else {
+     $ret=row.debito;
+  }
+  num=Math.round($ret * 100) / 100
+  num=num.toFixed(2);
+  return (formatNumber.new(num));
+}
 
 function estadoFactura(value, row, index){
 $ret=''
   if(row.anulada==1){        
-    $ret='<span class="label label-danger ">A</span>';
+    $ret='<span class="label label-danger ">Anulada</span>';
   } else {
-    $ret='<span class="label label-success">V</span>';
+    $ret='<span class="label label-success">Válida</span>';
   }
 return ($ret);
 }

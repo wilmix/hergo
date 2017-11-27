@@ -703,4 +703,21 @@ class Reportes extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	public function mostrarLibroVentasTotales()  //******cambiar a funcion del modelo
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$ini=$this->security->xss_clean($this->input->post("i"));//fecha inicio
+        	$fin=$this->security->xss_clean($this->input->post("f"));//FECHA FIN
+        	$alm=$this->security->xss_clean($this->input->post("a")); //almacen
+			$res=$this->Reportes_model->mostrarLibroVentasTotales($ini,$fin,$alm); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	
 }

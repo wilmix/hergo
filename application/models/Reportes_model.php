@@ -110,6 +110,66 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function mostrarLibroVentasTotales($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
+	{ //cambiar la consulta
+		$sql="SELECT IFNULL(NULL, 'TotalFacturas') AS titulo,COUNT(anulada) AS resultado
+		FROM factura AS f
+		WHERE fechaFac BETWEEN '$ini' AND '$fin'
+		AND f.almacen LIKE '%$alm'
+		UNION
+		/*validas*/
+		SELECT IFNULL(NULL, 'validas') as titulo,COUNT(anulada) AS resultado
+		FROM factura AS f
+		WHERE fechaFac BETWEEN '$ini' AND '$fin'
+		AND f.almacen LIKE '%$alm'
+		AND anulada=0
+		union
+		/*anuladas*/
+		SELECT IFNULL(NULL, 'anuladas') ,COUNT(anulada) AS anuladogffg
+		FROM factura AS f
+		WHERE fechaFac BETWEEN '$ini' AND '$fin'
+		AND f.almacen LIKE '%$alm'
+		AND anulada=1
+		union
+		/*contar manual*/
+		SELECT IFNULL(NULL, 'manuales') ,COUNT(df.manual)
+		FROM factura AS f
+		INNER JOIN datosfactura AS df ON df.lote=f.lote
+		WHERE fechaFac BETWEEN '$ini' AND '$fin'
+		AND f.almacen LIKE '%$alm'
+		AND df.manual=1
+		union
+		/*contar computarizadas*/
+		SELECT IFNULL(NULL, 'computarizadas') ,COUNT(df.manual)
+		FROM factura AS f
+		INNER JOIN datosfactura AS df ON df.lote=f.lote
+		WHERE fechaFac BETWEEN '$ini' AND '$fin'
+		AND f.almacen LIKE '%$alm'
+		AND df.manual=0
+		union
+		/*Suma Total*/
+		SELECT IFNULL(NULL, 'Total') ,ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)),2) AS sumaTotal
+		FROM factura AS f
+		INNER JOIN datosfactura AS df ON df.lote=f.lote
+		INNER JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura
+		WHERE fechaFac BETWEEN '$ini' AND '$fin'
+		AND f.almacen LIKE '%$alm'
+		AND anulada=0
+		union
+		/*Suma Debito*/
+		SELECT IFNULL(NULL, 'debito') ,ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)*13/100),2) AS debito
+		FROM factura AS f
+		INNER JOIN datosfactura AS df ON df.lote=f.lote
+		INNER JOIN clientes AS c ON c.idCliente = f.cliente
+		INNER JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura
+		WHERE fechaFac BETWEEN '$ini' AND '$fin'
+		AND f.almacen LIKE '%$alm'
+		AND anulada=0
+		 ";
+		
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 
 
 }
