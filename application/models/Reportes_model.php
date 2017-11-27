@@ -97,7 +97,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function mostrarLibroVentas($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
-		$sql="SELECT fechaFac, nFactura, df.autorizacion, anulada, c.documento,/*clienteNit,*/c.nombreCliente, /*      ClienteFactura,*/ total AS totalFactura, SUM(fd.facturaPUnitario*fd.facturaCantidad) AS sumaDetalle,   total*13/100 AS debito, IFNULL(codigoControl, 0) AS codigoControl , df.manual
+		$sql="SELECT fechaFac, nFactura, df.autorizacion, anulada, c.documento, c.nombreCliente, total AS totalFactura, ROUND(SUM(fd.facturaPUnitario*fd.facturaCantidad),2) AS sumaDetalle,  ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)*13/100),2) AS debito, IFNULL(codigoControl, 0) AS codigoControl , df.manual
 				FROM factura AS f
 				INNER JOIN datosfactura AS df ON df.lote=f.lote
 				INNER JOIN clientes AS c ON c.idCliente = f.cliente
