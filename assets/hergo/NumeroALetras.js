@@ -159,15 +159,14 @@ function NumeroALetras(num) {
         return Millones(data.enteros) + " " + data.letrasMonedaPlural + " " + data.letrasCentavos;
 }//NumeroALetras()
 */
-function NumeroALetras(num,moneda) {
-    console.log(moneda)
+function NumeroALetras(num) {    
     var data = {
         numero: num,
         enteros: Math.floor(num),
         centavos: (((Math.round(num * 100)) - (Math.floor(num) * 100))),
         letrasCentavos: "",
-        letrasMonedaPlural: moneda==1?'BOLIVIANOS':'DOLARES',
-        letrasMonedaSingular: moneda==1?'BOLIVIANO':'DOLAR', 
+        letrasMonedaPlural: 'BOLIVIANOS',
+        letrasMonedaSingular:'BOLIVIANO', 
 
         letrasMonedaCentavoPlural: "CENTAVOS",
         letrasMonedaCentavoSingular: "CENTAVO"

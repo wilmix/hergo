@@ -1,50 +1,4 @@
 
-var EventBus = new Vue;    
-    Vue.component('app-task',{
-        data: function(){
-            return{
-                editing:false,
-                draft:'',
-            }
-        },
-        template:'#templateModalPrevia',
-        props:['task','index'],
-        created:function(){
-            
-            EventBus.$on('editando',function(index){
-                console.log("asdasd")
-                if(this.index!=index)
-                    this.discard();
-            }.bind(this));
-        },
-        methods:{
-            toggleStatus:function(){
-            this. task.pending=!this.task.pending
-            },
-            edit:function(){
-                /*
-                this.tasks.forEach(function(task) {
-                    task.editing=false
-                }, this);*/
-                EventBus.$emit('editando',this.index)
-                this.editing=true;
-                this.draft=this.task.description;
-            
-            },
-            update:function(){
-                this.task.description=this.draft;
-                this.editing=false;
-            },
-            discard:function(){
-                this.editing=false
-            },
-            remove:function(){
-                //vm.tasks.splice(this.index,1);
-                this.$emit('removertarea',this.index);
-            },
-        
-        }
-    });
     var vmVistaPrevia = new Vue({
         el: '#app',
         data:{
@@ -148,10 +102,8 @@ var EventBus = new Vue;
            
         },
         filters:{
-            literal:function(value){
-                
-                var _moneda=$("#moneda").val();
-                return NumeroALetras(value,parseInt(_moneda))
+            literal:function(value){                            
+                return NumeroALetras(value)
             },
             moneda:function(value){
                 return numeral(value).format('0,0.00');

@@ -76,7 +76,7 @@
                 </div>
                 <div class="row">
                 <div class="col-md-9">
-                    <p>SON: <b id="totalTexto">{{retornarTotal() | literal}}</b></p>
+                    <p>SON: <b id="totalTexto">{{moneda==2?retornarTotal()*tipocambio:retornarTotal() | literal}}</b></p>
                     <p>NOTA: <span id="notaFactura">{{glosa}}</span></p>
                     <br>
                     <br>

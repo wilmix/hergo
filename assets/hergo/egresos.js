@@ -2,13 +2,7 @@ var iniciofecha=moment().subtract(0, 'year').startOf('year')
 var finfecha=moment().subtract(0, 'year').endOf('year')
 
 $(document).ready(function(){
-     $(".tiponumerico").inputmask({
-        alias:"decimal",
-        digits:2,
-        groupSeparator: ',',
-        autoGroup: true,
-        autoUnmask:true
-    });
+    
 
     var start = moment().subtract(0, 'year').startOf('year')
     var end = moment().subtract(0, 'year').endOf('year')

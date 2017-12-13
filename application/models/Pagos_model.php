@@ -2,6 +2,7 @@
  
 class Pagos_model extends CI_Model  ////////////***** nombre del modelo 
 {
+
 	public function __construct()
 	{	
 		parent::__construct();
@@ -33,18 +34,17 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function mostrarPendientePago($ini=null,$fin=null,$alm="")
 	{
-		$sql="SELECT factura.almacen, factura.nFactura, factura.fechaFac, clientes.nombreCliente, factura.total, pagos.saldoPago, pagos.glosaPago, factura.pagada
-		FROM factura
-		LEFT JOIN factura_pagos
-		ON factura.idFactura = factura_pagos.idFactura
-		LEFT JOIN pagos
-		ON factura_pagos.idPagos= pagos.idPagos
-		INNER JOIN clientes
-		ON clientes.idCliente = factura.cliente 
-		WHERE factura.fechaFac
-		BETWEEN '$ini' AND '$fin' AND not factura.pagada=1 AND factura.almacen like '%$alm' AND NOT factura.anulada=1
-		ORDER BY factura.nFactura desc";
-		
+		$sql="SELECT f.idFactura, f.almacen, f.nFactura, f.fechaFac, f.cliente,c.nombreCliente, f.total,  IFNULL(sum(p.montoPago),0) pagado,  f.total - IFNULL(sum(p.montoPago),0) saldoPago, GROUP_CONCAT(p.glosaPago SEPARATOR ', ') glosaPago , f.pagada
+		FROM factura f		
+		LEFT JOIN pagos p
+		ON  f.idFactura= p.idFactura
+		INNER JOIN clientes c
+		ON c.idCliente = f.cliente 
+		WHERE f.fechaFac
+		BETWEEN '$ini' AND '$fin' AND not f.pagada=1 AND f.almacen like '%$alm' AND NOT f.anulada=1
+    	GROUP BY f.idFactura
+		ORDER BY f.nFactura desc";
+		//die($sql);
 		$query=$this->db->query($sql);		
 		return $query;
 	}
@@ -54,6 +54,30 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		
 		$query=$this->db->query($sql);		
 		return $query;
+	}
+	public function obtenerNumPago($almacen)
+	{
+		$gestion= date('Y');		
+
+		$sql="SELECT MAX(p.numPago) numPago
+				FROM pagos p
+  				WHERE p.almacen=$almacen
+  				AND year(p.fechaPago)='$gestion'";		
+		$query=$this->db->query($sql);	
+		if($query->num_rows()>0)
+        {
+            $numPago=$query->row();
+            return ($numPago->numPago);
+		}	
+		else
+		{
+			return 0;
+		}		
+	}
+	public function guardarPago($obj)
+	{		
+		$sql=$this->db->insert_batch("pagos", $obj);
+		return $sql;		
 	}
 
 

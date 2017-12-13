@@ -67,9 +67,10 @@ function retornarPagosPendientes() //*******************************
         data: {i:ini,f:fin,a:alm}, //**** variables para filtro
     }).done(function(res){
         datosselect= restornardatosSelect(res)
+        var num=0;
         $("#tPendientes").bootstrapTable('destroy');
         $("#tPendientes").bootstrapTable({            ////********cambiar nombre tabla viata
-                data:res,           
+                data:res,                           
                     striped:true,
                     pagination:true,
                     pageSize:"100",
@@ -78,7 +79,7 @@ function retornarPagosPendientes() //*******************************
                     showColumns:true,
                     filter:true,
                 columns:
-                [
+                [                   
                     {   
                         field: 'almacen',            
                         title: 'Almacen',
@@ -112,6 +113,14 @@ function retornarPagosPendientes() //*******************************
                     {   
                         field: 'total',            
                         title: 'Total',
+                        visible:true,
+                        sortable:true,
+                        align: 'right',
+                        formatter: operateFormatter3,
+                    },
+                    {   
+                        field: 'pagado',            
+                        title: 'Pagado',
                         visible:true,
                         sortable:true,
                         align: 'right',
@@ -163,12 +172,14 @@ function retornarPagosPendientes() //*******************************
     {       
         num=Math.round(value * 100) / 100
         num=num.toFixed(2);
+       // return(num);
         return (formatNumber.new(num));
     }
+  
     function operateFormatter(value, row, index)
     {
         return [
-            '<button type="button" class="btn btn-default añadirFactura" aria-label="Right Align">',
+            '<button type="button" class="btn btn-default agregarFactura" aria-label="Right Align">',
             '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>',
         ].join('');
     }
@@ -202,7 +213,7 @@ function restornardatosSelect(res)
     
     datos.push(autor.unique());
     datos.push(cliente.unique());
-    console.log(cliente);
+    //console.log(cliente);
     return(datos);
 }
 Array.prototype.unique=function(a){
@@ -211,8 +222,17 @@ Array.prototype.unique=function(a){
 
 /***********Eventos*************/
 window.operateEvents = {
-    'click .verPago': function (e, value, row, index) {
-        //verdetalle(row)
+    'click .agregarFactura': function (e, value, row, index) {
+
+        
+        /*para corregir resultado de sum en mysql */
+        num=Math.round(row.saldoPago * 100) / 100
+        /***/
+        row.saldoPago=parseFloat(num.toFixed(2));        
+        row.pagar=row.saldoPago;
+        row.saldoNuevo=0;        
+        vmPago.agregarPago(row)
+        
     },
     'click .editarPago': function (e, value, row, index) {
       //console.log(row.idPagos);
@@ -222,3 +242,218 @@ window.operateEvents = {
      //alert(JSON.stringify(row));
     }
 };
+
+/****************************************** */
+
+Vue.component('app-row',{
+    
+    template:'#row-template',
+    props:['pagar','index'],
+    data: function(){
+        return{
+            montopagar:0, 
+            editing:false,            
+            error:'',           
+        }
+    },
+    created:function(){   
+        this.montopagar=this.pagar.saldoPago;
+    
+    },
+    methods:{     
+        remove:function(){
+            console.log(this.index);
+            //vm.tasks.splice(this.index,1);
+            this.$emit('removerfila',this.index);
+        },
+        update:function(){
+            this.error="";
+           
+            if(this.montopagar>this.pagar.saldoPago)
+            {
+                this.error="El monto a pagar es mayor al saldo";
+                vmPago.guardar=false;
+                return false;
+            }
+            this.pagar.pagar=this.montopagar;
+            this.editing=false;
+           
+            this.pagar.saldoNuevo=this.pagar.saldoPago-this.montopagar;
+            vmPago.guardar=true;
+        },
+        discard:function(){
+            this.editing=false
+            this.montopagar=this.pagar.pagar;
+        },
+        edit:function(){    
+            this.error="";     
+            this.editing=true;
+            this.montopagar=this.pagar.pagar;        
+        },
+        retornarSaldoNuevo:function(){
+            var _saldoNuevo=this.pagar.saldoPago-this.montopagar;
+            if(this.montopagar>this.pagar.saldoPago)        
+            {
+                this.error="El monto a pagar es mayor al saldo";                            
+                vmPago.guardar=false;
+            }
+            else
+            {
+                this.error="";
+                vmPago.guardar=true;
+            }
+            return _saldoNuevo;
+        },
+        
+        
+       
+    },
+    filters:{
+       
+        moneda:function(value){
+            num=Math.round(value * 100) / 100
+            num=num.toFixed(2);
+            //return(num);
+            return numeral(num).format('0,0.00');            
+        },                 
+    },   
+    directives: {
+        inputmask: {
+          bind: function(el, binding, vnode) {
+            $(el).inputmask({
+                alias:"decimal",
+                digits:2,
+                groupSeparator: ',',
+                autoGroup: true,
+                autoUnmask:true
+            }, {
+              isComplete: function (buffer, opts) {
+                vnode.context.value = buffer.join('');
+              }
+            });
+          },
+        }
+      },
+    
+});
+var vmPago = new Vue({
+    el: '#app',
+    data:{
+        porPagar:[],
+        glosa:'',
+        guardar:false,
+    },
+    
+    methods:{
+        deleteRow:function(index){        
+            this.porPagar.splice(index,1);
+            if (this.porPagar.length>0)
+                this.guardar=true;
+            else   
+                this.guardar=false;
+
+        },
+        agregarPago:function(row){
+            if(this.porPagar.length>0)
+            {                
+                if(this.porPagar.map((el) => el.nFactura).indexOf(row.nFactura)>=0)
+                {
+                    swal("Atencion", "Esta factura ya fue agregada","info");
+                    return false;
+                }
+                if(this.porPagar.map((el) => el.cliente).indexOf(row.cliente)<0)
+                {
+                    swal("Atencion", "No se pueden agregar diferentes clientes","info");
+                    return false;
+                }
+                this.porPagar.push(row)                
+            }
+            else
+            {
+                this.porPagar.push(row)
+            }                      
+            this.guardar=true;
+        },
+        retornarTotal:function(){
+            var total=0
+            $.each(this.porPagar,function(index,value){
+                total+=parseFloat(value.pagar);
+            })
+            return total;
+        },
+        guardarPago:function(){
+            agregarcargando();
+            var datos={
+                porPagar:this.porPagar,
+                glosa:this.glosa,
+            };
+            
+            datos=JSON.stringify(datos);
+            
+            if(!this.guardar)
+            {
+                quitarcargando();
+                swal("Error", "No se puede guardar el pago","error");
+                return false;
+            }
+            $.ajax({
+                type:"POST",
+                url: base_url('index.php/Pagos/guardarPagos'), //******controlador
+                dataType: "json",
+                data: {d:datos},
+            }).done(function(res){
+               if(res.status=200)
+               {
+                    quitarcargando();
+                    swal({
+                        title: 'Pago almacenado',
+                        text: "El pago se guardó con éxito",
+                        type: 'success', 
+                        showCancelButton: false,
+                        allowOutsideClick: false,  
+                    }).then(
+                      function(result) {   
+                        agregarcargando();                 
+                        location.reload();
+                    });
+               }
+            }).fail(function( jqxhr, textStatus, error ) {
+            var err = textStatus + ", " + error;
+            console.log( "Request Failed: " + err );
+                quitarcargando();
+                swal({
+                    title: 'Error',
+                    text: "Intente nuevamente",
+                    type: 'error', 
+                    showCancelButton: false,
+                    allowOutsideClick: false,  
+                }).then(
+                function(result) {   
+                    agregarcargando();                 
+                    location.reload();
+                });
+            });
+        }
+
+       
+    },
+    filters:{
+        moneda:function(value){
+            num=Math.round(value * 100) / 100
+            num=num.toFixed(2);
+            //return(num);
+            return numeral(num).format('0,0.00');            
+        },   
+        
+                            
+    },        
+    created: function(){
+      /*  
+        this.$http.post(base_url('index.php/Facturas/datosAlmacen'))
+            .then(function(response){                    
+                this.almacen = response.body;
+            }, function(){
+                alert('Error!');
+        });*/
+    }
+});
