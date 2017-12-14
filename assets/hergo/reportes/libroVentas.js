@@ -103,6 +103,7 @@ function retornarLibroVentas (){
                   field: '',            
                   title: 'N°',
                   sortable:true,
+                  formatter: contar
                 },
                 {   
                   field: 'fechaFac',            
@@ -228,6 +229,10 @@ function retornarLibroVentas (){
     console.log( "Request Failed: " + err );
     });
  }
+ function contar(value, row, index) 
+{
+    return index+1;
+}
 
  function retornarDatosTotales (){
     ini=iniciofecha.format('YYYY-MM-DD')
