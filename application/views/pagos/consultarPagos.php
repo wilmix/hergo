@@ -45,50 +45,67 @@
       </div>
       <div class="modal-body">
         <div class="col-md-6">
-          <p>Almacen: Central HergoA</p>
-          <p>Cliente: Banco Solidario S.A</p>
+          <p>Almacen: Central Hergo</p>
+          <p>Cliente: Banco Solidario S.A</p><!-- Nombre de cliente que pago  -->
         </div>
         <div class="col-md-6">
           <p>Fecha: 13 de diciembre de 2017</p>
         </div>
         <div class="col-md-12">
           <p>Por concepto de:</p>
-            <table class="table">
+            <table class="table" >
                 <thead>
                   <tr>
-                    <th>Lote</th>
+                    <th>Lote</th><!-- Numero de lote de factura (datosFactura) -->
+                    <th>Cliente</th><!-- Nombre de cliente que pago **porsiacaso** si ha varios y no kieren con un solo cliente -->
                     <th>Factura</th>
+                    <th>Monto $</th><!-- Monto en dolares porsiaca -->
                     <th>Monto Bs</th>
-                    <th>Monto $</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>69</td>
+                    <td>Banco Solidario S.A</td>
                     <td>3570</td>
-                    <td>700</td>
                     <td>100</td>
+                    <td>700</td>
                   </tr>
                   <tr>
                     <td>69</td>
+                    <td>Banco Solidario S.A</td>
                     <td>847</td>
-                    <td>350</td>
                     <td>50</td>
+                    <td>350</td>
                   </tr>
                   <tr>
                     <td>69</td>
+                    <td>Banco Solidario S.A</td>
                     <td>996</td>
-                    <td>50</td>
                     <td>7</td>
+                    <td>50</td>
                   </tr>
                 </tbody>
               </table>
         </div>
-        <p>Total</p>
+        <br>
+      <div class="col-md-12">
+        <div class="col-md-9">
+          <p>Son: Un mil cien 00/100 bolivianos</p><!-- Literal -->
+        </div>
+        <div class="col-md-3">
+          <p>1100.00</p>
+        </div>
+        
       </div>
+       
+      </div>
+       
+        
       <div class="modal-footer">
-        <!-- /.box <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
+
