@@ -128,7 +128,7 @@ function retornarTablaPagos() //*******************************
                         title: 'Cliente',
                         visible:true,
                         sortable:true,
-                        width: '15%',
+                        
                         filter: 
                             {
                                 type: "select",
@@ -141,15 +141,7 @@ function retornarTablaPagos() //*******************************
                         visible:true,
                         sortable:true,
                         filter: { type: "input" },
-                    },
-                    {   
-                        field: 'totalFactura',            
-                        title: 'Factura',
-                        visible:true,
-                        sortable:true,
-                        align: 'right',
-                        formatter: operateFormatter3,
-                    },
+                    },                   
                     {   
                         field: 'montoPago',            
                         title: 'Monto Pago',
@@ -157,34 +149,13 @@ function retornarTablaPagos() //*******************************
                         sortable:true,
                         align: 'right',
                         formatter: operateFormatter3,
-                    },
-                    {   
-                        field: 'saldoPago',            
-                        title: 'Saldo',
-                        visible:true,
-                        sortable:true,
-                        align: 'right',
-                        formatter: operateFormatter3,
-                    },
+                    },                   
                     {   
                         field: 'glosaPago',            
                         title: 'Glosa',
                         visible:false,
                         sortable:true,
-                    },
-                    {   
-                        field: 'estadoPago',            
-                        title: 'Estado',
-                        visible:true,
-                        sortable:true,
-                        align: 'center',
-                        filter: 
-                                {
-                                type: "select",
-                                data: ["A Cuenta", "Pagada",],
-                                },
-                        formatter: operateFormatter2,
-                    },
+                    },                 
                     {   
                         field: 'autor',            
                         title: 'AUTOR',
@@ -273,7 +244,7 @@ Array.prototype.unique=function(a){
 /***********Eventos*************/
 window.operateEvents = {
     'click .verPago': function (e, value, row, index) {
-        //verdetalle(row)
+        verdetalle(row)
     },
     'click .editarPago': function (e, value, row, index) {
       //console.log(row.idPagos);
@@ -283,3 +254,74 @@ window.operateEvents = {
      //alert(JSON.stringify(row));
     }
 };
+function verdetalle(row)
+{
+    
+    agregarcargando();           
+               
+    $.ajax({
+        type:"POST",
+        url: base_url('index.php/Pagos/retornarDetallePago'), //******controlador
+        dataType: "json",
+        data: {
+            numPago:row.numPago
+        },
+    }).done(function(res){
+        quitarcargando();
+        vm.cargarDatos(res);
+       
+    }).fail(function( jqxhr, textStatus, error ) {
+    var err = textStatus + ", " + error;
+    console.log( "Request Failed: " + err );
+        quitarcargando();
+        swal({
+            title: 'Error',
+            text: "Intente nuevamente",
+            type: 'error', 
+            showCancelButton: false,
+            allowOutsideClick: false,  
+        })
+    });
+    
+}
+var vm=new Vue({
+    el:'#app',
+    data:{
+       almacen:'',
+       fecha:'',
+       cliente:'',       
+       numPago:'',
+       tabla:[],
+
+    },
+    methods:{
+        cargarDatos:function(res){         
+            this.almacen=res[0].almacen;
+            this.fecha=res[0].fechaPago;
+            this.cliente=res[0].nombreCliente;
+            this.numPago=res[0].numPago;
+            this.tabla=res;
+            $("#modalPagos").modal("show");
+        },
+        retornarTotal:function(){
+            var total=0
+            $.each(this.tabla,function(index,value){
+                console.log(value);
+                total+=parseFloat(value.montoPago);
+            })
+            return total;
+        },
+    },
+    filters:{
+        literal:function(value){                            
+            return NumeroALetras(value)
+        },
+        moneda:function(value){
+            return numeral(value).format('0,0.00');
+        },
+        fechaCorta:function(value){
+            return formato_fecha_corta(value);
+        },  
+    }
+
+})

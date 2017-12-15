@@ -14,10 +14,7 @@
               <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
               <?php endforeach ?>
               <option value="">TODOS</option>
-            </select>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalPagos">
-              ModalPagos
-            </button>
+            </select>           
           </div>
           <table 
             id="tpagos" 
@@ -34,71 +31,59 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modalPagos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+<div class="modal fade" id="modalPagos" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog  modal-lg" role="document" id="app">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h2 class="modal-title" id="exampleModalLabel">Recibo Nº 21</h2><!-- Numero de pago -->
+        <h2 class="modal-title" id="">Recibo Nº {{numPago}}</h2><!-- Numero de pago -->
       </div>
-      <div class="modal-body">
+      <div class="modal-body" >
         <div class="col-md-6">
-          <p>Almacen: Central Hergo</p>
-          <p>Cliente: Banco Solidario S.A</p><!-- Nombre de cliente que pago  -->
+          <p>Almacen: {{almacen}}</p>
+          <p>Cliente: {{cliente}}</p><!-- Nombre de cliente que pago  -->
         </div>
         <div class="col-md-6">
-          <p>Fecha: 13 de diciembre de 2017</p>
+          <p>Fecha: {{fecha | fechaCorta}}</p>
         </div>
         <div class="col-md-12">
           <p>Por concepto de:</p>
             <table class="table" >
                 <thead>
                   <tr>
-                    <th>Lote</th><!-- Numero de lote de factura (datosFactura) -->
-                    <th>Cliente</th><!-- Nombre de cliente que pago **porsiacaso** si ha varios y no kieren con un solo cliente -->
-                    <th>Factura</th>
-                    <th>Monto $</th><!-- Monto en dolares porsiaca -->
-                    <th>Monto Bs</th>
+                    <th>Lote</th>
+                    <th>Cliente</th>
+                    <th>N°Factura</th>                    
+                    <th class="text-right">Total Factura</th>
+                    <th class="text-right">Saldo</th>
+                    <th class="text-right">Pagado Bs</th>
+                    
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>69</td>
-                    <td>Banco Solidario S.A</td>
-                    <td>3570</td>
-                    <td>100</td>
-                    <td>700</td>
-                  </tr>
-                  <tr>
-                    <td>69</td>
-                    <td>Banco Solidario S.A</td>
-                    <td>847</td>
-                    <td>50</td>
-                    <td>350</td>
-                  </tr>
-                  <tr>
-                    <td>69</td>
-                    <td>Banco Solidario S.A</td>
-                    <td>996</td>
-                    <td>7</td>
-                    <td>50</td>
-                  </tr>
+                  <tr v-for="(fila,index) in tabla">
+                    <td>{{fila.lote}}</td>
+                    <td>{{fila.nombreCliente}}</td>
+                    <td>{{fila.nFactura}}</td>
+                    <td class="text-right">{{fila.totalFactura | moneda}}</td>
+                    <td class="text-right">{{fila.saldo | moneda}}</td>
+                    <td class="text-right">{{fila.montoPago | moneda}}</td>
+                    
+                  </tr>                 
                 </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="5">{{retornarTotal() | literal}}</td>
+                    <td class="text-right">{{retornarTotal() | moneda}}</td>
+                  </tr>
+                </tfoot>
               </table>
         </div>
         <br>
-      <div class="col-md-12">
-        <div class="col-md-9">
-          <p>Son: Un mil cien 00/100 bolivianos</p><!-- Literal -->
-        </div>
-        <div class="col-md-3">
-          <p>1100.00</p>
-        </div>
         
-      </div>
-       
+        <div class="clearfix"></div>
       </div>
        
         

@@ -37,6 +37,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
         		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
 				base_url('assets/sweetalert/sweetalert2.min.js'), 
 				base_url('assets/plugins/numeral/numeral.min.js'),
+				base_url('assets/hergo/NumeroALetras.js'),				
 				
 			);
 			$this->foot_script=array(				
@@ -60,14 +61,14 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
-
+			$this->datos['foot_script']= $this->foot_script;
 			/*************DATERANGEPICKER**********/
 	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/pagos.js'); //aki poner el nuevo javascript
+			$this->datos['foot_script'][]=base_url('assets/hergo/pagos.js'); //aki poner el nuevo javascript
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
@@ -85,7 +86,8 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('pagos/consultarPagos.php',$this->datos); ///*****aki poner la vista
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);						
+			$this->load->view('plantilla/footerscript.php',$this->datos);
+			//$this->load->view('plantilla/footer.php',$this->datos);						
 	}
 	public function mostrarPagos()  //******cambiar a funcion del modelo
 	{
@@ -207,5 +209,11 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	{
 		$numPago=$this->Pagos_model->obtenerNumPago($almacen);
 		return $numPago+1;
+	}
+	public function retornarDetallePago()
+	{		
+		$numPago=$this->security->xss_clean($this->input->post('numPago'));				
+		$ret=$this->Pagos_model->retornarDetallePago($numPago);
+		echo json_encode($ret);
 	}
 }

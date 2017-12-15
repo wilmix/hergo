@@ -11,23 +11,22 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function mostrarPagos($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
-		$sql=" SELECT pagos.idPagos, almacenes.almacen, pagos.numPago, pagos.fechaPago, moneda.sigla, clientes.nombreCliente,factura.idFactura, factura.nFactura, factura.total AS totalFactura, pagos.montoPago,pagos.saldoPago, pagos.glosaPago,pagos.estadoPago, factura.pagada, CONCAT(users.first_name,' ',users.last_name) AS autor, pagos.fecha
-			FROM factura_pagos
-			RIGHT JOIN factura
-			ON factura.idFactura=factura_pagos.idFactura
-			RIGHT JOIN pagos
-			ON pagos.idPagos=factura_pagos.idPagos
-			INNER JOIN almacenes 
-			ON almacenes.idalmacen=pagos.almacen
-			INNER JOIN moneda 
-			ON moneda.id = pagos.monedaPago
-			INNER JOIN clientes 
-			ON clientes.idCliente= pagos.cliente
-			INNER JOIN users 
-			ON users.id= pagos.autor
-			WHERE pagos.fechaPago
-			BETWEEN '$ini' AND '$fin' AND pagos.almacen like '%$alm'
-			ORDER BY pagos.idPagos desc";
+		$sql="SELECT p.idPagos, a.almacen, p.numPago,p.fechaPago,m.sigla,c.nombreCliente, GROUP_CONCAT(f.nFactura SEPARATOR ' - ') nFactura, SUM(p.montoPago) montoPago, p.glosaPago,  CONCAT(u.first_name,' ', u.last_name) autor, p.fecha
+			FROM pagos p
+			INNER JOIN almacenes a
+			ON a.idalmacen=p.almacen
+			INNER JOIN moneda m
+			ON m.id=p.monedaPago
+			INNER JOIN clientes c
+			ON c.idCliente=p.cliente	
+			INNER JOIN factura f
+  			ON f.idFactura=p.idFactura		
+			INNER JOIN users u
+  			ON u.id=p.autor
+			WHERE p.fechaPago
+			BETWEEN '$ini' AND '$fin' AND p.almacen like '%$alm'
+			GROUP BY p.numPago
+			ORDER BY p.idPagos desc";
 		
 		$query=$this->db->query($sql);		
 		return $query;
@@ -46,6 +45,21 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		ORDER BY f.nFactura desc";
 		//die($sql);
 		$query=$this->db->query($sql);		
+		return $query;
+	}
+	public function retornarDetallePago($numPago)
+	{
+		$sql="SELECT p.idPagos,f.idFactura,f.lote,f.nFactura,p.montoPago,f.total totalFactura, IFNULL(total-p.montoPago,0) saldo,f.pagada, a.almacen, c.nombreCliente,p.fechaPago, p.numPago		
+		FROM pagos p
+		INNER JOIN factura f
+		ON  p.idFactura=f.idFactura
+		INNER JOIN almacenes a
+		ON  a.idalmacen=p.almacen
+		INNER JOIN clientes c 
+		ON f.cliente = c.idCliente
+		WHERE p.numPago=$numPago";
+		
+		$query=$this->db->query($sql)->result_array();		
 		return $query;
 	}
 	public function retornar_tabla($tabla)
