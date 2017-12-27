@@ -8,6 +8,7 @@
 
  
 </style>
+<input type="text" id="numpago" value="<?= isset($numPago)?$numPago:0?>">
 <div class="row">
   <div class="col-xs-12">
     <div class="box">

@@ -527,7 +527,9 @@ class Facturas extends CI_Controller
         	
         	 
         	$datosFactura=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
-        	$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$tipoFacturacion);
+			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$tipoFacturacion);
+		/*	print_r($ultimaFactura);
+			die();*/
         	/*VALIDAR FECHA*/
         	if(!$this->validarFechaLimite($datosFactura->fechaLimite, $fechaFac))
 			{
@@ -547,7 +549,10 @@ class Facturas extends CI_Controller
 			}
 			else
 			{
-				$numeroFactura=intval($ultimaFactura->nFactura)+1;
+				if($ultimaFactura)
+					$numeroFactura=intval($ultimaFactura->nFactura)+1;
+				else
+					$numeroFactura=1;
 			}
         	$factura=new stdclass();
         	//$factura->idFactura=0

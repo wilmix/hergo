@@ -29,7 +29,11 @@
   </div>
   <!-- /.col -->
 </div>
-
+<style>
+  .anulado {
+      color:red;
+  }
+</style>
 <!-- Modal -->
 <div class="modal fade" id="modalPagos" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog  modal-lg" role="document" id="app">
@@ -38,7 +42,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h2 class="modal-title" id="">Recibo Nº {{numPago}}</h2><!-- Numero de pago -->
+        <h2 class="modal-title" id="" v-bind:class="{ anulado:anulado==1?true:false }">Recibo Nº {{numPago}} {{anulado==1?'Anulado':''}}</h2><!-- Numero de pago -->
       </div>
       <div class="modal-body" >
         <div class="col-md-6">

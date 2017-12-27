@@ -75,9 +75,12 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '45.55.252.151',
+//	'hostname' => '45.55.252.151',	
+	'hostname' => 'localhost',	
 	'username' => 'root',	
-	'password' => 'hergo2017',
+//	'password' => 'hergo2017',	
+	'password' => '',	
+	//'database' => 'hergoBackup',
 	'database' => 'hergo2',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

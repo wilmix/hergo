@@ -11,7 +11,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function mostrarPagos($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
-		$sql="SELECT p.idPagos, a.almacen, p.numPago,p.fechaPago,m.sigla,c.nombreCliente, GROUP_CONCAT(f.nFactura SEPARATOR ' - ') nFactura, SUM(p.montoPago) montoPago, p.glosaPago,  CONCAT(u.first_name,' ', u.last_name) autor, p.fecha
+		$sql="SELECT p.idPagos, a.almacen, p.numPago,p.fechaPago,m.sigla,c.nombreCliente, GROUP_CONCAT(f.nFactura SEPARATOR ' - ') nFactura, SUM(p.montoPago) montoPago, p.glosaPago,  CONCAT(u.first_name,' ', u.last_name) autor, p.fecha, p.anulado
 			FROM pagos p
 			INNER JOIN almacenes a
 			ON a.idalmacen=p.almacen
@@ -47,9 +47,25 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function retornarEdicion($n)
+	{
+		$sql="SELECT p.idpagos, f.idFactura, f.almacen, f.nFactura, f.fechaFac, f.cliente,c.nombreCliente, f.total,  IFNULL(sum(p.montoPago),0) pagado,  f.total - IFNULL(sum(p.montoPago),0) saldoPago, GROUP_CONCAT(p.glosaPago SEPARATOR ', ') glosaPago , f.pagada
+		FROM factura f		
+		LEFT JOIN pagos p
+		ON  f.idFactura= p.idFactura
+		INNER JOIN clientes c
+		ON c.idCliente = f.cliente 
+		WHERE  NOT f.anulada=1
+    	AND p.numPago=$n
+    	GROUP BY f.idFactura
+		ORDER BY f.nFactura desc";
+		//die($sql);
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 	public function retornarDetallePago($numPago)
 	{
-		$sql="SELECT p.idPagos,f.idFactura,f.lote,f.nFactura,p.montoPago,f.total totalFactura, IFNULL(total-p.montoPago,0) saldo,f.pagada, a.almacen, c.nombreCliente,p.fechaPago, p.numPago		
+		$sql="SELECT p.idPagos,f.idFactura,f.lote,f.nFactura,p.montoPago,f.total totalFactura, IFNULL(total-p.montoPago,0) saldo,f.pagada, a.almacen, c.nombreCliente,p.fechaPago, p.numPago, p.anulado		
 		FROM pagos p
 		INNER JOIN factura f
 		ON  p.idFactura=f.idFactura
@@ -93,6 +109,15 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		$sql=$this->db->insert_batch("pagos", $obj);
 		return $sql;		
 	}
-
+	public function anularPago($numPago)
+	{
+		$sql="Update pagos set anulado=1 Where numPago=$numPago";
+		$this->db->query($sql);
+	}
+	public function recuperarPago($numPago)
+	{
+		$sql="Update pagos set anulado=0 Where numPago=$numPago";
+		$this->db->query($sql);
+	}
 
 }

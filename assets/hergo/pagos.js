@@ -155,16 +155,22 @@ function retornarTablaPagos() //*******************************
                         title: 'Glosa',
                         visible:false,
                         sortable:true,
+                    },
+                    {   
+                        field: 'anulado',            
+                        title: 'Anulado',
+                        visible:false,
+                        sortable:true,
                     },                 
                     {   
                         field: 'autor',            
-                        title: 'AUTOR',
+                        title: 'Autor',
                         visible:false,
                         sortable:true,
                     },
                     {   
                         field: 'fecha',            
-                        title: 'FECHA',
+                        title: 'Fecha',
                         visible:false,
                         sortable:true,
                     },
@@ -192,14 +198,25 @@ function retornarTablaPagos() //*******************************
     }
     function operateFormatter(value, row, index)
     {
-        return [
-            '<button type="button" class="btn btn-default verPago" aria-label="Right Align">',
-            '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-            '<button type="button" class="btn btn-default editarPago" aria-label="Right Align">',
-            '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>',
-            '<button type="button" class="btn btn-default imprimirPago" aria-label="Right Align">',
-            '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
-        ].join('');
+     
+        if(row.anulado==0)    
+            return [
+                '<button type="button" class="btn btn-default verPago" aria-label="Right Align">',
+                '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
+                '<button type="button" class="btn btn-default anularPago" aria-label="Right Align" title="Anular">',
+                '<span class="fa fa-ban" aria-hidden="true"></span></button>',
+                '<button type="button" class="btn btn-default imprimirPago" aria-label="Right Align">',
+                '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
+            ].join('');
+        else
+            return [
+                '<button type="button" class="btn btn-default verPago" aria-label="Right Align">',
+                '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
+                '<button type="button" class="btn btn-default recuperarPago" aria-label="Right Align" title="Recuperar">',
+                '<span class="fa fa-check-square-o" aria-hidden="true"></span></button>',
+                '<button type="button" class="btn btn-default imprimirPago" aria-label="Right Align">',
+                '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
+            ].join('');
     }
     function operateFormatter2(value, row, index)
     {
@@ -246,14 +263,70 @@ window.operateEvents = {
     'click .verPago': function (e, value, row, index) {
         verdetalle(row)
     },
-    'click .editarPago': function (e, value, row, index) {
-      //console.log(row.idPagos);
-            
+    'click .anularPago': function (e, value, row, index) {
+        console.log(this);       
+        var anulado=0;
+        if($(this).hasClass('anularPago'))
+            anulado=0;
+        else
+            anulado=1;
+        anularRecuperarPago(row,this,anulado);
+    },
+    'click .recuperarPago': function (e, value, row, index) {      
+        var anulado=0;
+        if($(this).hasClass('recuperarPago'))
+            anulado=1;
+        else
+            anulado=0;
+        anularRecuperarPago(row,this,anulado);
     },
     'click .imprimirPago': function (e, value, row, index) {
      //alert(JSON.stringify(row));
     }
 };
+function anularRecuperarPago(row,t,anulado)
+{
+    agregarcargando(); 
+    $.ajax({
+        type:"POST",
+        url: base_url('index.php/Pagos/anularRecuperarPago'),
+        dataType: "json",
+        data: {
+            numPago:row.numPago,
+            anulado:anulado
+        },
+    }).done(function(res){
+        if(res.status=200)
+        {
+            console.log($(t));
+            if(anulado==0)
+            {
+                $(t).removeClass('anularPago');
+                $(t).addClass('recuperarPago');
+                $(t).html('<span class="fa fa-check-square-o" aria-hidden="true"></span></button>');
+            }
+            else
+            {
+                $(t).removeClass('recuperarPago');
+                $(t).addClass('anularPago');
+                $(t).html('<span class="fa fa-ban" aria-hidden="true"></span></button>');
+            }                    
+            quitarcargando();
+        }
+    }).fail(function( jqxhr, textStatus, error ) {
+    var err = textStatus + ", " + error;
+    console.log( "Request Failed: " + err );
+        quitarcargando();
+        swal({
+            title: 'Error',
+            text: "Intente nuevamente",
+            type: 'error', 
+            showCancelButton: false,
+            allowOutsideClick: false,  
+        })
+    });
+}
+
 function verdetalle(row)
 {
     
@@ -291,6 +364,7 @@ var vm=new Vue({
        fecha:'',
        cliente:'',       
        numPago:'',
+       anulado:'',
        tabla:[],
 
     },
@@ -300,6 +374,7 @@ var vm=new Vue({
             this.fecha=res[0].fechaPago;
             this.cliente=res[0].nombreCliente;
             this.numPago=res[0].numPago;
+            this.anulado=res[0].anulado;
             this.tabla=res;
             $("#modalPagos").modal("show");
         },
