@@ -35,8 +35,8 @@ class Egresos_model extends CI_Model
             ON e.idegresos=fe.idegresos
             left JOIN factura f
             ON f.idFactura=fe.idFactura
-            WHERE e.fechamov 
-            BETWEEN '2017-01-01' AND '2017-12-31' and e.almacen like '%1' and t.id like '%7'   
+            WHERE DATE(e.fechamov)
+            BETWEEN '$ini' AND '$fin' and e.almacen like '%$alm' and t.id like '%$tin'  
             GROUP BY d.idingdetalle 
           
                 ) tabla    
@@ -44,7 +44,7 @@ class Egresos_model extends CI_Model
             GROUP BY tabla.idegresos
             ORDER BY tabla.idEgresos DESC				
             ";
-           
+            //die($sql);
         }
         else/*REVISAR!!!!!!!!!!!!!!!!!!SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
                 (SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio
@@ -103,7 +103,7 @@ class Egresos_model extends CI_Model
               ON t1.idIngreso=i.idIngresos
               INNER JOIN almacenes a1
               ON a1.idalmacen=i.almacen
-            WHERE e.fechamov 
+            WHERE DATE(e.fechamov)
             BETWEEN '$ini' AND '$fin' and e.almacen like '%$alm' and t.id like '%$tin'
             Group By e.idegresos
             ORDER BY e.idEgresos DESC  
@@ -516,7 +516,7 @@ class Egresos_model extends CI_Model
             ON e.moneda=m.id 
             INNER JOIN tipocambio tc
             ON tc.id=e.tipoCambio
-            WHERE e.fechamov 
+            WHERE DATE(e.fechamov)
             BETWEEN '$ini' AND '$fin' and (e.estado=0 or e.estado=2) and e.anulado!=1";        
         if($alm>0)         
             $sql.=" and e.almacen=$alm";                

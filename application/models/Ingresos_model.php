@@ -45,11 +45,11 @@ class Ingresos_model extends CI_Model
 			ON i.moneda=m.id
             INNER JOIN tipocambio tc
             ON i.tipocambio=tc.id
-            WHERE i.fechamov BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm' and t.id like '%$tin'
+            WHERE DATE(i.fechamov) BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm' and t.id like '%$tin'
             Group By i.idIngresos 
 			ORDER BY i.idIngresos DESC
             ";
-
+            
         }
         else
         {
@@ -111,7 +111,7 @@ class Ingresos_model extends CI_Model
               ON t1.idEgreso=e.idegresos
               INNER JOIN almacenes a1
               ON a1.idalmacen=e.almacen
-            WHERE i.fechamov BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm' and t.id like '%$tin'
+            WHERE DATE(i.fechamov) BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm' and t.id like '%$tin'
             Group By i.idIngresos 
             ORDER BY i.idIngresos DESC
             ";
@@ -148,7 +148,7 @@ class Ingresos_model extends CI_Model
     public function mostrarIngresosDetalle($id=null,$ini=null,$fin=null,$alm="",$tin="")
     {       
         $sql="SELECT *
-                FROM (SELECT i.nmov n,i.idIngresos, i.fechamov, p.nombreproveedor, i.nfact, CONCAT(u.first_name,' ', u.last_name) autor, i.fecha,t.tipomov,a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm FROM ingresos i INNER JOIN tmovimiento t ON i.tipomov = t.id INNER JOIN provedores p ON i.proveedor=p.idproveedor INNER JOIN users u ON u.id=i.autor INNER JOIN almacenes a ON a.idalmacen=i.almacen INNER JOIN moneda m ON i.moneda=m.id WHERE i.fechamov BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm' and t.id like '%$tin' ORDER BY i.idIngresos DESC) tabla
+                FROM (SELECT i.nmov n,i.idIngresos, i.fechamov, p.nombreproveedor, i.nfact, CONCAT(u.first_name,' ', u.last_name) autor, i.fecha,t.tipomov,a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm FROM ingresos i INNER JOIN tmovimiento t ON i.tipomov = t.id INNER JOIN provedores p ON i.proveedor=p.idproveedor INNER JOIN users u ON u.id=i.autor INNER JOIN almacenes a ON a.idalmacen=i.almacen INNER JOIN moneda m ON i.moneda=m.id WHERE DATE(i.fechamov) BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm' and t.id like '%$tin' ORDER BY i.idIngresos DESC) tabla
                 INNER JOIN ingdetalle id
                 ON tabla.idIngresos=id.idIngreso
                 INNER JOIN articulos ar
@@ -238,7 +238,8 @@ class Ingresos_model extends CI_Model
     {
 
 		$almacen_imp=$datos['almacen_imp'];
-    	$tipomov_imp=$datos['tipomov_imp'];
+        $tipomov_imp=$datos['tipomov_imp'];
+     
     	$fechamov_imp=$datos['fechamov_imp'];
     	$moneda_imp=$datos['moneda_imp'];
     	$proveedor_imp=$datos['proveedor_imp'];
@@ -279,7 +280,7 @@ class Ingresos_model extends CI_Model
                 }
     			if($idArticulo)
     			{
-    				$sql="INSERT INTO ingdetalle(idIngreso,nmov,articulo,moneda,cantidad,punitario,total,totaldoc) VALUES('$idIngreso','0','$idArticulo','$moneda_imp','$fila[2]','$punitariobs','$totalbs','$totaldoc')";
+    				$sql="INSERT INTO ingdetalle(idIngreso,nmov,articulo,moneda,cantidad,punitario,total,totaldoc) VALUES('$idIngreso','$nummov','$idArticulo','$moneda_imp','$fila[2]','$punitariobs','$totalbs','$totaldoc')";
     				$this->db->query($sql);
 
                /*     $costoArticulo=new stdclass();
@@ -373,7 +374,7 @@ class Ingresos_model extends CI_Model
         $obs_imp=$datos['obs_imp'];
         $autor=$this->session->userdata('user_id');
         $fecha = date('Y-m-d H:i:s');
-        $sql="UPDATE ingresos SET proveedor='$proveedor_imp',moneda='$moneda_imp',nfact='$nfact_imp',ningalm='$ningalm_imp',ordcomp='$ordcomp_imp',obs='$obs_imp',fecha='$fecha',autor='$autor', anulado='$anuladorecuperado' where idIngresos='$idingresoimportacion'";
+        $sql="UPDATE ingresos SET proveedor='$proveedor_imp',moneda='$moneda_imp',nfact='$nfact_imp',ningalm='$ningalm_imp',ordcomp='$ordcomp_imp',obs='$obs_imp',fecha='$fecha',autor='$autor', anulado='$anuladorecuperado', estado=0 where idIngresos='$idingresoimportacion'";
         $query=$this->db->query($sql);
         
         return true;
@@ -480,7 +481,8 @@ class Ingresos_model extends CI_Model
             return false;
         }
     }
-    public function retornarSaldo1($idArticulo,$idAlmacen) /*consulta procedure con parametros de salida @out_param*/
+     /*consulta procedure con parametros de salida @out_param*/
+   /* public function retornarSaldo1($idArticulo,$idAlmacen)
     {
         $this->db->trans_start();
 
@@ -500,8 +502,9 @@ class Ingresos_model extends CI_Model
         }
 
      
-    }
-    public function retornarSaldo2($idArticulo,$idAlmacen) /*retorna tabla*/
+    }*/
+    //retorna tabla
+ /*   public function retornarSaldo2($idArticulo,$idAlmacen) 
     {
         $this->db->trans_start();
         $sql="call consultar_saldo1($idAlmacen,$idArticulo)";
@@ -520,7 +523,7 @@ class Ingresos_model extends CI_Model
             return false;
         }
 
-    }
+    }*/
     public function retornarCosto($idArticulo) /*retorna tabla*/
     {
       /*  $this->db->trans_start();

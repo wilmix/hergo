@@ -190,7 +190,8 @@ class Traspasos extends CI_Controller
 	    	$egreso['moneda_ne'] = $datos['moneda_ne'];
 	    	$egreso['idCliente'] = 1801;
 	    	$egreso['pedido_ne'] = $datos['pedido_ne'];
-	    	$egreso['obs_ne'] = $datos['obs_ne'];
+			$egreso['obs_ne'] = $datos['obs_ne'];
+			$egreso['vendedor']=0;
 	    	$egreso['tabla']=$this->convertirTablaEgresos($datos['tabla']);
 
 	    	$ingreso['almacen_imp'] = $datos['almacen_des'];

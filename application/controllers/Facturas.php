@@ -27,7 +27,7 @@ class Facturas extends CI_Controller
 				base_url("assets/hergo/estilos.css"),
 				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
 				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
-				base_url('assets/sweetalert/sweetalert.css'),
+				base_url('assets/sweetalert/sweetalert2.min.css'),
 
 			);
 		$this->cabecera_script=array(
