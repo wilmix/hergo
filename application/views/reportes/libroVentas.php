@@ -16,6 +16,10 @@
               <option value="">TODOS</option>
             </select>
           </div>
+          <div class="text-center">
+            <h2>LIBRO DE VENTAS - <span id="tituloVentas"></span></h2>
+            <h4 id="ragoFecha"></h4>
+          </div>
           <table 
             id="tablaLibroVentas" 
             data-toolbar="#toolbar2"

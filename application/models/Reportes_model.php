@@ -97,15 +97,17 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function mostrarLibroVentas($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
-		$sql="SELECT fechaFac, nFactura, df.autorizacion, anulada, c.documento, c.nombreCliente, total AS totalFactura, ROUND(SUM(fd.facturaPUnitario*fd.facturaCantidad),2) AS sumaDetalle,  ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)*13/100),2) AS debito, IFNULL(codigoControl, 0) AS codigoControl , df.manual
-				FROM factura AS f
-				INNER JOIN datosfactura AS df ON df.lote=f.lote
-				INNER JOIN clientes AS c ON c.idCliente = f.cliente
-				INNER JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura
-				WHERE fechaFac BETWEEN '$ini' AND '$fin'
-				AND f.almacen LIKE '%$alm'
-				GROUP BY f.idFactura
-				ORDER BY  df.manual, nFactura";
+		$sql="SELECT fechaFac, nFactura, df.autorizacion, anulada, c.documento, c.nombreCliente,
+		IF(anulada=1 , 0 , ROUND(SUM(fd.facturaPUnitario*fd.facturaCantidad),2)) AS sumaDetalle, IF(anulada = 1 , 0 , ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)*13/100),2))  AS debito, 
+		IFNULL(codigoControl, 0) AS codigoControl , df.manual
+		FROM factura AS f
+		INNER JOIN datosfactura AS df ON df.lote=f.lote
+		INNER JOIN clientes AS c ON c.idCliente = f.cliente
+		INNER JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura
+		WHERE fechaFac BETWEEN '$ini' AND '$fin'
+		AND f.almacen LIKE '%$alm'
+		GROUP BY f.idFactura
+		ORDER BY  df.manual, nFactura";
 		
 		$query=$this->db->query($sql);		
 		return $query;

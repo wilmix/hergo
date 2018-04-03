@@ -5,7 +5,7 @@
     font-size: 16px;
 }
 </style>
-<body class="skin-blue fixed sidebar-mini" class="hold-transition skin-blue sidebar-mini">
+<body class="skin-blue sidebar-mini fixed">
 <input type="hidden" id="baseurl" value="<?php echo base_url() ?>">
 <div class="wrapper">
 
@@ -141,7 +141,7 @@
 
                 <p>
                   <?php echo $nombre_usuario ?>
-                  <small>Miembro desde Nov. 2012</small>
+                  <small>Miembro desde Nov. 2017</small>
                 </p>
               </li>
               <!-- Menu Body -->
