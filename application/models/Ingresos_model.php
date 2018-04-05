@@ -47,7 +47,7 @@ class Ingresos_model extends CI_Model
             ON i.tipocambio=tc.id
             WHERE DATE(i.fechamov) BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm' and t.id like '%$tin'
             Group By i.idIngresos 
-			ORDER BY i.idIngresos DESC
+			ORDER BY i.nmov DESC
             ";
             
         }

@@ -15,6 +15,13 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function retornar_tablaMovimiento($tipo)
+    {
+        $sql="SELECT * from tmovimiento where operacion='$tipo'";
+
+		$query=$this->db->query($sql);
+		return $query;
+    }
 	public function mostrarNEporFac($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
 		$sql="SELECT e.nmov n,e.idEgresos,t.sigla, e.fechamov, c.nombreCliente, SUM(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, a.almacen, m.sigla monedasigla			FROM egresos e
@@ -172,6 +179,29 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function mostrarDiarioIngresos($ini=null,$fin=null,$alm="",$tin="") ///********* nombre de la funcion mostrar
+	{ //cambiar la consulta
+		$sql="SELECT i.fechamov, i.tipomov,t.sigla, i.nmov, i.ordcomp, i.ningalm, p.nombreproveedor, 
+		a.CodigoArticulo, a.Descripcion, u.Sigla, id.cantidad, id.punitario, id.total, i.obs
+		from ingresos i
+		inner join provedores p
+		on p.idproveedor=i.proveedor
+		inner join ingdetalle id
+		on id.idIngreso= i.idIngresos
+		inner join articulos a
+		on a.idArticulos= id.articulo
+		inner join unidad u
+		on u.idUnidad=a.idUnidad
+		inner join tmovimiento t
+		on t.id= i.tipomov
+		where i.fechamov BETWEEN '$ini' AND '$fin'
+		and i.tipomov=2 AND i.almacen LIKE '%$alm'
+		order by i.nmov, id.articulo";
+		
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+
 
 
 }
