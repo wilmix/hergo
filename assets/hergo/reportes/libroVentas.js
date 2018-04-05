@@ -1,5 +1,5 @@
-var iniciofecha = moment().subtract(0, 'month').startOf('month')
-var finfecha = moment().subtract(0, 'month').endOf('month')
+var iniciofecha = moment().subtract(3, 'month').startOf('month')
+var finfecha = moment().subtract(3, 'month').endOf('month')
 $(document).ready(function () {
   $(".tiponumerico").inputmask({
     alias: "decimal",
@@ -9,8 +9,8 @@ $(document).ready(function () {
     autoUnmask: true
   });
 
-  var start = moment().subtract(1, 'month').startOf('month')
-  var end = moment().subtract(1, 'month').endOf('month')
+  var start = moment().subtract(3, 'month').startOf('month')
+  var end = moment().subtract(3, 'month').endOf('month')
 
   $(function () {
     moment.locale('es');
@@ -77,6 +77,7 @@ function retornarLibroVentas() {
       a: alm
     }, //**** variables para filtro
   }).done(function (res) {
+    console.log(res);
     quitarcargando();
     console.log(ini);
     console.log(fin);
@@ -89,7 +90,6 @@ function retornarLibroVentas() {
       pagination: true,
       pageSize: "100",
       search: true,
-      //searchOnEnterKey:true,
       showColumns: true,
       filter: true,
       stickyHeader: true,

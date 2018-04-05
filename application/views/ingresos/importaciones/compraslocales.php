@@ -35,11 +35,10 @@ select:focus{
   /*color: white;*/
 
 }
-
 input[type=date]::-webkit-outer-spin-button,
-input[type=date]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+input[type=date]::-webkit-inner-spin-button 
+{-webkit-appearance: none;
+margin: 0};
 </style>
 <div class="row">
   <div class="col-xs-12">
