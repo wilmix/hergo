@@ -23,11 +23,12 @@
                 </div>
                 <div class="text-center">
                     <h2>DIARIO DE INGRESOS - <span id="tituloAlmacen"></span></h2>
+                    <h3 id="tituloTipo" style="margin-top: 0px;margin-bottom: 0px;"></h3>
                     <h4 id="ragoFecha"></h4>
                 </div>
                 <table id="tablaDiarioIngresos"
-                data-toolbar="#toolbar2"
-                data-toggle="table">
+                    data-toolbar="#toolbar2"
+                    data-toggle="table">
                 </table>
                 <!--row-->
             </div>

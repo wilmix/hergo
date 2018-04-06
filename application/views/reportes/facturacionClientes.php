@@ -2,6 +2,7 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body">
+      
           <div id="toolbar2" class="form-inline">
           <button  type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
              <span>
@@ -16,11 +17,18 @@
               <option value="">TODOS</option>
             </select>
           </div>
-          <table 
-            id="tablaFacturacionClientes" 
-            data-toolbar="#toolbar2"
-            data-toggle="table">
-          </table>
+          <div class="container">
+            <div class="text-center">
+              <h2>FACTURACION CLIENTES - <span id="tituloAlmacen"></span></h2>
+              <h4 id="ragoFecha"></h4>
+            </div>
+            <table 
+              id="tablaFacturacionClientes" 
+              data-toolbar="#toolbar2"
+              data-toggle="table">
+            </table>
+          </div>
+          
 
       </div>
       <!-- /.box-body -->

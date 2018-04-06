@@ -1,7 +1,6 @@
 var iniciofecha = moment().subtract(3, 'month').startOf('month')
 var finfecha = moment().subtract(3, 'month').endOf('month')
 $(document).ready(function () {
-  tituloVentas();
   $(".tiponumerico").inputmask({
     alias: "decimal",
     digits: 2,
@@ -47,14 +46,17 @@ $(document).ready(function () {
 
   });
   $('#fechapersonalizada').on('apply.daterangepicker', function (ev, picker) {
+    tituloVentas();
     retornarLibroVentas();
     retornarDatosTotales();
   });
+  tituloVentas();
   retornarLibroVentas();
   retornarDatosTotales();
 
 })
 $(document).on("change", "#almacen_filtro", function () {
+  tituloVentas();
   retornarLibroVentas();
   retornarDatosTotales();
 }) //para cambio filtro segun cada uno
@@ -371,7 +373,7 @@ function estadoFactura(value, row, index) {
 
 function tituloVentas() {
   almText = $('#almacen_filtro').find(":selected").text();
-  $('#tituloVentas').text(almText);
+  $('#tituloAlmacen').text(almText);
   $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
 }
 

@@ -6,6 +6,9 @@
           
           </div>
           <div class="container">
+          <div class="text-center">
+            <h2>LISTA DE PRECIOS</h2>
+          </div>
           <table 
             id="tablaListaPrecios" 
             data-toolbar="#toolbar2"

@@ -1,6 +1,7 @@
 var iniciofecha = moment().subtract(5, 'year').startOf('year')
 var finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function () {
+    tituloReporte()
     $(".tiponumerico").inputmask({
         alias: "decimal",
         digits: 2,
@@ -165,6 +166,12 @@ function retornarNEporFac() //*******************************
         var err = textStatus + ", " + error;
         console.log("Request Failed: " + err);
     });
+}
+
+function tituloReporte() {
+    almText = $('#almacen_filtro').find(":selected").text();
+    $('#tituloReporte').text(almText);
+    $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
 }
 
 function operateFormatter3(value, row, index) {

@@ -2,7 +2,6 @@ var iniciofecha = moment().subtract(0, 'year').startOf('year')
 var finfecha = moment().subtract(0, 'year').endOf('year')
 
 $(document).ready(function () {
-    tituloReporte();
     $(".tiponumerico").inputmask({
         alias: "decimal",
         digits: 2,
@@ -57,15 +56,16 @@ $(document).ready(function () {
         
         retornarTablaIngresos();
     });
-
+    tituloReporte();
     retornarTablaIngresos();
 })
 $(document).on("change", "#almacen_filtro", function () {
 
+    tituloReporte();
     retornarTablaIngresos();
 })
 $(document).on("change", "#tipo_filtro", function () {
-
+    tituloReporte();
     retornarTablaIngresos();
 })
 
@@ -216,7 +216,9 @@ function retornarTablaIngresos() {
 
 function tituloReporte() {
     almText = $('#almacen_filtro').find(":selected").text();
+    tipoText = $('#tipo_filtro').find(':selected').text();
     $('#tituloAlmacen').text(almText);
+    $('#tituloTipo').text(tipoText);
     $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
 
 }
