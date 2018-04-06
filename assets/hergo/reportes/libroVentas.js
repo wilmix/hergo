@@ -1,6 +1,7 @@
 var iniciofecha = moment().subtract(3, 'month').startOf('month')
 var finfecha = moment().subtract(3, 'month').endOf('month')
 $(document).ready(function () {
+  tituloVentas();
   $(".tiponumerico").inputmask({
     alias: "decimal",
     digits: 2,
@@ -46,17 +47,14 @@ $(document).ready(function () {
 
   });
   $('#fechapersonalizada').on('apply.daterangepicker', function (ev, picker) {
-    tituloVentas();
     retornarLibroVentas();
     retornarDatosTotales();
   });
-  tituloVentas();
   retornarLibroVentas();
   retornarDatosTotales();
 
 })
 $(document).on("change", "#almacen_filtro", function () {
-  tituloVentas();
   retornarLibroVentas();
   retornarDatosTotales();
 }) //para cambio filtro segun cada uno
@@ -77,10 +75,10 @@ function retornarLibroVentas() {
       a: alm
     }, //**** variables para filtro
   }).done(function (res) {
-    console.log(res);
+    //console.log(res);
     quitarcargando();
-    console.log(ini);
-    console.log(fin);
+    //console.log(ini);
+    //console.log(fin);
     datosselect = restornardatosSelect(res);
     $("#tablaLibroVentas").bootstrapTable('destroy');
     $("#tablaLibroVentas").bootstrapTable({ ////********cambiar nombre tabla viata
@@ -96,7 +94,8 @@ function retornarLibroVentas() {
       stickyHeaderOffsetY: '50px',
       showFooter: true,
       footerStyle: footerStyle,
-      columns: [{
+      columns: [
+        {
           field: '',
           title: 'E',
           visible: false,

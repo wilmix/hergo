@@ -5,11 +5,14 @@
           <div id="toolbar2" class="form-inline">
           
           </div>
+          <div class="container">
           <table 
             id="tablaListaPrecios" 
             data-toolbar="#toolbar2"
             data-toggle="table">
           </table>
+          </div>
+          
       </div>
       <!-- /.box-body -->
     </div>

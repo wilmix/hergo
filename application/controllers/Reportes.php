@@ -564,7 +564,7 @@ class Reportes extends CI_Controller
         	$ini=$this->security->xss_clean($this->input->post("i"));//fecha inicio
         	$fin=$this->security->xss_clean($this->input->post("f"));//FECHA FIN
 			$alm=$this->security->xss_clean($this->input->post("a")); //almacen
-			$tin=$this->security->xss_clean($this->input->post("ti"));//tipo de ingreso
+			$ti=$this->security->xss_clean($this->input->post("ti"));//tipo de ingreso
 			$res=$this->Reportes_model->mostrarDiarioIngresos($ini,$fin,$alm,$ti); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
 			$res=$res->result_array();
 			echo json_encode($res);

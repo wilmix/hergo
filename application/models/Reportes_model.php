@@ -181,8 +181,8 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function mostrarDiarioIngresos($ini=null,$fin=null,$alm="",$tin="") ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
-		$sql="SELECT i.fechamov, i.tipomov,t.sigla, i.nmov, i.ordcomp, i.ningalm, p.nombreproveedor, 
-		a.CodigoArticulo, a.Descripcion, u.Sigla, id.cantidad, id.punitario, id.total, i.obs
+		$sql="SELECT alm.almacen, i.fechamov, i.tipomov,t.sigla, i.nmov, i.ordcomp, i.ningalm, p.nombreproveedor, 
+		a.CodigoArticulo, a.Descripcion, u.Unidad,  id.cantidad, id.punitario, id.total, i.obs
 		from ingresos i
 		inner join provedores p
 		on p.idproveedor=i.proveedor
@@ -194,9 +194,11 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		on u.idUnidad=a.idUnidad
 		inner join tmovimiento t
 		on t.id= i.tipomov
+		inner join almacenes alm
+		on alm.idalmacen = i.almacen
 		where i.fechamov BETWEEN '$ini' AND '$fin'
-		and i.tipomov=2 AND i.almacen LIKE '%$alm'
-		order by i.nmov, id.articulo";
+		and i.tipomov like '%$tin' AND i.almacen LIKE '%$alm'
+		order by alm.almacen, i.nmov, id.articulo";
 		
 		$query=$this->db->query($sql);		
 		return $query;
