@@ -40,7 +40,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
             INNER JOIN tipocambio tc
             ON e.tipocambio=tc.id
 			WHERE
-			e.`estado`=0
+			e.`estado`<>1
 			AND t.id = 7
 			AND e.fechamov 
 			BETWEEN '$ini' AND '$fin'
