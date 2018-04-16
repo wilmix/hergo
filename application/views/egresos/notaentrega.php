@@ -23,26 +23,27 @@
     }
 ?>
 <style>
-    input{
-        height: 50px;
+    input {
+      height: 50px;
     }
-  input:focus{
 
-  background-color: rgba(60, 141, 188, 0.47);;
-  /*color: white;*/
+    input:focus {
+      background-color: rgba(60, 141, 188, 0.47);
+      ;
+      /*color: white;*/
       font-weight: 700;
-}
-select:focus{
+    }
 
-  background-color:rgba(60, 141, 188, 0.47);
-  /*color: white;*/
+    select:focus {
+      background-color: rgba(60, 141, 188, 0.47);
+      /*color: white;*/
+    }
 
-}
-
-input[type=date]::-webkit-outer-spin-button,
-input[type=date]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;}
+    input[type=date]::-webkit-outer-spin-button,
+    input[type=date]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
 </style>
 <?php $auxIdTipoIngreso=($cont)?$idtegreso:$idegreso ?>
 <div class="row">
