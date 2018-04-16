@@ -42,7 +42,7 @@ select:focus{
 input[type=date]::-webkit-outer-spin-button,
 input[type=date]::-webkit-inner-spin-button {
     -webkit-appearance: none;
-    margin: 0;
+    margin: 0;}
 </style>
 <?php $auxIdTipoIngreso=($cont)?$idtegreso:$idegreso ?>
 <div class="row">
