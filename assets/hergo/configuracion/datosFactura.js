@@ -141,10 +141,12 @@ function retornarTablaDatosFactura() {
         data: {},
     }).done(function (res) {
         quitarcargando();
-        //datosselect = restornardatosSelect(res);
+        datosselect = restornardatosSelect(res);
         $("#tablaDatosFactura").bootstrapTable('destroy');    
         $("#tablaDatosFactura").bootstrapTable({ ////********cambiar nombre tabla viata
             data: res,
+            toolbarAlign:'right',
+            toggle:'table',
             striped: true,
             pagination: true,
             pageSize: "10",
@@ -153,17 +155,23 @@ function retornarTablaDatosFactura() {
             filter: true,
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',
+            
             columns: 
             [
                 {   
                     field: 'idDatosFactura',            
                     title: 'Lote',
                     align: 'center',
+                    sortable: true,
                 },
                 {   
                     field: 'almacen',            
                     title: 'Almacen',
                     align: 'center',
+                    filter: {
+                                type: "select",
+                                data: datosselect[0]
+                            }
                 },
                 {   
                     field: 'nit',            
@@ -180,26 +188,38 @@ function retornarTablaDatosFactura() {
                     field: 'desde',            
                     title: 'Desde',
                     align: 'center',
+                    align: 'right'
                 },
                 {   
                     field: 'hasta',            
                     title: 'Hasta',
-                    align: 'center',
+                    align: 'right'
                 },
                 {   
                     field: 'fechaLimite',            
                     title: 'Fecha Limite',
                     align: 'center',
+                    formatter: formato_fecha_corta
                 },
                 {   
                     field: 'manual',            
                     title: 'Manual',
                     align: 'center',
+                    filter: {
+                        type: "select",
+                        data: ["MAN", "COM"]
+                      },
+                    formatter: tipoDosificacion
                 },
                 {   
                     field: 'enUso',            
                     title: 'Estado',
                     align: 'center',
+                    filter: {
+                        type: "select",
+                        data: ["EN USO", "NO"]
+                      },
+                    formatter: estadoDosificacion
                 },
 
                 {   
@@ -246,6 +266,42 @@ function operateFormatter(value, row, index){
         '</a>  '       
     ].join('');
 }
+function tipoDosificacion(value, row, index) {
+    $ret = ''
+    if (row.manual == 1) {
+        $ret = '<span class="label label-warning">MAN</span>';
+    } else {
+        $ret = '<span class="label label-default">COM</span>';
+    }
+    return ($ret);
+}
+function estadoDosificacion(value, row, index) {
+    $ret = ''
+    if (row.enUso == 1) {
+        $ret = '<span class="label label-success">EN USO</span>';
+    } else {
+        $ret = '';
+    }
+    return ($ret);
+}
+function restornardatosSelect(res) {
+    var almacen = new Array()
+    var datos = new Array()
+    $.each(res, function (index, value) {
+        almacen.push(value.almacen)
+    })
+    almacen.sort();
+    datos.push(almacen.unique());
+    return (datos);
+}
+    Array.prototype.unique = function (a) {
+        return function () {
+            return this.filter(a)
+        }
+    }(function (a, b, c) {
+        return c.indexOf(a, b + 1) < 0
+    });
+
 function asignarselect(text1,select)
 {
     $("option",select).filter(function() {

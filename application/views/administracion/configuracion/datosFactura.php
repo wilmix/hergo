@@ -2,20 +2,19 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-body">
-                <div id="toolbar2" class="form-inline">
-                </div>
+                <div class="text-right">
+                    <div id="toolbar" class="btn-group" >
+                        <button class="btn btn-primary text-center btnnuevo" style="margin-bottom :10px" data-toggle="modal" data-target="#modalDatosFactura">Agregar Dosificacion</button>
+                    </div>
+                
                 <div class="text-center">
                     <h2>DATOS FACTURA</h2>
                 </div>
-                <div class="text-right">
-                    <button class="btn btn-default text-center btnnuevo" style="margin-bottom :10px" data-toggle="modal" data-target="#modalDatosFactura">Agregar Dosificacion</button>
-                </div>
                 <table id="tablaDatosFactura"
-                    data-toolbar="#toolbar2"
-                    data-toggle="table">
+                    data-toolbar="#toolbar">
                 </table>
+                </div>
                 <!--row-->
-            </div>
             <!-- /.box-body -->
         </div>
         <!-- /.box -->
