@@ -4,97 +4,91 @@ class Configuracion extends CI_Controller
 {
 	private $datos;
 	public function __construct()
-	{	
+	{
 		parent::__construct();
-		$this->load->helper('url');	
+		$this->load->helper('url');
 		$this->load->model("Configuracion_model");
+		$this->load->helper('date');
+		date_default_timezone_set("America/La_Paz");
 		$this->cabeceras_css=array(
-            base_url('assets/bootstrap/css/bootstrap.min.css'),
-            base_url("assets/fa/css/font-awesome.min.css"),
-            base_url("assets/dist/css/AdminLTE.min.css"),
-            base_url("assets/dist/css/skins/skin-blue.min.css"),
-            base_url("assets/hergo/estilos.css"),
-            base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
-            base_url('assets/plugins/table-boot/plugin/select2.min.css'),
-            base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.css'),	
-            base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),				
-            base_url('assets/sweetalert/sweetalert2.min.css'),
-			);
+				base_url('assets/bootstrap/css/bootstrap.min.css'),
+				base_url("assets/fa/css/font-awesome.min.css"),
+				base_url("assets/dist/css/AdminLTE.min.css"),
+				base_url("assets/dist/css/skins/skin-blue.min.css"),
+				base_url("assets/hergo/estilos.css"),
+				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
+				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
+				base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.css'),	
+				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),				
+				base_url('assets/sweetalert/sweetalert2.min.css'),
+		);
 		$this->cabecera_script=array(
-            base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
-            base_url('assets/bootstrap/js/bootstrap.min.js'),
-            base_url('assets/dist/js/app.min.js'),
-            base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
-            base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
-            base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
-            base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
-            base_url('assets/plugins/table-boot/js/tableExport.js'),
-            base_url('assets/plugins/table-boot/js/xlsx.core.min.js'),
-            base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
-            base_url('assets/plugins/table-boot/plugin/select2.min.js'),
-            base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
-            base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.js'),
-            base_url('assets/plugins/table-boot/plugin/FileSaver.min.js'),
-            base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
-            base_url('assets/plugins/daterangepicker/moment.min.js'),
-            base_url('assets/plugins/slimscroll/slimscroll.min.js'),        		
-            base_url('assets/sweetalert/sweetalert2.min.js'),
-				
-			);
+				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
+				base_url('assets/bootstrap/js/bootstrap.min.js'),
+				base_url('assets/dist/js/app.min.js'),
+				base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
+				base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
+				base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
+				base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
+				base_url('assets/plugins/table-boot/js/tableExport.js'),
+				base_url('assets/plugins/table-boot/js/xlsx.core.min.js'),
+				base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
+				base_url('assets/plugins/table-boot/plugin/select2.min.js'),
+				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
+				base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.js'),
+				base_url('assets/plugins/table-boot/plugin/FileSaver.min.js'),
+				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
+        		base_url('assets/plugins/daterangepicker/moment.min.js'),
+        		base_url('assets/plugins/slimscroll/slimscroll.min.js'),        		
+        		base_url('assets/sweetalert/sweetalert2.min.js'),
+        		
+
+		);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 			if($this->session->userdata('foto')==NULL)
 				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
 			else
-				$this->datos['foto']=base_url('assets/imagenes/').$this->session->userdata('foto');	
+				$this->datos['foto']=base_url('assets/imagenes/').$this->session->userdata('foto');
 	}
-	    
-    public function DatosFactura()
-	{
+
+	public function DatosFactura(){
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
-		
-			$this->datos['menu']="Configuración";
-			$this->datos['opcion']="Datos Factura";
-			$this->datos['titulo']="DatosFactura";
+
+			$this->datos['menu']="Datos Factura";
+			$this->datos['opcion']="Configuracion";
+			$this->datos['titulo']="Datos Factura";
+
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
+
+	        /*************DATERANGEPICKER**********/
+	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/configuracion/datosFactura.js'); /******        JS          ****** */
-			/*************TABLE***************/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/css/bootstrap-table.css'); 
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-export.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/tableExport.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-filter-control.js');
-			
-			/****************MOMENT*******************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/moment.min.js');
-			/***********************************/
-			/***********************************/
-			/***********************************/
-			/***********************************/
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/configuracion/datosFactura.js'); 				//*******agregar js********
+			/**************INPUT MASK***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+			$this->datos['almacenes']=$this->Configuracion_model->retornar_tabla("almacenes");
 
-			//$this->datos['clientes']=$this->Cliente_model->mostrarclientes();
-			//$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
-			//$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");		
-			/***********************************/
-			/***********************************/
-			/***********************************/
+
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-            $this->load->view('administracion/configuracion/configuracion.php',$this->datos);
+			$this->load->view('administracion/configuracion/datosFactura.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);						
-    }
-    public function mostrarDatosFactura()
+			$this->load->view('plantilla/footer.php',$this->datos);
+	}
+	public function mostrarDatosFactura()  //******cambiar a funcion del modelo
 	{
 		if($this->input->is_ajax_request())
         {
-			$res=$this->Configuracion_model->mostrarDatosFactura();
+			$res=$this->Configuracion_model->mostrarDatosFactura(); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
 			$res=$res->result_array();
 			echo json_encode($res);
 		}
@@ -103,8 +97,32 @@ class Configuracion extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	public function agregarDatosFactura(){
+		if($this->input->is_ajax_request()){
+				$id_lote = addslashes($this->security->xss_clean($this->input->post('id_lote')));
+				$almacen = addslashes($this->security->xss_clean($this->input->post('almacen')));
+				$autorizacion = addslashes($this->security->xss_clean($this->input->post('autorizacion')));
+				$desde = addslashes($this->security->xss_clean($this->input->post('desde')));
+				$hasta = addslashes($this->security->xss_clean($this->input->post('hasta')));
+				$fechaLimite = addslashes($this->security->xss_clean($this->input->post('fechaLimite')));
+				$tipo = addslashes($this->security->xss_clean($this->input->post('tipo')));
+				$llave = addslashes($this->security->xss_clean($this->input->post('llave')));
+				$leyenda1 = addslashes($this->security->xss_clean($this->input->post('leyenda1')));
+				$leyenda2 = addslashes($this->security->xss_clean($this->input->post('leyenda2')));
+				$leyenda3 = addslashes($this->security->xss_clean($this->input->post('leyenda3')));
+				$uso = addslashes($this->security->xss_clean($this->input->post('uso')));
+				
+				if($id_lote==""){
+					$this->Configuracion_model->agregarDatosFactura_model($id_lote,$almacen,$autorizacion,$desde,$hasta,$fechaLimite,$tipo,$llave,$leyenda1,$leyenda2,$leyenda3,$uso);
+				} else {
+					$this->Configuracion_model->editarDatosFactura_model($id_lote,$almacen,$autorizacion,$desde,$hasta,$fechaLimite,$tipo,$llave,$leyenda1,$leyenda2,$leyenda3,$uso);
+				}
+		}
+        echo "{}";       
+	}
+	
 
-		
+
 
 	
 }
