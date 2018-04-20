@@ -47,6 +47,7 @@
             <li><a href="<?php echo base_url("index.php/clientes") ?>"><i class="fa fa-users"></i> Clientes</a></li>
             <li><a href="<?php echo base_url("index.php/Provedores") ?>"><i class="fa fa-users"></i> Provedores</a></li>
             <li><a href="<?php echo base_url("index.php/CodigoControl") ?>"><i class="fa fa-qrcode"></i> CodigoControl QR</a></li>
+            <li><a href="<?php echo base_url("index.php/configuracion/datosFactura") ?>"><i class="fa fa-cog"></i> Datos Factura</a></li>
             <!--<li><a href="<?php echo base_url("index.php/usuarios") ?>"> FormFuncionarios</a></li>
             <!--<li><a href="#">Modificar Precis Articulos</a></li>
             <li><a href="#">Datos Factura</a></li>
@@ -66,8 +67,8 @@
           <ul class="treeview-menu">
 
             <li><a href="<?php echo base_url("ingresos") ?>"><i class="fa fa-caret-square-o-down "></i>  Consultas</a></li>
-            <li><a href="<?php echo base_url("ingresos/consultadetalle") ?>"><i class="fa fa-cog fa-spin fa-fw"></i> ConsultasDetalle
-            <small class="label pull-right bg-red"> construc</small></a></li>
+            <!--<li><a href="<?php echo base_url("ingresos/consultadetalle") ?>"><i class="fa fa-cog fa-spin fa-fw"></i> ConsultasDetalle
+            <small class="label pull-right bg-red"> construc</small></a></li>-->
             <li><a href="<?php echo base_url("Ingresos/Compraslocales") ?>"><i class="fa fa-plus-circle"></i> Compras Locales</a></li>
             <li><a href="<?php echo base_url("Ingresos/Importaciones") ?>"><i class="fa fa-plus-circle"></i> Ingreso Importaciones</a></li>
             <li><a href="<?php echo base_url("Ingresos/anulacionEgresos") ?>"><i class="fa fa-plus-circle"></i> Anulacion Egresos</a></li>
