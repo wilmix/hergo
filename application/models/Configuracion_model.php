@@ -16,11 +16,11 @@ class Configuracion_model extends CI_Model
 		return $query;
 	}
     public function mostrarDatosFactura(){
-			$sql="SELECT idDatosFactura, a.almacen, nit , autorizacion, desde, hasta, fechaLimite, enUso, manual, llaveDosificacion, glosa01, glosa02, glosa03
-			FROM datosfactura df
-			INNER JOIN almacenes a ON a.idalmacen= df.almacen
+			$sql="SELECT idDatosFactura, a.almacen, nit , autorizacion, desde, hasta, fechaLimite, enUso, manual, llaveDosificacion, glosa01, glosa02, glosa03, df.fecha, CONCAT(u.first_name,' ',u.last_name) AS autor
+			FROM datosfactura df 
+			INNER JOIN almacenes a ON a.idalmacen= df.almacen 
+			LEFT JOIN users u ON df.autor=u.id
 			ORDER BY idDatosFactura DESC";
-			
 			$query=$this->db->query($sql);		
 			return $query;
 	}
@@ -38,11 +38,9 @@ class Configuracion_model extends CI_Model
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
 		$nit = 1000991026;
-		$sql="UPDATE datosfactura
-		SET 
+		$sql="UPDATE datosfactura SET 
 		almacen='$almacen' , autorizacion='$autorizacion' , desde='$desde' , hasta='$hasta' , fechaLimite='$fechaLimite' ,enUso='$uso' ,manual='$tipo' , llaveDosificacion='$llave' , glosa01='$leyenda1' , glosa02='$leyenda2' , glosa03='$leyenda3', fecha='$fecha', autor='$autor'
 		WHERE idDatosFactura = $id_lote";
 		$query=$this->db->query($sql);
 	}
-
 }

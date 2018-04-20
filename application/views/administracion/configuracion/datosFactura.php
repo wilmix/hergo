@@ -2,7 +2,7 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-body">
-                <div class="text-right">
+                <div>
                     <div id="toolbar" class="btn-group" >
                         <button class="btn btn-primary text-center btnnuevo" style="margin-bottom :10px" data-toggle="modal" data-target="#modalDatosFactura">Agregar Dosificacion</button>
                     </div>

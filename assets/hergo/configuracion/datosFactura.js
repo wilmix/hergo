@@ -145,12 +145,13 @@ function retornarTablaDatosFactura() {
         $("#tablaDatosFactura").bootstrapTable('destroy');    
         $("#tablaDatosFactura").bootstrapTable({ ////********cambiar nombre tabla viata
             data: res,
+            //showToggle: true,
             toolbarAlign:'right',
             toggle:'table',
             striped: true,
             pagination: true,
             pageSize: "10",
-            search: true,
+            //search: true,
             showColumns: true,
             filter: true,
             stickyHeader: true,
@@ -203,11 +204,11 @@ function retornarTablaDatosFactura() {
                 },
                 {   
                     field: 'manual',            
-                    title: 'Manual',
+                    title: 'Tipo',
                     align: 'center',
                     filter: {
                         type: "select",
-                        data: ["MAN", "COM"]
+                        data: ["Manual", "Computarizada"]
                       },
                     formatter: tipoDosificacion
                 },
@@ -217,29 +218,35 @@ function retornarTablaDatosFactura() {
                     align: 'center',
                     filter: {
                         type: "select",
-                        data: ["EN USO", "NO"]
+                        data: ["En Uso", ""]
                       },
                     formatter: estadoDosificacion
                 },
-
                 {   
                     field: 'llaveDosificacion',            
-                    title: 'Llave de Dosificación'
-                
+                    title: 'Llave de Dosificación',
                 },
                 {   
                     field: 'glosa01',            
-                    title: 'Leyenda 01'
-                
+                    title: 'Leyenda 01',
                 },
                 {   
                     field: 'glosa02',            
-                    title: 'Leyenda 02'
-                
+                    title: 'Leyenda 02',
                 },
                 {   
                     field: 'glosa03',            
-                    title: 'Leyenda 03'
+                    title: 'Leyenda 03',
+                },
+                {   
+                    field: 'fecha',            
+                    title: 'Fecha',
+                    visible: false
+                },
+                {   
+                    field: 'autor',            
+                    title: 'Autor',
+                    visible: false
                 },
                 {   
                     field: 'acciones',            
@@ -248,8 +255,6 @@ function retornarTablaDatosFactura() {
                     formatter: operateFormatter,
                     events:operateEvents
                 }
-                
-
             ]
           });
     
@@ -262,23 +267,24 @@ function retornarTablaDatosFactura() {
 function operateFormatter(value, row, index){
     return [
         '<a class="editar" title="editar" data-toggle="modal" data-target="#editar" style="cursor:pointer">',
-        '<i class="fa fa-pencil"></i>',
+        '<div><i class="fas fa-pencil-alt fa-lg"></i></div>',
         '</a>  '       
     ].join('');
 }
 function tipoDosificacion(value, row, index) {
     $ret = ''
     if (row.manual == 1) {
-        $ret = '<span class="label label-warning">MAN</span>';
+        $ret = '<div style="font-size:1.5em;"><span class="fas fa-edit manual"></span></div>';
     } else {
-        $ret = '<span class="label label-default">COM</span>';
+        $ret = '<div style="font-size:1.5em; color:Tomato"><span class="fas fa-laptop computarizada"></span></div>';
+        
     }
     return ($ret);
 }
 function estadoDosificacion(value, row, index) {
     $ret = ''
     if (row.enUso == 1) {
-        $ret = '<span class="label label-success">EN USO</span>';
+        $ret = '<div style="font-size:1.5em; color:Green"><span class="fas fa-check-circle en uso"></span></div>';
     } else {
         $ret = '';
     }
