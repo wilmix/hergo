@@ -18,6 +18,7 @@ class Principal extends CI_Controller
 				base_url('assets/bootstrap/js/bootstrap.min.js'),
 				base_url('assets/dist/js/app.min.js'),
 				base_url('assets/plugins/slimscroll/slimscroll.min.js'),
+				
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 			if($this->session->userdata('foto')==NULL)
@@ -36,7 +37,7 @@ class Principal extends CI_Controller
 				    
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
-					
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);

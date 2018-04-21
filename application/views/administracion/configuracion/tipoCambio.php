@@ -6,7 +6,6 @@
                     <div id="toolbar" class="btn-group" >
                         <button class="btn btn-primary text-center btnnuevo" style="margin-bottom :10px" data-toggle="modal" data-target="#modalTipoCambio">Agregar Tipo Cambio</button>
                     </div>
-                
                 <div class="text-center">
                     <h2>TIPO DE CAMBIO</h2>
                 </div>
