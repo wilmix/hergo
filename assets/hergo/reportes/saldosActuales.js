@@ -47,34 +47,40 @@ function retornarSaldosActuales() //*******************************
                         align: 'center'
                     },
                     {   
-                        field: '',            
+                        field: 'laPaz',            
                         title: 'La Paz',
-                        sortable:true
+                        sortable:true,
+                        align: 'right',
+                        formatter: operateFormatter3
                     },
                     {   
-                        field: '',            
+                        field: 'elAlto',            
                         title: 'El Alto',
-                        sortable:true
+                        align: 'right',
+                        sortable:true,
+                        formatter: operateFormatter3
                     },
                     {   
-                        field: '',            
+                        field: 'potosi',            
                         title: 'Potosí',
-                        sortable:true
+                        align: 'right',
+                        sortable:true,
+                        formatter: operateFormatter3
                     },
                     {   
-                        field: '',            
+                        field: 'santacruz',            
                         title: 'Santa Cruz',
-                        sortable:true
-                    },
-                    {   
-                        field: '',            
-                        title: 'Cochabamba',
-                        sortable:true
+                        align: 'right',
+                        sortable:true,
+                        formatter: operateFormatter3
                     },
                     {   
                         field: '',            
                         title: 'Total',
-                        sortable:true
+                        sortable:true,
+                        formatter: tipoFactura,
+                        align: 'right',
+                        //formatter:operateFormatter3
                     }
 
                 ]
@@ -84,9 +90,17 @@ function retornarSaldosActuales() //*******************************
     console.log( "Request Failed: " + err );
     });
  }
-function operateFormatter3(value, row, index)
-{       
+function operateFormatter3(value, row, index) {     
     num=Math.round(value * 100) / 100
     num=num.toFixed(2);
     return (formatNumber.new(num));
 }
+function tipoFactura(value, row, index) {
+    
+    $ret =  parseFloat(row.laPaz) + 
+            parseFloat(row.elAlto) +
+            parseFloat(row.potosi) +
+            parseFloat(row.santacruz);
+    $ret = $ret.toFixed(2);
+    return ($ret);
+  }

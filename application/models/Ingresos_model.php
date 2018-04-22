@@ -593,12 +593,8 @@ class Ingresos_model extends CI_Model
         {
             return false;
         }*/
-<<<<<<< HEAD
-        $sql="call consultarSaldoArticulo1($idArticulo,$idAlmacen)";
-=======
 
         /*$sql="call consultarSaldoArticulo($idArticulo,$idAlmacen)";
->>>>>>> origin/master
         $query= $this->db->query($sql);
         mysqli_next_result($this->db->conn_id);
         if($query->num_rows()>0)

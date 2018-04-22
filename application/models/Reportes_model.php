@@ -64,11 +64,15 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function mostrarSaldos() ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
-		$sql="SELECT CodigoArticulo, Descripcion, unidad.Sigla
-			FROM articulos
-			INNER JOIN unidad ON unidad.idUnidad=articulos.idUnidad
-			INNER JOIN precio ON precio.idArticulo=articulos.idArticulos
-			ORDER BY CodigoArticulo";
+		$sql="SELECT CodigoArticulo, Descripcion, unidad.Sigla, IFNULL(lpz.`saldo`,0) laPaz, IFNULL(ea.`saldo`,0) elAlto, IFNULL(pts.`saldo`,0) potosi, IFNULL(scz.`saldo`,0)santacruz
+		FROM articulos a
+		INNER JOIN unidad ON unidad.idUnidad=a.idUnidad
+		LEFT JOIN saldoarticulos lpz ON lpz.`idArticulo`= a.`idArticulos` AND lpz.`idAlmacen`=1
+		LEFT JOIN saldoarticulos ea ON ea.`idArticulo`= a.`idArticulos` AND ea.`idAlmacen`=2
+		LEFT JOIN saldoarticulos pts ON pts.`idArticulo`= a.`idArticulos` AND pts.`idAlmacen`=3
+		LEFT JOIN saldoarticulos scz ON scz.`idArticulo`= a.`idArticulos` AND scz.`idAlmacen`=4
+		WHERE lpz.`saldo` OR ea.`saldo` OR pts.`saldo` OR scz.`saldo` IS NOT NULL
+		ORDER BY CodigoArticulo";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
