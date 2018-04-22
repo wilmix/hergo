@@ -10,7 +10,7 @@ class Reporte extends CI_Controller {
     $this->load->library('pdf');
  
     // Se obtienen los alumnos de la base de datos
-    $lineas = $this->articulospdf_modelo->obtenerListaArticulos(); //********cambiar nombre de class de modelo
+    $lineas = $this->Articulospdf_modelo->obtenerListaArticulos(); //********cambiar nombre de class de modelo
  
     // Creacion del PDF
  

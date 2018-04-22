@@ -41,6 +41,7 @@ function setTipoCambio()
         data: {},
     }).done(function(res){
         console.log(res.tipoCambio);
+        $('#mostrarTipoCambio').text(res.tipoCambio);
         glob_tipoCambio=res.tipoCambio;
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;

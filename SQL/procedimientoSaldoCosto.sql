@@ -38,3 +38,97 @@ CREATE TEMPORARY TABLE tmp_tabla AS(
        ) AS CONSULTA
 );
 SELECT * FROM tmp_tabla
+
+
+/************kardex********************/
+SET @idArt := 979;
+SET @alm := 1;
+/** ingresos **/
+	SELECT 	 i.`almacen`,
+		 p.`nombreproveedor`,
+		 IF(i.`tipomov`=1,0,i.`fechamov`) AS fecha,
+		 tm.`sigla` tipo,
+		 i.`nmov` AS numMov,
+		 id.`punitario`,
+		 id.`cantidad`,
+		 tm.`operacion`,
+		 tm.`id`
+	FROM ingdetalle id
+		INNER JOIN ingresos i
+		    ON i.`idIngresos`=id.`idIngreso`
+		INNER JOIN tmovimiento tm
+		    ON tm.`id`=i.`tipomov`
+		INNER JOIN provedores p
+		    ON p.`idproveedor`=i.`proveedor`
+	WHERE YEAR(i.`fechamov`)=YEAR(NOW()) /*gestion actual*/
+		AND i.`almacen`=@alm
+		AND i.`anulado`=0
+		and i.`estado`=1
+		AND id.`articulo`=@idArt
+UNION ALL 
+/** FACTURA **/
+	SELECT  f.almacen,
+		c.nombreCliente,
+		`fechaFac`,
+		"FAC" ,
+		f.`nFactura`,
+		fd.`facturaPUnitario`,
+		fd.`facturaCantidad`,
+		"-",
+		10
+	FROM    facturadetalle fd
+		INNER JOIN factura f
+		    ON f.`idFactura`=fd.`idFactura`
+		INNER JOIN clientes c
+		    ON c.idCliente=f.cliente
+	WHERE YEAR(f.`fechaFac`)=YEAR(NOW())/*gestion actual*/
+		AND f.`almacen`=@alm
+		AND f.`anulada`=0
+		AND fd.`articulo`=@idArt
+UNION ALL 
+/** NOTA ENTREGA **/
+	SELECT 	 e.almacen,
+		 c.nombreCliente,
+		 `fechamov`,
+		 tm.`sigla`,
+		 e.`nmov`,
+		 ed.`punitario`,
+		 ed.`cantidad`-ed.`cantFact` candidadNE,
+		 tm.`operacion`,
+		 tm.`id`
+	FROM 	egredetalle ed
+		INNER JOIN egresos e
+		    ON e.`idegresos`=ed.`idegreso`
+		INNER JOIN tmovimiento tm
+		    ON tm.`id`=e.tipomov
+		INNER JOIN clientes c
+		    ON c.idCliente=e.cliente
+	WHERE 	e.`almacen`=@alm
+		AND e.`anulado`=0
+		AND e.`tipomov`= 7
+		AND e.`estado`<>1
+		AND ed.`articulo`=@idArt
+UNION ALL 
+/** TRASPASO Y OTROS **/
+	SELECT 	 e.almacen,
+		 c.nombreCliente,
+		 e.`fechamov`,
+		 tm.`sigla`,
+		 e.`nmov`,
+		 ed.`punitario`,
+		 ed.`cantidad`,
+		 tm.`operacion`,
+		 tm.`id`
+	FROM egredetalle ed
+		INNER JOIN egresos e
+		    ON e.`idegresos`=ed.`idegreso`
+		INNER JOIN tmovimiento tm
+		    ON tm.`id`=e.tipomov
+		INNER JOIN clientes c
+		    ON c.idCliente=e.cliente
+		WHERE YEAR(e.`fechamov`)=YEAR(NOW()) /*gestion actual*/
+		AND e.`almacen`=@alm
+		AND e.`anulado`=0
+		AND e.`tipomov` BETWEEN 8 AND 9
+		AND ed.`articulo`=@idArt
+	ORDER BY  fecha, numMov;
