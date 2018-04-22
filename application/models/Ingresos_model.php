@@ -103,7 +103,7 @@ class Ingresos_model extends CI_Model
             ON a.idalmacen=i.almacen
             INNER JOIN moneda m
             ON i.moneda=m.id
-            INNER JOIN tipoCambio tc
+            INNER JOIN tipocambio tc
             ON i.tipocambio=tc.id
               INNER JOIN traspasos t1
               ON t1.idIngreso=i.idIngresos
@@ -134,7 +134,7 @@ class Ingresos_model extends CI_Model
             ON a.idalmacen=i.almacen
             INNER JOIN moneda m
             ON i.moneda=m.id
-            INNER JOIN tipoCambio tc
+            INNER JOIN tipocambio tc
             ON i.tipocambio=tc.id
             WHERE idIngresos=$id
             ORDER BY i.idIngresos DESC
@@ -199,10 +199,26 @@ class Ingresos_model extends CI_Model
         FROM articulos a
         INNER JOIN unidad u
         ON a.idUnidad=u.idUnidad
-        where CodigoArticulo like '$b%' or Descripcion like '$b%' ORDER By CodigoArticulo asc";
+        where CodigoArticulo like '$b%' 
+        ORDER By CodigoArticulo asc
+        limit 5
+        ";
+        //where CodigoArticulo like '$b%' or Descripcion like '$b%' ORDER By CodigoArticulo asc
 		
 		$query=$this->db->query($sql);
 		return $query;
+    }
+    public function retornarArticulos()
+    {
+        $sql="SELECT a.CodigoArticulo, a.Descripcion, u.Unidad
+        FROM articulos a
+        INNER JOIN unidad u
+        ON a.idUnidad=u.idUnidad       
+        ";
+        //where CodigoArticulo like '$b%' or Descripcion like '$b%' ORDER By CodigoArticulo asc
+        
+        $query=$this->db->query($sql);
+        return $query;
     }
      public function retornarClienteBusqueda($b)
     {
@@ -383,6 +399,7 @@ class Ingresos_model extends CI_Model
     public function retornar_datosArticulo($dato)
     {
     	$sql="SELECT idArticulos from articulos where CodigoArticulo='$dato' LIMIT 1";
+
     	$query=$this->db->query($sql);
     	if($query->num_rows()>0)
     	{
@@ -526,23 +543,10 @@ class Ingresos_model extends CI_Model
     }*/
     public function retornarCosto($idArticulo) /*retorna tabla*/
     {
-      /*  $this->db->trans_start();
-        $sql="call consultarCostoArticulo($idArticulo)";
-
-        $success = $this->db->query($sql);       
-
-        $this->db->trans_complete();
-      
-        if($success->num_rows()>0)
-        {
-            $fila=$success->row();             
-            return $fila;      
-        }
-        else
-        {
-            return false;
-        }*/
-        $sql="call consultarCostoArticulo($idArticulo)";        
+        /***************************/
+        /*** LLAMAR PROCEDIMIENTO**/
+        /*YA NO ES NECESARIO POR AHORA*/
+        /* $sql="call consultarCostoArticulo($idArticulo)";        
         $query= $this->db->query($sql);
         mysqli_next_result($this->db->conn_id);
         if($query->num_rows()>0)
@@ -553,38 +557,68 @@ class Ingresos_model extends CI_Model
         else
         {
             return false;
-        }
-    }
-    public function retornarSaldo($idArticulo,$idAlmacen) /*retorna tabla*/
-    {
-      /*  $this->db->trans_start();
-        $sql="call consultarSaldoArticulo($idArticulo,$idAlmacen)";
-
-        $success = $this->db->query($sql);       
-
-        $this->db->trans_complete();
-      
-        if($success->num_rows()>0)
-        {
-            $fila=$success->row();             
-            return $fila;      
-        }
-        else
-        {
-            return false;
         }*/
-        $sql="call consultarSaldoArticulo($idArticulo,$idAlmacen)";
-        $query= $this->db->query($sql);
-        mysqli_next_result($this->db->conn_id);
-        if($query->num_rows()>0)
+        /*********************************/
+        $sql="SELECT costoPromedioPonderado from articulos where idArticulos=$idArticulo LIMIT 1";        
+        $resultado=$this->db->query($sql);
+        if($resultado->num_rows()>0)
         {
-            $fila=$query->row();             
-            return $fila;      
+            $fila=$resultado->row();
+            return ($fila->costoPromedioPonderado);
         }
         else
         {
-            return false;
+            return 0;
         }
         
     }
+    public function retornarSaldo($idArticulo,$idAlmacen) /*retorna tabla*/
+    {
+        /***************************/
+        /*** LLAMAR PROCEDIMIENTO**/
+        /*YA NO ES NECESARIO POR AHORA*/
+      /*  $this->db->trans_start();
+        $sql="call consultarSaldoArticulo($idArticulo,$idAlmacen)";
+
+        $success = $this->db->query($sql);       
+
+        $this->db->trans_complete();
+      
+        if($success->num_rows()>0)
+        {
+            $fila=$success->row();             
+            return $fila;      
+        }
+        else
+        {
+            return false;
+        }*/
+
+        /*$sql="call consultarSaldoArticulo($idArticulo,$idAlmacen)";
+        $query= $this->db->query($sql);
+        mysqli_next_result($this->db->conn_id);
+        if($query->num_rows()>0)
+        {
+            $fila=$query->row();             
+            return $fila;      
+        }
+        else
+        {
+            return false;
+        }*/
+        $sql="SELECT saldo from saldoarticulos where idArticulo=$idArticulo and idAlmacen=$idAlmacen LIMIT 1";
+        
+        $resultado=$this->db->query($sql);
+        if($resultado->num_rows()>0)
+        {
+            $fila=$resultado->row();
+            return ($fila->saldo);
+        }
+        else
+        {
+            return 0;
+        }
+        
+    }
+    
 }

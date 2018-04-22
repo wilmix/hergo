@@ -73,9 +73,33 @@ class FacturaEgresos_model extends CI_Model
         else
         {
             return false;
-        }    
-
-
-      
+        }         
 	}
+	public function actualizarFparcial_noFacturado($idFactura,$idegresos)
+    {
+        $sql="SELECT fe.id
+		  FROM factura_egresos fe
+		  INNER JOIN factura f
+		  ON fe.idFactura=f.idFactura and fe.idegresos=$idegresos
+		  WHERE f.anulada=0";		  
+ 		//die($sql);
+        $query=$this->db->query($sql);
+        if($query->num_rows()>0)
+        {               
+        	//factura parcial en egresos
+        	$this->parcial_NoFacturado($idFactura,$idegresos,2);            
+        }
+        else
+        {
+        	//no facturado en egresos
+            $this->parcial_NoFacturado($idFactura,$idegresos,0);
+        }
+    }
+    private function parcial_NoFacturado($idFactura,$idegresos, $estado)
+    {
+    	//estado = 0 no facturado
+    	//estado = 2 facturado Parcial
+    	$sql="UPDATE egresos set estado=$estado WHERE idegresos=$idegresos";
+        $query=$this->db->query($sql);
+    }
 }

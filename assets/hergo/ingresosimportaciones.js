@@ -1,10 +1,12 @@
 var glob_factorIVA=0.87;
 var glob_factorRET=0.087;
-var loc_almacen;
-$(document).ready(function(){    
-    loc_almacen= $("#almacen_imp").val();    
-})
 
+var loc_almacen;
+
+$(document).ready(function(){    
+    loc_almacen= $("#almacen_imp").val();   
+    cargarArticulos(); 
+})
 
 $(document).on("change","#almacen_imp",function(){
 
@@ -67,7 +69,7 @@ $(document).ready(function(){
        /********/
         $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
         glob_agregar=false;
-        $.ajax({
+       /* $.ajax({
             url: base_url("index.php/Ingresos/retornararticulos"),
             dataType: "json",
             data: {
@@ -78,7 +80,19 @@ $(document).ready(function(){
                $("#cargandocodigo").hide(150)
               
             }
-          });        
+          });    */
+        /********************/    
+        var busqueda=request.term.trim()
+        if(busqueda.length > 1)
+        {
+            var ExpReg = new RegExp( busqueda ,"i");        
+            response(glob_art.fuzzy(ExpReg));    
+        }
+        
+        $("#cargandocodigo").hide(150);
+              
+        
+        /********************/    
     }, 
      /* focus: function( event, ui ) {
           //$(".solicitanuevo").val( ui.item.nombre );//si se instancio como indice un valor en este caso array("nombre"=> "valor")

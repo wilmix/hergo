@@ -31,7 +31,7 @@ $(document).ready(function()
     setTipoCambio();
 })
 var glob_tipoCambio=0; 
-  
+var glob_art=[];  
 function setTipoCambio()
 {
      $.ajax({
@@ -338,3 +338,59 @@ function codigoControl(res,datos)
             })
         })
     }
+/*****************************************************************/
+/*****************************************************************/
+/*****************************************************************/
+    Array.prototype.regIndexOf = function (rx) {
+        for (var i in this) {
+            if (this[i].toString().match(rx)) {
+                return i;
+            }
+        }
+        return -1;
+    };
+    /**
+     * Fuzzy Search in a Collection
+     *
+     * @param search Regex that represents what is going to be searched
+     * @return {Array} ArrayObject with an object of what we are looking for
+     */
+    Array.prototype.fuzzy = function(search) {
+        var _return = [];
+        /**
+         * Runs deep the object, to his last nodes and returns an array with all the values.
+         *
+         * @param object Object that is going to be analized
+         * @return {Array} with all the values of the object at the same level
+         */
+        var recursive = function(object) {
+            return _.map(object, function (obj, key) {
+                if (typeof obj !== 'object') {
+                    return obj.toString();
+                } else {
+                    return recursive(obj);
+                }
+            });
+        };
+        // Search inside the flatten array which was returned by recursive
+        _.each(recursive(this), function (obj, key) {
+            if (obj.regIndexOf(search) > -1) {
+                _return.push(this[key]);
+            }
+        }, this);
+        return _return;
+    };
+/*****************************************************************/
+/*****************************************************************/
+/*****************************************************************/
+function cargarArticulos()
+{
+    $.ajax({
+        url: base_url("index.php/Ingresos/retornarTodosArticulos"),
+        dataType: "json",        
+        success: function(data) {
+          glob_art=data;
+         
+        }
+      });  
+}

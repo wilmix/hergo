@@ -37,6 +37,7 @@ class Ingresos extends CI_Controller
         		base_url('assets/plugins/daterangepicker/moment.min.js'),
         		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
         		base_url('assets/sweetalert/sweetalert2.min.js'),
+        		base_url('assets/busqueda/underscore-min.js'),
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 			if($this->session->userdata('foto')==NULL)
@@ -537,14 +538,15 @@ class Ingresos extends CI_Controller
 		$ca=$this->Ingresos_model->retornarCosto($idArticulo);
 		$sa=$this->Ingresos_model->retornarSaldo($idArticulo,$idAlmacen);
 		$obj=new StdClass();
-		
-		if($ca)
-			$obj->nprecionu=$ca->punitarioSaldo;			
+
+		//$obj->nprecionu=$ca->punitarioSaldo;			
+		if($ca)			
+			$obj->nprecionu=$ca;
 		else			
 			$obj->nprecionu=0;
-					
-		if($sa)
-			$obj->ncantidad=$sa->saldo;
+		//$obj->ncantidad=$sa->saldo;		
+		if($sa)			
+			$obj->ncantidad=$sa;
 		else
 			$obj->ncantidad=0;
 		
@@ -561,7 +563,8 @@ class Ingresos extends CI_Controller
 		$obj=new StdClass();
 		
 		if($sa)
-			$obj->ncantidad=$sa->saldo;			
+			//$obj->ncantidad=$sa->saldo;			
+			$obj->ncantidad=$sa;		
 		else			
 			$obj->ncantidad=0;
 		if($precio)
@@ -583,6 +586,20 @@ class Ingresos extends CI_Controller
         {
         	$b = $this->security->xss_clean($this->input->get('b'));
         	$dato=$this->Ingresos_model->retornarArticulosBusqueda($b);        	
+
+			echo json_encode($dato->result_array());
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+    }
+    public function retornarTodosArticulos()
+    {
+        if($this->input->is_ajax_request())
+        {
+        	
+        	$dato=$this->Ingresos_model->retornarArticulos();        	
 
 			echo json_encode($dato->result_array());
 		}

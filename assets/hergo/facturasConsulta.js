@@ -261,24 +261,36 @@ window.eventosBotones = {
 
     },
     'click .anularFactura': function (e, value, row, index) {         
-    swal({
-      title: "Esta seguro?",
-      text: "Se anulara la factura seleccionada",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
-      confirmButtonText: "Si, continuar",
-      cancelButtonText: "Cancelar",
-  
-    },
-    function(){
-      anularFactura(row);
-    }); 
+     
+     /*   swal({
+          title: '',
+          text: "Se anulara la factura seleccionadahghghg",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#DD6B55',          
+          confirmButtonText: 'Si, continuar',
+          cancelButtonText: "Cancelar",
+        }).then((result) => {       
+             anularFactura(row); 
+          
+        })*/
+        swal({
+          title: 'Esta seguro?',
+          text: 'Se anulara la factura seleccionada',         
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Aceptar',
+          cancelButtonText:'Cancelar',                
+        }).then(function () {
+           anularFactura(row); 
+           agregarcargando(); 
+        })
         
     },      
 };
 function anularFactura(row)
 {
+
      var data={
         idFactura:row.idFactura
     }
@@ -287,7 +299,8 @@ function anularFactura(row)
         url: base_url('index.php/Facturas/anularFactura'),
         dataType: "json",
         data:data
-    }).done(function(res){        
+    }).done(function(res){    
+
        retornarTablaFacturacion();
       
     }).fail(function( jqxhr, textStatus, error ) {

@@ -3,7 +3,8 @@ var glob_factorRET=0.087;
 var loc_almacen;
 
 $(document).ready(function(){    
-    loc_almacen= $("#almacen_imp").val();    
+    loc_almacen= $("#almacen_imp").val();   
+    cargarArticulos();  
 })
 $(document).on("change","#almacen_imp",function(){
 
@@ -96,10 +97,17 @@ $( function() {
       autoFocus: true,
       source: function (request, response) {        
         $("#cargandocodigo").show(150)
+         $("#Descripcion_imp").val("");
+       $("#cantidad_imp").val("");
+       $("#punitario_imp").val("");
+       $("#constounitario").val("");
+       $("#unidad_imp").val("");
+       $("#costo_imp").val("");
+       $("#saldo_imp").val("");
         $("#Descripcion_imp").val('');
         $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
         glob_agregar=false;
-        $.ajax({
+       /* $.ajax({
             url: base_url("index.php/Ingresos/retornararticulos"),
             dataType: "json",
             data: {
@@ -110,7 +118,17 @@ $( function() {
                $("#cargandocodigo").hide(150)
               
             }
-          });        
+          });    */
+           /********************/    
+        var busqueda=request.term.trim()
+        if(busqueda.length > 1)
+        {
+            var ExpReg = new RegExp( busqueda ,"i");        
+            response(glob_art.fuzzy(ExpReg));    
+        }
+        
+        $("#cargandocodigo").hide(150);
+                  
     }, 
 
       select: function( event, ui ) {
