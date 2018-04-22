@@ -34,9 +34,10 @@ class Egresos_model extends CI_Model
             LEFT JOIN factura_egresos fe
             ON e.idegresos=fe.idegresos
             left JOIN factura f
-            ON f.idFactura=fe.idFactura
+            ON (f.idFactura=fe.idFactura and f.anulada=0)
             WHERE DATE(e.fechamov)
             BETWEEN '$ini' AND '$fin' and e.almacen like '%$alm' and t.id like '%$tin'  
+
             GROUP BY d.idingdetalle 
           
                 ) tabla    
@@ -44,7 +45,7 @@ class Egresos_model extends CI_Model
             GROUP BY tabla.idegresos
             ORDER BY tabla.idEgresos DESC				
             ";
-            //die($sql);
+           
         }
         else/*REVISAR!!!!!!!!!!!!!!!!!!SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
                 (SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio

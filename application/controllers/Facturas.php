@@ -673,8 +673,10 @@ class Facturas extends CI_Controller
 
 			$this->Facturacion_model->anularFactura($idFactura);
 			$this->actualizarRestarCantFact($idFactura);
-			$this->actualizarEstado($facturaEgresos->idegresos);
+		//	$this->actualizarEstado($facturaEgresos->idegresos);
 
+			/******actualizar estado en egreso****/
+			$this->FacturaEgresos_model->actualizarFparcial_noFacturado($idFactura,$facturaEgresos->idegresos);
 			echo json_encode(1);
 		}
 		else

@@ -38,6 +38,7 @@ class Egresos extends CI_Controller
         		base_url('assets/plugins/daterangepicker/moment.min.js'),
         		base_url('assets/plugins/slimscroll/slimscroll.min.js'),        		
         		base_url('assets/sweetalert/sweetalert2.min.js'),
+        		base_url('assets/busqueda/underscore-min.js'),
 
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
@@ -435,7 +436,7 @@ class Egresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	public function retornararticulos()
+	public function retornarClientes()
     {
         if($this->input->is_ajax_request() && $this->input->get('b'))
         {

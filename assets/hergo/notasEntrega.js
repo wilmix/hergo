@@ -4,7 +4,8 @@ var loc_almacen;
 var glob_guardar=false;
 var glob_precio_egreso=0;
 $(document).ready(function(){    
-    loc_almacen= $("#almacen_imp").val();    
+    loc_almacen= $("#almacen_imp").val();
+    cargarArticulos();    
 })
 $(document).on("change","#almacen_imp",function(){
 
@@ -57,10 +58,13 @@ $( function() {
       autoFocus: true,
       source: function (request, response) {        
         $("#cargandocliente").show(150)        
+
+
         $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+
         glob_guardar=false;
         $.ajax({
-            url: base_url("index.php/Egresos/retornararticulos"),
+            url: base_url("index.php/Egresos/retornarClientes"),
             dataType: "json",
             data: {
                 b: request.term
@@ -71,6 +75,7 @@ $( function() {
               
             }
           });        
+       
     }, 
 
       select: function( event, ui ) {       
@@ -99,8 +104,16 @@ $( function() {
         $("#cargandocodigo").show(150)
         $("#Descripcion_imp").val('');
         $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+
+        $("#Descripcion_ne").val("");
+        $("#cantidad_ne").val("");
+        $("#punitario_ne").val("");
+        $("#descuento_ne").val("");
+        $("#unidad_ne").val("");
+        $("#costo_ne").val("");
+        $("#saldo_ne").val("");
         glob_agregar=false;
-        $.ajax({
+        /*$.ajax({
             url: base_url("index.php/Ingresos/retornararticulos"),
             dataType: "json",
             data: {
@@ -111,7 +124,22 @@ $( function() {
                $("#cargandocodigo").hide(150)
               
             }
-          });        
+          });        */
+          /********************/    
+        var busqueda=request.term.trim()
+
+        if(busqueda.length > 1)
+        {
+            var ExpReg = new RegExp( busqueda ,"i");        
+            response(glob_art.fuzzy(ExpReg));    
+          
+        }
+        
+        $("#cargandocodigo").hide(150);
+              
+              
+        
+        /********************/  
     }, 
 
       select: function( event, ui ) {

@@ -40,7 +40,8 @@ class Traspasos extends CI_Controller
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
         		base_url('assets/plugins/daterangepicker/moment.min.js'),
         		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
-        		base_url('assets/sweetalert/sweetalert2.min.js'),        		
+        		base_url('assets/sweetalert/sweetalert2.min.js'),     
+        		base_url('assets/busqueda/underscore-min.js'),   		
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 			if($this->session->userdata('foto')==NULL)
@@ -246,6 +247,7 @@ class Traspasos extends CI_Controller
         	$datos['idegreso'] = $this->security->xss_clean($this->input->post('idEgreso'));
         	$datos['idingreso'] = $this->security->xss_clean($this->input->post('idIngreso'));
 
+
         	$totalTabla=$this->retornarTotal($datos['tabla']);
 
 
@@ -258,6 +260,7 @@ class Traspasos extends CI_Controller
 	    	$egreso['idCliente'] = 1801;
 	    	$egreso['pedido_ne'] = $datos['pedido_ne'];
 	    	$egreso['obs_ne'] = $datos['obs_ne'];
+	    	$egreso['vendedor']=0;
 	    	$egreso['tabla']=$this->convertirTablaEgresos($datos['tabla']);
 
 			$this->Egresos_model->actualizarmovimiento_model($egreso);
