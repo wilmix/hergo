@@ -17,7 +17,7 @@ th:hover .filterControl {
 </style> -->
 
       <div id="toolbar" class="btn-group">
-          <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("index.php/reporte") ?>" target="_blank"><span class="glyphicon glyphicon-print"></span></a>
+          <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("index.php/pdf/articulos_pdf") ?>" target="_blank"><span class="glyphicon glyphicon-print"></span></a>
           <button class="btn btn-default text-center btnnuevo" style="margin-bottom :10px" data-toggle="modal" data-target="#modalarticulo">Agregar nuevo Artículo</button>
 
       </div>

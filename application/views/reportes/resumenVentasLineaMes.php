@@ -4,6 +4,7 @@
       <div class="container">
         <div class="box-body">
             <div id="toolbar2" class="form-inline">
+
             <button  type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
               <span>
                 <i class="fa fa-calendar"></i> Fecha
@@ -16,6 +17,10 @@
                 <?php endforeach ?>
                 <option value="">TODOS</option>
               </select>
+            </div>
+              <div class="text-center">
+              <h2>RESUMEN VENTAS LINEA MES - <span id="tituloAlmacen"></span></h2>
+              <h4 id="ragoFecha"></h4>
             </div>
             <table 
               id="tablaResumenVentasLineaMes" 

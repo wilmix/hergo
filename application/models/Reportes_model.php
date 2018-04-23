@@ -71,7 +71,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		LEFT JOIN saldoarticulos ea ON ea.`idArticulo`= a.`idArticulos` AND ea.`idAlmacen`=2
 		LEFT JOIN saldoarticulos pts ON pts.`idArticulo`= a.`idArticulos` AND pts.`idAlmacen`=3
 		LEFT JOIN saldoarticulos scz ON scz.`idArticulo`= a.`idArticulos` AND scz.`idAlmacen`=4
-		WHERE lpz.`saldo` OR ea.`saldo` OR pts.`saldo` OR scz.`saldo` IS NOT NULL
+		WHERE lpz.`saldo` OR ea.`saldo` OR pts.`saldo` OR scz.`saldo` IS NOT NULL 
 		ORDER BY CodigoArticulo";
 		$query=$this->db->query($sql);		
 		return $query;
