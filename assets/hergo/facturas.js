@@ -426,6 +426,9 @@ function mostrarTablaFactura()
                                 if(!$.isNumeric(value))
                                 {
                                     return 'El campo es numerico';
+                                }
+                                if(value<0 || value==0) {
+                                    return 'no puede ser igual o menor a 0';   
                                 }                            
                             },
                           //  display: formatoMoneda,
@@ -966,9 +969,9 @@ function validateNum(value) {
     {
         return 'Debe ingresar un numero';
     }
-    if(value<0)
+    if(value<0 || value==0)
     {
-        return 'no puede ser menor a 0';   
+        return 'no puede ser igual o menor a 0';   
     }    
                             
     var data=$("#tabla3Factura").bootstrapTable('getData');

@@ -36,10 +36,11 @@ $(document).ready(function(){
             startDate: start,
             endDate: end,
             ranges: {
-               'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
-               "Hace un Año": [moment().subtract(1, 'year').startOf('year'),moment().subtract(1, 'year').endOf('year')],
-               'Hace dos Años': [moment().subtract(2, 'year').startOf('year'),moment().subtract(2, 'year').endOf('year')],
-               'Hace tres Años': [moment().subtract(3, 'year').startOf('year'),moment().subtract(3, 'year').endOf('year')],               
+                'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
+                'Mes Actual': [moment().subtract(0, 'month').startOf('month'), moment().subtract(0, 'month').endOf('month')],
+                'Hace un Mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                'Hace dos Meses': [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
+                'Hace tres Meses': [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],               
             }
         }, cb);
 
@@ -83,6 +84,8 @@ function retornarVentasLineaMes() //*******************************
                     search:true,
                     searchOnEnterKey:true,
                     showColumns:true,
+                    showFooter: true,
+                    footerStyle: footerStyle,
                     filter:true,
                     showExport:true,
                     exportTypes:['xlsx'],
@@ -103,6 +106,7 @@ function retornarVentasLineaMes() //*******************************
                         field: 'Sigla',            
                         title: 'Sigla',
                         sortable:true,
+                        align: 'center'
 
                     },
                     {
@@ -114,7 +118,8 @@ function retornarVentasLineaMes() //*******************************
                         field: 'total',
                         title: 'Total',
                         align: 'right',
-                        formatter: operateFormatter3
+                        formatter: operateFormatter3,
+                        footerFormatter: sumaColumna
                     }
                 ]
             });
@@ -123,9 +128,29 @@ function retornarVentasLineaMes() //*******************************
     console.log( "Request Failed: " + err );
     });
  }
-function operateFormatter3(value, row, index)
-{       
+function operateFormatter3(value, row, index) {       
     num=Math.round(value * 100) / 100
     num=num.toFixed(2);
     return (formatNumber.new(num));
 }
+function footerStyle(value, row, index) {
+    return {
+      css: {
+        "font-weight": "bold",
+        "border-top": "3px solid white",
+        "border-bottom": "3px solid white",
+        "text-align": "right",
+        "padding": "15px",
+        "background-color": "#3c8dbc",
+        "color": "white"
+      }
+    };
+  }
+
+  function sumaColumna(data) {
+    field = this.field;
+    let totalSum = data.reduce(function (sum, row) {
+      return sum + (+row[field]);
+    }, 0);
+    return (formatNumber.new(totalSum.toFixed(2)));
+  }
