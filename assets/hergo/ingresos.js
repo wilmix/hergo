@@ -476,6 +476,8 @@ window.operateEvents = {
     },
     'click .imprimirIngreso': function (e, value, row, index) {
         //alert(JSON.stringify(row));
+        let imprimir = base_url("pdf/compraslocales_pdf/index/") + row.idIngresos;
+        window.open(imprimir);
     }
 };
 
