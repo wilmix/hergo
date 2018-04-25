@@ -7,14 +7,18 @@
 class ComprasLocales_pdf extends CI_Controller {
  
   public function index($id=null) {
-
-        $this->load->model('Ingresos_model');    //********cambiar nombre de modelo
-        $this->load->library('ingresopdf/pdf');
-
-        $lineas = $this->Ingresos_model->mostrarDetalle($id); //********cambiar nombre de class de modelo
+        $this->load->model('Ingresos_model');
         $ingreso = $this->Ingresos_model->mostrarIngresos($id)->row();
 
-        $this->pdf = new Pdf();
+        $params = array('tipo' => $ingreso->tipomov, 'numeroIngreso' => $ingreso->n);
+
+        
+        $this->load->library('ingresopdf/pdf', $params);
+
+        $lineas = $this->Ingresos_model->mostrarDetalle($id); //********cambiar nombre de class de modelo
+        
+
+        $this->pdf = new Pdf($params);
         /*echo '<pre>';
         print_r ($lineas);
         echo '</pre>';*/

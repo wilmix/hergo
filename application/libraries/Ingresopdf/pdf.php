@@ -4,14 +4,17 @@
     
     //Extendemos la clase Pdf de la clase fpdf para que herede todas sus variables y funciones
     class Pdf extends FPDF {
-        public function __construct(){
+        private $datos = array();
+        public function __construct($params){
            parent::__construct();
-    
+           $this->datos = $params;
+
         }
 
         //CellFitSpace( ) 
         // El encabezado del PDF
         public function Header() {
+            $tipo = $this->datos['tipo'];
             $ci = & get_instance();
             $ci->load->model("Ingresos_model");
             $ingreso = $ci->Ingresos_model->mostrarIngresos(10090)->row();
@@ -24,13 +27,13 @@
             $this->Cell(50, 33, $ingreso->almacen, 0,0,'C');
             $this->SetFont('Arial','B',18);
             $this->Cell(35);
-            $this->Cell(80,10, 'NOTA DE INGRESOS',0,0,'C'); //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
+            $this->Cell(80,10, 'titulo',0,0,'C'); //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
             $this->Ln(8);
                 //****TITULO*****
             //TIPO DE INGRESO
             $this->SetFont('Arial','BU',15);
             $this->Cell(85);
-            $this->Cell(80,10, $ingreso->tipomov,0,0,'C');
+            $this->Cell(80,10, $tipo,0,0,'C');
             $this->Ln(5);
 
             //fecha de movimiento
