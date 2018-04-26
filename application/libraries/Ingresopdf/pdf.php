@@ -6,117 +6,95 @@
     class Pdf extends FPDF {
         private $datos = array();
         public function __construct($params){
-           parent::__construct();
-           $this->datos = $params;
-
+            parent::__construct();
+            $this->datos = $params;
         }
-
         //CellFitSpace( ) 
         // El encabezado del PDF
         public function Header() {
             $tipo = $this->datos['tipo'];
-            $ci = & get_instance();
-            $ci->load->model("Ingresos_model");
-            $ingreso = $ci->Ingresos_model->mostrarIngresos(10090)->row();
-            $fechaMovimiento = date('d/m/Y',strtotime($ingreso->fechamov));
+            $numeroIngreso = $this->datos['numeroIngreso'];
+            $fechaMovimiento = date('d/m/Y',strtotime($this->datos['fechamov']));
+            $almacen = $this->datos['almacen'];
+            $moneda = $this->datos['moneda'];
+            $proveedor = $this->datos['proveedor'];
+            $nfact = $this->datos['nfact'];
+            $nIngreso = $this->datos['nIngreso'];
+            $ordenCompra = $this->datos['ordenCompra'];
+            $sigla = $this->datos['sigla'];
 
             $this->SetY(10);
             $this->SetX(10);
             $this->Image('images/hergo.jpeg', 10, 10, 45 );
             $this->SetFont('Arial','B',10);
-            $this->Cell(50, 33, $ingreso->almacen, 0,0,'C');
-            $this->SetFont('Arial','B',18);
-            $this->Cell(35);
-            $this->Cell(80,10, 'titulo',0,0,'C'); //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
-            $this->Ln(8);
-                //****TITULO*****
-            //TIPO DE INGRESO
-            $this->SetFont('Arial','BU',15);
-            $this->Cell(85);
-            $this->Cell(80,10, $tipo,0,0,'C');
-            $this->Ln(5);
-
-            //fecha de movimiento
-            $this->SetY(8);
-            $this->SetX(200);
-            $this->Cell(10);
-            $this->SetFont('Times','i',12);
-            $this->Cell(25, 10, 'Nro Movimiento: ', 0,0,'R');
-            $this->Cell(25, 10, $ingreso->n, 0,0,'L');
-            //tipo de moneda
-            $this->SetY(13);
-            $this->SetX(200);
-            $this->Cell(10);
-            $this->SetFont('Times','i',11);
-            $this->Cell(25, 10, 'Fecha Mov: ', 0,0,'R');
-            $this->Cell(25, 10, $fechaMovimiento, 0,0,'L');
+            $this->SetXY(15,20);
+            $this->Cell(40,6, $almacen,0,0,'C');
             
-            // n movimiento
-            $this->SetY(18);
-            $this->SetX(200);
-            $this->Cell(10);
-            $this->SetFont('Times','i',11);
-            $this->Cell(25, 10, 'Moneda: ', 0,0,'R');
-            $this->Cell(25, 10, $ingreso->monedasigla, 0,0,'L');
+            $this->SetFont('Arial','B',10);
+            $this->SetXY(10,10);
+            $this->SetFont('Arial','B',18);
+            $this->Cell(0,8, 'NOTA DE INGRESOS',0,1,'C'); //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
+            /*$this->SetFont('Arial','B',13);
+            $this->Cell(0,6, $almacen,0,1,'C');*/
+            $this->SetFont('Arial','BU',15);
+            $this->Cell(0,8, $tipo,0,0,'C');
+
+
+            $this->SetXY(220,12);
+            $this->SetFont('Arial','B',15);
+            $this->Cell(45,8, $sigla . " - " .$numeroIngreso,1,1,'C');
+            $this->SetXY(220,20);
+            $this->SetFont('Arial','B',12);
+            $this->Cell(45,8, $fechaMovimiento,1,0,'C');
+            $this->Ln(10);
+
             
             //****ENCABEZADO****
-            $this->Ln(10);
+            
             $this->SetX(15);
-            $this->SetFont('Arial','',9);
-            // almacen
-            $this->Cell(30,10, 'Almacen: ',0,0,'');
-            $this->Cell(30, 10, $ingreso->almacen, 0,0,'L');
-            $this->Cell(30);
+            $this->SetFont('Arial','',10);
             //proveedor
-            $this->Cell(30,10, 'Proveedor: ',0,0,'');
-            $this->Cell(50, 10, $ingreso->nombreproveedor, 0,0,'L');
-            $this->Cell(25);
+            $this->Cell(20,10, 'Proveedor: ',0,0,'');
+            $this->Cell(85, 10, $proveedor, 0,0,'L');
             //factura
-            $this->Cell(30,10, 'Factura: ',0,0,'');
-            $this->Cell(20, 10, $ingreso->nfact, 0,0,'R');
-            $this->Ln(5);
-            $this->SetX(15);
-            $this->SetFont('Arial','',9);
-            //tipo movimiento
-            $this->Cell(30,10, 'Tipo Movimiento: ',0,0,'');
-            $this->Cell(30, 10, $ingreso->tipomov, 0,0,'L');
-            $this->Cell(30);
+            $this->Cell(20,10, 'Factura: ',0,0,'');
+            $this->Cell(20, 10, $nfact, 0,0,'L');
             // N° ingreso
-            $this->Cell(30,10, 'Nro Ingreso: ',0,0,'');
-            $this->Cell(50, 10, $ingreso->ningalm, 0,0,'L');
-            $this->Cell(25);
+            $this->Cell(25,10, 'Nro Ingreso: ',0,0,'');
+            $this->Cell(20, 10, $nIngreso, 0,0,'L');
             // Orden de compra
-            $this->Cell(30,10, 'Orden Compra: ',0,0,'');
-            $this->Cell(20, 10, $ingreso->ordcomp, 0,1,'R');
+            $this->Cell(25,10, 'Orden Compra: ',0,0,'');
+            $this->Cell(20, 10, $ordenCompra, 0,1,'L');
         // $this->Ln(10);
             //ENCABEZADO TABLA
             $this->SetX(10);
-            $this->SetFillColor(232,232,232);
+            $this->SetFillColor(255,255,255);
             $this->SetFont('Arial','B',9); 
-            $this->Cell(7,7,'N',1,0,'C',1);
-            $this->Cell(20,7,'CANTIDAD',1,0,'R',1);
-            $this->Cell(10,7,'UNID',1,0,'C',1);
-            $this->Cell(20,7,'CODIGO',1,0,'C',1);  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
-            $this->Cell(80,7,'DESCRIPCION',1,0,'C',1);
-            $this->Cell(30,7,'P/U',1,0,'R',1);
-            $this->Cell(30,7,'TOTAL DOC',1,0,'R',1);
-            $this->Cell(30,7,'P/U',1,0,'R',1);
-            $this->Cell(30,7,'TOTAL ',1,0,'R',1);
+            $this->Cell(173,6,'',0,0,'C',1);
+            $this->SetFillColor(232,232,232);
+            $this->Cell(40,6,'DOCUMENTO',1,0,'C',1);
+            $this->Cell(40,6,'INVENTARIO ',1,0,'C',1);
+            $this->Ln(6);
+            $this->Cell(7,6,'N',1,0,'C',1);
+            $this->Cell(18,6,'CANT',1,0,'c',1);
+            $this->Cell(10,6,'UNID',1,0,'C',1);
+            $this->Cell(18,6,'CODIGO',1,0,'C',1);  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
+            $this->Cell(120,6,'DESCRIPCION',1,0,'C',1);
+            $this->Cell(20,6,'P/U',1,0,'R',1);
+            $this->Cell(20,6,'TOTAL',1,0,'R',1);
+            $this->Cell(20,6,'P/U',1,0,'R',1);
+            $this->Cell(20,6,'TOTAL ',1,0,'R',1);
             $this->Ln(8);
        }
 
        // El pie del pdf
         public function Footer(){
-            $ci = & get_instance();
-            $ci->load->model("Ingresos_model");
-            $ingreso = $ci->Ingresos_model->mostrarIngresos(10090)->row();
-            
+            $observacion = $this->datos['observacion'];
             //posicion a 1.5 cm del final
             $this->SetFont('Arial','I', 10);
             $this->SetY(-20);
             $this->Cell(30,10, 'Observaciones: ',0,0,'L');
-            $this->Cell(220, 10, $ingreso->obs, 0,0,'L');
-
+            $this->Cell(210, 10, $observacion, 0,0,'L');
             $this->SetY(-12);
             //fuente
             $this->SetFont('Arial','I', 8);
