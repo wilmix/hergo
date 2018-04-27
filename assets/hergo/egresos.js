@@ -476,8 +476,10 @@ window.operateEvents = {
             swal("Error", "No se puede editar el registro seleccionado. El registro ya se encuentra Facturado.", "error")
         }
     },
-    'click .imprimirIngreso': function (e, value, row, index) {
+    'click .imprimirEgreso': function (e, value, row, index) {
         //alert(JSON.stringify(row));
+        let imprimir = base_url("pdf/Egresos/index/") + row.idEgresos;
+        window.open(imprimir);
     }
 };
 
