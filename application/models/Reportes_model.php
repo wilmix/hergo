@@ -83,7 +83,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 			INNER JOIN clientes ON clientes.idCliente = factura.cliente
 			WHERE fechaFac BETWEEN '$ini' AND '$fin'
 			AND factura.almacen LIKE '%$alm'
-			AND factura.anulada = 1
+			AND factura.anulada = 0
 			GROUP BY clientes.nombreCliente
 			ORDER BY total DESC";
 		
