@@ -51,6 +51,38 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function mostrarFacturasPendientesPago($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
+	{ //cambiar la consulta
+		$sql="SELECT * FROM
+		(SELECT f.`lote` lote, a.`almacen` alm, f.`fecha` fecha,f.`nFactura` nFac,c.`nombreCliente` cliente, 
+			f.`total` totalFactura,NULL  ,f.`glosa`,  IFNULL((`f`.`total` - `p`.`montoPago`),'noPagado') pagada
+		FROM factura f
+		INNER JOIN clientes c ON c.`idCliente`= f.`cliente`
+		INNER JOIN almacenes a ON a.`idalmacen` = f.`almacen`
+		LEFT JOIN pagos p ON p.`idFactura` = f.`idFactura`
+		WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin'
+		AND IFNULL((`f`.`total` - `p`.`montoPago`),'noPagado')='noPagado' 
+		AND f.`anulada` = 0 
+		AND f.`pagada` = 0
+		AND f.`almacen` LIKE '%$alm'
+		UNION ALL
+		SELECT f.`lote`, a.`almacen`, p.`fechaPago`,f.`nFactura`,c.`nombreCliente`, 
+			  f.`total` , p.`montoPago` , p.`glosaPago`, IFNULL((`f`.`total` - `p`.`montoPago`),'noPagado') pagada
+		FROM factura f
+		INNER JOIN clientes c ON c.`idCliente`= f.`cliente`
+		INNER JOIN almacenes a ON a.`idalmacen` = f.`almacen`
+		LEFT JOIN pagos p ON p.`idFactura` = f.`idFactura`
+		WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin'
+		AND IFNULL((`f`.`total` - `p`.`montoPago`),'noPagado') > 0
+		AND f.`anulada` = 0 
+		AND f.`pagada` = 0
+		AND p.`almacen` LIKE '%$alm') AS noPagadas
+		
+		ORDER BY cliente, fecha";
+		
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 	public function mostrarListaPrecios() ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
 		$sql="SELECT CodigoArticulo, Descripcion, unidad.Sigla, precio.precio AS Bolivianos, precio.precio/6.96 AS Dolares

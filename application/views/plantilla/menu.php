@@ -139,6 +139,7 @@
           <ul class="treeview-menu">
             <li><a href="<?php echo base_url("reportes/listaPrecios") ?>">Lista de Precios</a></li>
             <li><a href="<?php echo base_url("reportes/saldosActuales") ?>">Saldos Actuales</a></li>
+            <li><a href="<?php echo base_url("reportes/facturasPendietesPago") ?>">Facturas Pendientes Pago</a></li>
             <li><a href="<?php echo base_url("reportes/resumenVentasLineaMes") ?>">Resumen de Ventas Linea Mes</a></li>
             <li><a href="<?php echo base_url("reportes/notasEntregaPorFacturar") ?>">Notas de Entrega por Facturar</a></li>
             <li><a href="<?php echo base_url("reportes/facturacionClientes") ?>">Facturacion Clientes</a></li>
@@ -151,7 +152,7 @@
             <li><a href="<?php echo base_url("reportes/kardexIndividualValorado") ?>">Kardex Individual Valorado</a></li>
             <li><a href="<?php echo base_url("reportes/kardexIndividual") ?>">Kardex Individual Itemes</a></li>
             <li><a href="<?php echo base_url("reportes/kardexIndividualClientes") ?>">Kardex Individual Clientes</a></li>
-            <li><a href="<?php echo base_url("reportes/facturasPendietesPago") ?>">Facturas Pendientes Pago</a></li>-->
+            -->
           </ul>
         </li>
         <li class="treeview">
