@@ -25,11 +25,8 @@
 
          <table class="table table-condensed" class="table table-striped"
             data-toggle="table"
-            data-height="550"
             id="facturasConsulta"
-            data-toolbar="#toolbar2"
-            data-mobile-responsive="true"
-            data-show-columns="true">
+            data-toolbar="#toolbar2">
           </table>
 
       </div>

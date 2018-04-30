@@ -33,11 +33,12 @@ class FacturaEgresos_model extends CI_Model
 		$sql="
 		SELECT *, GROUP_CONCAT(DISTINCT e.nmov
 					ORDER BY e.nmov ASC
-					SEPARATOR ' - ') as movimientos
+					SEPARATOR ' - ') as movimientos, df.manual
 		FROM factura_egresos fe 
 		INNER JOIN egresos e on e.idegresos=fe.idegresos
 		INNER JOIN factura f on f.idFactura=fe.idFactura
 		INNER JOIN tmovimiento t on e.tipomov=t.id
+		INNER JOIN datosfactura df on df.idDatosFactura = f.lote
 		WHERE f.fechaFac
 		BETWEEN '$ini' AND '$fin'";        
         if($alm>0)         
@@ -47,7 +48,7 @@ class FacturaEgresos_model extends CI_Model
        
             $sql.="
              GROUP BY fe.idFactura
-            ORDER BY f.idFactura DESC
+            ORDER BY f.lote, f.nFactura  DESC
             ";
        // die($sql);
        

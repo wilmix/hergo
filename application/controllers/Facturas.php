@@ -28,6 +28,7 @@ class Facturas extends CI_Controller
 				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
 				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
 				base_url('assets/sweetalert/sweetalert2.min.css'),
+				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),	
 
 			);
 		$this->cabecera_script=array(
@@ -46,6 +47,7 @@ class Facturas extends CI_Controller
         		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
 				base_url('assets/sweetalert/sweetalert2.min.js'),        		
 				base_url('assets/plugins/numeral/numeral.min.js'),
+				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
 
 			);
 		$this->foot_script=array(				

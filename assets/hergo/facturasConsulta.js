@@ -83,9 +83,11 @@ function retornarTablaFacturacion()
             data:res,
             striped:true,
             pagination:true,
-            pageSize:"100",    
+            pageSize:"50",    
             search:true,        
             //searchOnEnterKey:true,
+            stickyHeader: true,
+            stickyHeaderOffsetY: '50px',
             filter:true,
             showColumns:true,
 
@@ -94,57 +96,64 @@ function retornarTablaFacturacion()
                 field: 'lote',                
                 title: 'lote',                            
                 visible:false,
+                //class:"col-sm-1",
             },
-            //agregado para que muestre el tipo de movimiento (NOTA DE EGRESO = NE o VENTA CAJA =)
             {
-                field:'sigla',
-                title:"Tipo",
-                sortable:true,
-                visible:false,
-                class:"col-sm-1",
+                field: 'manual',                
+                title: 'Tipo',                            
+                visible:true,
                 align: 'center',
-                
+                //class:"col-sm-1",
+                    filter: {
+                        type: "select",
+                        data: ["Manual", "Computarizada"]
+                      },
+                    formatter: tipoDosificacion
             },
+
+            
             //agregado para que muestre el numero de factura 
             {
                 field:'nFactura',
                 title:"N° Fac",
                 sortable:true,
-                class:"col-sm-1",
+                //class:"col-sm-1",
                 align: 'center',
                
             },
             {
-                field:'movimientos',
-                title:"Moviemiento",
-                sortable:true,
-                class:"col-sm-1",
-                align: 'center',
-                
-            },
-            {
                 field:'fechaFac',
                 title:"Fecha",
-                class:"col-sm-1CF",
+                //class:"col-sm-1",
                 sortable:true,
                 formatter: formato_fecha_corta,
             },
             {
                 field:'ClienteNit',
                 title:"N° Cliente",                
-                class:"col-sm-1",                                
+                //class:"col-sm-1",                                
                 sortable:true,
                 visible:false
             },
             {
                 field:'ClienteFactura',
                 title:"Cliente",                
-                class:"col-sm-4",         
+                //class:"col-sm-4",         
                 sortable:true,
                  filter: {
                     type: "select",
                     data: datosselect[0]
                 }
+            },
+            {
+                field:'sigla',
+                title:"Movimiento",
+                //sortable:true,
+               // visible:false,
+                //class:"col-sm-1",
+                align: 'center',
+                formatter: tipoNumeroMovimiento
+                
             },
             {
                 field:'total',
@@ -157,7 +166,7 @@ function retornarTablaFacturacion()
             {
                 field:'estado',
                 title:"Estado",
-                width: '7%',
+                //width: '7%',
                 sortable:true,
                 align: 'center',
                 formatter: formatoEstadoFactura,
@@ -208,6 +217,21 @@ function operateFormatter3(value, row, index)
 Array.prototype.unique=function(a){
   return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
 });
+
+function tipoDosificacion(value, row, index) {
+    $ret = ''
+    if (row.manual == 1) {
+        $ret = '<div style="font-size:1.5em;"><span class="fas fa-edit manual"></span></div>';
+    } else {
+        $ret = '<div style="font-size:1.5em; color:Tomato"><span class="fas fa-laptop computarizada"></span></div>';
+        
+    }
+    return ($ret);
+}
+function tipoNumeroMovimiento(value, row, index) {
+    $ret = row.sigla + "-" + row.movimientos;
+    return ($ret);
+}
 
 function formatoBotones(value, row, index)
 {
