@@ -242,6 +242,8 @@ function formatoBotones(value, row, index)
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
         '<button type="button" class="btn btn-default "  disabled aria-label="Right Align">',
         '<span class="fa fa-times " aria-hidden="true"></span></button>',
+        '<button type="button" class="btn btn-default printFactura" aria-label="Right Align">',
+        '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
         ].join('');    
     }
     else
@@ -251,6 +253,8 @@ function formatoBotones(value, row, index)
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',        
         '<button type="button" class="btn btn-default anularFactura"  aria-label="Right Align">',
         '<span class="fa fa-times " aria-hidden="true"></span></button>',
+        '<button type="button" class="btn btn-default printFactura" aria-label="Right Align">',
+        '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
         ].join('');    
     }
     
@@ -283,6 +287,11 @@ window.eventosBotones = {
         agregarDatosInicialesFacturaModal(row);
      //   verFacturaModal(row);
 
+    },
+    'click .printFactura': function (e, value, row, index) {
+        //alert(JSON.stringify(row));
+        let imprimir = base_url("pdf/Factura/index/") + row.idFactura;
+        window.open(imprimir);
     },
     'click .anularFactura': function (e, value, row, index) {         
      
