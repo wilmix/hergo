@@ -3,7 +3,7 @@
     require_once APPPATH."/third_party/fpdf/fpdf.php";
     require_once APPPATH."/third_party/numerosLetras/NumeroALetras.php";
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
-class ComprasLocales_pdf extends CI_Controller {
+class Ingresos extends CI_Controller {
   public function index($id=null) {
     //CARGAR MODELO
     $this->load->model('Ingresos_model');
@@ -12,9 +12,9 @@ class ComprasLocales_pdf extends CI_Controller {
     //PARAMETROS PARA LA LIBRERIA
     $params = array('tipo' => $ingreso->tipomov, 'numeroIngreso' => $ingreso->n, 'sigla'=>$ingreso->sigla, 'fechamov'=>$ingreso->fechamov, 'almacen'=>$ingreso->almacen, 'moneda'=>$ingreso->monedasigla,
     'proveedor' =>$ingreso->nombreproveedor,'nfact' =>$ingreso->nfact,'nIngreso' =>$ingreso->ningalm,'ordenCompra' =>$ingreso->ordcomp, 'observacion' =>$ingreso->obs);
-    $this->load->library('Ingresopdf/Pdf', $params);
+    $this->load->library('Ingresos_lib', $params);
 
-      $this->pdf = new Pdf($params);
+      $this->pdf = new Ingresos_lib($params);
       $this->pdf->AddPage('L','Letter');
       //$this->pdf->SetX(10);
       $this->pdf->AliasNbPages();
