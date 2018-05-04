@@ -8,12 +8,14 @@
         public function __construct($params){
             parent::__construct();
             $this->datos = $params;
+            //date_default_timezone_set('America/Bolivia/La_Paz');
+            date_default_timezone_set("America/La_Paz");
         }
         public function Header() {
             $almacen = $this->datos['almacen'];
             $direccion = $this->datos['direccion'];
             $Telefonos = $this->datos['Telefonos'];
-            $ciudad = $this->datos['ciudad'];
+            $ciudad = ucwords($this->datos['ciudad']);
             $fechaFac = $this->datos['fechaFac'];
             $ClienteFactura = $this->datos['ClienteFactura'];
             $ClienteNit = $this->datos['ClienteNit'];
@@ -26,6 +28,9 @@
             $manual = $this->datos['manual'];
             $nFactura = $this->datos['nFactura'];
             $userName = $this->datos['userName'];
+            $year = date('Y',strtotime($fechaFac));
+            $dia = date('d',strtotime($fechaFac));
+            $mes = date('M',strtotime($fechaFac));
 
 
             //TITULO
@@ -66,7 +71,7 @@
                 $this->SetFont('Arial','B',9);
                 $this->Cell(25,6, utf8_decode('Lugar y Fecha: '),1,0,'');
                 $this->SetFont('Arial','',9);
-                $this->Cell(100, 6, utf8_decode($fechaFac), 1,0,'L');
+                $this->Cell(100, 6, utf8_decode($ciudad . ', ' .$dia. ' de '. $mes . ' del '. $year), 1,0,'L');
                 $this->SetFont('Arial','B',9);
                 $this->Ln(6);
                 $this->SetX(13);

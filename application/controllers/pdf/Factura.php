@@ -38,7 +38,7 @@ class Factura extends CI_Controller {
         
 
     );
-    //$year = date('y',strtotime($egreso->fechamov));
+    $year = date('y',strtotime($factura->fechaFac));
     /*echo $id;
     echo '<pre>';
      print_r($lineas->result());
@@ -49,7 +49,7 @@ class Factura extends CI_Controller {
         $this->pdf = new Factura_lib($params);
         $this->pdf->AddPage('L',array(215,195));
         $this->pdf->AliasNbPages();
-        $this->pdf->SetTitle("Factura");
+        $this->pdf->SetTitle('FAC' . '-' .$factura->nFactura. '-' . $year);
         $this->pdf->SetLeftMargin(10);
         $this->pdf->SetRightMargin(10);
         $this->pdf->SetX(10);
@@ -78,6 +78,6 @@ class Factura extends CI_Controller {
                     $this->pdf->Cell(20,6,number_format($totalFactura, 2, ".", ","),'1',0,'R',1); //TOTAL DOCUMENTO
                     
         //guardar
-      $this->pdf->Output("Factura", 'I');
+      $this->pdf->Output('I','FAC' . '-' .$factura->nFactura. '-' . $year.'.pdf',true);
   }
 }
