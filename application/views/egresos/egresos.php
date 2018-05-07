@@ -42,8 +42,7 @@
 
           <table 
             id="tegresos"
-            data-toolbar="#toolbar2"
-            data-height="550">
+            data-toolbar="#toolbar2">
           </table>
 
       </div>

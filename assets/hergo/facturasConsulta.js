@@ -83,7 +83,7 @@ function retornarTablaFacturacion()
             data:res,
             striped:true,
             pagination:true,
-            pageSize:"50",    
+            pageSize:"25",    
             search:true,        
             //searchOnEnterKey:true,
             stickyHeader: true,

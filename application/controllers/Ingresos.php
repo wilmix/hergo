@@ -20,6 +20,7 @@ class Ingresos extends CI_Controller
 				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
 				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
 				base_url('assets/sweetalert/sweetalert2.min.css'),
+				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),	
 
 			);
 		$this->cabecera_script=array(
@@ -37,7 +38,8 @@ class Ingresos extends CI_Controller
         		base_url('assets/plugins/daterangepicker/moment.min.js'),
         		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
         		base_url('assets/sweetalert/sweetalert2.min.js'),
-        		base_url('assets/busqueda/underscore-min.js'),
+				base_url('assets/busqueda/underscore-min.js'),
+				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 			if($this->session->userdata('foto')==NULL)

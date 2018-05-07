@@ -305,9 +305,11 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
            if (saldoAlmacen > 0) // mensaje para  saldo de almacen 
             {
                 agregarArticuloEgresos();
+                console.log(saldoAlmacen)
             }
             else
             {
+                console.log(saldoAlmacen)
                  swal({
                           title: 'Saldo Insuficiente',
                           html: "No tiene suficiente <b>"+codigoArticulo+ "</b> en su almacen.<br>"+"Desea generar <b>NEGATIVO</b>?",

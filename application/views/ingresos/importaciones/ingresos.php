@@ -52,14 +52,9 @@
 
           <table 
             id="tingresos" 
-            data-toolbar="#toolbar2"
-            data-toggle="table"
-            data-height="550">
+            data-toolbar="#toolbar2">
           </table>
-
-
       </div>
-
       <!-- /.box-body -->
     </div>
     <!-- /.box -->

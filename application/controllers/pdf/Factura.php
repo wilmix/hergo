@@ -49,33 +49,71 @@ class Factura extends CI_Controller {
         $this->pdf = new Factura_lib($params);
         $this->pdf->AddPage('L',array(215,195));
         $this->pdf->AliasNbPages();
+        $this->pdf->SetAutoPageBreak(true,40);
         $this->pdf->SetTitle('FAC' . '-' .$factura->nFactura. '-' . $year);
         $this->pdf->SetLeftMargin(10);
         $this->pdf->SetRightMargin(10);
         $this->pdf->SetX(10);
         $this->pdf->SetFont('Arial', '', 8);
-            $totalFactura=0;
-            foreach ($lineas->result() as $linea) {
-                $totalFactura += ($linea->facturaCantidad*$linea->facturaPUnitario);
+
+            if ($factura->moneda==='1') {
+                $totalFactura=0;
+                foreach ($lineas->result() as $linea) {
+                    $totalFactura += ($linea->facturaCantidad*$linea->facturaPUnitario);
+                    $this->pdf->SetFillColor(255,255,255);
+                        $this->pdf->Cell(15,5,number_format($linea->facturaCantidad, 2, ".", ","),'',0,'R',0);
+                        $this->pdf->Cell(10,5,$linea->Sigla,'',0,'C',0);
+                        $this->pdf->Cell(15,5,$linea->ArticuloCodigo,'',0,'C',0);
+                        $this->pdf->Cell(118,5,utf8_decode($linea->ArticuloNombre),0,0,'L',0);
+                        $this->pdf->Cell(20,5,number_format($linea->facturaPUnitario, 2, ".", ","),0,0,'R',1);
+                        $this->pdf->Cell(20,5,number_format(($linea->facturaCantidad*$linea->facturaPUnitario), 2, ".", ","),'',0,'R',1);
+                    $this->pdf->Ln(5);
+                }
+
+                $this->pdf->SetFont('Times','B',10);
                 $this->pdf->SetFillColor(255,255,255);
-                    $this->pdf->Cell(15,5,number_format($linea->facturaCantidad, 2, ".", ","),'',0,'R',0);
-                    $this->pdf->Cell(10,5,$linea->Sigla,'',0,'C',0);
-                    $this->pdf->Cell(15,5,$linea->ArticuloCodigo,'',0,'C',0);
-                    $this->pdf->Cell(115,5,utf8_decode($linea->ArticuloNombre),0,0,'L',0);
-                    $this->pdf->Cell(20,5,number_format($linea->facturaPUnitario, 2, ".", ","),0,0,'R',1);
-                    $this->pdf->Cell(20,5,number_format(($linea->facturaCantidad*$linea->facturaPUnitario), 2, ".", ","),'',0,'R',1);
-                $this->pdf->Ln(5);
+                $this->pdf->Cell(172,5,'TOTAL BOB',0,0,'R',1);
+                $this->pdf->Cell(25,5,number_format($totalFactura, 2, ".", ","),0,1,'R',1); 
+                $this->pdf->SetFont('Courier','B',9);
+                $this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
+                $literal = NumeroALetras::convertir($totalFactura,'BOLIVIANOS','CENTAVOS');
+                $this->pdf->Cell(188,6,$literal,0,0,'l',1);
+
+            } else {
+                $tipoCambio = floatval($factura->cambiovalor);
+                $totalFactura=0;
+                foreach ($lineas->result() as $linea) {
+                    $totalFactura += (($linea->facturaCantidad*$linea->facturaPUnitario)/$tipoCambio);
+                    $this->pdf->SetFillColor(255,255,255);
+                        $this->pdf->Cell(15,5,number_format($linea->facturaCantidad, 2, ".", ","),'',0,'R',0);
+                        $this->pdf->Cell(10,5,$linea->Sigla,'',0,'C',0);
+                        $this->pdf->Cell(15,5,$linea->ArticuloCodigo,'',0,'C',0);
+                        $this->pdf->Cell(118,5,utf8_decode($linea->ArticuloNombre),0,0,'L',0);
+                        $this->pdf->Cell(20,5,number_format(($linea->facturaPUnitario/$tipoCambio), 2, ".", ","),0,0,'R',1);
+                        $this->pdf->Cell(20,5,number_format((($linea->facturaCantidad*$linea->facturaPUnitario)/$tipoCambio), 2, ".", ","),'',0,'R',1);
+                    $this->pdf->Ln(5);
+                }
+                $totalBolivianos = $totalFactura*$tipoCambio;
+                $this->pdf->SetFont('Times','B',10);
+                $this->pdf->SetFillColor(255,255,255);
+                $this->pdf->Cell(172,5,'TOTAL $u$',0,0,'R',1);
+                $this->pdf->Cell(25,5,number_format($totalFactura, 2, ".", ","),0,1,'R',1); 
+                $this->pdf->Cell(172,5,'Tipo Cambio:',0,0,'R',1);
+                $this->pdf->Cell(25,5,number_format($tipoCambio, 2, ".", ","),0,1,'R',1);
+                $this->pdf->Cell(172,5,'TOTAL BOB',0,0,'R',1);
+                $this->pdf->Cell(25,5,number_format($totalBolivianos, 2, ".", ","),0,1,'R',1); 
+                $this->pdf->SetFont('Courier','B',9);
+                $this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
+                $literal = NumeroALetras::convertir($totalBolivianos,'BOLIVIANOS','CENTAVOS');
+                $this->pdf->Cell(188,6,$literal,0,0,'l',1);
             }
+            
+            
             $this->pdf->Ln(2);
-                    // TOTALES
-                    $this->pdf->SetFont('Times','BI',10);
-                    $this->pdf->SetFillColor(232,232,232); 
-                    $this->pdf->Cell(15,6,'Total: ','1',0,'L',1);
-                    $this->pdf->SetFont('Times','I',10);
-                    $literal = NumeroALetras::convertir($totalFactura, 'BOLIVIANOS', 'CENTAVOS');
-                    $this->pdf->Cell(160,6,$literal,'1',0,'l',1);
-                    $this->pdf->SetFont('Arial','B',9);
-                    $this->pdf->Cell(20,6,number_format($totalFactura, 2, ".", ","),'1',0,'R',1); //TOTAL DOCUMENTO
+
+
+                    
+                     //TOTAL DOCUMENTO
                     
         //guardar
       $this->pdf->Output('I','FAC' . '-' .$factura->nFactura. '-' . $year.'.pdf',true);

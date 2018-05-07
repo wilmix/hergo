@@ -239,13 +239,12 @@ function mostrarTablaIngresos(res) {
         striped: true,
         pagination: true,
         pageSize: "100",
-        //height:"550", error con filtros
-        //clickToSelect:true,
         search: true,
-        //strictSearch:true,
         searchOnEnterKey: true,
         filter: true,
         showColumns: true,
+        stickyHeader: true,
+        stickyHeaderOffsetY: '50px',
 
 
 

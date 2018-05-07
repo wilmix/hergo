@@ -22,7 +22,7 @@
                     },
                         between: {
                             min: 1111,
-                            max: 999999999,
+                            max: 999999999999,
                             message: 'Igrese un CI o NIT válido'
                         }
                     }

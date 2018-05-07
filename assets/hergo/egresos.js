@@ -210,11 +210,13 @@ function mostrarTablaEgresos(res) {
         data: res,
         striped: true,
         pagination: true,
-        pageSize: "100",
+        pageSize: "25",
         search: true,
         //searchOnEnterKey:true,
         filter: true,
         showColumns: true,
+        stickyHeader: true,
+        stickyHeaderOffsetY: '50px',
 
         columns: [{
                 field: 'n',
