@@ -3,7 +3,15 @@ var glob_factorRET=0.087;
 var loc_almacen;
 var glob_guardar=false;
 var glob_precio_egreso=0;
-$(document).ready(function(){    
+$(document).ready(function(){  
+    
+    $('#fechamov_ne').daterangepicker({
+        locale: {
+            format: 'DD-MM-YYYY'
+        },
+        singleDatePicker: true,
+        showDropdowns: true
+      });
     loc_almacen= $("#almacen_imp").val();
     cargarArticulos();    
 })
@@ -271,83 +279,80 @@ $(document).on("keyup","#nfact_imp",function(){
     }
 })
 //calculo de compras locales con y sin factura
-function calculocompraslocales(cant,costo)
-{
-    var ret;    
-    var pu//preciounitario
-    pu=costo/cant;// calculamos el costo unitario      
-    if($("#nfact_imp").val()!="SF")  //si tiene el texto SF es sin factura         
-        ret=pu*glob_factorIVA; //confactura
-    else                        
-        ret=pu*glob_factorRET+pu; //sinfactura            
+function calculocompraslocales(cant, costo) {
+    var ret;
+    var pu //preciounitario
+    pu = costo / cant; // calculamos el costo unitario      
+    if ($("#nfact_imp").val() != "SF") //si tiene el texto SF es sin factura         
+        ret = pu * glob_factorIVA; //confactura
+    else
+        ret = pu * glob_factorRET + pu; //sinfactura            
     return ret;
 
 }
+
 function agregarArticulo() //faltaria el id costo; si se guarda en la base primero
 {
     //idcosto=12;
-    var codigo=$("#articulo_imp").val()
-    var descripcion=$("#Descripcion_ne").val()
-    var cant=$("#cantidad_ne").inputmask('unmaskedvalue');
-    var costo=$("#punitario_ne").inputmask('unmaskedvalue');
-    var descuento=$("#descuento_ne").inputmask('unmaskedvalue');
-    var totalfac=costo;
-    var cant=(cant=="")?0:cant;
-    var costo=(costo=="")?0:costo;
-    var tipoingreso=$("#tipomov_imp2").val();
-    var saldoAlmacen=$("#saldo_ne").val();
-    var codigoArticulo=$("#articulo_imp").val();
+    var codigo = $("#articulo_imp").val()
+    var descripcion = $("#Descripcion_ne").val()
+    var cant = $("#cantidad_ne").inputmask('unmaskedvalue');
+    var costo = $("#punitario_ne").inputmask('unmaskedvalue');
+    var descuento = $("#descuento_ne").inputmask('unmaskedvalue');
+    var totalfac = costo;
+    var cant = (cant == "") ? 0 : cant;
+    var costo = (costo == "") ? 0 : costo;
+    var tipoingreso = $("#tipomov_imp2").val();
+    var saldoAlmacen = $("#saldo_ne").val();
+    var codigoArticulo = $("#articulo_imp").val();
     var total;
 
 
-        if (cant>0) //valida cantidad mayor a cero
+    if (cant > 0) //valida cantidad mayor a cero
+    {
+        if (saldoAlmacen > 0) // mensaje para  saldo de almacen 
         {
-           if (saldoAlmacen > 0) // mensaje para  saldo de almacen 
-            {
-                agregarArticuloEgresos();
-                console.log(saldoAlmacen)
-            }
-            else
-            {
-                console.log(saldoAlmacen)
-                 swal({
-                          title: 'Saldo Insuficiente',
-                          html: "No tiene suficiente <b>"+codigoArticulo+ "</b> en su almacen.<br>"+"Desea generar <b>NEGATIVO</b>?",
-                          type: 'warning',
-                          showCancelButton: true,
-                          confirmButtonColor: '#3085d6',
-                          cancelButtonColor: '#d33',
-                          confirmButtonText: 'Si, Agregar',
-                          cancelButtonText: 'No, Cancelar'
-                }).then(
-                  function(result) {
+            agregarArticuloEgresos();
+            console.log(saldoAlmacen)
+        } else {
+            console.log(saldoAlmacen)
+            swal({
+                title: 'Saldo Insuficiente',
+                html: "No tiene suficiente <b>" + codigoArticulo + "</b> en su almacen.<br>" + "Desea generar <b>NEGATIVO</b>?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, Agregar',
+                cancelButtonText: 'No, Cancelar'
+            }).then(
+                function (result) {
                     agregarArticuloEgresos();
                     swal({
-                          type: 'warning',
-                          html: 'Usted generó un NEGATIVO en <b>'+codigoArticulo,
-                          showConfirmButton: false,
-                          timer: 4000
-                        })
-                  }, function(dismiss) {
-                    if (dismiss === 'cancel')
-                    {
-                    swal(
-                      'No agregado',
-                      'Gracias por no generar negativos :)',
-                      'error'
-                    )}
+                        type: 'warning',
+                        html: 'Usted generó un NEGATIVO en <b>' + codigoArticulo,
+                        showConfirmButton: false,
+                        timer: 4000
+                    })
+                },
+                function (dismiss) {
+                    if (dismiss === 'cancel') {
+                        swal(
+                            'No agregado',
+                            'Gracias por no generar negativos :)',
+                            'error'
+                        )
+                    }
                 });
-            }
-        
         }
-        else
-        {
-                swal(
-                      'Oops...',
-                      'Ingrese cantidad valida!',
-                      'error'
-                    )
-        }
+
+    } else {
+        swal(
+            'Oops...',
+            'Ingrese cantidad valida!',
+            'error'
+        )
+    }
 }
 
 function agregarArticuloEgresos()

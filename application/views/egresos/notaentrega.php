@@ -88,7 +88,7 @@
                <div class="col-xs-6 col-sm-6 col-md-2">
 
                   <label for="fechamov_ne" >Fecha:</label>
-                  <input id="fechamov_ne" type="date" class="form-control form-control-sm" name="fechamov_ne" placeholder="Fecha" value="<?= ($cont)?$newDate:$fecha  ?>" <?= ($cont)?"disabled":"" ?>>
+                  <input id="fechamov_ne" type="text" class="form-control form-control-sm" name="fechamov_ne" placeholder="Fecha" value="<?= ($cont)?$newDate:""  ?>" <?= ($cont)?"disabled":"" ?>>
                </div>
                <div class="col-xs-6 col-sm-6 col-md-2">
                   <label for="moneda_ne">Moneda:</label>
@@ -125,7 +125,7 @@
                      </div>
                      <div class="col-xs-4 col-sm-4 col-md-2">
                            <label>Fecha de Pago: </label>
-                           <input id="fechapago_ne" name="fechapago_ne" type="date" class="form-control form-control-sm"  placeholder="Fecha Pago" value="<?= ($cont)?$dcab->plazopago: $fecha ?>">
+                           <input id="fechapago_ne" name="fechapago_ne" type="date" class="form-control form-control-sm"  placeholder="Fecha Pago" value="<?= ($cont)?$dcab->plazopago: "" ?>">
                      </div>
                     <div class="col-xs-4 col-md-2">
                     <label></label>
