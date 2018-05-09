@@ -27,6 +27,13 @@ function retornarSaldosActuales() //*******************************
                     stickyHeaderOffsetY: '50px',
                 columns:
                 [
+                    {   
+                        field: 'idArticulos',            
+                        title: 'ID',
+                        sortable:true,
+                        align: 'center',
+                        filter: { type: "input" }
+                    },
                    {   
                         field: 'CodigoArticulo',            
                         title: 'Codigo',

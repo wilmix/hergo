@@ -15,6 +15,13 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function retornarArticulos()
+	{
+		$sql="SELECT a.idArticulos, a.CodigoArticulo, a.Descripcion
+		FROM articulos a";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 	public function retornar_tablaMovimiento($tipo)
     {
         $sql="SELECT * from tmovimiento where operacion='$tipo'";
@@ -96,7 +103,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function mostrarSaldos() ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
-		$sql="SELECT CodigoArticulo, Descripcion, unidad.Sigla, IFNULL(lpz.`saldo`,0) laPaz, IFNULL(ea.`saldo`,0) elAlto, IFNULL(pts.`saldo`,0) potosi, IFNULL(scz.`saldo`,0)santacruz
+		$sql="SELECT idArticulos, CodigoArticulo, Descripcion, unidad.Sigla, IFNULL(lpz.`saldo`,0) laPaz, IFNULL(ea.`saldo`,0) elAlto, IFNULL(pts.`saldo`,0) potosi, IFNULL(scz.`saldo`,0)santacruz
 		FROM articulos a
 		INNER JOIN unidad ON unidad.idUnidad=a.idUnidad
 		LEFT JOIN saldoarticulos lpz ON lpz.`idArticulo`= a.`idArticulos` AND lpz.`idAlmacen`=1
@@ -239,6 +246,13 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function mostrarKardexIndividual($art="",$alm="") ///********* nombre de la funcion mostrar
+	{ //cambiar la consulta
+		$sql="call hergo2.testKardex2($art,$alm);";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+
 
 
 

@@ -187,19 +187,25 @@ class Reportes extends CI_Controller
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
-
+			/*************AUTOCOMPLETE**********/
+            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
 	        /*************DATERANGEPICKER**********/
 	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			//$this->datos['cabeceras_script'][]=base_url('assets/hergo/egresos.js'); 				//*******agregar js********
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/kardexValorado.js'); 				//*******agregar js********
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            //$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");				//*******agregar alm********
+			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+			$this->datos['articulos']=$this->Reportes_model->retornarArticulos();
+			/*echo '<pre>';
+			print_r($this->Reportes_model->retornarArticulos()->result());
+			echo '</pre>';*/
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
@@ -208,6 +214,19 @@ class Reportes extends CI_Controller
 			$this->load->view('reportes/kardexIndividualValorado.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
+	}
+	public function mostrarArticulos()  //******cambiar a funcion del modelo
+	{
+		if($this->input->is_ajax_request())
+        {
+			$res=$this->Reportes_model->retornarArticulos(); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
 	}
 	public function kardexIndividual()
 	{
@@ -589,6 +608,23 @@ class Reportes extends CI_Controller
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
+		
+	}
+	public function mostrarKardexIndividual()  //******cambiar a funcion del modelo
+	{
+		if($this->input->is_ajax_request())
+        {
+			$alm=$this->security->xss_clean($this->input->post("a")); //almacen
+			$art=$this->security->xss_clean($this->input->post("art"));//tipo de ingreso
+			$res=$this->Reportes_model->mostrarKardexIndividual($art,$alm); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+		
 	}
 
 	public function diarioTraspasos()
@@ -755,5 +791,7 @@ class Reportes extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	
+
 	
 }

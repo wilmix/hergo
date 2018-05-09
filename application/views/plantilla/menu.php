@@ -145,11 +145,11 @@
             <li><a href="<?php echo base_url("reportes/facturacionClientes") ?>">Facturacion Clientes</a></li>
             <li><a href="<?php echo base_url("reportes/diarioIngresos") ?>">Diario de Ingreso</a></li>
             <li><a href="<?php echo base_url("reportes/libroVentas") ?>">Libro de Ventas</a></li>
+            <li><a href="<?php echo base_url("reportes/kardexIndividualValorado") ?>">Kardex Individual Valorado</a></li>
             <!--<li><a href="<?php echo base_url("reportes/movimientosClientes") ?>">Movimientos Item Clientes</a></li>
             <li><a href="<?php echo base_url("reportes/resumenVentaCliente") ?>">Resumen de Ventas por             <li><a href="<?php echo base_url("reportes/diarioPagos") ?>">Diario de Pagos</a></li>
             <li><a href="<?php echo base_url("reportes/resumenProductosUnidades") ?>">Resumen de Productos en Unidades</a></li>
             <li><a href="<?php echo base_url("reportes/estadoVentasCostoItem") ?>">Estado de Ventas y Costos</a></li>
-            <li><a href="<?php echo base_url("reportes/kardexIndividualValorado") ?>">Kardex Individual Valorado</a></li>
             <li><a href="<?php echo base_url("reportes/kardexIndividual") ?>">Kardex Individual Itemes</a></li>
             <li><a href="<?php echo base_url("reportes/kardexIndividualClientes") ?>">Kardex Individual Clientes</a></li>
             -->

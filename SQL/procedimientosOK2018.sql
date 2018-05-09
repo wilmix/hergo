@@ -265,3 +265,115 @@ SELECT *,
   @total:=IF(operacion='+',@total+@totalAux,@total-@totalAux) AS _total,
   @cpp:=ROUND(@total/@cant,4) as _cpp
   FROM tmp_tabla 
+
+
+
+*******kardex procedimiento*****
+CREATE DEFINER=`root`@`%` PROCEDURE `testKardex`(IN idArticulo INT, IN fechaIni DATETIME, IN fechaFin DATETIME)
+BEGIN
+  /************* kardex *****************/
+  set @idArticulo=idArticulo,
+    @cant=0.0,
+    @totalAux=0.0,
+    @total=0.0,
+    @cpp=0.0;
+  DROP TABLE IF EXISTS tmp_tabla;
+  CREATE TEMPORARY TABLE tmp_tabla AS(
+    SELECT * FROM
+    (
+      /** ingresos **/
+      	SELECT 	 i.`almacen`,
+      		 p.`nombreproveedor`,
+      		 IF(i.`tipomov`=1,0,i.`fechamov`) AS fecha,
+      		 tm.`sigla` tipo,
+      		 i.`nmov` AS numMov,
+      		 id.`punitario`,
+      		 id.`cantidad`,
+      		 tm.`operacion`
+      	FROM ingdetalle id
+      		INNER JOIN ingresos i
+      		    ON i.`idIngresos`=id.`idIngreso`
+                AND i.`almacen`=1
+            		AND i.`anulado`=0
+                AND i.`fechamov`
+      		        BETWEEN "2018-01-01" AND "2018-12-31" /*gestion actual*/ 
+      		INNER JOIN tmovimiento tm
+      		    ON tm.`id`=i.`tipomov`
+      		INNER JOIN provedores p
+      		    ON p.`idproveedor`=i.`proveedor`
+      	WHERE id.`articulo`=@idArticulo
+      UNION ALL 
+      /** FACTURA **/
+      	SELECT  f.almacen,
+      		c.nombreCliente,
+      		fechaFac,
+      		"FAC" ,
+      		f.nFactura,
+      		fd.facturaPUnitario,
+      		fd.facturaCantidad,
+      		"-"
+      	FROM    facturadetalle fd
+      		INNER JOIN factura f
+      		    ON f.`idFactura`=fd.`idFactura`
+                AND f.`almacen`=1
+      		      AND f.`anulada`=0
+                AND f.`fechaFac`
+      		        BETWEEN "2018-01-01" AND "2018-12-31"  /*gestion actual*/    	
+      		INNER JOIN clientes c
+      		    ON c.idCliente=f.cliente
+      	WHERE fd.`articulo`=@idArticulo
+      UNION ALL 
+      /** NOTA ENTREGA **/
+      	SELECT 	 e.almacen,
+      		 c.nombreCliente,
+      		 `fechamov`,
+      		 tm.`sigla`,
+      		 e.`nmov`,
+      		 ed.`punitario`,
+      		 ed.`cantidad`-ed.`cantFact` candidadNE,
+      		 tm.`operacion`
+      	FROM 	egredetalle ed
+      		INNER JOIN egresos e
+      		    ON e.`idegresos`=ed.`idegreso`
+              AND e.`anulado`=0
+          		AND e.`tipomov`= 7
+          		AND e.`estado`<>1
+              AND e.`almacen`=1 
+      		INNER JOIN tmovimiento tm
+      		    ON tm.`id`=e.tipomov
+      		INNER JOIN clientes c
+      		    ON c.idCliente=e.cliente
+      	WHERE ed.`articulo`=@idArticulo
+      UNION ALL 
+      /** TRASPASO Y OTROS **/
+      	SELECT 	 e.almacen,
+      		 c.nombreCliente,
+      		 e.`fechamov`,
+      		 tm.`sigla`,
+      		 e.`nmov`,
+      		 ed.`punitario`,
+      		 ed.`cantidad`,
+      		 tm.`operacion`
+      	FROM egredetalle ed
+      		INNER JOIN egresos e
+      		    ON e.`idegresos`=ed.`idegreso`
+              AND e.`almacen`=1
+          		AND e.`anulado`=0
+          		AND e.`tipomov` BETWEEN 8 AND 9
+              and e.`fechamov`
+      		      BETWEEN "2018-01-01" AND "2018-12-31" /*gestion actual*/
+      		INNER JOIN tmovimiento tm
+      		    ON tm.`id`=e.tipomov
+      		INNER JOIN clientes c
+      		    ON c.idCliente=e.cliente
+      	WHERE ed.`articulo`=@idArticulo
+      	ORDER BY  fecha, numMov
+    ) AS tmp
+  );
+  SELECT *, 
+    @cant:=IF(operacion='+', @cant+cantidad, @cant-cantidad) AS _cantidad,
+    @totalAux:=IF(operacion='+',ROUND(cantidad*punitario,4),ROUND(cantidad*@cpp,4)) AS _totalAux,
+    @total:=IF(operacion='+',@total+@totalAux,@total-@totalAux) AS _total,
+    @cpp:=ROUND(@total/@cant,4) as _cpp
+    FROM tmp_tabla;
+END
