@@ -23,6 +23,10 @@
     }
 ?>
 <style>
+    .totales{
+      font-size: 1.3em;
+      font-weight: bold;
+    }
     input {
       height: 50px;
     }
@@ -88,7 +92,7 @@
                <div class="col-xs-6 col-sm-6 col-md-2">
 
                   <label>Fecha:</label>
-                  <input id="fechamov_ne" type="text" class="form-control form-control-sm fecha_egreso" name="fechamov_ne" placeholder="Fecha" value="<?= ($cont)?$newDate:""  ?>" <?= ($cont)?"disabled":"" ?>>
+                  <input id="fechamov_ne" type="text" class="form-control form-control-sm fecha_egreso" name="fechamov_ne" placeholder="Fecha" value="<?= ($cont)?$newDate:""  ?>" <?= ($cont)?"disabled":"" ?> autofocus/>
                </div>
                <div class="col-xs-6 col-sm-6 col-md-2">
                   <label for="moneda_ne">Moneda:</label>
@@ -129,7 +133,7 @@
                      </div>
                     <div class="col-xs-4 col-md-2">
                     <label></label>
-                    <button type="button" data-toggle="modal" data-target="#modalcliente" class="form-control btn btn-success" id="botonmodalcliente"  style="margin-top: 4px;">Añadir Cliente</button>
+                    <button  tabindex="-1"  type="button" data-toggle="modal" data-target="#modalcliente" class="form-control btn btn-success" id="botonmodalcliente"  style="margin-top: 4px;">Añadir Cliente</button>
                     </div>
                   </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
             <?php else : ?>
@@ -245,12 +249,12 @@
               </div>
               <div class="col-md-6 col-xs-12">
                 <div class = "input-group col-md-12 col-xs-12">
-                  <span class = "input-group-addon">$</span>
+                  <span class = "input-group-addon totales">$</span>
                   <!--mostrar el total de dolares-->
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostosus">
-                  <span class = "input-group-addon" >Bs</span>
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalacostosus">
+                  <span class = "input-group-addon totales" >Bs</span>
                   <!--mostrar el total bolivivanos-->
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostobs">
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalacostobs">
                  </div>
               </div>
             </div><!--row-->

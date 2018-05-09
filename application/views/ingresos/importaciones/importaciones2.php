@@ -25,6 +25,11 @@
     }
 ?>
 <style>
+    .totales{
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+
     input {
       height: 50px;
     }
@@ -64,7 +69,7 @@
             <div class="row"> <!--PRIMERA FILA-->
                <div class=" col-xs-6 col-sm-6 col-md-3">
                 <label>Almacen:</label>
-                <select class="form-control form-control-sm" id="almacen_imp" name="almacen_imp" tabindex=1 <?= ($cont)?"disabled":"" ?>>
+                <select class="form-control form-control-sm" id="almacen_imp" name="almacen_imp" <?= ($cont)?"disabled":"" ?>>
                    <?php foreach ($almacen->result_array() as $fila): ?>
                      <option value=<?= $fila['idalmacen'] ?> <?= ($idalmacen==$fila['idalmacen'])?"selected":"" ?> ><?= $fila['almacen'] ?></option>
                    <?php endforeach ?>
@@ -73,7 +78,7 @@
                <div class=" col-xs-6 col-sm-6 col-md-3">
                 <input type="" name="tipomov_imp" value="<?= (isset($idingreso)?$idingreso:0)?>" class="hidden">
                 <label for="tipomov_imp">Tipo de Ingreso:</label>
-                <select class="form-control form-control-sm" id="tipomov_imp2" name="tipomov_imp2" tabindex=2 <?= ($cont)?"disabled":"" ?> disabled>
+                <select class="form-control form-control-sm" id="tipomov_imp2" name="tipomov_imp2"  <?= ($cont)?"disabled":"" ?> disabled>
                    <?php foreach ($tingreso->result_array() as $fila): ?>
                     <?php if ($cont): ?>
                       <?php if ($idtingreso==$fila['id']): ?>
@@ -92,11 +97,12 @@
                <div class="col-xs-6 col-sm-6 col-md-2">
 
                   <label for="fechamov_imp" >Fecha:</label>
-                  <input id="fechamov_imp" type="text" class="form-control form-control-sm fecha_ingreso" name="fechamov_imp" placeholder="Fecha" value="<?= ($cont)?$newDate:''  ?>" tabindex=3 <?= ($cont)?"disabled":"" ?>>
+                  <input id="fechamov_imp" type="text" class="form-control form-control-sm fecha_ingreso" 
+                  name="fechamov_imp" placeholder="Fecha" value="<?= ($cont)?$newDate:''  ?>"  <?= ($cont)?"disabled":"" ?> autofocus/>
                </div>
                <div class="col-xs-6 col-sm-6 col-md-2">
                   <label for="moneda_imp">Moneda:</label>
-                  <select class="form-control form-control-sm" id="moneda_imp" name="moneda_imp" tabindex=4>
+                  <select class="form-control form-control-sm" id="moneda_imp" name="moneda_imp">
                     <option value="1" <?= ($idmoneda==1)?"selected":"" ?> >BOLIVIANOS</option>
                     <option value="2" <?= ($idmoneda==2)?"selected":"" ?>>DOLARES </option>
                   </select>
@@ -110,7 +116,7 @@
                    <div class="col-xs-12 col-lg-6 col-md-6">
                      <label >Proveedor:</label>
                      <!--<select class="form-control" id="proveedor_imp" name="proveedor_imp">-->
-                       <select class="form-control selectpicker" data-size="5" data-live-search="true" id="proveedor_imp" name="proveedor_imp" tabindex=5>
+                       <select class="form-control selectpicker" data-size="5" data-live-search="true" id="proveedor_imp" name="proveedor_imp">
                         <?php foreach ($proveedor->result_array() as $fila): ?>
                          <option value=<?= $fila['idproveedor'] ?> <?= ($idproveedor==$fila['idproveedor'])?"selected":"" ?>><?= $fila['nombreproveedor'] ?></option>
                        <?php endforeach ?>
@@ -121,15 +127,15 @@
                    </div>
                    <div class="col-xs-4 col-sm-4 col-md-2">
                          <label>Orden de Compra:</label>
-                         <input id="ordcomp_imp" type="text" class="form-control form-control-sm" name="ordcomp_imp" placeholder="Orden de Compra" value="<?= ($cont)?$dcab->ordcomp:""  ?>" tabindex=6>
+                         <input id="ordcomp_imp" type="text" class="form-control form-control-sm" name="ordcomp_imp" placeholder="Orden de Compra" value="<?= ($cont)?$dcab->ordcomp:""  ?>" >
                    </div>
                    <div class="col-xs-4 col-sm-4 col-md-2">
                          <label>N° Factura: <small id="consinfac" style="font-size: 11px;color: #00a65a;">(con Factura)</small></label>
-                         <input id="nfact_imp" name="nfact_imp" type="text" style="text-transform:uppercase" onkeyup="javascript:this.value=this.value.toUpperCase();" class="form-control form-control-sm"  placeholder="# Factura" value="<?= ($cont)?$dcab->nfact:""  ?>" tabindex=7>
+                         <input id="nfact_imp" name="nfact_imp" type="text" style="text-transform:uppercase" onkeyup="javascript:this.value=this.value.toUpperCase();" class="form-control form-control-sm"  placeholder="# Factura" value="<?= ($cont)?$dcab->nfact:""  ?>">
                    </div>
                    <div class="col-xs-4 col-sm-4 col-md-2">
                          <label>N° Ingreso:</label>
-                         <input id="ningalm_imp" type="text" class="form-control form-control-sm" name="ningalm_imp" placeholder="# Ingreso" value="<?= ($cont)?$dcab->ningalm:""  ?>" tabindex=8>
+                         <input id="ningalm_imp" type="text" class="form-control form-control-sm" name="ningalm_imp" placeholder="# Ingreso" value="<?= ($cont)?$dcab->ningalm:""  ?>">
                    </div>
                 </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
 
@@ -144,13 +150,13 @@
                          <option id=<?php //$fila['idArticulos'] ?> descripcion="<?php //$fila['Descripcion'] ?>"><?php //$fila['CodigoArticulo'] ?></option>
                        <?php //endforeach ?>
                      </select> -->
-                     <input class="form-control form-control-sm" type="text" id="articulo_imp" name="articulo_imp"/ tabindex=9>
+                     <input class="form-control form-control-sm" type="text" id="articulo_imp" name="articulo_imp"/>
                      <div style="right: 22px;top:32px;position: absolute;" id="codigocorrecto"><i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i></div>
                   </div>
                   <div class="col-xs-12 col-md-4">
                       <!--mostrar descripcion de articulo segun codigo-->
                      <label for="descripcion_imp">Descripcion:</label>
-                     <input type="text" class="form-control form-control-sm" id="Descripcion_imp" name="Descripcion_imp" readonly/>
+                     <input type="text" class="form-control form-control-sm" id="Descripcion_imp" name="Descripcion_imp" disabled/>
                   </div>
                   <div class="col-xs-4 col-md-2">
                        <!--mostrar unidad de articulo segun codigo-->
@@ -179,12 +185,12 @@
                   <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
                       <label>Cantidad:</label>
-                      <input type="text" class="form-control form-control-sm" id="cantidad_imp" name="cantidad_imp" tabindex=10/>
+                      <input type="text" class="form-control form-control-sm" id="cantidad_imp" name="cantidad_imp" />
                   </div>
                   <div class="col-xs-4 col-md-2">
                       <!--insertar costo de articulo a ingresar-->
                       <label><?= $idingresocompraslocales==2? "Total:":"Costo Unitario:" ?></label> <!--CAMBIO PARA COMPRAS LOCALES-->
-                      <input type="text" class="form-control form-control-sm tiponumerico" id="punitario_imp" name="punitario_imp" tabindex=11/>
+                      <input type="text" class="form-control form-control-sm tiponumerico" id="punitario_imp" name="punitario_imp" />
                   </div>
                   <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
@@ -194,7 +200,7 @@
 
                   <div class="col-xs-12 col-md-2">
                   <label></label>
-                  <button type="button" class="form-control btn btn-success" id="agregar_articulo" name="agregar_articulo" style="margin-top: 4px;" tabindex=11>Añadir</button>
+                  <button type="button" class="form-control btn btn-success" id="agregar_articulo" name="agregar_articulo" style="margin-top: 4px;" >Añadir</button>
                   </div>
                </div><!--row CUARTA FILA -->
 
@@ -245,12 +251,12 @@
               </div>
               <div class="col-md-6 col-xs-12">
                 <div class = "input-group col-md-12 col-xs-12">
-                  <span class = "input-group-addon " id="nombretotaldoc">Bs Doc</span>
+                  <span class = "input-group-addon totales" id="nombretotaldoc">Bs. Doc.</span>
                   <!--mostrar el total bolivianos factura o documento-->
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostodoc" tabindex=13>
-                  <span class = "input-group-addon " id="nombretotalsis" >Bs Sis</span>
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalacostodoc">
+                  <span class = "input-group-addon totales" id="nombretotalsis" >Bs. Sis.</span>
                   <!--mostrar el total bolivivanos sistema-->
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico" disabled id="totalacostobs" tabindex=14>
+                  <input type = "text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalacostobs">
                  </div>
               </div>
             </div><!--row-->
@@ -276,8 +282,8 @@
                       
                     <button type="button" class="btn btn-danger" id="cancelarMovimientoActualizar">Cancelar</button>
                 <?php else: ?>
-                    <button type="button" class="btn btn-primary" id="guardarMovimiento" tabindex=11>Guardar Movimiento</button>
-                    <button type="button" class="btn btn-danger" id="cancelarMovimiento" tabindex=12>Cancelar Movimiento</button>
+                    <button type="button" class="btn btn-primary" id="guardarMovimiento">Guardar Movimiento</button>
+                    <button type="button" class="btn btn-danger" id="cancelarMovimiento">Cancelar Movimiento</button>
                 <?php endif ?>
 
 

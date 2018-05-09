@@ -248,15 +248,17 @@ function calcularTotal()
         //console.log(dato)
         total+=(dato=="")?0:parseFloat(dato)
     })
-    //total=Math.round(total * 100) / 100
+    total = (Math.round(total * 100) / 100).toFixed(2);
     if(moneda==1)
     {
         var totalDolares=total/glob_tipoCambio;
+        totalDolares = (Math.round(totalDolares * 100) / 100).toFixed(2);
     }
     else
     {
         var totalDolares=total;
         total=total*glob_tipoCambio;
+        
 
     }
     $("#totalacostobs").val(total)

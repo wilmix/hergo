@@ -220,6 +220,8 @@ function calcularTotal()
         $("#nombretotaldoc").html("Bs Doc");
         $("#nombretotalsis").html("Bs Sis");        
     }
+    totald = (Math.round(totald * 100) / 100).toFixed(2);
+    total = (Math.round(total * 100) / 100).toFixed(2);
     $("#totalacostodoc").val(totald)
     $("#totalacostobs").val(total)
 }
