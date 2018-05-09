@@ -22,7 +22,8 @@ class Traspasos extends CI_Controller
 				base_url("assets/hergo/estilos.css"),
 				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
 				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
-				base_url('assets/sweetalert/sweetalert2.min.css'),			
+				base_url('assets/sweetalert/sweetalert2.min.css'),
+				base_url('assets/plugins/daterangepicker/daterangepicker.css')				
 
 
 			);
@@ -41,7 +42,9 @@ class Traspasos extends CI_Controller
         		base_url('assets/plugins/daterangepicker/moment.min.js'),
         		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
         		base_url('assets/sweetalert/sweetalert2.min.js'),     
-        		base_url('assets/busqueda/underscore-min.js'),   		
+				base_url('assets/busqueda/underscore-min.js'),
+				base_url('assets/plugins/daterangepicker/daterangepicker.js'),
+				base_url('assets/plugins/daterangepicker/locale/es.js')   		
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 			if($this->session->userdata('foto')==NULL)

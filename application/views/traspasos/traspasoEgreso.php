@@ -87,7 +87,8 @@ input[type=date]::-webkit-inner-spin-button {
 
                <div class="col-xs-6 col-sm-6 col-md-2">
                   <label>Fecha:</label>
-                  <input id="fechamov_ne" type="date" class="form-control form-control-sm" name="fechamov_ne" placeholder="Fecha" value="<?= ($cont)?$newDate:$fecha  ?>" tabindex=3 <?= ($cont)?"disabled":"" ?>>
+                  <input id="fechamov_ne" type="text" class="form-control form-control-sm fecha_traspaso" name="fechamov_ne" 
+                  placeholder="Fecha" tabindex=3 value="<?= ($cont)?$newDate:''  ?>"  <?= ($cont)?"disabled":"" ?>>
                </div>
                <div>
                   <label class="hidden">Moneda:</label>
