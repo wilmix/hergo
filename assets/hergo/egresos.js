@@ -52,7 +52,9 @@ $(document).on("change", "#almacen_filtro", function () {
 $(document).on("change", "#tipo_filtro", function () {
     retornarTablaEgresos();
 })
-
+$(document).on("click", "#refresh", function () {
+    retornarTablaEgresos();
+})
 function mostrarTablaEgresosTraspasos(res) {
     $('#tegresos').bootstrapTable({
 

@@ -1,6 +1,7 @@
 var iniciofecha = moment().subtract(0, 'year').startOf('year')
 var finfecha = moment().subtract(0, 'year').endOf('year')
 
+
 $(document).ready(function () {
     $(".tiponumerico").inputmask({
         alias: "decimal",
@@ -76,6 +77,10 @@ $(document).on("change", "#almacen_filtro", function () {
     retornarTablaIngresos();
 })
 $(document).on("change", "#tipo_filtro", function () {
+    retornarTablaIngresos();
+
+})
+$(document).on("click", "#refresh", function () {
     retornarTablaIngresos();
 })
 
