@@ -31,6 +31,11 @@ div.collapse {
             <option value="6">VENTAS CAJA</option>
             <option value="7">NOTA DE ENTREGA</option>
           </select>
+          <button  type="button" class="btn btn-primary btn-sm" id="refresh">
+            <span>
+              <i class="fa fa-refresh"></i>
+            </span>
+          </button>
          </div>
 
          <table

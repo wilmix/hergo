@@ -69,6 +69,9 @@ $(document).on("change","#almacen_filtro",function(){
 $(document).on("change","#tipo_filtro",function(){
     retornarTablaFacturacion();
 })
+$(document).on("click", "#refresh", function () {
+    retornarTablaFacturacion();
+})
 
 
 function retornarTablaFacturacion()

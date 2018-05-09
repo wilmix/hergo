@@ -52,7 +52,10 @@ $(document).ready(function(){
 })
 $(document).on("change","#almacen_filtro",function(){
     retornarPagosPendientes();
-}) //para cambio filtro segun cada uno
+}) 
+$(document).on("click", "#refresh", function () {
+    retornarPagosPendientes();
+})
 
 
 function retornarPagosPendientes() //*******************************
@@ -60,12 +63,14 @@ function retornarPagosPendientes() //*******************************
     ini=iniciofecha.format('YYYY-MM-DD')
     fin=finfecha.format('YYYY-MM-DD')
     alm=$("#almacen_filtro").val();
+    agregarcargando();
     $.ajax({
         type:"POST",
         url: base_url('index.php/Pagos/mostrarPendientePago'), //******controlador
         dataType: "json",
         data: {i:ini,f:fin,a:alm}, //**** variables para filtro
     }).done(function(res){
+        quitarcargando();
         datosselect= restornardatosSelect(res)
         var num=0;
         $("#tPendientes").bootstrapTable('destroy');
