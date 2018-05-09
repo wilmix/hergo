@@ -21,6 +21,7 @@ class Ingresos extends CI_Controller
 				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
 				base_url('assets/sweetalert/sweetalert2.min.css'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),	
+				base_url('assets/plugins/daterangepicker/daterangepicker.css')	
 
 			);
 		$this->cabecera_script=array(
@@ -40,6 +41,8 @@ class Ingresos extends CI_Controller
         		base_url('assets/sweetalert/sweetalert2.min.js'),
 				base_url('assets/busqueda/underscore-min.js'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
+				base_url('assets/plugins/daterangepicker/daterangepicker.js'),
+				base_url('assets/plugins/daterangepicker/locale/es.js')
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 			if($this->session->userdata('foto')==NULL)
@@ -176,7 +179,6 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
 
-	//FORMULARIO PARA COMPRAS LOCALES
 	public function compraslocales()
 	{
 		if(!$this->session->userdata('logeado'))

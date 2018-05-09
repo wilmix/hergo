@@ -21,7 +21,8 @@ class Egresos extends CI_Controller
 				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
 				base_url('assets/plugins/table-boot/plugin/select2.min.css'),				
 				base_url('assets/sweetalert/sweetalert2.min.css'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),	
+				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),
+				base_url('assets/plugins/daterangepicker/daterangepicker.css')	
 
 			);
 		$this->cabecera_script=array(
@@ -41,6 +42,9 @@ class Egresos extends CI_Controller
         		base_url('assets/sweetalert/sweetalert2.min.js'),
 				base_url('assets/busqueda/underscore-min.js'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
+				base_url('assets/plugins/daterangepicker/daterangepicker.js'),
+				base_url('assets/plugins/daterangepicker/locale/es.js')
+
 
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
@@ -61,11 +65,6 @@ class Egresos extends CI_Controller
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/egresos.js');
@@ -109,16 +108,11 @@ class Egresos extends CI_Controller
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/notasEntrega.js');
-			//$this->datos['cabeceras_script'][]=base_url('assets/hergo/clientes.js');
 			$this->datos['cabeceras_script'][]=base_url('assets\hergo\modalClientesEgreso.js');
             /**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			/*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
@@ -146,7 +140,6 @@ class Egresos extends CI_Controller
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
 
-	//nuevo para VENTAS CAJA
 	public function VentasCaja()
 	{
 		if(!$this->session->userdata('logeado'))

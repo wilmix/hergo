@@ -3,7 +3,14 @@ var glob_factorRET=0.087;
 
 var loc_almacen;
 
-$(document).ready(function(){    
+$(document).ready(function(){
+    $('.fecha_ingreso').daterangepicker({
+        locale: {
+            format: 'DD-MM-YYYY'
+        },
+        singleDatePicker: true,
+        showDropdowns: true
+      });    
     loc_almacen= $("#almacen_imp").val();   
     cargarArticulos(); 
 })

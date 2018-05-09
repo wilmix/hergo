@@ -25,26 +25,27 @@
     }
 ?>
 <style>
-    input{
-        height: 50px;
+    input {
+      height: 50px;
     }
-  input:focus{
 
-  background-color: rgba(60, 141, 188, 0.47);;
-  /*color: white;*/
+    input:focus {
+      background-color: rgba(60, 141, 188, 0.47);
+      ;
+      /*color: white;*/
       font-weight: 700;
-}
-select:focus{
+    }
 
-  background-color:rgba(60, 141, 188, 0.47);
-  /*color: white;*/
+    select:focus {
+      background-color: rgba(60, 141, 188, 0.47);
+      /*color: white;*/
+    }
 
-}
-
-input[type=date]::-webkit-outer-spin-button,
-input[type=date]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+    input[type=date]::-webkit-outer-spin-button,
+    input[type=date]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
 </style>
 
 <div class="row">
@@ -91,7 +92,7 @@ input[type=date]::-webkit-inner-spin-button {
                <div class="col-xs-6 col-sm-6 col-md-2">
 
                   <label for="fechamov_imp" >Fecha:</label>
-                  <input id="fechamov_imp" type="date" class="form-control form-control-sm" name="fechamov_imp" placeholder="Fecha" value="<?= ($cont)?$newDate:$fecha  ?>" tabindex=3 <?= ($cont)?"disabled":"" ?>>
+                  <input id="fechamov_imp" type="text" class="form-control form-control-sm fecha_ingreso" name="fechamov_imp" placeholder="Fecha" value="<?= ($cont)?$newDate:''  ?>" tabindex=3 <?= ($cont)?"disabled":"" ?>>
                </div>
                <div class="col-xs-6 col-sm-6 col-md-2">
                   <label for="moneda_imp">Moneda:</label>

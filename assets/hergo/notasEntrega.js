@@ -5,7 +5,7 @@ var glob_guardar=false;
 var glob_precio_egreso=0;
 $(document).ready(function(){  
     
-    $('#fechamov_ne').daterangepicker({
+    $('.fecha_egreso').daterangepicker({
         locale: {
             format: 'DD-MM-YYYY'
         },

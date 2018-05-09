@@ -87,8 +87,8 @@
                </div>
                <div class="col-xs-6 col-sm-6 col-md-2">
 
-                  <label for="fechamov_ne" >Fecha:</label>
-                  <input id="fechamov_ne" type="text" class="form-control form-control-sm" name="fechamov_ne" placeholder="Fecha" value="<?= ($cont)?$newDate:""  ?>" <?= ($cont)?"disabled":"" ?>>
+                  <label>Fecha:</label>
+                  <input id="fechamov_ne" type="text" class="form-control form-control-sm fecha_egreso" name="fechamov_ne" placeholder="Fecha" value="<?= ($cont)?$newDate:""  ?>" <?= ($cont)?"disabled":"" ?>>
                </div>
                <div class="col-xs-6 col-sm-6 col-md-2">
                   <label for="moneda_ne">Moneda:</label>
@@ -101,7 +101,7 @@
                 <!-- AGREGAR VENDEDOR EN VES DE NUM DE MOVIMIENTO
                   <label for="fechamov_ne" ># Movimiento:</label>
                   <input id="nmov_ne" type="number" class="form-control" name="nmov_ne" placeholder="# Movimiento" disabled value="<?= ($cont)?$dcab->n:""  ?>"/>-->
-                  <label for="fechamov_ne" >Vendedor:</label>
+                  <label>Vendedor:</label>
                   <select   class="form-control form-control-sm" id="idUsuarioVendedor" name="idUsuarioVendedor">
                     <?php foreach ($user->result_array() as $fila): ?>
                     <option value=<?= $fila['id'] ?> <?=($fila['id']==$idvendedor)?"selected":""  ?> ><?= $fila['nombre']?></option>
@@ -125,7 +125,7 @@
                      </div>
                      <div class="col-xs-4 col-sm-4 col-md-2">
                            <label>Fecha de Pago: </label>
-                           <input id="fechapago_ne" name="fechapago_ne" type="date" class="form-control form-control-sm"  placeholder="Fecha Pago" value="<?= ($cont)?$dcab->plazopago: "" ?>">
+                           <input id="fechapago_ne" name="fechapago_ne" type="text" class="form-control form-control-sm fecha_egreso"  placeholder="Fecha Pago" value="<?= ($cont)?$dcab->plazopago: "" ?>">
                      </div>
                     <div class="col-xs-4 col-md-2">
                     <label></label>
