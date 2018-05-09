@@ -74,7 +74,7 @@ div.collapse {
                   <span class="input-group-addon" id="">
                       <span class="fa fa-calendar"></span>
                   </span>
-                    <input type="date" class="form-control" value="<?php echo $fecha ?>" id="fechaFactura" aria-describedby="sizing-addon2">
+                    <input type="text" class="form-control" value="" id="fechaFactura" aria-describedby="sizing-addon2">
                   <span class="input-group-addon">
                      <span class="fa fa-qrcode"></span>
                   </span>

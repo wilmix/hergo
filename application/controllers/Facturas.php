@@ -29,6 +29,7 @@ class Facturas extends CI_Controller
 				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
 				base_url('assets/sweetalert/sweetalert2.min.css'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),	
+				base_url('assets/plugins/daterangepicker/daterangepicker.css')	
 
 			);
 		$this->cabecera_script=array(
@@ -48,6 +49,8 @@ class Facturas extends CI_Controller
 				base_url('assets/sweetalert/sweetalert2.min.js'),        		
 				base_url('assets/plugins/numeral/numeral.min.js'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
+				base_url('assets/plugins/daterangepicker/daterangepicker.js'),
+				base_url('assets/plugins/daterangepicker/locale/es.js')
 
 			);
 		$this->foot_script=array(				
@@ -75,10 +78,6 @@ class Facturas extends CI_Controller
 			$this->datos['cabeceras_script']= $this->cabecera_script;
 			$this->datos['foot_script']= $this->foot_script;
 
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			
@@ -127,10 +126,6 @@ class Facturas extends CI_Controller
 			$this->datos['cabeceras_script']= $this->cabecera_script;
 			$this->datos['foot_script']= $this->foot_script;
 
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['foot_script'][]=base_url('assets/hergo/facturas.js');
@@ -561,7 +556,7 @@ class Facturas extends CI_Controller
         	$factura->lote=$datosFactura->lote;
         	$factura->almacen=$idAlmacen;
         	$factura->nFactura=$numeroFactura;
-        	$factura->fechaFac= $fechaFac;
+			$factura->fechaFac= date('Y-m-d',strtotime($fechaFac));
         	$factura->cliente=$cliente->idCliente;
         	$factura->moneda= addslashes($this->security->xss_clean($this->input->post('moneda')));
         	$factura->total= addslashes($this->security->xss_clean($this->input->post('total')));
@@ -578,7 +573,9 @@ class Facturas extends CI_Controller
         	$tabla= ($this->security->xss_clean($this->input->post('tabla')));
         	$tabla=json_decode($tabla);
         	//var_dump($tabla);
-        	$idFactura=$this->Facturacion_model->guardar($factura);
+			$idFactura=$this->Facturacion_model->guardar($factura);
+
+
         	//$idFactura=1;
 
         	if($idFactura>0) //se registro correctamente => almacenar la tabla

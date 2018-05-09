@@ -2,7 +2,13 @@ var iniciofecha=moment().subtract(0, 'year').startOf('year')
 var finfecha=moment().subtract(0, 'year').endOf('year')
 
 $(document).ready(function(){
-    //tablaprueba()
+    $('#fechaFactura').daterangepicker({
+        locale: {
+            format: 'DD-MM-YYYY'
+        },
+        singleDatePicker: true,
+        showDropdowns: true
+      });
     var res={
         detalle:0
     }
