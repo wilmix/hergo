@@ -305,19 +305,25 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     var cant = (cant == "") ? 0 : cant;
     var costo = (costo == "") ? 0 : costo;
     var tipoingreso = $("#tipomov_imp2").val();
-    var saldoAlmacen = $("#saldo_ne").val();
+    let saldoAlmacen = $("#saldo_ne").val();
     var codigoArticulo = $("#articulo_imp").val();
     var total;
 
-
-    if (cant > 0) //valida cantidad mayor a cero
+    if (cant > 0 && costo>=0) 
     {
-        if (saldoAlmacen > 0) // mensaje para  saldo de almacen 
+        if (Number(cant)<=Number(saldoAlmacen) && Number(saldoAlmacen) > 0 ) // mensaje para  saldo de almacen 
         {
             agregarArticuloEgresos();
-            console.log(saldoAlmacen)
+            console.log(typeof(cant));
+            console.log(typeof(saldoAlmacen));
+            console.log(cant<=saldoAlmacen);
+            console.log(saldoAlmacen > 0);
+
         } else {
-            console.log(saldoAlmacen)
+            console.log(typeof(cant));
+            console.log(typeof(saldoAlmacen));
+            console.log(cant<=saldoAlmacen);
+            console.log(saldoAlmacen > 0);
             swal({
                 title: 'Saldo Insuficiente',
                 html: "No tiene suficiente <b>" + codigoArticulo + "</b> en su almacen.<br>" + "Desea generar <b>NEGATIVO</b>?",
@@ -328,30 +334,27 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
                 confirmButtonText: 'Si, Agregar',
                 cancelButtonText: 'No, Cancelar'
             }).then(
-                function (result) {
+                result=>
+                {
                     agregarArticuloEgresos();
                     swal({
-                        type: 'warning',
-                        html: 'Usted generó un NEGATIVO en <b>' + codigoArticulo,
-                        showConfirmButton: false,
+                        html: 'Usted generó un <b>NEGATIVO</b> en ' + codigoArticulo,
                         timer: 4000
-                    })
+                    });
                 },
-                function (dismiss) {
-                    if (dismiss === 'cancel') {
-                        swal(
-                            'No agregado',
-                            'Gracias por no generar negativos :)',
-                            'error'
-                        )
-                    }
-                });
+                dismiss => {
+                    swal(
+                        'No agregado',
+                        'Gracias por no generar negativos :)',
+                        'error'
+                    )
+                }
+                );
         }
-
     } else {
         swal(
             'Oops...',
-            'Ingrese cantidad valida!',
+            'Ingrese cantidad o precio  válido!',
             'error'
         )
     }

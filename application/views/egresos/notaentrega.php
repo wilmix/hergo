@@ -184,7 +184,7 @@
                   <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
                       <label>Cantidad:</label>
-                      <input type="number" class="form-control form-control-sm" id="cantidad_ne" name="cantidad_ne"/>
+                      <input type="text" class="form-control form-control-sm" id="cantidad_ne" name="cantidad_ne"/>
                   </div>
                   <div class="col-xs-4 col-md-2">
                       <!--insertar costo de articulo a ingresar-->
