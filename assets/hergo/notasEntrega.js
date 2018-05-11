@@ -154,7 +154,7 @@ $( function() {
 
         idAlmacen=$("#almacen_ne").val();
         cargandoSaldoPrecioArticulo()
-        console.log(idAlmacen)
+        //console.log(idAlmacen)
          $.ajax({
 
             url: base_url("index.php/Ingresos/retornarSaldoPrecioArticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
@@ -209,7 +209,7 @@ $(document).on("click",".eliminarArticulo",function(){
 function limpiarArticulo()
 {
     inputarray=$(".filaarticulo").find("input").toArray();
-    console.log(inputarray)
+    //console.log(inputarray)
     $.each(inputarray,function(index,value)
     {
         $(value).val("")
@@ -314,16 +314,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
         if (Number(cant)<=Number(saldoAlmacen) && Number(saldoAlmacen) > 0 ) // mensaje para  saldo de almacen 
         {
             agregarArticuloEgresos();
-            console.log(typeof(cant));
-            console.log(typeof(saldoAlmacen));
-            console.log(cant<=saldoAlmacen);
-            console.log(saldoAlmacen > 0);
-
         } else {
-            console.log(typeof(cant));
-            console.log(typeof(saldoAlmacen));
-            console.log(cant<=saldoAlmacen);
-            console.log(saldoAlmacen > 0);
             swal({
                 title: 'Saldo Insuficiente',
                 html: "No tiene suficiente <b>" + codigoArticulo + "</b> en su almacen.<br>" + "Desea generar <b>NEGATIVO</b>?",
