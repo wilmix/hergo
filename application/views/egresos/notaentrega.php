@@ -70,6 +70,7 @@
                     <?php foreach ($almacen->result_array() as $fila): ?>
                      <option value=<?= $fila['idalmacen'] ?> <?= ($idalmacen==$fila['idalmacen'])?"selected":"" ?> ><?= $fila['almacen'] ?></option>
                    <?php endforeach ?>
+                   <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
                  </select>
                </div>
                <div class=" col-xs-6 col-sm-6 col-md-3">                
@@ -110,11 +111,10 @@
                     <?php foreach ($user->result_array() as $fila): ?>
                     <option value=<?= $fila['id'] ?> <?=($fila['id']==$idvendedor)?"selected":""  ?> ><?= $fila['nombre']?></option>
                     <?php endforeach ?>
+                    <option value=<?= $user_id_actual ?> selected="selected"><?= $nombre_actual ?></option>
                     </select>
-                  
                </div>
             </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
-
             <?php if ($auxIdTipoIngreso!=9): ?>
               <div class="row filacabecera"> <!--SEGUNDA FILA-->
                      <div class="col-xs-12 col-lg-6 col-md-6">

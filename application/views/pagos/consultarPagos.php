@@ -13,6 +13,7 @@
               <?php foreach ($almacen->result_array() as $fila): ?>
               <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
               <?php endforeach ?>
+              <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
               <option value="">TODOS</option>
             </select>           
           </div>

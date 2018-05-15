@@ -45,6 +45,10 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 				base_url('assets/vue/vue-resource.min.js'),				
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
+		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
+		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
+		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
+		
 			if($this->session->userdata('foto')==NULL)
 				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
 			else

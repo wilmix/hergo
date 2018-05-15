@@ -1,4 +1,4 @@
- <section class="content-header">
+ <!--<section class="content-header">
       <h1>
         Ingresos
         <small>Consulta</small>
@@ -7,7 +7,7 @@
         <li><a href="<?php echo base_url("ingresos") ?>"><i class="fa fa-dashboard"></i> Ingresos</a></li>
         <li class="active">Consultas</li>
       </ol>
-    </section>
+    </section>-->
 
     <!-- Main content -->
     <section class="content">
@@ -37,6 +37,7 @@
                 <?php foreach ($almacen->result_array() as $fila): ?>
                 <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
                 <?php endforeach ?>
+                <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
                 <option value="">TODOS</option>
               </select>
               

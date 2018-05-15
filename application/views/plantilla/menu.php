@@ -11,6 +11,7 @@
         </div>
         <div class="pull-left info">
           <p><?php echo $nombre_usuario ?></p>
+          <p><?php echo $almacen_usuario ?></p>
           <!-- Status -->
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>

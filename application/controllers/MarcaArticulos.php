@@ -25,6 +25,7 @@ class MarcaArticulos extends CI_Controller
             base_url('assets/plugins/slimscroll/slimscroll.min.js'),
         );
         $this->datos['nombre_usuario'] = $this->session->userdata('nombre');
+        $this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
         if ($this->session->userdata('foto') == NULL)
             $this->datos['foto'] = base_url('assets/imagenes/ninguno.png');
         else

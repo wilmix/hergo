@@ -45,6 +45,11 @@ class Ingresos extends CI_Controller
 				base_url('assets/plugins/daterangepicker/locale/es.js')
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
+		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
+		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
+		$this->datos['nombre_actual']=$this->session->userdata['nombre'];
+		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
+		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 			if($this->session->userdata('foto')==NULL)
 				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
 			else
@@ -84,7 +89,7 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
-			//$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('ingresos/importaciones/ingresos.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);

@@ -21,6 +21,8 @@ class Principal extends CI_Controller
 				
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
+		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
+
 			if($this->session->userdata('foto')==NULL)
 				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
 			else
@@ -33,7 +35,8 @@ class Principal extends CI_Controller
 			$this->datos['menu']="Index";
 			$this->datos['opcion']="Index";
 			$this->datos['titulo']="Hergo | Inventarios";
-		
+
+	
 				    
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;

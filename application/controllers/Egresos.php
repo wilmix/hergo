@@ -48,6 +48,12 @@ class Egresos extends CI_Controller
 
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
+		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
+
+		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
+		$this->datos['nombre_actual']=$this->session->userdata['nombre'];
+		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
+		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 			if($this->session->userdata('foto')==NULL)
 				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
 			else
@@ -75,7 +81,9 @@ class Egresos extends CI_Controller
 
             
             $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-            $this->datos['tipoingreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
+			$this->datos['tipoingreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
+			
+			
 
 
 			//$this->datos['ingresos']=$this->Ingresos_model->mostrarIngresos();
@@ -87,6 +95,7 @@ class Egresos extends CI_Controller
 			$this->load->view('egresos/egresos.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
+			
 	}
 	public function notaentrega()
 	{
@@ -130,6 +139,12 @@ class Egresos extends CI_Controller
 			
 			//$this->datos['opcion']="Compras locales";
 			$this->datos['idegreso']=7;
+			
+			//$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen'];
+			/*echo '<pre>';
+			echo ($this->session->userdata['datosAlmacen']->idalmacen);
+			echo ($this->session->userdata['datosAlmacen']->almacen);
+			echo '</pre>';*/
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
