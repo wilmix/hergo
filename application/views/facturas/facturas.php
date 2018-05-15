@@ -18,8 +18,13 @@
               <select class="btn btn-primary btn-sm" name="tipo_filtro" id="tipo_filtro">
                 <option value="">TODOS</option>
                 <option value="6">VENTAS CAJA</option>
-                <option value="7">NOTA DE ENTREGA</option>
+                <option value="7" selected="selected">NOTA DE ENTREGA</option>
               </select>
+              <button  type="button" class="btn btn-primary btn-sm" id="refresh">
+                <span>
+                  <i class="fa fa-refresh"></i>
+                </span>
+              </button>
              
            </div>
 

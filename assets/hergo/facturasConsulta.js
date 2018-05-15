@@ -57,6 +57,9 @@ $(document).on("change","#almacen_filtro",function(){
 $(document).on("change","#tipo_filtro",function(){
     retornarTablaFacturacion();
 })
+$(document).on("click", "#refresh", function () {
+    retornarTablaFacturacion();
+})
 
 
 function retornarTablaFacturacion()
@@ -148,9 +151,6 @@ function retornarTablaFacturacion()
             {
                 field:'sigla',
                 title:"Movimiento",
-                //sortable:true,
-               // visible:false,
-                //class:"col-sm-1",
                 align: 'center',
                 formatter: tipoNumeroMovimiento
                 
@@ -164,6 +164,16 @@ function retornarTablaFacturacion()
                 filter: { type: "input" },
             },
             {
+                field:'vendedor',
+                title:"Vendedor",
+                sortable:true,
+                align: 'center',
+                filter: {
+                    type: "select",
+                    data: datosselect[1]
+                }
+            },
+            {
                 field:'estado',
                 title:"Estado",
                 //width: '7%',
@@ -173,8 +183,21 @@ function retornarTablaFacturacion()
                 filter: 
                 {
                 type: "select",
-                data: ["T. Facturado", "Facturado Parcial","ANULADO"],
+                data: ["T. Facturado", "No facturado","Facturado Parcial","ANULADO"],
                 },                
+            },
+            {
+                field:'pagada',
+                title:"Pagado",
+                sortable:true,
+                align: 'center',
+                formatter: formatoFacturaPagada,
+                filter: 
+                {
+                type: "select",
+                data: ["No Pagada", "T. Pagada","Parcial"],
+                
+                }               
             },           
             {
                 title: 'Acciones',
@@ -194,13 +217,16 @@ function retornarTablaFacturacion()
 function restornardatosSelect(res)
 {
     var cliente = new Array()
+    let vendedor = new Array()
     var datos =new Array()
     $.each(res, function(index, value){
 
         cliente.push(value.ClienteFactura)
+        vendedor.push(value.vendedor)
     })
     cliente.sort();
     datos.push(cliente.unique());
+    datos.push(vendedor.unique());
     return(datos);
 }
 Array.prototype.unique=function(a){
@@ -275,6 +301,26 @@ function formatoEstadoFactura(value, row, index)
             $ret='<span class="label label-success">T. Facturado</span>';
         if(value==2)
             $ret='<span class="label label-info">Facturado Parcial</span>';
+    }
+    
+    return ($ret);
+}
+function formatoFacturaPagada(value, row, index)
+{
+    $ret=''
+
+    if(row.anulada==1)
+    {        
+        $ret='<span class="label label-warning">x</span>';
+    }
+    else
+    {
+        if(value==0)
+            $ret='<span class="label label-danger"><i class="fas fa-times-circle"> No Pagada</i></span>';
+        if(value==1)
+            $ret='<span class="label label-success"><i class="fas fa-check-circle"></i> T. Pagada</span>';
+        if(value==2)
+            $ret='<span class="label label-info"><i class="fas fa-exclamation-circle"></i> Parcial</span>';
     }
     
     return ($ret);

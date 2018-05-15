@@ -30,8 +30,7 @@ class FacturaEgresos_model extends CI_Model
 	
 	public function Listar($ini,$fin,$alm=0,$tipo=0)
 	{
-		$sql="
-		SELECT *, GROUP_CONCAT(DISTINCT e.nmov
+		$sql="SELECT *,CONCAT(u.first_name,' ', u.last_name) AS vendedor, GROUP_CONCAT(DISTINCT e.nmov
 					ORDER BY e.nmov ASC
 					SEPARATOR ' - ') as movimientos, df.manual
 		FROM factura_egresos fe 
@@ -39,6 +38,7 @@ class FacturaEgresos_model extends CI_Model
 		INNER JOIN factura f on f.idFactura=fe.idFactura
 		INNER JOIN tmovimiento t on e.tipomov=t.id
 		INNER JOIN datosfactura df on df.idDatosFactura = f.lote
+		INNER JOIN users u on u.id = e.vendedor
 		WHERE f.fechaFac
 		BETWEEN '$ini' AND '$fin'";        
         if($alm>0)         

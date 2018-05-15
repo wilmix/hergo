@@ -330,7 +330,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
                     agregarArticuloEgresos();
                     swal({
                         html: 'Usted generó un <b>NEGATIVO</b> en ' + codigoArticulo,
-                        timer: 4000
+                        //timer: 4000
                     });
                 },
                 dismiss => {
