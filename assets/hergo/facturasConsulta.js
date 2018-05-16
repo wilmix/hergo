@@ -173,7 +173,7 @@ function retornarTablaFacturacion()
                     data: datosselect[1]
                 }
             },
-            {
+            /*{
                 field:'estado',
                 title:"Estado",
                 //width: '7%',
@@ -185,7 +185,7 @@ function retornarTablaFacturacion()
                 type: "select",
                 data: ["T. Facturado", "No facturado","Facturado Parcial","ANULADO"],
                 },                
-            },
+            },*/
             {
                 field:'pagada',
                 title:"Pagado",
@@ -311,7 +311,7 @@ function formatoFacturaPagada(value, row, index)
 
     if(row.anulada==1)
     {        
-        $ret='<span class="label label-warning">x</span>';
+        $ret='<span class="label label-warning">Anulada</span>';
     }
     else
     {
