@@ -2,11 +2,14 @@ var glob_factorIVA=0.87;
 var glob_factorRET=0.087;
 
 var loc_almacen;
-
+let hoy = moment().format('DD-MM-YYYY, hh:mm:ss a');
 $(document).ready(function(){
+    console.log(hoy);
     $('.fecha_ingreso').daterangepicker({
+        timePicker: true,
+        startDate:hoy,
         locale: {
-            format: 'DD-MM-YYYY'
+            format: 'DD-MM-YYYY, hh:mm:ss a'
         },
         singleDatePicker: true,
         showDropdowns: true

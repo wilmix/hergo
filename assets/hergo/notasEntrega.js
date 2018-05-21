@@ -3,14 +3,16 @@ var glob_factorRET=0.087;
 var loc_almacen;
 var glob_guardar=false;
 var glob_precio_egreso=0;
-$(document).ready(function(){  
-    
+let hoy = moment().format('DD-MM-YYYY, hh:mm:ss a');
+$(document).ready(function(){ 
     $('.fecha_egreso').daterangepicker({
-        locale: {
-            format: 'DD-MM-YYYY'
-        },
         singleDatePicker: true,
-        showDropdowns: true
+        startDate:hoy,
+        locale: {
+            format: 'DD-MM-YYYY, hh:mm:ss a'
+        },
+        showDropdowns: true,
+        timePicker: true
       });
     loc_almacen= $("#almacen_imp").val();
     cargarArticulos();    

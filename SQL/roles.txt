@@ -1,0 +1,39 @@
+LISTA DE PERMISOS
+INGRESOS
+    -Ver 
+    -Crear
+    -Aprobar
+    -Editar 
+EGRESOS
+    -Nota de entrega
+        -Ver 
+        -Crear 
+        -Editar 
+    -Baja de Producto
+        -Ver 
+        -Crear 
+        -Editar 
+    -Venta Caja
+        -Ver 
+        -Crear 
+        -Editar 
+FACTURACION
+    -Ver
+    -Emitir Facturas
+    -Anular
+TRASPASOS
+    -Ver
+    -Crear
+PAGOS
+    -Ver
+    -Crear
+    -Editar 
+REPORTES
+    -Ver cada uno 
+
+ADMINISTRACION
+
+
+
+
+
