@@ -85,9 +85,8 @@ function retornarSaldosActuales() //*******************************
                         field: '',            
                         title: 'Total',
                         sortable:true,
-                        formatter: tipoFactura,
+                        formatter: total,
                         align: 'right',
-                        //formatter:operateFormatter3
                     }
 
                 ]
@@ -97,17 +96,22 @@ function retornarSaldosActuales() //*******************************
     console.log( "Request Failed: " + err );
     });
  }
-function operateFormatter3(value, row, index) {     
+function operateFormatter3(value, row, index) {
+    if (value==='-') {
+        return '-'
+    } else {
     num=Math.round(value * 100) / 100
     num=num.toFixed(2);
     return (formatNumber.new(num));
-}
-function tipoFactura(value, row, index) {
+    }
     
-    $ret =  parseFloat(row.laPaz) + 
-            parseFloat(row.elAlto) +
-            parseFloat(row.potosi) +
-            parseFloat(row.santacruz);
-    $ret = $ret.toFixed(2);
-    return ($ret);
+}
+function total(value, row, index) {
+    ea = row.elAlto == '-' ? 0 : parseFloat(row.elAlto) 
+    lp = row.laPaz == '-' ? 0 : parseFloat(row.laPaz)
+    sc = row.santacruz == '-' ? 0 : parseFloat(row.santacruz)
+    pts = row.potosi == '-' ? 0 : parseFloat(row.potosi)
+    $ret = ea+lp+sc+pts
+    $ret = $ret.toFixed(2)
+    return ($ret)
   }
