@@ -103,15 +103,8 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function mostrarSaldos() ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
-		$sql="SELECT idArticulos, CodigoArticulo, Descripcion, unidad.Sigla, IFNULL(lpz.`saldo`,'-') laPaz, IFNULL(ea.`saldo`,'-') elAlto, IFNULL(pts.`saldo`,'-') potosi, IFNULL(scz.`saldo`,'-')santacruz
-		FROM articulos a
-		INNER JOIN unidad ON unidad.idUnidad=a.idUnidad
-		LEFT JOIN saldoarticulos lpz ON lpz.`idArticulo`= a.`idArticulos` AND lpz.`idAlmacen`=1
-		LEFT JOIN saldoarticulos ea ON ea.`idArticulo`= a.`idArticulos` AND ea.`idAlmacen`=2
-		LEFT JOIN saldoarticulos pts ON pts.`idArticulo`= a.`idArticulos` AND pts.`idAlmacen`=3
-		LEFT JOIN saldoarticulos scz ON scz.`idArticulo`= a.`idArticulos` AND scz.`idAlmacen`=4
-		WHERE lpz.`saldo` IS NOT NULL 
-		ORDER BY CodigoArticulo";
+		$sql="SELECT * FROM hergo2.articulos_activos
+		WHERE SUBSTRING(CodigoArticulo,1,2)<>'SR'";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
