@@ -219,29 +219,33 @@ function mostrarTablaEgresos(res) {
         showColumns: true,
         stickyHeader: true,
         stickyHeaderOffsetY: '50px',
-
-        columns: [{
+        strictSearch: true,
+        showToggle:true,
+        columns: [
+            {
+                field: 'sigla',
+                title: "Tipo",
+                align: 'center',
+                searchable: false,
+                visible:false
+            },
+            {
                 field: 'n',
-                width: '3%',
                 title: 'N',
                 align: 'center',
                 sortable: true,
-                filter: {
-                    type: "input"
-                }
             },
             {
                 field: 'fechamov',
-                width: '7%',
                 title: "Fecha",
                 sortable: true,
                 align: 'center',
                 formatter: formato_fecha_corta,
+                searchable: false,
             },
             {
                 field: 'nombreCliente',
                 title: "Cliente",
-                width: '17%',
                 sortable: true,
                 filter: {
                     type: "select",
@@ -252,9 +256,10 @@ function mostrarTablaEgresos(res) {
             {
                 field: 'factura',
                 title: "Factura",
-                width: '4%',
                 sortable: true,
-                // formatter:mostrarFactura,
+                searchable: false,
+                width:'80px',
+                align:'center',
                 filter: {
                     type: "input"
                 }
@@ -263,24 +268,23 @@ function mostrarTablaEgresos(res) {
             {
                 field: 'monedasigla',
                 title: "Mon",
-                width: '1%',
-                align: 'right',
-                sortable: true,
+                align: 'center',
                 visible: true,
+                width:'50px',
                 filter: {
                     type: "select",
                     data: ["$US", "BS."],
                 },
-                //formatter: operateFormatter3,
-                //filter: {type: "input"}
+                searchable: false,
             },
             {
                 field: 'totalsus',
                 title: "Total Sus",
-                width: '7%',
                 align: 'right',
                 sortable: true,
+                width:'100px',
                 formatter: operateFormatter3,
+                searchable: false,
                 filter: {
                     type: "input"
                 }
@@ -288,13 +292,25 @@ function mostrarTablaEgresos(res) {
             {
                 field: 'total',
                 title: "Total Bs",
-                width: '7%',
+                width:'100px',
                 align: 'right',
                 sortable: true,
                 formatter: operateFormatter3,
+                searchable: false,
                 filter: {
                     type: "input"
                 }
+            },
+            {
+                field: "autor",
+                title: "Responsable",
+                sortable: true,
+                visible: true,
+                align: 'center',
+                filter: {
+                    type: "select",
+                    data: datosselect[0]
+                },
             },
             {
                 field: "estado",
@@ -311,46 +327,35 @@ function mostrarTablaEgresos(res) {
             },
             {
                 field: "clientePedido",
-                width: '8%',
                 title: "N° Pedido",
                 sortable: true,
                 visible: false,
                 align: 'center',
+                searchable: false,
             },
             {
                 field: "plazopago",
-                width: '8%',
                 title: "PlazoPago",
                 sortable: true,
                 visible: false,
                 align: 'center',
+                searchable: false,
                 formatter: formato_fecha_corta,
             },
             {
-                field: "autor",
-                width: '8%',
-                title: "Autor",
-                sortable: true,
-                visible: false,
-                align: 'center',
-                filter: {
-                    type: "select",
-                    data: datosselect[0]
-                },
-            },
-            {
                 field: "fecha",
-                width: '8%',
                 title: "Fecha",
                 sortable: true,
                 visible: false,
                 align: 'center',
+                searchable: false,
                 formatter: formato_fecha_corta,
             },
             {
                 title: 'Acciones',
                 align: 'center',
-                width: '11%',
+                width: '150px',
+                searchable: false,
                 events: operateEvents,
                 formatter: operateFormatter
             }
@@ -424,18 +429,20 @@ function operateFormatter(value, row, index) {
 
 function operateFormatter2(value, row, index) {
     $ret = ''
-
-    if (row.anulado == 1) {
-        $ret = '<span class="label label-warning">ANULADO</span>';
+    if (row.sigla=='ET' || row.sigla=='EB') {
+        $ret = '-'
     } else {
-        if (value == 0)
-            $ret = '<span class="label label-danger">No facturado</span>';
-        if (value == 1)
-            $ret = '<span class="label label-success">T. Facturado</span>';
-        if (value == 2)
-            $ret = '<span class="label label-info">Facturado Parcial</span>';
+        if (row.anulado == 1) {
+            $ret = '<span class="label label-warning">ANULADO</span>';
+        } else {
+            if (value == 0)
+                $ret = '<span class="label label-danger">No facturado</span>';
+            if (value == 1)
+                $ret = '<span class="label label-success">T. Facturado</span>';
+            if (value == 2)
+                $ret = '<span class="label label-info">Facturado Parcial</span>';
+        }
     }
-
     return ($ret);
 }
 

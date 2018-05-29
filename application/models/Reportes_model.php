@@ -17,8 +17,9 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function retornarArticulos()
 	{
-		$sql="SELECT a.idArticulos, a.CodigoArticulo, a.Descripcion
-		FROM articulos a";
+		$sql="SELECT idArticulos, CodigoArticulo,Descripcion
+		FROM hergo2.articulos_activos
+		WHERE SUBSTRING(CodigoArticulo,1,2)<>'SR'";
 		$query=$this->db->query($sql);		
 		return $query;
 	}

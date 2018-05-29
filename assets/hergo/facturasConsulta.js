@@ -93,55 +93,52 @@ function retornarTablaFacturacion()
             stickyHeaderOffsetY: '50px',
             filter:true,
             showColumns:true,
+            strictSearch: true,
+            showToggle:true,
+
 
             columns: [            
             {
                 field: 'lote',                
                 title: 'lote',                            
                 visible:false,
-                //class:"col-sm-1",
+                searchable: false,
             },
             {
                 field: 'manual',                
                 title: 'Tipo',                            
                 visible:true,
                 align: 'center',
-                //class:"col-sm-1",
-                    filter: {
-                        type: "select",
-                        data: ["Manual", "Computarizada"]
-                      },
-                    formatter: tipoDosificacion
+                formatter: tipoDosificacion
             },
 
             
-            //agregado para que muestre el numero de factura 
             {
                 field:'nFactura',
                 title:"N° Fac",
                 sortable:true,
-                //class:"col-sm-1",
                 align: 'center',
+                
                
             },
             {
                 field:'fechaFac',
                 title:"Fecha",
-                //class:"col-sm-1",
+                align:'center',
                 sortable:true,
                 formatter: formato_fecha_corta,
+                searchable: false,
             },
             {
                 field:'ClienteNit',
                 title:"N° Cliente",                
-                //class:"col-sm-1",                                
                 sortable:true,
-                visible:false
+                visible:false,
+                searchable: false,
             },
             {
                 field:'ClienteFactura',
                 title:"Cliente",                
-                //class:"col-sm-4",         
                 sortable:true,
                  filter: {
                     type: "select",
@@ -152,6 +149,7 @@ function retornarTablaFacturacion()
                 field:'sigla',
                 title:"Movimiento",
                 align: 'center',
+                searchable: false,
                 formatter: tipoNumeroMovimiento
                 
             },
@@ -160,6 +158,8 @@ function retornarTablaFacturacion()
                 title:"Total",                
                 sortable:true,
                 align: 'right',
+                searchable: false,
+                width:'100px',
                 formatter:operateFormatter3,
                 filter: { type: "input" },
             },
@@ -173,36 +173,21 @@ function retornarTablaFacturacion()
                     data: datosselect[1]
                 }
             },
-            /*{
-                field:'estado',
-                title:"Estado",
-                //width: '7%',
-                sortable:true,
-                align: 'center',
-                formatter: formatoEstadoFactura,
-                filter: 
-                {
-                type: "select",
-                data: ["T. Facturado", "No facturado","Facturado Parcial","ANULADO"],
-                },                
-            },*/
             {
                 field:'pagada',
                 title:"Pagado",
                 sortable:true,
                 align: 'center',
+                searchable: false,
                 formatter: formatoFacturaPagada,
-                filter: 
-                {
-                type: "select",
-                data: ["No Pagada", "T. Pagada","Parcial"],
-                
-                }               
+            
             },           
             {
                 title: 'Acciones',
                 align: 'center',
                 width: '10%',
+                width:'150px',
+                searchable: false,
                 events: eventosBotones,                
                 formatter: formatoBotones
             }]

@@ -124,7 +124,7 @@ function retornarTablaPagos() //*******************************
                         width: '1%',
                     },
                     {   
-                        field: 'nombreCliente',            
+                        field: 'clienteAnt',            
                         title: 'Cliente',
                         visible:true,
                         sortable:true,

@@ -11,7 +11,8 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function mostrarPagos($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
-		$sql="SELECT p.idPagos, a.almacen, p.numPago,p.fechaPago,m.sigla,c.nombreCliente, GROUP_CONCAT(f.nFactura SEPARATOR ' - ') nFactura, SUM(p.montoPago) montoPago, p.glosaPago,  CONCAT(u.first_name,' ', u.last_name) autor, p.fecha, p.anulado
+		$sql="SELECT p.idPagos, a.almacen, p.numPago,p.fechaPago,m.sigla,c.nombreCliente, GROUP_CONCAT(f.nFactura SEPARATOR ' - ') 
+		nFactura, SUM(p.montoPago) montoPago, p.glosaPago,  CONCAT(u.first_name,' ', u.last_name) autor, p.fecha, p.anulado, ca.nombreCliente as clienteAnt
 			FROM pagos p
 			INNER JOIN almacenes a
 			ON a.idalmacen=p.almacen
@@ -23,6 +24,8 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
   			ON f.idFactura=p.idFactura		
 			INNER JOIN users u
   			ON u.id=p.autor
+			INNER JOIN clientes ca
+			ON ca.idCliente=p.clienteAnt
 			WHERE p.fechaPago
 			BETWEEN '$ini' AND '$fin' AND p.almacen like '%$alm'
 			GROUP BY p.numPago
