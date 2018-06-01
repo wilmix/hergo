@@ -16,13 +16,9 @@ function retornarSaldosActuales() //*******************************
 
                 data:res,    
                     striped:true,
-                    //pagination:true,
-                    //pageSize:"100",
-                    //search:true,
-                    //searchOnEnterKey:true,
-                    //showColumns:true,
+                    search:true,
                     filter:true,
-                    //showExport:true,
+                    //strictSearch: true,
                     stickyHeader: true,
                     stickyHeaderOffsetY: '50px',
                 columns:
@@ -32,25 +28,25 @@ function retornarSaldosActuales() //*******************************
                         title: 'ID',
                         sortable:true,
                         align: 'center',
-                        filter: { type: "input" }
                     },
                    {   
                         field: 'CodigoArticulo',            
                         title: 'Codigo',
                         sortable:true,
                         align: 'center',
-                        filter: { type: "input" }
                     },
                     {   
                         field: 'Descripcion',            
                         title: 'Descripción',
                         sortable:true,
+                        searchable: false,
                         filter: { type: "input" }
                     },
                     {   
                         field: 'Sigla',            
                         title: 'Unidad',
                         sortable:true,
+                        searchable: false,
                         align: 'center'
                     },
                     {   
@@ -58,6 +54,7 @@ function retornarSaldosActuales() //*******************************
                         title: 'La Paz',
                         sortable:true,
                         align: 'right',
+                        searchable: false,
                         formatter: operateFormatter3
                     },
                     {   
@@ -65,6 +62,7 @@ function retornarSaldosActuales() //*******************************
                         title: 'El Alto',
                         align: 'right',
                         sortable:true,
+                        searchable: false,
                         formatter: operateFormatter3
                     },
                     {   
@@ -72,6 +70,7 @@ function retornarSaldosActuales() //*******************************
                         title: 'Potosí',
                         align: 'right',
                         sortable:true,
+                        searchable: false,
                         formatter: operateFormatter3
                     },
                     {   
@@ -79,6 +78,7 @@ function retornarSaldosActuales() //*******************************
                         title: 'Santa Cruz',
                         align: 'right',
                         sortable:true,
+                        searchable: false,
                         formatter: operateFormatter3
                     },
                     {   
@@ -86,6 +86,7 @@ function retornarSaldosActuales() //*******************************
                         title: 'Total',
                         sortable:true,
                         formatter: total,
+                        searchable: false,
                         align: 'right',
                     }
 

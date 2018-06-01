@@ -267,14 +267,11 @@ function mostrarTablaEgresos(res) {
             },
             {
                 field: 'monedasigla',
-                title: "Mon",
+                title: "Moneda",
                 align: 'center',
                 visible: true,
                 width:'50px',
-                filter: {
-                    type: "select",
-                    data: ["$US", "BS."],
-                },
+                sortable: true,
                 searchable: false,
             },
             {
@@ -318,10 +315,6 @@ function mostrarTablaEgresos(res) {
                 width: '7%',
                 sortable: true,
                 align: 'center',
-                filter: {
-                    type: "select",
-                    data: ["T. Facturado", "No facturado", "Parcial", "Anulado"],
-                },
                 formatter: operateFormatter2,
 
             },
