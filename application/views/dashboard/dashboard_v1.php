@@ -100,7 +100,7 @@
               <div class="row">
                 <div class="col-sm-4 col-xs-12">
                   <div class="description-block border-right">
-                    <h5 class="description-header">$35,210.43</h5>
+                    <h5 class="description-header" id="ventaCaja"></h5>
                     <span class="description-text">VENTA CAJA</span>
                   </div>
                   <!-- /.description-block -->
@@ -108,7 +108,7 @@
                 <!-- /.col -->
                 <div class="col-sm-4 col-xs-12">
                   <div class="description-block border-right">
-                    <h5 class="description-header">$10,390.90</h5>
+                    <h5 class="description-header" id="notaEntrega"></h5>
                     <span class="description-text">NOTA ENTREGA</span>
                   </div>
                   <!-- /.description-block -->
@@ -116,7 +116,7 @@
                 <!-- /.col -->
                 <div class="col-sm-4 col-xs-12">
                   <div class="description-block">
-                    <h5 class="description-header">1200</h5>
+                    <h5 class="description-header" id="cantidad"></h5>
                     <span class="description-text">ARTICULOS</span>
                   </div>
                   <!-- /.description-block -->

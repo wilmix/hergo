@@ -167,4 +167,18 @@ class Principal extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	public function ventasDetalleHoy()  //******cambiar a funcion del modelo
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$ini=$this->security->xss_clean($this->input->post("i"));//fecha inicio
+			$res=$this->Dashboard_model->mostrarVentaDetalle($ini); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 }

@@ -2,6 +2,7 @@ $(document).ready(function(){
     getVentas()
     getventasIngresosHoy()
     getInfoHoy()
+    getVentasDetalle() 
 })
 
 let today = moment().subtract(0, 'month').startOf('day').format('YYYY-MM-DD')
@@ -135,6 +136,34 @@ function getInfoHoy() {
     let sczAct = res[5].cant
     $("#negativos").text(lpNeg)
     $("#activos").text(lpAct)
+
+  }).fail(function (jqxhr, textStatus, error) {
+    var err = textStatus + ", " + error;
+    console.log("Request Failed: " + err);
+  });
+}
+function getVentasDetalle() {
+  ini = today
+  ini = '2018-05-18'
+  $.ajax({
+    type: "POST",
+    url: base_url('index.php/Principal/ventasDetalleHoy'),
+    dataType: "json",
+    data: {
+      i: ini,
+    }, 
+  }).done(function (res) {
+    console.log(res)
+    let ventasNE = res[0].lp
+    let ventaCaja = res[1].lp
+    let cantidad = res[2].lp
+
+
+
+    $("#notaEntrega").html(formatNumber.new(ventasNE)+"<small> Bs</small>")
+    $("#ventaCaja").html(formatNumber.new(ventaCaja)+"<small> Bs</small>")
+    $("#cantidad").html(formatNumber.new(cantidad))
+
 
   }).fail(function (jqxhr, textStatus, error) {
     var err = textStatus + ", " + error;

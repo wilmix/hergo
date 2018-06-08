@@ -87,4 +87,50 @@ class Dashboard_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function mostrarVentaDetalle($ini)
+	{ 
+		$sql="	SELECT 'notasEntrega' info, f.`fechaFac` hoy , 
+				IFNULL(ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)),2),0) lp , 
+				IFNULL(ROUND ((SUM(fd3.facturaPUnitario*fd3.facturaCantidad)),2),0) pts,
+				IFNULL(ROUND ((SUM(fd4.facturaPUnitario*fd4.facturaCantidad)),2),0) scz
+					FROM factura AS f
+					LEFT JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura  AND f.almacen=1
+					LEFT JOIN facturadetalle fd3 ON fd3.idFactura=f.idFactura AND f.almacen= 3
+					LEFT JOIN facturadetalle fd4 ON fd4.idFactura=f.idFactura AND f.almacen= 4
+					INNER JOIN factura_egresos fe ON fe.`idFactura` = f.`idFactura` 
+					INNER JOIN egresos e ON e.`idegresos` = fe.`idegresos`
+					WHERE f.`fechaFac`= '$ini'
+					AND f.`anulada`=0
+					AND e.`tipomov`=7
+					GROUP BY DAY(f.`fechaFac`)
+		UNION ALL
+		SELECT 'ventaCaja' info, f.`fechaFac` hoy , 
+				IFNULL(ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)),2),0) lp , 
+				IFNULL(ROUND ((SUM(fd3.facturaPUnitario*fd3.facturaCantidad)),2),0) pts,
+				IFNULL(ROUND ((SUM(fd4.facturaPUnitario*fd4.facturaCantidad)),2),0) scz
+					FROM factura AS f
+					LEFT JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura  AND f.almacen=1
+					LEFT JOIN facturadetalle fd3 ON fd3.idFactura=f.idFactura AND f.almacen= 3
+					LEFT JOIN facturadetalle fd4 ON fd4.idFactura=f.idFactura AND f.almacen= 4
+					INNER JOIN factura_egresos fe ON fe.`idFactura` = f.`idFactura` 
+					INNER JOIN egresos e ON e.`idegresos` = fe.`idegresos`
+					WHERE f.`fechaFac`= '$ini'
+					AND f.`anulada`=0
+					AND e.`tipomov`=6
+					GROUP BY DAY(f.`fechaFac`)
+		UNION ALL
+		SELECT 'cantidad' info, f.`fechaFac` hoy , 
+				COUNT(fd.facturaPUnitario*fd.facturaCantidad) lp , 
+				COUNT(fd3.facturaPUnitario*fd3.facturaCantidad) pts,
+				COUNT(fd4.facturaPUnitario*fd4.facturaCantidad) scz
+					FROM factura AS f
+					LEFT JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura  AND f.almacen=1
+					LEFT JOIN facturadetalle fd3 ON fd3.idFactura=f.idFactura AND f.almacen= 3
+					LEFT JOIN facturadetalle fd4 ON fd4.idFactura=f.idFactura AND f.almacen= 4
+					WHERE f.`fechaFac`= '$ini'
+					AND f.`anulada`=0
+					GROUP BY DAY(f.`fechaFac`)";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 }
