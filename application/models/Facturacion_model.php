@@ -21,15 +21,14 @@ class Facturacion_model extends CI_Model
 			return 0;
 		}
 	}
-	public function obtenerUltimoRegistro($idAlmacen,$tipoFacturacion)
+	public function obtenerUltimoRegistro($idAlmacen,$tipoFacturacion,$lote)
 	{
 		$sql="SELECT * 
 		from factura f
-		INNER JOIN datosfactura d
-		ON d.lote=f.lote
-		WHERE d.manual=$tipoFacturacion
+		WHERE 		
+		f.lote=$lote
 		AND f.almacen=$idAlmacen
-		ORDER BY f.idFactura desc Limit 1";
+		ORDER BY f.nfactura desc Limit 1";		
 		$query=$this->db->query($sql);
         if($query->num_rows()>0)
         {

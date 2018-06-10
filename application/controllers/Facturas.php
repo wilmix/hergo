@@ -708,7 +708,8 @@ class Facturas extends CI_Controller
         	
         	//$idAlmacen=$this->session->userdata('idalmacen');//para usuarios no administradores
 			$resultado=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
-			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$tipoFacturacion);
+	
+			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$tipoFacturacion,$resultado->lote);
 			
 			$errores=array();
 			$obj=new stdclass();
