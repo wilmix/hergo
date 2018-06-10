@@ -7,6 +7,7 @@ class Principal extends CI_Controller
 	{	
 		parent::__construct();
 		$this->load->helper('url');	
+		$this->load->model("Dashboard_model");
 		$this->cabeceras_css=array(
 				base_url('assets/bootstrap/css/bootstrap.min.css'),
 				base_url("assets/fa/css/font-awesome.min.css"),
@@ -18,8 +19,12 @@ class Principal extends CI_Controller
 				base_url('assets/bootstrap/js/bootstrap.min.js'),
 				base_url('assets/dist/js/app.min.js'),
 				base_url('assets/plugins/slimscroll/slimscroll.min.js'),
+				base_url('assets/plugins/daterangepicker/moment.min.js'),
+				base_url('assets/hergo/dashboard.js'),
 				
+			
 			);
+		
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
 
@@ -44,7 +49,8 @@ class Principal extends CI_Controller
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/container.php',$this->datos);
+			//$this->load->view('plantilla/container.php',$this->datos);
+			$this->load->view('dashboard/dashboard_v1.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 						
 
@@ -118,5 +124,61 @@ class Principal extends CI_Controller
 		$arr = array("file_id"=>0,"overwriteInitial"=>true,"initialPreviewConfig"=>$infoImagenesSubidas,
 		       "initialPreview"=>$ImagenesSubidas);
 		//echo json_encode($arr);
+	}
+	public function ventasGestion()  //******cambiar a funcion del modelo
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$ini=$this->security->xss_clean($this->input->post("i"));//fecha inicio
+        	$fin=$this->security->xss_clean($this->input->post("f"));//FECHA FIN
+			$res=$this->Dashboard_model->mostrarVentasGestion($ini,$fin); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function ventasIngresosHoy()  //******cambiar a funcion del modelo
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$ini=$this->security->xss_clean($this->input->post("i"));//fecha inicio
+			$res=$this->Dashboard_model->mostrarVentasIngresosHoy($ini); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function infoHoy()  //******cambiar a funcion del modelo
+	{
+		if($this->input->is_ajax_request())
+        {
+			$res=$this->Dashboard_model->mostrarInfo();
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function ventasDetalleHoy()  //******cambiar a funcion del modelo
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$ini=$this->security->xss_clean($this->input->post("i"));//fecha inicio
+			$res=$this->Dashboard_model->mostrarVentaDetalle($ini); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
 	}
 }
