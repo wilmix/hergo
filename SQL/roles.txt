@@ -4,6 +4,7 @@ INGRESOS
     -Crear
     -Aprobar
     -Editar 
+    -Anular
 EGRESOS
     -Nota de entrega
         -Ver 
