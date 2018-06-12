@@ -385,6 +385,7 @@ function agregarDatosInicialesFacturaModal(row)
         dataType: "json",
         data:data
     }).done(function(res){
+        console.log(res);
         if(res.response)
         {
             agregarDatosFacturaModal(res.datosFactura,row);
@@ -467,6 +468,8 @@ function mostrardatosmodal(data)
         vmVistaPrevia.moneda=parseInt(data.data1.moneda);
 
         vmVistaPrevia.pedido=data.data3.pedido;
+        vmVistaPrevia.codigoControl=data.data3.codigoControl;
+
         //vmVistaPrevia.generarCodigoControl() //este dato se extrae de la base de datos, solo se usa para generar el codigo
         vmVistaPrevia.generarCodigoQr();
         console.log("REVISAR TIPO DE CAMBIO GUARDADO EN EL MOMENTO DE FACTURA")

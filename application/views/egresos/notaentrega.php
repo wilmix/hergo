@@ -207,7 +207,7 @@
           <hr>
         <!--Tabla para mostrar articulos ingresados-->
               <div class="table-responsive">
-                <table  class="table table-condensed table-bordered table-striped">
+                <table  class="table table-condensed table-bordered table-striped" id="tablaNotaEntrega">
                   <thead>
                     <tr>
                       <th class="col-sm-1" >Código</th>

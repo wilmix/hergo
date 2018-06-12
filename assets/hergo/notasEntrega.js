@@ -315,7 +315,11 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     {
         if (Number(cant)<=Number(saldoAlmacen) && Number(saldoAlmacen) > 0 ) // mensaje para  saldo de almacen 
         {
+            console.log(Number(cant)<=Number(saldoAlmacen) && Number(saldoAlmacen) > 0 )
             agregarArticuloEgresos();
+            document.getElementById("articulo_imp").focus()
+
+            
         } else {
             swal({
                 title: 'Saldo Insuficiente',
@@ -334,6 +338,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
                         html: 'Usted generó un <b>NEGATIVO</b> en ' + codigoArticulo,
                         //timer: 4000
                     });
+                    
                 },
                 dismiss => {
                     swal(
@@ -343,7 +348,9 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
                     )
                 }
                 );
+                
         }
+
     } else {
         swal(
             'Oops...',
@@ -389,6 +396,7 @@ function agregarArticuloEgresos()
     });
     calcularTotal()
     limpiarArticulo();
+    document.getElementById("articulo_imp").focus()
 }
 $(document).on("keyup","#cantidad_imp,#punitario_imp",function(){
     var cant=$("#cantidad_imp").inputmask('unmaskedvalue');
@@ -465,7 +473,11 @@ function guardarmovimiento()
                         showCancelButton: false
                     }).then(
                           function(result) {
-                            location.reload();
+                            //location.reload();
+                            document.getElementById("obs_ne").value = "";
+                            document.getElementById("idCliente").value = "";
+                            $("#tablaNotaEntrega tr").remove();
+                            limpiarCabecera()
                           });
                 }
                 else

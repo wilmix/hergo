@@ -5,7 +5,7 @@ $(document).ready(function(){
     getInfoHoy()
     getNotaEntregaHoy()
     getVentaCajaHoy()
-    getCantidadHoy()
+    //getCantidadHoy()
 })
 
 let today = moment().subtract(0, 'month').startOf('day').format('YYYY-MM-DD')
@@ -138,9 +138,10 @@ function getVentasHoy() {
       console.log('vacioVentasHoy');
       $("#ventasHoy").html('0 '+"<small> Bs</small>")
     } else {
-      let ventasHoyLP = res[0].lp
-      console.log(ventasHoyLP);
-      $("#ventasHoy").html(formatNumber.new(ventasHoyLP)+"<small> Bs</small>")
+      let ventasHoy = res[0].ventasHoy
+      let cantidad = res[0].cantidadHoy
+      $("#ventasHoy").html(formatNumber.new(ventasHoy)+"<small> Bs</small>")
+      $("#cantidad").html(formatNumber.new(cantidad))
     }
   }).fail(function (jqxhr, textStatus, error) {
     var err = textStatus + ", " + error;
@@ -186,7 +187,7 @@ function getNotaEntregaHoy() {
     if (res == '') {
       $("#notaEntrega").html('0.00 '+"<small> Bs</small>")
     } else {
-        let ventasNE = res[0].lp
+        let ventasNE = res[0].notaEntrega
         $("#notaEntrega").html(formatNumber.new(ventasNE)+"<small> Bs</small>")
     }
 
@@ -208,31 +209,9 @@ function getVentaCajaHoy() {
     if (res == '') {
       $("#ventaCaja").html('0.00 '+"<small> Bs</small>")
     } else {
-        let ventaCaja = res[0].lp
+        let ventaCaja = res[0].ventaCaja
         $("#ventaCaja").html(formatNumber.new(ventaCaja)+"<small> Bs</small>")
     }
-  }).fail(function (jqxhr, textStatus, error) {
-    var err = textStatus + ", " + error;
-    console.log("Request Failed: " + err);
-  });
-}
-function getCantidadHoy() {
-  ini = today
-  $.ajax({
-    type: "POST",
-    url: base_url('index.php/Principal/cantidadHoy'),
-    dataType: "json",
-    data: {
-      i: ini
-    }, 
-  }).done(function (res) {
-    if (res == '') {
-      $("#cantidad").html('0.00 ')
-    } else {
-        let cantidad = res[0].lp
-        $("#cantidad").html(formatNumber.new(cantidad))
-    }
-
   }).fail(function (jqxhr, textStatus, error) {
     var err = textStatus + ", " + error;
     console.log("Request Failed: " + err);

@@ -104,12 +104,13 @@ class Facturacion_model extends CI_Model
 	}
 	public function obtenerPedido($idFactura)
 	{
-		$sql="SELECT GROUP_CONCAT(e.clientePedido SEPARATOR '-') pedido
+		$sql="SELECT GROUP_CONCAT(e.clientePedido SEPARATOR '-') pedido, f.`codigoControl`
 		FROM factura_egresos fe
 		INNER JOIN egresos e
 		ON fe.idegresos=e.idegresos
-		Where fe.idFactura=$idFactura
-		GROUP BY fe.idFactura  
+		INNER JOIN factura f ON f.`idFactura`=fe.`idFactura`
+		WHERE fe.idFactura=$idFactura
+		GROUP BY fe.idFactura
 		";		
 		$query=$this->db->query($sql);
         if($query->num_rows()>0)
@@ -122,6 +123,12 @@ class Facturacion_model extends CI_Model
             return false;
         }
 	}
+	/*SELECT GROUP_CONCAT(e.clientePedido SEPARATOR '-') pedido
+		FROM factura_egresos fe
+		INNER JOIN egresos e
+		ON fe.idegresos=e.idegresos
+		Where fe.idFactura=$idFactura
+		GROUP BY fe.idFactura  */
 	public function obtenerDetalleFactura($idFactura)
 	{
 		$sql=" 

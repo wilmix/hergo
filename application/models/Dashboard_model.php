@@ -28,18 +28,16 @@ class Dashboard_model extends CI_Model
 	}
 	public function mostrarVentasHoy($ini)
 	{ 
-		$sql="SELECT 'ventas' info, f.`fechaFac` hoy , 
-			IFNULL(ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)),2),0) lp , 
-			IFNULL(ROUND ((SUM(fd3.facturaPUnitario*fd3.facturaCantidad)),2),0) pts,
-			IFNULL(ROUND ((SUM(fd4.facturaPUnitario*fd4.facturaCantidad)),2),0) scz
-				FROM factura AS f
-				LEFT JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura  AND f.almacen=1
-				LEFT JOIN facturadetalle fd3 ON fd3.idFactura=f.idFactura AND f.almacen= 3
-				LEFT JOIN facturadetalle fd4 ON fd4.idFactura=f.idFactura AND f.almacen= 4
-				
-				WHERE f.`fechaFac`BETWEEN '$ini' AND '$ini' + INTERVAL 1 DAY
-				AND anulada=0
-				GROUP BY DAY(f.`fechaFac`)";
+		$sql="SELECT SUM(total) ventasHoy, sum(facturaCantidad) cantidadHoy
+		FROM (
+		SELECT f.`idFactura`, f.`nFactura`, f.`fechaFac`, f.`total`, fd.`facturaCantidad`
+		FROM factura f
+		inner join facturadetalle fd on fd.`idFactura` = f.`idFactura`
+		WHERE f.`fechaFac`BETWEEN '2018-06-12' AND '2018-06-12' + INTERVAL 1 DAY
+		AND f.`anulada` = 0
+		AND f.`almacen` = 1
+		GROUP BY f.`idFactura`) AS tb
+		";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
@@ -91,38 +89,32 @@ class Dashboard_model extends CI_Model
 		return $query;
 	}
 	public function notaEntregaHoy($ini) { 
-		$sql="	SELECT 'notasEntrega' info, f.`fechaFac` hoy , 
-				IFNULL(ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)),2),0) lp , 
-				IFNULL(ROUND ((SUM(fd3.facturaPUnitario*fd3.facturaCantidad)),2),0) pts,
-				IFNULL(ROUND ((SUM(fd4.facturaPUnitario*fd4.facturaCantidad)),2),0) scz
-					FROM factura AS f
-					LEFT JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura  AND f.almacen=1
-					LEFT JOIN facturadetalle fd3 ON fd3.idFactura=f.idFactura AND f.almacen= 3
-					LEFT JOIN facturadetalle fd4 ON fd4.idFactura=f.idFactura AND f.almacen= 4
-					INNER JOIN factura_egresos fe ON fe.`idFactura` = f.`idFactura` 
-					INNER JOIN egresos e ON e.`idegresos` = fe.`idegresos`
-					WHERE f.`fecha` BETWEEN '$ini' AND '$ini' + INTERVAL 1 DAY
-					AND f.`anulada`=0
-					AND e.`tipomov`=7
-					GROUP BY DAY(f.`fechaFac`)";
+		$sql="SELECT SUM(total) notaEntrega
+		FROM (
+		SELECT f.`idFactura`, f.`nFactura`, f.`fechaFac`, e.`tipomov`, f.`total`
+		FROM factura_egresos fe
+		INNER JOIN factura f ON f.`idFactura` = fe.`idFactura`
+		INNER JOIN egresos e ON e.`idegresos` =fe.`idegresos`
+		WHERE f.`fechaFac`BETWEEN '2018-06-12' AND '2018-06-12' + INTERVAL 1 DAY
+		AND f.`anulada` = 0
+		AND e.`tipomov` = 7
+		AND f.`almacen` = 1
+		GROUP BY f.`idFactura`) AS tb";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
 	public function ventaCajaHoy($ini) { 
-		$sql="SELECT 'ventaCaja' info, f.`fechaFac` hoy , 
-		IFNULL(ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)),2),0) lp , 
-		IFNULL(ROUND ((SUM(fd3.facturaPUnitario*fd3.facturaCantidad)),2),0) pts,
-		IFNULL(ROUND ((SUM(fd4.facturaPUnitario*fd4.facturaCantidad)),2),0) scz
-			FROM factura AS f
-			LEFT JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura  AND f.almacen=1
-			LEFT JOIN facturadetalle fd3 ON fd3.idFactura=f.idFactura AND f.almacen= 3
-			LEFT JOIN facturadetalle fd4 ON fd4.idFactura=f.idFactura AND f.almacen= 4
-			INNER JOIN factura_egresos fe ON fe.`idFactura` = f.`idFactura` 
-			INNER JOIN egresos e ON e.`idegresos` = fe.`idegresos`
-			WHERE f.`fechaFac` BETWEEN '$ini' AND '$ini' + INTERVAL 1 DAY
-			AND f.`anulada`=0
-			AND e.`tipomov`=6
-			GROUP BY DAY(f.`fechaFac`)";
+		$sql="SELECT SUM(total) ventaCaja
+		FROM (
+		SELECT f.`idFactura`, f.`nFactura`, f.`fechaFac`, e.`tipomov`, f.`total`
+		FROM factura_egresos fe
+		INNER JOIN factura f ON f.`idFactura` = fe.`idFactura`
+		INNER JOIN egresos e ON e.`idegresos` =fe.`idegresos`
+		WHERE f.`fechaFac`BETWEEN '2018-06-12' AND '2018-06-12' + INTERVAL 1 DAY
+		AND f.`anulada` = 0
+		AND e.`tipomov` = 6
+		AND f.`almacen` = 1
+		GROUP BY f.`idFactura`) AS tb";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
