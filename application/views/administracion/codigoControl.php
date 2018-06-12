@@ -10,7 +10,7 @@
           	<div class="row">
           		<div class="col-xs-12 col-sm-3 col-md-3">
           			N° de Autorización:<br>
-		      		<input class="form-control" type="number" id="idAuto" value="262401700038715">
+		      		<input class="form-control" type="number" id="idAuto" value="262401800035215">
           		</div>
           		
           		<div class="col-xs-12 col-sm-3 col-md-3">
@@ -19,7 +19,7 @@
           		</div>
           		<div class="col-xs-12 col-sm-6 col-md-6">
           			Llave:<br>
-		      		<input class="form-control" type="text" id="idLlave" value="MLX5E7YBFGWv(3)zU[8#bF)w4(Bv]iR@UaH)5K47+3CTVQR%J(]TEM*zn%Xj8D6H"><br>	
+		      		<input class="form-control" type="text" id="idLlave" value="jwXVT2(t]7p{\#GRxXBNCDwy@3yFWtwK=9dpZc5R6KW$hM-L%-wWtKBraU#DuH=I"><br>	
           		</div>
           		
           	</div>

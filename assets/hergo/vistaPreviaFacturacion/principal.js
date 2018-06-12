@@ -25,7 +25,7 @@
         methods:{
     
             lugarFecha: function(){
-                var fechaFormato = moment(this.fecha, 'YYYY-MM-DD');
+                var fechaFormato = moment(this.fecha, 'DD-MM-YYYY');
                 var dia=fechaFormato.format("DD");
                 var mes=fechaFormato.format("MMMM");
                 var anio=fechaFormato.format("YYYY");    
@@ -37,31 +37,37 @@
                 this.datosFactura.forEach(function(detalle) {
                     totalfact+=parseFloat(detalle.facturaCantidad*detalle.facturaPUnitario);
                 })
-              //  console.log(totalfact);
+               console.log(totalfact);
                return totalfact;
             
                 
             },
             dolares:function(value){
-                console.log((this.tipocambio))
+                //console.log((this.tipocambio))
                 return value / parseFloat(this.tipocambio);
             },
            
             generarCodigoControl:function()
             {                      
-                if(this.manual==1) return 0;                      
+                if(this.manual==1) return 0;    
                 var autor    = this.autorizacion;
                 var nFactura = this.numero;
                 var idNIT    = this.ClienteNit;
-                var fecha    = moment(this.fecha, 'YYYY-MM-DD');;
+                var fecha    = moment(this.fecha, 'DD-MM-YYYY');;
                 var monto    = this.retornarTotal().toString();
                 var llave    = this.llave;
-                var nitCasa  = this.nit;   
+                var nitCasa  = this.nit;  
+                if (this.moneda == 2) {
+                    monto =this.retornarTotal()*this.tipocambio
+                    monto = monto.toString()
+                    //console.log(monto);
+                }  
                                 
                 var dia=fecha.format("DD");
                 var mes=fecha.format("MM");
-                var gestion=fecha.format("YYYY");           
-
+                var gestion=fecha.format("YYYY");
+                //console.log(monto);
+                
                 var fechaConcatenar = gestion + mes + dia;
                 
                 console.log(autor,

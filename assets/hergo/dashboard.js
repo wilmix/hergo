@@ -1,6 +1,7 @@
 $(document).ready(function(){
+    getVentasHoy()
+    getIngresosHoy()
     getVentas()
-    getventasIngresosHoy()
     getInfoHoy()
     getVentasDetalle() 
 })
@@ -94,30 +95,59 @@ function getVentas() {
     });
 }
 
-function getventasIngresosHoy() {
+
+
+function getIngresosHoy() {
   ini = today
-  ini = '2018-05-18'
   $.ajax({
     type: "POST",
-    url: base_url('index.php/Principal/ventasIngresosHoy'),
+    url: base_url('index.php/Principal/ingresosHoy'),
     dataType: "json",
     data: {
       i: ini,
     }, 
   }).done(function (res) {
-    console.log(res)
-    let ingresosHoyLP = res[1].lp
-    let ventasHoyLP = res[0].lp
-
-    $("#ventasHoy").html(formatNumber.new(ventasHoyLP)+"<small> Bs</small>")
-    $("#ingresosHoy").html(formatNumber.new(ingresosHoyLP)+"<small> Bs</small>")
-
-
+    console.log(res);
+    if (res =='') {
+      console.log('vacioIngresosHoy');
+      $("#ingresosHoy").html('0 '+"<small> Bs</small>")
+    } else {
+      let ingresosHoyLP = res[0].lp
+      console.log(ingresosHoyLP);
+      $("#ingresosHoy").html(formatNumber.new(ingresosHoyLP)+"<small> Bs</small>")
+    }
   }).fail(function (jqxhr, textStatus, error) {
     var err = textStatus + ", " + error;
     console.log("Request Failed: " + err);
   });
 }
+
+function getVentasHoy() {
+  ini = today
+  $.ajax({
+    type: "POST",
+    url: base_url('index.php/Principal/ventasHoy'),
+    dataType: "json",
+    data: {
+      i: ini,
+    }, 
+  }).done(function (res) {
+    console.log(res);
+    if (res =='') {
+      console.log('vacioVentasHoy');
+      $("#ventasHoy").html('0 '+"<small> Bs</small>")
+    } else {
+      let ventasHoyLP = res[0].lp
+      console.log(ventasHoyLP);
+      $("#ventasHoy").html(formatNumber.new(ventasHoyLP)+"<small> Bs</small>")
+    }
+  }).fail(function (jqxhr, textStatus, error) {
+    var err = textStatus + ", " + error;
+    console.log("Request Failed: " + err);
+  });
+}
+
+
 function getInfoHoy() {
   $.ajax({
     type: "POST",
@@ -127,7 +157,7 @@ function getInfoHoy() {
       i: ini,
     }, 
   }).done(function (res) {
-    console.log(res)
+    //console.log(res)
     let lpNeg = res[0].cant
     let ptsNeg = res[1].cant
     let sczNeg = res[2].cant
@@ -144,7 +174,7 @@ function getInfoHoy() {
 }
 function getVentasDetalle() {
   ini = today
-  ini = '2018-05-18'
+  ini = '2018-06-08'
   $.ajax({
     type: "POST",
     url: base_url('index.php/Principal/ventasDetalleHoy'),
@@ -153,16 +183,20 @@ function getVentasDetalle() {
       i: ini,
     }, 
   }).done(function (res) {
-    console.log(res)
-    let ventasNE = res[0].lp
-    let ventaCaja = res[1].lp
-    let cantidad = res[2].lp
-
-
-
-    $("#notaEntrega").html(formatNumber.new(ventasNE)+"<small> Bs</small>")
-    $("#ventaCaja").html(formatNumber.new(ventaCaja)+"<small> Bs</small>")
-    $("#cantidad").html(formatNumber.new(cantidad))
+    if (res == '') {
+      $("#notaEntrega").html('0.00 '+"<small> Bs</small>")
+      $("#ventaCaja").html('0.00 '+"<small> Bs</small>")
+      $("#cantidad").html('0.00 ')
+    } else {
+        //console.log(res)
+        let ventasNE = res[0].lp
+        let ventaCaja = res[1].lp
+        let cantidad = res[2].lp
+        $("#notaEntrega").html(formatNumber.new(ventasNE)+"<small> Bs</small>")
+        $("#ventaCaja").html(formatNumber.new(ventaCaja)+"<small> Bs</small>")
+        $("#cantidad").html(formatNumber.new(cantidad))
+    }
+    
 
 
   }).fail(function (jqxhr, textStatus, error) {

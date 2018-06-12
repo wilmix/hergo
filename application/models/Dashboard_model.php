@@ -26,7 +26,7 @@ class Dashboard_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarVentasIngresosHoy($ini)
+	public function mostrarVentasHoy($ini)
 	{ 
 		$sql="SELECT 'ventas' info, f.`fechaFac` hoy , 
 			IFNULL(ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)),2),0) lp , 
@@ -37,11 +37,15 @@ class Dashboard_model extends CI_Model
 				LEFT JOIN facturadetalle fd3 ON fd3.idFactura=f.idFactura AND f.almacen= 3
 				LEFT JOIN facturadetalle fd4 ON fd4.idFactura=f.idFactura AND f.almacen= 4
 				
-				WHERE f.`fechaFac`= '$ini'
+				WHERE f.`fechaFac`BETWEEN '$ini' AND '$ini' + INTERVAL 1 DAY
 				AND anulada=0
-				GROUP BY DAY(f.`fechaFac`)
-		UNION ALL
-		SELECT 'ingresos' info, i.`fechamov` hoy , 
+				GROUP BY DAY(f.`fechaFac`)";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+	public function mostrarIngresosHoy($ini)
+	{ 
+		$sql="SELECT 'ingresos' info, i.`fechamov` hoy , 
 			IFNULL(ROUND ((SUM(id.`cantidad`*id.`punitario`)),2),0) lp ,
 			IFNULL(ROUND ((SUM(id3.`cantidad`*id3.`punitario`)),2),0) pts,
 			IFNULL(ROUND ((SUM(id4.`cantidad`*id4.`punitario`)),2),0) scz
@@ -49,11 +53,10 @@ class Dashboard_model extends CI_Model
 				LEFT JOIN ingdetalle AS id ON id.`idIngreso` = i.`idIngresos`  AND i.`almacen` = 1
 				LEFT JOIN ingdetalle AS id3 ON id3.`idIngreso` = i.`idIngresos`  AND i.`almacen` = 3
 				LEFT JOIN ingdetalle AS id4 ON id4.`idIngreso` = i.`idIngresos`  AND i.`almacen` = 4
-		WHERE i.`fechamov`= '$ini'
+		WHERE i.`fecha`BETWEEN '$ini' AND '$ini' + INTERVAL 1 DAY
 		AND i.`anulado`=0
 		AND i.`tipomov`= 2 AND 16
-		GROUP BY DAY(i.`fechamov`)
-		";
+		GROUP BY DAY(i.`fechamov`)";
 		$query=$this->db->query($sql);		
 		return $query;
 	}

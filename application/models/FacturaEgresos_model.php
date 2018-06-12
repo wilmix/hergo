@@ -48,7 +48,7 @@ class FacturaEgresos_model extends CI_Model
        
             $sql.="
              GROUP BY fe.idFactura
-            ORDER BY f.lote, f.nFactura  DESC
+            ORDER BY f.idFactura  DESC
             ";
        // die($sql);
        

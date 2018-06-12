@@ -104,7 +104,7 @@ function retornarTablaFacturacion()
             //clickToSelect:true,
             search:true,
             filter:true,
-            searchOnEnterKey:true,
+            //searchOnEnterKey:true,
             filter:true,
             showColumns:true,
 
@@ -757,6 +757,7 @@ $(document).on("click","#crearFactura",function(){
             dataType: "json",
             data: datos,
         }).done(function(res){
+            console.log(res.nfac);
             
            if(res.response)
            {                            

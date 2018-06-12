@@ -525,9 +525,9 @@ class Facturas extends CI_Controller
         	//$idAlmacen= ($this->security->xss_clean($this->input->post('idAlmacen')));	//para seleccionar almacen si es administrador
         	$idAlmacen=$this->session->userdata('idalmacen');//si no es usuario administrador solo guarda segun su almacen asignado
         	
-        	 
+
         	$datosFactura=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
-			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$tipoFacturacion);
+			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$datosFactura->lote);
 		/*	print_r($ultimaFactura);
 			die();*/
         	/*VALIDAR FECHA*/
@@ -709,7 +709,7 @@ class Facturas extends CI_Controller
         	//$idAlmacen=$this->session->userdata('idalmacen');//para usuarios no administradores
 			$resultado=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
 	
-			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$tipoFacturacion,$resultado->lote);
+			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$resultado->lote);
 			
 			$errores=array();
 			$obj=new stdclass();
