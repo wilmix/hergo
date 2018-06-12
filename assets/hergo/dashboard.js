@@ -3,7 +3,9 @@ $(document).ready(function(){
     getIngresosHoy()
     getVentas()
     getInfoHoy()
-    getVentasDetalle() 
+    getNotaEntregaHoy()
+    getVentaCajaHoy()
+    getCantidadHoy()
 })
 
 let today = moment().subtract(0, 'month').startOf('day').format('YYYY-MM-DD')
@@ -96,7 +98,6 @@ function getVentas() {
 }
 
 
-
 function getIngresosHoy() {
   ini = today
   $.ajax({
@@ -147,7 +148,6 @@ function getVentasHoy() {
   });
 }
 
-
 function getInfoHoy() {
   $.ajax({
     type: "POST",
@@ -172,32 +172,66 @@ function getInfoHoy() {
     console.log("Request Failed: " + err);
   });
 }
-function getVentasDetalle() {
+
+function getNotaEntregaHoy() {
   ini = today
-  ini = '2018-06-08'
   $.ajax({
     type: "POST",
-    url: base_url('index.php/Principal/ventasDetalleHoy'),
+    url: base_url('index.php/Principal/notaEntregaHoy'),
     dataType: "json",
     data: {
-      i: ini,
+      i: ini
     }, 
   }).done(function (res) {
     if (res == '') {
       $("#notaEntrega").html('0.00 '+"<small> Bs</small>")
+    } else {
+        let ventasNE = res[0].lp
+        $("#notaEntrega").html(formatNumber.new(ventasNE)+"<small> Bs</small>")
+    }
+
+  }).fail(function (jqxhr, textStatus, error) {
+    var err = textStatus + ", " + error;
+    console.log("Request Failed: " + err);
+  });
+}
+function getVentaCajaHoy() {
+  ini = today
+  $.ajax({
+    type: "POST",
+    url: base_url('index.php/Principal/ventaCajaHoy'),
+    dataType: "json",
+    data: {
+      i: ini
+    }, 
+  }).done(function (res) {
+    if (res == '') {
       $("#ventaCaja").html('0.00 '+"<small> Bs</small>")
+    } else {
+        let ventaCaja = res[0].lp
+        $("#ventaCaja").html(formatNumber.new(ventaCaja)+"<small> Bs</small>")
+    }
+  }).fail(function (jqxhr, textStatus, error) {
+    var err = textStatus + ", " + error;
+    console.log("Request Failed: " + err);
+  });
+}
+function getCantidadHoy() {
+  ini = today
+  $.ajax({
+    type: "POST",
+    url: base_url('index.php/Principal/cantidadHoy'),
+    dataType: "json",
+    data: {
+      i: ini
+    }, 
+  }).done(function (res) {
+    if (res == '') {
       $("#cantidad").html('0.00 ')
     } else {
-        //console.log(res)
-        let ventasNE = res[0].lp
-        let ventaCaja = res[1].lp
-        let cantidad = res[2].lp
-        $("#notaEntrega").html(formatNumber.new(ventasNE)+"<small> Bs</small>")
-        $("#ventaCaja").html(formatNumber.new(ventaCaja)+"<small> Bs</small>")
+        let cantidad = res[0].lp
         $("#cantidad").html(formatNumber.new(cantidad))
     }
-    
-
 
   }).fail(function (jqxhr, textStatus, error) {
     var err = textStatus + ", " + error;
