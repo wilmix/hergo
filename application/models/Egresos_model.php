@@ -247,7 +247,7 @@ class Egresos_model extends CI_Model
             $fechamov_ne=$fecha;            
         $nummov=$this->retornarNumMovimiento($tipomov_ne,$gestion,$almacen_ne);
     	$sql="INSERT INTO egresos (almacen,tipomov,nmov,fechamov,cliente,moneda,obs,tipocambio,autor,fecha,plazopago,clientePedido,vendedor) 
-        VALUES('$almacen_ne','$tipomov_ne','$nummov',STR_TO_DATE('$fechamov_ne','%d-%m-%Y, %h:%i:%s %p'),'$idCliente','$moneda_ne','$obs_ne','$tipocambio','$autor','$fecha',STR_TO_DATE('$fechapago_ne','%d-%m-%Y, %h:%i:%s %p'),'$pedido_ne','$idUsuarioVendedor')";
+        VALUES('$almacen_ne','$tipomov_ne','$nummov',STR_TO_DATE('$fechamov_ne','%d-%m-%Y'),'$idCliente','$moneda_ne','$obs_ne','$tipocambio','$autor','$fecha',STR_TO_DATE('$fechapago_ne','%d-%m-%Y'),'$pedido_ne','$idUsuarioVendedor')";
     	$query=$this->db->query($sql);
     	$idEgreso=$this->db->insert_id();
       // var_dump($idEgreso);

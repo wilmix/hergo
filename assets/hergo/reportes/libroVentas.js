@@ -1,5 +1,5 @@
-var iniciofecha = moment().subtract(3, 'month').startOf('month')
-var finfecha = moment().subtract(3, 'month').endOf('month')
+var iniciofecha = moment().subtract(1, 'month').startOf('month')
+var finfecha = moment().subtract(1, 'month').endOf('month')
 $(document).ready(function () {
   $(".tiponumerico").inputmask({
     alias: "decimal",
@@ -9,8 +9,8 @@ $(document).ready(function () {
     autoUnmask: true
   });
 
-  var start = moment().subtract(3, 'month').startOf('month')
-  var end = moment().subtract(3, 'month').endOf('month')
+  var start = moment().subtract(1, 'month').startOf('month')
+  var end = moment().subtract(1, 'month').endOf('month')
 
   $(function () {
     moment.locale('es');

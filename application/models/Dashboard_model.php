@@ -11,7 +11,18 @@ class Dashboard_model extends CI_Model
     }
     public function mostrarVentasGestion($ini=null,$fin=null) ///********* nombre de la funcion mostrar
 	{ 
-		$sql="SELECT LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3) mes,YEAR(f.`fechaFac`) gestion, 
+		$sql="SELECT LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3) mes,YEAR(f.`fechaFac`) gestion,ROUND(SUM(f.`total`),2) monto
+		FROM factura f
+		WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin' 
+					AND f.`anulada`=0
+					AND f.`almacen` = 1
+					GROUP BY MONTH(f.`fechaFac`)
+					ORDER BY f.`fechaFac`
+					";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+	/*SELECT LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3) mes,YEAR(f.`fechaFac`) gestion, 
 						IFNULL(ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)),2),0) lp , 
 						IFNULL(ROUND ((SUM(fd3.facturaPUnitario*fd3.facturaCantidad)),2),0) pts,
 						IFNULL(ROUND ((SUM(fd4.facturaPUnitario*fd4.facturaCantidad)),2),0) scz
@@ -22,10 +33,7 @@ class Dashboard_model extends CI_Model
 			WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin' 
 			AND anulada=0
 			GROUP BY MONTH(f.`fechaFac`)
-			ORDER BY f.`fechaFac`";
-		$query=$this->db->query($sql);		
-		return $query;
-	}
+			ORDER BY f.`fechaFac` */
 	public function mostrarVentasHoy($ini)
 	{ 
 		$sql="SELECT SUM(total) ventasHoy, sum(facturaCantidad) cantidadHoy

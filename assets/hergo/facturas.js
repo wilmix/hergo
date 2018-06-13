@@ -1,15 +1,15 @@
 var iniciofecha=moment().subtract(0, 'year').startOf('year')
 var finfecha=moment().subtract(0, 'year').endOf('year')
-let hoy = moment().format('DD-MM-YYYY, hh:mm:ss a');
+let hoy = moment().format('DD-MM-YYYY');
 $(document).ready(function(){
     $('#fechaFactura').daterangepicker({
         singleDatePicker: true,
         startDate:hoy,
+        autoApply:true,
         locale: {
-            format: 'DD-MM-YYYY, hh:mm:ss a'
+            format: 'DD-MM-YYYY'
         },
         showDropdowns: true,
-        timePicker: true
       });
     var res={
         detalle:0

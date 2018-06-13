@@ -52,7 +52,7 @@ $(document).ready(function(){
 
     $(".tiponumerico").inputmask({
         alias:"decimal",
-        digits:3,
+        digits:4,
         groupSeparator: ',',
         autoGroup: true,
         autoUnmask:true
@@ -253,8 +253,10 @@ function calculocompraslocales(cant,costo)
     if($("#nfact_imp").val()!="SF")  //si tiene el texto SF es sin factura         
         ret=pu*glob_factorIVA; //confactura
     else                        
-        ret=pu*glob_factorRET+pu; //sinfactura            
+        ret=pu*glob_factorRET+pu; //sinfactura     
+    console.log(ret);       
     return ret;
+
 
 }
 function agregarArticulo() //faltaria el id costo; si se guarda en la base primero
@@ -295,7 +297,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     $("#tbodyarticulos").append(articulo)
     $(".tiponumerico").inputmask({
         alias:"decimal",
-        digits:3,
+        digits:4,
         groupSeparator: ',',
         autoGroup: true
     });

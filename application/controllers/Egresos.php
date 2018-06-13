@@ -129,7 +129,7 @@ class Egresos extends CI_Controller
 			$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
             $this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
 		  	$this->datos['fecha']=date('Y-m-d');
-		  	$this->datos['clientes']=$this->Ingresos_model->retornar_tabla("clientes");
+		  	//$this->datos['clientes']=$this->Ingresos_model->retornar_tabla("clientes");
 		  	$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
 		  	$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
 		  	//clientes

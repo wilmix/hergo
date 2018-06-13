@@ -73,8 +73,11 @@ function ventasChart(meses, alm1, alm2, alm3) {
 }
 
 function getVentas() {
+    today1 = moment().subtract(-1, 'day').startOf('day').format('YYYY-MM-DD')
     ini = yearAgo
-    fin = today
+    fin = today1
+    console.log(yearAgo);
+    console.log(today1);
     $.ajax({
       type: "POST",
       url: base_url('index.php/Principal/ventasGestion'),
@@ -83,14 +86,13 @@ function getVentas() {
         i: ini,
         f: fin,
       }, 
-      
     }).done(function (res) {
       console.log(res)
-      let laPaz = res.map (ventas => ventas.lp)
-      let potosi = res.map (ventas => ventas.pts)
-      let santaCruz = res.map (ventas => ventas.scz)
+      let monto = res.map (ventas => ventas.monto)
+      //let potosi = res.map (ventas => ventas.pts)
+      //let santaCruz = res.map (ventas => ventas.scz)
       let tiempo = res.map( ventas => ventas.mes + " " + ventas.gestion)
-      ventasChart(tiempo, laPaz, potosi, santaCruz)
+      ventasChart(tiempo, monto)
     }).fail(function (jqxhr, textStatus, error) {
       var err = textStatus + ", " + error;
       console.log("Request Failed: " + err);
@@ -139,10 +141,12 @@ function getVentasHoy() {
       $("#ventasHoy").html('0 '+"<small> Bs</small>")
       $("#cantidad").html('0')
     } else {
-      let ventasHoy = res[0].ventasHoy
+      let hoy = res[0].ventasHoy
       let cantidad = res[0].cantidadHoy
-      $("#ventasHoy").html(formatNumber.new(ventasHoy)+"<small> Bs</small>")
-      $("#cantidad").html(formatNumber.new(cantidad))
+      console.log(formatNumber.new(Number(hoy).toFixed(2)));
+      console.log(formatNumber.new(Number(hoy)));
+      $("#ventasHoy").html(formatNumber.new(Number(hoy).toFixed(2))+"<small> Bs</small>")
+      $("#cantidad").html(formatNumber.new(Number(cantidad).toFixed(2)))
     }
   }).fail(function (jqxhr, textStatus, error) {
     var err = textStatus + ", " + error;
@@ -177,6 +181,7 @@ function getInfoHoy() {
 
 function getNotaEntregaHoy() {
   ini = today
+  console.log(ini);
   $.ajax({
     type: "POST",
     url: base_url('index.php/Principal/notaEntregaHoy'),
@@ -189,7 +194,7 @@ function getNotaEntregaHoy() {
       $("#notaEntrega").html('0.00 '+"<small> Bs</small>")
     } else {
         let ventasNE = res[0].notaEntrega
-        $("#notaEntrega").html(formatNumber.new(ventasNE)+"<small> Bs</small>")
+        $("#notaEntrega").html(formatNumber.new(Number(ventasNE).toFixed(2))+"<small> Bs</small>")
     }
 
   }).fail(function (jqxhr, textStatus, error) {
@@ -211,7 +216,7 @@ function getVentaCajaHoy() {
       $("#ventaCaja").html('0.00 '+"<small> Bs</small>")
     } else {
         let ventaCaja = res[0].ventaCaja
-        $("#ventaCaja").html(formatNumber.new(ventaCaja)+"<small> Bs</small>")
+        $("#ventaCaja").html(formatNumber.new(Number(ventaCaja).toFixed(2))+"<small> Bs</small>")
     }
   }).fail(function (jqxhr, textStatus, error) {
     var err = textStatus + ", " + error;

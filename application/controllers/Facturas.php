@@ -559,7 +559,7 @@ class Facturas extends CI_Controller
         	$factura->lote=$datosFactura->lote;
         	$factura->almacen=$idAlmacen;
         	$factura->nFactura=$numeroFactura;
-			$factura->fechaFac= date('Y-m-d, h:i:s',strtotime($fechaFac));
+			$factura->fechaFac= date('Y-m-d',strtotime($fechaFac));
         	$factura->cliente=$cliente->idCliente;
         	$factura->moneda= addslashes($this->security->xss_clean($this->input->post('moneda')));
         	$factura->total= addslashes($this->security->xss_clean($this->input->post('total')));

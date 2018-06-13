@@ -8,11 +8,11 @@ $(document).ready(function(){
     $('.fecha_egreso').daterangepicker({
         singleDatePicker: true,
         startDate:hoy,
+        autoApply:true,
         locale: {
-            format: 'DD-MM-YYYY, hh:mm:ss a'
+            format: 'DD-MM-YYYY'
         },
         showDropdowns: true,
-        timePicker: true
       });
     loc_almacen= $("#almacen_imp").val();
     cargarArticulos();    
