@@ -387,10 +387,6 @@ function retornarTablaEgresos() {
         //$("#tegresos").bootstrapTable('showLoading');
         $("#tegresos").bootstrapTable('resetView');
         mensajeregistrostabla(res, "#tegresos");
-
-        /*if(Object.keys(res).length<=0) $("tbody td","table#tegresos").html("No se encontraron registros")        
-        else $("tbody","table#tegresos").show()            */
-
     }).fail(function (jqxhr, textStatus, error) {
         var err = textStatus + ", " + error;
         console.log("Request Failed: " + err);

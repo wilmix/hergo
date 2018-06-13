@@ -33,7 +33,7 @@ class Dashboard_model extends CI_Model
 		SELECT f.`idFactura`, f.`nFactura`, f.`fechaFac`, f.`total`, fd.`facturaCantidad`
 		FROM factura f
 		inner join facturadetalle fd on fd.`idFactura` = f.`idFactura`
-		WHERE f.`fechaFac`BETWEEN '2018-06-12' AND '2018-06-12' + INTERVAL 1 DAY
+		WHERE f.`fechaFac`BETWEEN '$ini' AND '$ini' + INTERVAL 1 DAY
 		AND f.`anulada` = 0
 		AND f.`almacen` = 1
 		GROUP BY f.`idFactura`) AS tb
@@ -95,7 +95,7 @@ class Dashboard_model extends CI_Model
 		FROM factura_egresos fe
 		INNER JOIN factura f ON f.`idFactura` = fe.`idFactura`
 		INNER JOIN egresos e ON e.`idegresos` =fe.`idegresos`
-		WHERE f.`fechaFac`BETWEEN '2018-06-12' AND '2018-06-12' + INTERVAL 1 DAY
+		WHERE f.`fechaFac`BETWEEN '$ini' AND '$ini' + INTERVAL 1 DAY
 		AND f.`anulada` = 0
 		AND e.`tipomov` = 7
 		AND f.`almacen` = 1
@@ -110,26 +110,11 @@ class Dashboard_model extends CI_Model
 		FROM factura_egresos fe
 		INNER JOIN factura f ON f.`idFactura` = fe.`idFactura`
 		INNER JOIN egresos e ON e.`idegresos` =fe.`idegresos`
-		WHERE f.`fechaFac`BETWEEN '2018-06-12' AND '2018-06-12' + INTERVAL 1 DAY
+		WHERE f.`fechaFac`BETWEEN '$ini' AND '$ini' + INTERVAL 1 DAY
 		AND f.`anulada` = 0
 		AND e.`tipomov` = 6
 		AND f.`almacen` = 1
 		GROUP BY f.`idFactura`) AS tb";
-		$query=$this->db->query($sql);		
-		return $query;
-	}
-	public function cantidadHoy($ini) { 
-		$sql="SELECT 'cantidad' info, f.`fechaFac` hoy , 
-		COUNT(fd.facturaPUnitario*fd.facturaCantidad) lp , 
-		COUNT(fd3.facturaPUnitario*fd3.facturaCantidad) pts,
-		COUNT(fd4.facturaPUnitario*fd4.facturaCantidad) scz
-			FROM factura AS f
-			LEFT JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura  AND f.almacen=1
-			LEFT JOIN facturadetalle fd3 ON fd3.idFactura=f.idFactura AND f.almacen= 3
-			LEFT JOIN facturadetalle fd4 ON fd4.idFactura=f.idFactura AND f.almacen= 4
-			WHERE f.`fechaFac` BETWEEN '$ini' AND '$ini' + INTERVAL 1 DAY
-			AND f.`anulada`=0
-			GROUP BY DAY(f.`fechaFac`)";
 		$query=$this->db->query($sql);		
 		return $query;
 	}

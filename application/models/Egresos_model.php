@@ -23,7 +23,7 @@ class Egresos_model extends CI_Model
                     INNER JOIN clientes c 
                     ON e.cliente=c.idCliente
                     INNER JOIN users u 
-                    ON u.id=e.autor 
+                    ON u.id=e.vendedor 
                     INNER JOIN almacenes a 
                     ON a.idalmacen=e.almacen 
                     INNER JOIN moneda m 
@@ -502,8 +502,9 @@ class Egresos_model extends CI_Model
     }
     public function ListarparaFacturacion($ini,$fin,$alm,$tipo)
     {        
-        $sql="
-            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,sum(d.total)/tc.tipocambio totalsus , tc.tipocambio
+        $sql="SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, 
+            CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, 
+            e.clientePedido,c.idcliente,sum(d.total)/tc.tipocambio totalsus , tc.tipocambio
             FROM egresos e
             INNER JOIN egredetalle d
             on e.idegresos=d.idegreso
@@ -512,7 +513,7 @@ class Egresos_model extends CI_Model
             INNER JOIN clientes c 
             ON e.cliente=c.idCliente
             INNER JOIN users u 
-            ON u.id=e.autor 
+            ON u.id=e.vendedor 
             INNER JOIN almacenes a 
             ON a.idalmacen=e.almacen 
             INNER JOIN moneda m 

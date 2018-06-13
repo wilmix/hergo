@@ -301,6 +301,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     });
     calcularTotal()
     limpiarArticulo();
+    document.getElementById("articulo_imp").focus()
 }
 $(document).on("keyup","#cantidad_imp,#punitario_imp",function(){
     var cant=$("#cantidad_imp").inputmask('unmaskedvalue');

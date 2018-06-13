@@ -134,9 +134,10 @@ function getVentasHoy() {
     }, 
   }).done(function (res) {
     console.log(res);
-    if (res =='') {
+    if (res[0].ventasHoy == null) {
       console.log('vacioVentasHoy');
       $("#ventasHoy").html('0 '+"<small> Bs</small>")
+      $("#cantidad").html('0')
     } else {
       let ventasHoy = res[0].ventasHoy
       let cantidad = res[0].cantidadHoy
@@ -184,7 +185,7 @@ function getNotaEntregaHoy() {
       i: ini
     }, 
   }).done(function (res) {
-    if (res == '') {
+    if (res[0].notaEntrega == null) {
       $("#notaEntrega").html('0.00 '+"<small> Bs</small>")
     } else {
         let ventasNE = res[0].notaEntrega
@@ -206,7 +207,7 @@ function getVentaCajaHoy() {
       i: ini
     }, 
   }).done(function (res) {
-    if (res == '') {
+    if (res[0].ventaCaja == null) {
       $("#ventaCaja").html('0.00 '+"<small> Bs</small>")
     } else {
         let ventaCaja = res[0].ventaCaja

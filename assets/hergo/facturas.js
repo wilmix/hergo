@@ -100,40 +100,31 @@ function retornarTablaFacturacion()
             striped:true,
             pagination:true,
             pageSize:"50",
-            //height:"550", error con filtros
-            //clickToSelect:true,
             search:true,
             filter:true,
-            //searchOnEnterKey:true,
-            filter:true,
             showColumns:true,
+            strictSearch: true,
 
             columns: [            
             {
                 field: 'n',
-                width: '3%',
                 title: 'N',
                 align: 'center',
                 sortable:true,
-                filter: {
-                    type: "select",
-                    data: datosselect[0]
-                }
             },
        
             {
                 field:'fechamov',
-                width: '7%',
                 title:"Fecha",
                 sortable:true,
                 align: 'center',
+                searchable: false,
                 formatter: formato_fecha_corta,
 
             },
             {
                 field:'nombreCliente',
                 title:"Cliente",
-                width: '17%',
                 sortable:true,
                 filter: {
                     type: "select",
@@ -143,7 +134,7 @@ function retornarTablaFacturacion()
             {
                 field:'monedasigla',
                 title:"Moneda",
-                width: '7%',
+                searchable: false,
                 visible:true,
                 sortable:true,
                 
@@ -151,7 +142,6 @@ function retornarTablaFacturacion()
             {
                 field:'total',
                 title:"Total Bs",
-                width: '7%',
                 align: 'right',
                 sortable:true,
                 formatter: operateFormatter3,
@@ -169,7 +159,6 @@ function retornarTablaFacturacion()
             {
                 field:'sigla',
                 title:"TipoMov",
-                width: '7%',
                 sortable:true,
                 filter: {
                     type: "select",
@@ -180,7 +169,7 @@ function retornarTablaFacturacion()
             {
                 field:'n',
                 title:"N Mov",
-                width: '7%',
+                searchable: false,
                 sortable:true,
       
                 
@@ -189,36 +178,31 @@ function retornarTablaFacturacion()
             {   //Estado poner Pagado - Pendiente - Anulado
                 field:"estado",
                 title:"Estado",
-                width: '7%',
                 sortable:true,
                 align: 'center',
+                searchable: false,
                 formatter: operateFormatter2,
-                filter: {
-                    type: "select",
-                    data:["No facturado","Parcial"]
-                },
             },                  
             {
                 field:"autor",
-                width: '8%',
-                title:"Autor",
+                title:"Responsable",
                 sortable:true,
-                visible:false,
+                searchable: false,
                 align: 'center'
             },
             {
                 field:"fecha",
-                width: '8%',
                 title:"Fecha",
                 sortable:true,
                 visible:false,
+                searchable: false,
                 align: 'center',
                 //formatter: formato_fecha_corta,
             },
             {
                 title: 'Acciones',
                 align: 'center',
-                width: '10%',
+                searchable: false,
                 events: operateEvents,
                 formatter: operateFormatter
             }]
@@ -566,13 +550,6 @@ function retornarBoton2(value, row, index)
        '<button type="button" class="btn btn-default eliminarElemento" data-view="'+row.idingdetalle+'"><span class="fa fa-times" aria-hidden="true"></span></button>',
     ].join('');
 }
-/*function QuitardeTabla(dato)
-{
-    var view=$('[data-view="'+dato+'"]').removeClass("hidden");
-    var remove=$('[data-remove="'+dato+'"]').addClass("hidden");
-    var tr=view.parents("tr");              
-    tr.removeClass("view")
-}*/
 function quitarElementoTabla(row)
 {       
     ids=new Array(row.idEgreDetalle)   
@@ -894,83 +871,6 @@ function AgregarRegistroTabla3Array(row)
     });
 }
 
-var data=[
-    {
-        "name": "bootstrap-table",
-        "stargazers_count": "526",
-        "forks_count": "122",
-        "description": "An extended Bootstrap table with radio, checkbox, sort, pagination, and other added features. (supports twitter bootstrap v2 and v3)"
-    },
-    {
-        "name": "multiple-select",
-        "stargazers_count": "288",
-        "forks_count": "150",
-        "description": "A jQuery plugin to select multiple elements with checkboxes :)"
-    },
-    {
-        "name": "bootstrap-show-password",
-        "stargazers_count": "32",
-        "forks_count": "11",
-        "description": "Show/hide password plugin for twitter bootstrap."
-    },
-    {
-        "name": "blog",
-        "stargazers_count": "13",
-        "forks_count": "4",
-        "description": "my blog"
-    },
-    {
-        "name": "scutech-redmine",
-        "stargazers_count": "6",
-        "forks_count": "3",
-        "description": "Redmine notification tools for chrome extension."
-    }
-];
-function tablaprueba()
-{
-     var $table = $('#table').bootstrapTable({
-        idField: 'name',
-        data: data,
-        columns: [{
-            field: 'name',
-            title: 'Name',
-
-        }, {
-            field: 'stargazers_count',
-            title: 'Stars',
-            editable: {
-                type: 'text',
-                mode: 'inline',
-                container: 'body',
-                validate: validateNum
-            }
-        }, {
-            field: 'forks_count',
-            title: 'Forks',
-            editable: {
-                type: 'text',
-                mode: 'inline',
-                 container: 'body',
-            }
-        }, {
-            field: 'description',
-            title: 'Description',
-            editable: {
-                type: 'textarea',
-                 container: 'body',
-            }
-        }]
-    });
-    $table.on('editable-save.bs.table', function (e, field, row, old, $el) {
-        /*console.log(e)
-        console.log(field)
-        console.log(row)
-        console.log($el)*/
-
-        $el.text=old;
-            return false;
-    });
-}
 function validateNum(value) {
     value = $.trim(value);   
     //console.log(editable)

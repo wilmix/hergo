@@ -317,9 +317,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
         {
             console.log(Number(cant)<=Number(saldoAlmacen) && Number(saldoAlmacen) > 0 )
             agregarArticuloEgresos();
-            document.getElementById("articulo_imp").focus()
-
-            
+          
         } else {
             swal({
                 title: 'Saldo Insuficiente',
@@ -473,11 +471,7 @@ function guardarmovimiento()
                         showCancelButton: false
                     }).then(
                           function(result) {
-                            //location.reload();
-                            document.getElementById("obs_ne").value = "";
-                            document.getElementById("idCliente").value = "";
-                            $("#tablaNotaEntrega tr").remove();
-                            limpiarCabecera()
+                            location.reload();
                           });
                 }
                 else
@@ -502,8 +496,7 @@ function actualizarMovimiento()
     console.log(valuesToSubmit)
     console.log(tablaaux);
     if(tablaaux.length>0)
-    {
-        var tabla=JSON.stringify(tablaaux);
+    {        var tabla=JSON.stringify(tablaaux);
 
         valuesToSubmit+="&tabla="+tabla;    
         retornarajax(base_url("index.php/Egresos/actualizarmovimiento"),valuesToSubmit,function(data)
