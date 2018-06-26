@@ -285,11 +285,12 @@ var codigo=$("#articulo_imp").val();
     var saldoAlmacen =$("#saldo_ne").val();
     var codigoArticulo =$("#articulo_imp").val();
 
-    if (cant>0) //valida cantidad mayor a cero
+    if (Number(cant) > 0 && Number(costo)>=0) //valida cantidad mayor a cero
     {
 
-           if (saldoAlmacen > 0) // mensaje para  saldo de almacen 
+           if (Number(cant)<=Number(saldoAlmacen) && Number(saldoAlmacen) > 0 ) // mensaje para  saldo de almacen 
             {
+                console.log(Number(cant)<=Number(saldoAlmacen) && Number(saldoAlmacen) > 0 )
                 agregarArticuloTraspasos();
             }
             else
