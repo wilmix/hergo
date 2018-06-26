@@ -448,7 +448,7 @@ class Ingresos extends CI_Controller
 			{
 				//die("Es traspaso");
 				$tabla=$this->retornaTablaIngresos($id);
-				$this->retornarcostoarticulo_tabla($tabla,$res->almacen,$res->moneda,true);
+				//$this->retornarcostoarticulo_tabla($tabla,$res->almacen,$res->moneda,true);
 			}
 
 			$res=$this->Ingresos_model->editarestado_model($d,$id);

@@ -311,7 +311,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     var codigoArticulo = $("#articulo_imp").val();
     var total;
 
-    if (cant > 0 && costo>=0) 
+    if (Number(cant) > 0 && Number(costo)>=0) 
     {
         if (Number(cant)<=Number(saldoAlmacen) && Number(saldoAlmacen) > 0 ) // mensaje para  saldo de almacen 
         {

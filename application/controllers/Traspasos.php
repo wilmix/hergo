@@ -310,7 +310,7 @@ class Traspasos extends CI_Controller
     	$idEgreso=$this->Egresos_model->guardarmovimiento_model($datos);    	    	
     	if($idEgreso)
     	{
-    		$this->actualizarCostoArticuloEgreso($datos['tabla'],$datos['almacen_ne']);			
+    		//$this->actualizarCostoArticuloEgreso($datos['tabla'],$datos['almacen_ne']);			
     		return $idEgreso;
     	}
 		else
