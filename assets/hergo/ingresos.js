@@ -266,7 +266,7 @@ function mostrarTablaIngresos(res) {
                 align: 'center',
                 visible: false,
                 sortable: true,
-                searchable: false,
+                searchable: true,
                 filter: {
                     type: "select",
                     data: datosselect[1]
@@ -315,9 +315,6 @@ function mostrarTablaIngresos(res) {
                 sortable: true,
                 searchable:false,
                 formatter: operateFormatter3,
-                filter: {
-                    type: "input"
-                },
 
             },
             {
@@ -338,10 +335,6 @@ function mostrarTablaIngresos(res) {
                 title: "Estado",
                 sortable: true,
                 searchable:false,
-                filter: {
-                    type: "select",
-                    data: ["APROBADO", "PENDIENTE", "ANULADO"]
-                },
                 formatter: operateFormatter2,
                 align: 'center',
 
@@ -349,13 +342,12 @@ function mostrarTablaIngresos(res) {
             {
                 field: "autor",
                 title: "Autor",
-                sortable: true,
-                searchable:false,
+                searchable:true,
                 filter: {
                     type: "select",
                     data: datosselect[2]
                 },
-                visible: false,
+                visible: true,
                 align: 'center',
 
             },
