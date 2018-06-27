@@ -169,15 +169,6 @@ function mostrarTablaIngresosTraspaso(res) {
 
             },
             {
-                field: "estado",
-                title: "Estado",
-                sortable: true,
-                formatter: operateFormatter2,
-                align: 'center',
-                searchable: false,
-
-            },
-            {
                 field: "autor",
                 title: "Autor",
                 sortable: true,
@@ -197,6 +188,16 @@ function mostrarTablaIngresosTraspaso(res) {
                 formatter: formato_fecha_corta,
                 visible: false,
                 align: 'center',
+                searchable: false,
+
+            },
+            {
+                field: "estado",
+                title: "Estado",
+                sortable: true,
+                formatter: operateFormatter2,
+                align: 'center',
+                width:'100px',
                 searchable: false,
 
             },
@@ -304,15 +305,6 @@ function mostrarTablaIngresos(res) {
 
             },
             {
-                field: "estado",
-                title: "Estado",
-                sortable: true,
-                searchable:false,
-                formatter: operateFormatter2,
-                align: 'center',
-
-            },
-            {
                 field: "autor",
                 title: "Autor",
                 searchable:true,
@@ -331,6 +323,16 @@ function mostrarTablaIngresos(res) {
                 sortable: true,
                 formatter: formato_fecha_corta,
                 visible: false,
+                align: 'center',
+
+            },
+            {
+                field: "estado",
+                title: "Estado",
+                sortable: true,
+                width:'100px',
+                searchable:false,
+                formatter: operateFormatter2,
                 align: 'center',
 
             },

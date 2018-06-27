@@ -82,13 +82,10 @@ function retornarTablaTraspasos()
             striped:true,
             pagination:true,
             pageSize:"100",
-            //height:"550", error con filtros
-            //clickToSelect:true,
             search:true,
-            //strictSearch:true,
-            searchOnEnterKey:true,
+            strictSearch:true,
             filter:true,
-            showColumns:true,
+            //showColumns:true,
                     
             columns:[{
                 field:'fecha',
@@ -96,8 +93,15 @@ function retornarTablaTraspasos()
                 sortable:true,
                 align: 'center',
                 formatter: formato_fecha_corta,
+                searchable:false,
             },
-
+            {
+                field:'numEgreso',
+                title:"N",
+                align: 'center',
+                sortable:true,  
+                width:"20px",               
+            },
             {
                 field:'origen',
                 title:"Almacen Origen",
@@ -106,6 +110,13 @@ function retornarTablaTraspasos()
                         type: "select",
                         data: datosselect[0]
                     }
+            },
+            {
+                field:'numIngreso',
+                title:"N",
+                align: 'center',
+                sortable:true, 
+                width:"20px",                     
             },
             {
                 field:'destino',
@@ -122,6 +133,7 @@ function retornarTablaTraspasos()
                 align: 'right',
                 sortable:true,
                 formatter: operateFormatter3,
+                searchable:false,
             },  
             {
                 field:"estado",
@@ -133,6 +145,7 @@ function retornarTablaTraspasos()
                     data: ["Pendiente", "Aprobado"],
                         },
                 formatter: operateFormatter2,
+                searchable:false,
             },                  
             
             {
@@ -140,6 +153,7 @@ function retornarTablaTraspasos()
                 align: 'center',
                 width: '100px',
                 events: operateEvents,
+                searchable:false,
                 formatter: operateFormatter
             }]
             
