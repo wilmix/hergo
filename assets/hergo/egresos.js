@@ -96,7 +96,7 @@ function mostrarTablaEgresosTraspasos(res) {
                 },
 
             },
-            {
+            /*{
                 field: 'factura',
                 title: "Factura",
                 width: '4%',
@@ -106,7 +106,7 @@ function mostrarTablaEgresosTraspasos(res) {
                     type: "input"
                 }
 
-            },
+            },*/
             {
                 field: 'monedasigla',
                 title: "Mon",
@@ -149,10 +149,6 @@ function mostrarTablaEgresosTraspasos(res) {
                 width: '7%',
                 sortable: true,
                 align: 'center',
-                filter: {
-                    type: "select",
-                    data: ["T. Facturado", "No facturado", "Parcial", "Anulado"],
-                },
                 formatter: operateFormatter2,
 
             },
@@ -418,9 +414,12 @@ function operateFormatter(value, row, index) {
 
 function operateFormatter2(value, row, index) {
     $ret = ''
-    if (row.sigla=='ET' || row.sigla=='EB') {
-        $ret = '-'
-    } else {
+    if (row.sigla=='ET') {
+        $ret = '<span class="label label-default">Traspaso</span>'
+    } else if(row.sigla=='EB'){
+        $ret = '<span class="label label-default">BajaProducto</span>'
+    } 
+    else {
         if (row.anulado == 1) {
             $ret = '<span class="label label-warning">ANULADO</span>';
         } else {
@@ -556,8 +555,13 @@ function verdetalle(fila) {
             $("#totalbsdetalle").val(totalbs);
             $("#titulo_modalIgresoDetalle").html(" - " + fila.tipomov + " - " + csFact);
             $("#modalEgresoDetalle").modal("show");
-
-            arrayFactura = fila.factura.split("-");
+            let arrayFactura = ""
+            if (fila.factura === null) {
+                return arrayFactura
+            } else {
+                arrayFactura = fila.factura.split("-");
+            }
+            
             var cadena = ""
             $.each(arrayFactura, function (index, val) {
 

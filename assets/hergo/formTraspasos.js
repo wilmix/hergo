@@ -431,6 +431,7 @@ function guardarmovimiento()
         var tabla=JSON.stringify(tablaaux);
         
         valuesToSubmit+="&tabla="+tabla;
+        console.log(tabla);
 
         retornarajax(base_url("index.php/Traspasos/guardarmovimiento"),valuesToSubmit,function(data)
         {

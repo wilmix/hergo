@@ -88,13 +88,13 @@
                 <input id="fechamov_egr" type="text" class="form-control" name="fechamov_egr" readonly="">
              </div>
              <div class="col-xs-6 col-sm-6 col-md-2">
-                <label for="moneda_egr">Moneda:</label>
-                <input id="moneda_egr" type="text" class="form-control" name="moneda_egr" readonly="">
+                <!--<label for="moneda_egr">Moneda:</label>
+                <input id="moneda_egr" type="text" class="form-control" name="moneda_egr" readonly="">-->
 
              </div>
              <div class="col-xs-4 col-sm-4 col-md-2">
-                  <label>N° Pedido:</label>
-                  <input id="pedido_egr" type="text" class="form-control" name="pedido_egr" readonly="">
+                  <!--<label>N° Pedido:</label>
+                  <input id="pedido_egr" type="text" class="form-control" name="pedido_egr" readonly="">-->
              </div>
 
           </div> 
@@ -108,14 +108,13 @@
           <!--TOTALES SISTEMA-->
           
 
-          <div class="col-md-6 col-xs-12 pull-right" style="padding: 0px">
-            <div class = "input-group col-md-12 col-xs-12">
-              <span class = "input-group-addon">$</span>
-              <!--mostrar el total bolivianos factura-->
-              <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="" disabled="">
+          <div class="col-md-12 col-xs-12" style="padding: 0px">
+            <div class = "input-group col-md-3 col-xs-6 pull-right">
+              <!--<span class = "input-group-addon">$</span>
+              <!--<input type = "text" class="form-control form-control-sm text-right tiponumerico" id="" disabled="">-->
               <span class = "input-group-addon">Bs</span>
               <!--mostrar el total bolivivanos sistema-->
-              <input type = "text" class="form-control form-control-sm text-right tiponumerico" id="totalbsdetalle" disabled="">
+              <input type = "text" class="form-control form-control-sm text-right tiponumerico pull-right" id="totalbsdetalle" disabled="">
              </div>
           </div>
           <div class="clearfix"></div>

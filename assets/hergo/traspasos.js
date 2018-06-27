@@ -238,11 +238,11 @@ window.operateEvents = {
 };
 function verdetalle(fila)
 {
-  console.log(fila)
+  //console.log(fila)
     id=fila.idEgreso
-    console.log(id);
+    //console.log(id);
     datos={id:id}
-    console.log(fila)
+    //console.log(fila)
     retornarajax(base_url("index.php/Traspasos/mostrarDetalle"),datos,function(data)
     {
         estado=validarresultado_ajax(data);
@@ -252,6 +252,7 @@ function verdetalle(fila)
             mostrarDetalle(data.respuesta);
             //console.log(glob_tipoCambio)
             var totalnn=fila.total
+            console.log(totalnn);
             
            /* var totalsus=totalnn;
             var totalbs=totalnn;
@@ -312,7 +313,7 @@ function verdetalle(fila)
 }
 function mostrarDetalle(res)
 {
-    console.log(res)
+    //console.log(res)
     $("#tTraspasodetalle").bootstrapTable('destroy');
         $("#tTraspasodetalle").bootstrapTable({
 
@@ -326,54 +327,40 @@ function mostrarDetalle(res)
                 field: 'CodigoArticulo',
                 title: 'Código',
                 align: 'center',
-                width: '10%',
+                width:'100px',
                 sortable:true,
             },
             {
                 field: 'Descripcion',
                 title: 'Descripcion',
-                width: '40%',
                 sortable:true,
             },
             {
                 field:'cantidad',
                 title:"Cantidad",
                 align: 'right',
-                width: '10%',
+                width:'100px',
                 sortable:true,
             },
-            
-            //PARA COMPARAR CON FACTURA
-           
             {
                 field:'punitario',
                 title:"P/U Bs",
                 align: 'right',
-                width: '10%',
+                width:'100px',
                 sortable:true,
             },
             {
                 field:'total',
                 title:"Total",
                 align: 'right',
-                width: '10%',
+                width:'100px',
                 sortable:true,
             },
 
             ]
         });
 }
-function punitariofac(value, row, index)
-{       
-    
-    console.log(row);
-    var punit=row.cantidad==""?0:row.cantidad;
-    punit=row.totaldoc/punit;
-    punit=redondeo(punit,3)
-    
-    return (formatNumber.new(punit));
-   //return(num)
-}
+
 function restornardatosSelect(res)
 {
 

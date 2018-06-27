@@ -516,16 +516,30 @@ function verdetalle(fila) {
             $("#ningalm_imp").val(fila.ningalm)
             $("#obs_imp").val(fila.obs)
             $("#nmovingre").html(fila.n)
+            console.log(fila.tipomov);
+            console.log(fila.estado);
 
             /***pendienteaprobado***/
             var boton = "";
-            if (fila.estado == "0")
+
+            if (fila.estado == "0"){
                 boton = '<button type="button" class="btn btn-success" datastd="' + fila.idIngresos + '" id="btnaprobado">Aprobado</button>';
-            else
+            } else {
                 boton = '<button type="button" class="btn btn-danger" datastd="' + fila.idIngresos + '" id="btnpendiente">Pendiente</button>';
-            var csFact = "Sin factura";
-            if (fila.nfact != "SF")
-                csFact = "Con factura";
+            }    
+            let csFact = "";
+            if (fila.nfact == "SF") {
+                csFact = "Sin factura"
+            } else if (fila.tipomov == "Traspaso de Almacen") {
+                if (fila.estado==1) {
+                    csFact = "Aprobado"
+                } else {
+                    csFact = "Pendiente"
+                }
+            } else {
+                csFact = "Con factura"
+            }
+
 
             totaldoc = totaldoc * 100 / 100;
             totaldoc = totaldoc.toFixed(2);
