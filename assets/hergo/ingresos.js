@@ -91,34 +91,29 @@ function mostrarTablaIngresosTraspaso(res) {
         striped: true,
         pagination: true,
         pageSize: "100",
-        //height:"550", error con filtros
-        //clickToSelect:true,
         search: true,
-        //strictSearch:true,
-        searchOnEnterKey: true,
         filter: true,
         showColumns: true,
+        stickyHeader: true,
+        stickyHeaderOffsetY: '50px',
+        strictSearch: true,
 
 
 
         columns: [{
                 field: 'n',
-                width: '5%',
                 title: 'N',
                 align: 'center',
                 sortable: true,
-
-                filter: {
-                    type: "input"
-                }
+                searchable: true,
+                width:'20px',
             },
             {
                 field: 'sigla',
-                width: '5%',
                 title: 'Tipo',
                 align: 'center',
                 visible: false,
-                searchable: false,
+                searchable: true,
                 sortable: true,
 
                 filter: {
@@ -128,111 +123,89 @@ function mostrarTablaIngresosTraspaso(res) {
             },
             {
                 field: 'fechamov',
-                width: '7%',
                 title: "Fecha",
                 align: 'right',
                 sortable: true,
-                //align: 'center',
+                align: 'center',
                 searchable: false,
                 formatter: formato_fecha_corta,
             },
             {
                 field: 'origen', //para traspasos
                 title: "Origen",
-                width: '20%',
                 filter: {
                     type: "select",
                     data: datosselect[3]
                 },
                 sortable: true,
-
-            },
-            {
-                field: 'nfact',
-                title: "Factura",
-                width: '7%',
-                sortable: true,
-                //searchable:false,
-                filter: {
-                    type: "input"
-                },
-
-
+                searchable: true,
             },
             {
                 field: 'monedasigla',
                 title: "Moneda",
-                width: '7%',
                 align: 'right',
+                width:'20px',
                 sortable: true,
-
+                searchable: false,
 
             },
             {
                 field: 'totalsus',
                 title: "Total Sus",
-                width: '7%',
                 align: 'right',
+                width:'100px',
                 sortable: true,
                 formatter: operateFormatter3,
-                filter: {
-                    type: "input"
-                },
-
+                searchable: false,
             },
             {
                 field: 'total',
                 title: "Total Bs",
-                width: '7%',
+                width:'100px',
                 align: 'right',
                 sortable: true,
+                searchable: false,
                 formatter: operateFormatter3,
-                filter: {
-                    type: "input"
-                },
 
             },
             {
                 field: "estado",
                 title: "Estado",
-                width: '7%',
                 sortable: true,
-                filter: {
-                    type: "select",
-                    data: ["APROBADO", "PENDIENTE", "ANULADO"]
-                },
                 formatter: operateFormatter2,
                 align: 'center',
+                searchable: false,
 
             },
             {
                 field: "autor",
-                width: '10%',
                 title: "Autor",
                 sortable: true,
                 filter: {
                     type: "select",
                     data: datosselect[2]
                 },
-                visible: false,
+                visible: true,
                 align: 'center',
+                searchable: true,
 
             },
             {
                 field: "fecha",
-                width: '10%',
                 title: "Fecha",
                 sortable: true,
                 formatter: formato_fecha_corta,
                 visible: false,
                 align: 'center',
+                searchable: false,
 
             },
             {
                 title: 'Acciones',
                 align: 'center',
-                width: '10%',
+                width:'100px',
                 events: operateEvents,
+                searchable: false,
                 formatter: operateFormatter
             }
         ]
@@ -304,7 +277,7 @@ function mostrarTablaIngresos(res) {
                 title: "Moneda",
                 align: 'center',
                 searchable:false,
-                WIDTH:'20px'
+                width:'20px'
      
             },
             {
