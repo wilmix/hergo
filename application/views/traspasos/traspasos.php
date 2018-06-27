@@ -63,7 +63,7 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
 
         <div class="modal-title" ><h4>
-            <h2><span class="label label-primary" id="nombreModal"></span>
+            <h2><span class="label label-primary" id="nombreModal">Traspaso de Almacenes</span>
             <span class="label label-primary" id="numeromovimiento"></span>
             <span id="estadoTraspaso"></span>
             </h2>

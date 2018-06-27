@@ -92,7 +92,6 @@ function retornarTablaTraspasos()
                     
             columns:[{
                 field:'fecha',
-                width: '7%',
                 title:"Fecha",
                 sortable:true,
                 align: 'center',
@@ -102,7 +101,6 @@ function retornarTablaTraspasos()
             {
                 field:'origen',
                 title:"Almacen Origen",
-                width: '17%',
                 sortable:true,                 
                 filter: {
                         type: "select",
@@ -112,7 +110,6 @@ function retornarTablaTraspasos()
             {
                 field:'destino',
                 title:"Almacen Destino",
-                width: '17%',
                 sortable:true,                 
                 filter: {
                         type: "select",
@@ -122,19 +119,15 @@ function retornarTablaTraspasos()
             {
                 field:'total',
                 title:"Total",
-                width: '7%',
                 align: 'right',
                 sortable:true,
                 formatter: operateFormatter3,
-                filter: {type: "input"}
             },  
             {
                 field:"estado",
                 title:"Estado",
-                width: '7%',
                 sortable:true,
                 align: 'center',                    
-
                 filter: {
                     type: "select",
                     data: ["Pendiente", "Aprobado"],
@@ -145,7 +138,7 @@ function retornarTablaTraspasos()
             {
                 title: 'Acciones',
                 align: 'center',
-                width: '10%',
+                width: '100px',
                 events: operateEvents,
                 formatter: operateFormatter
             }]
@@ -171,8 +164,6 @@ function operateFormatter(value, row, index)
     return [
         '<button type="button" class="btn btn-default verTraspaso" aria-label="Right Align">',
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',        
-        '<button type="button" class="btn btn-default imprimirEgreso" aria-label="Right Align">',
-        '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
     ].join('');
 }
 
