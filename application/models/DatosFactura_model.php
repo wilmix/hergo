@@ -54,7 +54,7 @@ class DatosFactura_model extends CI_Model
 		*/
 		$sql="SELECT * 
 			FROM datosfactura 
-			WHERE lote=$lote";
+			WHERE idDatosFactura=$lote";
 		$query=$this->db->query($sql);
         if($query->num_rows()>0)
         {

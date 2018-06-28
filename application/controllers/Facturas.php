@@ -527,7 +527,7 @@ class Facturas extends CI_Controller
         	
 
         	$datosFactura=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
-			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$datosFactura->lote);
+			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$datosFactura->idDatosFactura);
 		/*	print_r($ultimaFactura);
 			die();*/
         	/*VALIDAR FECHA*/
@@ -556,7 +556,7 @@ class Facturas extends CI_Controller
 			}
         	$factura=new stdclass();
         	//$factura->idFactura=0
-        	$factura->lote=$datosFactura->lote;
+        	$factura->lote=$datosFactura->idDatosFactura;
         	$factura->almacen=$idAlmacen;
         	$factura->nFactura=$numeroFactura;
 			$factura->fechaFac= date('Y-m-d',strtotime($fechaFac));
@@ -709,7 +709,7 @@ class Facturas extends CI_Controller
         	//$idAlmacen=$this->session->userdata('idalmacen');//para usuarios no administradores
 			$resultado=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
 	
-			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$resultado->lote);
+			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$resultado->idDatosFactura);
 			
 			$errores=array();
 			$obj=new stdclass();

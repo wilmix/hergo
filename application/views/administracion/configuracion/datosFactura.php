@@ -87,7 +87,7 @@
                                     <span class="input-group-addon">
                                         <i class="glyphicon glyphicon-screenshot"></i>
                                     </span>
-                                    <input name="hasta" placeholder="Hasta" class="form-control" id="hasta" type="text">
+                                    <input name="hasta" placeholder="Hasta" value="9999" class="form-control" id="hasta" type="text">
                                 </div>
                             </div>
                         </div>
@@ -137,7 +137,7 @@
                                     <span class="input-group-addon">
                                         <i class="glyphicon glyphicon-screenshot"></i>
                                     </span>
-                                    <textarea class="form-control" id="leyenda1" name="leyenda1" placeholder="Ingrese llave de dosificación"></textarea>
+                                    <textarea class="form-control" id="leyenda1" name="leyenda1">"ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAÍS, EL USO ILÍCITO DE ÉSTA SERÁ SANCIONADO DE ACUERDO A LA LEY"</textarea>
                                 </div>
                             </div>
                         </div>
@@ -148,7 +148,7 @@
                                     <span class="input-group-addon">
                                         <i class="glyphicon glyphicon-screenshot"></i>
                                     </span>
-                                    <textarea class="form-control" id="leyenda2" name="leyenda2" placeholder="Ingrese llave de dosificación"></textarea>
+                                    <textarea class="form-control" id="leyenda2" name="leyenda2">Ley Nº 453: Está prohibido importar, distribuir  o comercializar productos prohibidos o retirados en el país de origen por atentar a la integridad física y a la salud</textarea>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +159,7 @@
                                     <span class="input-group-addon">
                                         <i class="glyphicon glyphicon-screenshot"></i>
                                     </span>
-                                    <textarea class="form-control" id="leyenda3" name="leyenda3" placeholder="Ingrese llave de dosificación"></textarea>
+                                    <textarea class="form-control" id="leyenda3" name="leyenda3">VENTA AL POR MAYOR DE MAQUINARIA, EQUIPO Y MATERIALES</textarea>
                                 </div>
                             </div>
                         </div>

@@ -201,11 +201,10 @@ function operateFormatter2(value, row, index)
     return ($ret);
 }
 
-function operateFormatter3(value, row, index)
-{       
-    num=Math.round(value * 100) / 100
+function operateFormatter3(value, row, index) {
+    num = Math.round(value * 100) / 100
+    num = num.toFixed(2);
     return (formatNumber.new(num));
-   //return(num)
 }
 function mostrarFactura(value, row, index)
 {       

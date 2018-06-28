@@ -73,31 +73,10 @@ $(document).ready(function() {
                     }                    
                 }
             },
-            leyenda1: {
-                validators: {
-                    notEmpty: {
-                        message: 'Inserte leyenda'
-                    }                    
-                }
-            },
-            leyenda2: {
-                validators: {
-                    notEmpty: {
-                        message: 'Inserte leyenda'
-                    }                    
-                }
-            },
-            leyenda3: {
-                validators: {
-                    notEmpty: {
-                        message: 'Inserte leyenda'
-                    }                    
-                }
-            },
             uso: {
                 validators: {
                     notEmpty: {
-                        message: 'Elija si articulo esta en uso'
+                        message: 'Elija si  esta en uso'
                     }                    
                 }
             }
@@ -229,14 +208,17 @@ function retornarTablaDatosFactura() {
                 {   
                     field: 'glosa01',            
                     title: 'Leyenda 01',
+                    visible: false
                 },
                 {   
                     field: 'glosa02',            
                     title: 'Leyenda 02',
+                    visible: false
                 },
                 {   
                     field: 'glosa03',            
                     title: 'Leyenda 03',
+                    visible: false
                 },
                 {   
                     field: 'fecha',            
