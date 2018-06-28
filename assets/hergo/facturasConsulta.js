@@ -174,6 +174,14 @@ function retornarTablaFacturacion()
                 }
             },
             {
+                field:'fecha',
+                title:"Fecha",
+                align:'center',
+                sortable:true,
+                visible:false,
+                searchable: false,
+            },
+            {
                 field:'pagada',
                 title:"Pagado",
                 sortable:true,

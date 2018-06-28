@@ -137,7 +137,7 @@
                                     <span class="input-group-addon">
                                         <i class="glyphicon glyphicon-screenshot"></i>
                                     </span>
-                                    <textarea class="form-control" id="leyenda1" name="leyenda1">"ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAÍS, EL USO ILÍCITO DE ÉSTA SERÁ SANCIONADO DE ACUERDO A LA LEY"</textarea>
+                                    <textarea class="form-control" id="leyenda1" name="leyenda1" rows="4">"ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAÍS, EL USO ILÍCITO DE ÉSTA SERÁ SANCIONADO DE ACUERDO A LA LEY"</textarea>
                                 </div>
                             </div>
                         </div>
@@ -148,7 +148,7 @@
                                     <span class="input-group-addon">
                                         <i class="glyphicon glyphicon-screenshot"></i>
                                     </span>
-                                    <textarea class="form-control" id="leyenda2" name="leyenda2">Ley Nº 453: Está prohibido importar, distribuir  o comercializar productos prohibidos o retirados en el país de origen por atentar a la integridad física y a la salud</textarea>
+                                    <textarea class="form-control" id="leyenda2" name="leyenda2" rows="4">Ley Nº 453: Está prohibido importar, distribuir  o comercializar productos prohibidos o retirados en el país de origen por atentar a la integridad física y a la salud</textarea>
                                 </div>
                             </div>
                         </div>

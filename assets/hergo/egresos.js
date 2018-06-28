@@ -338,7 +338,7 @@ function mostrarTablaEgresos(res) {
                 visible: false,
                 align: 'center',
                 searchable: false,
-                formatter: formato_fecha_corta,
+               // formatter: formato_fecha_corta,
             },
             {
                 title: 'Acciones',

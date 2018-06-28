@@ -321,7 +321,7 @@ function mostrarTablaIngresos(res) {
                 title: "Fecha",
                 searchable:false,
                 sortable: true,
-                formatter: formato_fecha_corta,
+                //formatter: formato_fecha_corta,
                 visible: false,
                 align: 'center',
 
