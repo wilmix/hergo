@@ -13,10 +13,7 @@ $(document).ready(function(){
 
     var start = moment().subtract(0, 'year').startOf('year')
     var end = moment().subtract(0, 'year').endOf('year')
-    var actual=moment().subtract(0, 'year').startOf('year')
-    var unanterior=moment().subtract(1, 'year').startOf('year')
-    var dosanterior=moment().subtract(2, 'year').startOf('year')
-    var tresanterior=moment().subtract(3, 'year').startOf('year')
+
  
     $(function() {
         moment.locale('es');
@@ -69,7 +66,7 @@ function retornarTablaFacturacion()
     fin=finfecha.format('YYYY-MM-DD')
     alm=$("#almacen_filtro").val()
     tipo=$("#tipo_filtro").val()
-    console.log({ini:ini,fin:fin,alm:alm,tipo:tipo})
+    //console.log({ini:ini,fin:fin,alm:alm,tipo:tipo})
     $.ajax({
         type:"POST",
         url: base_url('index.php/Facturas/MostrarTablaConsultaFacturacion'),
@@ -88,7 +85,6 @@ function retornarTablaFacturacion()
             pagination:true,
             pageSize:"25",    
             search:true,        
-            //searchOnEnterKey:true,
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',
             filter:true,
@@ -333,19 +329,6 @@ window.eventosBotones = {
         window.open(imprimir);
     },
     'click .anularFactura': function (e, value, row, index) {         
-     
-     /*   swal({
-          title: '',
-          text: "Se anulara la factura seleccionadahghghg",
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#DD6B55',          
-          confirmButtonText: 'Si, continuar',
-          cancelButtonText: "Cancelar",
-        }).then((result) => {       
-             anularFactura(row); 
-          
-        })*/
         swal({
           title: 'Esta seguro?',
           text: 'Se anulara la factura seleccionada',         
@@ -404,91 +387,35 @@ function agregarDatosInicialesFacturaModal(row)
     console.log( "Request Failed: " + err );
     }); 
 }
-function agregarDatosFacturaModal(res,row)
-{
-    
-    //$("#fNit").html(res.detalle.nit);
+function agregarDatosFacturaModal(res,row) {
     vmVistaPrevia.nit=res.detalle.nit;    
-    //$("#fnumero").html(res.nfac);
     vmVistaPrevia.numero=res.nfac;
-    //$("#fauto").html(res.detalle.autorizacion);
     vmVistaPrevia.autorizacion=res.detalle.autorizacion;
-    //$("#fechaLimiteEmision").html(formato_fecha_corta(res.detalle.fechaLimite));
-    vmVistaPrevia.fechaLimiteEmision=res.detalle.fechaLimite//formato_fecha_corta(res.detalle.fechaLimite);
-    //$("#codigoControl").html(row.codigoControl)
+    vmVistaPrevia.fechaLimiteEmision=res.detalle.fechaLimite
     vmVistaPrevia.codigoControl=row.codigoControl;
     vmVistaPrevia.llave=res.detalle.llaveDosificacion;    
     var fecha = moment(row.fechaFac, 'YYYY-MM-DD');
     vmVistaPrevia.fecha=fecha;
     vmVistaPrevia.manual=parseInt(res.detalle.manual);
-
-
-
-  /*  fechaFormato = fecha.format('YYYY-MM-DD');
-    var datos={
-        nit:row.ClienteNit,
-        fecha:fechaFormato,
-        monto:row.total,
-    }
-    codigoControl(res,datos);
-    */
 }
 function mostrardatosmodal(data)
 {
-
-    //$("#cuerpoTablaFActura").html("");
-
-     //   var totalfact=0;
-        
-              
-
-        /*$.each(data.data2,function(index, value){   
-            totalfact+=parseFloat(value.facturaCantidad*value.facturaPUnitario);
-            var row =' <tr>'+
-                    '<td>'+formato_moneda(value.facturaCantidad)+'</td>'+
-                    '<td>'+value.Sigla+'</td>'+
-                    '<td>'+value.ArticuloCodigo+'</td>'+
-                    '<td>'+value.ArticuloNombre+'</td>'+
-                    '<td class="text-right">'+formato_moneda(value.facturaPUnitario)+'</td>'+
-                    '<td class="text-right">'+formato_moneda(value.facturaCantidad*value.facturaPUnitario)+'</td>'+
-                  '</tr>'
-            $("#cuerpoTablaFActura").append(row);
-        });*/
-        /******LUGAR y fecha*****/
-        /*var fecha=data.data1.fechaFac;  
-        var fechaFormato = moment(fecha, 'YYYY-MM-DD');
-        var dia=fechaFormato.format("DD");
-        var mes=fechaFormato.format("MMMM");
-        var anio=fechaFormato.format("YYYY");    
-        var LugarFecha=("La Paz, "+dia+" de "+mes+" de "+anio);
-        $("#fechaFacturaModal").html(LugarFecha);*/
-        //console.log(data.data2)
-        vmVistaPrevia.datosFactura=data.data2;
-        //$("#clienteFactura").html(data.data1.ClienteFactura)
-        vmVistaPrevia.ClienteFactura=data.data1.ClienteFactura;        
-        //$("#clienteFacturaNit").html(data.data1.ClienteNit);
-        vmVistaPrevia.ClienteNit=data.data1.ClienteNit;
-        //$("#notaFactura").html(data.data1.glosa);
-        vmVistaPrevia.glosa=data.data1.glosa;
-
         tipocambioFactura=data.data1.cambiovalor;
         vmVistaPrevia.tipocambio=data.data1.cambiovalor;
         vmVistaPrevia.moneda=parseInt(data.data1.moneda);
+        vmVistaPrevia.datosFactura=data.data2;
+        if (vmVistaPrevia.moneda==2) {
+            for (let i = 0; i < vmVistaPrevia.datosFactura.length; i++) {
+                vmVistaPrevia.datosFactura[i].facturaPUnitario = vmVistaPrevia.datosFactura[i].facturaPUnitario/tipocambioFactura;
+            }
+        } 
 
+        vmVistaPrevia.ClienteFactura=data.data1.ClienteFactura;        
+        vmVistaPrevia.ClienteNit=data.data1.ClienteNit;
+        vmVistaPrevia.glosa=data.data1.glosa;
         vmVistaPrevia.pedido=data.data3.pedido;
         vmVistaPrevia.codigoControl=data.data3.codigoControl;
-
-        //vmVistaPrevia.generarCodigoControl() //este dato se extrae de la base de datos, solo se usa para generar el codigo
         vmVistaPrevia.generarCodigoQr();
-        console.log("REVISAR TIPO DE CAMBIO GUARDADO EN EL MOMENTO DE FACTURA")
-      
-        /***********LITERAL**************/
-      //  $("#totalTexto").html(NumeroALetras(totalfact));
-        /**********************************/
-       /* $("#totalFacturaBsModal").html(formato_moneda(totalfact));
-        $("#totalFacturaSusModal").html(formato_moneda(totalfact/tipocambioFactura));
-        $("#tipoCambioFacturaModal").html(tipocambioFactura);*/
         $("#facPrev").modal("show"); 
         quitarcargando();
-
 }

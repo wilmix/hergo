@@ -912,8 +912,17 @@ $(document).on("click","#guardarFactura",function()
 {
     agregarcargando();
     $("#guardarFactura").css("disabled","true");
-    var tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
+    let tabla3factura=$("#tabla3Factura").bootstrapTable('getData');
     tabla3factura=JSON.stringify(tabla3factura);
+    let tabla3 = JSON.parse(tabla3factura)
+    let moneda = $("#moneda").val()
+    if (moneda==2) {
+        for (let i = 0; i < tabla3.length; i++) {
+            tabla3[i].punitario = tabla3[i].punitario*glob_tipoCambio;
+        }
+    } 
+    tabla3factura=JSON.stringify(tabla3)
+    console.log(tabla3);
     var datos={
         almacen:$("#almacen_filtro").val(),
         fechaFac:$("#fechaFactura").val(),
@@ -924,7 +933,6 @@ $(document).on("click","#guardarFactura",function()
         codigoControl:$("#codigoControl").html(),
         textqr:$("#textqr").val(),
         tabla:tabla3factura,
-
     }
     $.ajax({
             type:"POST",
@@ -932,6 +940,7 @@ $(document).on("click","#guardarFactura",function()
             dataType: "json",
             data: datos,
         }).done(function(res){
+
            if(res)
            {
                quitarcargando();
