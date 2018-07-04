@@ -9,28 +9,22 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
 	}
-	public function mostrarPagos($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
-	{ //cambiar la consulta
-		$sql="SELECT p.idPagos, a.almacen, p.numPago,p.fechaPago,m.sigla,c.nombreCliente, GROUP_CONCAT(f.nFactura SEPARATOR ' - ') 
-		nFactura, SUM(p.montoPago) montoPago, p.glosaPago,  CONCAT(u.first_name,' ', u.last_name) autor, p.fecha, p.anulado, ca.nombreCliente as clienteAnt
-			FROM pagos p
-			INNER JOIN almacenes a
-			ON a.idalmacen=p.almacen
-			INNER JOIN moneda m
-			ON m.id=p.monedaPago
-			INNER JOIN clientes c
-			ON c.idCliente=p.cliente	
-			INNER JOIN factura f
-  			ON f.idFactura=p.idFactura		
-			INNER JOIN users u
-  			ON u.id=p.autor
-			INNER JOIN clientes ca
-			ON ca.idCliente=p.clienteAnt
-			WHERE p.fechaPago
-			BETWEEN '$ini' AND '$fin' AND p.almacen like '%$alm'
-			GROUP BY p.numPago
-			ORDER BY p.idPagos desc";
-		
+	public function mostrarPagos($ini=null,$fin=null,$alm="") { 
+		$sql="SELECT p.`idPago`, a.`almacen`, p.`numPago`, p.`fechaPago`, c.`nombreCliente`, p.`totalPago`, 
+		p.`anulado`, CONCAT(u.`first_name`, ' ' , u.`last_name`) autor, p.`fecha`, f.`pagada`, m.`sigla`, tp.`tipoPago`
+		FROM pago_factura pf
+		INNER JOIN pago p ON p.`idPago`= pf.`idPago`
+		INNER JOIN factura f ON f.`idFactura` = pf.`idFactura`
+		INNER JOIN clientes c ON c.`idCliente` = p.`cliente`
+		INNER JOIN users u ON u.`id`= p.`autor`
+		INNER JOIN moneda m ON m.`id` = p.`moneda`
+		INNER JOIN almacenes a ON a.`idalmacen` = p.`almacen`
+		INNER JOIN tipoPago tp ON tp.`id`= p.`tipoPago`
+		WHERE p.fechaPago
+		BETWEEN '$ini' AND '$fin' AND p.almacen like '%$alm'
+		AND f.`anulada` = 0
+		GROUP BY p.`idPago`
+		ORDER BY p.`idPago` DESC";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
@@ -68,15 +62,21 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function retornarDetallePago($numPago)
 	{
-		$sql="SELECT p.idPagos,f.idFactura,f.lote,f.nFactura,p.montoPago,f.total totalFactura, IFNULL(total-p.montoPago,0) saldo,f.pagada, a.almacen, c.nombreCliente,p.fechaPago, p.numPago, p.anulado		
-		FROM pagos p
-		INNER JOIN factura f
-		ON  p.idFactura=f.idFactura
-		INNER JOIN almacenes a
-		ON  a.idalmacen=p.almacen
-		INNER JOIN clientes c 
-		ON f.cliente = c.idCliente
-		WHERE p.numPago=$numPago";
+		$sql="SELECT f.`lote`, f.`fechaFac`,f.`nFactura`, c.`nombreCliente`, pf.`monto`, f.`pagada`, 
+		a.`almacen`, cp.`nombreCliente` nombre, p.`glosa`, p.`fechaPago`, p.`numPago`, tp.`tipoPago`, 
+		b.`sigla` banco, p.`transferencia`, p.`cheque`
+		FROM pago_factura pf
+		INNER JOIN pago p ON p.`idPago`= pf.`idPago`
+		INNER JOIN factura f ON f.`idFactura` = pf.`idFactura`
+		INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
+		INNER JOIN clientes cp ON cp.`idCliente` = p.`cliente`
+		INNER JOIN users u ON u.`id`= p.`autor`
+		INNER JOIN moneda m ON m.`id` = p.`moneda`
+		INNER JOIN almacenes a ON a.`idalmacen` = p.`almacen`
+		INNER JOIN tipoPago tp ON tp.`id` = p.`tipoPago`
+		LEFT JOIN bancos b ON b.`id`=p.`banco`
+		WHERE p.`numPago` = $numPago
+		ORDER BY f.`nFactura`";
 		
 		$query=$this->db->query($sql)->result_array();		
 		return $query;

@@ -20,6 +20,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
 				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
 				base_url('assets/sweetalert/sweetalert2.min.css'),
+				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),	
 			);
 		$this->cabecera_script=array(
 				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
@@ -37,7 +38,8 @@ class Pagos extends CI_Controller  /////**********nombre controlador
         		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
 				base_url('assets/sweetalert/sweetalert2.min.js'), 
 				base_url('assets/plugins/numeral/numeral.min.js'),
-				base_url('assets/hergo/NumeroALetras.js'),				
+				base_url('assets/hergo/NumeroALetras.js'),
+				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),				
 				
 			);
 			$this->foot_script=array(				
@@ -140,6 +142,8 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			/***********************************/
 
 			$this->datos['almacen']=$this->Pagos_model->retornar_tabla("almacenes");
+			$this->datos['tipoPago']=$this->Pagos_model->retornar_tabla("tipoPago");
+			$this->datos['bancos']=$this->Pagos_model->retornar_tabla("bancos");
 
 
 			/***********************************/

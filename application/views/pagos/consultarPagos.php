@@ -18,10 +18,7 @@
             </select>           
           </div>
           <table 
-            id="tpagos" 
-            data-toolbar="#toolbar2"
-            data-toggle="table"
-            data-height="550">
+            id="tpagos">
           </table>
       </div>
       <!-- /.box-body -->
@@ -43,15 +40,39 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h2 class="modal-title" id="" v-bind:class="{ anulado:anulado==1?true:false }">Recibo Nº {{numPago}} {{anulado==1?'Anulado':''}}</h2><!-- Numero de pago -->
+        <h2 class="modal-title" id="" v-bind:class="{ anulado:anulado==1?true:false }">Recibo Nº {{numPago}} {{anulado==1?'Anulado':''}} <span class="badge badge-light"> {{ tipoPago }}</span></h2><!-- Numero de pago -->
       </div>
       <div class="modal-body" >
-        <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-3">
           <p>Almacen: {{almacen}}</p>
+        </div>  
+        <div class="col-md-3">
+          <p>Fecha: {{fecha | fechaCorta}}</p>
+        </div>  
+        <div v-if="tipoPago == 'TRANSFERENCIA'">
+            <div class="col-md-3">
+              <p>Banco: {{ banco }}</p>
+            </div>  
+            <div class="col-md-3">
+              <p>Vaucher: {{ transferencia }}</p>
+            </div>
+        </div>
+        <div v-if="tipoPago == 'CHEQUE'">
+        <div class="col-md-3">
+              <p>Cheque: {{ cheque }}</p>
+            </div> 
+        </div>
+        
+      </div>
+      <div class="row">
+      <div class="col-md-12">
           <p>Cliente: {{cliente}}</p><!-- Nombre de cliente que pago  -->
         </div>
+      </div>
+        
         <div class="col-md-6">
-          <p>Fecha: {{fecha | fechaCorta}}</p>
+          
         </div>
         <div class="col-md-12">
           <p>Por concepto de:</p>
@@ -59,39 +80,33 @@
                 <thead>
                   <tr>
                     <th>Lote</th>
+                    <th>N°Factura</th>
                     <th>Cliente</th>
-                    <th>N°Factura</th>                    
-                    <th class="text-right">Total Factura</th>
-                    <th class="text-right">Saldo</th>
-                    <th class="text-right">Pagado Bs</th>
+                    <th>Estado</th>
+                    <th class="text-right">Monto</th>
                     
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="(fila,index) in tabla">
                     <td>{{fila.lote}}</td>
-                    <td>{{fila.nombreCliente}}</td>
                     <td>{{fila.nFactura}}</td>
-                    <td class="text-right">{{fila.totalFactura | moneda}}</td>
-                    <td class="text-right">{{fila.saldo | moneda}}</td>
-                    <td class="text-right">{{fila.montoPago | moneda}}</td>
+                    <td>{{fila.nombreCliente}}</td>
+                    <td>{{fila.pagada | estado}}</td>
+                    <td class="text-right">{{fila.monto | moneda}}</td>
                     
                   </tr>                 
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="5">{{retornarTotal() | literal}}</td>
+                    <td colspan="4">{{retornarTotal() | literal}}</td>
                     <td class="text-right">{{retornarTotal() | moneda}}</td>
                   </tr>
                 </tfoot>
-              </table>
+            </table>
+            <p>Glosa: {{glosa}}</p>   
         </div>
-        <br>
-        
-        <div class="clearfix"></div>
-      </div>
-       
-        
+     </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>

@@ -1,6 +1,16 @@
 var iniciofecha=moment().subtract(0, 'year').startOf('year')
 var finfecha=moment().subtract(0, 'year').endOf('year')
+let hoy = moment().format('DD-MM-YYYY, hh:mm:ss a');
 $(document).ready(function(){
+    $('.fecha_pago').daterangepicker({
+        singleDatePicker: true,
+        startDate:hoy,
+        autoApply:true,
+        locale: {
+            format: 'DD-MM-YYYY'
+        },
+        showDropdowns: true,
+      });
      $(".tiponumerico").inputmask({
         alias:"decimal",
         digits:2,
@@ -11,11 +21,7 @@ $(document).ready(function(){
 
     var start = moment().subtract(0, 'year').startOf('year')
     var end = moment().subtract(0, 'year').endOf('year')
-    var actual=moment().subtract(0, 'yevr').startOf('year')
-    var unanterior=moment().subtract(1, 'year').startOf('year')
-    var dosanterior=moment().subtract(2, 'year').startOf('year')
-    var tresanterior=moment().subtract(3, 'year').startOf('year')
- 
+
     $(function() {
         moment.locale('es');
         function cb(start, end) {
@@ -76,13 +82,14 @@ function retornarPagosPendientes() //*******************************
         $("#tPendientes").bootstrapTable('destroy');
         $("#tPendientes").bootstrapTable({            ////********cambiar nombre tabla viata
                 data:res,                           
-                    striped:true,
-                    pagination:true,
-                    pageSize:"100",
-                    search:true,
-                    searchOnEnterKey:true,
-                    showColumns:true,
-                    filter:true,
+                    striped: true,
+                    pagination: true,
+                    pageSize: "25",
+                    search: true,
+                    filter: true,
+                    showColumns: true,
+                    strictSearch: true,
+                    showToggle:true,
                 columns:
                 [                   
                     {   
@@ -90,12 +97,14 @@ function retornarPagosPendientes() //*******************************
                         title: 'Almacen',
                         visible:false,
                         sortable:true,
+                        searchable: false,
                     },
                     {   
                         field: 'nFactura',            
                         title: 'N° Factura',
                         visible:true,
                         sortable:true,
+                        searchable: true,
                     },
                     {   
                         field: 'fechaFac',            
@@ -103,6 +112,7 @@ function retornarPagosPendientes() //*******************************
                         visible:true,
                         sortable:true,
                         formatter: formato_fecha_corta,
+                        searchable: false,
                     },
                     {   
                         field: 'nombreCliente',            
@@ -122,6 +132,7 @@ function retornarPagosPendientes() //*******************************
                         sortable:true,
                         align: 'right',
                         formatter: operateFormatter3,
+                        searchable: false,
                     },
                     {   
                         field: 'pagado',            
@@ -130,6 +141,7 @@ function retornarPagosPendientes() //*******************************
                         sortable:true,
                         align: 'right',
                         formatter: operateFormatter3,
+                        searchable: false,
                     },
                     {   
                         field: 'saldoPago',            
@@ -138,12 +150,14 @@ function retornarPagosPendientes() //*******************************
                         sortable:true,
                         align: 'right',
                         formatter: operateFormatter3,
+                        searchable: false,
                     },
                     {   
                         field: 'glosaPago',            
                         title: 'Glosa',
                         visible:false,
                         sortable:true,
+                        searchable: false,
                     },
                     {   
                         field: 'pagada',            
@@ -152,18 +166,13 @@ function retornarPagosPendientes() //*******************************
                         sortable:true,
                         align: 'center',
                         formatter: operateFormatter2,
-                        filter: 
-                                {
-                                type: "select",
-                                data: ["A Cuenta", "No Pagada"],
-                                },
-                        formatter: operateFormatter2,
+                        searchable: false,
                     },
                     {
                         title: '',
                         align: 'center',
-                        //width: '15%',
                         events: operateEvents,
+                        searchable: false,
                         formatter: operateFormatter
                     },
                 ]
@@ -228,8 +237,6 @@ Array.prototype.unique=function(a){
 /***********Eventos*************/
 window.operateEvents = {
     'click .agregarFactura': function (e, value, row, index) {
-
-        
         /*para corregir resultado de sum en mysql */
         num=Math.round(row.saldoPago * 100) / 100
         /***/
@@ -237,7 +244,6 @@ window.operateEvents = {
         row.pagar=row.saldoPago;
         row.saldoNuevo=0;        
         vmPago.agregarPago(row)
-        
     },
     'click .editarPago': function (e, value, row, index) {
       //console.log(row.idPagos);
@@ -341,12 +347,21 @@ Vue.component('app-row',{
       },
     
 });
+
 var vmPago = new Vue({
     el: '#app',
     data:{
+        selected:'',
+        selected: '1',
+            options: [
+            { tipo: 'EFECTIVO', value: '1' },
+            { tipo: 'TRANSFERENCIA', value: '2' },
+            { tipo: 'CHEQUE', value: '3' }
+            ],
         porPagar:[],
         glosa:'',
         guardar:false,
+
     },
     
     methods:{
@@ -366,11 +381,11 @@ var vmPago = new Vue({
                     swal("Atencion", "Esta factura ya fue agregada","info");
                     return false;
                 }
-                if(this.porPagar.map((el) => el.cliente).indexOf(row.cliente)<0)
+                /*if(this.porPagar.map((el) => el.cliente).indexOf(row.cliente)<0)
                 {
                     swal("Atencion", "No se pueden agregar diferentes clientes","info");
                     return false;
-                }
+                }*/
                 this.porPagar.push(row)                
             }
             else

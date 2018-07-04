@@ -12,10 +12,6 @@ $(document).ready(function(){
 
     var start = moment().subtract(0, 'year').startOf('year')
     var end = moment().subtract(0, 'year').endOf('year')
-    var actual=moment().subtract(0, 'year').startOf('year')
-    var unanterior=moment().subtract(1, 'year').startOf('year')
-    var dosanterior=moment().subtract(2, 'year').startOf('year')
-    var tresanterior=moment().subtract(3, 'year').startOf('year')
  
     $(function() {
         moment.locale('es');
@@ -62,73 +58,67 @@ function retornarTablaPagos() //*******************************
     ini=iniciofecha.format('YYYY-MM-DD')
     fin=finfecha.format('YYYY-MM-DD')
     alm=$("#almacen_filtro").val();
+    agregarcargando();
     $.ajax({
         type:"POST",
         url: base_url('index.php/Pagos/mostrarPagos'), //******controlador
         dataType: "json",
         data: {i:ini,f:fin,a:alm}, //**** variables para filtro
     }).done(function(res){
-        console.log(res);
-        console.log(alm);
+        quitarcargando();
         datosselect= restornardatosSelect(res)
         $("#tpagos").bootstrapTable('destroy');
         $("#tpagos").bootstrapTable({            ////********cambiar nombre tabla viata
 
                 data:res,           
-                    striped:true,
-                    pagination:true,
-                    pageSize:"100",
-                    search:true,
-                    searchOnEnterKey:true,
-                    showColumns:true,
-                    filter:true,
+                    striped: true,
+                    pagination: true,
+                    pageSize: "100",
+                    search: true,
+                    filter: true,
+                    showColumns: true,
+                    stickyHeader: true,
+                    stickyHeaderOffsetY: '50px',
+                    strictSearch: true,
                 columns:
                 [
                     {   
-                        field: 'idPagos',            
+                        field: 'idPago',            
                         title: 'ID',
                         visible:false,
                         sortable:true,
+                        searchable: true,
+                        align: 'center',
                     },
                     {   
                         field: 'almacen',            
                         title: 'Almacen',
                         visible:false,
                         sortable:true,
+                        searchable: false,
                     },
                     {   
                         field: 'numPago',            
                         title: 'N° Pago',
                         visible:true,
                         sortable:true,
-                        width: '4%',
-                        filter: 
-                            {
-                                type: "select",
-                                data: datosselect[2]
-                            },
+                        searchable: true,
+                        align: 'center',
                     },
                     {   
                         field: 'fechaPago',            
                         title: 'Fecha',
                         visible:true,
                         sortable:true,
-                        width: '10%',
                         formatter: formato_fecha_corta,
+                        searchable: false,
+                        align: 'center',
                     },
                     {   
-                        field: 'sigla',            
-                        title: 'Moneda',
-                        visible:false,
-                        sortable:true,
-                        width: '1%',
-                    },
-                    {   
-                        field: 'clienteAnt',            
+                        field: 'nombreCliente',            
                         title: 'Cliente',
                         visible:true,
                         sortable:true,
-                        
                         filter: 
                             {
                                 type: "select",
@@ -136,53 +126,70 @@ function retornarTablaPagos() //*******************************
                             },
                     },
                     {   
-                        field: 'nFactura',            
-                        title: 'N°Fac',
-                        visible:true,
+                        field: 'sigla',            
+                        title: 'Moneda',
+                        visible:false,
                         sortable:true,
-                        filter: { type: "input" },
-                    },                   
+                        searchable: false,
+                    },
                     {   
-                        field: 'montoPago',            
+                        field: 'totalPago',            
                         title: 'Monto Pago',
                         visible:true,
                         sortable:true,
                         align: 'right',
                         formatter: operateFormatter3,
+                        searchable: false,
                     },                   
-                    {   
-                        field: 'glosaPago',            
-                        title: 'Glosa',
-                        visible:false,
-                        sortable:true,
-                    },
                     {   
                         field: 'anulado',            
                         title: 'Anulado',
                         visible:false,
                         sortable:true,
-                    },                 
+                        searchable: false,
+                    },
+                    {   
+                        field: 'tipoPago',            
+                        title: 'Tipo',
+                        visible:true,
+                        sortable:true,
+                        searchable: false,
+                        align: 'center',
+                    },
+                    {   
+                        field: 'pagada',            
+                        title: 'Estado',
+                        sortable:true,
+                        formatter: operateFormatter2,
+                        searchable: false,
+                        align: 'center',
+                    },
                     {   
                         field: 'autor',            
                         title: 'Autor',
                         visible:false,
                         sortable:true,
+                        filter: 
+                            {
+                                type: "select",
+                                data: datosselect[0]
+                            },
                     },
                     {   
                         field: 'fecha',            
                         title: 'Fecha',
                         visible:false,
                         sortable:true,
+                        searchable: false,
                     },
                     {
                         title: 'Acciones',
                         align: 'center',
-                        width: '15%',
+                        width: '150px',
+                        searchable: false,
                         events: operateEvents,
                         formatter: operateFormatter
                     }
-
-
                 ]
             });
     }).fail(function( jqxhr, textStatus, error ) {
@@ -196,15 +203,13 @@ function retornarTablaPagos() //*******************************
         num=num.toFixed(2);
         return (formatNumber.new(num));
     }
-    function operateFormatter(value, row, index)
-    {
-     
+    function operateFormatter(value, row, index)  {
         if(row.anulado==0)    
             return [
                 '<button type="button" class="btn btn-default verPago" aria-label="Right Align">',
                 '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-                '<button type="button" class="btn btn-default anularPago" aria-label="Right Align" title="Anular">',
-                '<span class="fa fa-ban" aria-hidden="true"></span></button>',
+                //'<button type="button" class="btn btn-default anularPago" aria-label="Right Align" title="Anular">',
+                //'<span class="fa fa-ban" aria-hidden="true"></span></button>',
                 '<button type="button" class="btn btn-default imprimirPago" aria-label="Right Align">',
                 '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
             ].join('');
@@ -212,22 +217,37 @@ function retornarTablaPagos() //*******************************
             return [
                 '<button type="button" class="btn btn-default verPago" aria-label="Right Align">',
                 '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-                '<button type="button" class="btn btn-default recuperarPago" aria-label="Right Align" title="Recuperar">',
-                '<span class="fa fa-check-square-o" aria-hidden="true"></span></button>',
+                //'<button type="button" class="btn btn-default recuperarPago" aria-label="Right Align" title="Recuperar">',
+                //'<span class="fa fa-check-square-o" aria-hidden="true"></span></button>',
                 '<button type="button" class="btn btn-default imprimirPago" aria-label="Right Align">',
                 '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
             ].join('');
     }
-    function operateFormatter2(value, row, index)
-    {
-        $ret=''
-        // 0=factura pagada totalmente 1=Factura pagada parcialmente 2=Pago Anulado
-        if(value==0)
-            $ret='<span class="label label-danger">No Pagada</span>';
-         if(value==1)
-            $ret='<span class="label label-success">Pagada</span>';
-        if(value==2)
-            $ret='<span class="label label-info">A Cuenta</span>';
+    function operateFormatter2(value, row, index) {
+        let $ret=''
+        if(row.anulado==1){
+            $ret='<span class="label label-warning">Anulado</span>';
+        } else {
+            // 0=factura NO Pagada 1=Factura pagada 2=Pago  parcialmente a cuetna
+            if(value==0)
+                $ret='<span class="label label-danger">No Pagada</span>';
+            if(value==1)
+                $ret='<span class="label label-success">Pagada</span>';
+            if(value==2)
+                $ret='<span class="label label-info">A Cuenta</span>';
+        }
+        return ($ret);
+    }
+    function operateFormatterEstado(value, row, index) {
+        let $ret=''
+            // 0=factura NO Pagada 1=Factura pagada 2=Pago  parcialmente a cuetna
+            if(value==0)
+                $ret='No Pagada';
+            if(value==1)
+                $ret='Pagada';
+            if(value==2)
+                $ret='A Cuenta';
+        
         return ($ret);
     }
 
@@ -236,22 +256,17 @@ function restornardatosSelect(res)
 
     var autor = new Array()
     var cliente = new Array()
-    var nPago = new Array()
     var datos =new Array()
     $.each(res, function(index, value){
 
         autor.push(value.autor)
         cliente.push(value.nombreCliente)
-        nPago.push(value.numPago)
     })
 
     autor.sort();
     cliente.sort();
-    nPago.sort();
-    console.log(nPago);
     datos.push(autor.unique());
     datos.push(cliente.unique());
-    datos.push(nPago.unique());
     return(datos);
 }
 Array.prototype.unique=function(a){
@@ -263,7 +278,10 @@ window.operateEvents = {
     'click .verPago': function (e, value, row, index) {
         verdetalle(row)
     },
-    'click .anularPago': function (e, value, row, index) {
+    'click .imprimirPago': function (e, value, row, index) {
+        alert(JSON.stringify(row));
+    }
+    /*'click .anularPago': function (e, value, row, index) {
         console.log(this);       
         var anulado=0;
         if($(this).hasClass('anularPago'))
@@ -279,10 +297,9 @@ window.operateEvents = {
         else
             anulado=0;
         anularRecuperarPago(row,this,anulado);
-    },
-    'click .imprimirPago': function (e, value, row, index) {
-     //alert(JSON.stringify(row));
-    }
+    },*/
+    
+    
 };
 function anularRecuperarPago(row,t,anulado)
 {
@@ -327,11 +344,8 @@ function anularRecuperarPago(row,t,anulado)
     });
 }
 
-function verdetalle(row)
-{
-    
+function verdetalle(row) {
     agregarcargando();           
-               
     $.ajax({
         type:"POST",
         url: base_url('index.php/Pagos/retornarDetallePago'), //******controlador
@@ -365,24 +379,36 @@ var vm=new Vue({
        cliente:'',       
        numPago:'',
        anulado:'',
+       glosa:'',
+       tipoPago:'',
+       banco:'',
+       transferencia:'',
+       cheque:'',
        tabla:[],
 
     },
     methods:{
         cargarDatos:function(res){         
+            
+            this.tabla=res;
             this.almacen=res[0].almacen;
             this.fecha=res[0].fechaPago;
-            this.cliente=res[0].nombreCliente;
+            this.cliente=res[0].nombre;
             this.numPago=res[0].numPago;
             this.anulado=res[0].anulado;
-            this.tabla=res;
+            this.glosa=res[0].glosa
+            this.tipoPago=res[0].tipoPago
+            this.transferencia=res[0].transferencia
+            this.banco=res[0].banco
+            this.cheque=res[0].cheque
+            
             $("#modalPagos").modal("show");
         },
         retornarTotal:function(){
             var total=0
             $.each(this.tabla,function(index,value){
                 console.log(value);
-                total+=parseFloat(value.montoPago);
+                total+=parseFloat(value.monto);
             })
             return total;
         },
@@ -397,6 +423,9 @@ var vm=new Vue({
         fechaCorta:function(value){
             return formato_fecha_corta(value);
         },  
+        estado:function(value){
+            return operateFormatterEstado(value)
+        },
     }
 
 })
