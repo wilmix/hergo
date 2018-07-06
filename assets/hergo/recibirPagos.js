@@ -2,7 +2,7 @@ var iniciofecha=moment().subtract(0, 'year').startOf('year')
 var finfecha=moment().subtract(0, 'year').endOf('year')
 let hoy = moment().format('DD-MM-YYYY, hh:mm:ss a');
 $(document).ready(function(){
-    $('.fecha_pago').daterangepicker({
+    /*$('.fecha_pago').daterangepicker({
         singleDatePicker: true,
         startDate:hoy,
         autoApply:true,
@@ -10,7 +10,7 @@ $(document).ready(function(){
             format: 'DD-MM-YYYY'
         },
         showDropdowns: true,
-      });
+      });*/
      $(".tiponumerico").inputmask({
         alias:"decimal",
         digits:2,
@@ -351,8 +351,14 @@ Vue.component('app-row',{
 var vmPago = new Vue({
     el: '#app',
     data:{
-        selected:'',
-        selected: '1',
+        tipoPago:'',
+        fechaPago:'',
+        banco:'',
+        transferencia:'',
+        cheque:'',
+        cliente:'1',
+        tipoPago: '1',
+        totalPago:'',
             options: [
             { tipo: 'EFECTIVO', value: '1' },
             { tipo: 'TRANSFERENCIA', value: '2' },
@@ -363,7 +369,6 @@ var vmPago = new Vue({
         guardar:false,
 
     },
-    
     methods:{
         deleteRow:function(index){        
             this.porPagar.splice(index,1);
@@ -399,17 +404,25 @@ var vmPago = new Vue({
             $.each(this.porPagar,function(index,value){
                 total+=parseFloat(value.pagar);
             })
+            this.totalPago=total
             return total;
         },
         guardarPago:function(){
             agregarcargando();
             var datos={
+                fechaPago:this.fechaPago,
+                tipoPago: this.tipoPago,
+                banco:this.banco,
+                transferencia:this.transferencia,
+                cheque: this.cheque,
+                cliente: this.cliente,
                 porPagar:this.porPagar,
+                totalPago:this.totalPago,
                 glosa:this.glosa,
             };
-            
+            console.log(datos);
             datos=JSON.stringify(datos);
-            
+            console.log(datos);
             if(!this.guardar)
             {
                 quitarcargando();

@@ -47,94 +47,87 @@
   <!-- /.col -->
 </div>
 
-<div class="row" id="app">
+<div class="row">
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body">
-      <div class="form-row">
-          <div class="form-row align-items-center col-md-3">
-            <label>Fecha: </label>
-            <input class="form-control fecha_pago" type="text">
-          </div>
-          <div class="form-row align-items-center col-md-3">
-            <label class="" for="">Tipo: </label>
-            <select class="form-control" v-model="selected">
-              <option v-for="option in options" v-bind:value="option.value">
-                {{ option.tipo }}
-              </option>
-            </select>
-          </div>
-          
-          
-          <div v-if="selected == 2">
+        <main id="app">
+          <form>
+            <div class="form-row">
               <div class="form-row align-items-center col-md-3">
-                <label >Banco: </label>
-                <select class="form-control" id="" name="">
-                    <?php foreach ($bancos->result_array() as $fila): ?>
-                      <option value=<?= $fila['id'] ?>> <?= $fila['sigla'] ?> </option>
-                    <?php endforeach ?>
-                </select>
+                <label>Fecha: </label>
+                <input v-model="fechaPago" class="form-control fecha_pago" type="date" >
               </div>
               <div class="form-row align-items-center col-md-3">
-                <label class="" for="">Vaucher: </label>
-                <input type="text" class="form-control">
+                  <label class="" for="">Tipo: </label>
+                  <select class="form-control" v-model="tipoPago">
+                    <option v-for="option in options" v-bind:value="option.value">
+                      {{ option.tipo }}
+                    </option>
+                  </select>
+                </div>
+                <div v-if="tipoPago == 2">
+                    <div class="form-row align-items-center col-md-3">
+                      <label >Banco: </label>
+                      <select class="form-control" id="" name="" v-model="banco">
+                          <?php foreach ($bancos->result_array() as $fila): ?>
+                            <option value=<?= $fila['id'] ?>> <?= $fila['sigla'] ?> </option>
+                          <?php endforeach ?>
+                      </select>
+                    </div>
+                    <div class="form-row align-items-center col-md-3">
+                      <label class="" for="">Vaucher: </label>
+                      <input type="text" class="form-control" v-model="transferencia">
+                    </div>
+                </div>
+                <div v-if="tipoPago == 3">
+                  <div class="form-row align-items-center col-md-3">
+                    <label >Cheque N°: </label>
+                    <input type="text" class="form-control" v-model="cheque">
+                  </div>
+                </div>
+            </div> <!-- class="form-row" -->
+
+            <div class="table">
+              <table class="table table-hover table-striped table-bordered" id="paraPagar_table">
+                <thead>
+                  <tr>
+                    <th style="width:10%">N. Factura</th>
+                    <th>Cliente</th>
+                    <th class="text-right">Total</th>
+                    <th class="text-right">Saldo</th>
+                    <th style="width:20%;text-align: center">Pagar</th>
+                    <th style="width:5%"></th>
+                  </tr>
+                </thead>  
+                <tbody>
+                  <tr is="app-row" v-for="(pagar,index) in porPagar" :index="index" :pagar="pagar" @removerfila="deleteRow" >
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="4" class="text-right"><b>Total</b> </td>          
+                    <td class="text-right"> {{ retornarTotal() | moneda}}</td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-md-12">                  
+                <label for="observaciones_ne">Glosa:</label>
+                <input type="text" class="form-control" id="glosa" name="glosa" value="" v-model="glosa">
               </div>
-          </div>
-
-          <div v-if="selected == 3">
-              <div class="form-row align-items-center col-md-3">
-                <label >Cheque N°: </label>
-                <input type="text" class="form-control">
-              </div>
-          </div>
-          
-      </div>
-
-
-      <div class="table">
-      <table class="table table-hover table-striped table-bordered" id="paraPagar_table">
-            <thead>
-              <tr>
-                <th style="width:10%">N. Factura</th>
-                <th>Cliente</th>
-                <th class="text-right">Total</th>
-                <th class="text-right">Saldo</th>
-                <th style="width:20%;text-align: center">Pagar</th>
-                <th style="width:5%"></th>
-
-              </tr>
-            </thead>  
-            <tbody>
-              
-              <tr is="app-row" v-for="(pagar,index) in porPagar" :index="index" :pagar="pagar" @removerfila="deleteRow" >
-              
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <td colspan="4" class="text-right"><b>Total</b> </td>          
-                <td class="text-right"> {{ retornarTotal() | moneda}}</td>
-                <td></td>
-              </tr>
-            </tfoot>
-            
-          </table>
-      </div>
-          <hr>
-          <div class="row">
-                <div class="col-xs-12 col-md-12">                  
-                  <label for="observaciones_ne">Glosa:</label>
-                  <input type="text" class="form-control" id="glosa" name="glosa" value="" v-model="glosa">
-              </div>
-              <hr>
-          </div>
-          <hr>
-          <div class="row">
+            </div>
+            <hr>
+            <div class="row">
               <div class="col-xs-12">
                 <button type="button" class="btn btn-primary" id="guardarPago" @click="guardarPago">Guardar Pago</button>
                 <button type="button" class="btn btn-danger" id="cancelarPago">Cancelar Pago</button>
               </div>
-          </div>
+            </div>
+          </form>
+        </main>
       </div>
       <!-- /.box-body -->
     </div>
