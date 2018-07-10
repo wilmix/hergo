@@ -286,12 +286,12 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 				array_push($pagosFactura,$pagos);	
 				$this->Facturacion_model->actualizar_estadoPagoFactura($fila->idFactura,$fila->saldoNuevo,$fila->saldoPago);
 			}
-			echo '<pre>';	print_r($pagosFactura); echo '</pre>';	        	        	
-			//$this->Pagos_model->guardarPago($pagosArray);
+			//echo '<pre>';	print_r($pagosFactura); echo '</pre>';	        	        	
+			$this->Pagos_model->guardarPago_Factura($pagosFactura);
 
-			/*$return=new stdClass();
+			$return=new stdClass();
 			$return->status=200;
-			echo json_encode($return);*/
+			echo json_encode($return);
 
 			
 

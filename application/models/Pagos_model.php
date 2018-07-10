@@ -130,6 +130,11 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		$sql=$this->db->insert("pago", $obj);
 		return $sql;		
 	}
+	public function guardarPago_Factura($obj)
+	{		
+		$sql=$this->db->insert_batch("pago_factura", $obj);
+		return $sql;		
+	}
 	public function anularPago($numPago)
 	{
 		$sql="Update pagos set anulado=1 Where numPago=$numPago";
