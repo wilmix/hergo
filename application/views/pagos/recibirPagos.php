@@ -55,8 +55,18 @@
           <form>
             <div class="form-row">
               <div class="form-row align-items-center col-md-3">
+                <label>Almacen: </label>
+                <select class="form-control" v-model="almacen">
+                  <option v-for="option in almacenes" v-bind:value="option.value">
+                      {{ option.alm }}
+                  </option>
+                </select>
+              </div>
+              <div class="form-row align-items-center col-md-3">
                 <label>Fecha: </label>
-                <input v-model="fechaPago" class="form-control fecha_pago" type="date" >
+                <!--<input v-model="fechaPago" class="form-control fecha_pago" type="text">-->
+                <vuejs-datepicker :bootstrap-styling="true" class="form-control" v-model="fechaPago" :format="customFormatter">
+                </vuejs-datepicker>
               </div>
               <div class="form-row align-items-center col-md-3">
                   <label class="" for="">Tipo: </label>

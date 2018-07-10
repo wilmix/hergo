@@ -8,6 +8,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 		parent::__construct();
 		$this->load->helper('url');	
 		$this->load->model("Pagos_model");//*****************aki poner el modelo
+		$this->load->model("Egresos_model");
 		$this->load->model("Facturacion_model");
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
@@ -44,7 +45,8 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			);
 			$this->foot_script=array(				
         		base_url('assets/vue/vue.js'),								
-				base_url('assets/vue/vue-resource.min.js'),				
+				base_url('assets/vue/vue-resource.min.js'),	
+				'https://unpkg.com/vuejs-datepicker',
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
@@ -125,11 +127,12 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$this->datos['foot_script']= $this->foot_script;
 
 			/*************DATERANGEPICKER**********/
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			
 			$this->datos['foot_script'][]=base_url('assets/hergo/recibirPagos.js'); //aki poner el nuevo javascript
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
@@ -245,10 +248,58 @@ class Pagos extends CI_Controller  /////**********nombre controlador
         {
 			$data=$this->security->xss_clean($this->input->post('d'));
 			$data=json_decode($data);
-			//deberia llegar por lo menos 1 registro
-			$numPago=$this->retornarNumPago($data->porPagar[0]->almacen);
 			
-			$pagosArray = array();
+			//deberia llegar por lo menos 1 registro
+			$numPago=$this->retornarNumPago($data->almacen);
+			
+			$pago = new stdclass();
+			$pago->almacen=$data->almacen;
+			$pago->numPago=$numPago;
+			$pago->fechaPago=$data->fechaPago;
+			$pago->moneda=$data->moneda;
+			$pago->cliente=$data->cliente;
+			$pago->totalPago=$data->totalPago;
+			$pago->anulado=$data->anulado;
+			$pago->glosa=$data->glosa;
+			$pago->autor=$this->session->userdata('user_id');
+			$pago->fecha=date('Y-m-d H:i:s');
+			$pago->tipoCambio=$this->Egresos_model->retornarTipoCambio();
+			$pago->tipoPago=$data->tipoPago;
+			$pago->cheque=$data->cheque;
+			$pago->banco=$data->banco;
+			$pago->transferencia=$data->transferencia;
+			$pago->pagos=$data->porPagar;
+			$this->Pagos_model->guardarPago($pago);
+			$pago->idPago=$this->retornarIdPago($pago->numPago,$pago->almacen);
+
+				//echo '<pre>';	print_r($pago); echo '</pre>';.
+				//echo '<pre>';	print_r($pago->pagos[1]); echo '</pre>';
+			
+			
+			//guardar detalle
+			$pagosFactura = array();
+			foreach ($pago->pagos as $fila) {
+				$pagos=new stdclass();
+				$pagos->idPago=$pago->numPago;
+				$pagos->idFactura=$fila->idFactura;
+				$pagos->monto=$fila->pagar;				
+				array_push($pagosFactura,$pagos);	
+				$this->Facturacion_model->actualizar_estadoPagoFactura($fila->idFactura,$fila->saldoNuevo,$fila->saldoPago);
+			}
+			echo '<pre>';	print_r($pagosFactura); echo '</pre>';	        	        	
+			//$this->Pagos_model->guardarPago($pagosArray);
+
+			/*$return=new stdClass();
+			$return->status=200;
+			echo json_encode($return);*/
+
+			
+
+
+
+
+
+			/*$pagosArray = array();
 			
 			foreach ($data->porPagar as $fila) {
 				$pago=new stdclass();
@@ -265,13 +316,13 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 				$pago->autor=$this->session->userdata('user_id');
 				$pago->fecha=date('Y-m-d H:i:s');				
 				array_push($pagosArray,$pago);	
-				$this->Facturacion_model->actualizar_estadoPagoFactura($fila->idFactura,$fila->saldoNuevo,$fila->saldoPago);
+				//$this->Facturacion_model->actualizar_estadoPagoFactura($fila->idFactura,$fila->saldoNuevo,$fila->saldoPago);
 			}
-        //	print_r($pagosArray);        	        	        	
+        	var_dump($pagosArray);      	        	        	
 			$this->Pagos_model->guardarPago($pagosArray);
 			$return=new stdClass();
 			$return->status=200;
-			echo json_encode($return);
+			echo json_encode($return);*/  
 		}
 		else
 		{
@@ -282,6 +333,11 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	{
 		$numPago=$this->Pagos_model->obtenerNumPago($almacen);
 		return $numPago+1;
+	}
+	public function retornarIdPago($numPago,$almacen)
+	{
+		$idPago=$this->Pagos_model->obtenerIdPago($numPago,$almacen);
+		return $idPago;
 	}
 	public function retornarDetallePago()
 	{		

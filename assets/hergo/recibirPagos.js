@@ -1,16 +1,22 @@
 var iniciofecha=moment().subtract(0, 'year').startOf('year')
 var finfecha=moment().subtract(0, 'year').endOf('year')
-let hoy = moment().format('DD-MM-YYYY, hh:mm:ss a');
+let hoy = moment().format('MM-DD-YYYY');
+let almacen = $("#almacen_filtro").val();
+let fechaPagoHoy = $('.fecha_pago').val();
+
+
 $(document).ready(function(){
-    /*$('.fecha_pago').daterangepicker({
+    $('.fecha_pago').daterangepicker({
         singleDatePicker: true,
         startDate:hoy,
         autoApply:true,
         locale: {
-            format: 'DD-MM-YYYY'
+            format: 'MM-DD-YYYY'
         },
         showDropdowns: true,
-      });*/
+      });
+
+
      $(".tiponumerico").inputmask({
         alias:"decimal",
         digits:2,
@@ -18,7 +24,6 @@ $(document).ready(function(){
         autoGroup: true,
         autoUnmask:true
     });
-
     var start = moment().subtract(0, 'year').startOf('year')
     var end = moment().subtract(0, 'year').endOf('year')
 
@@ -351,23 +356,35 @@ Vue.component('app-row',{
 var vmPago = new Vue({
     el: '#app',
     data:{
+        almacen:'1',
+            almacenes: [
+            { alm: 'CENTRAL HERGO', value: '1' },
+            { alm: 'DEPOSITO EL ALTO', value: '2' },
+            { alm: 'POTOSI', value: '3' },
+            { alm: 'SANTA CRUZ', value: '4' },
+            ],
         tipoPago:'',
-        fechaPago:'',
-        banco:'',
+        fechaPago:hoy,
+        banco:'1',
         transferencia:'',
         cheque:'',
         cliente:'1',
         tipoPago: '1',
-        totalPago:'',
             options: [
             { tipo: 'EFECTIVO', value: '1' },
             { tipo: 'TRANSFERENCIA', value: '2' },
             { tipo: 'CHEQUE', value: '3' }
             ],
+        totalPago:'',
         porPagar:[],
+        anulado:0,
+        moneda:1,
         glosa:'',
         guardar:false,
 
+    },
+    components: {
+        vuejsDatepicker,
     },
     methods:{
         deleteRow:function(index){        
@@ -376,7 +393,6 @@ var vmPago = new Vue({
                 this.guardar=true;
             else   
                 this.guardar=false;
-
         },
         agregarPago:function(row){
             if(this.porPagar.length>0)
@@ -410,15 +426,18 @@ var vmPago = new Vue({
         guardarPago:function(){
             agregarcargando();
             var datos={
-                fechaPago:this.fechaPago,
+                almacen: this.almacen,
+                fechaPago:moment(this.fechaPago).format('YYYY-MM-DD'),
+                moneda:this.moneda,
+                cliente: this.cliente,
+                totalPago:this.totalPago,
+                anulado:this.anulado,
+                glosa:this.glosa,
                 tipoPago: this.tipoPago,
+                cheque: this.cheque,
                 banco:this.banco,
                 transferencia:this.transferencia,
-                cheque: this.cheque,
-                cliente: this.cliente,
                 porPagar:this.porPagar,
-                totalPago:this.totalPago,
-                glosa:this.glosa,
             };
             console.log(datos);
             datos=JSON.stringify(datos);
@@ -429,6 +448,7 @@ var vmPago = new Vue({
                 swal("Error", "No se puede guardar el pago","error");
                 return false;
             }
+            console.log('ajax')
             $.ajax({
                 type:"POST",
                 url: base_url('index.php/Pagos/guardarPagos'), //******controlador
@@ -466,9 +486,10 @@ var vmPago = new Vue({
                     location.reload();
                 });
             });
-        }
-
-       
+        },
+        customFormatter(date) {
+            return moment(date).format('DD MMMM YYYY');
+        },       
     },
     filters:{
         moneda:function(value){
@@ -480,13 +501,4 @@ var vmPago = new Vue({
         
                             
     },        
-    created: function(){
-      /*  
-        this.$http.post(base_url('index.php/Facturas/datosAlmacen'))
-            .then(function(response){                    
-                this.almacen = response.body;
-            }, function(){
-                alert('Error!');
-        });*/
-    }
 });

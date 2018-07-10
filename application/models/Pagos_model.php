@@ -93,9 +93,9 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		$gestion= date('Y');		
 
 		$sql="SELECT MAX(p.numPago) numPago
-				FROM pagos p
-  				WHERE p.almacen=$almacen
-  				AND year(p.fechaPago)='$gestion'";		
+		FROM pago p
+		 WHERE p.almacen=$almacen
+		 AND YEAR(p.fechaPago)='$gestion'";		
 		$query=$this->db->query($sql);	
 		if($query->num_rows()>0)
         {
@@ -107,9 +107,27 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 			return 0;
 		}		
 	}
+	public function obtenerIdPago($numPago,$almacen)
+	{
+		$sql="SELECT idPago
+		FROM pago p
+		WHERE p.`numPago`=$numPago
+		AND p.`almacen`=$almacen";		
+		$query=$this->db->query($sql);	
+		if($query->num_rows()>0)
+        {
+            $idPago=$query->row();
+            return ($idPago->idPago);
+		}	
+		else
+		{
+			return 0;
+		}		
+	}
+	
 	public function guardarPago($obj)
 	{		
-		$sql=$this->db->insert_batch("pagos", $obj);
+		$sql=$this->db->insert("pago", $obj);
 		return $sql;		
 	}
 	public function anularPago($numPago)
