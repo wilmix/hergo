@@ -63,7 +63,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function retornarDetallePago($numPago)
+	public function retornarDetallePago($idPago)
 	{
 		$sql="SELECT f.`lote`, f.`fechaFac`,f.`nFactura`, c.`nombreCliente`, pf.`monto`, f.`pagada`, 
 		a.`almacen`, cp.`nombreCliente` nombre, p.`glosa`, p.`fechaPago`, p.`numPago`, tp.`tipoPago`, 
@@ -78,7 +78,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		INNER JOIN almacenes a ON a.`idalmacen` = p.`almacen`
 		INNER JOIN tipoPago tp ON tp.`id` = p.`tipoPago`
 		LEFT JOIN bancos b ON b.`id`=p.`banco`
-		WHERE p.`numPago` = $numPago
+		WHERE p.idPago = $idPago
 		ORDER BY f.`nFactura`";
 		
 		$query=$this->db->query($sql)->result_array();		

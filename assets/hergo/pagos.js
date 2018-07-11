@@ -282,8 +282,11 @@ window.operateEvents = {
         verdetalle(row)
     },
     'click .imprimirPago': function (e, value, row, index) {
-        alert(JSON.stringify(row));
-    }
+        //alert(JSON.stringify(row));
+        let imprimir = base_url("pdf/Recibo/index/") + row.idPago;
+        //console.log(imprimir);
+        window.open(imprimir);
+    },
     /*'click .anularPago': function (e, value, row, index) {
         console.log(this);       
         var anulado=0;
@@ -354,7 +357,7 @@ function verdetalle(row) {
         url: base_url('index.php/Pagos/retornarDetallePago'), //******controlador
         dataType: "json",
         data: {
-            numPago:row.numPago
+            idPago:row.idPago
         },
     }).done(function(res){
         quitarcargando();

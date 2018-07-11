@@ -271,11 +271,6 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->pagos=$data->porPagar;
 			$this->Pagos_model->guardarPago($pago);
 			$pago->idPago=$this->retornarIdPago($pago->numPago,$pago->almacen);
-
-				//echo '<pre>';	print_r($pago); echo '</pre>';.
-				//echo '<pre>';	print_r($pago->pagos[1]); echo '</pre>';
-			
-			
 			//guardar detalle
 			$pagosFactura = array();
 			foreach ($pago->pagos as $fila) {
@@ -289,41 +284,9 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			}
 			//echo '<pre>';	print_r("id ".$fila->idFactura."saldoNuevo ".$fila->saldoNuevo."saldoPago ".$fila->saldoPago); echo '</pre>';	        	        	
 			$this->Pagos_model->guardarPago_Factura($pagosFactura);
-
 			$return=new stdClass();
 			$return->status=200;
 			echo json_encode($return);
-
-			
-
-
-
-
-
-			/*$pagosArray = array();
-			
-			foreach ($data->porPagar as $fila) {
-				$pago=new stdclass();
-				$pago->idFactura=$fila->idFactura;
-				$pago->almacen=$fila->almacen;
-				$pago->numPago=$numPago;
-				$pago->fechaPago= date('Y-m-d H:i:s');  				
-				$pago->monedaPago= 1;
-				$pago->cliente=$fila->cliente;				
-				$pago->montoPago=$fila->pagar;				
-				$pago->saldoPago=0;
-				$pago->glosaPago=$data->glosa;
-				$pago->anulado=0;			        
-				$pago->autor=$this->session->userdata('user_id');
-				$pago->fecha=date('Y-m-d H:i:s');				
-				array_push($pagosArray,$pago);	
-				//$this->Facturacion_model->actualizar_estadoPagoFactura($fila->idFactura,$fila->saldoNuevo,$fila->saldoPago);
-			}
-        	var_dump($pagosArray);      	        	        	
-			$this->Pagos_model->guardarPago($pagosArray);
-			$return=new stdClass();
-			$return->status=200;
-			echo json_encode($return);*/  
 		}
 		else
 		{
@@ -342,8 +305,8 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	}
 	public function retornarDetallePago()
 	{		
-		$numPago=$this->security->xss_clean($this->input->post('numPago'));				
-		$ret=$this->Pagos_model->retornarDetallePago($numPago);
+		$idPago=$this->security->xss_clean($this->input->post('idPago'));				
+		$ret=$this->Pagos_model->retornarDetallePago($idPago);
 		echo json_encode($ret);
 	}
 	public function anularRecuperarPago()
