@@ -50,7 +50,9 @@ $(document).ready(function(){
 $(document).on("change","#almacen_filtro",function(){
     retornarTablaPagos();
 }) //para cambio filtro segun cada uno
-
+$(document).on("click", "#refresh", function () {
+    retornarTablaPagos();
+})
 
 
 function retornarTablaPagos() //*******************************
@@ -163,6 +165,7 @@ function retornarTablaPagos() //*******************************
                         formatter: operateFormatter2,
                         searchable: false,
                         align: 'center',
+                        visible:false,
                     },
                     {   
                         field: 'autor',            

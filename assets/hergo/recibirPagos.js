@@ -439,16 +439,19 @@ var vmPago = new Vue({
                 transferencia:this.transferencia,
                 porPagar:this.porPagar,
             };
-            console.log(datos);
+
+            let clientes = datos.porPagar.map(p=>p.cliente)
+            let cliente = clientes.reduce( (a,b) => a==b )
+            if (cliente) {
+                datos.cliente=clientes[0]
+            }
             datos=JSON.stringify(datos);
-            console.log(datos);
             if(!this.guardar)
             {
                 quitarcargando();
                 swal("Error", "No se puede guardar el pago","error");
                 return false;
             }
-            console.log('ajax')
             $.ajax({
                 type:"POST",
                 url: base_url('index.php/Pagos/guardarPagos'), //******controlador
@@ -460,7 +463,7 @@ var vmPago = new Vue({
                     quitarcargando();
                     swal({
                         title: 'Pago almacenado',
-                        text: "El pago se guardó con éxito",
+                        text: `El pago se guardó con éxito`,
                         type: 'success', 
                         showCancelButton: false,
                         allowOutsideClick: false,  

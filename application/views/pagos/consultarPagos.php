@@ -15,10 +15,17 @@
               <?php endforeach ?>
               <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
               <option value="">TODOS</option>
-            </select>           
+            </select>       
+            <button  type="button" class="btn btn-primary btn-sm" id="refresh">
+              <span>
+                <i class="fa fa-refresh"></i>
+              </span>
+            </button>    
           </div>
           <table 
-            id="tpagos">
+            id="tpagos"
+            data-toolbar="#toolbar2"
+            data-toggle="table">
           </table>
       </div>
       <!-- /.box-body -->

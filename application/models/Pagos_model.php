@@ -30,17 +30,20 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function mostrarPendientePago($ini=null,$fin=null,$alm="")
 	{
-		$sql="SELECT f.idFactura, f.almacen, f.nFactura, f.fechaFac, f.cliente,c.nombreCliente, f.total,  IFNULL(sum(p.montoPago),0) pagado,  f.total - IFNULL(sum(p.montoPago),0) saldoPago, GROUP_CONCAT(p.glosaPago SEPARATOR ', ') glosaPago , f.pagada
-		FROM factura f		
-		LEFT JOIN pagos p
-		ON  f.idFactura= p.idFactura
-		INNER JOIN clientes c
-		ON c.idCliente = f.cliente 
-		WHERE f.fechaFac
-		BETWEEN '$ini' AND '$fin' AND not f.pagada=1 AND f.almacen like '%$alm' AND NOT f.anulada=1
-    	GROUP BY f.idFactura
-		ORDER BY f.nFactura desc";
-		//die($sql);
+		$sql="SELECT f.idFactura, f.almacen, f.nFactura, f.fechaFac, f.cliente,c.nombreCliente, 
+		f.total,  IFNULL(SUM(pf.monto),0) pagado,  
+		f.total - IFNULL(SUM(pf.monto),0) saldoPago, GROUP_CONCAT(p.glosa SEPARATOR ', ') glosaPago , f.pagada
+				FROM factura f		
+				LEFT JOIN pago_factura pf
+				ON  f.idFactura = pf.`idFactura`
+				LEFT JOIN pago p
+				ON p.`idPago` = pf.`idPago`
+				INNER JOIN clientes c
+				ON c.idCliente = f.cliente 
+				WHERE f.fechaFac
+				BETWEEN '$ini' AND '$fin' AND not f.pagada=1 AND f.almacen like '%$alm' AND NOT f.anulada=1
+				GROUP BY f.idFactura
+				ORDER BY f.idFactura DESC";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
