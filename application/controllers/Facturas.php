@@ -399,6 +399,37 @@ class Facturas extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	public function retornarTabla3Cliente()
+	{			
+		if($this->input->is_ajax_request() && $this->input->post('idegresoDetalle') )
+        {
+        	$idegresoDetalle= addslashes($this->security->xss_clean($this->input->post('idegresoDetalle')));
+        	$idegreso= addslashes($this->security->xss_clean($this->input->post('idegreso')));
+        	$egresoDetalle=FALSE;
+        	/***Retornar idcliente***/
+			$datosEgreso=$this->Egresos_model->mostrarEgresos($idegreso);//para obtener el cliente
+        	$fila=$datosEgreso->row();
+        	$idcliente=$fila->idcliente; 
+        	$cliente=$fila->nombreCliente; 
+        	$clienteNit=$fila->documento;
+        	$clientePedido=$fila->clientePedido;
+        	
+        
+		
+			$obj2=new stdclass();
+			$obj2->detalle=$egresoDetalle;
+			//$obj2->mensaje=$mensaje;
+			$obj2->cliente=$cliente;
+			$obj2->clienteNit=$clienteNit;
+			$obj2->clientePedido=$clientePedido;
+			
+			echo json_encode($obj2);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 	public function retornarTabla3Array()
 	{			
 		if($this->input->is_ajax_request() && $this->input->post('rows') )
