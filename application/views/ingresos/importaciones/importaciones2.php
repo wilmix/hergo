@@ -186,12 +186,12 @@
                   <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
                       <label>Cantidad:</label>
-                      <input type="text" class="form-control form-control-sm" id="cantidad_imp" name="cantidad_imp" />
+                      <input type="text" style="text-align:right;" class="form-control form-control-sm" id="cantidad_imp" name="cantidad_imp" />
                   </div>
                   <div class="col-xs-4 col-md-2">
                       <!--insertar costo de articulo a ingresar-->
                       <label><?= $idingresocompraslocales==2? "Total:":"Costo Unitario:" ?></label> <!--CAMBIO PARA COMPRAS LOCALES-->
-                      <input type="text" class="form-control form-control-sm tiponumerico" id="punitario_imp" name="punitario_imp" />
+                      <input type="text" style="text-align:right;" class="form-control form-control-sm" id="punitario_imp" name="punitario_imp" />
                   </div>
                   <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
