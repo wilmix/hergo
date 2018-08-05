@@ -6,6 +6,10 @@ class Reportes extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		/*******/
+		$this->load->library('LibAcceso');
+	
+		/*******/
 		$this->load->helper('url');
 		$this->load->model("Reportes_model");
 		$this->load->helper('date');
@@ -53,6 +57,7 @@ class Reportes extends CI_Controller
 	}
 
 	public function listaPrecios(){
+		$this->libacceso->acceso(26);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -98,6 +103,7 @@ class Reportes extends CI_Controller
 	}
 	public function saldosActuales()
 	{
+		$this->libacceso->acceso(27);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -179,6 +185,7 @@ class Reportes extends CI_Controller
 	}
 	public function kardexIndividualValorado()
 	{
+		$this->libacceso->acceso(34);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -297,6 +304,7 @@ class Reportes extends CI_Controller
 	}
 	public function resumenVentasLineaMes()
 	{
+		$this->libacceso->acceso(29);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -346,6 +354,7 @@ class Reportes extends CI_Controller
 	}
 	public function facturasPendietesPago()
 	{
+		$this->libacceso->acceso(28);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -395,6 +404,7 @@ class Reportes extends CI_Controller
 	}
 	public function notasEntregaPorFacturar()
 	{
+		$this->libacceso->acceso(30);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -444,6 +454,7 @@ class Reportes extends CI_Controller
 	}
 	public function facturacionClientes()
 	{
+		$this->libacceso->acceso(31);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -526,6 +537,7 @@ class Reportes extends CI_Controller
 	}
 	public function resumenVentaCliente()
 	{
+		
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -559,6 +571,7 @@ class Reportes extends CI_Controller
 	}
 	public function diarioIngresos()
 	{
+		$this->libacceso->acceso(32);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -729,6 +742,7 @@ class Reportes extends CI_Controller
 	}
 	public function libroVentas()
 	{
+		$this->libacceso->acceso(33);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 

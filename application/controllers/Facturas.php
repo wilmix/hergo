@@ -7,6 +7,10 @@ class Facturas extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->helper('url');
+			/*******/
+			$this->load->library('LibAcceso');
+			
+			/*******/
 		//$this->load->model("ingresos_model");
 		$this->load->model("Egresos_model");
 		$this->load->model("Cliente_model");
@@ -70,6 +74,7 @@ class Facturas extends CI_Controller
 	
 	public function index()
 	{
+		$this->libacceso->acceso(21);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -118,6 +123,7 @@ class Facturas extends CI_Controller
 
 	public function EmitirFactura()
 	{
+		$this->libacceso->acceso(22);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 

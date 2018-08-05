@@ -4,8 +4,12 @@ class Traspasos extends CI_Controller
 {
 	private $traspaso;
 	public function __construct()
-	{
+	{		
 		parent::__construct();
+			/*******/
+			$this->load->library('LibAcceso');
+			
+			/*******/
 		$this->load->helper('url');
 		$this->load->model("Ingresos_model");
 		$this->load->model("Egresos_model");
@@ -56,6 +60,7 @@ class Traspasos extends CI_Controller
 	
 	public function index()
 	{
+		$this->libacceso->acceso(19);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -92,6 +97,7 @@ class Traspasos extends CI_Controller
 	}
 	public function traspasoEgreso()
 	{
+		$this->libacceso->acceso(20);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 

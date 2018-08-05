@@ -6,7 +6,10 @@ class Egresos extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->library('LibAcceso');
+		
 		$this->load->helper('url');
+		
 		$this->load->model("Ingresos_model");
 		$this->load->model("Egresos_model");
 		$this->load->model("Cliente_model");
@@ -62,6 +65,7 @@ class Egresos extends CI_Controller
 	
 	public function index()
 	{
+		$this->libacceso->acceso(15);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -99,6 +103,7 @@ class Egresos extends CI_Controller
 	}
 	public function notaentrega()
 	{
+		$this->libacceso->acceso(17);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -157,6 +162,7 @@ class Egresos extends CI_Controller
 
 	public function VentasCaja()
 	{
+		$this->libacceso->acceso(16);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -209,6 +215,7 @@ class Egresos extends CI_Controller
 		//nuevo para BAJA DE PRODUCTO
 	public function BajaProducto()
 	{
+		$this->libacceso->acceso(18);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 

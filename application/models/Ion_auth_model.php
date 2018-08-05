@@ -1733,6 +1733,17 @@ class Ion_auth_model extends CI_Model
             return false;
         }
 	}
+	
+	public function retornarAccesoUsuario($idUsuario)
+	{
+		$sql="SELECT a.subMenu
+        FROM ACCESO_USUARIO a        
+        WHERE a.idUsuario=$idUsuario";     
+
+        $query=$this->db->query($sql);
+                
+        return ($query->result_array());
+	}
 	public function set_session($user)
 	{
 
@@ -1749,6 +1760,7 @@ class Ion_auth_model extends CI_Model
 		    'foto'					=> $user->foto,
 		    'idalmacen'				=>$user->almacen,
 			'datosAlmacen'			=>$this->retornarAlmacen($user->almacen),
+			'accesoMenu'   =>$this->retornarAccesoUsuario($user->id)
 		);
 		
 

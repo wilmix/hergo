@@ -6,6 +6,10 @@ class Clientes extends CI_Controller
 	public function __construct()
 	{	
 		parent::__construct();
+		/*******/
+		$this->load->library('LibAcceso');
+		$this->libacceso->acceso(6);
+		/*******/
 		$this->load->helper('url');	
 		$this->load->model("Cliente_model");
 		$this->cabeceras_css=array(

@@ -5,6 +5,10 @@ class Auth extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+			/*******/
+			$this->load->library('LibAcceso');
+		
+			/*******/
 		$this->load->database();
 		$this->load->library(array('ion_auth','form_validation'));
 		$this->load->helper(array('url','language'));
@@ -67,7 +71,7 @@ class Auth extends CI_Controller {
 	//editar credenciales
 	public function usuarios()
 	{
-
+		$this->libacceso->acceso(35);
 		if (!$this->ion_auth->logged_in())
 		{
 			// redirect them to the login page
@@ -502,6 +506,7 @@ class Auth extends CI_Controller {
 	// create a new user
 	public function create_user()
     {
+		$this->libacceso->acceso(36);
         $this->data['title'] = $this->lang->line('create_user_heading');
 
         if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
@@ -818,6 +823,7 @@ class Auth extends CI_Controller {
 	// create a new group
 	public function create_group()
 	{
+		$this->libacceso->acceso(37);
 		$this->data['title'] = $this->lang->line('create_group_title');
 
 		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())

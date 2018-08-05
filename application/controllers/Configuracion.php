@@ -7,6 +7,10 @@ class Configuracion extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->helper('url');
+		/*******/
+		$this->load->library('LibAcceso');
+		
+		/*******/
 		$this->load->model("Configuracion_model");
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
@@ -53,6 +57,7 @@ class Configuracion extends CI_Controller
 	}
 
 	public function DatosFactura(){
+		$this->libacceso->acceso(9);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -123,6 +128,7 @@ class Configuracion extends CI_Controller
 	}
 	
 	public function TipoCambio(){
+		$this->libacceso->acceso(10);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 			$this->datos['menu']="Tipo de Cambio";

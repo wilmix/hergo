@@ -6,6 +6,10 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	public function __construct()
 	{	
 		parent::__construct();
+		/*******/
+		$this->load->library('LibAcceso');
+	
+		/*******/
 		$this->load->helper('url');	
 		$this->load->model("Pagos_model");//*****************aki poner el modelo
 		$this->load->model("Egresos_model");
@@ -60,6 +64,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	}
 	public function index()
 	{
+		$this->libacceso->acceso(23);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 		
@@ -115,6 +120,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	}
 	public function RecibirPago()
 	{
+		$this->libacceso->acceso(24);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 		

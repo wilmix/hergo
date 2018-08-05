@@ -7,6 +7,10 @@ class Login extends CI_Controller
 	{	
 		parent::__construct();
 		$this->load->helper('url');	
+		$this->load->library('LibAcceso');
+		//$this->libacceso->acceso(1);
+		
+
 		$this->cabeceras_css=array(
 				'http://fonts.googleapis.com/css?family=Roboto:400,100,300,500',
 				base_url('assets/bootstrap/css/bootstrap.min.css'),
@@ -36,6 +40,26 @@ class Login extends CI_Controller
 	}
 	public function verLogin()
 	{
-		print_r($_SESSION['datosAlmacen']); 
+		//print_r($_SESSION['datosAlmacen']); 
+		//print_r($_SESSION['accesoMenu']); 
+		$aux=$this->retornarSubMenus($_SESSION['accesoMenu']);
+		var_dump($aux);
+		
+		if(in_array("122", $aux))
+		{
+			echo "existe";
+		}
+		else
+		{
+			echo "No existe";
+		}
+	}
+	public function retornarSubMenus($submenues)
+	{
+		$submenu = array();
+		foreach ($submenues as $row ) {
+			array_push($submenu,$row['subMenu']);
+		}
+		return $submenu;
 	}
 }

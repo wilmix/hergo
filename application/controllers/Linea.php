@@ -8,6 +8,10 @@ class Linea extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
+        /*******/
+        $this->load->library('LibAcceso');
+        $this->libacceso->acceso(4);
+        /*******/
         $this->load->helper('url');
         $this->load->model("Articulo_model");
         $this->load->model("Linea_model");

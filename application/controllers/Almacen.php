@@ -6,6 +6,8 @@ class Almacen extends CI_Controller
 	public function __construct()
 	{	
 		parent::__construct();
+		$this->load->library('LibAcceso');
+		$this->libacceso->acceso(1);
 		$this->load->helper('url');	
 		$this->load->model("Almacen_model");
 		$this->cabeceras_css=array(

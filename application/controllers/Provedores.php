@@ -6,6 +6,10 @@ class Provedores extends CI_Controller
 	public function __construct()
 	{	
 		parent::__construct();
+		/*******/
+		$this->load->library('LibAcceso');
+		$this->libacceso->acceso(7);
+		/*******/
 		$this->load->helper('url');	
 		$this->load->model("Proveedores_model");
 		$this->cabeceras_css=array(

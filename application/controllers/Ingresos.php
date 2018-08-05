@@ -6,6 +6,8 @@ class Ingresos extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->library('LibAcceso');
+		
 		$this->load->helper('url');
 		$this->load->model("Ingresos_model");
 		$this->load->model("Egresos_model");
@@ -57,6 +59,7 @@ class Ingresos extends CI_Controller
 	}
 	public function index()
 	{
+		$this->libacceso->acceso(11);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -137,6 +140,7 @@ class Ingresos extends CI_Controller
 
 	public function importaciones()
 	{
+		$this->libacceso->acceso(13);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -186,6 +190,7 @@ class Ingresos extends CI_Controller
 
 	public function compraslocales()
 	{
+		$this->libacceso->acceso(12);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -232,6 +237,7 @@ class Ingresos extends CI_Controller
 	}
 	public function anulacionEgresos()
 	{
+		$this->libacceso->acceso(14);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
