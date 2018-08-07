@@ -557,7 +557,10 @@ class Facturas extends CI_Controller
 	        	$cliente=$this->Cliente_model->obtenerCliente($cookie->cliente);
         	}
         	$tipoFacturacion= ($this->security->xss_clean($this->input->post('tipoFacturacion')));
-        	$fechaFac=addslashes($this->security->xss_clean($this->input->post('fechaFac')));
+			$fechaFac=addslashes($this->security->xss_clean($this->input->post('fechaFac')));
+			$idCliente = ($this->security->xss_clean($this->input->post('idCliente')));
+			$cliente=$this->Cliente_model->obtenerCliente($idCliente);
+
 
         	//$idAlmacen= ($this->security->xss_clean($this->input->post('idAlmacen')));	//para seleccionar almacen si es administrador
         	$idAlmacen=$this->session->userdata('idalmacen');//si no es usuario administrador solo guarda segun su almacen asignado

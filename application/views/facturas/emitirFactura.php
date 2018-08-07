@@ -104,10 +104,11 @@ div.collapse {
 
 
 
-           <input id="valuecliente"  class="hidden">
-           <input id="valueidcliente"  class="hidden">
-           <input id="idAlm"  class="hidden">
-           <input id="nitCliente"  class="hidden">
+           <input id="valuecliente" class="hidden">
+           <input id="valueidcliente" class="hidden">
+           <input id="idAlm" class="hidden">
+           <input id="nitCliente" class="hidden">
+           <input id="idclienteHidden" class="hidden">
         
           <div class="table-responsive" class="table table-condensed">
             <div class="col-md-6 col-xs-12">             

@@ -70,12 +70,12 @@
                 
                 var fechaConcatenar = gestion + mes + dia;
                 
-                console.log(autor,
+                /*console.log(autor,
                             nFactura,
                             idNIT,
                             fechaConcatenar,
                             monto,
-                            llave);
+                            llave);*/
 
                 codigo = generateControlCode(
                             autor,

@@ -511,6 +511,7 @@ function mostrarDatosCliente(row) {
     $("#tipoNumEgreso").val(row.sigla + "-" + row.n);
     $("#pedidoClienteT2").val(row.clientePedido);
     $("#monedaT2").val(row.monedasigla);
+    $("#idclienteHidden").val(row.idcliente);
 
 }
 
@@ -696,7 +697,7 @@ function AgregarRegistroTabla3Cliente(row, index, btn) {
                 data: { idegreso: row.idegreso, idegresoDetalle: row.idingdetalle },
 
             }).done(function (res) {
-
+                console.log(res);
                 $("#nombreCliente").val(res.cliente);
                 $("#valuecliente").val(res.cliente);
                 $("#valueidcliente").val(res.idCliente);
@@ -747,6 +748,7 @@ function AgregarTabla(datos) {
 
             agregarRegistrosTabla2(res);
             $("#idAlm").val(res.alm);
+            $("#valueidcliente").val(res.idcliente);
 
 
         }
@@ -899,8 +901,7 @@ function agregarDatosFactura(res) {
 
     vmVistaPrevia.generarCodigoControl() //este dato se extrae de la base de datos, solo se usa para generar el codigo
     vmVistaPrevia.generarCodigoQr();
-    console.log("REVISAR TIPO DE CAMBIO GUARDADO EN EL MOMENTO DE FACTURA")
-
+    
     $("#facPrev").modal("show");
 }
 $(document).on("click", ".agregarTodos", function () {
@@ -1059,6 +1060,7 @@ $(document).on("click", ".editable-click", function () {
 $(document).on("click", "#guardarFactura", function () {
     agregarcargando();
     $("#guardarFactura").css("disabled", "true");
+    let idCliente = $("#idclienteHidden").val()
     let tabla3factura = $("#tabla3Factura").bootstrapTable('getData');
     tabla3factura = JSON.stringify(tabla3factura);
     let tabla3 = JSON.parse(tabla3factura)
@@ -1069,7 +1071,8 @@ $(document).on("click", "#guardarFactura", function () {
         }
     }
     tabla3factura = JSON.stringify(tabla3)
-    console.log(tabla3);
+    //console.log(tabla3);
+    //console.log(idCliente);
     var datos = {
         almacen: $("#almacen_filtro").val(),
         fechaFac: $("#fechaFactura").val(),
@@ -1080,7 +1083,9 @@ $(document).on("click", "#guardarFactura", function () {
         codigoControl: $("#codigoControl").html(),
         textqr: $("#textqr").val(),
         tabla: tabla3factura,
+        idCliente : idCliente,
     }
+    console.log(datos);
     $.ajax({
         type: "POST",
         url: base_url('index.php/Facturas/guardarFactura'),

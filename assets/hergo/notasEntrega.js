@@ -169,7 +169,7 @@ $( function() {
                 glob_precio_egreso=data.precio;
                 $("#costo_ne").val(data.precio);
                 $("#saldo_ne").val(data.ncantidad);              
-                $("#punitario_ne").val(data.precio);
+                $("#punitario_ne").val("");
                 cambiarMoneda()
             }
           });    
