@@ -140,7 +140,7 @@ function retornarPagosPendientes() //*******************************
                         searchable: false,
                     },
                     {   
-                        field: 'pagado',            
+                        field: 'totalPago',            
                         title: 'Pagado',
                         visible:true,
                         sortable:true,

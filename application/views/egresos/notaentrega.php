@@ -212,10 +212,10 @@
                     <tr>
                       <th class="col-sm-1" >Código</th>
                       <th class="col-sm-7">Artículo</th>
-                      <th class="col-sm-1" class="text-right">Cantidad</th>
-                      <th class="col-sm-1" class="text-right">Precio</th> 
-                      <th class="col-sm-1" class="text-right">Descuento</th>
-                      <th class="col-sm-1" class="text-right">Total</th> 
+                      <th class="col-sm-1 text-right">Cantidad</th>
+                      <th class="col-sm-1 text-right">Precio</th> 
+                      <th class="col-sm-1 text-right">Descuento</th>
+                      <th class="col-sm-1 text-right">Total</th> 
                       <th>&nbsp;</th>
                     </tr>
                   </thead>

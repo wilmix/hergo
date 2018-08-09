@@ -157,6 +157,7 @@ function retornarTablaPagos() //*******************************
                         sortable:true,
                         searchable: false,
                         align: 'center',
+                        formatter: tipoPago,
                     },
                     {   
                         field: 'pagada',            
@@ -238,6 +239,15 @@ function retornarTablaPagos() //*******************************
                 $ret='<span class="label label-success">Pagada</span>';
             if(value==2)
                 $ret='<span class="label label-info">A Cuenta</span>';
+        }
+        return ($ret);
+    }
+    function tipoPago (value, row, index) {
+        let $ret=''
+        if(row.anulado==1){
+            $ret='<span class="label label-warning">Anulado</span>';
+        } else {
+           $ret = row.tipoPago
         }
         return ($ret);
     }
