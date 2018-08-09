@@ -667,13 +667,13 @@ function cambiarMoneda()
     if ($("#moneda_ne").val()==1) 
     {
         $(".costo_ne_label").html("Precio Bs")
-        $(".punitario_ne_class").val(glob_precio_egreso)   
+        //$(".punitario_ne_class").val(glob_precio_egreso)   
 
     }
     else
     {
         $(".costo_ne_label").html("Precio Dolares")
-        $(".punitario_ne_class").val(glob_precio_egreso/glob_tipoCambio)
+        //$(".punitario_ne_class").val(glob_precio_egreso/glob_tipoCambio)
     }
 }
 

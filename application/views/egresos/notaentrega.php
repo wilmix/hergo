@@ -184,17 +184,17 @@
                   <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
                       <label>Cantidad:</label>
-                      <input type="text" class="form-control form-control-sm" id="cantidad_ne" name="cantidad_ne"/>
+                      <input type="text" style="text-align:right;" class="form-control form-control-sm" id="cantidad_ne" name="cantidad_ne"/>
                   </div>
                   <div class="col-xs-4 col-md-2">
                       <!--insertar costo de articulo a ingresar-->
                       <label class="costo_ne_label">Precio Bs:</label> <!--CAMBIO PARA COMPRAS LOCALES-->
-                      <input type="text" class="form-control form-control-sm tiponumerico punitario_ne_class" id="punitario_ne" name="punitario_ne"/>
+                      <input type="text" style="text-align:right;" class="form-control form-control-sm" id="punitario_ne" name="punitario_ne"/>
                   </div>
                   <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
                       <label>% Descuento:</label>
-                      <input type="text" class="form-control form-control-sm tiponumerico" id="descuento_ne" name="descuento_ne" />
+                      <input type="text" style="text-align:right;" class="form-control form-control-sm" id="descuento_ne" name="descuento_ne" />
                   </div>
 
                   <div class="col-xs-12 col-md-2">
