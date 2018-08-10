@@ -208,12 +208,12 @@ function retornarTablaPagos() //*******************************
         return (formatNumber.new(num));
     }
     function operateFormatter(value, row, index)  {
-        if(row.anulado==0)    
+        if(row.anulado==1)    
             return [
                 '<button type="button" class="btn btn-default verPago" aria-label="Right Align">',
                 '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-                //'<button type="button" class="btn btn-default anularPago" aria-label="Right Align" title="Anular">',
-                //'<span class="fa fa-ban" aria-hidden="true"></span></button>',
+                '<button type="button" class="btn btn-default "  disabled aria-label="Right Align">',
+                '<span class="fa fa-times " aria-hidden="true"></span></button>',
                 '<button type="button" class="btn btn-default imprimirPago" aria-label="Right Align">',
                 '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
             ].join('');
@@ -221,8 +221,8 @@ function retornarTablaPagos() //*******************************
             return [
                 '<button type="button" class="btn btn-default verPago" aria-label="Right Align">',
                 '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-                //'<button type="button" class="btn btn-default recuperarPago" aria-label="Right Align" title="Recuperar">',
-                //'<span class="fa fa-check-square-o" aria-hidden="true"></span></button>',
+                '<button type="button" class="btn btn-default anularPago"  aria-label="Right Align">',
+                '<span class="fa fa-times " aria-hidden="true"></span></button>',
                 '<button type="button" class="btn btn-default imprimirPago" aria-label="Right Align">',
                 '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
             ].join('');
@@ -297,24 +297,10 @@ window.operateEvents = {
         //console.log(imprimir);
         window.open(imprimir);
     },
-    /*'click .anularPago': function (e, value, row, index) {
-        console.log(this);       
-        var anulado=0;
-        if($(this).hasClass('anularPago'))
-            anulado=0;
-        else
-            anulado=1;
-        anularRecuperarPago(row,this,anulado);
-    },
-    'click .recuperarPago': function (e, value, row, index) {      
-        var anulado=0;
-        if($(this).hasClass('recuperarPago'))
-            anulado=1;
-        else
-            anulado=0;
-        anularRecuperarPago(row,this,anulado);
-    },*/
     
+    'click .anularPago': function (e, value, row, index) {
+        console.log(row);   
+    },
     
 };
 function anularRecuperarPago(row,t,anulado)
