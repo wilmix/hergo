@@ -30,17 +30,15 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function mostrarPendientePago($ini=null,$fin=null,$alm="")
 	{
-		$sql="SELECT f.`idFactura`, f.almacen, f.nFactura, f.fechaFac, f.cliente, f.total, f.pagada,
-					c.nombreCliente,
+		$sql="SELECT f.`idFactura`, f.almacen, f.nFactura, f.fechaFac, f.cliente, f.total, f.pagada,c.nombreCliente,
 					f.`total` - IFNULL(SUM(ppa.monto),0) saldoPago,
 					IFNULL(SUM(ppa.monto),0) totalPago
-				
 				FROM factura f
 				LEFT JOIN pagosPendientesActivos ppa ON ppa.`idFactura` = f.`idFactura`
 				LEFT JOIN clientes c ON c.idCliente = f.cliente
 				WHERE 
-				f.fechaFac BETWEEN '2017-01-01' AND '2018-12-31'
-						AND f.almacen LIKE '%1'
+				f.fechaFac BETWEEN '$ini' AND '$fin'
+						AND f.almacen LIKE '%$alm'
 						AND f.pagada <> 1
 						AND  f.anulada<>1
 				GROUP BY f.idFactura
@@ -139,15 +137,32 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		$sql=$this->db->insert_batch("pago_factura", $obj);
 		return $sql;		
 	}
-	public function anularPago($numPago)
+	public function anularPago($idPago)
 	{
-		$sql="Update pagos set anulado=1 Where numPago=$numPago";
+		$sql="UPDATE pago SET anulado=1 WHERE idPago=$idPago";
 		$this->db->query($sql);
 	}
-	public function recuperarPago($numPago)
+	public function retornarIdFacturas($idPago)
 	{
-		$sql="Update pagos set anulado=0 Where numPago=$numPago";
+		$sql="SELECT pf.`idFactura`,pf.`monto`, f.`total`
+		FROM pago_factura pf
+		inner join factura f on f.`idFactura`=pf.`idFactura`
+		WHERE pf.`idPago` = $idPago";
+		$query = $this->db->query($sql);
+		return $query;
+	}
+	public function modificarPagadaFactura($pagada,$idFactura)
+	{
+		$sql="UPDATE factura f
+		SET f.`pagada` = $pagada
+		WHERE f.`idFactura`=$idFactura";
 		$this->db->query($sql);
 	}
-
+	public function totalPago($idFactura) {
+		$sql="SELECT ifnull(sum(ppa.`monto`),0) totalPago
+		FROM pagosPendientesActivos ppa
+		WHERE ppa.`idFactura`=$idFactura";
+		$query = $this->db->query($sql);
+		return $query;
+	}
 }

@@ -315,23 +315,40 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 		$ret=$this->Pagos_model->retornarDetallePago($idPago);
 		echo json_encode($ret);
 	}
-	public function anularRecuperarPago()
-	{
+	public function anularPago() {
 		if($this->input->is_ajax_request())
         {
-			$numPago=$this->security->xss_clean($this->input->post('numPago'));						
-			$anulado=$this->security->xss_clean($this->input->post('anulado'));	
-			if($anulado==0)
-				$this->Pagos_model->anularPago($numPago);			
-			else
-				$this->Pagos_model->recuperarPago($numPago);			
+
+			$idPago=$this->security->xss_clean($this->input->post('idPago'));	
+			//$this->Pagos_model->anularPago($idPago);
+			$facturas=$this->Pagos_model->retornarIdFacturas($idPago);	
+			
 			$return=new stdClass();
+			$return->facturas=$facturas->result();
+			foreach ($return->facturas as $value) {
+				$totalPago=$this->Pagos_model->totalPago($value->idFactura);
+				echo '<pre>';	print_r($totalPago->row());   echo '</pre>';	
+
+				
+				if ($totalPago->row() == $value->monto) {
+					$pagada = 0;
+					echo $pagada;
+					//$this->Pagos_model->modificarPagadaFactura($pagada,$value->idFactura);
+				} else {
+					$pagada = 2;
+					echo $pagada;
+					//$this->Pagos_model->modificarPagadaFactura($pagada,$value->idFactura);
+				}
+				
+
+			}
 			$return->status=200;
-			echo json_encode($return);
+			//echo json_encode($return);
 		}
 		else
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
-	}	
+	}
+	
 }

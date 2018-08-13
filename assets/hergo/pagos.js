@@ -299,7 +299,8 @@ window.operateEvents = {
     },
     
     'click .anularPago': function (e, value, row, index) {
-        console.log(row);   
+        anularPago(row.idPago)
+        retornarTablaPagos() 
     },
     
 };
@@ -331,6 +332,36 @@ function anularRecuperarPago(row,t,anulado)
                 $(t).html('<span class="fa fa-ban" aria-hidden="true"></span></button>');
             }                    
             quitarcargando();
+        }
+    }).fail(function( jqxhr, textStatus, error ) {
+    var err = textStatus + ", " + error;
+    console.log( "Request Failed: " + err );
+        quitarcargando();
+        swal({
+            title: 'Error',
+            text: "Intente nuevamente",
+            type: 'error', 
+            showCancelButton: false,
+            allowOutsideClick: false,  
+        })
+    });
+}
+
+function anularPago(idPago)
+{
+    agregarcargando(); 
+    $.ajax({
+        type:"POST",
+        url: base_url('index.php/Pagos/anularPago'),
+        dataType: "json",
+        data: {
+            idPago:idPago,
+        },
+    }).done(function(res){
+        if(res.status=200)
+        {
+            retornarTablaPagos()       
+            quitarcargando()
         }
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
