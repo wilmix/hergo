@@ -1,0 +1,78 @@
+-- MOVIMIENTO ITEMES CLIENTES --> variables fecha y id articulo
+SELECT a.`CodigoArticulo`, f.`fechaFac`, f.`nFactura`,c.`documento`,  c.`nombreCliente` , ROUND(fd.`facturaPUnitario`,2) precioUnitario, 
+ROUND(fd.`facturaCantidad`,2) cantidad, ROUND(fd.`facturaPUnitario` * fd.`facturaCantidad`,2) totalVentas
+FROM facturadetalle fd
+    INNER JOIN factura f ON f.`idFactura` = fd.`idFactura` AND f.`anulada` = 0
+    INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
+    INNER JOIN articulos a ON a.`idArticulos` = fd.`articulo`
+WHERE  f.`fechaFac` BETWEEN '2018-01-01' AND '2018-12-31'
+AND fd.`articulo` = 2176
+ORDER BY c.`nombreCliente`, f.`fechaFac`
+
+
+
+-- ******KARDEX INDIVIDUAL CLIENTES SEPARAR**********
+
+-- SALDO FACTURA
+select c.`idCliente`, c.`nombreCliente`, f.`almacen`, round(sum(f.`total`),2) saldoTotalFactura
+from factura f  
+inner join clientes c on c.`idCliente` = f.`cliente`
+where f.`fechaFac` BETWEEN '2010-01-01' AND '2018-01-01'
+and f.`anulada` = 0
+-- AND c.`idCliente` = 11487
+group by c.`idCliente`
+ORDER BY c.`nombreCliente`
+
+
+-- SALDO NOTA DE ENTREGA
+SELECT e.`cliente`, c.`nombreCliente`,  e.`almacen`, ROUND(SUM(ed.`total`),2) saldoTotalNE
+FROM egresos e
+INNER JOIN egredetalle ed ON ed.`idegreso` = e.`idegresos`
+INNER JOIN clientes c ON c.`idCliente` = e.`cliente`
+WHERE e.`fechamov` BETWEEN '2010-01-01' AND '2018-01-01'
+AND e.`estado` <> 1
+AND e.`anulado` = 0
+-- AND e.`cliente` = 516
+GROUP BY c.`idCliente`
+ORDER BY c.`nombreCliente`
+
+
+
+-- KARDEX INDIVIDUAL CLIENTES..... variables id cliente..
+SELECT * 
+FROM (
+	SELECT sf.`idCliente`, sf.`nombreCliente`,CONCAT((YEAR(NOW())),'-01-01') fecha, 0 numDocumento, 1 almacen,  "" detalle,  IFNULL(sne.`saldoTotalNE`,0) saldoNE, sf.`saldoTotalFactura`, sp.`saldoTotalPago`
+	FROM saldoFactura sf
+	LEFT JOIN saldoNotaEntrega sne ON sne.`cliente` = sf.`idCliente`
+	LEFT JOIN saldoPago sp ON sp.`cliente` = sf.`idCliente`
+	WHERE sf.`idCliente` = 1192
+
+	UNION ALL
+	SELECT c.`idCliente`, c.`nombreCliente`, f.fechaFac,         f.nFactura, f.almacen,     IFNULL(f.glosa,"") detalle, 0 , ROUND(f.`total`,2) saldoTotalFactura, 0
+	FROM factura f  
+	INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
+	WHERE  YEAR(f.`fechaFac`)=YEAR(NOW())
+	AND f.`anulada` = 0
+	AND c.`idCliente` = 1192
+
+
+	UNION ALL
+	SELECT c.`idCliente`, c.`nombreCliente`,  e.`fechamov`, e.`nmov`, e.`almacen`, e.`obs`, ROUND(SUM(ed.`total`),2) saldoTotalNE , 0 , 0 
+	FROM egresos e
+	INNER JOIN egredetalle ed ON ed.`idegreso` = e.`idegresos`
+	INNER JOIN clientes c ON c.`idCliente` = e.`cliente`
+	WHERE  YEAR(e.`fechamov`)=YEAR(NOW())
+	AND e.`estado` <> 1
+	AND e.`anulado` = 0
+	AND e.`cliente` = 1192
+
+	UNION ALL 
+	SELECT c.`idCliente`, c.`nombreCliente`, p.`fechaPago`, p.`numPago`, p.`almacen`, p.`glosa`,0 , 0, ROUND(pf.`monto`,2) saldoTotalPago
+	FROM pago_factura pf
+	INNER JOIN pago p ON p.`idPago` = pf.`idPago` AND p.`anulado` = 0
+	INNER JOIN factura f ON f.`idFactura` = pf.`idFactura` AND f.`anulada` = 0
+	INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
+	WHERE YEAR(p.`fechaPago` )=YEAR(NOW())
+	AND c.`idCliente` = 1192
+	) AS kardexClientes
+ORDER BY fecha

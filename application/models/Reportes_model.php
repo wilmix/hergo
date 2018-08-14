@@ -15,11 +15,20 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function retornarArticulos()
-	{
+	public function retornarArticulos() {
 		$sql="SELECT idArticulos, CodigoArticulo,Descripcion
 		FROM hergo2.articulos_activos
 		WHERE SUBSTRING(CodigoArticulo,1,2)<>'SR'";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+	public function retornarClientes3() {
+		$sql="SELECT f.`cliente`, c.`nombreCliente`, c.`documento`
+			FROM factura f
+				INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
+				WHERE YEAR(f.`fechaFac`) BETWEEN (YEAR(NOW())-3) AND YEAR(NOW())
+				GROUP BY f.`cliente`
+				ORDER BY c.`nombreCliente`";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
@@ -146,7 +155,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		IF(anulada = 1 , 0 , ROUND ((f.total*13/100),2))  AS debito, 
 		IFNULL(codigoControl, 0) AS codigoControl , df.manual
 		FROM factura AS f
-		INNER JOIN datosfactura AS df ON df.lote=f.lote
+		INNER JOIN datosfactura AS df ON df.idDatosFactura=f.lote
 		INNER JOIN clientes AS c ON c.idCliente = f.cliente
 		WHERE fechaFac BETWEEN '$ini' AND '$fin'
 		AND f.almacen LIKE '$alm'
@@ -192,7 +201,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		/*contar manual*/
 		SELECT IFNULL(NULL, 'manuales') ,COUNT(df.manual)
 		FROM factura AS f
-		INNER JOIN datosfactura AS df ON df.lote=f.lote
+		INNER JOIN datosfactura AS df ON df.idDatosFactura=f.lote
 		WHERE fechaFac BETWEEN '$ini' AND '$fin'
 		AND f.almacen LIKE '%$alm'
 		AND df.manual=1
@@ -200,7 +209,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		/*contar computarizadas*/
 		SELECT IFNULL(NULL, 'computarizadas') ,COUNT(df.manual)
 		FROM factura AS f
-		INNER JOIN datosfactura AS df ON df.lote=f.lote
+		INNER JOIN datosfactura AS df ON df.idDatosFactura=f.lote
 		WHERE fechaFac BETWEEN '$ini' AND '$fin'
 		AND f.almacen LIKE '%$alm'
 		AND df.manual=0
@@ -208,7 +217,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		/*Suma Total*/
 		SELECT IFNULL(NULL, 'Total') ,ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)),2) AS sumaTotal
 		FROM factura AS f
-		INNER JOIN datosfactura AS df ON df.lote=f.lote
+		INNER JOIN datosfactura AS df ON df.idDatosFactura=f.lote
 		INNER JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura
 		WHERE fechaFac BETWEEN '$ini' AND '$fin'
 		AND f.almacen LIKE '%$alm'
@@ -217,7 +226,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		/*Suma Debito*/
 		SELECT IFNULL(NULL, 'debito') ,ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)*13/100),2) AS debito
 		FROM factura AS f
-		INNER JOIN datosfactura AS df ON df.lote=f.lote
+		INNER JOIN datosfactura AS df ON df.idDatosFactura=f.lote
 		INNER JOIN clientes AS c ON c.idCliente = f.cliente
 		INNER JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura
 		WHERE fechaFac BETWEEN '$ini' AND '$fin'
@@ -255,6 +264,45 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 	public function mostrarKardexIndividual($art="",$alm="") ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
 		$sql="call hergo2.testKardex2($art,$alm);";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+	public function kardexIndividualCliente($cliente="",$almacen="") {
+		$sql="SELECT * 
+				FROM (SELECT sf.`idCliente`, sf.`nombreCliente`,CONCAT((YEAR(NOW())),'-01-01') fecha, 0 numDocumento, '$almacen' almacen,  '' detalle,  IFNULL(sne.`saldoTotalNE`,0) saldoNE, sf.`saldoTotalFactura`, sp.`saldoTotalPago`
+					FROM saldoFactura sf
+					LEFT JOIN saldoNotaEntrega sne ON sne.`cliente` = sf.`idCliente`
+					LEFT JOIN saldoPago sp ON sp.`cliente` = sf.`idCliente`
+					WHERE sf.`idCliente` = $cliente
+					UNION ALL
+					SELECT c.`idCliente`, c.`nombreCliente`, f.fechaFac,         f.nFactura, f.almacen,     IFNULL(f.glosa,'') detalle, 0 , ROUND(f.`total`,2) saldoTotalFactura, 0
+					FROM factura f  
+					INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
+					WHERE  YEAR(f.`fechaFac`)=YEAR(NOW())
+					AND f.`anulada` = 0
+					AND f.almacen = $almacen
+					AND c.`idCliente` = $cliente
+					UNION ALL
+					SELECT c.`idCliente`, c.`nombreCliente`,  e.`fechamov`, e.`nmov`, e.`almacen`, e.`obs`, ROUND(SUM(ed.`total`),2) saldoTotalNE , 0 , 0 
+					FROM egresos e
+					INNER JOIN egredetalle ed ON ed.`idegreso` = e.`idegresos`
+					INNER JOIN clientes c ON c.`idCliente` = e.`cliente`
+					WHERE  YEAR(e.`fechamov`)=YEAR(NOW())
+					AND e.`estado` <> 1
+					AND e.`anulado` = 0
+					AND e.almacen = $almacen
+					AND e.`cliente` = $cliente
+					UNION ALL 
+					SELECT c.`idCliente`, c.`nombreCliente`, p.`fechaPago`, p.`numPago`, p.`almacen`, p.`glosa`,0 , 0, ROUND(pf.`monto`,2) saldoTotalPago
+					FROM pago_factura pf
+					INNER JOIN pago p ON p.`idPago` = pf.`idPago` AND p.`anulado` = 0
+					INNER JOIN factura f ON f.`idFactura` = pf.`idFactura` AND f.`anulada` = 0
+					INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
+					WHERE YEAR(p.`fechaPago` )=YEAR(NOW())
+					AND p.almacen = $almacen
+					AND c.`idCliente` = $cliente
+					) AS kardexClientes
+				ORDER BY fecha";
 		$query=$this->db->query($sql);		
 		return $query;
 	}

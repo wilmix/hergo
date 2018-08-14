@@ -269,39 +269,7 @@ class Reportes extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-	public function kardexIndividualClientes()
-	{
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
 
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Kardex Individual Clientes";
-			$this->datos['titulo']="Kardex Individual Clientes";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			//$this->datos['cabeceras_script'][]=base_url('assets/hergo/egresos.js'); 				//*******agregar js********
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            //$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");				//*******agregar alm********
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/kardexIndividualClientes.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
-	}
 	public function resumenVentasLineaMes()
 	{
 		$this->libacceso->acceso(29);
@@ -805,6 +773,58 @@ class Reportes extends CI_Controller
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
+	}
+	public function kardexIndividualCliente()
+	{
+		$this->libacceso->acceso(33);
+		if(!$this->session->userdata('logeado'))
+			redirect('auth', 'refresh');
+
+			$this->datos['menu']="Reportes";
+			$this->datos['opcion']="Kardex Individual Cliente";
+			$this->datos['titulo']="Kardex Individual Cliente";
+
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
+
+	        /*************DATERANGEPICKER**********/
+	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
+			/**************FUNCION***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/kardexIndividualCliente.js'); 				//*******agregar js********
+			/**************INPUT MASK***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+			$this->datos['clientes']=$this->Reportes_model->retornarClientes3();
+
+			$this->load->view('plantilla/head.php',$this->datos);
+			$this->load->view('plantilla/header.php',$this->datos);
+			$this->load->view('plantilla/menu.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('reportes/kardexIndividualCliente.php',$this->datos);
+			$this->load->view('plantilla/footcontainer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
+	}
+	public function mostrarKardexIndividualCliente()  //******cambiar a funcion del modelo
+	{
+		if($this->input->is_ajax_request())
+        {
+			$almacen=$this->security->xss_clean($this->input->post("almacen")); //almacen
+			$cliente=$this->security->xss_clean($this->input->post("cliente"));//tipo de ingreso
+			//$res=$this->Reportes_model->kardexIndividualCliente($cliente,$almacen); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+			$res=$this->Reportes_model->kardexIndividualCliente(1192,1);
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+		
 	}
 	
 
