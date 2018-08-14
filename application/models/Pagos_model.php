@@ -144,15 +144,14 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function retornarIdFacturas($idPago)
 	{
-		$sql="SELECT pf.`idFactura`,pf.`monto`, f.`total`
+		$sql="SELECT pf.`idFactura`, f.`total` AS totalFactura
 		FROM pago_factura pf
 		inner join factura f on f.`idFactura`=pf.`idFactura`
 		WHERE pf.`idPago` = $idPago";
 		$query = $this->db->query($sql);
 		return $query;
 	}
-	public function modificarPagadaFactura($pagada,$idFactura)
-	{
+	public function modificarPagadaFactura($pagada,$idFactura) {
 		$sql="UPDATE factura f
 		SET f.`pagada` = $pagada
 		WHERE f.`idFactura`=$idFactura";

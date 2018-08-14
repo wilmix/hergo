@@ -320,30 +320,23 @@ class Pagos extends CI_Controller  /////**********nombre controlador
         {
 
 			$idPago=$this->security->xss_clean($this->input->post('idPago'));	
-			//$this->Pagos_model->anularPago($idPago);
+			$this->Pagos_model->anularPago($idPago);
 			$facturas=$this->Pagos_model->retornarIdFacturas($idPago);	
-			
 			$return=new stdClass();
 			$return->facturas=$facturas->result();
 			foreach ($return->facturas as $value) {
 				$totalPago=$this->Pagos_model->totalPago($value->idFactura);
-				echo '<pre>';	print_r($totalPago->row());   echo '</pre>';	
-
-				
-				if ($totalPago->row() == $value->monto) {
+				$totalPagado = $totalPago->result()[0]->totalPago;
+				if ($totalPagado == 0) {
 					$pagada = 0;
-					echo $pagada;
-					//$this->Pagos_model->modificarPagadaFactura($pagada,$value->idFactura);
+					$this->Pagos_model->modificarPagadaFactura($pagada,$value->idFactura);
 				} else {
 					$pagada = 2;
-					echo $pagada;
-					//$this->Pagos_model->modificarPagadaFactura($pagada,$value->idFactura);
+					$this->Pagos_model->modificarPagadaFactura($pagada,$value->idFactura);
 				}
-				
-
 			}
 			$return->status=200;
-			//echo json_encode($return);
+			echo json_encode($return);
 		}
 		else
 		{

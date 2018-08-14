@@ -126,7 +126,7 @@
             <ul class="treeview-menu">
               <li class="Pagos"><a href="<?php echo base_url("Pagos") ?>">Consulta Pagos</a></li>
               <li class="RecibirPago"><a href="<?php echo base_url("Pagos/RecibirPago") ?>">Recibir Pagos</a></li>
-              <li class=""><a href="#">Modificar Pagos</a></li>
+              <!-- <li class=""><a href="#">Modificar Pagos</a></li> -->
             </ul>
           </li>
 

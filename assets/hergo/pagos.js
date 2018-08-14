@@ -299,8 +299,35 @@ window.operateEvents = {
     },
     
     'click .anularPago': function (e, value, row, index) {
-        anularPago(row.idPago)
-        retornarTablaPagos() 
+          swal({
+            title: 'Esta seguro?',
+            html: 'Se anulara el recibo <b>N° ' + row.numPago + ' de ' + row.nombreCliente + '</b>',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Anular',
+            cancelButtonText: 'No, Cancelar'
+        }).then(
+            result=>
+            {
+                anularPago(row.idPago)
+                retornarTablaPagos() 
+                swal({
+                    html: 'Se anularó el recibo N° ' + row.numPago,
+                    //timer: 4000
+                });
+                
+            },
+            /*dismiss => {
+                swal(
+                    'No anulado',
+                    'Gracias por no generar negativos :)',
+                    'error'
+                )
+            }*/
+            );
+
     },
     
 };
@@ -360,7 +387,7 @@ function anularPago(idPago)
     }).done(function(res){
         if(res.status=200)
         {
-            retornarTablaPagos()       
+            //retornarTablaPagos()       
             quitarcargando()
         }
     }).fail(function( jqxhr, textStatus, error ) {
