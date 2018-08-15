@@ -816,7 +816,7 @@ class Reportes extends CI_Controller
 			$almacen=$this->security->xss_clean($this->input->post("almacen")); //almacen
 			$cliente=$this->security->xss_clean($this->input->post("cliente"));//tipo de ingreso
 			//$res=$this->Reportes_model->kardexIndividualCliente($cliente,$almacen); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
-			$res=$this->Reportes_model->kardexIndividualCliente(1192,1);
+			$res=$this->Reportes_model->kardexIndividualCliente($cliente,$almacen);
 			$res=$res->result_array();
 			echo json_encode($res);
 		}

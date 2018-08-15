@@ -269,7 +269,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function kardexIndividualCliente($cliente="",$almacen="") {
 		$sql="SELECT * 
-				FROM (SELECT sf.`idCliente`, sf.`nombreCliente`,CONCAT((YEAR(NOW())),'-01-01') fecha, 0 numDocumento, '$almacen' almacen,  '' detalle,  IFNULL(sne.`saldoTotalNE`,0) saldoNE, sf.`saldoTotalFactura`, sp.`saldoTotalPago`
+				FROM (SELECT sf.`idCliente`, sf.`nombreCliente`,CONCAT((YEAR(NOW())),'-01-01') fecha, '-' numDocumento, '$almacen' almacen,  'SALDO INICIAL' detalle,  IFNULL(sne.`saldoTotalNE`,0) saldoNE, sf.`saldoTotalFactura`, sp.`saldoTotalPago`
 					FROM saldoFactura sf
 					LEFT JOIN saldoNotaEntrega sne ON sne.`cliente` = sf.`idCliente`
 					LEFT JOIN saldoPago sp ON sp.`cliente` = sf.`idCliente`

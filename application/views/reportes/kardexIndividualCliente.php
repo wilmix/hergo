@@ -25,9 +25,9 @@
                 </div>
                 <div class="text-center">
                     <h2>Kardex Individual de Cliente -
-                        <span id="tituloReporte"></span>
+                        <span id="nombreCliente"></span>
                     </h2>
-                    <h4 id="nombreCliente"></h4>
+                    <h4 id="tituloReporte"></h4>
                 </div>
                 <table id="tablaKardex" data-toolbar="#toolbar2" data-toggle="table">
                 </table>
