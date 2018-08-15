@@ -1,6 +1,49 @@
-$(document).ready(function() {
+
+var iniciofecha = moment().subtract(5, 'year').startOf('year')
+var finfecha = moment().subtract(0, 'year').endOf('year')
+$(document).ready(function () {
+
+    let start = moment().subtract(0, 'year').startOf('year')
+    let end = moment().subtract(0, 'year').endOf('year')
+
+  $(function () {
+    moment.locale('es');
+
+    function cb(start, end) {
+      $('#fechapersonalizada span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
+      iniciofecha = start
+      finfecha = end
+    }
+
+    $('#fechapersonalizada').daterangepicker({
+
+      locale: {
+        format: 'DD/MM/YYYY',
+        applyLabel: 'Aplicar',
+        cancelLabel: 'Cancelar',
+        customRangeLabel: 'Personalizado',
+      },
+      startDate: start,
+      endDate: end,
+      ranges: {
+        'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
+        "Hace un Año": [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+        'Hace dos Años': [moment().subtract(2, 'year').startOf('year'), moment().subtract(2, 'year').endOf('year')],
+        'Hace tres Años': [moment().subtract(3, 'year').startOf('year'), moment().subtract(3, 'year').endOf('year')],
+      }
+    }, cb);
+
+    cb(start, end);
+
+  });
+  $('#fechapersonalizada').on('apply.daterangepicker', function (ev, picker) {
     tituloReporte()
-});
+   });
+  tituloReporte()
+})
+
+
+
 
 
 $(document).on("click", "#kardex", function () {
@@ -18,8 +61,11 @@ $(document).on("change", "#clientes_filtro", function () {
 })
 
 function retornarKardexCliente() {
+    let ini = iniciofecha.format('YYYY-MM-DD')
+    let fin = finfecha.format('YYYY-MM-DD')
     let almacen = $("#almacen_filtro").val()
     let cliente = $("#clientes_filtro").val()
+
     agregarcargando();
     $.ajax({
         type: "POST",
@@ -27,12 +73,15 @@ function retornarKardexCliente() {
         dataType: "json",
         data: {
             almacen: almacen,
-            cliente: cliente
+            cliente: cliente,
+            ini:ini,
+            fin:fin,
         },
     }).done(function (res) {
         quitarcargando(); 
-        console.log(almacen + " " + cliente)
-        console.log(res);
+        //console.log(almacen + " " + cliente)
+
+        console.log(ini+ ' ' +fin);
         if (res[0].fecha ===null) {
             res.shift()
         }
@@ -79,7 +128,7 @@ function retornarKardexCliente() {
                 {
                     field: 'detalle',
                     title: 'Detalle',
-                    align: 'center'
+                    align: 'left'
                 },
         
                 {
@@ -105,11 +154,11 @@ function retornarKardexCliente() {
 
                 },
                 {
-                    field: '',
+                    field: 'total',
                     title: 'Total',
                     align: 'right',
                     formatter: operateFormatter3,
-                    footerFormatter: sumaColumna
+                    //footerFormatter: sumaColumna
                 },
             ]
           });

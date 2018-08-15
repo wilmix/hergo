@@ -813,11 +813,20 @@ class Reportes extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-			$almacen=$this->security->xss_clean($this->input->post("almacen")); //almacen
-			$cliente=$this->security->xss_clean($this->input->post("cliente"));//tipo de ingreso
-			//$res=$this->Reportes_model->kardexIndividualCliente($cliente,$almacen); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
-			$res=$this->Reportes_model->kardexIndividualCliente($cliente,$almacen);
-			$res=$res->result_array();
+			$almacen=$this->security->xss_clean($this->input->post("almacen"));
+			$cliente=$this->security->xss_clean($this->input->post("cliente"));
+			$ini=$this->security->xss_clean($this->input->post("ini"));
+			$fin=$this->security->xss_clean($this->input->post("fin"));
+			$res=$this->Reportes_model->kardexIndividualCliente($cliente,$almacen,$ini,$fin);
+			//$res=$res->result_array();
+			$res=$res->result();
+			
+			//echo '<pre>';	print_r($res); echo '</pre>';	
+			$aux = 0;
+			foreach ($res as $linea) {
+				$linea->total = $aux + floatval($linea->saldoNE) + floatval($linea->saldoTotalFactura) - floatval($linea->saldoTotalPago);
+				$aux = $linea->total;
+			}
 			echo json_encode($res);
 		}
 		else

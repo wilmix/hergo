@@ -267,21 +267,71 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function kardexIndividualCliente($cliente="",$almacen="") {
+	public function kardexIndividualCliente($cliente="",$almacen="",$ini=null,$fin=null) {
 		$sql="SELECT * 
-				FROM (SELECT sf.`idCliente`, sf.`nombreCliente`,CONCAT((YEAR(NOW())),'-01-01') fecha, '-' numDocumento, '$almacen' almacen,  'SALDO INICIAL' detalle,  IFNULL(sne.`saldoTotalNE`,0) saldoNE, sf.`saldoTotalFactura`, sp.`saldoTotalPago`
+				FROM (SELECT sf.`idCliente`, sf.`nombreCliente`,CONCAT((YEAR(NOW())),'-01-01') fecha, '-' numDocumento, '$almacen' almacen,  'SALDO INICIAL' detalle,  
+					
+					(SELECT 
+					ROUND(SUM(`ed`.`total`), 2) AS `saldoTotalNE`
+					FROM
+						((`egresos` `e`
+						JOIN `egredetalle` `ed` ON ((`ed`.`idegreso` = `e`.`idegresos`)))
+						JOIN `clientes` `c` ON ((`c`.`idCliente` = `e`.`cliente`)))
+					WHERE
+						(
+							`e`.`fechamov` < '$ini' 
+							AND (`e`.`estado` <> 1)
+							AND (`e`.`anulado` = 0)
+							AND (`e`.`almacen` = '$almacen')
+							AND (`e`.`cliente` = '$cliente')
+						)
+					GROUP BY `c`.`idCliente`) as saldoNE, 
+
+					(SELECT ROUND(SUM(`f`.`total`), 2) AS `saldoTotalFactura`
+						FROM
+							(`factura` `f`
+							JOIN `clientes` `c` ON ((`c`.`idCliente` = `f`.`cliente`)))
+						WHERE
+							(
+								(`f`.`fechaFac` < '$ini')
+								AND (`f`.`anulada` = 0)
+								AND (`f`.`almacen` = '$almacen')
+								AND (`f`.`cliente` = '$cliente')
+							)
+						GROUP BY `c`.`idCliente`
+					) saldoTotalFactura, 
+
+					(SELECT 
+							ROUND(SUM(`pf`.`monto`), 2) AS `saldoTotalPago`
+						FROM
+							(((`pago_factura` `pf`
+							JOIN `pago` `p` ON (((`p`.`idPago` = `pf`.`idPago`)
+								AND (`p`.`anulado` = 0))))
+							JOIN `factura` `f` ON (((`f`.`idFactura` = `pf`.`idFactura`)
+								AND (`f`.`anulada` = 0))))
+							)
+						WHERE
+							(
+								(`p`.`fechaPago` < '$ini')
+								AND (`p`.`almacen` = '$almacen')
+								AND (f.cliente = '$cliente')
+							)
+						GROUP BY f.cliente
+					) saldoTotalPago
 					FROM saldoFactura sf
 					LEFT JOIN saldoNotaEntrega sne ON sne.`cliente` = sf.`idCliente`
 					LEFT JOIN saldoPago sp ON sp.`cliente` = sf.`idCliente`
-					WHERE sf.`idCliente` = $cliente
+					WHERE sf.`idCliente` = '$cliente'
 					UNION ALL
-					SELECT c.`idCliente`, c.`nombreCliente`, f.fechaFac,         f.nFactura, f.almacen,     IFNULL(f.glosa,'') detalle, 0 , ROUND(f.`total`,2) saldoTotalFactura, 0
+					SELECT c.`idCliente`, c.`nombreCliente`, f.fechaFac,         f.nFactura, f.almacen,     
+					IFNULL(f.glosa,'') detalle, 
+					0 , ROUND(f.`total`,2) saldoTotalFactura, 0
 					FROM factura f  
 					INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
 					WHERE  YEAR(f.`fechaFac`)=YEAR(NOW())
 					AND f.`anulada` = 0
-					AND f.almacen = $almacen
-					AND c.`idCliente` = $cliente
+					AND f.almacen = '$almacen'
+					AND c.`idCliente` = '$cliente'
 					UNION ALL
 					SELECT c.`idCliente`, c.`nombreCliente`,  e.`fechamov`, e.`nmov`, e.`almacen`, e.`obs`, ROUND(SUM(ed.`total`),2) saldoTotalNE , 0 , 0 
 					FROM egresos e
@@ -290,17 +340,19 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 					WHERE  YEAR(e.`fechamov`)=YEAR(NOW())
 					AND e.`estado` <> 1
 					AND e.`anulado` = 0
-					AND e.almacen = $almacen
-					AND e.`cliente` = $cliente
+					AND e.almacen = '$almacen'
+					AND e.`cliente` = '$cliente'
 					UNION ALL 
-					SELECT c.`idCliente`, c.`nombreCliente`, p.`fechaPago`, p.`numPago`, p.`almacen`, p.`glosa`,0 , 0, ROUND(pf.`monto`,2) saldoTotalPago
+					SELECT c.`idCliente`, c.`nombreCliente`, p.`fechaPago`, p.`numPago`, p.`almacen`, 
+					CONCAT('Fac. ',f.`lote`,'-',f.nFactura,', ',p.`glosa`) glosa,
+					0 , 0, ROUND(pf.`monto`,2) saldoTotalPago
 					FROM pago_factura pf
 					INNER JOIN pago p ON p.`idPago` = pf.`idPago` AND p.`anulado` = 0
 					INNER JOIN factura f ON f.`idFactura` = pf.`idFactura` AND f.`anulada` = 0
 					INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
 					WHERE YEAR(p.`fechaPago` )=YEAR(NOW())
-					AND p.almacen = $almacen
-					AND c.`idCliente` = $cliente
+					AND p.almacen = '$almacen'
+					AND c.`idCliente` = '$cliente'
 					) AS kardexClientes
 				ORDER BY fecha";
 		$query=$this->db->query($sql);		
