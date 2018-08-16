@@ -277,7 +277,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 						`e`.`fechamov` < '$ini'
 						AND `e`.`estado` <> 1
 						AND `e`.`anulado` = 0
-						AND `e`.`almacen` = '$almacen'
+						AND `e`.`almacen` LIKE '%$almacen'
 						AND `e`.`cliente` = '$cliente'
 					GROUP BY e.`cliente`),0) saldoNE, 
 
@@ -286,7 +286,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 					WHERE
 						`f`.`fechaFac` < '$ini'
 						AND `f`.`anulada` = 0
-						AND `f`.`almacen` = '$almacen'
+						AND `f`.`almacen` LIKE '%$almacen'
 						AND `f`.`cliente` = '$cliente'
 					GROUP BY f.`cliente`),0) saldoTotalFactura, 
 
@@ -296,7 +296,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 						INNER JOIN `factura` `f` ON `f`.`idFactura` = `pf`.`idFactura`	AND `f`.`anulada` = 0
 					WHERE
 						`p`.`fechaPago` < '$ini'
-						AND `p`.`almacen` = '$almacen'
+						AND `p`.`almacen` LIKE '%$almacen'
 						AND f.cliente = '$cliente'
 					GROUP BY f.cliente),0) saldoTotalPago
 				FROM clientes c
@@ -309,7 +309,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 					INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
 				WHERE  f.`fechaFac` BETWEEN '$ini' AND '$fin'
 					AND f.`anulada` = 0
-					AND f.almacen = '$almacen'
+					AND f.almacen LIKE '%$almacen'
 					AND c.`idCliente` = '$cliente'
 			UNION ALL
 				SELECT c.`idCliente`, c.`nombreCliente`,  e.`fechamov`, e.`nmov`, e.`almacen`, e.`obs`, ROUND(SUM(ed.`total`),2) saldoTotalNE , 0 , 0 
@@ -319,7 +319,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 				WHERE  e.`fechamov` BETWEEN '$ini' AND '$fin'
 					AND e.`estado` <> 1
 					AND e.`anulado` = 0
-					AND e.almacen = '$almacen'
+					AND e.almacen LIKE '%$almacen'
 					AND e.`cliente` = '$cliente'
 			UNION ALL 
 				SELECT c.`idCliente`, c.`nombreCliente`, p.`fechaPago`, p.`numPago`, p.`almacen`, 
@@ -330,7 +330,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 					INNER JOIN factura f ON f.`idFactura` = pf.`idFactura` AND f.`anulada` = 0
 					INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
 				WHERE   p.`fechaPago` BETWEEN '$ini' AND '$fin'
-					AND p.almacen = '$almacen'
+					AND p.almacen LIKE '%$almacen'
 					AND c.`idCliente` = '$cliente'
 		) kardexClientes
 		ORDER BY fecha";

@@ -78,6 +78,7 @@ function retornarKardexCliente() {
             fin:fin,
         },
     }).done(function (res) {
+        console.log('almacen:'+almacen+' cliente:'+cliente + ' ini:'+ini +' fin:'+fin);
         quitarcargando(); 
         if (res[0].fecha ===null) {
             res.shift()
