@@ -821,7 +821,7 @@ class Reportes extends CI_Controller
 			//$res=$res->result_array();
 			$res=$res->result();
 			
-			//echo '<pre>';	print_r($res); echo '</pre>';	
+			//echo '<pre>';	print_r($almacen.'-'.$cliente.'-'.$ini.'-'.$fin); echo '</pre>';	
 			$aux = 0;
 			foreach ($res as $linea) {
 				$linea->total = $aux + floatval($linea->saldoNE) + floatval($linea->saldoTotalFactura) - floatval($linea->saldoTotalPago);

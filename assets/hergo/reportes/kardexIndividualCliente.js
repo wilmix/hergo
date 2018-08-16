@@ -79,13 +79,9 @@ function retornarKardexCliente() {
         },
     }).done(function (res) {
         quitarcargando(); 
-        //console.log(almacen + " " + cliente)
-
-        console.log(ini+ ' ' +fin);
         if (res[0].fecha ===null) {
             res.shift()
         }
-        console.log(res);
         $("#tablaKardex").bootstrapTable('destroy');    
         $("#tablaKardex").bootstrapTable({ 
             data: res,

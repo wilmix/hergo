@@ -68,7 +68,7 @@ class DatosFactura_model extends CI_Model
 	}
 	public function actualizarEnUso($idDatosFactura)
 	{
-		$sql="UPDATE datosFactura set enUso=1 where idDatosFactura=$idDatosFactura";
+		$sql="UPDATE datosfactura set enUso=1 where idDatosFactura=$idDatosFactura";
        
 		$query=$this->db->query($sql);
         
