@@ -26,9 +26,25 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$sql="SELECT f.`cliente`, c.`nombreCliente`, c.`documento`
 			FROM factura f
 				INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
-				WHERE YEAR(f.`fechaFac`) BETWEEN (YEAR(NOW())-3) AND YEAR(NOW())
+				WHERE YEAR(f.`fechaFac`) BETWEEN (YEAR(NOW())-2) AND YEAR(NOW())
 				GROUP BY f.`cliente`
 				ORDER BY c.`nombreCliente`";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+	public function clientesFacturasPendientes() {
+		$sql="SELECT f.`cliente` idCliente, c.`nombreCliente`, c.`documento`
+		FROM pago p
+			LEFT JOIN pago_factura pf ON p.`idPago` = pf.`idPago`
+			left join factura f on f.`idFactura` = pf.`idFactura`
+			INNER JOIN clientes c ON c.`idCliente`= f.`cliente`
+		WHERE 
+			f.`pagada` <>1 
+			and f.`anulada` = 0 
+			and p.`anulado` = 0
+			group by f.`cliente`
+			order by c.`nombreCliente` 
+		";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
@@ -68,34 +84,29 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarFacturasPendientesPago($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
-	{ //cambiar la consulta
-		$sql="SELECT * FROM
-		(SELECT f.`lote` lote, a.`almacen` alm, f.`fecha` fecha,f.`nFactura` nFac,c.`nombreCliente` cliente, 
-			f.`total` totalFactura,NULL  ,f.`glosa`,  IFNULL((`f`.`total` - `p`.`montoPago`),'noPagado') pagada
-		FROM factura f
-		INNER JOIN clientes c ON c.`idCliente`= f.`cliente`
-		INNER JOIN almacenes a ON a.`idalmacen` = f.`almacen`
-		LEFT JOIN pagos p ON p.`idFactura` = f.`idFactura`
-		WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin'
-		AND IFNULL((`f`.`total` - `p`.`montoPago`),'noPagado')='noPagado' 
-		AND f.`anulada` = 0 
-		AND f.`pagada` = 0
-		AND f.`almacen` LIKE '%$alm'
-		UNION ALL
-		SELECT f.`lote`, a.`almacen`, p.`fechaPago`,f.`nFactura`,c.`nombreCliente`, 
-			  f.`total` , p.`montoPago` , p.`glosaPago`, IFNULL((`f`.`total` - `p`.`montoPago`),'noPagado') pagada
-		FROM factura f
-		INNER JOIN clientes c ON c.`idCliente`= f.`cliente`
-		INNER JOIN almacenes a ON a.`idalmacen` = f.`almacen`
-		LEFT JOIN pagos p ON p.`idFactura` = f.`idFactura`
-		WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin'
-		AND IFNULL((`f`.`total` - `p`.`montoPago`),'noPagado') > 0
-		AND f.`anulada` = 0 
-		AND f.`pagada` = 0
-		AND p.`almacen` LIKE '%$alm') AS noPagadas
+	public function mostrarFacturasPendientesPago($cliente="", $almacen="")
+	{ 
+		$sql="SELECT  idFactura, idPago, lote , nFac, almacen, fecha, CONCAT(glosaFactura, ' ',glosaPago) glosa, 
+		totalFactura, IFNULL(SUM(monto),0) totalPago , totalFactura-IFNULL(SUM(monto),0) saldo, nombreCliente
+		FROM 
+		(
+			SELECT 
+				f.`idFactura`, f.`lote` lote, f.`almacen`, f.`fechaFac` fecha,f.`nFactura` nFac,f.`cliente` cliente, 
+				f.`total` totalFactura, f.`glosa` glosaFactura, f.`pagada` , pf.`monto`,IFNULL(p.`anulado`,0) pagoAnulado, p.`idPago`, p.`glosa` glosaPago, c.`nombreCliente`
+			FROM factura f
+			LEFT JOIN pago_factura pf ON f.`idFactura` = pf.`idFactura`
+			LEFT JOIN pago p ON p.`idPago` = pf.`idPago` 
+			INNER JOIN clientes c ON f.`cliente` = c.`idCliente`
+			WHERE 
+				f.`anulada` = 0 
+				AND f.`pagada` <>1 
+				AND f.`almacen` LIKE '%$almacen'
+				AND f.`cliente` LIKE '%$cliente'
 		
-		ORDER BY cliente, fecha";
+		) tbl
+		WHERE pagoAnulado = 0
+		GROUP BY idFactura
+		ORDER BY nombreCliente, fecha";
 		
 		$query=$this->db->query($sql);		
 		return $query;
@@ -165,18 +176,6 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-/*SELECT fechaFac, nFactura, df.autorizacion, anulada, c.documento, c.nombreCliente,
-		IF(anulada=1 , 0 , ROUND((f.total,2)) AS sumaDetalle, 
-		IF(anulada = 1 , 0 , ROUND ((f.total*13/100),2))  AS debito, 
-		IFNULL(codigoControl, 0) AS codigoControl , df.manual
-		FROM factura AS f
-		INNER JOIN datosfactura AS df ON df.lote=f.lote
-		INNER JOIN clientes AS c ON c.idCliente = f.cliente
-		INNER JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura
-		WHERE fechaFac BETWEEN '$ini' AND '$fin'
-		AND f.almacen LIKE '%$alm'
-		GROUP BY f.idFactura
-		ORDER BY  df.manual, nFactura */
 	public function mostrarLibroVentasTotales($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
 		$sql="SELECT IFNULL(NULL, 'TotalFacturas') AS titulo,COUNT(anulada) AS resultado
@@ -337,8 +336,4 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-
-
-
-
 }

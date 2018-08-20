@@ -1,106 +1,58 @@
-var iniciofecha = moment().subtract(5, 'year').startOf('year')
-var finfecha = moment().subtract(0, 'year').endOf('year')
-$(document).ready(function () {
+$(document).ready(function() {
     tituloReporte()
-    $(".tiponumerico").inputmask({
-        alias: "decimal",
-        digits: 2,
-        groupSeparator: ',',
-        autoGroup: true,
-        autoUnmask: true
+    $('#clientes_filtro').select2({
+        placeholder: 'Seleccione',
+        width: 'resolve',
+        allowClear: true
     });
 
-    var start = moment().subtract(5, 'year').startOf('year')
-    var end = moment().subtract(0, 'year').endOf('year')
-    var actual = moment().subtract(0, 'year').startOf('year')
-    var unanterior = moment().subtract(1, 'year').startOf('year')
-    var dosanterior = moment().subtract(2, 'year').startOf('year')
-    var tresanterior = moment().subtract(3, 'year').startOf('year')
-
-    $(function () {
-        moment.locale('es');
-
-        function cb(start, end) {
-            $('#fechapersonalizada span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
-            iniciofecha = start
-            finfecha = end
-        }
-
-        $('#fechapersonalizada').daterangepicker({
-
-            locale: {
-                format: 'DD/MM/YYYY',
-                applyLabel: 'Aplicar',
-                cancelLabel: 'Cancelar',
-                customRangeLabel: 'Personalizado',
-            },
-            startDate: start,
-            endDate: end,
-            ranges: {
-                'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
-                "Hace un Año": [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
-                'Hace dos Años': [moment().subtract(2, 'year').startOf('year'), moment().subtract(2, 'year').endOf('year')],
-                'Hace tres Años': [moment().subtract(3, 'year').startOf('year'), moment().subtract(3, 'year').endOf('year')],
-            }
-        }, cb);
-
-        cb(start, end);
-
-    });
-    $('#fechapersonalizada').on('apply.daterangepicker', function (ev, picker) {
-        tituloReporte();
-        retornarFacturasPendientes();
-    });
-    tituloReporte();
-    retornarFacturasPendientes();
-})
-
+});
 $(document).on("change", "#almacen_filtro", function () {
     tituloReporte()
     retornarFacturasPendientes();
 }) //para cambio filtro segun cada uno
-
+$(document).on("click", "#pendientes", function () {
+    tituloReporte();
+    retornarFacturasPendientes();
+})
 
 function tituloReporte() {
+    nomCliente = $('#clientes_filtro').find(':selected').text();
     almText = $('#almacen_filtro').find(":selected").text();
+    if (nomCliente == '') {
+        $('#nombreCliente').text('TODOS')
+    } else {
+        $('#nombreCliente').text(nomCliente)
+    }
+     
     $('#tituloReporte').text(almText);
-    $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
 }
 
-function retornarFacturasPendientes() //*******************************
+function retornarFacturasPendientes()
 {
-    ini = iniciofecha.format('YYYY-MM-DD')
-    fin = finfecha.format('YYYY-MM-DD')
-    alm = $("#almacen_filtro").val();
+    cliente = $("#clientes_filtro").val();
+    almacen = $("#almacen_filtro").val();
     agregarcargando();
     $.ajax({
         type: "POST",
-        url: base_url('index.php/Reportes/mostrarFacturasPendientesPago'), //******controlador
+        url: base_url('index.php/Reportes/mostrarFacturasPendientesPago'),
         dataType: "json",
         data: {
-            i: ini,
-            f: fin,
-            a: alm
-        }, //**** variables para filtro
+            cliente : cliente,
+            almacen : almacen
+        }, 
     }).done(function (res) {
         quitarcargando();
         console.log(res);
-        console.log(`Almacen ${alm} ini ${ini} fin ${fin}`);
+        console.log(`Almacen: ${almacen} Cliente: ${cliente}`);
         datosselect = restornardatosSelect(res);
         $("#tablaFacturasPendientes").bootstrapTable('destroy');
-        $("#tablaFacturasPendientes").bootstrapTable({ ////********cambiar nombre tabla viata
-
+        $("#tablaFacturasPendientes").bootstrapTable({ 
             data: res,
             striped: true,
-            pagination: true,
-            pageSize: "10",
-            search: true,
             searchOnEnterKey: true,
             showColumns: true,
             filter: true,
-            showExport: true,
-            exportTypes: ['xlsx'],
-            exportDataType: 'basic',
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',
             showFooter: true,
@@ -108,14 +60,16 @@ function retornarFacturasPendientes() //*******************************
             columns: 
             [
                 {
-                    field: 'alm',
+                    field: 'almacen',
                     title: 'Almacen',
+                    width:'50px',
                     sortable: true,
                     visible: false
                 },
                 {
                     field: 'lote',
                     title: 'Lote',
+                    width:'50px',
                     sortable: true,
                     align: 'center'
                 },
@@ -123,45 +77,60 @@ function retornarFacturasPendientes() //*******************************
                     field: 'nFac',
                     title: 'N° Factura',
                     sortable: true,
+                    width:'80px',
                     align: 'center',
                 },
                 {
                     field: 'fecha',
                     title: 'Fecha',
+                    width:'100px',
                     sortable: true,
                     align: 'center',
                     formatter: formato_fecha_corta
                 },
                 {
-                    field: 'cliente',
+                    field: 'nombreCliente',
                     title: 'Cliente',
                     sortable: true,
+                     //visible:false,
                     filter: {
                         type: "select",
                         data: datosselect[0]
                     }
                 },
                 {
+                    field: 'glosa',
+                    title: 'Glosa',
+                    sortable: true,
+                },
+                {
                     field: 'totalFactura',
                     title: 'Crédito',
                     sortable: true,
                     align: 'right',
+                    width:'100px',
                     formatter: operateFormatter3,
                     footerFormatter: sumaColumna
                 },
                 {
-                    field: 'NULL',
+                    field: 'totalPago',
                     title: 'Abono',
                     sortable: true,
                     align: 'right',
+                    width:'100px',
                     formatter: operateFormatter3,
                     footerFormatter: sumaColumna
                 },
                 {
-                    field: 'glosa',
-                    title: 'Glosa',
+                    field: 'saldo',
+                    title: 'Saldo',
                     sortable: true,
-                }
+                    align: 'right',
+                    width:'100px',
+                    formatter: operateFormatter3,
+                    footerFormatter: sumaColumna
+                },
+                
             ]
         });
     }).fail(function (jqxhr, textStatus, error) {
@@ -200,7 +169,7 @@ function restornardatosSelect(res) {
     var datos = new Array()
     $.each(res, function (index, value) {
 
-        cliente.push(value.cliente)
+        cliente.push(value.nombreCliente)
     })
 
     //alm.sort();

@@ -344,7 +344,8 @@ class Reportes extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            $this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");				//*******agregar alm********
+			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");	
+			$this->datos['clientes']=$this->Reportes_model->clientesFacturasPendientes();	
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
@@ -354,14 +355,13 @@ class Reportes extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-	public function mostrarFacturasPendientesPago()  //******cambiar a funcion del modelo
+	public function mostrarFacturasPendientesPago() 
 	{
 		if($this->input->is_ajax_request())
         {
-        	$ini=$this->security->xss_clean($this->input->post("i"));//fecha inicio
-        	$fin=$this->security->xss_clean($this->input->post("f"));//FECHA FIN
-        	$alm=$this->security->xss_clean($this->input->post("a")); //almacen
-			$res=$this->Reportes_model->mostrarFacturasPendientesPago($ini,$fin,$alm); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+        	$cliente=$this->security->xss_clean($this->input->post("cliente"));
+        	$almacen=$this->security->xss_clean($this->input->post("almacen")); 
+			$res=$this->Reportes_model->mostrarFacturasPendientesPago($cliente, $almacen); 
 			$res=$res->result_array();
 			echo json_encode($res);
 		}
@@ -793,7 +793,7 @@ class Reportes extends CI_Controller
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/kardexIndividualCliente.js'); 				//*******agregar js********
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/kardexIndividualCliente.js');
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
@@ -818,9 +818,7 @@ class Reportes extends CI_Controller
 			$ini=$this->security->xss_clean($this->input->post("ini"));
 			$fin=$this->security->xss_clean($this->input->post("fin"));
 			$res=$this->Reportes_model->kardexIndividualCliente($cliente,$almacen,$ini,$fin);
-			//$res=$res->result_array();
 			$res=$res->result();
-			
 			//echo '<pre>';	print_r($almacen.'-'.$cliente.'-'.$ini.'-'.$fin); echo '</pre>';	
 			$aux = 0;
 			foreach ($res as $linea) {

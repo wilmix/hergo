@@ -2,6 +2,11 @@
 var iniciofecha = moment().subtract(5, 'year').startOf('year')
 var finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function () {
+    $('#clientes_filtro').select2({
+        placeholder: 'Seleccione',
+        width: 'resolve',
+        allowClear: true
+    });
 
     let start = moment().subtract(0, 'year').startOf('year')
     let end = moment().subtract(0, 'year').endOf('year')
@@ -109,17 +114,20 @@ function retornarKardexCliente() {
                     field: 'fecha',
                     title: 'Fecha',
                     align: 'center',
+                    width:'100px',
                     formatter: formato_fecha_corta
 
                 },
                 {
                     field: 'numDocumento',
                     title: 'N° Doc.',
+                    width:'80px',
                     align: 'left'
                 },
                 {
                     field: 'almacen',
                     title: 'Alm.',
+                    width:'50px',
                     align: 'center'
                 },
                 {
@@ -132,6 +140,7 @@ function retornarKardexCliente() {
                     field: 'saldoNE',
                     title: 'NotaEntrega',
                     align: 'right',
+                    width:'100px',
                     formatter: operateFormatter3,
                     footerFormatter: sumaColumna
                 },
@@ -139,6 +148,7 @@ function retornarKardexCliente() {
                     field: 'saldoTotalFactura',
                     title: 'Factura',
                     align: 'right',
+                    width:'100px',
                     formatter: operateFormatter3,
                     footerFormatter: sumaColumna
                 },
@@ -146,6 +156,7 @@ function retornarKardexCliente() {
                     field: 'saldoTotalPago',
                     title: 'Pago',
                     align: 'right',
+                    width:'100px',
                     formatter: operateFormatter3,
                     footerFormatter: sumaColumna
 
@@ -155,6 +166,7 @@ function retornarKardexCliente() {
                     title: 'Total',
                     align: 'right',
                     formatter: operateFormatter3,
+                    width:'100px',
                     //footerFormatter: sumaColumna
                 },
             ]
