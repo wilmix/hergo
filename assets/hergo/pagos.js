@@ -224,7 +224,9 @@ function retornarTablaPagos() //*******************************
                 '<button type="button" class="btn btn-default anularPago"  aria-label="Right Align">',
                 '<span class="fa fa-times " aria-hidden="true"></span></button>',
                 '<button type="button" class="btn btn-default imprimirPago" aria-label="Right Align">',
-                '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
+                '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>',
+                '<button type="button" class="btn btn-default editarPago" aria-label="Right Align">',
+                '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'
             ].join('');
     }
     function operateFormatter2(value, row, index) {
@@ -297,40 +299,49 @@ window.operateEvents = {
         //console.log(imprimir);
         window.open(imprimir);
     },
-    
-    'click .anularPago': function (e, value, row, index) {
-          swal({
-            title: 'Esta seguro?',
-            html: 'Se anulara el recibo <b>N° ' + row.numPago + ' de ' + row.nombreCliente + '</b>',
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, Anular',
-            cancelButtonText: 'No, Cancelar'
-        }).then(
-            result=>
-            {
-                anularPago(row.idPago)
-                retornarTablaPagos() 
-                swal({
-                    html: 'Se anularó el recibo N° ' + row.numPago,
-                    //timer: 4000
-                });
-                
-            },
-            /*dismiss => {
-                swal(
-                    'No anulado',
-                    'Gracias por no generar negativos :)',
-                    'error'
-                )
-            }*/
-            );
-
+    'click .editarPago': function (e, value, row, index) {
+        
+        let editar = base_url("Pagos/editarPago/index/") + row.idPago;
+        console.log(row.idPago);
+        console.log(editar);
+        window.open(editar);
     },
+    'click .anularPago': function (e, value, row, index) {
+        swal({
+          title: 'Esta seguro?',
+          html: 'Se anulara el recibo <b>N° ' + row.numPago + ' de ' + row.nombreCliente + '</b>',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, Anular',
+          cancelButtonText: 'No, Cancelar'
+      }).then(
+          result=>
+          {
+              anularPago(row.idPago)
+              retornarTablaPagos() 
+              swal({
+                  html: 'Se anularó el recibo N° ' + row.numPago,
+                  //timer: 4000
+              });
+              
+          },
+          /*dismiss => {
+              swal(
+                  'No anulado',
+                  'Gracias por no generar negativos :)',
+                  'error'
+              )
+          }*/
+          );
+
+  },
+},
     
-};
+    
+
+
 function anularRecuperarPago(row,t,anulado)
 {
     agregarcargando(); 

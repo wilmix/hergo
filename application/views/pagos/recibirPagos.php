@@ -8,7 +8,7 @@
 
  
 </style>
-<input type="text" id="numpago" value="<?= isset($numPago)?$numPago:0?>" class="hidden">
+<input type="text" id="idPago" value="<?= isset($idPago)?$idPago:0?>" > class="hidden"
 <div class="row">
   <div class="col-xs-12">
     <div class="box">

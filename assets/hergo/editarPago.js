@@ -1,10 +1,10 @@
 $(document).ready(function(){
-    var n=$("#numpago").val();
+    let idPago=$("#idPago").val();
     $.ajax({
         type:"POST",
-        url: base_url('index.php/Pagos/retornarEdicion'), //******controlador
+        url: base_url('index.php/Pagos/retornarEdicion'), 
         dataType: "json",
-        data: {n:n},
+        data: {idPago:idPago},
     }).done(function(res){
         agregarPagos(res)
     }).fail(function( jqxhr, textStatus, error ) {

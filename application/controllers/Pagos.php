@@ -167,7 +167,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$this->load->view('plantilla/footerscript.php',$this->datos);
 			//$this->load->view('plantilla/footer.php',$this->datos);						
 	}
-	public function editarPago($numPago=0)
+	public function editarPago($idPago=0)
 	{
 		/**********************************************************************/
 		//verificar si el num de pago corresponde al almacen del usuario logueado !!!!!
@@ -203,7 +203,10 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			/***********************************/
 
 			$this->datos['almacen']=$this->Pagos_model->retornar_tabla("almacenes");
-			$this->datos['numPago']=$numPago;
+			$this->datos['tipoPago']=$this->Pagos_model->retornar_tabla("tipoPago");
+			$this->datos['bancos']=$this->Pagos_model->retornar_tabla("bancos");
+			
+			//$this->datos['idPago']=$idPago;
 
 			/***********************************/
 			/***********************************/
@@ -221,11 +224,12 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	{
 		if($this->input->is_ajax_request())
         {
-        	$n=$this->security->xss_clean($this->input->post("n"));//fecha inicio
+        	$idPago=$this->security->xss_clean($this->input->post("idPago"));//fecha inicio
         
-			$res=$this->Pagos_model->retornarEdicion($n);
-			$res=$res->result_array();
-			echo json_encode($res);
+			//$res=$this->Pagos_model->retornarEdicion($n);
+			//$res=$res->result_array();
+			echo $idPago;
+			//echo json_encode($res);
 		}
 		else
 		{
