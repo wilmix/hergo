@@ -301,10 +301,12 @@ window.operateEvents = {
     },
     'click .editarPago': function (e, value, row, index) {
         
-        let editar = base_url("Pagos/editarPago/index/") + row.idPago;
+        let editar = base_url("Pagos/editarPago/") + row.idPago;
         console.log(row.idPago);
         console.log(editar);
-        window.open(editar);
+        //window.open(editar);
+        window.location.href = editar;
+       // window.open(editar);
     },
     'click .anularPago': function (e, value, row, index) {
         swal({

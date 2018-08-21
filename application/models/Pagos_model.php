@@ -46,18 +46,11 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function retornarEdicion($n)
+	public function retornarEdicion($idPago)
 	{
-		$sql="SELECT p.idpagos, f.idFactura, f.almacen, f.nFactura, f.fechaFac, f.cliente,c.nombreCliente, f.total,  IFNULL(sum(p.montoPago),0) pagado,  f.total - IFNULL(sum(p.montoPago),0) saldoPago, GROUP_CONCAT(p.glosaPago SEPARATOR ', ') glosaPago , f.pagada
-		FROM factura f		
-		LEFT JOIN pagos p
-		ON  f.idFactura= p.idFactura
-		INNER JOIN clientes c
-		ON c.idCliente = f.cliente 
-		WHERE  NOT f.anulada=1
-    	AND p.numPago=$n
-    	GROUP BY f.idFactura
-		ORDER BY f.nFactura desc";
+		$sql="SELECT *
+		FROM pago p
+		WHERE p.idPago = $idPago";
 		//die($sql);
 		$query=$this->db->query($sql);		
 		return $query;

@@ -174,8 +174,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 		/**********************************************************************/
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
-			
-			
+
 			$this->datos['menu']="Pagos";
 			$this->datos['opcion']="Editar Pago";
 			$this->datos['titulo']="Editar Pago";
@@ -206,7 +205,8 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$this->datos['tipoPago']=$this->Pagos_model->retornar_tabla("tipoPago");
 			$this->datos['bancos']=$this->Pagos_model->retornar_tabla("bancos");
 			
-			//$this->datos['idPago']=$idPago;
+			$this->datos['idPago']=$idPago;
+			
 
 			/***********************************/
 			/***********************************/
@@ -215,21 +215,33 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('pagos/recibirPagos.php',$this->datos); ///*****aki poner la vista
+			$this->load->view('pagos/recibirPagos.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footerscript.php',$this->datos);
 			//$this->load->view('plantilla/footer.php',$this->datos);						
 	}
-	public function retornarEdicion()  //******cambiar a funcion del modelo
+	public function mostrarIngresosEdicion($id) {
+        /*$res=$this->Ingresos_model->mostrarIngresos($id);
+        if($res->num_rows()>0)
+    	{
+    		$fila=$res->row();
+    		return $fila;
+    	}
+        else
+        {
+            return(false);
+		}*/
+		echo $id;
+	}
+	public function retornarEdicion()
 	{
 		if($this->input->is_ajax_request())
         {
-        	$idPago=$this->security->xss_clean($this->input->post("idPago"));//fecha inicio
+        	$idPago=$this->security->xss_clean($this->input->post("idPago"));
         
-			//$res=$this->Pagos_model->retornarEdicion($n);
-			//$res=$res->result_array();
-			echo $idPago;
-			//echo json_encode($res);
+			$res=$this->Pagos_model->retornarEdicion($idPago);
+			$res=$res->row();
+			echo json_encode($res);
 		}
 		else
 		{
