@@ -49,13 +49,13 @@ $(document).ready(function(){
 })
 $(document).on("change","#almacen_filtro",function(){
     retornarTablaPagos();
-}) //para cambio filtro segun cada uno
+}) 
 $(document).on("click", "#refresh", function () {
     retornarTablaPagos();
 })
 
 
-function retornarTablaPagos() //*******************************
+function retornarTablaPagos()
 {   
     ini=iniciofecha.format('YYYY-MM-DD')
     fin=finfecha.format('YYYY-MM-DD')
@@ -265,9 +265,8 @@ function retornarTablaPagos() //*******************************
         
         return ($ret);
     }
-
-function restornardatosSelect(res)
-{
+    function restornardatosSelect(res)
+    {
 
     var autor = new Array()
     var cliente = new Array()
@@ -283,7 +282,7 @@ function restornardatosSelect(res)
     datos.push(autor.unique());
     datos.push(cliente.unique());
     return(datos);
-}
+    }
 Array.prototype.unique=function(a){
   return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
 });
@@ -343,52 +342,7 @@ window.operateEvents = {
     
     
 
-
-function anularRecuperarPago(row,t,anulado)
-{
-    agregarcargando(); 
-    $.ajax({
-        type:"POST",
-        url: base_url('index.php/Pagos/anularRecuperarPago'),
-        dataType: "json",
-        data: {
-            numPago:row.numPago,
-            anulado:anulado
-        },
-    }).done(function(res){
-        if(res.status=200)
-        {
-            console.log($(t));
-            if(anulado==0)
-            {
-                $(t).removeClass('anularPago');
-                $(t).addClass('recuperarPago');
-                $(t).html('<span class="fa fa-check-square-o" aria-hidden="true"></span></button>');
-            }
-            else
-            {
-                $(t).removeClass('recuperarPago');
-                $(t).addClass('anularPago');
-                $(t).html('<span class="fa fa-ban" aria-hidden="true"></span></button>');
-            }                    
-            quitarcargando();
-        }
-    }).fail(function( jqxhr, textStatus, error ) {
-    var err = textStatus + ", " + error;
-    console.log( "Request Failed: " + err );
-        quitarcargando();
-        swal({
-            title: 'Error',
-            text: "Intente nuevamente",
-            type: 'error', 
-            showCancelButton: false,
-            allowOutsideClick: false,  
-        })
-    });
-}
-
-function anularPago(idPago)
-{
+function anularPago(idPago) {
     agregarcargando(); 
     $.ajax({
         type:"POST",
@@ -444,7 +398,8 @@ function verdetalle(row) {
     });
     
 }
-var vm=new Vue({
+
+let vm=new Vue({
     el:'#app',
     data:{
        almacen:'',

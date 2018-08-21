@@ -8,7 +8,7 @@
 
  
 </style>
-<input type="text" id="idPago" value="<?= isset($idPago)?$idPago:0?>" > class="hidden"
+<input type="text" id="idPago" value="<?= isset($idPago)?$idPago:0?>" class="hidden"> 
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
@@ -105,7 +105,7 @@
                     <th style="width:10%">N. Factura</th>
                     <th>Cliente</th>
                     <th class="text-right">Total</th>
-                    <th class="text-right">Saldo</th>
+                    <th class="text-right">SaldoNuevo</th>
                     <th style="width:20%;text-align: center">Pagar</th>
                     <th style="width:5%"></th>
                   </tr>

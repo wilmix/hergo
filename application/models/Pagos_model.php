@@ -46,8 +46,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function retornarEdicion($idPago)
-	{
+	public function retornarEdicion($idPago) {
 		$sql="SELECT *
 		FROM pago p
 		WHERE p.idPago = $idPago";
@@ -55,6 +54,30 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function retornarEdicionDetalle($idPago) {
+		$sql="SELECT 
+		f.`almacen`, 
+		f.`cliente`, 
+		f.`fechaFac`, 
+		f.`idFactura`,
+		f.`nFactura`, 
+		c.`nombreCliente`, 
+		f.`pagada`,  
+		f.`total` ,
+		(f.total-sum(pf.`monto`)) saldoNuevo,
+		sum(pf.`monto`) pagar,
+		pf.`saldoNuevo` saldoPago
+		
+		FROM pago_factura pf
+		INNER JOIN factura f ON f.`idFactura` =pf.`idFactura`
+		INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
+		WHERE pf.`idPago` = $idPago
+		GROUP BY f.`idFactura`";
+		//die($sql);
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+	//(f.`total`-SUM(pf.`monto`)) pagar,
 	public function retornarDetallePago($idPago)
 	{
 		$sql="SELECT f.`lote`, f.`fechaFac`,f.`nFactura`, c.`nombreCliente`, pf.`monto`, f.`pagada`, 

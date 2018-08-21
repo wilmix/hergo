@@ -218,29 +218,29 @@ function retornarPagosPendientes() //*******************************
         return ($ret);
     }
 
-function restornardatosSelect(res)
-{
+    function restornardatosSelect(res)
+    {
 
-    var autor = new Array()
-    var cliente = new Array()
-    var datos =new Array()
-    $.each(res, function(index, value){
+        var autor = new Array()
+        var cliente = new Array()
+        var datos =new Array()
+        $.each(res, function(index, value){
 
-        autor.push(value.autor)
-        cliente.push(value.nombreCliente)
-    })
+            autor.push(value.autor)
+            cliente.push(value.nombreCliente)
+        })
 
-    autor.sort();
-    cliente.sort();
-    
-    datos.push(autor.unique());
-    datos.push(cliente.unique());
-    //console.log(cliente);
-    return(datos);
-}
-Array.prototype.unique=function(a){
-  return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
-});
+        autor.sort();
+        cliente.sort();
+        
+        datos.push(autor.unique());
+        datos.push(cliente.unique());
+        //console.log(cliente);
+        return(datos);
+    }
+    Array.prototype.unique=function(a){
+    return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
+    });
 
 /***********Eventos*************/
 window.operateEvents = {
@@ -253,51 +253,104 @@ window.operateEvents = {
         row.saldoNuevo=0;        
         vmPago.agregarPago(row)
     },
-    'click .editarPago': function (e, value, row, index) {
-      //console.log(row.idPagos);
-            
-    },
-    'click .imprimirPago': function (e, value, row, index) {
-     //alert(JSON.stringify(row));
-    }
 };
 
 /****************************************** */
-
-function info(idPago) {
-    console.log(idPago);
+let datos
+function editarPago(idPago) {
     $.ajax({
         type:"POST",
-        url: base_url('index.php/Pagos/retornarEdicion'), 
+        url: base_url('index.php/Pagos/retornarEdicion'),
+        async: false,
         dataType: "json",
-        data: {idPago:idPago},
+        data: {
+            idPago:idPago
+        },
     }).done(function(res){
-       llenar(res)
-    }).fail(function( jqxhr, textStatus, error ) {
-    var err = textStatus + ", " + error;
-    console.log( "Request Failed: " + err );
-        quitarcargando();
-        swal({
-            title: 'Error',
-            text: "Intente nuevamente",
-            type: 'error', 
-            showCancelButton: false,
-            allowOutsideClick: false,  
-        }).then(
-        function(result) {   
+        console.log(res);
+        for (let index = 0; index < res.detalle.length; index++) {
             
-      
-        });
-    });
+            saldoNuevo = Math.round(res.detalle[index].saldoNuevo*100)/100
+            pagar = Math.round(res.detalle[index].pagar*100)/100
+            saldoPago = Math.round(res.detalle[index].saldoPago*100)/100
+            total = Math.round(res.detalle[index].total*100)/100
+                res.detalle[index].saldoPago = parseFloat(total.toFixed(2))
+                res.detalle[index].saldoNuevo = parseFloat(saldoNuevo.toFixed(2))
+                res.detalle[index].pagar = parseFloat(pagar.toFixed(2))
+        }
+        console.log(res.detalle);
+        datos =  {
+            almacen: res.cabecera.almacen,
+            almacenes: [
+                { alm: 'CENTRAL HERGO', value: '1' },
+                { alm: 'DEPOSITO EL ALTO', value: '2' },
+                { alm: 'POTOSI', value: '3' },
+                { alm: 'SANTA CRUZ', value: '4' },
+                ],
+            tipoPago: res.cabecera.tipoPago,
+            fechaPago: res.cabecera.fechaPago,
+            banco:res.cabecera.banco,
+            transferencia:res.cabecera.transferencia,
+            cheque:res.cabecera.cheque,
+            cliente:'1',
+            tipoPago: res.cabecera.tipoPago,
+                options: [
+                { tipo: 'EFECTIVO', value: '1' },
+                { tipo: 'TRANSFERENCIA', value: '2' },
+                { tipo: 'CHEQUE', value: '3' }
+                ],
+            totalPago:'',
+            porPagar:res.detalle,
+            anulado:0,
+            moneda:1,
+            glosa:res.cabecera.glosa,
+            guardar:false,
+        }
+    })
     
 }
+
+if (idPago == 0) {
+    data = {
+            almacen:'1',
+                almacenes: [
+                { alm: 'CENTRAL HERGO', value: '1' },
+                { alm: 'DEPOSITO EL ALTO', value: '2' },
+                { alm: 'POTOSI', value: '3' },
+                { alm: 'SANTA CRUZ', value: '4' },
+                ],
+            tipoPago:'',
+            fechaPago:hoy,
+            banco:'1',
+            transferencia:'',
+            cheque:'',
+            cliente:'1',
+            tipoPago: '1',
+                options: [
+                { tipo: 'EFECTIVO', value: '1' },
+                { tipo: 'TRANSFERENCIA', value: '2' },
+                { tipo: 'CHEQUE', value: '3' }
+                ],
+            totalPago:'',
+            porPagar:[],
+            anulado:0,
+            moneda:1,
+            glosa:'',
+            guardar:false,
+    }
+} else {
+    editarPago(idPago); 
+    data = datos
+}
+
 Vue.component('app-row',{
     
     template:'#row-template',
     props:['pagar','index'],
+
     data: function(){
         return{
-            montopagar:0, 
+            montopagar:10, 
             editing:false,            
             error:'',           
         }
@@ -346,7 +399,7 @@ Vue.component('app-row',{
             else
             {
                 this.error="";
-                vmPago.guardar=true;
+                //vmPago.guardar=true;
             }
             return _saldoNuevo;
         },
@@ -382,316 +435,132 @@ Vue.component('app-row',{
       },
     
 });
-if (idPago == 0) {
-    var vmPago = new Vue({
-        el: '#app',
-        data:{
-            almacen:'1',
-                almacenes: [
-                { alm: 'CENTRAL HERGO', value: '1' },
-                { alm: 'DEPOSITO EL ALTO', value: '2' },
-                { alm: 'POTOSI', value: '3' },
-                { alm: 'SANTA CRUZ', value: '4' },
-                ],
-            tipoPago:'',
-            fechaPago:hoy,
-            banco:'1',
-            transferencia:'',
-            cheque:'',
-            cliente:'1',
-            tipoPago: '1',
-                options: [
-                { tipo: 'EFECTIVO', value: '1' },
-                { tipo: 'TRANSFERENCIA', value: '2' },
-                { tipo: 'CHEQUE', value: '3' }
-                ],
-            totalPago:'',
-            porPagar:[],
-            anulado:0,
-            moneda:1,
-            glosa:'',
-            guardar:false,
-    
-        },
-        components: {
-            vuejsDatepicker,
-        },
-        methods:{
-            deleteRow:function(index){        
-                this.porPagar.splice(index,1);
-                if (this.porPagar.length>0)
-                    this.guardar=true;
-                else   
-                    this.guardar=false;
-            },
-            agregarPago:function(row){
-                if(this.porPagar.length>0)
-                {                
-                    if(this.porPagar.map((el) => el.nFactura).indexOf(row.nFactura)>=0)
-                    {
-                        swal("Atencion", "Esta factura ya fue agregada","info");
-                        return false;
-                    }
-                    /*if(this.porPagar.map((el) => el.cliente).indexOf(row.cliente)<0)
-                    {
-                        swal("Atencion", "No se pueden agregar diferentes clientes","info");
-                        return false;
-                    }*/
-                    this.porPagar.push(row)                
-                }
-                else
-                {
-                    this.porPagar.push(row)
-                }                      
-                this.guardar=true;
-            },
-            retornarTotal:function(){
-                var total=0
-                $.each(this.porPagar,function(index,value){
-                    total+=parseFloat(value.pagar);
-                })
-                this.totalPago=total
-                return total;
-            },
-            guardarPago:function(){
-                agregarcargando();
-                var datos={
-                    almacen: this.almacen,
-                    fechaPago:moment(this.fechaPago).format('YYYY-MM-DD'),
-                    moneda:this.moneda,
-                    cliente: this.cliente,
-                    totalPago:this.totalPago,
-                    anulado:this.anulado,
-                    glosa:this.glosa,
-                    tipoPago: this.tipoPago,
-                    cheque: this.cheque,
-                    banco:this.banco,
-                    transferencia:this.transferencia,
-                    porPagar:this.porPagar,
-                };
-    
-                let clientes = datos.porPagar.map(p=>p.cliente)
-                let cliente = clientes.reduce( (a,b) => a==b )
-                if (cliente) {
-                    datos.cliente=clientes[0]
-                }
-                datos=JSON.stringify(datos);
-                if(!this.guardar)
-                {
-                    quitarcargando();
-                    swal("Error", "No se puede guardar el pago","error");
-                    return false;
-                }
-                $.ajax({
-                    type:"POST",
-                    url: base_url('index.php/Pagos/guardarPagos'), //******controlador
-                    dataType: "json",
-                    data: {d:datos},
-                }).done(function(res){
-                   if(res.status=200)
-                   {
-                        quitarcargando();
-                        swal({
-                            title: 'Pago almacenado',
-                            text: `El pago se guardó con éxito`,
-                            type: 'success', 
-                            showCancelButton: false,
-                            allowOutsideClick: false,  
-                        }).then(
-                          function(result) {   
-                            agregarcargando();                 
-                            location.reload();
-                        });
-                   }
-                }).fail(function( jqxhr, textStatus, error ) {
-                var err = textStatus + ", " + error;
-                console.log( "Request Failed: " + err );
-                    quitarcargando();
-                    swal({
-                        title: 'Error',
-                        text: "Intente nuevamente",
-                        type: 'error', 
-                        showCancelButton: false,
-                        allowOutsideClick: false,  
-                    }).then(
-                    function(result) {   
-                        agregarcargando();                 
-                        location.reload();
-                    });
-                });
-            },
-            customFormatter(date) {
-                return moment(date).format('DD MMMM YYYY');
-            },       
-        },
-        filters:{
-            moneda:function(value){
-                num=Math.round(value * 100) / 100
-                num=num.toFixed(2);
-                //return(num);
-                return numeral(num).format('0,0.00');            
-            },   
-            
-                                
-        },        
-    });
-} else {
-    info(idPago)
-    
-}
 
-function llenar(res) {
-    console.log(res);
-    var vmPago = new Vue({
-        el: '#app',
-        data:{
-            almacen:res.almacen,
-                almacenes: [
-                { alm: 'CENTRAL HERGO', value: '1' },
-                { alm: 'DEPOSITO EL ALTO', value: '2' },
-                { alm: 'POTOSI', value: '3' },
-                { alm: 'SANTA CRUZ', value: '4' },
-                ],
-            tipoPago:'',
-            fechaPago:res.fechaPago,
-            banco:res.banco,
-            transferencia:res.transferencia,
-            cheque:res.cheque,
-            cliente:res.cliente,
-            tipoPago: res.tipoPago,
-                options: [
-                { tipo: 'EFECTIVO', value: '1' },
-                { tipo: 'TRANSFERENCIA', value: '2' },
-                { tipo: 'CHEQUE', value: '3' }
-                ],
-            totalPago:res.totalPago,
-            porPagar:[],
-            anulado:res.anulado,
-            moneda:res.moneda,
-            glosa:res.glosa,
-            guardar:false,
-    
-        },
-        components: {
-            vuejsDatepicker,
-        },
-        methods:{
-            deleteRow:function(index){        
-                this.porPagar.splice(index,1);
-                if (this.porPagar.length>0)
-                    this.guardar=true;
-                else   
-                    this.guardar=false;
-            },
-            agregarPago:function(row){
-                if(this.porPagar.length>0)
-                {                
-                    if(this.porPagar.map((el) => el.nFactura).indexOf(row.nFactura)>=0)
-                    {
-                        swal("Atencion", "Esta factura ya fue agregada","info");
-                        return false;
-                    }
-                    /*if(this.porPagar.map((el) => el.cliente).indexOf(row.cliente)<0)
-                    {
-                        swal("Atencion", "No se pueden agregar diferentes clientes","info");
-                        return false;
-                    }*/
-                    this.porPagar.push(row)                
-                }
-                else
-                {
-                    this.porPagar.push(row)
-                }                      
+
+var vmPago = new Vue({
+    el: '#app',
+    data:data,
+    components: {
+        vuejsDatepicker,
+    },
+    methods:{
+        deleteRow:function(index){        
+            this.porPagar.splice(index,1);
+            if (this.porPagar.length>0)
                 this.guardar=true;
-            },
-            retornarTotal:function(){
-                var total=0
-                $.each(this.porPagar,function(index,value){
-                    total+=parseFloat(value.pagar);
-                })
-                this.totalPago=total
-                return total;
-            },
-            guardarPago:function(){
-                agregarcargando();
-                var datos={
-                    almacen: this.almacen,
-                    fechaPago:moment(this.fechaPago).format('YYYY-MM-DD'),
-                    moneda:this.moneda,
-                    cliente: this.cliente,
-                    totalPago:this.totalPago,
-                    anulado:this.anulado,
-                    glosa:this.glosa,
-                    tipoPago: this.tipoPago,
-                    cheque: this.cheque,
-                    banco:this.banco,
-                    transferencia:this.transferencia,
-                    porPagar:this.porPagar,
-                };
-    
-                let clientes = datos.porPagar.map(p=>p.cliente)
-                let cliente = clientes.reduce( (a,b) => a==b )
-                if (cliente) {
-                    datos.cliente=clientes[0]
-                }
-                datos=JSON.stringify(datos);
-                if(!this.guardar)
+            else   
+                this.guardar=false;
+        },
+        agregarPago:function(row){
+            if(this.porPagar.length>0)
+            {                
+                if(this.porPagar.map((el) => el.nFactura).indexOf(row.nFactura)>=0)
                 {
-                    quitarcargando();
-                    swal("Error", "No se puede guardar el pago","error");
+                    swal("Atencion", "Esta factura ya fue agregada","info");
                     return false;
                 }
-                $.ajax({
-                    type:"POST",
-                    url: base_url('index.php/Pagos/guardarPagos'), //******controlador
-                    dataType: "json",
-                    data: {d:datos},
-                }).done(function(res){
-                   if(res.status=200)
-                   {
-                        quitarcargando();
-                        swal({
-                            title: 'Pago almacenado',
-                            text: `El pago se guardó con éxito`,
-                            type: 'success', 
-                            showCancelButton: false,
-                            allowOutsideClick: false,  
-                        }).then(
-                          function(result) {   
-                            agregarcargando();                 
-                            location.reload();
-                        });
-                   }
-                }).fail(function( jqxhr, textStatus, error ) {
-                var err = textStatus + ", " + error;
-                console.log( "Request Failed: " + err );
+                /*if(this.porPagar.map((el) => el.cliente).indexOf(row.cliente)<0)
+                {
+                    swal("Atencion", "No se pueden agregar diferentes clientes","info");
+                    return false;
+                }*/
+                this.porPagar.push(row)
+                console.log(this.porPagar);                
+            }
+            else
+            {
+                this.porPagar.push(row)
+            }                      
+            this.guardar=true;
+        },
+        retornarTotal:function(){
+            var total=0
+            $.each(this.porPagar,function(index,value){
+                total+=parseFloat(value.pagar);
+            })
+            this.totalPago=total
+            return total;
+        },
+        guardarPago:function(){
+            agregarcargando();
+            var datos={
+                almacen: this.almacen,
+                fechaPago:moment(this.fechaPago).format('YYYY-MM-DD'),
+                moneda:this.moneda,
+                cliente: this.cliente,
+                totalPago:this.totalPago,
+                anulado:this.anulado,
+                glosa:this.glosa,
+                tipoPago: this.tipoPago,
+                cheque: this.cheque,
+                banco:this.banco,
+                transferencia:this.transferencia,
+                porPagar:this.porPagar,
+            };
+
+            let clientes = datos.porPagar.map(p=>p.cliente)
+            let cliente = clientes.reduce( (a,b) => a==b )
+            if (cliente) {
+                datos.cliente=clientes[0]
+            }
+            datos=JSON.stringify(datos);
+            if(!this.guardar)
+            {
+                quitarcargando();
+                swal("Error", "No se puede guardar el pago","error");
+                return false;
+            }
+            $.ajax({
+                type:"POST",
+                url: base_url('index.php/Pagos/guardarPagos'), //******controlador
+                dataType: "json",
+                data: {d:datos},
+            }).done(function(res){
+                if(res.status=200)
+                {
                     quitarcargando();
                     swal({
-                        title: 'Error',
-                        text: "Intente nuevamente",
-                        type: 'error', 
+                        title: 'Pago almacenado',
+                        text: `El pago se guardó con éxito`,
+                        type: 'success', 
                         showCancelButton: false,
                         allowOutsideClick: false,  
                     }).then(
-                    function(result) {   
+                        function(result) {   
                         agregarcargando();                 
                         location.reload();
                     });
+                }
+            }).fail(function( jqxhr, textStatus, error ) {
+            var err = textStatus + ", " + error;
+            console.log( "Request Failed: " + err );
+                quitarcargando();
+                swal({
+                    title: 'Error',
+                    text: "Intente nuevamente",
+                    type: 'error', 
+                    showCancelButton: false,
+                    allowOutsideClick: false,  
+                }).then(
+                function(result) {   
+                    agregarcargando();                 
+                    location.reload();
                 });
-            },
-            customFormatter(date) {
-                return moment(date).format('DD MMMM YYYY');
-            },       
+            });
         },
-        filters:{
-            moneda:function(value){
-                num=Math.round(value * 100) / 100
-                num=num.toFixed(2);
-                //return(num);
-                return numeral(num).format('0,0.00');            
-            },   
-            
-                                
-        },        
-    });
-}
+        customFormatter(date) {
+            return moment(date).format('DD MMMM YYYY');
+        },       
+    },
+    filters:{
+        moneda:function(value){
+            num=Math.round(value * 100) / 100
+            num=num.toFixed(2);
+            //return(num);
+            return numeral(num).format('0,0.00');            
+        },   
+        
+                            
+    },        
+});
+

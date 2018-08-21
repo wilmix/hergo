@@ -233,18 +233,15 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 		}*/
 		echo $id;
 	}
-	public function retornarEdicion()
-	{
-		if($this->input->is_ajax_request())
-        {
-        	$idPago=$this->security->xss_clean($this->input->post("idPago"));
-        
-			$res=$this->Pagos_model->retornarEdicion($idPago);
-			$res=$res->row();
+	public function retornarEdicion() {
+		if ($this->input->is_ajax_request()) {
+			$idPago=$this->security->xss_clean($this->input->post("idPago"));
+			$res = new stdclass();
+			$res->cabecera=$this->Pagos_model->retornarEdicion($idPago)->row();
+			$res->detalle=$this->Pagos_model->retornarEdicionDetalle($idPago)->result_array();
+			//$res=$res->array();
 			echo json_encode($res);
-		}
-		else
-		{
+		} else {
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
