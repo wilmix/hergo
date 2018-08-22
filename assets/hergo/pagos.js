@@ -210,22 +210,20 @@ function retornarTablaPagos()
     function operateFormatter(value, row, index)  {
         if(row.anulado==1)    
             return [
-                '<button type="button" class="btn btn-default verPago" aria-label="Right Align">',
+                '<button type="button" class="btn btn-default verPago" aria-label="Right Align" data-toggle="tooltip" title="Ver Pago">',
                 '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
+                '<button type="button" class="btn btn-default imprimirPago" aria-label="Right Align" data-toggle="tooltip" title="Imprimir">',
+                '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>',
                 '<button type="button" class="btn btn-default "  disabled aria-label="Right Align">',
                 '<span class="fa fa-times " aria-hidden="true"></span></button>',
-                '<button type="button" class="btn btn-default imprimirPago" aria-label="Right Align">',
-                '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
             ].join('');
         else
             return [
-                '<button type="button" class="btn btn-default verPago" aria-label="Right Align">',
+                '<button type="button" class="btn btn-default verPago" aria-label="Right Align" data-toggle="tooltip" title="Ver Pago">',
                 '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-                '<button type="button" class="btn btn-default anularPago"  aria-label="Right Align">',
-                '<span class="fa fa-times " aria-hidden="true"></span></button>',
-                '<button type="button" class="btn btn-default imprimirPago" aria-label="Right Align">',
+                '<button type="button" class="btn btn-default imprimirPago" aria-label="Right Align" data-toggle="tooltip" title="Imprimir">',
                 '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>',
-                '<button type="button" class="btn btn-default editarPago" aria-label="Right Align">',
+                '<button type="button" class="btn btn-default editarPago" aria-label="Right Align" data-toggle="tooltip" title="Editar">',
                 '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'
             ].join('');
     }
@@ -299,45 +297,10 @@ window.operateEvents = {
         window.open(imprimir);
     },
     'click .editarPago': function (e, value, row, index) {
-        
         let editar = base_url("Pagos/editarPago/") + row.idPago;
-        console.log(row.idPago);
-        console.log(editar);
-        //window.open(editar);
         window.location.href = editar;
-       // window.open(editar);
+        //window.open(editar);
     },
-    'click .anularPago': function (e, value, row, index) {
-        swal({
-          title: 'Esta seguro?',
-          html: 'Se anulara el recibo <b>N° ' + row.numPago + ' de ' + row.nombreCliente + '</b>',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Si, Anular',
-          cancelButtonText: 'No, Cancelar'
-      }).then(
-          result=>
-          {
-              anularPago(row.idPago)
-              retornarTablaPagos() 
-              swal({
-                  html: 'Se anularó el recibo N° ' + row.numPago,
-                  //timer: 4000
-              });
-              
-          },
-          /*dismiss => {
-              swal(
-                  'No anulado',
-                  'Gracias por no generar negativos :)',
-                  'error'
-              )
-          }*/
-          );
-
-  },
 },
     
     

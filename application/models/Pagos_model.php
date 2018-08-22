@@ -49,6 +49,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	public function retornarEdicion($idPago) {
 		$sql="SELECT *
 		FROM pago p
+		INNER JOIN clientes c ON c.`idCliente` = p.`cliente`
 		WHERE p.idPago = $idPago";
 		//die($sql);
 		$query=$this->db->query($sql);		

@@ -265,7 +265,7 @@ function editarPago(idPago) {
             idPago:idPago
         },
     }).done(function(res){
-        console.log(res);
+       console.log(res);
         for (let index = 0; index < res.detalle.length; index++) {
             
             saldoNuevo = Math.round(res.detalle[index].saldoNuevo*100)/100
@@ -276,7 +276,7 @@ function editarPago(idPago) {
                 res.detalle[index].saldoNuevo = parseFloat(saldoNuevo.toFixed(2))
                 res.detalle[index].pagar = parseFloat(pagar.toFixed(2))
         }
-        console.log(res.detalle);
+        //console.log(res);
         datos =  {
             almacen: res.cabecera.almacen,
             almacenes: [
@@ -302,12 +302,13 @@ function editarPago(idPago) {
             anulado:0,
             moneda:1,
             glosa:res.cabecera.glosa,
-            guardar:false,
+            guardar:true,
             idPago:idPago,
+            nombreCliente:res.cabecera.nombreCliente,
+            numPago:res.cabecera.numPago,
             
         }
     })
-    
 }
 
 if (idPago == 0) {
@@ -552,6 +553,51 @@ var vmPago = new Vue({
                 });
             });
 
+
+        },
+        anularPago(){
+                console.log(data);
+                swal({
+                    title: 'Esta seguro?',
+                    html: 'Se anulara el recibo <b>N° ' + this.numPago + ' de ' + this.nombreCliente+ '</b>',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, Anular',
+                    cancelButtonText: 'No, Cancelar'
+                }).then(
+                    result=>{
+                        console.log('acepatado')
+                        agregarcargando();
+                $.ajax({
+                    type:"POST",
+                    url: base_url('index.php/Pagos/anularPago'),
+                    dataType: "json",
+                    data: {
+                        idPago:this.idPago,
+                    },
+                }).done(function(res){
+                    if(res.status=200)
+                    {
+                        window.location.href = base_url("Pagos")  
+                        quitarcargando()
+                    }
+                }).fail(function( jqxhr, textStatus, error ) {
+                var err = textStatus + ", " + error;
+                console.log( "Request Failed: " + err );
+                    quitarcargando();
+                    swal({
+                        title: 'Error',
+                        text: "Intente nuevamente",
+                        type: 'error', 
+                        showCancelButton: false,
+                        allowOutsideClick: false,  
+                    })
+                });
+                },
+                
+            )    
 
         },
         cancelarPago:function(){
