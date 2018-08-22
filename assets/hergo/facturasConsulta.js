@@ -66,7 +66,7 @@ function retornarTablaFacturacion()
     fin=finfecha.format('YYYY-MM-DD')
     alm=$("#almacen_filtro").val()
     tipo=$("#tipo_filtro").val()
-    //console.log({ini:ini,fin:fin,alm:alm,tipo:tipo})
+    console.log({ini:ini,fin:fin,alm:alm,tipo:tipo})
     $.ajax({
         type:"POST",
         url: base_url('index.php/Facturas/MostrarTablaConsultaFacturacion'),
@@ -74,7 +74,6 @@ function retornarTablaFacturacion()
         data: {ini:ini,fin:fin,alm:alm,tipo:tipo},
     }).done(function(res){
          quitarcargando();
-      //   console.log(res);
         datosselect= restornardatosSelect(res)
 
         $("#facturasConsulta").bootstrapTable('destroy');
@@ -83,7 +82,7 @@ function retornarTablaFacturacion()
             data:res,
             striped:true,
             pagination:true,
-            pageSize:"25",    
+            pageSize:"100",    
             search:true,        
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',
@@ -136,10 +135,6 @@ function retornarTablaFacturacion()
                 field:'ClienteFactura',
                 title:"Cliente",                
                 sortable:true,
-                 filter: {
-                    type: "select",
-                    data: datosselect[0]
-                }
             },
             {
                 field:'sigla',

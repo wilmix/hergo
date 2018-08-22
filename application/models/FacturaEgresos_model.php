@@ -42,7 +42,7 @@ class FacturaEgresos_model extends CI_Model
 		WHERE f.fechaFac
 		BETWEEN '$ini' AND '$fin'";        
         if($alm>0)         
-            $sql.=" and e.almacen=$alm";    
+            $sql.=" and f.`almacen`=$alm";    
         if($tipo>0)         
             $sql.=" and e.tipomov=$tipo";            
        
