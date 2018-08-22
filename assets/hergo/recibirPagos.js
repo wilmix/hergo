@@ -91,8 +91,6 @@ function retornarPagosPendientes() //*******************************
         $("#tPendientes").bootstrapTable({            ////********cambiar nombre tabla viata
                 data:res,                           
                     striped: true,
-                    pagination: true,
-                    pageSize: "25",
                     search: true,
                     filter: true,
                     showColumns: true,
@@ -304,8 +302,9 @@ function editarPago(idPago) {
             anulado:0,
             moneda:1,
             glosa:res.cabecera.glosa,
-            guardar:true,
+            guardar:false,
             idPago:idPago,
+            
         }
     })
     
@@ -351,7 +350,7 @@ Vue.component('app-row',{
 
     data: function(){
         return{
-            montopagar:10, 
+            montopagar:0, 
             editing:false,            
             error:'',           
         }
@@ -400,7 +399,8 @@ Vue.component('app-row',{
             else
             {
                 this.error="";
-                //vmPago.guardar=true;
+                console.log(vmPago);
+                //vmPago.guardar=true; **************************
             }
             return _saldoNuevo;
         },
@@ -437,7 +437,7 @@ Vue.component('app-row',{
 });
 
 
-let vmPago = new Vue({
+var vmPago = new Vue({
     el: '#app',
     data:data,
     components: {

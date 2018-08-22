@@ -366,16 +366,13 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->cheque=$data->cheque;
 			$pago->banco=$data->banco;
 			$pago->transferencia=$data->transferencia;
-			$this->Pagos_model->editarPago($idPago,$pago);
-
-
-			/*echo '<pre>';	
-			print_r($pago); 
-			print_r($idPago);
-			echo '</pre>';*/
-			$return=new stdClass();
-			$return->status=200;
-			echo json_encode($return);
+			if ($this->Pagos_model->editarPago($idPago,$pago,$data->porPagar)) {
+				$return=new stdClass();
+				$return->status=200;
+				echo json_encode($return);
+			} else {
+				die("PAGINA NO ENCONTRADA");
+			}
 		}
 		else
 		{

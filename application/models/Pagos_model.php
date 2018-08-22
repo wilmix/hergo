@@ -147,11 +147,32 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		$sql=$this->db->insert("pago", $obj);
 		return $sql;		
 	}
-	public function editarPago($idPago,$obj)
-	{		
-		$this->db->where('idPago', $idPago);		
-		$sql=$this->db->update("pago", $obj);
-		return $sql;		
+	public function editarPago($idPago,$pago,$detalle) {	
+		$this->db->trans_start();	
+			$this->db->where('idPago', $idPago);		
+			$this->db->update("pago", $pago);
+
+			$this->db->where('idPago', $idPago);
+			$this->db->delete('pago_factura');
+
+			$pagosFactura = array();
+				foreach ($detalle as $fila) {
+					$pagos=new stdclass();
+					$pagos->idPago=$idPago;
+					$pagos->idFactura=$fila->idFactura;
+					$pagos->monto=$fila->pagar;		
+					$pagos->saldoNuevo=$fila->saldoNuevo;	
+					array_push($pagosFactura,$pagos);	
+					$this->Facturacion_model->actualizar_estadoPagoFactura($fila->idFactura,$fila->saldoNuevo,$fila->saldoPago);
+				}
+			$this->db->insert_batch("pago_factura", $pagosFactura);
+		$this->db->trans_complete();
+		if ($this->db->trans_status() === FALSE) {
+			return false;
+		} else {
+			return true;
+		}
+		
 	}
 	public function guardarPago_Factura($obj)
 	{		
