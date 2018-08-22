@@ -220,19 +220,6 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$this->load->view('plantilla/footerscript.php',$this->datos);
 			//$this->load->view('plantilla/footer.php',$this->datos);						
 	}
-	public function mostrarIngresosEdicion($id) {
-        /*$res=$this->Ingresos_model->mostrarIngresos($id);
-        if($res->num_rows()>0)
-    	{
-    		$fila=$res->row();
-    		return $fila;
-    	}
-        else
-        {
-            return(false);
-		}*/
-		echo $id;
-	}
 	public function retornarEdicion() {
 		if ($this->input->is_ajax_request()) {
 			$idPago=$this->security->xss_clean($this->input->post("idPago"));
@@ -356,5 +343,43 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	
+	public function editarPagos()
+	{
+		if($this->input->is_ajax_request())
+        {
+			$data=$this->security->xss_clean($this->input->post('datos'));
+			$data=json_decode($data);
+			$idPago=$data->idPago;
+
+			$pago = new stdclass();
+
+			$pago->almacen=$data->almacen;
+			$pago->fechaPago=$data->fechaPago;
+			$pago->moneda=$data->moneda;
+			$pago->cliente=$data->cliente;
+			$pago->totalPago=$data->totalPago;
+			$pago->glosa=$data->glosa;
+			$pago->autor=$this->session->userdata('user_id');
+			$pago->fecha=date('Y-m-d H:i:s');
+			$pago->tipoCambio=$this->Egresos_model->retornarTipoCambio();
+			$pago->tipoPago=$data->tipoPago;
+			$pago->cheque=$data->cheque;
+			$pago->banco=$data->banco;
+			$pago->transferencia=$data->transferencia;
+			$this->Pagos_model->editarPago($idPago,$pago);
+
+
+			/*echo '<pre>';	
+			print_r($pago); 
+			print_r($idPago);
+			echo '</pre>';*/
+			$return=new stdClass();
+			$return->status=200;
+			echo json_encode($return);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 }

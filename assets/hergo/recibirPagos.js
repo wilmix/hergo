@@ -304,7 +304,8 @@ function editarPago(idPago) {
             anulado:0,
             moneda:1,
             glosa:res.cabecera.glosa,
-            guardar:false,
+            guardar:true,
+            idPago:idPago,
         }
     })
     
@@ -408,7 +409,6 @@ Vue.component('app-row',{
        
     },
     filters:{
-       
         moneda:function(value){
             num=Math.round(value * 100) / 100
             num=num.toFixed(2);
@@ -437,7 +437,7 @@ Vue.component('app-row',{
 });
 
 
-var vmPago = new Vue({
+let vmPago = new Vue({
     el: '#app',
     data:data,
     components: {
@@ -481,9 +481,85 @@ var vmPago = new Vue({
             this.totalPago=total
             return total;
         },
+        editarPago(){
+            console.log('editar');
+            agregarcargando();
+            let datos={
+                almacen: this.almacen,
+                fechaPago:moment(this.fechaPago).format('YYYY-MM-DD'),
+                moneda:this.moneda,
+                cliente: this.cliente,
+                totalPago:this.totalPago,
+                anulado:this.anulado,
+                glosa:this.glosa,
+                tipoPago: this.tipoPago,
+                cheque: this.cheque,
+                banco:this.banco,
+                transferencia:this.transferencia,
+                porPagar:this.porPagar,
+                guardar:true,
+                idPago:idPago,
+            };
+
+            let clientes = datos.porPagar.map(p=>p.cliente)
+            let cliente = clientes.reduce( (a,b) => a==b )
+            if (cliente) {
+                datos.cliente=clientes[0]
+            }
+            console.log(datos);
+            datos=JSON.stringify(datos);
+            if(!this.guardar)
+            {
+                quitarcargando();
+                swal("Error", "No se puede guardar el pago","error");
+                return false;
+            }
+            $.ajax({
+                type:"POST",
+                url: base_url('index.php/Pagos/editarPagos'),
+                dataType: "json",
+                data: {datos:datos},
+            }).done(function(res){
+                if(res.status=200)
+                {
+                    quitarcargando();
+                    swal({
+                        title: 'Pago almacenado',
+                        text: `El pago se guardó con éxito`,
+                        type: 'success', 
+                        showCancelButton: false,
+                        allowOutsideClick: false,  
+                    }).then(
+                        function(result) {   
+                        agregarcargando();                 
+                        window.location.href = base_url("Pagos")
+                    });
+                }
+            }).fail(function( jqxhr, textStatus, error ) {
+            var err = textStatus + ", " + error;
+            console.log( "Request Failed: " + err );
+                quitarcargando();
+                swal({
+                    title: 'Error',
+                    text: "Intente nuevamente",
+                    type: 'error', 
+                    showCancelButton: false,
+                    allowOutsideClick: false,  
+                }).then(
+                function(result) {   
+                    agregarcargando();                 
+                    window.location.href = base_url("Pagos")
+                });
+            });
+
+
+        },
+        cancelarPago:function(){
+            window.location.href = base_url("Pagos")
+        },
         guardarPago:function(){
             agregarcargando();
-            var datos={
+            let datos={
                 almacen: this.almacen,
                 fechaPago:moment(this.fechaPago).format('YYYY-MM-DD'),
                 moneda:this.moneda,

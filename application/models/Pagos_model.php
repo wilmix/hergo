@@ -77,7 +77,6 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	//(f.`total`-SUM(pf.`monto`)) pagar,
 	public function retornarDetallePago($idPago)
 	{
 		$sql="SELECT f.`lote`, f.`fechaFac`,f.`nFactura`, c.`nombreCliente`, pf.`monto`, f.`pagada`, 
@@ -146,6 +145,12 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	public function guardarPago($obj)
 	{		
 		$sql=$this->db->insert("pago", $obj);
+		return $sql;		
+	}
+	public function editarPago($idPago,$obj)
+	{		
+		$this->db->where('idPago', $idPago);		
+		$sql=$this->db->update("pago", $obj);
 		return $sql;		
 	}
 	public function guardarPago_Factura($obj)
