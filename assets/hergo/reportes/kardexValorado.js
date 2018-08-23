@@ -1,14 +1,6 @@
 $(document).ready(function() {
     tituloReporte()
-    $('#articulos_filtro').select2({
-        placeholder: 'Seleccione',
-        width: 'resolve',
-        allowClear: true
-    });
-
-});
-
-
+    $('#articulos_filtro').select2()});
 $(document).on("click", "#kardex", function () {
     tituloReporte();
     retornarKardex();

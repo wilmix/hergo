@@ -2,11 +2,7 @@
 var iniciofecha = moment().subtract(5, 'year').startOf('year')
 var finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function () {
-    $('#clientes_filtro').select2({
-        placeholder: 'Seleccione',
-        width: 'resolve',
-        allowClear: true
-    });
+    $('#clientes_filtro').select2();
 
     let start = moment().subtract(0, 'year').startOf('year')
     let end = moment().subtract(0, 'year').endOf('year')

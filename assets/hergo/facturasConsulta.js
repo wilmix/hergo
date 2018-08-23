@@ -66,13 +66,14 @@ function retornarTablaFacturacion()
     fin=finfecha.format('YYYY-MM-DD')
     alm=$("#almacen_filtro").val()
     tipo=$("#tipo_filtro").val()
-    console.log({ini:ini,fin:fin,alm:alm,tipo:tipo})
+    //console.log({ini:ini,fin:fin,alm:alm,tipo:tipo})
     $.ajax({
         type:"POST",
         url: base_url('index.php/Facturas/MostrarTablaConsultaFacturacion'),
         dataType: "json",
         data: {ini:ini,fin:fin,alm:alm,tipo:tipo},
     }).done(function(res){
+        console.log(res);
          quitarcargando();
         datosselect= restornardatosSelect(res)
 
@@ -135,6 +136,10 @@ function retornarTablaFacturacion()
                 field:'ClienteFactura',
                 title:"Cliente",                
                 sortable:true,
+                filter: {
+                    type: "select",
+                    data: datosselect[0]
+                }
             },
             {
                 field:'sigla',
@@ -200,21 +205,28 @@ function retornarTablaFacturacion()
 
 function restornardatosSelect(res)
 {
-    var cliente = new Array()
+    let cliente = new Array()
     let vendedor = new Array()
-    var datos =new Array()
+    let datos =new Array()
     $.each(res, function(index, value){
 
         cliente.push(value.ClienteFactura)
         vendedor.push(value.vendedor)
+        
     })
     cliente.sort();
+    vendedor.sort();
     datos.push(cliente.unique());
     datos.push(vendedor.unique());
+    
     return(datos);
 }
-Array.prototype.unique=function(a){
-  return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
+Array.prototype.unique = function (a) {
+    return function () {
+        return this.filter(a)
+    }
+}(function (a, b, c) {
+    return c.indexOf(a, b + 1) < 0
 });
 
 function operateFormatter3(value, row, index)
