@@ -171,7 +171,7 @@ function retornarTablaPagos()
                     {   
                         field: 'autor',            
                         title: 'Recibido por:',
-                        visible:false,
+                        //visible:false,
                         sortable:true,
                         filter: 
                             {
