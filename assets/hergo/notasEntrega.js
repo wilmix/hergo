@@ -690,7 +690,8 @@ function anularMovimientoEgreso()
         if(tablaaux.length>0)
         {
             var tabla=JSON.stringify(tablaaux);
-            valuesToSubmit+="&tabla="+tabla;    
+            valuesToSubmit+="&tabla="+tabla;
+            console.log(valuesToSubmit);    
             retornarajax(base_url("index.php/Egresos/anularmovimiento"),valuesToSubmit,function(data)
             {
                 estado=validarresultado_ajax(data);

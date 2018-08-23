@@ -141,9 +141,10 @@ class Facturacion_model extends CI_Model
 		$query=$this->db->query($sql);        
         return ($query->result_array());
 	}
-	public function anularFactura($idFactura)
+	public function anularFactura($idFactura,$msj)
 	{
-		$sql="UPDATE factura set anulada=1 where idFactura=$idFactura";
+		$msj = strval($msj);
+		$sql="UPDATE factura set anulada=1,glosa='$msj' where idFactura=$idFactura;";
        
 		$query=$this->db->query($sql);
         

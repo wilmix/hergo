@@ -138,7 +138,7 @@ div.collapse {
             <div class="row">
               <div class="col-xs-12 col-md-12">
                 <label for="observaciones_ne">Observaciones:</label>
-                <input type="text" class="form-control" id="observacionesFactura" value="" />
+                <input type="text" class="form-control" id="observacionesFactura" name="observacionesFactura" value="" />
               </div>
             </div>
 

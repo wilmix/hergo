@@ -709,13 +709,16 @@ class Facturas extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-        	$idFactura= addslashes($this->security->xss_clean($this->input->post('idFactura')));			
+			$idFactura= addslashes($this->security->xss_clean($this->input->post('idFactura')));
+			$msjAnular= addslashes($this->security->xss_clean($this->input->post('msj')));
+						
         	
         	$facturaEgresos=$this->FacturaEgresos_model->obtenerPorFactura($idFactura);
 
-			$this->Facturacion_model->anularFactura($idFactura);
+			$this->Facturacion_model->anularFactura($idFactura, $msjAnular);
 			$this->actualizarRestarCantFact($idFactura);
-		//	$this->actualizarEstado($facturaEgresos->idegresos);
+
+		//******	$this->actualizarEstado($facturaEgresos->idegresos);
 
 			/******actualizar estado en egreso****/
 			$this->FacturaEgresos_model->actualizarFparcial_noFacturado($idFactura,$facturaEgresos->idegresos);
@@ -763,6 +766,7 @@ class Facturas extends CI_Controller
 			}
 			/*if(!$ultimaFactura)
 			{
+				
 				$obj->response=false;
 				$obj->resultado=null;
 				array_push($errores, "Error no se uso el ultimo lote de facturas");

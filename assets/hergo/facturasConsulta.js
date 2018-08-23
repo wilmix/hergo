@@ -335,34 +335,64 @@ window.eventosBotones = {
         let imprimir = base_url("pdf/Factura/index/") + row.idFactura;
         window.open(imprimir);
     },
-    'click .anularFactura': function (e, value, row, index) {         
+    'click .anularFactura': function (e, value, row, index) {    
+        console.log(row);     
         swal({
           title: 'Esta seguro?',
-          text: 'Se anulara la factura seleccionada',         
+          text: `Se anulara la factura ${row.nFactura} de ${row.ClienteFactura}`,      
           type: 'warning',
           showCancelButton: true,
           confirmButtonText: 'Aceptar',
           cancelButtonText:'Cancelar',                
         }).then(function () {
-           anularFactura(row); 
-           agregarcargando(); 
+
+            swal({
+                title: 'Anular movimiento',
+                text: 'Cual es el motivo de anulacion?',
+                input: 'text',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Aceptar',
+                cancelButtonText:'Cancelar',                
+              }).then(function (texto) {
+                 anularFactura(row, texto); 
+                swal({
+                  type: 'success',
+                  title: 'Anulado!',
+                  allowOutsideClick: false, 
+                  html: `FACTURA ${row.nFactura} ANULADA POR:  ${texto}`
+                }).then(function(){                
+
+                })
+              })
+
+
+            /*mensajeAnular("#observacionesFactura",
+                function(){
+                    anularFactura(row, ); 
+                },
+                function(){
+                    console.log('object');
+                }
+            )*/
         })
         
     },      
 };
-function anularFactura(row)
+function anularFactura(row,txtAnular)
 {
-
-     var data={
-        idFactura:row.idFactura
+     let data={
+        idFactura:row.idFactura,
+        msj:row.glosa + " ANULADA: "+  txtAnular,
     }
+    console.log(data.msj);
      $.ajax({
         type:"POST",
         url: base_url('index.php/Facturas/anularFactura'),
         dataType: "json",
         data:data
-    }).done(function(res){    
-
+    }).done(function(res){  
+        
        retornarTablaFacturacion();
       
     }).fail(function( jqxhr, textStatus, error ) {
