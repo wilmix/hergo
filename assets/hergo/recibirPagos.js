@@ -4,8 +4,6 @@ let hoy = moment().format('MM-DD-YYYY');
 let almacen = $("#almacen_filtro").val();
 let fechaPagoHoy = $('.fecha_pago').val();
 let idPago=$("#idPago").val();
-
-
 $(document).ready(function(){
     
     $('.fecha_pago').daterangepicker({
@@ -343,7 +341,7 @@ if (idPago == 0) {
     editarPago(idPago); 
     data = datos
 }
-
+console.log(data);
 Vue.component('app-row',{
     
     template:'#row-template',
@@ -556,49 +554,64 @@ var vmPago = new Vue({
 
         },
         anularPago(){
-                console.log(data);
+            swal({
+              title: 'Esta seguro?',
+              text: `Se anulara el recibo ${this.numPago} de ${this.nombreCliente}`,      
+              type: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Aceptar',
+              cancelButtonText:'Cancelar',                
+            }).then(function () {
                 swal({
-                    title: 'Esta seguro?',
-                    html: 'Se anulara el recibo <b>N° ' + this.numPago + ' de ' + this.nombreCliente+ '</b>',
-                    type: 'warning',
+                    title: 'Anular movimiento',
+                    text: 'Cual es el motivo de anulacion?',
+                    input: 'text',
+                    type: 'info',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, Anular',
-                    cancelButtonText: 'No, Cancelar'
-                }).then(
-                    result=>{
-                        console.log('acepatado')
-                        agregarcargando();
-                $.ajax({
-                    type:"POST",
-                    url: base_url('index.php/Pagos/anularPago'),
-                    dataType: "json",
-                    data: {
-                        idPago:this.idPago,
-                    },
-                }).done(function(res){
-                    if(res.status=200)
-                    {
-                        window.location.href = base_url("Pagos")  
-                        quitarcargando()
-                    }
-                }).fail(function( jqxhr, textStatus, error ) {
-                var err = textStatus + ", " + error;
-                console.log( "Request Failed: " + err );
-                    quitarcargando();
-                    swal({
-                        title: 'Error',
-                        text: "Intente nuevamente",
-                        type: 'error', 
-                        showCancelButton: false,
-                        allowOutsideClick: false,  
-                    })
-                });
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText:'Cancelar',                
+                }).then(function (texto) {
+                     vmPago.anular(texto) 
+                     console.log(texto);
+                        swal({
+                            type: 'success',
+                            title: 'Anulado!',
+                            allowOutsideClick: false, 
+                            html: `RECIBO ${this.numPago} ANULADA POR:  ${texto}`
+                        }).then(function(){ 
+                            window.location.href = base_url("Pagos")  
+                        })
+                  })
+            })
+        },
+        anular:function(texto){
+            agregarcargando();
+            $.ajax({
+                type:"POST",
+                url: base_url('index.php/Pagos/anularPago'),
+                dataType: "json",
+                data: {
+                    idPago:this.idPago,
+                    msj:this.glosa + ' ANULADO: ' + texto ,
                 },
-                
-            )    
-
+            }).done(function(res){
+                if(res.status=200)
+                {
+                    
+                    quitarcargando()
+                }
+            }).fail(function( jqxhr, textStatus, error ) {
+            var err = textStatus + ", " + error;
+            console.log( "Request Failed: " + err );
+                quitarcargando();
+                swal({
+                    title: 'Error',
+                    text: "Intente nuevamente",
+                    type: 'error', 
+                    showCancelButton: false,
+                    allowOutsideClick: false,  
+                })
+            })
         },
         cancelarPago:function(){
             window.location.href = base_url("Pagos")

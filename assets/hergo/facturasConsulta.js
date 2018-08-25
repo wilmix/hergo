@@ -354,27 +354,15 @@ window.eventosBotones = {
                 showCancelButton: true,
                 confirmButtonText: 'Aceptar',
                 cancelButtonText:'Cancelar',                
-              }).then(function (texto) {
+            }).then(function (texto) {
                  anularFactura(row, texto); 
-                swal({
-                  type: 'success',
-                  title: 'Anulado!',
-                  allowOutsideClick: false, 
-                  html: `FACTURA ${row.nFactura} ANULADA POR:  ${texto}`
-                }).then(function(){                
-
-                })
+                    swal({
+                        type: 'success',
+                        title: 'Anulado!',
+                        allowOutsideClick: false, 
+                        html: `FACTURA ${row.nFactura} ANULADA POR:  ${texto}`
+                    }).then(function(){})
               })
-
-
-            /*mensajeAnular("#observacionesFactura",
-                function(){
-                    anularFactura(row, ); 
-                },
-                function(){
-                    console.log('object');
-                }
-            )*/
         })
         
     },      

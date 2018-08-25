@@ -320,7 +320,8 @@ class Pagos extends CI_Controller  /////**********nombre controlador
         {
 
 			$idPago=$this->security->xss_clean($this->input->post('idPago'));	
-			$this->Pagos_model->anularPago($idPago);
+			$msj=$this->security->xss_clean($this->input->post('msj'));	
+			$this->Pagos_model->anularPago($idPago, $msj);
 			$facturas=$this->Pagos_model->retornarIdFacturas($idPago);	
 			$return=new stdClass();
 			$return->facturas=$facturas->result();
@@ -335,7 +336,10 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 					$this->Pagos_model->modificarPagadaFactura($pagada,$value->idFactura);
 				}
 			}
+			
 			$return->status=200;
+			$return->idPago=$idPago;
+			$return->msj=$msj;
 			echo json_encode($return);
 		}
 		else
