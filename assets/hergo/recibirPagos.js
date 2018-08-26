@@ -252,7 +252,7 @@ window.operateEvents = {
 };
 
 /****************************************** */
-let datos
+
 function editarPago(idPago) {
     $.ajax({
         type:"POST",
@@ -275,7 +275,7 @@ function editarPago(idPago) {
                 res.detalle[index].pagar = parseFloat(pagar.toFixed(2))
         }
         //console.log(res);
-        datos =  {
+        data =  {
             almacen: res.cabecera.almacen,
             almacenes: [
                 { alm: 'CENTRAL HERGO', value: '1' },
@@ -306,10 +306,12 @@ function editarPago(idPago) {
             numPago:res.cabecera.numPago,
             
         }
+        console.log(data);
     })
+    return data
 }
-
-if (idPago == 0) {
+function datosEditar(idPago) {
+    if (idPago == 0) {
     data = {
             almacen:'1',
                 almacenes: [
@@ -337,11 +339,12 @@ if (idPago == 0) {
             glosa:'',
             guardar:false,
     }
-} else {
+    } else {
     editarPago(idPago); 
-    data = datos
+    }
+    return data
 }
-console.log(data);
+
 Vue.component('app-row',{
     
     template:'#row-template',
@@ -398,7 +401,7 @@ Vue.component('app-row',{
             else
             {
                 this.error="";
-                console.log(vmPago);
+                
                 //vmPago.guardar=true; **************************
             }
             return _saldoNuevo;
@@ -438,11 +441,13 @@ Vue.component('app-row',{
 
 var vmPago = new Vue({
     el: '#app',
-    data:data,
+    data:datosEditar(idPago),
+   
     components: {
         vuejsDatepicker,
     },
     methods:{
+        
         deleteRow:function(index){        
             this.porPagar.splice(index,1);
             if (this.porPagar.length>0)
@@ -498,15 +503,17 @@ var vmPago = new Vue({
                 porPagar:this.porPagar,
                 guardar:true,
                 idPago:idPago,
+                nombreCliente: 'VARIOS',
             };
-
+            let  numPago = this.numPago;
             let clientes = datos.porPagar.map(p=>p.cliente)
             let cliente = clientes.reduce( (a,b) => a==b )
             if (cliente) {
                 datos.cliente=clientes[0]
+                datos.nombreCliente = datos.porPagar[0].nombreCliente
             }
             console.log(datos);
-            datos=JSON.stringify(datos);
+            datosAjax=JSON.stringify(datos);
             if(!this.guardar)
             {
                 quitarcargando();
@@ -517,14 +524,15 @@ var vmPago = new Vue({
                 type:"POST",
                 url: base_url('index.php/Pagos/editarPagos'),
                 dataType: "json",
-                data: {datos:datos},
+                data: {datos:datosAjax},
             }).done(function(res){
                 if(res.status=200)
                 {
                     quitarcargando();
                     swal({
-                        title: 'Pago almacenado',
-                        text: `El pago se guardó con éxito`,
+                        title: 'Pago Modificado',
+                        text: `El pago ${numPago} por ${datos.totalPago.toFixed(2)} Bs. de ${datos.nombreCliente} 
+                                se modificó con éxito`,
                         type: 'success', 
                         showCancelButton: false,
                         allowOutsideClick: false,  
@@ -631,14 +639,17 @@ var vmPago = new Vue({
                 banco:this.banco,
                 transferencia:this.transferencia,
                 porPagar:this.porPagar,
+                nombreCliente:'VARIOS',
             };
-
+            
             let clientes = datos.porPagar.map(p=>p.cliente)
             let cliente = clientes.reduce( (a,b) => a==b )
             if (cliente) {
                 datos.cliente=clientes[0]
+                datos.nombreCliente = datos.porPagar[0].nombreCliente
+                
             }
-            datos=JSON.stringify(datos);
+            datosAjx=JSON.stringify(datos);
             if(!this.guardar)
             {
                 quitarcargando();
@@ -649,14 +660,14 @@ var vmPago = new Vue({
                 type:"POST",
                 url: base_url('index.php/Pagos/guardarPagos'), //******controlador
                 dataType: "json",
-                data: {d:datos},
+                data: {d:datosAjx},
             }).done(function(res){
                 if(res.status=200)
                 {
                     quitarcargando();
                     swal({
                         title: 'Pago almacenado',
-                        text: `El pago se guardó con éxito`,
+                        text: `El pago por ${datos.totalPago.toFixed(2)} Bs. de ${datos.nombreCliente} se guardó con éxito`,
                         type: 'success', 
                         showCancelButton: false,
                         allowOutsideClick: false,  
