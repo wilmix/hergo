@@ -87,3 +87,27 @@ FROM
 		
 ) kardexClientes
 ORDER BY fecha;
+
+
+
+////////// estado de ventas y costos por item gestion actual
+SELECT a.`idLinea`, a.`CodigoArticulo`, a.`Descripcion`, a.`costoPromedioPonderado`, AVG(fd.`facturaPUnitario`) ppVenta 
+, sa.`saldo`, (a.`costoPromedioPonderado`* sa.`saldo`) saldoValorado
+, SUM(fd.`facturaCantidad`) cantidadVendida
+,(SUM(fd.`facturaCantidad`)* a.`costoPromedioPonderado`) totalCosto
+,(AVG(fd.`facturaPUnitario`)*SUM(fd.`facturaCantidad`)) totalVentas
+, ((AVG(fd.`facturaPUnitario`)*SUM(fd.`facturaCantidad`))-(SUM(fd.`facturaCantidad`)* a.`costoPromedioPonderado`))utilidad
+,e.`tipomov`
+FROM facturadetalle fd
+INNER JOIN factura f ON f.`idFactura` = fd.`idFactura`
+INNER JOIN articulos a ON a.`idArticulos` = fd.`articulo`
+INNER JOIN saldoarticulos sa ON sa.`idArticulo` = fd.`articulo` AND sa.`idAlmacen` = 1
+INNER JOIN factura_egresos fe ON fe.`idFactura` = f.`idFactura`
+INNER JOIN egresos e ON e.`idegresos` = fe.`idegresos`
+WHERE
+YEAR(f.`fechaFac`)=YEAR(NOW()) AND
+f.`almacen` = 1 AND 
+f.`anulada` = 0
+GROUP BY fd.`articulo`
+ORDER BY a.`idLinea`, fd.`articulo`
+
