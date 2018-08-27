@@ -1,6 +1,46 @@
 var iniciofecha = moment().subtract(0, 'year').startOf('year')
 var finfecha = moment().subtract(0, 'year').endOf('year')
 let hoy = moment().format('DD-MM-YYYY');
+$( function() {
+    $("#cliente_factura").autocomplete(
+    {      
+      minLength: 3,
+      autoFocus: true,
+      source: function (request, response) {        
+        $("#cargandocliente").show(150)        
+        $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+        $.ajax({
+            url: base_url("index.php/Egresos/retornarClientes"),
+            dataType: "json",
+            data: {
+                b: request.term
+            },
+            success: function(data) {
+               response(data);    
+               $("#cargandocliente").hide(150)
+              
+            }
+          });        
+       
+    }, 
+      select: function( event, ui ) {       
+         
+          $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
+          $("#cliente_factura").val( ui.item.nombreCliente + " - " + ui.item.documento);
+          $("#idCliente_factura").val( ui.item.idCliente);
+          $("#nit_factura").val( ui.item.documento);
+          $("#nombreFacturaPrevia").val( ui.item.nombreCliente);
+
+          return false;
+      }
+    })
+    .autocomplete( "instance" )._renderItem = function( ul, item ) {
+      
+      return $( "<li>" )
+        .append( "<a><div>" + item.nombreCliente + " </div><div style='color:#615f5f; font-size:10px'>" + item.documento + "</div></a>" )
+        .appendTo( ul );
+    };
+ });
 $(document).ready(function () {
     $('#fechaFactura').daterangepicker({
         singleDatePicker: true,
@@ -582,7 +622,8 @@ function quitarElementoTablaCliente(row) {
         values: ids
     });
     if (registrosTabla3() == 0) {
-        $("#nombreCliente").val("");
+        //$("#cliente_factura").val("");
+        //$("#idCliente_factura").val("");
         $("#valuecliente").val("");
         $("#valueidcliente").val("");
         $("#nitCliente").val("");
@@ -607,7 +648,8 @@ function quitarTodosElementosTabla3() {
         $.each($("#tabla2detalle").find("tbody tr"), function (index, value) {
             $(value).removeClass("danger");
         })
-        $("#nombreCliente").val("");
+        $("#cliente_factura").val("");
+        $("#idCliente_factura").val("");
         $("#valuecliente").val("");
         $("#valueidcliente").val("");
         calcularTotalFactura();
@@ -624,7 +666,8 @@ function quitarTodosElementosTabla3Cliente() {
         $.each($("#tabla2detalle").find("tbody tr"), function (index, value) {
             $(value).removeClass("danger");
         })
-        $("#nombreCliente").val("");
+        $("#cliente_factura").val("");
+        $("#idCliente_factura").val("");
         $("#valuecliente").val("");
         $("#valueidcliente").val("");
         $("#nitCliente").val("");
@@ -688,7 +731,7 @@ function AgregarRegistroTabla3(row, index, btn) {
 
 function AgregarRegistroTabla3Cliente(row, index, btn) {
 
-    if ($("#nombreCliente").val() == "" || $("#nombreCliente").val() == $("#nombreClienteTabla1").val()) {
+    if ($("#cliente_factura").val() == "" || $("#cliente_factura").val() == $("#nombreClienteTabla1").val()) {
         if (!existeId(row.idingdetalle)) {
             $.ajax({
                 type: "POST",
@@ -698,7 +741,10 @@ function AgregarRegistroTabla3Cliente(row, index, btn) {
 
             }).done(function (res) {
                 console.log(res);
-                $("#nombreCliente").val(res.cliente);
+                $("#cliente_factura").val(res.cliente); ////////*********************** */
+                $("#idCliente_factura").val(res.idCliente);
+                $("#nit_factura").val(res.clienteNit);
+
                 $("#valuecliente").val(res.cliente);
                 $("#valueidcliente").val(res.idCliente);
                 $("#nitCliente").val(res.clienteNit);
@@ -873,29 +919,15 @@ $(document).on("click", "#crearFactura", function () {
 
 })
 function agregarDatosFactura(res) {
-
-    //$("#fNit").html(res.detalle.nit);}
     vmVistaPrevia.guardar = true;
     vmVistaPrevia.nit = res.detalle.nit;
-    //$("#fnumero").html(res.nfac);
-    vmVistaPrevia.numero = res.nfac
-    //$("#fauto").html(res.detalle.autorizacion);
+    vmVistaPrevia.numero = $("#nit_factura").val();
     vmVistaPrevia.autorizacion = res.detalle.autorizacion;
-    //$("#fechaLimiteEmision").html(formato_fecha_corta(res.detalle.fechaLimite))
     vmVistaPrevia.fechaLimiteEmision = res.detalle.fechaLimite
     vmVistaPrevia.llave = res.detalle.llaveDosificacion;
-
     vmVistaPrevia.manual = $("#tipoFacturacion").val();
-
-
-
-
-    //$("#clienteFactura").html(data.data1.ClienteFactura)
-    vmVistaPrevia.ClienteFactura = $("#nombreCliente").val();
-    //$("#clienteFacturaNit").html(data.data1.ClienteNit);
-    vmVistaPrevia.ClienteNit = $("#nitCliente").val();
-    //$("#notaFactura").html(data.data1.glosa);
-
+    vmVistaPrevia.ClienteFactura = $("#cliente_factura").val();
+    vmVistaPrevia.ClienteNit = $("#nit_factura").val();
     vmVistaPrevia.tipocambio = glob_tipoCambio;
     vmVistaPrevia.moneda = $("#moneda").val();
 
@@ -980,7 +1012,7 @@ function AgregarRegistroTabla3Array(row) {
 function AgregarRegistroTabla3ArrayCliente(row) {
 
     if (row.length > 0) {
-        if ($("#nombreCliente").val() == "" || $("#nombreCliente").val() == $("#nombreClienteTabla1").val()) {
+        if ($("#cliente_factura").val() == "" || $("#cliente_factura").val() == $("#nombreClienteTabla1").val()) {
 
             $.ajax({
                 type: "POST",
@@ -989,8 +1021,10 @@ function AgregarRegistroTabla3ArrayCliente(row) {
                 data: { idegreso: row[0].idegreso, idegresoDetalle: row[0].idingdetalle },
 
             }).done(function (res) {
-
-                $("#nombreCliente").val(res.cliente);
+                console.log(res);
+                $("#cliente_factura").val(res.cliente); //******************************************
+                $("#idCliente_factura").val(res.idCliente); //******************************************
+                $("#nit_factura").val(res.clienteNit);
                 $("#valuecliente").val(res.cliente);
                 $("#valueidcliente").val(res.idCliente);
                 $("#nitCliente").val(res.clienteNit);
@@ -1060,7 +1094,7 @@ $(document).on("click", ".editable-click", function () {
 $(document).on("click", "#guardarFactura", function () {
     agregarcargando();
     $("#guardarFactura").css("disabled", "true");
-    let idCliente = $("#idclienteHidden").val()
+    let idCliente = $("#idCliente_factura").val()
     let tabla3factura = $("#tabla3Factura").bootstrapTable('getData');
     tabla3factura = JSON.stringify(tabla3factura);
     let tabla3 = JSON.parse(tabla3factura)

@@ -48,19 +48,21 @@ div.collapse {
 
             <div class="form-group row">
               <div class="col-md-6 col-xs-12">
+
                 <div class = "input-group col-md-12 col-xs-12">
                   <span class="input-group-addon">Cliente:</span>
                   <input type="text" class="form-control"  id="nombreClienteTabla1" aria-describedby="sizing-addon2" disabled="">
                   <span class="input-group-addon">Mov:</span>
                   <input type="text" class="form-control" id="tipoNumEgreso" aria-describedby="sizing-addon2" disabled="">
                 </div>
+
               </div>
               <div class="col-md-6 col-xs-12">
-                <div class = "input-group col-md-12 col-xs-12">
-                  <span class="input-group-addon" id="basic-addon3">Cliente:</span>
-                  <input type="text" class="form-control" id="nombreCliente" aria-describedby="sizing-addon2" disabled="">
-                  <span class="input-group-addon" id="sizing-addon2">Mov:</span>
-                  <input type="text" class="form-control" id="numeroMovT3" aria-describedby="sizing-addon2" disabled="">
+                <div class="input-group col-md-12 col-xs-12">
+                  <span class="input-group-addon">Cliente:</span><span style="margin-left: 10px;display: none;" id="cargandocliente" ><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+                  <input class="form-control form-control-sm" type="text" id="cliente_factura" name="cliente_factura" value="">
+                  <input type="text" readonly="true" name="idCliente_factura" id="idCliente_factura" class="hidden" value="">  
+                  <input type="text" readonly="true" name="nit_factura" id="nit_factura" class="hidden"  value=""> 
                 </div>
               </div>
             </div><!--row-->
@@ -141,8 +143,6 @@ div.collapse {
                 <input type="text" class="form-control" id="observacionesFactura" name="observacionesFactura" value="" />
               </div>
             </div>
-
-
        <!-- /.box-body -->
       </div>
     <!-- /.box -->

@@ -134,7 +134,9 @@ class Facturas extends CI_Controller
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
 			$this->datos['foot_script']= $this->foot_script;
-
+			/*************AUTOCOMPLETE**********/
+            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['foot_script'][]=base_url('assets/hergo/facturas.js');
@@ -428,6 +430,7 @@ class Facturas extends CI_Controller
 			$obj2->cliente=$cliente;
 			$obj2->clienteNit=$clienteNit;
 			$obj2->clientePedido=$clientePedido;
+			$obj2->idCliente=$idcliente;
 			
 			echo json_encode($obj2);
 		}

@@ -22,7 +22,7 @@
                 <h1 class="text-center"><b>FACTURA</b></h1>
                 </div>
                 <div class="text-center" class="col-md-4">
-                    <p id="nitcss"><b>NIT: <span id="fNit">{{nit}} </span></b></p>
+                    <p id="nitcss"><b>NIT: <span >{{nit}} </span></b></p>
                     <p>FACTURA N°: <b id="fnumero">{{numero}}</b> <br>
                     AUTORIZACION N°: <span id="fauto">{{autorizacion}}</span></p>
                 </div>
@@ -30,11 +30,11 @@
                 <div class="row">
                 <div class="col-md-8">
                 <p>Lugar y Fecha: <span id="fechaFacturaModal">{{lugarFecha()}}</span><br>
-                Señor(es): <span id="clienteFactura">{{ClienteFactura}}</span>  <br>
+                Señor(es): <span >{{ClienteFactura}}</span>  <br>
                 OC/Pedido: <span id="clientePedido">{{pedido}}</span></p>
                 </div>
                     <div class="col-md-4">
-                    <p class="text-center">NIT/CI:  <b><span id="clienteFacturaNit">{{ClienteNit}}</span></b></p>
+                    <p class="text-center">NIT/CI:  <b><span>{{ClienteNit}}</span></b></p>
                     <p id="direction" class="text-center">Actividad economica: VENTA AL POR MAYOR DE MAQUINARIA, EQUIPO Y MATERIALES</p>
                 </div>
                 </div>
