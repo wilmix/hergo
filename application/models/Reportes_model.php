@@ -336,4 +336,37 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function mostrarEstadoVentasCosto($alm="")
+	{ 
+		$sql="SELECT l.Sigla,l.Linea, u.Unidad, a.`CodigoArticulo`, a.`Descripcion`, a.`costoPromedioPonderado`
+		, (sum(fd.`facturaPUnitario` * fd.facturaCantidad) ) / SUM(fd.`facturaCantidad`)  ppVenta 
+		-- saldoValorado = costoUnitario * saldo
+		, sa.`saldo`, (a.`costoPromedioPonderado`* sa.`saldo`) saldoValorado
+		, sum(fd.`facturaCantidad`) cantidadVendida
+		--  cantidadVendida * costo
+		,(SUM(fd.`facturaCantidad`)* a.`costoPromedioPonderado`) totalCosto
+		--  cantidadVendida * ppVenta
+		, (SUM(fd.`facturaCantidad`)* ((SUM(fd.`facturaPUnitario` * fd.facturaCantidad) ) / SUM(fd.`facturaCantidad`)))  totalVentas
+		-- totalVenta - totalCosto
+		, ((SUM(fd.`facturaCantidad`)* ((SUM(fd.`facturaPUnitario` * fd.facturaCantidad) ) / SUM(fd.`facturaCantidad`))) - (SUM(fd.`facturaCantidad`)* a.`costoPromedioPonderado`))utilidad
+		
+		from facturadetalle fd
+		inner join factura f on f.`idFactura` = fd.`idFactura`
+		inner join articulos a on a.`idArticulos` = fd.`articulo`
+		inner join saldoarticulos sa on sa.`idArticulo` = fd.`articulo` and sa.`idAlmacen` = 1
+		inner join factura_egresos fe on fe.`idFactura` = f.`idFactura`
+		inner join linea l on l.idLinea = a.idLinea
+		inner join unidad u on u.idUnidad = a.idUnidad
+		where
+		YEAR(f.`fechaFac`)=YEAR(NOW()) AND
+		f.`almacen` LIKE '%$alm' and 
+		f.`anulada` = 0 
+		group by fd.`articulo`
+		order by a.`idLinea`, a.CodigoArticulo
+		
+		";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+
 }

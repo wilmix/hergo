@@ -10,6 +10,11 @@ $(document).on("click", "#refresh", function () {
     tituloReporte();
     retornarKardex();
 })
+$(document).on("change", "#articulos_filtro", function () {
+    retornarKardex();
+})
+
+
 function retornarKardex() {
     var alm = $("#almacen_filtro").val()
     var art = $("#articulos_filtro").val()

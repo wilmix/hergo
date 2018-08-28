@@ -168,12 +168,12 @@ class Reportes extends CI_Controller
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			//$this->datos['cabeceras_script'][]=base_url('assets/hergo/egresos.js'); 				//*******agregar js********
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/estadoVentasCosto.js'); 				
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            //$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");				//*******agregar alm********
+        	$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
@@ -183,6 +183,22 @@ class Reportes extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
+	public function mostrarEstadoVentasCosto()  
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$alm=$this->security->xss_clean($this->input->post("alm")); 
+			$res=$this->Reportes_model->mostrarEstadoVentasCosto($alm); 
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+
+
 	public function kardexIndividualValorado()
 	{
 		$this->libacceso->acceso(34);
@@ -223,7 +239,7 @@ class Reportes extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-	public function mostrarArticulos()  //******cambiar a funcion del modelo
+	public function mostrarArticulos() 
 	{
 		if($this->input->is_ajax_request())
         {
