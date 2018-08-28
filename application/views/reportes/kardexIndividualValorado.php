@@ -14,7 +14,6 @@
                         <?php foreach ($articulos->result_array() as $fila): ?>
                         <option value=<?= $fila['idArticulos'] ?> ><?= $fila['CodigoArticulo'].' | '.$fila['Descripcion'] ?></option>
                         <?php endforeach ?>
-                        <option value="436" selected="selected"></option>
                     </select>
                     <button  type="button" class="btn btn-primary btn-sm" id="kardex">
                         <span>
@@ -26,7 +25,7 @@
                     <h2>Kardex Individual Valorado -
                         <span id="tituloReporte"></span>
                     </h2>
-                    <h4 id="nombreArticulo"></h4>
+                    <h3 id="nombreArticulo"></h3>
                 </div>
                 <table id="tablaKardex" data-toolbar="#toolbar2" data-toggle="table">
                 </table>

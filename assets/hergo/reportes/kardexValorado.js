@@ -11,6 +11,11 @@ $(document).on("click", "#refresh", function () {
     retornarKardex();
 })
 $(document).on("change", "#articulos_filtro", function () {
+    tituloReporte();
+    retornarKardex();
+})
+$(document).on("change", "#almacen_filtro", function () {
+    tituloReporte();
     retornarKardex();
 })
 
@@ -70,7 +75,7 @@ function retornarKardex() {
                 {
                     field: 'nombreproveedor',
                     title: 'Cliente | Proveedor',
-                    align: 'center'
+                    align: 'left'
                 },
                 
                 {
