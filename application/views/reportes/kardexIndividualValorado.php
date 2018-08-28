@@ -8,7 +8,7 @@
                         <?php foreach ($almacen->result_array() as $fila): ?>
                         <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
                         <?php endforeach ?>
-                        <!--<option value="">TODOS</option>-->
+                        <option value="">TODOS</option>
                     </select>
                     <select class="form-control"  data-style="btn-primary" id="articulos_filtro" name="articulos_filtro">
                         <?php foreach ($articulos->result_array() as $fila): ?>

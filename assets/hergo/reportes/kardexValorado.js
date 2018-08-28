@@ -46,9 +46,9 @@ function retornarKardex() {
             columns: [
                 {
                     field: 'almacen',
-                    title: 'Almacen',
+                    title: 'Alm',
                     align: 'center',
-                    visible: false
+                    visible: true
                 },
                 {
                     field: 'fecha',

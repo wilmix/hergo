@@ -62,7 +62,7 @@ $(document).ready(function(){
 $( function() {
     $("#cliente_egreso").autocomplete(
     {      
-      minLength: 1,
+      minLength: 3,
       autoFocus: true,
       source: function (request, response) {        
         $("#cargandocliente").show(150)        
@@ -102,7 +102,7 @@ $( function() {
  $( function() {
     $("#articulo_imp").autocomplete(
     {      
-      minLength: 1,
+      minLength: 3,
       autoFocus: true,
       source: function (request, response) {        
         $("#cargandocodigo").show(150)

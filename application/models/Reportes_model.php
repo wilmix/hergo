@@ -176,7 +176,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarLibroVentasTotales($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
+	public function mostrarLibroVentasTotales($ini=null,$fin=null,$alm="") 
 	{ //cambiar la consulta
 		$sql="SELECT IFNULL(NULL, 'TotalFacturas') AS titulo,COUNT(anulada) AS resultado
 		FROM factura AS f
@@ -236,7 +236,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarDiarioIngresos($ini=null,$fin=null,$alm="",$tin="") ///********* nombre de la funcion mostrar
+	public function mostrarDiarioIngresos($ini=null,$fin=null,$alm="",$tin="") 
 	{ //cambiar la consulta
 		$sql="SELECT alm.almacen, i.fechamov, i.tipomov,t.sigla, i.nmov, i.ordcomp, i.ningalm, p.nombreproveedor, 
 		a.CodigoArticulo, a.Descripcion, u.Unidad,  id.cantidad, id.punitario, id.total, i.obs
@@ -260,9 +260,13 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarKardexIndividual($art="",$alm="") ///********* nombre de la funcion mostrar
-	{ //cambiar la consulta
-		$sql="call hergo2.testKardex2($art,$alm);";
+	public function mostrarKardexIndividual($art="",$alm="") 
+	{ 
+		if ($alm=="") {
+			$sql="call hergo2.testKardexGeneral($art);";
+		} else {
+			$sql="call hergo2.testKardex2($art,$alm);";
+		}
 		$query=$this->db->query($sql);		
 		return $query;
 	}
