@@ -372,5 +372,66 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function mostrarSaldosActualesItems($alm="",$linea="")
+	{ 
+		if ($alm >0) {
+			$sql = "SELECT 
+			IF(codigo IS NULL,'',codigo) codigo, 
+			IF(codigo IS NULL,'',descripcion) descripcion, 
+			IF(codigo IS NULL AND linea IS NULL,'TOTAL GENERAL: ',IF(codigo IS NULL,CONCAT('TOTAL ',linea), almacen)) almacen, 
+			IF(codigo IS NULL,'',costo) costo, 
+			IF(codigo IS NULL,'',saldo) saldo, 
+			IF(codigo IS NULL,'',remision) remision, 
+			IF(codigo IS NULL,'',saldoAlm) saldoAlm, 
+			vTotal, linea, 
+			IF(codigo IS NULL,'',unidad) unidad
+			FROM (
+			SELECT 
+			IF(alm.almacen IS NULL,'',a.`CodigoArticulo`) codigo, 
+			IF(a.`CodigoArticulo`IS NULL,'',a.`Descripcion`) descripcion,
+			IF(l.`Linea` IS NULL,'TOTAL ',alm.`almacen`)almacen, 
+			a.`costoPromedioPonderado` costo, 
+			SUM((sa.`saldo` +  sa.`notaEntrega`)) saldo,
+			SUM(sa.`notaEntrega`) remision, 
+			SUM(`saldo`) saldoAlm,
+			SUM((sa.`saldo` * a.costoPromedioPonderado)) vTotal,
+			IF(alm.`almacen` IS NULL,'',l.Linea) linea, u.`Unidad`
+			FROM saldoarticulos sa
+			INNER JOIN articulos a ON a.`idArticulos` = sa.`idArticulo`
+			INNER JOIN almacenes alm ON alm.idalmacen = sa.idAlmacen
+			INNER JOIN linea l ON l.idLinea = a.idLinea
+			INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
+			WHERE sa.`idAlmacen` = $alm
+			-- and sa.`idArticulo` = 436
+			-- AND a.`CodigoArticulo` between 'TM1100' AND 'TM1100'
+			-- AND l.`Linea` = '3M'
+			GROUP BY    l.`Linea` ASC,a.`CodigoArticulo` ASC WITH ROLLUP
+			) tbl";
+		} else {
+			$sql="SELECT 
+		IF(alm.almacen is null,'',a.idArticulos) id,
+		IF(alm.almacen IS NULL,'',a.`CodigoArticulo`) codigo, 
+		IF(alm.almacen IS NULL,'',a.`Descripcion`) descripcion,
+		IFNULL(alm.almacen, concat('TOTAL: ','') )almacen, 
+		a.`costoPromedioPonderado` costo, 
+		SUM((sa.`saldo` +  sa.`notaEntrega`)) saldo, 
+		sum(sa.`notaEntrega`) remision, 
+		SUM(sa.`saldo`) saldoAlm,
+		SUM((sa.`saldo` * a.costoPromedioPonderado)) vTotal, 
+		IF(alm.`almacen` IS NULL,'',l.Linea) linea
+		FROM saldoarticulos sa
+		INNER JOIN articulos a ON a.`idArticulos` = sa.`idArticulo`
+		INNER JOIN almacenes alm ON alm.idalmacen = sa.idAlmacen
+		INNER JOIN linea l ON l.idLinea = a.idLinea
+		WHERE sa.`idAlmacen` LIKE '%$alm'
+		-- and sa.`idArticulo` = 436
+		AND l.Linea LIKE '%$linea'
+		GROUP BY  a.`CodigoArticulo`, alm.almacen with ROLLUP";
+		}
+		
+		
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 
 }
