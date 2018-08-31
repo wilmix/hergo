@@ -139,7 +139,8 @@
             </a>
             <ul class="treeview-menu">
               <li class="listaPrecios"><a href="<?php echo base_url("reportes/listaPrecios") ?>">Lista de Precios</a></li>
-              <li class="saldosActuales"><a href="<?php echo base_url("reportes/saldosActuales") ?>">Saldos Actuales</a></li>
+              <li class="saldosActuales"><a href="<?php echo base_url("reportes/saldosActuales") ?>">Saldos Resumen</a></li>
+              <li class="saldosActuales"><a href="<?php echo base_url("reportes/saldosActualesItems") ?>">Saldos Actuales Items</a></li>
               <li class="facturasPendietesPago"><a href="<?php echo base_url("reportes/facturasPendietesPago") ?>">Facturas Pendientes Pago</a></li>
               <li class="resumenVentasLineaMes"><a href="<?php echo base_url("reportes/resumenVentasLineaMes") ?>">Resumen de Ventas Linea Mes</a></li>
               <li class="notasEntregaPorFacturar"><a href="<?php echo base_url("reportes/notasEntregaPorFacturar") ?>">Notas de Entrega por Facturar</a></li>
