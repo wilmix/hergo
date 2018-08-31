@@ -342,32 +342,53 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function mostrarEstadoVentasCosto($alm="")
 	{ 
-		$sql="SELECT l.Sigla,l.Linea, u.Unidad, a.`CodigoArticulo`, a.`Descripcion`, a.`costoPromedioPonderado`
-		, (sum(fd.`facturaPUnitario` * fd.facturaCantidad) ) / SUM(fd.`facturaCantidad`)  ppVenta 
-		-- saldoValorado = costoUnitario * saldo
-		, sa.`saldo`, (a.`costoPromedioPonderado`* sa.`saldo`) saldoValorado
-		, sum(fd.`facturaCantidad`) cantidadVendida
-		--  cantidadVendida * costo
-		,(SUM(fd.`facturaCantidad`)* a.`costoPromedioPonderado`) totalCosto
-		--  cantidadVendida * ppVenta
-		, (SUM(fd.`facturaCantidad`)* ((SUM(fd.`facturaPUnitario` * fd.facturaCantidad) ) / SUM(fd.`facturaCantidad`)))  totalVentas
-		-- totalVenta - totalCosto
-		, ((SUM(fd.`facturaCantidad`)* ((SUM(fd.`facturaPUnitario` * fd.facturaCantidad) ) / SUM(fd.`facturaCantidad`))) - (SUM(fd.`facturaCantidad`)* a.`costoPromedioPonderado`))utilidad
-		
-		from facturadetalle fd
-		inner join factura f on f.`idFactura` = fd.`idFactura`
-		inner join articulos a on a.`idArticulos` = fd.`articulo`
-		inner join saldoarticulos sa on sa.`idArticulo` = fd.`articulo` and sa.`idAlmacen` = 1
-		inner join factura_egresos fe on fe.`idFactura` = f.`idFactura`
-		inner join linea l on l.idLinea = a.idLinea
-		inner join unidad u on u.idUnidad = a.idUnidad
-		where
-		YEAR(f.`fechaFac`)=YEAR(NOW()) AND
-		f.`almacen` LIKE '%$alm' and 
-		f.`anulada` = 0 
-		group by fd.`articulo`
-		order by a.`idLinea`, a.CodigoArticulo
-		
+		$sql="SELECT 
+		sigla, linea, idArticulo,  
+		IF(codigo IS NULL, '', descrip) descrip, 
+		IF(codigo IS NULL, '', unidad) unidad, 
+		IF(codigo IS NULL, '', costo) costo, 
+		IF(codigo IS NULL, '', ppVenta) ppVenta, 
+		IF(codigo IS NULL, '', saldo) saldo,
+		IF(codigo IS NULL, '', cantidadVendida) cantidadVendida,
+		saldoValorado, totalCosto, totalVentas, utilidad, 
+		CASE
+			WHEN codigo IS NULL AND sigla IS NULL THEN 'TOTAL GENERAL'
+			WHEN codigo IS NULL THEN CONCAT('TOTAL ', linea)
+			ELSE codigo
+		END codigo
+		FROM(
+		SELECT sigla, linea, 
+		idArticulo idArticulo, codigo, descrip, unidad, costo, ppVenta, saldo,
+		SUM(saldoValorado) saldoValorado, cantidadVendida, SUM(totalCosto) totalCosto, SUM(totalVentas) totalVentas, SUM(utilidad) utilidad
+		FROM
+		(
+		SELECT l.`Sigla` sigla, l.`Linea` linea, idArticulo, a.`CodigoArticulo` codigo, a.`Descripcion` descrip, u.`Unidad` unidad, a.`costoPromedioPonderado` costo, IFNULL(ppVenta,0) ppVenta , saldo,
+		(a.`costoPromedioPonderado` * saldo) saldoValorado, cantidadVendida, (cantidadVendida * a.`costoPromedioPonderado`) totalCosto, (cantidadVendida * IFNULL(ppVenta,0)) totalVentas,
+		((cantidadVendida * IFNULL(ppVenta,0)) - (cantidadVendida * a.`costoPromedioPonderado`)) utilidad
+		FROM (
+		SELECT *
+		FROM
+		(
+		SELECT sa.idArticulo , sa.saldo, sa.`facturado` cantidadVendida 
+		FROM saldoarticulos sa
+		WHERE sa.`idAlmacen` LIKE '%$alm'
+		) sal
+		LEFT JOIN ( SELECT * FROM (
+			SELECT fd.articulo , (SUM(fd.`facturaPUnitario` * fd.facturaCantidad) ) / SUM(fd.`facturaCantidad`)  ppVenta
+			FROM factura f
+			INNER JOIN facturadetalle fd ON fd.`idFactura` = f.`idFactura`
+			INNER JOIN articulos a ON a.idArticulos = fd.articulo
+			WHERE YEAR(f.`fechaFac`)=YEAR(NOW()) AND f.`anulada` = 0 AND f.`almacen` LIKE '%$alm'
+			GROUP BY fd.articulo
+			)tbl) ppv ON ppv.articulo = idArticulo
+		) todo
+		INNER JOIN articulos a ON a.`idArticulos` = idArticulo
+		INNER JOIN unidad u ON u.`idUnidad`= a.`idUnidad`
+		INNER JOIN linea l ON l.`idLinea` = a.`idLinea`
+		ORDER BY l.`Sigla`, a.`CodigoArticulo`
+		) tbl
+		GROUP BY sigla, codigo WITH ROLLUP
+		)roll		
 		";
 		$query=$this->db->query($sql);		
 		return $query;

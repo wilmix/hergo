@@ -32,35 +32,36 @@ function retornarestadoVentasCosto() //*******************************
                     stickyHeaderOffsetY: '50px',
                     showFooter: true,
                     footerStyle: footerStyle,
+                    rowStyle:rowStyle,
                 columns:
                 [
                     {
-                        field: 'Sigla',
+                        field: 'sigla',
                         title: 'Linea',
                         align: 'center',
                         visible: true
                     },
                     {
-                        field: 'CodigoArticulo',
+                        field: 'codigo',
                         title: 'Código',
                         align: 'center',
                         visible: true
                     },
                     {
-                        field: 'Descripcion',
+                        field: 'descrip',
                         title: 'Descripción',
                         align: 'left',
                         visible: true
                     },
                     {
-                        field: 'Unidad',
+                        field: 'unidad',
                         title: 'Uni.',
                         align: 'center',
                         visible: true,
                         searchable: false,
                     },
                     {
-                        field: 'costoPromedioPonderado',
+                        field: 'costo',
                         title: 'Costo Uni.',
                         align: 'right',
                         width:'80px',
@@ -167,4 +168,21 @@ function footerStyle(value, row, index) {
             "color": "white"
         }
     };
+}
+function rowStyle(row, index) {
+    if (row.descrip=='') {
+        return {
+            css: {
+                //"font-weight": "bold",
+                //"border-top": "3px solid white",
+                //"border-bottom": "3px solid white",
+                "text-align": "right",
+                //"padding": "15px",
+                "background-color": "#3c8dbc",
+                "color": "white",
+               // "font-size":"120%",
+            }
+        };
+    }
+    return {};
 }
