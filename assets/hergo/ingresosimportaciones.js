@@ -262,38 +262,53 @@ function calculocompraslocales(cant,costo)
 function agregarArticulo() //faltaria el id costo; si se guarda en la base primero
 {
     //idcosto=12;
-    var codigo=$("#articulo_imp").val()
-    var descripcion=$("#Descripcion_imp").val()
-    var cant=$("#cantidad_imp").inputmask('unmaskedvalue');
-    var costo=$("#punitario_imp").inputmask('unmaskedvalue');    
-    var totalfac=costo;
-    var cant=(cant=="")?0:cant;
-    var costo=(costo=="")?0:costo;
-    var tipoingreso=$("#tipomov_imp2").val()
-    var total;
-    //console.log(tipoingreso)
+    let codigo=$("#articulo_imp").val()
+    let descripcion=$("#Descripcion_imp").val()
+    let cant=$("#cantidad_imp").inputmask('unmaskedvalue');
+    let costo=$("#punitario_imp").inputmask('unmaskedvalue');    
+    let totalfac=costo;
+    cant=(cant=="")?0:cant;
+    costo=(costo=="")?0:costo;
+    let tipoingreso=$("#tipomov_imp2").val()
+    let total;
+
     if(tipoingreso==2)//si es compra local idcompralocal=2
     {
- 
+        totalfac = costo
         costo=calculocompraslocales(cant,costo)
+    } 
+    total=cant*costo; 
+    var punitfac=cant==0?0:(totalfac/cant);
+    let articulo
+    if (tipoingreso==2) {
+        articulo='<tr>'+ 
+        '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
+        '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
+        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
+        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+punitfac+'""></input></td>'+  //nuevo P/U Factura
+        '<td class="text-right"><input type="text" class="totalDoc estilofila tiponumerico" disabled value="'+totalfac+'""></input></td>'+ //nuevo Total Factura
+        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+
+        '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
+        '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+
+    '</tr>'
+    } else {
+        punitfac = costo
+        totalfac = total
+        console.log('pu'+punitfac);
+        console.log('total'+totalfac);
+        articulo='<tr>'+ 
+        '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
+        '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
+        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
+        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+punitfac+'""></input></td>'+  //nuevo P/U Factura
+        '<td class="text-right"><input type="text" class="totalDoc estilofila tiponumerico" disabled value="'+totalfac+'""></input></td>'+ //nuevo Total Factura
+        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+
+        '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
+        '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+
+    '</tr>'
 
     }
-        total=cant*costo;    
-    
-    //console.log("cant",cant,"* costo",costo,"=",total)
-    
-    //var articulo='<tr caid="'+idcosto+'">'+ //costo articulo id
-    var punitfac=cant==0?0:(totalfac/cant);
-    var articulo='<tr>'+ 
-            '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
-            '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+punitfac+'""></input></td>'+  //nuevo P/U Factura
-            '<td class="text-right"><input type="text" class="totalDoc estilofila tiponumerico" disabled value="'+totalfac+'""></input></td>'+ //nuevo Total Factura
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+
-            '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
-            '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+
-        '</tr>'
+   
     $("#tbodyarticulos").append(articulo)
     $(".tiponumerico").inputmask({
         alias:"decimal",

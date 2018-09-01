@@ -215,10 +215,10 @@
                       <th class="col-sm-1" >Código</th>
                       <th class="col-sm-6">Artículo</th>
                       <th class="col-sm-1" class="text-right">Cantidad</th>
-                      <th class="col-sm-1" class="text-right">P/U Documento</th> <!--nuevo-->
-                      <th class="col-sm-1" class="text-right">Total Documento</th> <!--nuevo-->
-                      <th class="text-right">C/U Sistema</th><!--CAMBIO PARA COMPRAS LOCALES "Costo Unitario":"Total" --> 
-                      <th class="text-right">Total</th>
+                      <th class="col-sm-1" class="text-right">P/U</th>
+                      <th class="col-sm-1" class="text-right">Total</th>
+                      <th class="text-right">C/U Sistema</th>
+                      <th class="text-right">Total Sistema</th>
                       <th>&nbsp;</th>
                     </tr>
                   </thead>
@@ -252,14 +252,12 @@
               </div>
               <div class="col-md-6 col-xs-12">
                 <div class = "input-group col-md-12 col-xs-12">
-                  <span class = "input-group-addon totales" id="nombretotaldoc">Bs. Doc.</span>
-                  <!--mostrar el total bolivianos factura o documento-->
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalacostodoc">
-                  <span class = "input-group-addon totales" id="nombretotalsis" >Bs. Sis.</span>
-                  <!--mostrar el total bolivivanos sistema-->
-                  <input type = "text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalacostobs">
+                    <span class = "input-group-addon totales" id="nombretotaldoc"></span>
+                    <input type = "text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalacostodoc">
+                    <span class = "input-group-addon totales" id="nombretotalsis" ></span>
+                    <input type = "text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalacostobs">
                  </div>
-              </div>
+                </div>
             </div><!--row-->
             <hr>
             <div class="row">
