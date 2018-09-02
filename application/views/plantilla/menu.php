@@ -50,10 +50,10 @@
             <li class="CodigoControl"><a href="<?php echo base_url("index.php/CodigoControl") ?>"><i class="fa fa-qrcode"></i> CodigoControl QR</a></li>
             <li class="datosFactura"><a href="<?php echo base_url("index.php/configuracion/datosFactura") ?>"><i class="fa fa-cog"></i> Datos Factura</a></li>
             <li class="tipoCambio"><a href="<?php echo base_url("index.php/configuracion/tipoCambio") ?>"><i class="fas fa-dollar-sign"></i> Tipo de Cambio</a></li>
+            <li class="roles"><a href="<?php echo base_url("index.php/Roles/roles") ?>">Roles</a></li>
             <!--<li><a href="<?php echo base_url("index.php/usuarios") ?>"> FormFuncionarios</a></li>
-            <!--<li><a href="#">Modificar Precis Articulos</a></li>
+            <li><a href="#">Modificar Precis Articulos</a></li>
             <li><a href="#">Datos Factura</a></li>
-            <li><a href="#">Roles</a></li>
             <li><a href="#">Opciones</a></li>-->
 
           </ul>
