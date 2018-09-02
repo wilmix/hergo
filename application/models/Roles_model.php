@@ -30,7 +30,8 @@ class Roles_model extends CI_Model  ////////////***** nombre del modelo
         LEFT JOIN 	(SELECT au.subMenu idSubMenu, idUsuario
                 FROM ACCESO_USUARIO au 
                 WHERE au.idUsuario = $idUser) usuario
-        ON usuario.idSubMenu = sub.`id`";
+		ON usuario.idSubMenu = sub.`id`
+		ORDER BY menu.menu, sub.id";
 		$query=$this->db->query($sql);		
 		return $query;
     }

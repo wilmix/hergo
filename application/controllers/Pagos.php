@@ -169,9 +169,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	}
 	public function editarPago($idPago=0)
 	{
-		/**********************************************************************/
-		//verificar si el num de pago corresponde al almacen del usuario logueado !!!!!
-		/**********************************************************************/
+		$this->libacceso->acceso(25);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 

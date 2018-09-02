@@ -443,6 +443,7 @@ class Ingresos extends CI_Controller
 	}
 	public function revisarStd()
 	{
+		$this->libacceso->acceso(39);
 
 		if($this->input->is_ajax_request())
         {

@@ -5,10 +5,12 @@ $(document).ready(function(){
 $(document).on("change", "#users_filtro", function () {
     idUser = $('#users_filtro').val();
     retornarRoles(idUser);
+    
 })
 function retornarRoles() 
 {   
     agregarcargando(idUser);
+    tituloReporte()
     $.ajax({
         type:"POST",
         url: base_url('index.php/Roles/mostrarRoles'), 
@@ -17,7 +19,7 @@ function retornarRoles()
             idUser:idUser
         },
     }).done(function(res){
-        console.log(res);
+        datosselect = restornardatosSelect(res)
     	quitarcargando();
         $("#tablaRoles").bootstrapTable('destroy');
         $("#tablaRoles").bootstrapTable({ 
@@ -45,11 +47,15 @@ function retornarRoles()
                     {   
                         field: 'menu',            
                         title: 'Menu',
+                        filter: {
+                            type: "select",
+                            data: datosselect[0]
+                        },
                     },
 
                     {   
                         field: 'subMenu',            
-                        title: 'Sub Menu',
+                        title: 'Módulo',
                     },
                     {   
                         field: 'activo',            
@@ -77,9 +83,8 @@ function retornarRoles()
     return ($ret);
 }
 function tituloReporte() {
-    nomCliente = $('#clientes_filtro').find(':selected').text();
-    $('#tituloReporte').text(almText);
-    $('#nombreCliente').text(nomCliente);
+    let user = $('#users_filtro').find(':selected').text();
+    $('#nombreUser').text(user);
 }
 window.operateEvents = {
     'click .cambiar': function (e, value, row, index) {
@@ -129,3 +134,21 @@ function desActivar (idUser, idSubMenu) {
     console.log( "Request Failed: " + err );
     });
 }
+function restornardatosSelect(res) {
+
+    var menu = new Array()
+    var datos = new Array()
+    $.each(res, function (index, value) {
+        menu.push(value.menu)
+    })
+    menu.sort();
+    datos.push(menu.unique());
+    return (datos);
+}
+Array.prototype.unique = function (a) {
+    return function () {
+        return this.filter(a)
+    }
+}(function (a, b, c) {
+    return c.indexOf(a, b + 1) < 0
+});

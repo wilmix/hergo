@@ -57,7 +57,7 @@ class Roles extends CI_Controller
 	}
 
 	public function roles(){
-		$this->libacceso->acceso(26);
+		$this->libacceso->acceso(38);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 

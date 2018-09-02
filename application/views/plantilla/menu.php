@@ -50,7 +50,7 @@
             <li class="CodigoControl"><a href="<?php echo base_url("index.php/CodigoControl") ?>"><i class="fa fa-qrcode"></i> CodigoControl QR</a></li>
             <li class="datosFactura"><a href="<?php echo base_url("index.php/configuracion/datosFactura") ?>"><i class="fa fa-cog"></i> Datos Factura</a></li>
             <li class="tipoCambio"><a href="<?php echo base_url("index.php/configuracion/tipoCambio") ?>"><i class="fas fa-dollar-sign"></i> Tipo de Cambio</a></li>
-            <li class="roles"><a href="<?php echo base_url("index.php/Roles/roles") ?>">Roles</a></li>
+            
             <!--<li><a href="<?php echo base_url("index.php/usuarios") ?>"> FormFuncionarios</a></li>
             <li><a href="#">Modificar Precis Articulos</a></li>
             <li><a href="#">Datos Factura</a></li>
@@ -167,10 +167,10 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li class="usuarios"><a href="<?php echo base_url('index.php/auth/usuarios') ?>">Ver Usuarios</a></li>
-          <li class="create_user"><a href="<?php echo base_url('index.php/auth/create_user') ?>">Nuevo Usuario</a></li>
-          <li class="create_group"><a href="<?php echo base_url('index.php/auth/create_group') ?>">Nuevo Grupo</a></li>
-
+          <li class="usuarios"><a href="<?php echo base_url('index.php/auth/usuarios') ?>"><i class="fas fa-users"></i> Ver Usuarios</a></li>
+          <li class="create_user"><a href="<?php echo base_url('index.php/auth/create_user') ?>"><i class="fas fa-user-plus"></i> Nuevo Usuario</a></li>
+          <!--<li class="create_group"><a href="<?php echo base_url('index.php/auth/create_group') ?>">Nuevo Grupo</a></li>-->
+          <li class="roles"><a href="<?php echo base_url("index.php/Roles/roles") ?>"><i class="fas fa-lock"></i> Roles</a></li>
         </ul>
       </li>
 

@@ -528,11 +528,19 @@ $(document).on("click", "#btnaprobado", function () {
         id: id
     }
     retornarajax(base_url("index.php/Ingresos/revisarStd"), datos, function (data) {
-        estado = validarresultado_ajax(data);
-        if (estado) {
-            retornarTablaIngresos()
-            $("#modalIgresoDetalle").modal("hide");
-        }
+        console.log(data);
+        if(data.estado=="ok")
+            {
+                retornarTablaIngresos()
+                $("#modalIgresoDetalle").modal("hide");
+            }
+            else
+            {
+              quitarcargando();
+              swal("Atencion!", "Usted no tiene permiso de aprobar ingresos")
+              console.log(data.respuesta);
+            }
+
     })
 })
 $(document).on("click", "#btnpendiente", function () {
