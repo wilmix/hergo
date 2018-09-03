@@ -18,7 +18,8 @@ class Roles_model extends CI_Model  ////////////***** nombre del modelo
     public function retornar_users()
 	{
 		$sql="SELECT u.id, u.username, CONCAT(u.`first_name`, ' ', u.`last_name`) nombre, u.`almacen`, u.`foto`
-        FROM users u";
+		FROM users u
+		WHERE u.active = 1";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
