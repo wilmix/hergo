@@ -409,7 +409,7 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 			FROM (
 			SELECT 
 			IF(alm.almacen IS NULL,'',a.`CodigoArticulo`) codigo, 
-			IF(a.`CodigoArticulo`IS NULL,'',a.`Descripcion`) descripcion,
+			a.`Descripcion` descripcion,
 			IF(l.`Linea` IS NULL,'TOTAL ',alm.`almacen`)almacen, 
 			a.`costoPromedioPonderado` costo, 
 			SUM((sa.`saldo` +  sa.`notaEntrega`)) saldo,

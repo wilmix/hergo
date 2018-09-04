@@ -79,23 +79,26 @@ function retornarSaldosAlmacen() {
                     field: 'codigo',
                     title: 'Código',
                     align: 'center',
+                    searchable: true,
                 },
                 {
                     field: 'descripcion',
                     title: 'Descripcion',
-                    searchable: false,
-                    align: 'left'
+                    searchable: true,
+                    align: 'left',
                 },
                 {
                     field: 'unidad',
                     title: 'Unidad',
-                    align: 'center'
+                    align: 'center',
+                    searchable: false,
                 },
                 {
                     field: 'almacen',
                     title: 'Almacen',
                     align: 'center',
                     width:'150px',
+                    searchable: false,
                 },
                 {
                     field: 'costo',
@@ -185,23 +188,26 @@ function retornarSaldosGeneral() {
                     field: 'codigo',
                     title: 'Código',
                     align: 'center',
+                    searchable: true,
                 },
                 {
                     field: 'descripcion',
-                    title: 'Descripcion',
-                    searchable: false,
-                    align: 'left'
+                    title: 'Descripcioon',
+                    searchable: true,
+                    align: 'left',
                 },
                 {
                     field: 'unidad',
                     title: 'Unidad',
-                    align: 'center'
+                    align: 'center',
+                    searchable: false,
                 },
                 {
                     field: 'almacen',
                     title: 'Almacen',
                     align: 'center',
                     width:'150px',
+                    searchable: false,
                 },
                 {
                     field: 'costo',
@@ -302,6 +308,7 @@ function restornardatosSelect(res) {
 
 
     let linea = new Array()
+
     var datos = new Array()
     $.each(res, function (index, value) {
         linea.push(value.linea)

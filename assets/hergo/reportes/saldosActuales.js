@@ -28,6 +28,7 @@ function retornarSaldosActuales() //*******************************
                         title: 'ID',
                         sortable:true,
                         align: 'center',
+                        visible:false,
                     },
                    {   
                         field: 'CodigoArticulo',            
@@ -39,7 +40,7 @@ function retornarSaldosActuales() //*******************************
                         field: 'Descripcion',            
                         title: 'Descripción',
                         sortable:true,
-                        searchable: false,
+                        searchable: true,
                         filter: { type: "input" }
                     },
                     {   
