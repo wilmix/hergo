@@ -27,6 +27,13 @@
             $this->SetXY(15,20);
             $this->Cell(40,6, $almacen,0,0,'C');
             $this->SetFont('Arial','B',10);
+            $this->SetXY(10,25);
+            if ($nfact=='SF') {
+                $this->Cell(40,6, 'Compra sin Factura - Retencion de Impuestos',0,0,'L');
+            } else {
+                $this->Cell(40,6, 'Compra con Factura',0,0,'C');
+            }
+
             $this->SetXY(10,10);
             $this->SetFont('Arial','B',18);
             $this->Cell(0,8, 'NOTA DE INGRESOS',0,1,'C'); 
@@ -51,7 +58,7 @@
                 $this->SetFont('Arial','B',10);
                 $this->Cell(20,10, 'Factura: ',0,0,'');
                 $this->SetFont('Arial','',10);
-                $this->Cell(20, 10, $nfact, 0,0,'L');
+                $this->Cell(20, 10, $nfact=='SF'?' - ':$nfact, 0,0,'L');
                 // N° ingreso
                 $this->SetFont('Arial','B',10);
                 $this->Cell(25,10, 'Nro Ingreso: ',0,0,'');
