@@ -367,6 +367,7 @@ function guardarmovimiento()
 
         retornarajax(base_url("index.php/Ingresos/guardarmovimiento"),valuesToSubmit,function(data)
         {
+            console.log(data.respuesta);
             estado=validarresultado_ajax(data);
             if(estado)
             {               
@@ -382,11 +383,13 @@ function guardarmovimiento()
                   
                     swal({
                         title: "Ingreso realizado!",
-                        text: "El egreso se guardo con éxito",
+                        text: "El ingreso se guardo con éxito",
                         type: "success",        
                         allowOutsideClick: false,                                                                        
                         }).then(function(){
                             location.reload();
+                            let imprimir = base_url("pdf/Ingresos/index/") + data.respuesta;
+                            window.open(imprimir);
                         })
 
                 }
