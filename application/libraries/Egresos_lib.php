@@ -30,7 +30,7 @@
             $this->Image('images/hergo.jpeg', 10, 10, 45 );
             $this->SetFont('Arial','B',9);
             $this->SetXY(15,20);
-            $this->Cell(40,6, $almacen,0,0,'C');
+            $this->Cell(40,6, utf8_decode($almacen),0,0,'C');
             $this->SetXY(10,10);
             $this->SetFont('Arial','B',18);
             $this->Cell(0,8, $tipoMov,0,0,'C');
@@ -49,7 +49,7 @@
                 $this->SetFont('Arial','B',9);
                 $this->Cell(20,6, utf8_decode('Señores: '),0,0,'');
                 $this->SetFont('Arial','',9);
-                $this->Cell(100, 6, $nombreCliente, 0,0,'L');
+                $this->Cell(100, 6, utf8_decode($nombreCliente), 0,0,'L');
                 $this->SetFont('Arial','B',9);
                 $this->Cell(10,6, utf8_decode('NIT: '),0,0,'');
                 $this->SetFont('Arial','',9);
@@ -58,7 +58,7 @@
                 $this->SetFont('Arial','B',9);
                 $this->Cell(20,6, utf8_decode('Dirección: '),0,0,'');
                 $this->SetFont('Arial','',9);
-                $this->Cell(140, 6, $direccion, 0,0,'L');
+                $this->Cell(140, 6, utf8_decode($direccion), 0,0,'L');
                 $this->Ln(6);
                 $this->SetFont('Arial','B',9);
                 $this->Cell(20,6, utf8_decode('Teléfono: '),0,0,'');
@@ -71,7 +71,7 @@
                 $this->SetFont('Arial','B',9);
                 $this->Cell(20,6, utf8_decode('Pedido No: '),0,0,'');
                 $this->SetFont('Arial','',9);
-                $this->Cell(45, 6, $clientePedido, 0,0,'L');
+                $this->Cell(45, 6, utf8_decode($clientePedido), 0,0,'L');
                     //factura n
                     $this->SetXY(170,27);
                     $this->SetFont('Arial','B',12);
@@ -99,7 +99,7 @@
 
         public function Footer(){
             $observaciones = $this->datos['observaciones'];
-            $plazoPago = date('d/m/Y',strtotime($this->datos['plazoPago']));
+            $plazoPago = (strtotime($this->datos['plazoPago'])==0)?'':date('d/m/Y',strtotime($this->datos['plazoPago']));
             $userName = $this->datos['userName'];
             $autor = $this->datos['autor'];
             $this->SetLineWidth(0.5);
@@ -108,7 +108,7 @@
             $this->SetFont('Arial','BI', 9);
             $this->Cell(15,5, 'NOTA: ',0,0,'L',1);
             $this->SetFont('Arial','I', 8);
-            $this->Cell(110, 5, $observaciones, 0,0,'L',1);
+            $this->Cell(110, 5, utf8_decode($observaciones), 0,0,'L',1);
             $this->SetFont('Arial','BI', 9);
             $this->Cell(30,5, 'Recibi Conforme:',0,0,'L',1);
             $this->Cell(45, 5, '', 0,0,'L');
@@ -117,7 +117,7 @@
             $this->SetY(-20);
             $this->SetFont('Arial','I', 9);
             $this->Cell(25,5, 'Emitido por:',0,0,'L',1);
-            $this->Cell(40, 5, $autor, 0,0,'L');
+            $this->Cell(40, 5, utf8_decode($autor), 0,0,'L');
             $this->SetFont('Arial','I', 9);
             $this->Cell(20,5, 'Autorizado:',0,0,'L');
             $this->Cell(40, 5, '', 0,0,'L');
