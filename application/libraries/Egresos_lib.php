@@ -99,7 +99,7 @@
 
         public function Footer(){
             $observaciones = $this->datos['observaciones'];
-            $plazoPago = (strtotime($this->datos['plazoPago'])==0)?'':date('d/m/Y',strtotime($this->datos['plazoPago']));
+            $plazoPago = date('d/m/Y',strtotime($this->datos['plazoPago']));
             $userName = $this->datos['userName'];
             $autor = $this->datos['autor'];
             $this->SetLineWidth(0.5);
