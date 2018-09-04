@@ -657,7 +657,7 @@ class Facturas extends CI_Controller
 	        	$this->FacturaDetalle_model->guardar($detalle);
 	        	$this->FacturaEgresos_model->guardarArray($facturaEgreso);
 
-	        	echo 1;
+	        	echo $idFactura;
         	}
         	else
         	{

@@ -1126,7 +1126,7 @@ $(document).on("click", "#guardarFactura", function () {
         dataType: "json",
         data: datos,
     }).done(function (res) {
-
+        console.log(res);
         if (res) {
             quitarcargando();
             $("#tabla3Factura").bootstrapTable('removeAll');
@@ -1140,6 +1140,8 @@ $(document).on("click", "#guardarFactura", function () {
                 function (result) {
                     agregarcargando();
                     location.reload();
+                    let imprimir = base_url("pdf/Factura/index/") + res;
+                    window.open(imprimir);
                 });
 
         }
