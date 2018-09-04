@@ -662,6 +662,7 @@ var vmPago = new Vue({
                 dataType: "json",
                 data: {d:datosAjx},
             }).done(function(res){
+                console.log(res);
                 if(res.status=200)
                 {
                     quitarcargando();
@@ -675,6 +676,8 @@ var vmPago = new Vue({
                         function(result) {   
                         agregarcargando();                 
                         location.reload();
+                        let imprimir = base_url("pdf/Recibo/index/") + res.id;
+                        window.open(imprimir);
                     });
                 }
             }).fail(function( jqxhr, textStatus, error ) {
