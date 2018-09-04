@@ -291,8 +291,8 @@ class Ingresos extends CI_Controller
 			redirect('auth', 'refresh');
 
 			$this->datos['menu']="Ingresos";
-			$this->datos['opcion']="Importaciones";
-			$this->datos['titulo']="Editar";
+			$this->datos['opcion']="Modificar";
+			$this->datos['titulo']="Modificar";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;

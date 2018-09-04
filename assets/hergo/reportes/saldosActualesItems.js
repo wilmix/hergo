@@ -308,7 +308,6 @@ function restornardatosSelect(res) {
 
 
     let linea = new Array()
-
     var datos = new Array()
     $.each(res, function (index, value) {
         linea.push(value.linea)

@@ -389,18 +389,18 @@ function retornarTablaIngresos() {
 function operateFormatter(value, row, index) {
     if (row.sigla == "IT")
         return [
-            '<button type="button" class="btn btn-default verIngreso" aria-label="Right Align">',
+            '<button type="button" class="btn btn-default verIngreso" aria-label="Right Align" data-toggle="tooltip" title="Ver Ingreso">',
             '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-            '<button type="button" class="btn btn-default imprimirIngreso" aria-label="Right Align">',
+            '<button type="button" class="btn btn-default imprimirIngreso" aria-label="Right Align" data-toggle="tooltip" title="Imprimir">',
             '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
         ].join('');
     else
         return [
-            '<button type="button" class="btn btn-default verIngreso" aria-label="Right Align">',
+            '<button type="button" class="btn btn-default verIngreso" aria-label="Right Align" data-toggle="tooltip" title="Ver Ingreso">',
             '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-            '<button type="button" class="btn btn-default editarIngreso" aria-label="Right Align">',
+            '<button type="button" class="btn btn-default editarIngreso" aria-label="Right Align" data-toggle="tooltip" title="Modificar">',
             '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>',
-            '<button type="button" class="btn btn-default imprimirIngreso" aria-label="Right Align">',
+            '<button type="button" class="btn btn-default imprimirIngreso" aria-label="Right Align" data-toggle="tooltip" title="Imprimir">',
             '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
         ].join('');
 }

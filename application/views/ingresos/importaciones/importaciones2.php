@@ -109,7 +109,7 @@
                   </select>
                </div>
                <div class="col-xs-12 col-sm-6 col-md-2">
-                  <label for="fechamov_imp" ># Movimiento:</label>
+                  <label ># Movimiento:</label>
                   <input id="nmov_imp" type="number" class="form-control" name="nmov_imp" placeholder="# Movimiento" disabled value="<?= ($cont)?$dcab->n:""  ?>"/>
                </div>
             </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
@@ -135,8 +135,8 @@
                          <input id="nfact_imp" name="nfact_imp" type="text" style="text-transform:uppercase" onkeyup="javascript:this.value=this.value.toUpperCase();" class="form-control form-control-sm"  placeholder="# Factura" value="<?= ($cont)?$dcab->nfact:""  ?>">
                    </div>
                    <div class="col-xs-4 col-sm-4 col-md-2">
-                         <label>N° Ingreso:</label>
-                         <input id="ningalm_imp" type="text" class="form-control form-control-sm" name="ningalm_imp" placeholder="# Ingreso" value="<?= ($cont)?$dcab->ningalm:""  ?>">
+                         <label class="hidden">N° Ingreso:</label>
+                         <input id="ningalm_imp" type="text" class="form-control form-control-sm hidden" name="ningalm_imp" placeholder="# Ingreso" value="<?= ($cont)?$dcab->ningalm:""  ?>">
                    </div>
                 </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
 

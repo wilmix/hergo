@@ -457,6 +457,7 @@ function guardarmovimiento()
 
         retornarajax(base_url("index.php/Egresos/guardarmovimiento"),valuesToSubmit,function(data)
         {
+            console.log(data);
             estado=validarresultado_ajax(data);
             if(estado)
             {               
@@ -471,6 +472,8 @@ function guardarmovimiento()
                         showCancelButton: false
                     }).then(
                           function(result) {
+                            let imprimir = base_url("pdf/Egresos/index/") + data.respuesta;
+                            window.open(imprimir);
                             location.reload();
                           });
                 }
