@@ -232,7 +232,9 @@ function mostrarTablaIngresos(res) {
                 field: 'n',
                 title: 'N',
                 align: 'center',
-                sortable: true
+                sortable: true,
+                searchable: true,
+
             },
             {
                 field: 'sigla',
@@ -366,6 +368,7 @@ function retornarTablaIngresos() {
             ti: tipoingreso
         },
     }).done(function (res) {
+        console.log(res);
         quitarcargando();
         datosselect = restornardatosSelect(res)
 
@@ -688,6 +691,7 @@ function restornardatosSelect(res) {
     datos.push(tipo.unique());
     datos.push(autor.unique());
     datos.push(origen.unique());
+    console.log(autor);
     return (datos);
 }
 Array.prototype.unique = function (a) {
