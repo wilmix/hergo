@@ -361,28 +361,31 @@ function cellStyle(value, row, index) {
         return { 
             css: {
             "color":"red",
-            "text-decoration": "underline",
+            "text-decoration": "underline overline",
             "font-weight": "bold",
-            "font-style": "italic"
+            "font-style": "italic",
+            "padding-top": "15px",
             } 
         }
      }else if (row.estado =='APROBADO'){
         return { 
             css: {
             "color":"green",
-            "text-decoration": "underline",
+            "text-decoration": "underline overline",
             "font-weight": "bold",
-            "font-style": "italic"
+            "font-style": "italic",
+            "padding-top": "15px",
             } 
         }
 
      } else {
         return { 
             css: {
-            "color":"orange",
-            "text-decoration": "underline",
+            "color":"black",
+            "text-decoration": "underline overline",
             "font-weight": "bold",
-            "font-style": "italic"
+            "font-style": "italic",
+            "padding-top": "15px",
             } 
         }
      }
