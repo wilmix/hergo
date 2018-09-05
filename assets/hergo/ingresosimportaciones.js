@@ -388,8 +388,8 @@ function guardarmovimiento()
                         allowOutsideClick: false,                                                                        
                         }).then(function(){
                             location.reload();
-                            //let imprimir = base_url("pdf/Ingresos/index/") + data.respuesta;
-                            //window.open(imprimir);
+                            let imprimir = base_url("pdf/Ingresos/index/") + data.respuesta;
+                            window.open(imprimir);
                         })
 
                 }

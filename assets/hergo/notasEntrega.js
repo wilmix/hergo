@@ -472,9 +472,9 @@ function guardarmovimiento()
                         showCancelButton: false
                     }).then(
                           function(result) {
-                            //let imprimir = base_url("pdf/Egresos/index/") + data.respuesta;
-                            //window.open(imprimir);
                             location.reload();
+                            let imprimir = base_url("pdf/Egresos/index/") + data.respuesta;
+                            window.open(imprimir);
                           });
                 }
                 else

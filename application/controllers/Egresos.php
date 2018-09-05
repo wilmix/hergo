@@ -484,13 +484,12 @@ class Egresos extends CI_Controller
         	$datos['pedido_ne'] = $this->security->xss_clean($this->input->post('pedido_ne'));        	
         	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
         	$datos['vendedor'] = $this->security->xss_clean($this->input->post('idUsuarioVendedor'));
-        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
+			$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
+			$idEgreso=$this->Egresos_model->guardarmovimiento_model($datos);
 
-        	if($this->Egresos_model->guardarmovimiento_model($datos))
+        	if($idEgreso)
         	{
-        		//$this->actualizarCostoArticuloEgreso($datos['tabla'],$datos['almacen_ne']);
-
-				echo json_encode("true");			
+				echo json_encode($idEgreso);			
         	}
 			else
 			{				

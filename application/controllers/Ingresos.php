@@ -637,12 +637,14 @@ class Ingresos extends CI_Controller
         	$datos['nfact_imp'] = $this->security->xss_clean($this->input->post('nfact_imp'));
         	$datos['ningalm_imp'] = $this->security->xss_clean($this->input->post('ningalm_imp'));
         	$datos['obs_imp'] = $this->security->xss_clean($this->input->post('obs_imp'));
-        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
+			$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
+			$idIngreso = $this->Ingresos_model->guardarmovimiento_model($datos);
+			
 
-        	if($this->Ingresos_model->guardarmovimiento_model($datos))
+        	if($idIngreso)
         	{
         		//$this->retornarcostoarticulo_tabla($datos['tabla'],$datos['almacen_imp'],$datos['moneda_imp']); //se eliminaria el dato
-				echo json_encode("true");
+				echo json_encode($idIngreso);
         	}
 			else
 			{				
