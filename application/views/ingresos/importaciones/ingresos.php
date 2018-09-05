@@ -1,16 +1,5 @@
- <!--<section class="content-header">
-      <h1>
-        Ingresos
-        <small>Consulta</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="<?php echo base_url("ingresos") ?>"><i class="fa fa-dashboard"></i> Ingresos</a></li>
-        <li class="active">Consultas</li>
-      </ol>
-    </section>-->
-
     <!-- Main content -->
-    <section class="content">
+<section class="content">
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
@@ -18,22 +7,22 @@
            
           <div class="text-right" class="btn-group" id="toolbar">
 
-            <a class="btn btn-primary btn-sm" href="<?php echo base_url("Ingresos/Compraslocales") ?>" target="_blank"><i class="fa fa-plus-circle fa-lg"></i>  ComprasLocales</a>
+            <a class="btn btn-primary  btn-sm hidden-xs" href="<?php echo base_url("Ingresos/Compraslocales") ?>" target="_blank"><i class="fa fa-plus-circle fa-lg"></i>  ComprasLocales</a>
 
-            <a class="btn btn-primary btn-sm" href="<?php echo base_url("Ingresos/Importaciones") ?>" target="_blank"><i class="fa fa-plus-circle fa-lg"></i>  IngresoImportaciones</a>
+            <a class="btn btn-primary btn-sm hidden-xs" href="<?php echo base_url("Ingresos/Importaciones") ?>" target="_blank"><i class="fa fa-plus-circle fa-lg"></i>  IngresoImportaciones</a>
 
-            <a class="btn btn-primary btn-sm" href="<?php echo base_url("Ingresos/anulacionEgresos") ?>") target="_blank"><i class="fa fa-plus-circle fa-lg"></i>  Anulacion Egresos</a>
+            <a class="btn btn-primary btn-sm hidden-xs" href="<?php echo base_url("Ingresos/anulacionEgresos") ?>") target="_blank"><i class="fa fa-plus-circle fa-lg"></i>  Anulacion Egresos</a>
           </div>  
 
           <div  id="toolbar2" class="form-inline">
-              <button  type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
+              <button  type="button" class="btn btn-primary col-sm-5 col-xs-12" id="fechapersonalizada">
                 <span>
                   <i class="fa fa-calendar"></i> Fecha
                 </span>
                   <i class="fa fa-caret-down"></i>
               </button>
 
-              <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
+              <select   class="btn btn-primary  col-sm-3 col-xs-12" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
                 <?php foreach ($almacen->result_array() as $fila): ?>
                 <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
                 <?php endforeach ?>
@@ -41,14 +30,14 @@
                 <option value="">TODOS</option>
               </select>
               
-              <select class="btn btn-primary btn-sm" name="tipo_filtro" id="tipo_filtro">
+              <select class="btn btn-primary  col-sm-3 col-xs-10" name="tipo_filtro" id="tipo_filtro">
                 <?php foreach ($tipoingreso->result_array() as $fila): ?>
                   <option value="<?= $fila['id'] ?>" <?= $fila['id']==2?"selected":""  ?>><?= strtoupper($fila['tipomov']) ?></option>
                 <?php endforeach ?>
                 <option value="">TODOS</option>
               </select>
 
-              <button  type="button" class="btn btn-primary btn-sm" id="refresh">
+              <button  type="button" class="btn btn-primary  col-sm-1 col-xs-2" id="refresh">
                 <span>
                   <i class="fa fa-refresh"></i>
                 </span>

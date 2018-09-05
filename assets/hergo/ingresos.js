@@ -97,8 +97,7 @@ function mostrarTablaIngresosTraspaso(res) {
         stickyHeader: true,
         stickyHeaderOffsetY: '50px',
         strictSearch: true,
-
-
+        showToggle:true,
 
         columns: [{
                 field: 'n',
@@ -227,6 +226,7 @@ function mostrarTablaIngresos(res) {
         stickyHeader: true,
         stickyHeaderOffsetY: '50px',
         strictSearch: true,
+        showToggle:true,
 
         columns: [{
                 field: 'n',
