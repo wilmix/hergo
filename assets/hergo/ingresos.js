@@ -227,7 +227,7 @@ function mostrarTablaIngresos(res) {
         stickyHeaderOffsetY: '50px',
         strictSearch: true,
         showToggle:true,
-
+        
         columns: [{
                 field: 'n',
                 title: 'N',
@@ -333,9 +333,15 @@ function mostrarTablaIngresos(res) {
                 title: "Estado",
                 sortable: true,
                 width:'100px',
-                searchable:false,
-                formatter: operateFormatter2,
+                searchable:true,
+                //formatter: operateFormatter2,
                 align: 'center',
+                cellStyle:cellStyle,
+                filter: {
+                    type: "select",
+                    filterShowClear:true,
+                    data: datosselect[4]
+                },
 
             },
             {
@@ -349,7 +355,40 @@ function mostrarTablaIngresos(res) {
         ]
     });
 }
+function cellStyle(value, row, index) {
+ 
+    if (row.estado =='PENDIENTE') {
+        return { 
+            css: {
+            "color":"red",
+            "text-decoration": "underline",
+            "font-weight": "bold",
+            "font-style": "italic"
+            } 
+        }
+     }else if (row.estado =='APROBADO'){
+        return { 
+            css: {
+            "color":"green",
+            "text-decoration": "underline",
+            "font-weight": "bold",
+            "font-style": "italic"
+            } 
+        }
 
+     } else {
+        return { 
+            css: {
+            "color":"orange",
+            "text-decoration": "underline",
+            "font-weight": "bold",
+            "font-style": "italic"
+            } 
+        }
+     }
+     return {};
+     
+}
 function retornarTablaIngresos() {
     ini = iniciofecha.format('YYYY-MM-DD')
     fin = finfecha.format('YYYY-MM-DD')
@@ -411,12 +450,12 @@ function operateFormatter(value, row, index) {
 function operateFormatter2(value, row, index) {
     $ret = ''
     if (row.anulado == 1) {
-        $ret = '<span class="label label-warning">ANULADO</span>';
+        $ret = '<span class="label label-warning">'+value+'</span>';
     } else {
-        if (value == 0)
-            $ret = '<span class="label label-danger">PENDIENTE</span>';
-        if (value == 1)
-            $ret = '<span class="label label-success">APROBADO</span>';
+        if (value == 'PENDIENTE')
+            $ret = '<span class="label label-danger">'+value+'</span>';
+        if (value == 'APROBADO')
+            $ret = '<span class="label label-success">'+value+'</span>';
     }
 
     return ($ret);
@@ -676,6 +715,7 @@ function restornardatosSelect(res) {
     var tipo = new Array()
     var autor = new Array()
     var origen = new Array()
+    let estado = new Array()
     var datos = new Array()
     $.each(res, function (index, value) {
 
@@ -683,6 +723,7 @@ function restornardatosSelect(res) {
         tipo.push(value.sigla)
         autor.push(value.autor)
         origen.push(value.origen)
+        estado.push(value.estado)
     })
     proveedor.sort();
     tipo.sort();
@@ -691,7 +732,8 @@ function restornardatosSelect(res) {
     datos.push(tipo.unique());
     datos.push(autor.unique());
     datos.push(origen.unique());
-    console.log(autor);
+    datos.push(estado.unique())
+    //console.log(estado);
     return (datos);
 }
 Array.prototype.unique = function (a) {
