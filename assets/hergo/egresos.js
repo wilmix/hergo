@@ -61,11 +61,14 @@ function mostrarTablaEgresosTraspasos(res) {
         data: res,
         striped: true,
         pagination: true,
-        pageSize: "100",
+        pageSize: "25",
         search: true,
-        //searchOnEnterKey:true,
         filter: true,
         showColumns: true,
+        stickyHeader: true,
+        stickyHeaderOffsetY: '50px',
+        strictSearch: true,
+        showToggle:true,
 
         columns: [{
                 field: 'n',
@@ -96,17 +99,6 @@ function mostrarTablaEgresosTraspasos(res) {
                 },
 
             },
-            /*{
-                field: 'factura',
-                title: "Factura",
-                width: '4%',
-                sortable: true,
-                //formatter:mostrarFactura,
-                filter: {
-                    type: "input"
-                }
-
-            },*/
             {
                 field: 'monedasigla',
                 title: "Mon",
@@ -118,8 +110,6 @@ function mostrarTablaEgresosTraspasos(res) {
                     type: "select",
                     data: ["$US", "BS."],
                 },
-                //formatter: operateFormatter3,
-                //filter: {type: "input"}
             },
             {
                 field: 'totalsus',
@@ -210,7 +200,6 @@ function mostrarTablaEgresos(res) {
         pagination: true,
         pageSize: "25",
         search: true,
-        //searchOnEnterKey:true,
         filter: true,
         showColumns: true,
         stickyHeader: true,
@@ -230,6 +219,7 @@ function mostrarTablaEgresos(res) {
                 title: 'N',
                 align: 'center',
                 sortable: true,
+                searchable: true,
             },
             {
                 field: 'fechamov',
@@ -689,16 +679,11 @@ function restornardatosSelect(res) {
         cliente.push(value.nombreCliente)
         destino.push(value.destino)
     })
-    //proveedor.sort();
-    //tipo.sort();
     autor.sort();
     cliente.sort();
-    //datos.push(proveedor.unique());
-    //datos.push(tipo.unique());
     datos.push(autor.unique());
     datos.push(cliente.unique());
     datos.push(destino.unique());
-    //console.log(cliente);
     return (datos);
 }
 Array.prototype.unique = function (a) {

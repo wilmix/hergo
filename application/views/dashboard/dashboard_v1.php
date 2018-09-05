@@ -82,8 +82,8 @@
             <!-- /.box-header -->
             <div class="box-body">
               <div class="row">
-                <div class="col-md-12">
-                  <div class="chart">
+                <div class="col-md-12 hidden-xs">
+                  <div class="chart hidden-xs">
                     <!-- Sales Chart Canvas -->
                     <canvas id="ventas" style="height: 180px; width: 645px;" width="645" height="180"></canvas>
                   </div>
