@@ -490,7 +490,7 @@ class Egresos extends CI_Controller
         	{
         		//$this->actualizarCostoArticuloEgreso($datos['tabla'],$datos['almacen_ne']);
 
-				echo json_encode($this->Egresos_model->guardarmovimiento_model($datos));			
+				echo json_encode("true");			
         	}
 			else
 			{				

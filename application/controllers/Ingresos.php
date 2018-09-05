@@ -642,7 +642,7 @@ class Ingresos extends CI_Controller
         	if($this->Ingresos_model->guardarmovimiento_model($datos))
         	{
         		//$this->retornarcostoarticulo_tabla($datos['tabla'],$datos['almacen_imp'],$datos['moneda_imp']); //se eliminaria el dato
-				echo json_encode($this->Ingresos_model->guardarmovimiento_model($datos));
+				echo json_encode("true");
         	}
 			else
 			{				
