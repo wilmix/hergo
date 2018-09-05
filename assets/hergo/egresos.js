@@ -139,7 +139,8 @@ function mostrarTablaEgresosTraspasos(res) {
                 width: '7%',
                 sortable: true,
                 align: 'center',
-                formatter: operateFormatter2,
+                cellStyle:cellStyle,
+                //formatter: operateFormatter2,
 
             },
             {
@@ -198,7 +199,7 @@ function mostrarTablaEgresos(res) {
         data: res,
         striped: true,
         pagination: true,
-        pageSize: "25",
+        pageSize: "100",
         search: true,
         filter: true,
         showColumns: true,
@@ -296,12 +297,16 @@ function mostrarTablaEgresos(res) {
                 },
             },
             {
-                field: "estado",
+                field: "estadoF",
                 title: "Estado",
                 width: '7%',
                 sortable: true,
                 align: 'center',
-                formatter: operateFormatter2,
+                cellStyle:cellStyle,
+                filter: {
+                    type: "select",
+                    data: datosselect[3]
+                },
 
             },
             {
@@ -344,8 +349,6 @@ function mostrarTablaEgresos(res) {
 }
 
 function retornarTablaEgresos() {
-
-
     ini = iniciofecha.format('YYYY-MM-DD')
     fin = finfecha.format('YYYY-MM-DD')
     alm = $("#almacen_filtro").val()
@@ -381,23 +384,71 @@ function retornarTablaEgresos() {
 
 }
 
+function cellStyle(value, row, index) {
+    if (row.anulado ==1) {
+        return { 
+            css: {
+                "color":"black",
+                "text-decoration": "underline overline",
+                "font-weight": "bold",
+                "font-style": "italic",
+                "padding-top": "15px",
+            } 
+        }
+     }else if (row.estadoF =='FACTURADO'){
+        return { 
+            css: {
+            "color":"green",
+            "text-decoration": "underline overline",
+            "font-weight": "bold",
+            "font-style": "italic",
+            "padding-top": "15px",
+            } 
+        }
+
+     } else if (row.estadoF =='NO FACTURADO') {
+        return { 
+            css: {
+            "color":"red",
+            "font-size": "80%",
+            "text-decoration": "underline overline",
+            "font-weight": "bold",
+            "font-style": "italic",
+            "padding-top": "15px",
+            } 
+        }
+     } else if (row.estadoF =='PARCIAL') {
+        return { 
+            css: {
+            "color":"blue",
+            "text-decoration": "underline overline",
+            "font-weight": "bold",
+            "font-style": "italic",
+            "padding-top": "15px",
+            } 
+        }
+     }
+     return {};
+     
+}
+
 function operateFormatter(value, row, index) {
     if (row.sigla == "ET")
         return [
-            '<button type="button" class="btn btn-default verEgreso" aria-label="Right Align">',
+            '<button type="button" class="btn btn-default verEgreso" aria-label="Right Align" data-toggle="tooltip" title="Ver">',
             '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-            '<button type="button" class="btn btn-default editarEgresoTraspaso" aria-label="Right Align">',
+            '<button type="button" class="btn btn-default editarEgresoTraspaso" aria-label="Right Align" data-toggle="tooltip" title="Modificar">',
             '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>',
-            '<button type="button" class="btn btn-default imprimirEgreso" aria-label="Right Align">',
+            '<button type="button" class="btn btn-default imprimirEgreso" aria-label="Right Align" data-toggle="tooltip" title="Imprimir">',
             '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
         ].join('');
     else
         return [
-            '<button type="button" class="btn btn-default verEgreso" aria-label="Right Align">',
+            '<button type="button" class="btn btn-default verEgreso" aria-label="Right Align" data-toggle="tooltip" title="Ver">',
             '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-            '<button type="button" class="btn btn-default editarEgreso" aria-label="Right Align">',
+            '<button type="button" class="btn btn-default editarEgreso" aria-label="Right Align" data-toggle="tooltip" title="Modificar">',
             '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>',
-            '<button type="button" class="btn btn-default imprimirEgreso" aria-label="Right Align">',
+            '<button type="button" class="btn btn-default imprimirEgreso" aria-label="Right Align" data-toggle="tooltip" title="Imprimir">',
             '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
         ].join('');
 }
@@ -459,7 +510,7 @@ window.operateEvents = {
     'click .editarEgresoTraspaso': function (e, value, row, index) {
         console.log(row.idIngresos);
         var editar = base_url("Traspasos/edicion/") + row.idEgresos;
-        if (row.estado == 0) {
+        if (row.estado == '') {
             window.location.href = editar;
         } else {
             swal("Error", "No se puede editar el registro seleccionado. El registro ya se encuentra Facturado.", "error")
@@ -671,19 +722,22 @@ function restornardatosSelect(res) {
     var cliente = new Array()
     var datos = new Array()
     var destino = new Array()
+    let estado = new Array()
+
     $.each(res, function (index, value) {
 
-        //proveedor.push(value.nombreproveedor)
-        //tipo.push(value.sigla)
         autor.push(value.autor)
         cliente.push(value.nombreCliente)
         destino.push(value.destino)
+        estado.push(value.estadoF)
     })
-    autor.sort();
-    cliente.sort();
-    datos.push(autor.unique());
-    datos.push(cliente.unique());
-    datos.push(destino.unique());
+    autor.sort()
+    cliente.sort()
+    estado.sort()
+    datos.push(autor.unique())
+    datos.push(cliente.unique())
+    datos.push(destino.unique())
+    datos.push(estado.unique())
     return (datos);
 }
 Array.prototype.unique = function (a) {

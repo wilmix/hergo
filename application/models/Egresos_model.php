@@ -12,7 +12,15 @@ class Egresos_model extends CI_Model
 	{
 		if($id==null) //no tiene id de entrada
         {
-		  $sql="SELECT *, SUM(total1) total, SUM( total1)/tipocambiovalor totalsus
+		  $sql="SELECT *, SUM(total1) total, SUM( total1)/tipocambiovalor totalsus,
+            CASE
+                WHEN anulado = 1 THEN 'ANULADO'
+                WHEN sigla = 'ET' THEN 'TRASPASO'
+                WHEN sigla = 'EB' THEN 'BAJA PRODUCTO'
+                WHEN estado = 0 THEN 'NO FACTURADO'
+                WHEN estado = 1 THEN 'FACTURADO'
+                WHEN estado = 2 THEN 'PARCIAL'	
+            END estadoF, estado
             FROM(
                     SELECT DISTINCTROW d.idingdetalle, e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, ( d.total) total1,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,c.documento,e.tipocambio, tc.tipocambio tipocambiovalor,f.nFactura,GROUP_CONCAT(DISTINCTROW f.nfactura SEPARATOR '-') factura 
                     FROM egresos e
@@ -46,9 +54,7 @@ class Egresos_model extends CI_Model
             ";
            
         }
-        else/*REVISAR!!!!!!!!!!!!!!!!!!SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
-                (SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio
-            FROM ingresos i*/
+        else
         {            
              $sql="SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  
             e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, 
@@ -82,8 +88,14 @@ class Egresos_model extends CI_Model
     {
         if($id==null) //no tiene id de entrada
         {
-          $sql="
-            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,c.documento,e.tipocambio, sum(d.total)/tc.tipocambio totalsus, a1.almacen destino
+          $sql="SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total, e.fecha, CONCAT(u.first_name,' ', u.last_name) autor,
+           e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,c.documento,e.tipocambio, sum(d.total)/tc.tipocambio totalsus, 
+           a1.almacen destino,
+           CASE
+                WHEN e.anulado = 1 THEN 'ANULADO'
+                WHEN t.sigla = 'ET' THEN 'TRASPASO'
+                WHEN t.sigla = 'EB' THEN 'BAJA PRODUCTO'
+            END estado
             FROM egresos e
             INNER JOIN egredetalle d
             on e.idegresos=d.idegreso

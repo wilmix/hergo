@@ -214,7 +214,7 @@ function retornarTablaFacturacion() {
 
                 },
 
-                {   //Estado poner Pagado - Pendiente - Anulado
+                {   
                     field: "estado",
                     title: "Estado",
                     sortable: true,
@@ -224,10 +224,12 @@ function retornarTablaFacturacion() {
                 },
                 {
                     field: "autor",
-                    title: "Responsable",
-                    sortable: true,
-                    searchable: false,
-                    align: 'center'
+                    title: "Vendedor",
+                    align: 'center',
+                    filter: {
+                        type: "select",
+                        data: datosselect[0]
+                    }
                 },
                 {
                     field: "fecha",
@@ -236,7 +238,6 @@ function retornarTablaFacturacion() {
                     visible: false,
                     searchable: false,
                     align: 'center',
-                    //formatter: formato_fecha_corta,
                 },
                 {
                     title: 'Acciones',
@@ -259,19 +260,20 @@ function retornarTablaFacturacion() {
 }
 
 function restornardatosSelect(res) {
-    var numeroFactura = new Array()
-    var cliente = new Array()
-    var datos = new Array()
+    let cliente = new Array()
+    let vendedor = new Array()
+    let datos = new Array()
     $.each(res, function (index, value) {
 
-        numeroFactura.push(value.n)
         cliente.push(value.nombreCliente)
+        vendedor.push(value.autor)
     })
-    numeroFactura.sort();
-    cliente.sort();
-    datos.push(numeroFactura.unique());
-    datos.push(cliente.unique());
-    return (datos);
+    vendedor.sort()
+    cliente.sort()
+    datos.push(vendedor.unique())
+    datos.push(cliente.unique())
+    console.log(datos);
+    return (datos)
 }
 Array.prototype.unique = function (a) {
     return function () { return this.filter(a) }

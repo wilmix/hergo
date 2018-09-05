@@ -91,8 +91,6 @@ function retornarTablaFacturacion()
             showColumns:true,
             strictSearch: true,
             showToggle:true,
-
-
             columns: [            
             {
                 field: 'lote',                
@@ -178,13 +176,15 @@ function retornarTablaFacturacion()
                 searchable: false,
             },
             {
-                field:'pagada',
+                field:'pagadaF',
                 title:"Pagado",
                 sortable:true,
                 align: 'center',
-                searchable: false,
-                formatter: formatoFacturaPagada,
-            
+                cellStyle:cellStyle,
+                filter: {
+                    type: "select",
+                    data: datosselect[2]
+                }
             },           
             {
                 title: 'Acciones',
@@ -203,22 +203,71 @@ function retornarTablaFacturacion()
     });
 }
 
+function cellStyle(value, row, index) {
+    if (row.anulada ==1) {
+        return { 
+            css: {
+                "color":"black",
+                "text-decoration": "underline overline",
+                "font-weight": "bold",
+                "font-style": "italic",
+                "padding-top": "15px",
+            } 
+        }
+     }else if (row.pagadaF =='PAGADA'){
+        return { 
+            css: {
+            "color":"green",
+            "text-decoration": "underline overline",
+            "font-weight": "bold",
+            "font-style": "italic",
+            "padding-top": "15px",
+            } 
+        }
+
+     } else if (row.pagadaF =='NO PAGADA') {
+        return { 
+            css: {
+            "color":"red",
+            "font-size": "90%",
+            "text-decoration": "underline overline",
+            "font-weight": "bold",
+            "font-style": "italic",
+            "padding-top": "15px",
+            } 
+        }
+     } else if (row.pagadaF =='PAGO PARCIAL') {
+        return { 
+            css: {
+            "color":"blue",
+            "text-decoration": "underline overline",
+            "font-size": "90%",
+            "font-weight": "bold",
+            "font-style": "italic",
+            "padding-top": "15px",
+            } 
+        }
+     }
+     return {};
+     
+}
+
 function restornardatosSelect(res)
 {
     let cliente = new Array()
     let vendedor = new Array()
+    let estado = new Array()
     let datos =new Array()
     $.each(res, function(index, value){
-
         cliente.push(value.ClienteFactura)
         vendedor.push(value.vendedor)
-        
+        estado.push(value.pagadaF)
     })
     cliente.sort();
     vendedor.sort();
-    datos.push(cliente.unique());
-    datos.push(vendedor.unique());
-    
+    datos.push(cliente.unique())
+    datos.push(vendedor.unique())
+    datos.push(estado.unique())
     return(datos);
 }
 Array.prototype.unique = function (a) {
@@ -281,26 +330,7 @@ function formatoBotones(value, row, index)
     }
     
 }
-function formatoEstadoFactura(value, row, index)
-{
-    $ret=''
 
-    if(row.anulada==1)
-    {        
-        $ret='<span class="label label-warning">ANULADO</span>';
-    }
-    else
-    {
-        if(value==0)
-            $ret='<span class="label label-danger">No facturado</span>';
-        if(value==1)
-            $ret='<span class="label label-success">T. Facturado</span>';
-        if(value==2)
-            $ret='<span class="label label-info">Facturado Parcial</span>';
-    }
-    
-    return ($ret);
-}
 function formatoFacturaPagada(value, row, index)
 {
     $ret=''

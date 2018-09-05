@@ -212,7 +212,6 @@ class Egresos extends CI_Controller
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
 
-		//nuevo para BAJA DE PRODUCTO
 	public function BajaProducto()
 	{
 		$this->libacceso->acceso(18);
@@ -292,17 +291,17 @@ class Egresos extends CI_Controller
 		}
 	}
 
-	public function editarEgresos($id=null)//cambiar nombre a editar ingresos!!!!
+	public function editarEgresos($id=null)
 	{
-        //if("si no esta autorizado a editar redireccionar o enviar error!!!!")
+        $this->libacceso->acceso(43);
         if($id==null) redirect("error");
         if(!$this->Egresos_model->puedeeditar($id)) redirect("error");
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
 			$this->datos['menu']="Egresos";
-			$this->datos['opcion']="Editar Egresos";
-			$this->datos['titulo']="Editar";
+			$this->datos['opcion']="Modificar Egresos";
+			$this->datos['titulo']="Modificar";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;

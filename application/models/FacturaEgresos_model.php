@@ -30,9 +30,16 @@ class FacturaEgresos_model extends CI_Model
 	
 	public function Listar($ini,$fin,$alm=0,$tipo=0)
 	{
-		$sql="SELECT f.`idFactura`, f.`lote`, df.`manual`, f.`nFactura`, f.`fechaFac`, f.`ClienteNit`, f.`ClienteFactura`,  t.`sigla`, f.`total`, f.`pagada`,
-		CONCAT(u.first_name,' ', u.last_name) AS vendedor, f.`anulada`, f.fecha,
-		GROUP_CONCAT(DISTINCT e.nmov ORDER BY e.nmov ASC SEPARATOR ' - ') AS movimientos, f.glosa
+		$sql="SELECT f.`idFactura`, f.`lote`, df.`manual`, f.`nFactura`, f.`fechaFac`, f.`ClienteNit`, f.`ClienteFactura`,  t.`sigla`, 
+		f.`total`, CONCAT(u.first_name,' ', u.last_name) AS vendedor, f.`anulada`, f.fecha,
+		GROUP_CONCAT(DISTINCT e.nmov ORDER BY e.nmov ASC SEPARATOR ' - ') AS movimientos, f.glosa,
+		f.`pagada`, 
+		CASE
+			WHEN f.`anulada` = 1 THEN 'ANULADA'
+			WHEN f.`pagada` = 0 THEN 'NO PAGADA'
+			WHEN f.`pagada` = 1 THEN 'PAGADA'
+			WHEN f.`pagada` = 2 THEN 'PAGO PARCIAL'
+		END pagadaF
 		FROM factura_egresos fe 
 		INNER JOIN egresos e on e.idegresos=fe.idegresos
 		INNER JOIN factura f on f.idFactura=fe.idFactura

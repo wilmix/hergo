@@ -534,7 +534,7 @@ function verdetalle(fila) {
             /***pendienteaprobado***/
             var boton = "";
 
-            if (fila.estado == "0"){
+            if (fila.estado == "PENDIENTE"){
                 boton = '<button type="button" class="btn btn-success" datastd="' + fila.idIngresos + '" id="btnaprobado">Aprobado</button>';
             } else {
                 boton = '<button type="button" class="btn btn-danger" datastd="' + fila.idIngresos + '" id="btnpendiente">Pendiente</button>';
