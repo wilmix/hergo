@@ -194,7 +194,7 @@ function mostrarTablaIngresosTraspaso(res) {
                 field: "estado",
                 title: "Estado",
                 sortable: true,
-                formatter: operateFormatter2,
+                cellStyle:cellStyle,
                 align: 'center',
                 width:'100px',
                 searchable: false,
@@ -334,7 +334,6 @@ function mostrarTablaIngresos(res) {
                 sortable: true,
                 width:'100px',
                 searchable:true,
-                //formatter: operateFormatter2,
                 align: 'center',
                 cellStyle:cellStyle,
                 filter: {
