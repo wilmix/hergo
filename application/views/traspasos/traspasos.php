@@ -3,9 +3,7 @@
     <div class="box">
       <div class="box-body">
         <div class="text-right" class="btn-group" id="toolbar">
-
           <a class="btn btn-primary btn-sm" href="<?php echo base_url("Traspasos/traspasoEgreso") ?>" target="_blank"><i class="fa fa-plus-circle fa-lg"></i>  Traspasos</a>
-
         </div>
 
             <div  id="toolbar2" class="form-inline">
@@ -17,29 +15,14 @@
                 <i class="fa fa-caret-down"></i>
              </button>
 
-
-             <!-- <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
-                <?php foreach ($almacen->result_array() as $fila): ?>
-                <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
-                <?php endforeach ?>
-                <option value="">TODOS</option>
-
-              </select>
-              
-              <select class="btn btn-primary btn-sm" name="tipo_filtro" id="tipo_filtro">
-                <?php foreach ($tipoingreso->result_array() as $fila): ?>
-                  <option value="<?= $fila['id'] ?>" <?= $fila['id']==7?"selected":""  ?>><?= strtoupper($fila['tipomov']) ?></option>
-                <?php endforeach ?>
-                <option value="">TODOS</option>
-                 
-              </select>-->
-
+             <button  type="button" class="btn btn-primary btn-sm " id="refresh">
+                <span>
+                  <i class="fa fa-refresh"></i>
+                </span>
+              </button>
            </div>
-
           <table 
-            id="tTraspasos"
-            data-toolbar="#toolbar2"
-            data-height="550">
+            id="tTraspasos">
           </table>
 
       </div>

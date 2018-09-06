@@ -57,6 +57,9 @@ $(document).on("change","#almacen_filtro",function(){
 $(document).on("change","#tipo_filtro",function(){
     retornarTablaTraspasos();
 })
+$(document).on("click", "#refresh", function () {
+    retornarTablaTraspasos();
+})
 
 
 function retornarTablaTraspasos()
@@ -125,7 +128,7 @@ function retornarTablaTraspasos()
                 filter: {
                         type: "select",
                         data: datosselect[1]
-                    }
+                }
             },
             {
                 field:'total',
@@ -136,16 +139,15 @@ function retornarTablaTraspasos()
                 searchable:false,
             },  
             {
-                field:"estado",
+                field:"estadoT",
                 title:"Estado",
                 sortable:true,
-                align: 'center',                    
+                align: 'center',  
+                cellStyle:cellStyle,                  
                 filter: {
                     type: "select",
-                    data: ["Pendiente", "Aprobado"],
-                        },
-                formatter: operateFormatter2,
-                searchable:false,
+                    data: datosselect[2]
+                },
             },                  
             
             {
@@ -179,6 +181,42 @@ function operateFormatter(value, row, index)
         '<button type="button" class="btn btn-default verTraspaso" aria-label="Right Align">',
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',        
     ].join('');
+}
+function cellStyle(value, row, index) {
+    if (row.estadoT =='PENDIENTE') {
+        return { 
+            css: {
+            "color":"red",
+            "text-decoration": "underline overline",
+            "font-weight": "bold",
+            "font-style": "italic",
+            "padding-top": "15px",
+            } 
+        }
+     }else if (row.estadoT =='APROBADO'){
+        return { 
+            css: {
+            "color":"green",
+            "text-decoration": "underline overline",
+            "font-weight": "bold",
+            "font-style": "italic",
+            "padding-top": "15px",
+            } 
+        }
+
+     } else {
+        return { 
+            css: {
+            "color":"black",
+            "text-decoration": "underline overline",
+            "font-weight": "bold",
+            "font-style": "italic",
+            "padding-top": "15px",
+            } 
+        }
+     }
+     return {};
+     
 }
 
 function operateFormatter2(value, row, index)
@@ -368,20 +406,23 @@ function mostrarDetalle(res)
 function restornardatosSelect(res)
 {
 
-    var origen = new Array()
-    var destino = new Array()
-    
-    var datos =new Array()
+    let origen = new Array()
+    let destino = new Array()
+    let estado = new Array()
+    let datos =new Array()
     $.each(res, function(index, value){
 
         origen.push(value.origen)
         destino.push(value.destino)
+        estado.push(value.estadoT)
     })
-    origen.sort();
-    destino.sort();
-   
-    datos.push(origen.unique());
-    datos.push(destino.unique());    
+    origen.sort()
+    destino.sort()
+    estado.sort()
+    datos.push(origen.unique())
+    datos.push(destino.unique())
+    datos.push(estado.unique())
+    console.log(datos);    
     return(datos);
 }
 Array.prototype.unique=function(a){

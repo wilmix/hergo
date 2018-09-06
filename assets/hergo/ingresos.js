@@ -355,7 +355,6 @@ function mostrarTablaIngresos(res) {
     });
 }
 function cellStyle(value, row, index) {
- 
     if (row.estado =='PENDIENTE') {
         return { 
             css: {
