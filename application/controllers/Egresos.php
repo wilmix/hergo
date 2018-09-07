@@ -122,7 +122,7 @@ class Egresos extends CI_Controller
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/notasEntrega.js');
-			$this->datos['cabeceras_script'][]=base_url('assets\hergo\modalClientesEgreso.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/modalClientesEgreso.js');
             /**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
@@ -181,7 +181,7 @@ class Egresos extends CI_Controller
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/notasEntrega.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/clientes.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/modalClientesEgreso.js');
             /**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
@@ -193,7 +193,7 @@ class Egresos extends CI_Controller
 			$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
             $this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
 		  	$this->datos['fecha']=date('Y-m-d');
-		  	$this->datos['clientes']=$this->Ingresos_model->retornar_tabla("clientes");
+		  	//$this->datos['clientes']=$this->Ingresos_model->retornar_tabla("clientes");
 		  	$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
 		  	$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
 		  	//clientes
