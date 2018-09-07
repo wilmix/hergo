@@ -228,7 +228,7 @@ input[type=date]::-webkit-inner-spin-button {
                   <input type="text" class="form-control" id="obs_ne" name="obs_ne" value="<?= ($cont)?$dcab->obs:''  ?>" />
               </div>
                 <hr>
-            </div>
+             </div>
             <hr>
             <div class="row">
                 <div class="col-xs-12">

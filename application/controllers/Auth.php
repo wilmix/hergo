@@ -77,11 +77,11 @@ class Auth extends CI_Controller {
 			// redirect them to the login page
 			redirect('auth/login', 'refresh');
 		}
-		elseif (!$this->ion_auth->is_admin()) // remove this elseif if you want to enable this for non-admins
+		/*elseif (!$this->ion_auth->is_admin()) // remove this elseif if you want to enable this for non-admins
 		{
 			// redirect them to the home page because they must be an administrator to view this
 			return show_error('You must be an administrator to view this page.');
-		}
+		}*/
 		else
 		{
 			// set the flash data error message if there is one
@@ -507,9 +507,10 @@ class Auth extends CI_Controller {
 	public function create_user()
     {
 		$this->libacceso->acceso(36);
-        $this->data['title'] = $this->lang->line('create_user_heading');
+		$this->data['title'] = $this->lang->line('create_user_heading');
+		//if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
 
-        if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
+        if (!$this->ion_auth->logged_in())
         {
             redirect('auth', 'refresh');
         }
@@ -590,7 +591,7 @@ class Auth extends CI_Controller {
                 'id'    => 'email',
                 'type'  => 'text',
                 'value' => $this->form_validation->set_value('email'),
-                 'placeholder' => 'Correo',//modificado para bootstrap
+                'placeholder' => 'Correo',//modificado para bootstrap
                 'class' => 'form-control',//modificado para bootstrap
             );
             $this->data['company'] = array(
@@ -598,7 +599,7 @@ class Auth extends CI_Controller {
                 'id'    => 'company',
                 'type'  => 'text',
                 'value' => $this->form_validation->set_value('company'),
-                 'placeholder' => 'Cargo',//modificado para bootstrap
+                'placeholder' => 'Cargo',//modificado para bootstrap
                 'class' => 'form-control',//modificado para bootstrap
             );
             $this->data['phone'] = array(

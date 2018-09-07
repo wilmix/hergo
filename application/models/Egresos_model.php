@@ -606,7 +606,9 @@ class Egresos_model extends CI_Model
     }
     public function retornar_tablaUsers()
     {
-        $sql="SELECT id, CONCAT(first_name, ' ', last_name) AS nombre, almacen FROM users";
+        $sql="SELECT id, CONCAT(first_name, ' ', last_name) AS nombre, almacen 
+        FROM users
+        WHERE active = 1";
         $query=$this->db->query($sql);
         return $query;
     }

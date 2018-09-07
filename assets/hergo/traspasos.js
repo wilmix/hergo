@@ -178,7 +178,7 @@ function retornarTablaTraspasos()
 function operateFormatter(value, row, index)
 {
     return [
-        '<button type="button" class="btn btn-default verTraspaso" aria-label="Right Align">',
+        '<button type="button" class="btn btn-default verTraspaso" aria-label="Right Align" data-toggle="tooltip" title="Ver">',
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',        
     ].join('');
 }
