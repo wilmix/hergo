@@ -64,7 +64,7 @@ $(document).ready(function(){
  $( function() {
     $("#articulo_imp").autocomplete(
     {      
-      minLength: 1,
+      minLength: 2,
       autoFocus: true,
       source: function (request, response) {        
         $("#cargandocodigo").show(150)
