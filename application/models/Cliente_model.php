@@ -17,7 +17,8 @@ class Cliente_model extends CI_Model
 		INNER JOIN clientetipo cl
 		ON cl.idClienteTipo=c.idClientetipo
 		INNER JOIN users u
-		ON u.id=c.autor";
+		ON u.id=c.autor
+		ORDER BY c.idCliente DESC ";
 		
 		$query=$this->db->query($sql);		
 		return $query;
@@ -40,7 +41,7 @@ class Cliente_model extends CI_Model
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
-		$sql="UPDATE clientes SET idDocumentoTipo='$tipo_doc', documento='$carnet', nombreCliente='$nombre_cliente', idClientetipo='$clientetipo', direccion='$direccion', telefono='$phone', fax='$fax', email='$email', web='$website', autor='$autor', fecha='$fecha' WHERE idCliente=$id";
+		$sql="UPDATE clientes SET idDocumentoTipo='$tipo_doc', documento='$carnet', nombreCliente=UPPER('$nombre_cliente'), idClientetipo='$clientetipo', direccion='$direccion', telefono='$phone', fax='$fax', email='$email', web='$website', autor='$autor', fecha='$fecha' WHERE idCliente=$id";
 		$query=$this->db->query($sql);		
 	}
 	public function obtenerCliente($id)

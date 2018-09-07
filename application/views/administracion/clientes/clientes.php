@@ -57,7 +57,6 @@
                           <?php foreach ($tipodocumento->result_array() as $fila):  ?>
                             <option value="<?= $fila['idDocumentoTipo'] ?>"><?= $fila['documentotipo']?></option>
                           <?php endforeach ?>
-                         
                         </select>
                       </div>
                     </div>

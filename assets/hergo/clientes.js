@@ -1,8 +1,7 @@
  $(document).ready(function() {
     retornarTablaClientes()
     $('#form_clientes').bootstrapValidator({
-        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
-             feedbackIcons: {
+            feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',
             invalid: 'glyphicon glyphicon-remove',
             validating: 'glyphicon glyphicon-refresh'
@@ -22,7 +21,7 @@
                     },
                         between: {
                             min: 1111,
-                            max: 999999999999,
+                            max: 9999999999999999,
                             message: 'Igrese un CI o NIT válido'
                         }
                     }
@@ -35,6 +34,13 @@
                     },
                         notEmpty: {
                         message: 'Campo obligatorio'
+                    }
+                }
+            },
+            clientetipo: {
+                validators: {
+                    notEmpty: {
+                        message: 'Selecciona NIT o CI'
                     }
                 }
             },
@@ -53,15 +59,7 @@
                     }
                 }
             },
-          
-         /* website: {
-                validators: {
-                    uri: {
-                        message: 'The website address is not valid'
-                    }
-                }
-            },*/
-        
+      
           
           phone: {
                     validators: {
@@ -113,7 +111,7 @@ function mostrarModal(fila)
     console.log(fila)
     $("#id_cliente").val(fila.idCliente)
     $(".modallineatitulo").html("Editar Cliente")
-    asignarselect(fila.documentoTipo,"#tipo_doc")
+    asignarselect(fila.documentotipo,"#tipo_doc")
     $("#carnet").val(fila.documento)
     $("#nombre_cliente").val(fila.nombreCliente)
     asignarselect(fila.clientetipo,"#clientetipo")
@@ -123,7 +121,7 @@ function mostrarModal(fila)
     $("#email").val(fila.email)
     $("#website").val(fila.web)
 
-    $(".bguardar").html("Editar")
+    $(".bguardar").html("Guardar")
     $('#modalcliente').modal('show');
     
   
@@ -157,11 +155,13 @@ function retornarTablaClientes()
             {   
                 field: 'idCliente',            
                 title: 'id',
-                visible:false,
+                visible:true,
+                sortable:true,
             },  
             {   
-                field: 'documentoTipo',            
+                field: 'documentotipo',            
                 title: 'Tipo Documento',
+                searchable: false,
                             
             },         
             {
@@ -179,49 +179,57 @@ function retornarTablaClientes()
                 title:"Tipo Cliente",
                 sortable:true,
                 visible:false,
+                searchable: false,
             },
             {
                 field:"direccion",
                 title:"Direccion",
                 sortable:true,
                 visible:false,
+                searchable: false,
             },
             {
                 field:"email",
                 title:"Email",
                 sortable:true,
                 visible:false,
+                searchable: false,
             },
             {
                 field:"web",
                 title:"Web",
                 sortable:true,
                 visible:false,
+                searchable: false,
             },
             {
                 field:"telefono",
                 title:"Telefono",
                 sortable:true,
                 visible:false,
+                searchable: false,
             },
             {
                 field:"fax",
                 title:"Fax",
                 sortable:true,
                 visible:false,
+                searchable: false,
             },
             {
                 field:"fecha",
                 title:"Fecha",
                 sortable:true,
                 visible:false,
+                searchable: false,
                 formatter: formato_fecha
             },          
             {
                 field:"autor",
                 title:"Autor",
                 sortable:true,
-                visible:false,
+                visible:true,
+                searchable: false,
             },          
             {               
                 title: 'Editar',
