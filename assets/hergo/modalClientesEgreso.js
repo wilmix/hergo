@@ -14,53 +14,60 @@ $(document).ready(function () {
                         }
                     }
                 },
-                carnet: {
-                    validators: {
-                        notEmpty: {
+              carnet: {
+                        validators: {
+                          notEmpty: {
                             message: 'Campo obligatorio'
                         },
-                        between: {
-                            min: 1111,
-                            max: 999999999999,
-                            message: 'Igrese un CI o NIT válido'
+                            between: {
+                                min: 1111,
+                                max: 9999999999999999,
+                                message: 'Igrese un CI o NIT válido'
+                            }
                         }
-                    }
-                },
+                    },
                 nombre_cliente: {
                     validators: {
-                        stringLength: {
+                            stringLength: {
                             min: 2,
                             message: 'Ingrese nombre válido'
                         },
-                        notEmpty: {
+                            notEmpty: {
                             message: 'Campo obligatorio'
                         }
                     }
                 },
-                direccion: {
+                clientetipo: {
                     validators: {
-                        stringLength: {
+                        notEmpty: {
+                            message: 'Selecciona NIT o CI'
+                        }
+                    }
+                },
+              direccion: {
+                    validators: {
+                         stringLength: {
                             min: 5,
                             message: 'Ingrese dirección válida'
                         },
                     }
                 },
-                email: {
+                 email: {
                     validators: {
-                        emailAddress: {
+                            emailAddress: {
                             message: 'Ingrese un email válido'
                         }
                     }
                 },
-                phone: {
-                    validators: {
-                        between: {
-                            min: 1111,
-                            max: 99999999,
-                            message: 'Igrese número de telefono valido'
+              phone: {
+                        validators: {
+                             between: {
+                                min: 1111,
+                                max: 99999999,
+                                message: 'Igrese número de telefono valido'
+                            }
                         }
-                    }
-                },
+                    },
             }
         })
         .on('success.form.bv', function (e) {
@@ -92,20 +99,3 @@ $(document).on("click", "#botonmodalcliente", function () {
 $(document).on("click", ".botoncerrarmodal", function () {
     resetForm('#form_clientes')
 })
-function mostrarModal(fila) {
-    console.log(fila)
-    $("#id_cliente").val(fila.idCliente)
-    $(".modallineatitulo").html("Editar Cliente")
-    asignarselect(fila.documentoTipo, "#tipo_doc")
-    $("#carnet").val(fila.documento)
-    $("#nombre_cliente").val(fila.nombreCliente)
-    asignarselect(fila.clientetipo, "#clientetipo")
-    $("#direccion").val(fila.direccion)
-    $("#phone").val(fila.telefono)
-    $("#fax").val(fila.fax)
-    $("#email").val(fila.email)
-    $("#website").val(fila.web)
-    $(".bguardar").html("Editar")
-    $('#modalcliente').modal('show');
-}
-
