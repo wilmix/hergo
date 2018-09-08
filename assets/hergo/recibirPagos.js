@@ -456,6 +456,7 @@ var vmPago = new Vue({
                 this.guardar=false;
         },
         agregarPago:function(row){
+            
             if(this.porPagar.length>0)
             {                
                 if(this.porPagar.map((el) => el.nFactura).indexOf(row.nFactura)>=0)
@@ -507,6 +508,10 @@ var vmPago = new Vue({
             };
             let  numPago = this.numPago;
             let clientes = datos.porPagar.map(p=>p.cliente)
+            if (clientes == 0) {
+                quitarcargando();
+                swal("Error", "No se puede guardar el pago","error");
+            }
             let cliente = clientes.reduce( (a,b) => a==b )
             if (cliente) {
                 datos.cliente=clientes[0]
@@ -514,7 +519,7 @@ var vmPago = new Vue({
             }
             console.log(datos);
             datosAjax=JSON.stringify(datos);
-            if(!this.guardar)
+            if(!this.guardar ||  vmPago.$children[1].editing == true || datos=={})
             {
                 quitarcargando();
                 swal("Error", "No se puede guardar el pago","error");
@@ -643,6 +648,10 @@ var vmPago = new Vue({
             };
             
             let clientes = datos.porPagar.map(p=>p.cliente)
+            if (clientes == 0) {
+                quitarcargando();
+                swal("Error", "No se puede guardar el pago","error");
+            }
             let cliente = clientes.reduce( (a,b) => a==b )
             if (cliente) {
                 datos.cliente=clientes[0]
@@ -650,7 +659,8 @@ var vmPago = new Vue({
                 
             }
             datosAjx=JSON.stringify(datos);
-            if(!this.guardar)
+            console.log(vmPago.$children[1].editing);
+            if(!this.guardar || vmPago.$children[1].editing == true)
             {
                 quitarcargando();
                 swal("Error", "No se puede guardar el pago","error");
