@@ -70,7 +70,8 @@ class Reportes extends CI_Controller
 
 	        /*************DATERANGEPICKER**********/
 	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
+			
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
@@ -78,7 +79,10 @@ class Reportes extends CI_Controller
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+			
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.js');
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
@@ -964,5 +968,66 @@ class Reportes extends CI_Controller
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
+	}
+
+	public function reporteIngresos()
+	{
+		//$this->libacceso->acceso(41);
+		if(!$this->session->userdata('logeado'))
+			redirect('auth', 'refresh');
+
+			$this->datos['menu']="Reportes";
+			$this->datos['opcion']="Reporte Ingresos";
+			$this->datos['titulo']="Reporte Ingresos";
+
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
+			/*************AUTOCOMPLETE**********/
+            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
+	        /*************DATERANGEPICKER**********/
+	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
+			/**************FUNCION***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/reporteIngresos.js'); 				
+			/**************INPUT MASK***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+			//$this->datos['linea']=$this->Reportes_model->retornar_tabla("linea");
+			$this->datos['tipoingreso']=$this->Reportes_model->retornar_tablaMovimiento("+");
+			/*echo '<pre>';
+			print_r($this->Reportes_model->retornarArticulos()->result());
+			echo '</pre>';*/
+
+			$this->load->view('plantilla/head.php',$this->datos);
+			$this->load->view('plantilla/header.php',$this->datos);
+			$this->load->view('plantilla/menu.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('reportes/reporteIngresos.php',$this->datos);
+			$this->load->view('plantilla/footcontainer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
+	}
+	public function mostrarReporteIngreso()  //******cambiar a funcion del modelo
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$ini=$this->security->xss_clean($this->input->post("i"));//fecha inicio
+        	$fin=$this->security->xss_clean($this->input->post("f"));//FECHA FIN
+			$alm=$this->security->xss_clean($this->input->post("a")); //almacen
+			$ti=$this->security->xss_clean($this->input->post("ti"));//tipo de ingreso
+			$res=$this->Reportes_model->mostrarReporteIngreso($ini,$fin,$alm,$ti); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+			$res=$res->result_array();
+			//$res=$ini.' '.$fin.' '.$alm.' '.$ti;
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+		
 	}
 }

@@ -1,243 +1,218 @@
 /**
- * @author: Dennis Hernández
- * @webSite: http://djhvscf.github.io/Blog
- * @version: v1.1.0
+ * @author: Yura Knoxville
+ * @version: v1.0.0
  */
 
 !function ($) {
 
     'use strict';
 
-    var originalRowAttr,
-        dataTTId = 'data-tt-id',
-        dataTTParentId = 'data-tt-parent-id',
-        obj = {},
-        parentId = undefined;
+    var initBodyCaller,
+        tableGroups;
 
-    var getParentRowId = function (that, id) {
-        var parentRows = that.$body.find('tr').not('[' + 'data-tt-parent-id]');
+    // it only does '%s', and return '' when arguments are undefined
+    var sprintf = function (str) {
+        var args = arguments,
+            flag = true,
+            i = 1;
 
-        for (var i = 0; i < parentRows.length; i++) {
-            if (i === id) {
-                return $(parentRows[i]).attr('data-tt-id');
+        str = str.replace(/%s/g, function () {
+            var arg = args[i++];
+
+            if (typeof arg === 'undefined') {
+                flag = false;
+                return '';
             }
-        }
-
-        return undefined;
-    };
-
-    var sumData = function (that, data) {
-        var sumRow = {};
-        $.each(data, function (i, row) {
-            if (!row.IsParent) {
-                for (var prop in row) {
-                    if (!isNaN(parseFloat(row[prop]))) {
-                        if (that.columns[that.fieldsColumnsIndex[prop]].groupBySumGroup) {
-                            if (sumRow[prop] === undefined) {
-                                sumRow[prop] = 0;
-                            }
-                            sumRow[prop] += +row[prop];
-                        }
-                    }
-                }
-            }
+            return arg;
         });
-        return sumRow;
+        return flag ? str : '';
     };
 
-    var rowAttr = function (row, index) {
-        //Call the User Defined Function
-        originalRowAttr.apply([row, index]);
-
-        obj[dataTTId.toString()] = index;
-
-        if (!row.IsParent) {
-            obj[dataTTParentId.toString()] = parentId === undefined ? index : parentId;
-        } else {
-            parentId = index;
-            delete obj[dataTTParentId.toString()];
-        }
-
-        return obj;
-    };
-
-    var setObjectKeys = function () {
-        // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
-        Object.keys = function (o) {
-            if (o !== Object(o)) {
-                throw new TypeError('Object.keys called on a non-object');
-            }
-            var k = [],
-                p;
-            for (p in o) {
-                if (Object.prototype.hasOwnProperty.call(o, p)) {
-                    k.push(p);
-                }
-            }
-            return k;
-        }
-    };
-
-    var getDataArrayFromItem = function (that, item) {
-        var itemDataArray = [];
-        for (var i = 0; i < that.options.groupByField.length; i++) {
-            itemDataArray.push(item[that.options.groupByField[i]]);
-        }
-
-        return itemDataArray;
-    };
-
-    var getNewRow = function (that, result, index) {
-        var newRow = {};
-        for (var i = 0; i < that.options.groupByField.length; i++) {
-            newRow[that.options.groupByField[i].toString()] = result[index][0][that.options.groupByField[i]];
-        }
-
-        newRow.IsParent = true;
-
-        return newRow;
-    };
-
-    var groupBy = function (array, f) {
+    var groupBy = function (array , f) {
         var groups = {};
-        $.each(array, function (i, o) {
-            var group = JSON.stringify(f(o));
+        array.forEach(function(o) {
+            var group = f(o);
             groups[group] = groups[group] || [];
             groups[group].push(o);
         });
-        return Object.keys(groups).map(function (group) {
-            return groups[group];
-        });
-    };
 
-    var makeGrouped = function (that, data) {
-        var newData = [],
-            sumRow = {};
-
-        var result = groupBy(data, function (item) {
-            return getDataArrayFromItem(that, item);
-        });
-
-        for (var i = 0; i < result.length; i++) {
-            result[i].unshift(getNewRow(that, result, i));
-            if (that.options.groupBySumGroup) {
-                sumRow = sumData(that, result[i]);
-                if (!$.isEmptyObject(sumRow)) {
-                    result[i].push(sumRow);
-                }
-            }
-        }
-
-        newData = newData.concat.apply(newData, result);
-
-        if (!that.options.loaded && newData.length > 0) {
-            that.options.loaded = true;
-            that.options.originalData = that.options.data;
-            that.options.data = newData;
-        }
-
-        return newData;
+        return groups;
     };
 
     $.extend($.fn.bootstrapTable.defaults, {
         groupBy: false,
-        groupByField: [],
-        groupBySumGroup: false,
-        groupByInitExpanded: undefined, //node, 'all'
-        //internal variables
-        loaded: false,
-        originalData: undefined
-    });
-
-    $.fn.bootstrapTable.methods.push('collapseAll', 'expandAll', 'refreshGroupByField');
-
-    $.extend($.fn.bootstrapTable.COLUMN_DEFAULTS, {
-        groupBySumGroup: false
+        groupByField: ''
     });
 
     var BootstrapTable = $.fn.bootstrapTable.Constructor,
-        _init = BootstrapTable.prototype.init,
-        _initData = BootstrapTable.prototype.initData;
+        _initSort = BootstrapTable.prototype.initSort,
+        _initBody = BootstrapTable.prototype.initBody,
+        _updateSelected = BootstrapTable.prototype.updateSelected;
 
-    BootstrapTable.prototype.init = function () {
-        //Temporal validation
-        if (!this.options.sortName) {
-            if ((this.options.groupBy) && (this.options.groupByField.length > 0)) {
-                var that = this;
+    BootstrapTable.prototype.initSort = function () {
+        _initSort.apply(this, Array.prototype.slice.apply(arguments));
 
-                // Compatibility: IE < 9 and old browsers
-                if (!Object.keys) {
-                    $.fn.bootstrapTable.utils.objectKeys();
+        var that = this;
+        tableGroups = [];
+
+        if ((this.options.groupBy) && (this.options.groupByField !== '')) {
+
+            if ((this.options.sortName != this.options.groupByField)) {
+                this.data.sort(function(a, b) {
+                    return a[that.options.groupByField].localeCompare(b[that.options.groupByField]);
+                });
+            }
+
+            var that = this;
+            var groups = groupBy(that.data, function (item) {
+                return [item[that.options.groupByField]];
+            });
+
+            var index = 0;
+            $.each(groups, function(key, value) {
+                tableGroups.push({
+                    id: index,
+                    name: key
+                });
+
+                value.forEach(function(item) {
+                    if (!item._data) {
+                        item._data = {};
+                    }
+
+                    item._data['parent-index'] = index;
+                });
+
+                index++;
+            });
+        }
+    }
+
+    BootstrapTable.prototype.initBody = function () {
+        initBodyCaller = true;
+
+        _initBody.apply(this, Array.prototype.slice.apply(arguments));
+
+        if ((this.options.groupBy) && (this.options.groupByField !== '')) {
+            var that = this,
+                checkBox = false,
+                visibleColumns = 0;
+
+            this.columns.forEach(function(column) {
+                if (column.checkbox) {
+                    checkBox = true;
+                } else {
+                    if (column.visible) {
+                        visibleColumns++;
+                    }
+                }
+            });
+
+            tableGroups.forEach(function(item){
+                var html = [];
+
+                html.push(sprintf('<tr class="info groupBy expanded" data-group-index="%s">', item.id));
+
+                if (checkBox) {
+                    html.push('<td class="bs-checkbox">',
+                        '<input name="btSelectGroup" type="checkbox" />',
+                        '</td>'
+                    );
                 }
 
-                //Make sure that the internal variables are set correctly
-                this.options.loaded = false;
-                this.options.originalData = undefined;
+                html.push('<td',
+                    sprintf(' colspan="%s"', visibleColumns),
+                    '>', item.name, '</td>'
+                );
 
-                originalRowAttr = this.options.rowAttributes;
-                this.options.rowAttributes = rowAttr;
-                this.$el.off('post-body.bs.table').on('post-body.bs.table', function () {
-                    that.$el.treetable({
-                        expandable: true,
-                        onNodeExpand: function () {
-                            if (that.options.height) {
-                                that.resetHeader();
-                            }
-                        },
-                        onNodeCollapse: function () {
-                            if (that.options.height) {
-                                that.resetHeader();
-                            }
-                        }
-                    }, true);
+                html.push('</tr>');
 
-                    if (that.options.groupByInitExpanded !== undefined) {
-                        if (typeof that.options.groupByInitExpanded === 'number') {
-                            that.expandNode(that.options.groupByInitExpanded);
-                        } else if (that.options.groupByInitExpanded.toLowerCase() === 'all') {
-                            that.expandAll();
-                        }
-                    }
+                that.$body.find('tr[data-parent-index='+item.id+']:first').before($(html.join('')));
+            });
+
+            this.$selectGroup = [];
+            this.$body.find('[name="btSelectGroup"]').each(function() {
+                var self = $(this);
+
+                that.$selectGroup.push({
+                    group: self,
+                    item: that.$selectItem.filter(function () {
+                        return ($(this).closest('tr').data('parent-index') ===
+                        self.closest('tr').data('group-index'));
+                    })
+                });
+            });
+
+            this.$container.off('click', '.groupBy')
+                .on('click', '.groupBy', function() {
+                    $(this).toggleClass('expanded');
+                    that.$body.find('tr[data-parent-index='+$(this).closest('tr').data('group-index')+']').toggleClass('hidden');
+                });
+
+            this.$container.off('click', '[name="btSelectGroup"]')
+                .on('click', '[name="btSelectGroup"]', function (event) {
+                    event.stopImmediatePropagation();
+
+                    var self = $(this);
+                    var checked = self.prop('checked');
+                    that[checked ? 'checkGroup' : 'uncheckGroup']($(this).closest('tr').data('group-index'));
+                });
+        }
+
+        initBodyCaller = false;
+        this.updateSelected();
+    };
+
+    BootstrapTable.prototype.updateSelected = function () {
+        if (!initBodyCaller) {
+            _updateSelected.apply(this, Array.prototype.slice.apply(arguments));
+
+            if ((this.options.groupBy) && (this.options.groupByField !== '')) {
+                this.$selectGroup.forEach(function (item) {
+                    var checkGroup = item.item.filter(':enabled').length ===
+                        item.item.filter(':enabled').filter(':checked').length;
+
+                    item.group.prop('checked', checkGroup);
                 });
             }
         }
-        _init.apply(this, Array.prototype.slice.apply(arguments));
     };
 
-    BootstrapTable.prototype.initData = function (data, type) {
-        //Temporal validation
-        if (!this.options.sortName) {
-            if ((this.options.groupBy) && (this.options.groupByField.length > 0)) {
+    BootstrapTable.prototype.getGroupSelections = function (index) {
+        var that = this;
 
-                this.options.groupByField = typeof this.options.groupByField === 'string' ?
-                    this.options.groupByField.replace('[', '').replace(']', '')
-                        .replace(/ /g, '').toLowerCase().split(',') : this.options.groupByField;
+        return $.grep(this.data, function (row) {
+            return (row[that.header.stateField] && (row._data['parent-index'] === index));
+        });
+    };
 
-                data = makeGrouped(this, data ? data : this.options.data);
-            }
+    BootstrapTable.prototype.checkGroup = function (index) {
+        this.checkGroup_(index, true);
+    };
+
+    BootstrapTable.prototype.uncheckGroup = function (index) {
+        this.checkGroup_(index, false);
+    };
+
+    BootstrapTable.prototype.checkGroup_ = function (index, checked) {
+        var rows;
+        var filter = function() {
+            return ($(this).closest('tr').data('parent-index') === index);
+        };
+
+        if (!checked) {
+            rows = this.getGroupSelections(index);
         }
-        _initData.apply(this, [data, type]);
-    };
 
-    BootstrapTable.prototype.expandAll = function () {
-        this.$el.treetable('expandAll');
-    };
+        this.$selectItem.filter(filter).prop('checked', checked);
 
-    BootstrapTable.prototype.collapseAll = function () {
-        this.$el.treetable('collapseAll');
-    };
 
-    BootstrapTable.prototype.expandNode = function (id) {
-        id = getParentRowId(this, id);
-        if (id !== undefined) {
-            this.$el.treetable('expandNode', id);
+        this.updateRows();
+        this.updateSelected();
+        if (checked) {
+            rows = this.getGroupSelections(index);
         }
+        this.trigger(checked ? 'check-all' : 'uncheck-all', rows);
     };
 
-    BootstrapTable.prototype.refreshGroupByField = function (groupByFields) {
-        if (!$.fn.bootstrapTable.utils.compareObjects(this.options.groupByField, groupByFields)) {
-            this.options.groupByField = groupByFields;
-            this.load(this.options.originalData);
-        }
-    };
 }(jQuery);
