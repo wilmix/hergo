@@ -71,6 +71,7 @@
               <div class="form-row align-items-center col-md-3">
                   <label class="" for="">Tipo: </label>
                   <select class="form-control" v-model="tipoPago">
+                  
                     <option v-for="option in options" v-bind:value="option.value">
                       {{ option.tipo }}
                     </option>

@@ -81,7 +81,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['foot_script'][]=base_url('assets/hergo/pagos.js'); //aki poner el nuevo javascript
+			$this->datos['foot_script'][]=base_url('assets/hergo/pagos.js');
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
@@ -139,7 +139,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 			
-			$this->datos['foot_script'][]=base_url('assets/hergo/recibirPagos.js'); //aki poner el nuevo javascript
+			
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
@@ -149,6 +149,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			 $this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.css');
 			 $this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.js');
 			/***********************************/
+			$this->datos['foot_script'][]=base_url('assets/hergo/recibirPagos.js'); 
 
 			$this->datos['almacen']=$this->Pagos_model->retornar_tabla("almacenes");
 			$this->datos['tipoPago']=$this->Pagos_model->retornar_tabla("tipoPago");
@@ -279,7 +280,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pagosFactura = array();
 			foreach ($pago->pagos as $fila) {
 				$pagos=new stdclass();
-				$pagos->idPago=$pago->numPago;
+				$pagos->idPago=$pago->idPago;
 				$pagos->idFactura=$fila->idFactura;
 				$pagos->monto=$fila->pagar;		
 				$pagos->saldoNuevo=$fila->saldoNuevo;	

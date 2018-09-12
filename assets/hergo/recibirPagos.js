@@ -252,7 +252,18 @@ window.operateEvents = {
 };
 
 /****************************************** */
-
+function getIdAlmacen() {
+    $.ajax({
+    type:"POST",
+    url: base_url('index.php/Facturas/tipoCambio'),
+    dataType: "json",
+    data: {},
+    }).done(function(res){
+    console.log(res.idAlmacenUsuario);
+    glob_idAlmacenUsuario = res.idAlmacenUsuario;
+    return glob_idAlmacenUsuario
+    })
+}
 function editarPago(idPago) {
     $.ajax({
         type:"POST",
@@ -311,9 +322,18 @@ function editarPago(idPago) {
     return data
 }
 function datosEditar(idPago) {
+    let glob_idAlmacenUsuario_1 = new Object();
+     glob_idAlmacenUsuario_1=$.ajax({
+        async: false,
+        type:"POST",
+        url: base_url('index.php/Facturas/tipoCambio'),
+        dataType: "json",
+        })
+        console.log(glob_idAlmacenUsuario_1.responseJSON.idAlmacenUsuario)
+
     if (idPago == 0) {
     data = {
-            almacen:'1',
+            almacen:glob_idAlmacenUsuario_1.responseJSON.idAlmacenUsuario,
                 almacenes: [
                 { alm: 'CENTRAL HERGO', value: '1' },
                 { alm: 'DEPOSITO EL ALTO', value: '2' },
@@ -447,7 +467,6 @@ var vmPago = new Vue({
         vuejsDatepicker,
     },
     methods:{
-        
         deleteRow:function(index){        
             this.porPagar.splice(index,1);
             if (this.porPagar.length>0)

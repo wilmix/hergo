@@ -546,8 +546,10 @@ class Facturas extends CI_Controller
 	public function tipoCambio()
 	{
 		$tipoCambio=$this->Egresos_model->retornarValorTipoCambio();
+		$idAlmacenUsuario = $this->session->userdata['datosAlmacen']->idalmacen;
 		$obj2=new stdclass();
 		$obj2->tipoCambio=$tipoCambio->tipocambio;	
+		$obj2->idAlmacenUsuario = $idAlmacenUsuario;
 		echo json_encode($obj2);
 	}
 	public function guardarFactura()
