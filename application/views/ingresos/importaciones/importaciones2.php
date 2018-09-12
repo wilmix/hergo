@@ -70,9 +70,10 @@
                <div class=" col-xs-6 col-sm-6 col-md-3">
                 <label>Almacen:</label>
                 <select class="form-control form-control-sm" id="almacen_imp" name="almacen_imp" <?= ($cont)?"disabled":"" ?>>
+                <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
                    <?php foreach ($almacen->result_array() as $fila): ?>
                      <option value=<?= $fila['idalmacen'] ?> <?= ($idalmacen==$fila['idalmacen'])?"selected":"" ?> ><?= $fila['almacen'] ?></option>
-                     <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
+                     
                    <?php endforeach ?>
                 </select>
                </div>

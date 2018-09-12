@@ -4,6 +4,7 @@
             <div class="box-body">
                 <div id="toolbar2" class="form-inline">
                     <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
+                        <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
                         <?php foreach ($almacen->result_array() as $fila): ?>
                         <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
                         <?php endforeach ?>

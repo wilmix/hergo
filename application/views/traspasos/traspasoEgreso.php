@@ -66,6 +66,7 @@ input[type=date]::-webkit-inner-spin-button {
                <div class=" col-xs-6 col-sm-6 col-md-3">
                 <label>Almacen Origen:</label>
                 <select class="form-control form-control-sm" id="almacen_ori" name="almacen_ori" tabindex=1 <?= ($cont)?"disabled":"" ?>>
+                  <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
                     <?php foreach ($almacen->result_array() as $fila): ?>
                      <option value=<?= $fila['idalmacen'] ?> <?= ($idalmacenOrigen==$fila['idalmacen'])?"selected":"" ?> ><?= $fila['almacen'] ?></option>
                    <?php endforeach ?>
