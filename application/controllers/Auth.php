@@ -32,9 +32,6 @@ class Auth extends CI_Controller {
 				
 			);
 		$this->data['nombre_usuario']= $this->session->userdata('nombre');
-		//$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
-		//$this->data['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
-		//$this->data['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 			if($this->session->userdata('foto')==NULL)
 				$this->data['foto']=base_url('assets/imagenes/ninguno.png');
 			else
@@ -91,6 +88,10 @@ class Auth extends CI_Controller {
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
 			//list the users
+			$this->data['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
+			$this->data['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
+			$this->data['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
+			$this->data['titulo']="Usuarios";
 			$this->data['users'] = $this->ion_auth->users()->result();
 			foreach ($this->data['users'] as $k => $user)
 			{
@@ -110,9 +111,6 @@ class Auth extends CI_Controller {
 			$this->load->view('plantilla/menu.php',$this->data);
 			$this->_render_page('auth/index', $this->data);
 			$this->load->view('plantilla/footer.php',$this->data);
-
-			
-					
 		}
 	}
 
@@ -520,7 +518,11 @@ class Auth extends CI_Controller {
 
         $tables = $this->config->item('tables','ion_auth');
         $identity_column = $this->config->item('identity','ion_auth');
-        $this->data['identity_column'] = $identity_column;
+		$this->data['identity_column'] = $identity_column;
+		$this->data['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
+		$this->data['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
+		$this->data['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
+		$this->data['titulo']="Crear Usuario";
 
         // validate form input
         $this->form_validation->set_rules('first_name', $this->lang->line('create_user_validation_fname_label'), 'required');
