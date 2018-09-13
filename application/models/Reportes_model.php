@@ -33,17 +33,11 @@ class Reportes_model extends CI_Model  ////////////***** nombre del modelo
 		return $query;
 	}
 	public function clientesFacturasPendientes() {
-		$sql="SELECT f.`cliente` idCliente, c.`nombreCliente`, c.`documento`
-		FROM pago p
-			LEFT JOIN pago_factura pf ON p.`idPago` = pf.`idPago`
-			left join factura f on f.`idFactura` = pf.`idFactura`
-			INNER JOIN clientes c ON c.`idCliente`= f.`cliente`
-		WHERE 
-			f.`pagada` <>1 
-			and f.`anulada` = 0 
-			and p.`anulado` = 0
-			group by f.`cliente`
-			order by c.`nombreCliente` 
+		$sql="SELECT f.`cliente` idCliente, f.`ClienteFactura` nombreCliente, f.`ClienteNit` documento
+				FROM factura f
+				WHERE
+				f.`pagada` <>1 
+				GROUP BY f.`ClienteFactura` ASC
 		";
 		$query=$this->db->query($sql);		
 		return $query;
