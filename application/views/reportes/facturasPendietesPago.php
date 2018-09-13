@@ -11,14 +11,7 @@
               <option value="">TODOS</option>
             </select>
 
-            <select class="form-control"  data-style="btn-primary" id="clientes_filtro" name="clientes_filtro">
-                <?php foreach ($clientes->result_array() as $fila): ?>
-                <option value=<?= $fila['idCliente'] ?> ><?= $fila['nombreCliente'].' | '.$fila['documento'] ?></option>
-                <?php endforeach ?>
-                <option value="">TODOS</option>
-            </select>
-
-            <button  type="button" class="btn btn-primary btn-sm" id="pendientes">
+           <button  type="button" class="btn btn-primary btn-sm" id="pendientes">
                 <span>
                 <i class="fa fa-share-square"></i>
                 </span>
@@ -27,7 +20,7 @@
           </div>
           <div class="container">
           <div class="text-center">
-            <h2>FACTURAS PENDIENTES DE PAGO - <span id="nombreCliente"></span></h2>
+            <h2>FACTURAS PENDIENTES DE PAGO</h2>
             <h3 id="tituloReporte"></h3>
           </div>
           <table 

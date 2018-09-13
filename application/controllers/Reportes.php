@@ -368,7 +368,6 @@ class Reportes extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
 			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");	
-			$this->datos['clientes']=$this->Reportes_model->clientesFacturasPendientes();	
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
@@ -382,9 +381,8 @@ class Reportes extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-        	$cliente=$this->security->xss_clean($this->input->post("cliente"));
         	$almacen=$this->security->xss_clean($this->input->post("almacen")); 
-			$res=$this->Reportes_model->mostrarFacturasPendientesPago($cliente, $almacen); 
+			$res=$this->Reportes_model->mostrarFacturasPendientesPago($almacen); 
 			$res=$res->result_array();
 			echo json_encode($res);
 		}
