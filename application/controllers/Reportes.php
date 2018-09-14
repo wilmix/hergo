@@ -61,6 +61,80 @@ class Reportes extends CI_Controller
 				$this->datos['foto']=base_url('assets/imagenes/').$this->session->userdata('foto');
 	}
 
+	public function saldosExcel()
+    {       
+		$spreadsheet = new Spreadsheet();
+		
+		$sheet = $spreadsheet->getActiveSheet();
+		$sheet->setTitle('Saldos');
+		$styleArray = [
+			'font' => [
+				'bold' => true,
+			],
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+			],
+			'borders' => [
+				'top' => [
+					'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+				],
+			],
+			'fill' => [
+				'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+				'rotation' => 90,
+				'startColor' => [
+					'argb' => 'FFA0A0A0',
+				],
+				'endColor' => [
+					'argb' => 'FFFFFFFF',
+				],
+			],
+		];
+		
+		$spreadsheet->getActiveSheet()->getStyle('A1:I1')->applyFromArray($styleArray);
+		$sheet->setCellValue('A1', 'ID');
+		$sheet->setCellValue('B1', 'CODIGO');
+		$sheet->setCellValue('C1', 'DESCRIPCIÓN');
+		$sheet->setCellValue('D1', 'UNIDAD');
+		$sheet->setCellValue('E1', 'LA PAZ');
+		$sheet->setCellValue('F1', 'EL ALTO');
+		$sheet->setCellValue('G1', 'POTOSI');
+		$sheet->setCellValue('H1', 'SANTA CRUZ');
+		$sheet->setCellValue('I1', 'TOTAL');
+
+		$res=$this->Reportes_model->mostrarSaldos(); 
+		$res=$res->result_array();
+		//echo '<pre>'; print_r($res); echo '</pre>';
+		$spreadsheet->getActiveSheet()
+		->fromArray(
+			$res,  // The data to set
+			NULL,        // Array values with this value will not be set
+			'A2'         // Top left coordinate of the worksheet range where
+						//    we want to set these values (default is A1)
+		);
+        
+		$writer = new Xlsx($spreadsheet);
+		$spreadsheet->getActiveSheet()->getColumnDimension('A')->setVisible(false);
+		$spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(50);
+		$spreadsheet->getActiveSheet()->getStyle('E1:I3000')->getNumberFormat()->setFormatCode('#,##0.00');
+		$spreadsheet->getActiveSheet()->getStyle('A1');
+
+		$spreadsheet->getActiveSheet()->setAutoFilter(
+			$spreadsheet->getActiveSheet()
+				->calculateWorksheetDimension()
+		);
+		
+		$filename = 'saldosArticulos';
+		$fecha = date('d-m-Y');
+ 
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'. $filename . ' ' . $fecha .'.xlsx"'); 
+        header('Cache-Control: max-age=0');
+        
+        $writer->save('php://output'); // download file 
+ 
+    }
+
 	public function listaPrecios(){
 		$this->libacceso->acceso(26);
 		if(!$this->session->userdata('logeado'))

@@ -1,6 +1,12 @@
 $(document).ready(function(){
     retornarSaldosActuales();
+    base_url('index.php/Reportes/pruebaExcel')
 }) 
+$(document).on("click", "#excel", function () {
+    console.log('object');
+    let excel = base_url("reportes/saldosExcel");
+    location.href = (excel);
+})
 
 function retornarSaldosActuales() //*******************************
 {   
@@ -41,7 +47,6 @@ function retornarSaldosActuales() //*******************************
                         title: 'Descripción',
                         sortable:true,
                         searchable: true,
-                        filter: { type: "input" }
                     },
                     {   
                         field: 'Sigla',            

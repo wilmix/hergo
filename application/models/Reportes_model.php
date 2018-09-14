@@ -108,7 +108,8 @@ class Reportes_model extends CI_Model
 	}
 	public function mostrarSaldos() ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
-		$sql="SELECT * FROM hergo2.articulos_activos
+		$sql="SELECT *, (aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz`) total
+ 		FROM hergo2.articulos_activos aa
 		WHERE SUBSTRING(CodigoArticulo,1,2)<>'SR'";
 		$query=$this->db->query($sql);		
 		return $query;
