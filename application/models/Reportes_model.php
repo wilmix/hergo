@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  
-class Reportes_model extends CI_Model  ////////////***** nombre del modelo 
+class Reportes_model extends CI_Model  
 {
 	public function __construct()
 	{	
