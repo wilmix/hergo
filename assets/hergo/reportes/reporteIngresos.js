@@ -279,17 +279,5 @@ function operateFormatter3(value, row, index) {
     return (formatNumber.new(num));
 }
 
-  function formato_fecha_corta_sub(value, row, index)
-  {
-    let fecha = ""
-    if (row.fechamov == '') {
-        fecha = ''
-    } else {
-        if((value=="0000-00-00 00:00:00")||(value=="")||(value==null))
-        fecha="sin fecha de registro"
-        else
-        fecha = moment(value,"YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY")
-    }
-    return fecha
-  }
+
   

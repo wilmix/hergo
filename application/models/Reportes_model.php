@@ -32,16 +32,6 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function clientesFacturasPendientes() {
-		$sql="SELECT f.`cliente` idCliente, f.`ClienteFactura` nombreCliente, f.`ClienteNit` documento
-				FROM factura f
-				WHERE
-				f.`pagada` <>1 
-				GROUP BY f.`ClienteFactura` ASC
-		";
-		$query=$this->db->query($sql);		
-		return $query;
-	}
 	public function retornar_tablaMovimiento($tipo)
     {
         $sql="SELECT * from tmovimiento where operacion='$tipo'";
@@ -78,29 +68,29 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarFacturasPendientesPago($cliente="", $almacen="")
+	public function mostrarFacturasPendientesPago($almacen="")
 	{ 
-		$sql="SELECT  idFactura, idPago, lote , nFac, almacen, fecha, CONCAT(glosaFactura, ' ',glosaPago) glosa, 
-		totalFactura, IFNULL(SUM(monto),0) totalPago , totalFactura-IFNULL(SUM(monto),0) saldo, nombreCliente
-		FROM 
+		$sql="SELECT id, almacen, cliente, lote, nFactura, fechaFac,
+		SUM(total) total,
+		SUM(montoPagado) montoPagado
+		FROM
 		(
-			SELECT 
-				f.`idFactura`, f.`lote` lote, f.`almacen`, f.`fechaFac` fecha,f.`nFactura` nFac,f.`cliente` cliente, 
-				f.`total` totalFactura, f.`glosa` glosaFactura, f.`pagada` , pf.`monto`,IFNULL(p.`anulado`,0) pagoAnulado, p.`idPago`, p.`glosa` glosaPago, c.`nombreCliente`
-			FROM factura f
-			LEFT JOIN pago_factura pf ON f.`idFactura` = pf.`idFactura`
-			LEFT JOIN pago p ON p.`idPago` = pf.`idPago` 
-			INNER JOIN clientes c ON f.`cliente` = c.`idCliente`
-			WHERE 
-				f.`anulada` = 0 
-				AND f.`pagada` <>1 
-				AND f.`almacen` LIKE '%$almacen'
-				AND f.`cliente` LIKE '%$cliente'
-		
-		) tbl
-		WHERE pagoAnulado = 0
-		GROUP BY idFactura
-		ORDER BY nombreCliente, fecha";
+		SELECT f.`idFactura` id, a.`almacen`, f.`ClienteFactura` cliente, f.`lote`, f.`nFactura`, f.`fechaFac`, f.`total`, IFNULL(pr.monto,0) montoPagado
+		FROM factura f
+		LEFT JOIN 
+		(SELECT pf.`idPago`, pf.`idFactura`, SUM(pf.`monto`) monto
+		FROM pago_factura pf 
+		INNER JOIN pago p ON pf.`idPago` = p.`idPago` AND p.`anulado` = 0
+		GROUP BY pf.`idFactura`) pr
+		ON f.`idFactura` = pr.idFactura
+		INNER JOIN almacenes a ON a.`idalmacen` = f.`almacen`
+		WHERE f.`anulada` = 0 
+		AND f.`pagada` <>1 
+		AND f.`almacen` LIKE '%$almacen'
+		GROUP BY f.`idFactura` 
+		ORDER BY f.`ClienteFactura`
+		)tbla
+		GROUP BY cliente, id WITH ROLLUP";
 		
 		$query=$this->db->query($sql);		
 		return $query;

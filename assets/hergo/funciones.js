@@ -188,6 +188,19 @@ function retornarajax(url,datos,callback)
       fecha = moment(value,"YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY")
     return fecha
   }
+  function formato_fecha_corta_sub(value, row, index)
+  {
+    let fecha = ""
+    if (value == '') {
+        fecha = ''
+    } else {
+        if((value=="0000-00-00 00:00:00")||(value=="")||(value==null))
+        fecha="sin fecha de registro"
+        else
+        fecha = moment(value,"YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY")
+    }
+    return fecha
+  }
   function asignarselect(text1,select)
   {
     text1=text1.trim()

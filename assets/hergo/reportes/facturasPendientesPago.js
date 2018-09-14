@@ -1,11 +1,6 @@
 $(document).ready(function() {
     tituloReporte()
-    $('#clientes_filtro').select2({
-        placeholder: 'Seleccione',
-        width: 'resolve',
-        allowClear: true
-    });
-
+    retornarFacturasPendientes();
 });
 $(document).on("change", "#almacen_filtro", function () {
     tituloReporte()
@@ -17,20 +12,12 @@ $(document).on("click", "#pendientes", function () {
 })
 
 function tituloReporte() {
-    nomCliente = $('#clientes_filtro').find(':selected').text();
     almText = $('#almacen_filtro').find(":selected").text();
-    if (nomCliente == '') {
-        $('#nombreCliente').text('TODOS')
-    } else {
-        $('#nombreCliente').text(nomCliente)
-    }
-     
     $('#tituloReporte').text(almText);
 }
 
 function retornarFacturasPendientes()
 {
-    cliente = $("#clientes_filtro").val();
     almacen = $("#almacen_filtro").val();
     agregarcargando();
     $.ajax({
@@ -38,13 +25,30 @@ function retornarFacturasPendientes()
         url: base_url('index.php/Reportes/mostrarFacturasPendientesPago'),
         dataType: "json",
         data: {
-            cliente : cliente,
             almacen : almacen
         }, 
     }).done(function (res) {
         quitarcargando();
+        for (let index = 0; index < res.length; index++) {
+            if (res[index].id == null && res[index].cliente == null) {
+                res[index].cliente = `TOTAL GENERAL`
+                res[index].lote = ''
+                res[index].nFactura = ''
+                res[index].fechaFac = ''
+                res[index].saldo = (Number(res[index].total) - Number(res[index].montoPagado))
+            } else if (res[index].id == null) {
+                res[index].lote = ''
+                res[index].nFactura = ''
+                res[index].fechaFac = ''
+                res[index].saldo = (Number(res[index].total) - Number(res[index].montoPagado))
+
+            } else  {
+
+                res[index].saldo = (Number(res[index].total) - Number(res[index].montoPagado))
+
+            }
+        }
         console.log(res);
-        console.log(`Almacen: ${almacen} Cliente: ${cliente}`);
         datosselect = restornardatosSelect(res);
         $("#tablaFacturasPendientes").bootstrapTable('destroy');
         $("#tablaFacturasPendientes").bootstrapTable({ 
@@ -55,8 +59,7 @@ function retornarFacturasPendientes()
             filter: true,
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',
-            showFooter: true,
-            footerStyle: footerStyle,
+            rowStyle:rowStyle,
             columns: 
             [
                 {
@@ -74,22 +77,22 @@ function retornarFacturasPendientes()
                     align: 'center'
                 },
                 {
-                    field: 'nFac',
+                    field: 'nFactura',
                     title: 'N° Factura',
                     sortable: true,
                     width:'80px',
                     align: 'center',
                 },
                 {
-                    field: 'fecha',
+                    field: 'fechaFac',
                     title: 'Fecha',
                     width:'100px',
                     sortable: true,
                     align: 'center',
-                    formatter: formato_fecha_corta
+                    formatter: formato_fecha_corta_sub
                 },
                 {
-                    field: 'nombreCliente',
+                    field: 'cliente',
                     title: 'Cliente',
                     sortable: true,
                      //visible:false,
@@ -99,27 +102,20 @@ function retornarFacturasPendientes()
                     }
                 },
                 {
-                    field: 'glosa',
-                    title: 'Glosa',
-                    sortable: true,
-                },
-                {
-                    field: 'totalFactura',
+                    field: 'total',
                     title: 'Crédito',
                     sortable: true,
                     align: 'right',
                     width:'100px',
                     formatter: operateFormatter3,
-                    footerFormatter: sumaColumna
                 },
                 {
-                    field: 'totalPago',
+                    field: 'montoPagado',
                     title: 'Abono',
                     sortable: true,
                     align: 'right',
                     width:'100px',
                     formatter: operateFormatter3,
-                    footerFormatter: sumaColumna
                 },
                 {
                     field: 'saldo',
@@ -128,7 +124,6 @@ function retornarFacturasPendientes()
                     align: 'right',
                     width:'100px',
                     formatter: operateFormatter3,
-                    footerFormatter: sumaColumna
                 },
                 
             ]
@@ -143,18 +138,22 @@ function operateFormatter3(value, row, index) {
     num = num.toFixed(2);
     return (formatNumber.new(num));
 }
-function footerStyle(value, row, index) {
-    return {
-        css: {
-            "font-weight": "bold",
-            "border-top": "3px solid white",
-            "border-bottom": "3px solid white",
-            "text-align": "right",
-            "padding": "15px",
-            "background-color": "#3c8dbc",
-            "color": "white"
-        }
-    };
+function rowStyle(row, index) {
+    if (row.id==null) {
+        return {
+            css: {
+                //"font-weight": "bold",
+                //"border-top": "3px solid white",
+                //"border-bottom": "3px solid white",
+                "text-align": "right",
+                //"padding": "15px",
+                "background-color": "#3c8dbc",
+                "color": "white",
+               // "font-size":"120%",
+            }
+        };
+    }
+    return {};
 }
 function sumaColumna(data) {
     field = this.field;
@@ -169,16 +168,10 @@ function restornardatosSelect(res) {
     var datos = new Array()
     $.each(res, function (index, value) {
 
-        cliente.push(value.nombreCliente)
+        cliente.push(value.cliente)
     })
-
-    //alm.sort();
     cliente.sort();
-    //responsable.sort();
-    //console.log(nPago);
-    //datos.push(alm.unique());
     datos.push(cliente.unique());
-    //datos.push(responsable.unique());
     return (datos);
 }
 Array.prototype.unique = function (a) {
