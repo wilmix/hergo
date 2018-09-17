@@ -95,6 +95,7 @@ function retornarajax(url,datos,callback)
               
               
             }).fail(function( jqxhr, textStatus, error ) {
+              quitarcargando()
               var retornar=new Object();      
               var err = textStatus + ", " + error;
               console.log( "Request Failed: " + err );

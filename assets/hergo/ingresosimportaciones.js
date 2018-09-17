@@ -367,20 +367,10 @@ function guardarmovimiento()
 
         retornarajax(base_url("index.php/Ingresos/guardarmovimiento"),valuesToSubmit,function(data)
         {
-            console.log(data.respuesta);
             estado=validarresultado_ajax(data);
             if(estado)
             {               
-                if(data.respuesta)
-                {
-                    
-                    $("#modalIgresoDetalle").modal("hide");
-                    /*limpiarArticulo();
-                    limpiarCabecera();
-                    limpiarTabla();*/
-                    //$(".mensaje_ok").html("Datos almacenados correctamente");
-                    //$("#modal_ok").modal("show");
-                  
+                if(data.respuesta) {
                     swal({
                         title: "Ingreso realizado!",
                         text: "El ingreso se guardo con éxito",
@@ -391,14 +381,18 @@ function guardarmovimiento()
                             let imprimir = base_url("pdf/Ingresos/index/") + data.respuesta;
                             window.open(imprimir);
                         })
-
                 }
-                else
-                {
-                    $(".mensaje_error").html("Error al almacenar los datos, intente nuevamente");
-                    $("#modal_error").modal("show");
-                }
-                
+            }
+            else 
+            {
+                swal({
+                    title: "Ingreso error!",
+                    text: "El ingreso NO se guardo",
+                    type: "error",        
+                    allowOutsideClick: false,                                                                        
+                    }).then(function(){
+                        console.log(error);
+                    })
             }
         })      
     }
