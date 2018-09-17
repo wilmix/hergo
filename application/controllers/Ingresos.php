@@ -623,7 +623,51 @@ class Ingresos extends CI_Controller
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
-    }
+	}
+	public function guardarIngreso()
+	{
+		if($this->input->is_ajax_request())
+        {
+			$ingreso = new stdclass();
+			$ingreso->almacen = $this->security->xss_clean($this->input->post('almacen_imp'));
+        	$ingreso->tipomov = $this->security->xss_clean($this->input->post('tipomov_imp'));
+			$ingreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_imp'));
+			$ingreso->fechamov = date('Y-m-d H:i:s',strtotime($ingreso->fechamov));
+        	$ingreso->moneda = $this->security->xss_clean($this->input->post('moneda_imp'));
+        	$ingreso->proveedor = $this->security->xss_clean($this->input->post('proveedor_imp'));
+        	$ingreso->ordcomp = $this->security->xss_clean($this->input->post('ordcomp_imp'));
+        	$ingreso->nfact = $this->security->xss_clean($this->input->post('nfact_imp'));
+        	$ingreso->ningalm = $this->security->xss_clean($this->input->post('ningalm_imp'));
+        	$ingreso->obs = $this->security->xss_clean($this->input->post('obs_imp'));
+			$ingreso->articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
+
+			$tipocambio=$this->Ingresos_model->retornarValorTipoCambio();
+			$ingreso->tipoCambio = $tipocambio->id;
+			$tipoCambioValor=$tipocambio->tipocambio;
+
+			$ingreso->autor=$this->session->userdata('user_id');
+			$ingreso->fecha = date('Y-m-d H:i:s');
+
+			$gestion= date("Y", strtotime($ingreso->fechamov));
+			$ingreso->nmov = $this->Ingresos_model->retornarNumMovimiento($ingreso->tipomov,$gestion,$ingreso->almacen);
+
+			$id = $this->Ingresos_model->guardarIngreso($ingreso, $tipoCambioValor);
+
+			if($id)
+        	{
+				echo json_encode($id);
+        	}
+			else
+			{				
+				echo json_encode("false");
+			}			
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+
     public function guardarmovimiento()
     {
     	if($this->input->is_ajax_request())
@@ -640,10 +684,8 @@ class Ingresos extends CI_Controller
 			$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
 			$idIngreso = $this->Ingresos_model->guardarmovimiento_model($datos);
 			
-
         	if($idIngreso)
         	{
-        		//$this->retornarcostoarticulo_tabla($datos['tabla'],$datos['almacen_imp'],$datos['moneda_imp']); //se eliminaria el dato
 				echo json_encode($idIngreso);
         	}
 			else

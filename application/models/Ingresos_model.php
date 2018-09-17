@@ -311,7 +311,8 @@ class Ingresos_model extends CI_Model
                 }
     			if($idArticulo)
     			{
-    				$sql="INSERT INTO ingdetalle(idIngreso,nmov,articulo,moneda,cantidad,punitario,total,totaldoc) VALUES('$idIngreso','$nummov','$idArticulo','$moneda_imp','$fila[2]','$punitariobs','$totalbs','$totaldoc')";
+    				$sql="INSERT INTO ingdetalle(idIngreso,nmov,articulo,moneda,cantidad,punitario,total,totaldoc) 
+                    VALUES('$idIngreso','$nummov','$idArticulo','$moneda_imp','$fila[2]','$punitariobs','$totalbs','$totaldoc')";
     				$this->db->query($sql);
 
                /*     $costoArticulo=new stdclass();
@@ -635,5 +636,45 @@ class Ingresos_model extends CI_Model
         }
         
     }
+    public function guardarIngreso($ingreso, $tipoCambioValor)
+	{	
+        $this->db->trans_start();
+            $this->db->insert("ingresos", $ingreso);
+            $idIngreso=$this->db->insert_id();
+
+            $ingresoDetalle = array();
+                foreach ($ingreso->articulos as $fila) {
+                    $detalle=new stdclass();
+                    $detalle->idIngreso = $idIngreso;
+                    $detalle->nmov = $ingreso->nmov;
+                    $detalle->articulo = $this->Ingresos_model->retornar_datosArticulo($fila[0]);
+                    $detalle->moneda = $ingreso->moneda;
+                    $detalle->cantidad = $fila[2];
+
+                    if ($ingreso->moneda == 2) {
+                        $detalle->punitario= $fila[5] * $tipoCambioValor;
+                        $detalle->total=$fila[6] * $tipoCambioValor;
+                        $detalle->totaldoc=$fila[4] * $tipoCambioValor;
+                        
+                    }	elseif ($ingreso->moneda == 1) {
+                        $detalle->punitario= $fila[5];
+                        $detalle->total=$fila[6];
+                        $detalle->totaldoc=$fila[4];
+                    }
+                    array_push($ingresoDetalle,$detalle);	
+                }
+            $this->db->insert_batch("ingdetalle", $ingresoDetalle);
+        
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+
+        } else {
+            
+            return $idIngreso;
+        }
+	}
     
 }
