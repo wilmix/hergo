@@ -156,15 +156,12 @@ $( function() {
 
         idAlmacen=$("#almacen_ne").val();
         cargandoSaldoPrecioArticulo()
-        //console.log(idAlmacen)
          $.ajax({
 
             url: base_url("index.php/Ingresos/retornarSaldoPrecioArticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
             dataType: "json",
             data: {},
             success: function(data) {
-                //response(data);                   
-                console.log(data)
                 finCargaSaldoPrecioArticulo()
                 glob_precio_egreso=data.precio;
                 $("#costo_ne").val(data.precio);
@@ -211,7 +208,6 @@ $(document).on("click",".eliminarArticulo",function(){
 function limpiarArticulo()
 {
     inputarray=$(".filaarticulo").find("input").toArray();
-    //console.log(inputarray)
     $.each(inputarray,function(index,value)
     {
         $(value).val("")
@@ -223,7 +219,6 @@ function limpiarArticulo()
 function limpiarCabecera()
 {
     inputarray=$(".filacabecera").find("input").toArray();
-    console.log(inputarray)
     $.each(inputarray,function(index,value)
     {
         $(value).val("")
@@ -247,7 +242,6 @@ function calcularTotal()
     var dato=0;
     $.each(totales,function(index, value){
         dato=$(value).inputmask('unmaskedvalue');
-        //console.log(dato)
         total+=(dato=="")?0:parseFloat(dato)
     })
     total = (Math.round(total * 100) / 100).toFixed(2);
@@ -295,29 +289,22 @@ function calculocompraslocales(cant, costo) {
 
 }
 
-function agregarArticulo() //faltaria el id costo; si se guarda en la base primero
+function agregarArticulo()
 {
-    //idcosto=12;
-    var codigo = $("#articulo_imp").val()
-    var descripcion = $("#Descripcion_ne").val()
-    var cant = $("#cantidad_ne").inputmask('unmaskedvalue');
-    var costo = $("#punitario_ne").inputmask('unmaskedvalue');
-    var descuento = $("#descuento_ne").inputmask('unmaskedvalue');
-    var totalfac = costo;
-    var cant = (cant == "") ? 0 : cant;
-    var costo = (costo == "") ? 0 : costo;
-    var tipoingreso = $("#tipomov_imp2").val();
-    let saldoAlmacen = $("#saldo_ne").val();
-    var codigoArticulo = $("#articulo_imp").val();
-    var total;
+    let saldoAlmacen = $("#saldo_ne").inputmask('unmaskedvalue')
+    let cant = $("#cantidad_ne").inputmask('unmaskedvalue')
+    let costo = $("#punitario_ne").inputmask('unmaskedvalue')
+    let codigoArticulo = $("#articulo_imp").val();
 
-    if (Number(cant) > 0 && Number(costo)>=0) 
+    cant = parseFloat((cant == '') ? 0 : cant)
+    costo = parseFloat((costo == '') ? 0 : costo)
+    saldoAlmacen = parseFloat((saldoAlmacen == '') ? 0 : saldoAlmacen)
+
+    if ((cant) > 0 && (costo)>=0) 
     {
-        if (Number(cant)<=Number(saldoAlmacen) && Number(saldoAlmacen) > 0 ) // mensaje para  saldo de almacen 
+        if ((cant)<=(saldoAlmacen) && parseFloat(saldoAlmacen) > 0 )
         {
-            console.log(Number(cant)<=Number(saldoAlmacen) && Number(saldoAlmacen) > 0 )
             agregarArticuloEgresos();
-          
         } else {
             swal({
                 title: 'Saldo Insuficiente',
@@ -328,27 +315,21 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Si, Agregar',
                 cancelButtonText: 'No, Cancelar'
-            }).then(
-                result=>
-                {
+            }).then((result)=>{
                     agregarArticuloEgresos();
                     swal({
+                        type: 'error',
                         html: 'Usted generó un <b>NEGATIVO</b> en ' + codigoArticulo,
-                        //timer: 4000
                     });
-                    
-                },
-                dismiss => {
-                    swal(
-                        'No agregado',
-                        'Gracias por no generar negativos :)',
-                        'error'
-                    )
-                }
-                );
-                
+                },(dismiss) => {
+                    swal({
+                        type: 'success',
+                        title: 'Gracias por no generar negativos :)',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+            })
         }
-
     } else {
         swal(
             'Oops...',
@@ -432,32 +413,25 @@ function alertacosto(costounitario,costobase)
 }
 function guardarmovimiento()
 {     
-    console.log($("#_tipomov_ne").val())
     var valuesToSubmit = $("#form_egreso").serialize();
-    console.log(valuesToSubmit);
     var tipoEgreso=$("#tipomov_ne2").text();
     var tablaaux=tablatoarray();
     if($("#_tipomov_ne").val()==9) //continuar en el caso de que el tipo de movimiento es baja de producto
         var auxContinuar=true
     else
         var auxContinuar=false
-
-    console.log(!glob_guardar,!auxContinuar);
     if(!glob_guardar && !auxContinuar)
     {
         swal("Error", "Seleccione el cliente","error")
-        console.log("este tipo "+tipoEgreso);
         return 0;
     }    
     if(tablaaux.length>0)
     {
         var tabla=JSON.stringify(tablaaux);
-        console.log(valuesToSubmit)
         valuesToSubmit+="&tabla="+tabla;
 
         retornarajax(base_url("index.php/Egresos/guardarmovimiento"),valuesToSubmit,function(data)
         {
-            console.log(data);
             estado=validarresultado_ajax(data);
             if(estado)
             {               
@@ -496,8 +470,6 @@ function actualizarMovimiento()
 {     
     var valuesToSubmit = $("#form_egreso").serialize();
     var tablaaux=tablatoarray();
-    console.log(valuesToSubmit)
-    console.log(tablaaux);
     if(tablaaux.length>0)
     {        var tabla=JSON.stringify(tablaaux);
 
@@ -541,8 +513,6 @@ function anularMovimiento()// X
 {     
     var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
     var tablaaux=tablatoarray();
-    console.log(valuesToSubmit)
-    console.log(tablaaux);
     if(tablaaux.length>0)
     {
         var tabla=JSON.stringify(tablaaux);
@@ -582,8 +552,6 @@ function recuperarMovimiento()// X
 {     
     var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
     var tablaaux=tablatoarray();
-    console.log(valuesToSubmit)
-    console.log(tablaaux);
     if(tablaaux.length>0)
     {
         var tabla=JSON.stringify(tablaaux);
@@ -627,10 +595,8 @@ function tablatoarray()
     $.each(filas,function(index,value){
         datos=$(value).find("input").toArray()
         tabla.push(Array($(datos[0]).val(),$(datos[1]).val(),$(datos[2]).inputmask('unmaskedvalue'),$(datos[3]).inputmask('unmaskedvalue'),$(datos[4]).inputmask('unmaskedvalue'),$(datos[5]).inputmask('unmaskedvalue'),$(datos[6]).inputmask('unmaskedvalue')))
-        //console.log(datos);
     })
     return(tabla)
-    //console.log(filas)
 }
 $(document).on("click","#guardarMovimiento",function(){
     guardarmovimiento();
@@ -688,13 +654,10 @@ function anularMovimientoEgreso()
    
         var valuesToSubmit = $("#form_egreso").serialize();
         var tablaaux=tablatoarray();
-        console.log(valuesToSubmit)
-        console.log(tablaaux);
         if(tablaaux.length>0)
         {
             var tabla=JSON.stringify(tablaaux);
             valuesToSubmit+="&tabla="+tabla;
-            console.log(valuesToSubmit);    
             retornarajax(base_url("index.php/Egresos/anularmovimiento"),valuesToSubmit,function(data)
             {
                 estado=validarresultado_ajax(data);
@@ -731,8 +694,6 @@ function recuperarMovimientoEgreso()
 {
     var valuesToSubmit = $("#form_egreso").serialize();
     var tablaaux=tablatoarray();
-    console.log(valuesToSubmit)
-    console.log(tablaaux);
     if(tablaaux.length>0)
     {
         var tabla=JSON.stringify(tablaaux);
