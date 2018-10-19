@@ -2,7 +2,7 @@ var glob_factorIVA=0.87;
 var glob_factorRET=0.087;
 var loc_almacen;
 var glob_guardar=false;
-var glob_precio_egreso=0;
+let glob_precio_egreso=0;
 let hoy = moment().format('DD-MM-YYYY, hh:mm:ss a');
 $(document).ready(function(){ 
     $('.fecha_egreso').daterangepicker({
@@ -235,11 +235,10 @@ function limpiarTabla()
 }
 function calcularTotal()
 {
-    var moneda=$("#moneda_ne").val()
-    var totalCosto=0;
-    var totales=$(".totalCosto").toArray();
-    var total=0;
-    var dato=0;
+    let moneda=$("#moneda_ne").val()
+    let totales=$(".totalCosto").toArray();
+    let total=0;
+    let dato=0;
     $.each(totales,function(index, value){
         dato=$(value).inputmask('unmaskedvalue');
         total+=(dato=="")?0:parseFloat(dato)
@@ -254,15 +253,12 @@ function calcularTotal()
     {
         var totalDolares=total;
         total=total*glob_tipoCambio;
-        
-
     }
     $("#totalacostobs").val(total)
     $("#totalacostosus").val(totalDolares)
 }
 $(document).on("change","#moneda_ne",function(){
     calcularTotal()
-
 })
 $(document).on("keyup","#nfact_imp",function(){
     if($(this).val()=="SF")
@@ -341,29 +337,25 @@ function agregarArticulo()
 
 function agregarArticuloEgresos()
 {
-    var codigo=$("#articulo_imp").val()
-    var descripcion=$("#Descripcion_ne").val()
-    var cant=$("#cantidad_ne").inputmask('unmaskedvalue');
-    var costo=$("#punitario_ne").inputmask('unmaskedvalue');
-    var descuento=$("#descuento_ne").inputmask('unmaskedvalue');
-    var totalfac=costo;
-    var cant=(cant=="")?0:cant;
-    var costo=(costo=="")?0:costo;
-    var tipoingreso=$("#tipomov_imp2").val();
-    var total;
+    let codigo=$("#articulo_imp").val()
+    let descripcion=$("#Descripcion_ne").val()
+    let cant=$("#cantidad_ne").inputmask('unmaskedvalue')
+    let precioUnitario=$("#punitario_ne").inputmask('unmaskedvalue')
+    let descuento=$("#descuento_ne").inputmask('unmaskedvalue')
+    let total
+    cant=parseFloat((cant=='') ? 0 : cant)
+    precioUnitario=parseFloat((precioUnitario=='') ? 0 : precioUnitario)
+    descuento = parseFloat((descuento=='' ? 0 : descuento))
+    precioUnitario = precioUnitario - (precioUnitario * descuento/100)
+    total = precioUnitario * cant 
 
-    descuento=cant*costo*descuento/100;
-    costo=costo;
-    total=(cant*costo)-descuento;   
-
-    var articulo='<tr>'+ 
+    let articulo='<tr>'+ 
             '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
             '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
             '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+  //nuevo P/U Factura
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+descuento+'""></input></td>'+ //nuevo Total Factura            
+            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+precioUnitario+'""></input></td>'+
             '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
-            
+            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+descuento+'""></input></td>'+   
             '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+
         '</tr>'
     $("#tbodyarticulos").append(articulo)
@@ -413,9 +405,9 @@ function alertacosto(costounitario,costobase)
 }
 function guardarmovimiento()
 {     
-    var valuesToSubmit = $("#form_egreso").serialize();
-    var tipoEgreso=$("#tipomov_ne2").text();
-    var tablaaux=tablatoarray();
+    let valuesToSubmit = $("#form_egreso").serialize();
+    let tipoEgreso=$("#tipomov_ne2").text();
+    let tablaaux=tablatoarray();
     if($("#_tipomov_ne").val()==9) //continuar en el caso de que el tipo de movimiento es baja de producto
         var auxContinuar=true
     else

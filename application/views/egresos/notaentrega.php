@@ -212,10 +212,10 @@
                     <tr>
                       <th class="col-sm-1" >Código</th>
                       <th class="col-sm-7">Artículo</th>
-                      <th class="col-sm-1 text-right">Cantidad</th>
+                      <th class="col-sm-1 text-right" >Cantidad</th>
                       <th class="col-sm-1 text-right">Precio</th> 
-                      <th class="col-sm-1 text-right">Descuento</th>
                       <th class="col-sm-1 text-right">Total</th> 
+                      <th class="col-sm-1 text-right">Dscto.</th>
                       <th>&nbsp;</th>
                     </tr>
                   </thead>
@@ -224,21 +224,18 @@
                         <?php foreach ($detalle as $fila): ?>
                           <?php 
                             $punitariofac= $fila['cantidad']==""?0:$fila['cantidad'];
-                            //$punitariofac=$fila['totaldoc'] / $punitariofac;
                           ?>
                             <tr>
-                                <td><input type="text" class="estilofila" disabled value="<?= $fila['CodigoArticulo'] ?>"></input></td>
-                                <td><input type="text" class="estilofila" disabled value="<?= $fila['Descripcion'] ?>"></input</td>
-                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['cantidad'] ?>"></input></td>
-                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['punitario']?>"></input></td><!--nuevo-->
-                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['descuento'] ?>"></input></td><!--nuevo-->
-                                <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="<?= $fila['total'] ?>"></input></td>
-                                <!--<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value=""></input></td>--><!--nuevo-->
+                                <td><input type="text" class="estilofila" disabled value="<?= $fila['CodigoArticulo'] ?>"></td>
+                                <td><input type="text" class="estilofila" disabled value="<?= $fila['Descripcion'] ?>"></td>
+                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['cantidad'] ?>"></td>
+                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['punitario']?>"></td>
+                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['descuento'] ?>"></td>
+                                <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="<?= $fila['total'] ?>"></td>
                                 <td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
                             </tr>
                         <?php endforeach ?>
                     <?php endif ?>
-
                   </tbody>
                 </table>
               </div> <!--div class="table-responsive"-->
