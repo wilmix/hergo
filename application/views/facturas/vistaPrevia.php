@@ -23,7 +23,7 @@
                 </div>
                 <div class="text-center" class="col-md-4">
                     <p id="nitcss"><b>NIT: <span >{{nit}} </span></b></p>
-                    <p>FACTURA N°: <b id="fnumero">{{numero}}</b> <br>
+                    <p>FACTURA N°: <b>{{numero}}</b> <br>
                     AUTORIZACION N°: <span id="fauto">{{autorizacion}}</span></p>
                 </div>
                 </div>

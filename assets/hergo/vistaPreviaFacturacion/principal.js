@@ -37,13 +37,11 @@
                 this.datosFactura.forEach(function(detalle) {
                     totalfact+=parseFloat(detalle.facturaCantidad*detalle.facturaPUnitario);
                 })
-               console.log(totalfact);
                return totalfact;
             
                 
             },
             dolares:function(value){
-                //console.log((this.tipocambio))
                 return value / parseFloat(this.tipocambio);
             },
            
@@ -60,23 +58,15 @@
                 if (this.moneda == 2) {
                     monto =this.retornarTotal()*this.tipocambio
                     monto = monto.toString()
-                    //console.log(monto);
+
                 }  
                                 
                 var dia=fecha.format("DD");
                 var mes=fecha.format("MM");
                 var gestion=fecha.format("YYYY");
-                //console.log(monto);
+
                 
                 var fechaConcatenar = gestion + mes + dia;
-                
-                /*console.log(autor,
-                            nFactura,
-                            idNIT,
-                            fechaConcatenar,
-                            monto,
-                            llave);*/
-
                 codigo = generateControlCode(
                             autor,
                             nFactura,
@@ -98,9 +88,7 @@
                     var monto    = this.retornarTotal().toString();
               
                     var codigoqr = (this.nit + "|" + this.numero + "|" + this.autorizacion + "|" +fecha + "|" + monto+ "|" + monto +"|" + this.codigoControl +"|" + this.ClienteNit + "|0|0|0|0");
-                    
-                    console.log(codigoqr)
-                    
+                   
                     generarQr("qrcodeimg",codigoqr)
                 }
                 

@@ -117,13 +117,11 @@ $(document).on("click", "#refresh", function () {
 
 
 function retornarTablaFacturacion() {
-
     agregarcargando();
     ini = iniciofecha.format('YYYY-MM-DD')
     fin = finfecha.format('YYYY-MM-DD')
     alm = $("#almacen_filtro").val()
     tipo = $("#tipo_filtro").val()
-    console.log({ ini: ini, fin: fin, alm: alm, tipo: tipo })
     $.ajax({
         type: "POST",
         url: base_url('index.php/Facturas/MostrarTablaFacturacion'),
@@ -134,7 +132,6 @@ function retornarTablaFacturacion() {
         datosselect = restornardatosSelect(res)
         $("#tfacturas").bootstrapTable('destroy');
         $('#tfacturas').bootstrapTable({
-
             data: res,
             striped: true,
             pagination: true,
@@ -143,7 +140,6 @@ function retornarTablaFacturacion() {
             filter: true,
             showColumns: true,
             strictSearch: true,
-
             columns: [
                 {
                     field: 'n',
@@ -272,7 +268,6 @@ function restornardatosSelect(res) {
     cliente.sort()
     datos.push(vendedor.unique())
     datos.push(cliente.unique())
-    console.log(datos);
     return (datos)
 }
 Array.prototype.unique = function (a) {
@@ -282,8 +277,6 @@ Array.prototype.unique = function (a) {
 });
 
 function mostrarTablaDetalle(res) {
-    console.log(res)
-
     $("#tabla2detalle").bootstrapTable('destroy');
     $("#tabla2detalle").bootstrapTable({
         data: res.detalle,
@@ -374,7 +367,6 @@ function registrosTabla3() {
     return tabla3factura.length;
 }
 function rowStyle(row, index) {
-    //console.log(row)
     var existe = false;
     var tabla3factura = $("#tabla3Factura").bootstrapTable('getData');
     $.each(tabla3factura, function (index, value) {
@@ -501,8 +493,6 @@ function mostrarTablaFactura() {
         ]
     });
     $table.on('editable-save.bs.table', function (e, field, row, old, $el) {
-        //console.log(parseFloat(row.punitario),parseFloat(row.cantidadRealAux)) 
-        console.log(row)
         var total = parseFloat(row.punitario) * parseFloat(row.cantidadReal);
         $("#tabla3Factura").bootstrapTable('updateByUniqueId', {
             id: row.idEgreDetalle,
@@ -516,8 +506,6 @@ function mostrarTablaFactura() {
 
 var scope = this;
 scope.formatoMoneda = function (value) {
-
-    console.log(value)
     $(this).html(operateFormatter3(value));
 };
 
@@ -548,7 +536,6 @@ function totalTabla2(value, row, index) {
     return (operateFormatter3(row.punitario * row.cantidadReal));
 }
 function mostrarDatosCliente(row) {
-    console.log(row);
     $("#nombreClienteTabla1").val(row.nombreCliente);
     $("#tipoNumEgreso").val(row.sigla + "-" + row.n);
     $("#pedidoClienteT2").val(row.clientePedido);
@@ -601,7 +588,6 @@ function quitarElementoTabla(row) {
         field: 'idEgreDetalle',
         values: ids
     });
-    console.log(row)
     $.ajax({
         type: "POST",
         url: base_url('index.php/Facturas/eliminarElementoTabla3'),
@@ -742,8 +728,7 @@ function AgregarRegistroTabla3Cliente(row, index, btn) {
                 data: { idegreso: row.idegreso, idegresoDetalle: row.idingdetalle },
 
             }).done(function (res) {
-                console.log(res);
-                $("#cliente_factura").val(res.cliente); ////////*********************** */
+                $("#cliente_factura").val(res.cliente);
                 $("#idCliente_factura").val(res.idCliente);
                 $("#nit_factura").val(res.clienteNit);
 
@@ -783,7 +768,6 @@ function AgregarRegistroTabla3Cliente(row, index, btn) {
 
 }
 function AgregarTabla(datos) {
-    //console.log(dato);
     $("#tabla2detalle").bootstrapTable('showLoading');
     $.ajax({
         type: "POST",
@@ -791,7 +775,6 @@ function AgregarTabla(datos) {
         dataType: "json",
         data: { idegreso: datos.idEgresos },
     }).done(function (res) {
-        console.log(res)
         if (res.detalle) {
 
             agregarRegistrosTabla2(res);
@@ -814,10 +797,7 @@ function agregarRegistrosTabla2(detalle) {
     $("#tabla2detalle").bootstrapTable('resetView');
 }
 function agregarRegistrosTabla3(detalle) {
-    console.log(detalle)
     var moneda = $("#moneda").val();
-
-    console.log(moneda);
     detalle = detalle[0];
     var rows = [];
     rows.push({
@@ -836,7 +816,6 @@ function agregarRegistrosTabla3(detalle) {
     $("#tabla3Factura").bootstrapTable('append', rows);
 }
 function agregarRegistrosTabla3Cliente(detalle) {
-    // console.log(detalle)
     if (!existeId(detalle.idingdetalle)) {
         var moneda = $("#moneda").val();
         
@@ -862,15 +841,11 @@ function calcularTotalFactura() {
     var moneda = $("#moneda").val();
     var tabla3factura = $("#tabla3Factura").bootstrapTable('getData');
     var total = 0;
-    //   console.log(tabla3factura);
     $.each(tabla3factura, function (index, value) {
-        //  console.log(value.total)
         total = total + parseFloat(value.total);
     })
     /****************Bs**************/
-    //  console.log(total);
     var totalBs = moneda == 2 ? (parseFloat(total) * parseFloat(glob_tipoCambio)) : total;
-    // console.log(totalBs);
     $("#totalFacturaBs").val(totalBs);
     /*************SUS***************/
     var totalSus = moneda == 2 ? total : parseFloat(total) / parseFloat(glob_tipoCambio);
@@ -891,15 +866,12 @@ $(document).on("click", "#crearFactura", function () {
             tipoFacturacion: $("#tipoFacturacion").val(),
             fechaFactura: $("#fechaFactura").val()
         }
-        console.log(datos)
         $.ajax({
             type: "POST",
             url: base_url('index.php/Facturas/consultarDatosFactura'),
             dataType: "json",
             data: datos,
         }).done(function (res) {
-            console.log(res.nfac);
-
             if (res.response) {
                 vistaPreviaFactura();
                 agregarDatosFactura(res);
@@ -923,7 +895,7 @@ $(document).on("click", "#crearFactura", function () {
 function agregarDatosFactura(res) {
     vmVistaPrevia.guardar = true;
     vmVistaPrevia.nit = res.detalle.nit;
-    vmVistaPrevia.numero = $("#nit_factura").val();
+    vmVistaPrevia.numero = res.nfac
     vmVistaPrevia.autorizacion = res.detalle.autorizacion;
     vmVistaPrevia.fechaLimiteEmision = res.detalle.fechaLimite
     vmVistaPrevia.llave = res.detalle.llaveDosificacion;
@@ -971,7 +943,6 @@ function AgregarRegistroTabla3Array(row) {
     //si ya existe=>verificar si es otro cliente //false
     $("#tabla3Factura").bootstrapTable('showLoading');
     var datos = JSON.stringify(row);
-    console.log(row)
     $.ajax({
         type: "POST",
         url: base_url('index.php/Facturas/retornarTabla3Array'),
@@ -994,7 +965,6 @@ function AgregarRegistroTabla3Array(row) {
             $("#clientePedido").html(res.clientePedido)
             $.each(res.detalle, function (index, value) {
                 agregarRegistrosTabla3(value);
-                //console.log(value)
                 $('[data-index="' + index + '"]', "#tabla2detalle").addClass("danger")
             })
             calcularTotalFactura();
@@ -1023,7 +993,6 @@ function AgregarRegistroTabla3ArrayCliente(row) {
                 data: { idegreso: row[0].idegreso, idegresoDetalle: row[0].idingdetalle },
 
             }).done(function (res) {
-                console.log(res);
                 $("#cliente_factura").val(res.cliente); //******************************************
                 $("#idCliente_factura").val(res.idCliente); //******************************************
                 $("#nit_factura").val(res.clienteNit);
@@ -1043,7 +1012,6 @@ function AgregarRegistroTabla3ArrayCliente(row) {
 
             $.each(row, function (index, value) {
                 agregarRegistrosTabla3Cliente(value);
-                //console.log(value)
                 $('[data-index="' + index + '"]', "#tabla2detalle").addClass("danger")
             })
             calcularTotalFactura();
@@ -1061,7 +1029,6 @@ function AgregarRegistroTabla3ArrayCliente(row) {
 }
 function validateNum(value) {
     value = $.trim(value);
-    //console.log(editable)
     if ($.trim(value) == '') {
         return 'El dato es requerido';
     }
@@ -1073,12 +1040,9 @@ function validateNum(value) {
     }
 
     var data = $("#tabla3Factura").bootstrapTable('getData');
-    console.log(data);
     index = $(this).parents('tr').data('index');
     row = (data[index]);
-    console.log(row.cantidadRealAux)
-
-    if (parseInt(value) > parseInt(row.cantidadRealAux)) {
+    if (parseFloat(value) > parseFloat(row.cantidadRealAux)) {
         return 'No puede ser mayor a ' + row.cantidadRealAux;
     }
 
@@ -1107,8 +1071,6 @@ $(document).on("click", "#guardarFactura", function () {
         }
     }
     tabla3factura = JSON.stringify(tabla3)
-    //console.log(tabla3);
-    //console.log(idCliente);
     var datos = {
         almacen: $("#almacen_filtro").val(),
         fechaFac: $("#fechaFactura").val(),
@@ -1121,14 +1083,12 @@ $(document).on("click", "#guardarFactura", function () {
         tabla: tabla3factura,
         idCliente : idCliente,
     }
-    console.log(datos);
     $.ajax({
         type: "POST",
         url: base_url('index.php/Facturas/guardarFactura'),
         dataType: "json",
         data: datos,
     }).done(function (res) {
-        console.log(res);
         if (res) {
             quitarcargando();
             $("#tabla3Factura").bootstrapTable('removeAll');

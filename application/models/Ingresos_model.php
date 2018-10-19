@@ -238,7 +238,8 @@ class Ingresos_model extends CI_Model
     {
         $sql="SELECT *
         FROM clientes a        
-        where nombreCliente like '$b%' or documento like '$b%' ORDER By nombreCliente asc";
+        where nombreCliente like '$b%' or documento like '$b%' ORDER By nombreCliente asc
+        LIMIT 20";
         
         $query=$this->db->query($sql);
         return $query;
