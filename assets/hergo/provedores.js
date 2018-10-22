@@ -15,18 +15,6 @@ $(document).ready(function() {
                     }
                 }
             },
-          carnet: {
-                    validators: {
-                      notEmpty: {
-                        message: 'Carnet o NIT campo obligatorio'
-                    },
-                        between: {
-                            min: 1111,
-                            max: 99999999,
-                            message: 'Igrese un CI o NIT valido'
-                        }
-                    }
-                },
             nombre: {
                 validators: {
                         stringLength: {
@@ -35,21 +23,6 @@ $(document).ready(function() {
                         notEmpty: {
                         message: 'Campo obligatorio'
                     }
-                }
-            },
-           nombre_res: {
-                validators: {
-                        stringLength: {
-                        min: 2,
-                    },
-                        
-                }
-            },
-          direccion: {
-                validators: {
-                     stringLength: {
-                        min: 5,
-                    },
                 }
             },
              email: {
@@ -67,7 +40,7 @@ $(document).ready(function() {
                     validators: {
                          between: {
                             min: 1111,
-                            max: 99999999,
+                            max: 9999999999999999999,
                             message: 'Igrese número de telefono valido'
                         }
                     }
@@ -119,7 +92,7 @@ function mostrarModal(fila)
     console.log(fila)
     $("#id_proveedor").val(fila.idproveedor)
     $(".modallineatitulo").html("Editar Proveedor")
-    asignarselect(fila.documentoTipo,"#tipo_doc")
+    asignarselect(fila.documentotipo,"#tipo_doc")
     $("#carnet").val(fila.documento)
     $("#nombre").val(fila.nombreproveedor)
     $("#direccion").val(fila.direccion)
@@ -166,7 +139,7 @@ function retornarTablaProveedor()
                 visible:false,
             },  
             {   
-                field: 'documentoTipo',            
+                field: 'documentotipo',            
                 title: 'Tipo Documento',
                             
             },         

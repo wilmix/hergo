@@ -15,7 +15,8 @@ class Proveedores_model extends CI_Model
 		INNER JOIN documentotipo d
 		ON p.idDocumentoTipo=d.idDocumentoTipo
 		INNER JOIN users u
-		ON u.id=p.autor";
+		ON u.id=p.autor
+		ORDER BY p.idproveedor DESC";
 		
 		$query=$this->db->query($sql);		
 		return $query;
