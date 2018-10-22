@@ -26,7 +26,7 @@ class MarcaArticulo_model extends CI_Model
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
-		$sql="UPDATE marca SET Marca='$mar', sigla='$sig'  WHERE idMarca=$cod";
+		$sql="UPDATE marca SET Marca='$mar', Sigla='$sig'  WHERE idMarca=$cod";
 		$query=$this->db->query($sql);		
 	}
 }

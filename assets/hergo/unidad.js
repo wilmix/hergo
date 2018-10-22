@@ -1,7 +1,5 @@
 $(document).ready(function(){
-  
-     $('#form_unidad').bootstrapValidator({
-             
+    $('#form_unidad').bootstrapValidator({
         feedbackIcons: {
         valid: 'glyphicon glyphicon-ok',
         invalid: 'glyphicon glyphicon-remove',
@@ -9,10 +7,10 @@ $(document).ready(function(){
         },
         excluded: ':disabled',
         fields: {          
-           unidad: {
+            unidad: {
                 validators: {
                         stringLength: {
-                        min: 3,
+                        min: 1,
                         max: 3,
                         message: 'Dede contener 3 caracteres'
                         
@@ -26,71 +24,69 @@ $(document).ready(function(){
             sigla: {
                 validators: {
                      stringLength: {
-                        min: 2,
-                        max: 2,
-                        message: 'La sigla debe tener 2 caracteres'
+                        min: 1,
+                        max: 100,
+                        message: ''
                     },
-                                    notEmpty: {
+                    notEmpty: {
                         message: 'Campo obligatorio'
                     }
                 }
             },                
-           }
+        }
         })
         .on('success.form.bv', function(e) {
             // Prevent form submission
             e.preventDefault();
             // Get the form instance
-            var valuesToSubmit = $("#form_unidad").serialize();
-            //alert (valuesToSubmit);
+            let valuesToSubmit = $("#form_unidad").serialize();
             $.ajax({
                 url: base_url("index.php/Unidad/agregarUnidad"),
                 data: valuesToSubmit,              
                 type: 'POST',
             })
             .done(function( data, textStatus, jqXHR ) {
-                if ( console && console.log ) {
-                    console.log( "La solicitud se ha completado correctamente." );                    
-                    $('#contact-form-success').show().fadeOut(10000);
-                    $('#modallinea').modal('hide');
-                    document.location.href=""
-                }
-             })
+                resetForm('#form_unidad')
+                swal(
+                    'Unidad guardada',
+                    '',
+                    'success'
+                    )
+                $('#modalunidad').modal('hide')
+                document.location.href=""
+            })
             .fail(function( jqXHR, textStatus, errorThrown ) {
-                if ( console && console.log ) {
-                    console.log( "La solicitud a fallado: " +  textStatus);
-                }
+                swal(
+                    'Error',
+                    'La unidad ya se encuentra registrado en nuestra bases de datos',
+                    'error'
+                )
             });
         });
 });/**FIN READY**/
 /********MODAL ALMACEN EDITAR**********/
 $(document).on("click",".botoneditar",function(){
-    $("#form_unidad")[0].reset();
+    resetForm('#form_unidad')
     enivardatosmodalalmacen(this)
 })
 $(document).on("click",".btnnuevo",function(){
-     $("#form_unidad")[0].reset();
+    resetForm('#form_unidad')
 })
-function borrarmodal()
+function enivardatosmodalalmacen(data)
 {
-    $(".modalunidadtitulo").html("Agregar Marca")
-    $("#modalnombreunidad").val("")
-    $("#modalsiglaunidad").val("")
-    $("#bguardar_unidad").html("Guardar")
-}
-function enivardatosmodalalmacen(id)
-{
-    fila=$(id).parents("tr")
-    cod=$(fila).attr("id");
+    fila=$(data).parents("tr")
+    id=$(fila).attr("id");
     datos=$(fila).find("td")
-    marca=$(datos[0]).html();
+    uni=$(datos[0]).html();
     sigla=$(datos[1]).html();
-    $("#cod_unidad").val(cod)
-    $(".modalunidadtitulo").html("Editar Marca")
-    $("#modalnombreunidad").val(marca)
+    console.log(fila)
+    console.log(id);
+    console.log(datos);
+    $("#cod_unidad").val(id)
+    $(".modalunidadtitulo").html("Editar Unidad")
+    $("#modalnombreunidad").val(uni)
     $("#modalsiglaunidad").val(sigla)
     $("#bguardar_unidad").html("Editar")
     $('#modalunidad').modal('show');
-    console.log(direccion)
 }
 

@@ -7,16 +7,14 @@
           </div>                    
           <table 
               data-toggle="table"
-             data-height="550"
-             data-search="true"
-             data-show-toggle="true"
-             data-show-columns="true"
-             data-locale="es-MX"
-             data-show-refresh="false"
-             data-page-size="10"
-             data-pagination="true"
-             data-search="true"
-             data-striped="true"
+              data-height="550"
+              data-search="true"
+              data-show-toggle="true"
+              data-show-columns="true"
+              data-locale="es-MX"
+              data-show-refresh="false"
+              data-search="true"
+              data-striped="true"
              >
               <thead>
                   <tr>
@@ -52,7 +50,7 @@
 <!-- Modal -->
 <form action=" " method="post"  id="form_unidad">
   <div class="modal fade" id="modalunidad" role="dialog">
-      <input type="" name="cod" value="" id="cod_cliente" hidden> <!-- input oculto para el codigo de unidad-->
+      <input type="" name="cod" value="" id="cod_unidad" hidden> <!-- input oculto para el codigo de unidad-->
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -84,33 +82,6 @@
                 </div>
                 
               </div>
-                <!-- Ciudad  
-              <div class="form-group"> 
-                <label class="col-md-3 control-label">Ciudad</label>
-                  <div class="col-md-9 selectContainer">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pushpin"></i></span>
-                      <select name="ciudad" class="form-control selectpicker" id="modalciudadalmacen" >
-                        <option value=" " >Selecciona</option>
-                        <option>La Paz</option>
-                        <option>Potosi</option>
-                        <option >Santa Cruz</option>
-                        <option >Tarija</option>
-                      </select>
-                   </div>
-                </div>
-                
-              </div>-->
-              <!-- Uso -->
-              <div class="form-group">
-                <label class="col-md-3 control-label">En Uso</label>
-                <div class="col-md-9">
-                    <div class="radio">
-                        <label><input type="radio" name="enuso" value="1" checked/> Si </label>
-                        <label><input type="radio" name="enuso" value="0" /> No </label>
-                    </div>
-                </div>
-                
               </div>
             </fieldset>                 
             <div class="modal-footer">

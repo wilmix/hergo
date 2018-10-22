@@ -14,8 +14,6 @@
              data-show-columns="true"
              data-locale="es-MX"
              data-show-refresh="false"
-             data-page-size="100"
-             data-pagination="true"
              data-search="true"
              data-show-export="true"
              data-export-types="['excel', 'pdf']"

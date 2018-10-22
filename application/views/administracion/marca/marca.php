@@ -12,9 +12,6 @@
              data-show-toggle="true"
              data-show-columns="true"
              data-locale="es-MX"
-             data-show-refresh="false"
-             data-page-size="10"
-             data-pagination="true"
              data-search="true"
              data-striped="true"
              >
@@ -63,7 +60,7 @@
             <fieldset>
             <!-- Nombre de Marca-->
               <div class="form-group">
-                <label class="col-md-3 control-label" for="modalnombremarca">Marca</label>  
+                <label class="col-md-3 control-label">Marca</label>  
                 <div class="col-md-9 inputGroupContainer">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
@@ -83,34 +80,9 @@
                 </div>
                 
               </div>
-                <!-- Ciudad  
-              <div class="form-group"> 
-                <label class="col-md-3 control-label">Ciudad</label>
-                  <div class="col-md-9 selectContainer">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pushpin"></i></span>
-                      <select name="ciudad" class="form-control selectpicker" id="modalciudadalmacen" >
-                        <option value=" " >Selecciona</option>
-                        <option>La Paz</option>
-                        <option>Potosi</option>
-                        <option >Santa Cruz</option>
-                        <option >Tarija</option>
-                      </select>
-                   </div>
-                </div>
-                
+              
               </div>-->
               <!-- Uso -->
-              <div class="form-group">
-                <label class="col-md-3 control-label">En Uso</label>
-                <div class="col-md-9">
-                    <div class="radio">
-                        <label><input type="radio" name="enuso" value="1" checked/> Si </label>
-                        <label><input type="radio" name="enuso" value="0" /> No </label>
-                    </div>
-                </div>
-                
-              </div>
             </fieldset>                 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

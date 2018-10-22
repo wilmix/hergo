@@ -21,6 +21,7 @@ class Unidad extends CI_Controller {
             base_url("assets/dist/css/AdminLTE.min.css"),
             base_url("assets/dist/css/skins/skin-blue.min.css"),
             base_url("assets/hergo/estilos.css"),
+            base_url('assets/sweetalert/sweetalert2.min.css'),
         );
         $this->cabecera_script = array(
             base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
@@ -28,6 +29,7 @@ class Unidad extends CI_Controller {
             base_url('assets/dist/js/app.min.js'),
             base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
             base_url('assets/plugins/slimscroll/slimscroll.min.js'),
+            base_url('assets/sweetalert/sweetalert2.min.js'),
         );
         $this->datos['nombre_usuario'] = $this->session->userdata('nombre');
         $this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
@@ -64,12 +66,6 @@ class Unidad extends CI_Controller {
         $this->datos['cabeceras_script'][] = base_url('assets/plugins/FileInput/js/locales/es.js');
         /*         * ******************************** */
         $this->datos['unidad'] = $this->Articulo_model->retornar_tabla("unidad");
-        //$this->datos['marca'] = $this->Articulo_model->retornar_tabla("marca");
-        //$this->datos['linea'] = $this->Articulo_model->retornar_tabla("linea");
-        //$this->datos['requisito'] = $this->Articulo_model->retornar_tabla("requisito");
-        //$this->datos['articulos'] = $this->Articulo_model->retornar_tabla("linea");
-
-
         $this->load->view('plantilla/head.php', $this->datos);
         $this->load->view('plantilla/header.php', $this->datos);
         $this->load->view('plantilla/menu.php', $this->datos);
@@ -84,7 +80,6 @@ class Unidad extends CI_Controller {
             $uni = $this->security->xss_clean($this->input->post('unidad'));
             $sig = $this->security->xss_clean($this->input->post('sigla'));
             $cod = $this->security->xss_clean($this->input->post('cod'));
-            $enu = $this->security->xss_clean($this->input->post('enuso'));
             if ($cod == "")
                 $this->Unidad_model->agregarUnidad_model($uni, $sig);
             else

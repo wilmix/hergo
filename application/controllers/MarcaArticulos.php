@@ -79,16 +79,15 @@ class MarcaArticulos extends CI_Controller
 
     public function agregarMarca() {
         if ($this->input->is_ajax_request()) {
-            $lin = $this->security->xss_clean($this->input->post('linea'));
+            $marca = $this->security->xss_clean($this->input->post('marca'));
             $sig = $this->security->xss_clean($this->input->post('sigla'));
             $cod = $this->security->xss_clean($this->input->post('cod'));
-            $enu = $this->security->xss_clean($this->input->post('enuso'));
             if ($cod == "")
-                $this->MarcaArticulo_model->agregarMarca_model($lin, $sig);
+                $res = $this->MarcaArticulo_model->agregarMarca_model($marca, $sig);
             else
-                $this->MarcaArticulo_model->editarMarca_model($lin, $sig, $cod);
+                $res = $this->MarcaArticulo_model->editarMarca_model($marca, $sig, $cod);
         }
-        echo "{}";
+        echo $res;
     }
 
 }

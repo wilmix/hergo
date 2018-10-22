@@ -41,7 +41,7 @@ $(document).ready(function(){
             e.preventDefault();
             // Get the form instance
             var valuesToSubmit = $("#form_marcaArticulos").serialize();
-            //alert (valuesToSubmit);
+            console.log(valuesToSubmit)
             $.ajax({
                 url: base_url("index.php/MarcaArticulos/agregarMarca"),
                 data: valuesToSubmit,              
@@ -90,6 +90,5 @@ function enivardatosmodalalmacen(id)
     $("#modalsiglamarca").val(sigla)
     $("#bguardar_marca").html("Editar")
     $('#modalmarca').modal('show');
-    console.log(direccion)
 }
 

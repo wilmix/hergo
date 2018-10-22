@@ -19,14 +19,14 @@ class Unidad_model extends CI_Model
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
-		$sql="INSERT INTO Unidad(Unidad, Sigla) VALUES('$uni','$sig')";
+		$sql="INSERT INTO unidad(Unidad, Sigla) VALUES('$uni','$sig')";
 		$query=$this->db->query($sql);		
 	}
 	public function editarUnidad_model($uni,$sig,$cod)
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
-		$sql="UPDATE Unidad SET Unidad='$uni', Sigla='$sig'  WHERE idUnidad=$cod";
+		$sql="UPDATE unidad SET Unidad='$uni', Sigla='$sig'  WHERE idUnidad=$cod";
 		$query=$this->db->query($sql);		
 	}
 }

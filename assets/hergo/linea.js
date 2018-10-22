@@ -14,12 +14,10 @@ $(document).ready(function(){
                         stringLength: {
                         min: 2,
                         message: 'Ingrese nombre de Linea válido'
-                        
                     },
                     notEmpty: {
                         message: 'Campo obligatorio'
                     }
-                        
                 }
             },            
             sigla: {
@@ -42,6 +40,7 @@ $(document).ready(function(){
             // Get the form instance
             var valuesToSubmit = $("#form_linea").serialize();
             //alert (valuesToSubmit);
+            console.log(valuesToSubmit);
             $.ajax({
                 url: base_url("index.php/Linea/agregarLinea"),
                 data: valuesToSubmit,              
@@ -90,6 +89,5 @@ function enivardatosmodalalmacen(id)
     $("#modalsiglalinea").val(sigla)
     $("#bguardar_linea").html("Editar")
     $('#modallinea').modal('show');
-    console.log(direccion)
 }
 
