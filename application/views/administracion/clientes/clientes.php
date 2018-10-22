@@ -41,7 +41,7 @@
         <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h3 class="modal-title">Agregar Cliente</h3>
+              <h3 class="modal-title" >Agregar Cliente</h3>
               </div>
                   <!--MODAL BODY-->
               <div class="modal-body form form-horizontal">
@@ -53,7 +53,7 @@
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
                         <select name="tipo_doc" id="tipo_doc" class="form-control selectpicker" >
-                          <option value=" " >Selecciona</option>
+                        <option value="" selected disabled hidden>Elige Tipo Documento</option>
                           <?php foreach ($tipodocumento->result_array() as $fila):  ?>
                             <option value="<?= $fila['idDocumentoTipo'] ?>"><?= $fila['documentotipo']?></option>
                           <?php endforeach ?>
@@ -83,13 +83,13 @@
                   </div>
                    <!-- Tipo Cliente-->
                   <div class="form-group"> 
-                    <label class="col-md-3 col-lg-3 control-label">Tipo de Cliente</label>
+                    <label class="col-md-3 col-lg-3 control-label">Tipo de Cliente:</label>
                     <div class="col-md-9 col-lg-9 selectContainer">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
                         <select name="clientetipo" id="clientetipo" class="form-control selectpicker" >
-                          <option value=" " >Selecciona</option>
                           <?php foreach ($tipocliente->result_array() as $fila):  ?>
+                            <option value="" selected disabled hidden>Elige Tipo Cliente</option>
                             <option value="<?= $fila['idClientetipo'] ?>"><?= $fila['clientetipo']?></option>
                           <?php endforeach ?>
                         </select>

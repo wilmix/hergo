@@ -18,6 +18,7 @@ class Clientes extends CI_Controller
 				base_url("assets/dist/css/AdminLTE.min.css"),
 				base_url("assets/dist/css/skins/skin-blue.min.css"),
 				base_url("assets/hergo/estilos.css"),
+				base_url('assets/sweetalert/sweetalert2.min.css'),
 			);
 		$this->cabecera_script=array(
 				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
@@ -25,6 +26,7 @@ class Clientes extends CI_Controller
 				base_url('assets/dist/js/app.min.js'),
 				base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
 				base_url('assets/plugins/slimscroll/slimscroll.min.js'),
+				base_url('assets/sweetalert/sweetalert2.min.js'),
 				
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
@@ -114,15 +116,15 @@ class Clientes extends CI_Controller
         	if($id=="")//es nuevo, agregar
         	{
         		
-        		$this->Cliente_model->agregarCliente_model($id,$tipo_doc,$carnet,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website);
+        		$result = $this->Cliente_model->agregarCliente_model($id,$tipo_doc,$carnet,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website);
         	}
         	else //existe, editar
         	{
         		
-        		$this->Cliente_model->editarCliente_model($id,$tipo_doc,$carnet,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website);
+        		$result = $this->Cliente_model->editarCliente_model($id,$tipo_doc,$carnet,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website);
         	}
         }
-        echo "{}";
+        echo $result;
 	}
 	
 

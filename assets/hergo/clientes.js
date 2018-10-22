@@ -21,7 +21,7 @@
                     },
                         between: {
                             min: 1111,
-                            max: 9999999999999999,
+                            max: 999999999999999999,
                             message: 'Igrese un CI o NIT válido'
                         }
                     }
@@ -29,7 +29,7 @@
             nombre_cliente: {
                 validators: {
                         stringLength: {
-                        min: 2,
+                        min: 1,
                         message: 'Ingrese nombre válido'
                     },
                         notEmpty: {
@@ -47,7 +47,7 @@
           direccion: {
                 validators: {
                      stringLength: {
-                        min: 5,
+                        min: 1,
                         message: 'Ingrese dirección válida'
                     },
                 }
@@ -64,8 +64,8 @@
           phone: {
                     validators: {
                          between: {
-                            min: 1111,
-                            max: 99999999,
+                            min: 1,
+                            max: 999999999999999,
                             message: 'Igrese número de telefono valido'
                         }
                     }
@@ -76,7 +76,7 @@
             e.preventDefault();
             //var valuesToSubmit = $("#form_clientes").serialize();  
             var formData = new FormData($('#form_clientes')[0]);  
-            console.log(formData)              
+            //console.log(formData)              
             $.ajax({
                 url: base_url("index.php/Clientes/agregarCliente"),
                 type: 'POST',
@@ -85,18 +85,29 @@
                 contentType: false,
                 processData: false,
                 success: function (returndata) {
-                   $(".mensaje_ok").html(" Los datos se guardaron correctamente");
-                   // $("#modal_ok").modal("show");
-                    $('#contact-form-success').show().fadeOut(10000);
                     $('#modalcliente').modal('hide');
+                    resetForm('#form_clientes')
                     retornarTablaClientes()
-                    
-                }
-            }); 
+                    swal(
+                        'Cliente Registrado',
+                        '',
+                        'success'
+                        )
+                }, 
+                error : function (returndata) {
+                    swal(
+                        'Error',
+                        'El número de documento ya se encuentra registrado en nuestra bases de datos',
+                        'error'
+                    )
+                    //console.log(returndata);
+                }, 
+            })
         });
 });
 $(document).on("click","#botonmodalcliente",function(){
     resetForm('#form_clientes')
+    
     $(".modal-title").html("Agregar Cliente")
     $("#bguardar").html("Guardar")
     
@@ -108,9 +119,9 @@ $(document).on("click",".botoncerrarmodal",function(){
 
 function mostrarModal(fila)
 {
-    console.log(fila)
+    //console.log(fila)
     $("#id_cliente").val(fila.idCliente)
-    $(".modallineatitulo").html("Editar Cliente")
+    $(".modal-title").html("Editar Cliente")
     asignarselect(fila.documentotipo,"#tipo_doc")
     $("#carnet").val(fila.documento)
     $("#nombre_cliente").val(fila.nombreCliente)
@@ -144,7 +155,7 @@ function retornarTablaClientes()
             data:res,           
             striped:true,
             pagination:true,
-            pageSize:25,
+            pageSize:100,
             clickToSelect:true,
             search:true,
             showExport:true,

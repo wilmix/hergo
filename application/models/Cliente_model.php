@@ -34,14 +34,16 @@ class Cliente_model extends CI_Model
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
-		$sql="INSERT INTO clientes (idDocumentoTipo, documento, nombreCliente, idClientetipo, direccion, telefono, fax, email, web, autor, fecha) VALUES('$tipo_doc','$carnet','$nombre_cliente','$clientetipo','$direccion','$phone','$fax','$email','$website' ,'$autor','$fecha')";
+		$sql="INSERT INTO clientes (idDocumentoTipo, documento, nombreCliente, idClientetipo, direccion, telefono, fax, email, web, autor, fecha) 
+		VALUES('$tipo_doc','$carnet','$nombre_cliente','$clientetipo','$direccion','$phone','$fax','$email','$website' ,'$autor','$fecha')";
 		$query=$this->db->query($sql);		
 	}
 	public function editarCliente_model($id,$tipo_doc,$carnet,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website)
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
-		$sql="UPDATE clientes SET idDocumentoTipo='$tipo_doc', documento='$carnet', nombreCliente=UPPER('$nombre_cliente'), idClientetipo='$clientetipo', direccion='$direccion', telefono='$phone', fax='$fax', email='$email', web='$website', autor='$autor', fecha='$fecha' WHERE idCliente=$id";
+		$sql="UPDATE clientes SET idDocumentoTipo='$tipo_doc', documento='$carnet', nombreCliente=UPPER('$nombre_cliente'), idClientetipo='$clientetipo', 
+		direccion='$direccion', telefono='$phone', fax='$fax', email='$email', web='$website', autor='$autor', fecha='$fecha' WHERE idCliente=$id";
 		$query=$this->db->query($sql);		
 	}
 	public function obtenerCliente($id)
