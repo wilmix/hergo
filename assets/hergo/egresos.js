@@ -508,7 +508,7 @@ window.operateEvents = {
         }
     },
     'click .editarEgresoTraspaso': function (e, value, row, index) {
-        console.log(row.idIngresos);
+        //console.log(row.idIngresos);
         var editar = base_url("Traspasos/edicion/") + row.idEgresos;
         if (row.estado == '') {
             window.location.href = editar;
@@ -528,13 +528,13 @@ function calcularTotalDetalle(detalle) {
     $.each(detalle, function (index, value) {
 
         total += parseFloat(value.total)
-        console.log(total);
+        //console.log(total);
     })
     return total;
 }
 
 function verdetalle(fila) {
-    console.log(fila)
+    //console.log(fila)
     id = fila.idEgresos
     datos = {
         id: id,
@@ -543,30 +543,19 @@ function verdetalle(fila) {
     }
     retornarajax(base_url("index.php/Egresos/mostrarDetalle"), datos, function (data) {
         estado = validarresultado_ajax(data);
-        console.log(data);
+        //console.log(data);
         if (estado) {
-
             mostrarDetalle(data.respuesta.resultado);
-
             var totalnn = calcularTotalDetalle(data.respuesta.resultado)
-
-
             var tipocambioEgreso = data.respuesta.tipocambio;
             var totalsus = totalnn;
             var totalbs = totalnn;
             if (fila.moneda == 1) {
                 totalsus = totalsus / tipocambioEgreso;
-                console.log(tipocambioEgreso)
+                //console.log(tipocambioEgreso)
             }
             if (fila.moneda == 2)
                 totalbs = totalbs * tipocambioEgreso;
-
-
-
-
-            //console.log(sus)
-            //sus=sus.toLocaleString()
-
             $("#facturadonofacturado").html(operateFormatter2(fila.estado, fila))
             $("#almacen_egr").val(fila.almacen)
             $("#tipomov_egr").val(fila.tipomov)
@@ -582,10 +571,6 @@ function verdetalle(fila) {
             $("#nombreModal").html(fila.tipomov);
             /***pendienteaprobado***/
             var boton = "";
-            //if(fila.estado=="0")
-            // boton='<button type="button" class="btn btn-success" datastd="'+fila.idIngresos+'" id="btnaprobado">Aprobado</button>';
-            //else
-            //  boton='<button type="button" class="btn btn-danger" datastd="'+fila.idIngresos+'" id="btnpendiente">Pendiente</button>';
             var csFact = "Sin factura";
             if (fila.nfact != "SF")
                 csFact = "Con factura";
@@ -635,7 +620,7 @@ function mostrarDetalle(res) {
             {
                 field: 'Descripcion',
                 title: 'Descripcion',
-                width: '40%',
+                width: '50%',
                 sortable: true,
             },
             {
@@ -656,14 +641,6 @@ function mostrarDetalle(res) {
                 sortable: true,
             },
             {
-                field: 'descuento',
-                title: "% Dscnt",
-                align: 'right',
-                width: '10%',
-                formatter: operateFormatter3,
-                sortable: true,
-            },
-            {
                 field: 'total',
                 title: "Total",
                 align: 'right',
@@ -673,10 +650,19 @@ function mostrarDetalle(res) {
                 footerFormatter: sumaColumna
             },
             {
+                field: 'descuento',
+                title: "% Dscnt",
+                align: 'right',
+                width: '5%',
+                formatter: operateFormatter3,
+                sortable: true,
+            },
+            
+            {
                 field: 'cantFact',
                 title: "CantFact",
                 align: 'right',
-                width: '10%',
+                width: '5%',
                 sortable: true,
             },
         ]
@@ -705,7 +691,7 @@ function sumaColumna(data) {
 
 function punitariofac(value, row, index) {
 
-    console.log(row);
+    //console.log(row);
     var punit = row.cantidad == "" ? 0 : row.cantidad;
     punit = row.totaldoc / punit;
     punit = redondeo(punit, 3)

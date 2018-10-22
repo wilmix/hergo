@@ -271,7 +271,7 @@ class Egresos_model extends CI_Model
     			//print_r($fila);
     			$idArticulo=$this->retornar_datosArticulo($fila[0]);    			
               
-                $totalbs=$fila[5];
+                $totalbs=$fila[4];
                 $punitariobs=$fila[3];
     			if($idArticulo)
     			{
@@ -282,7 +282,8 @@ class Egresos_model extends CI_Model
                     
                     }
     			//	$sql="INSERT INTO egredetalle(idegreso,nmov,articulo,moneda,cantidad,punitario,total,descuento) VALUES('$idEgreso','0','$idArticulo','$moneda_ne','$fila[2]','$fila[3]','$fila[5]','$fila[4]')";
-                    $sql="INSERT INTO egredetalle(idegreso,nmov,articulo,moneda,cantidad,punitario,total,descuento) VALUES('$idEgreso','0','$idArticulo','$moneda_ne','$fila[2]','$punitariobs','$totalbs','$fila[4]')";
+                    $sql="INSERT INTO egredetalle(idegreso,nmov,articulo,moneda,cantidad,punitario,total,descuento) 
+                    VALUES('$idEgreso','0','$idArticulo','$moneda_ne','$fila[2]','$punitariobs','$totalbs','$fila[5]')";
     				$this->db->query($sql);
     			}
                 // $sql="INSERT INTO ingdetalle(idIngreso,articulo,moneda,cantidad,punitario,total) VALUES('$idingresoimportacion','$idArticulo','$moneda_imp','$fila[2]','$fila[3]','$fila[4]')";
