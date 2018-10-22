@@ -26,6 +26,10 @@ $(document).ready(function(){
                     },
                     notEmpty: {
                         message: 'Campo obligatorio'
+                    },
+                    regexp: {
+                        regexp: /[A-Z]{2}[0-9]{4}/,
+                        message: 'Formato de código incorrecto'
                     }
                 }
             },
@@ -76,7 +80,7 @@ $(document).ready(function(){
                 validators: {                 
                     between: {
                         min: 0,
-                        max: 9999999999,
+                        max: 9999999999999999,
                         message: 'Ingrese Posicion Arancelaria Valida'
                     }
                 }
@@ -120,20 +124,7 @@ $(document).ready(function(){
             e.preventDefault();
             var valuesToSubmit = $("#form_articulo").serialize();  
             var formData = new FormData($('#form_articulo')[0]);  
-            console.log(formData)      
-        
-           /* retornarajax(base_url("index.php/articulos/agregarArticulo"),valuesToSubmit,function(data)
-            {
-                estado=validarresultado_ajax(data);
-                if(estado)
-                {                       
-                    $(".mensaje_ok").html(" Los datos se guardaron correctamente");
-                    //$("#modal_ok").modal("show");
-                    $('#contact-form-success').show().fadeOut(10000);
-                    $('#modalarticulo').modal('hide');
-                    retornarTabla();              
-                }
-            }) */
+            //console.log(formData)      
             $.ajax({
                 url: base_url("index.php/Articulos/agregarArticulo"),
                 type: 'POST',
@@ -142,13 +133,24 @@ $(document).ready(function(){
                 contentType: false,
                 processData: false,
                 success: function (returndata) {
-                   $(".mensaje_ok").html(" Los datos se guardaron correctamente");
-                    $("#modal_ok").modal("show");
-                    $('#contact-form-success').show().fadeOut(10000);
                     $('#modalarticulo').modal('hide');
-        
-                    retornarTabla();
-                }
+                    resetForm('#form_articulo')
+                    swal(
+                        'Artículo guardado',
+                        '',
+                        'success'
+                        )
+                    retornarTabla()
+                }, 
+                error : function (returndata) {
+                    swal(
+                        'Error',
+                        'El código de artículo ya se encuentra registrado en nuestra bases de datos',
+                        'error'
+                    )
+                    //console.log(returndata);
+                },
+
             }); 
         });
 });/**FIN READY**/
@@ -183,7 +185,7 @@ function asignarselect(text1,select)
 
 function mostrarModal(fila)
 {
-    console.log(fila)
+    //console.log(fila)
     cargarimagen(fila.Imagen)
     $("#id_articulo").val(fila.idArticulos)
     $("#codigoarticulo").val(fila.CodigoArticulo)
@@ -219,7 +221,7 @@ function retornarTabla()
             data:res,           
             striped:true,
             pagination:true,
-            pageSize:25,
+            pageSize:100,
             clickToSelect:true,
             search:true,
             showExport:true,
@@ -231,39 +233,46 @@ function retornarTabla()
                 field: 'idArticulos',            
                 title: 'id',
                 align: 'center',
-                //events: operateEvents,
             },  
             {   
                 field: 'Imagen',            
                 title: 'Imagen',
                 align: 'center',
-                //events: operateEvents,
+                searchable: false,
                 formatter: mostrarimagen
             },         
             {
                 field:'CodigoArticulo',
                 title:"Código",
                 sortable:true,
+                align: 'center',
             },
             {
                 field:'Descripcion',
                 title:"Descripcion",
                 sortable:true,
+                align: 'left',
             },
             {
                 field:'Unidad',
                 title:"Unidad",
                 sortable:true,
+                searchable: false,
+                align: 'center',
             },
             {
                 field:"Marca",
                 title:"Marca",
                 sortable:true,
+                searchable: false,
+                align: 'center',
             },
             {
                 field:"Linea",
                 title:"Linea",
                 sortable:true,
+                searchable: false,
+                align: 'center',
             },
             {
                 field:"NumParte",
@@ -291,6 +300,7 @@ function retornarTabla()
                 title:"Fecha",
                 sortable:true,
                 visible:false,
+                searchable: false,
                 formatter: formato_fecha
             },          
             {
@@ -298,11 +308,13 @@ function retornarTabla()
                 title:"Autor",
                 sortable:true,
                 visible:false,
+                searchable: false,
             },          
             {               
                 title: 'Editar',
                 align: 'center',
                 events: operateEvents,
+                searchable: false,
                 formatter: operateFormatter
             }]
         });
@@ -314,14 +326,12 @@ function retornarTabla()
     var err = textStatus + ", " + error;
     console.log( "Request Failed: " + err );
     });
-    //$("body").css("padding-right","0px");
 }
 function mostrarimagen(value, row, index)
 {
-    //value
-    var ruta=""
-    var imagen=""
-    if((value=="")||(value=="null"))
+    let ruta=""
+    let imagen=""
+    if((value=="")||(value==null))
     {
         ruta="/assets/img_articulos/hergo.jpg"
         clase=""
@@ -333,7 +343,7 @@ function mostrarimagen(value, row, index)
     }
 
     imagen = '<div class="contimg"><img src="'+base_url(ruta)+'" class="'+clase+'"></div>'
-    return [imagen].join('');
+    return [imagen].join('')
 }
 
 function verproductoservicio(value, row, index)
@@ -369,12 +379,11 @@ $(document).on("click",".imagenminiatura",function(){
 
 function cargarimagen(imagen)
 {
-     ruta=(imagen=="")?"/assets/img_articulos/ninguno.png":"/assets/img_articulos/"+imagen
+    ruta=(imagen=="")?"/assets/img_articulos/ninguno.png":"/assets/img_articulos/"+imagen
     $('#imagenes').fileinput('destroy');
-    console.log(base_url(ruta))
-     $("#imagenes").fileinput({
+    //console.log(base_url(ruta))
+    $("#imagenes").fileinput({
         initialPreview: [
-           
             base_url(ruta)
         ],
         initialPreviewAsData: true,
@@ -385,8 +394,7 @@ function cargarimagen(imagen)
         previewFileType: "image",
         maxFileSize: 1024,
     });
-     $('#imagenes').fileinput('refresh');
-     console.log("refresh")
+    $('#imagenes').fileinput('refresh');
 }
 
 

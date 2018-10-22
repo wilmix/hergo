@@ -18,6 +18,7 @@ class Articulos extends CI_Controller
 				base_url("assets/dist/css/AdminLTE.min.css"),
 				base_url("assets/dist/css/skins/skin-blue.min.css"),
 				base_url("assets/hergo/estilos.css"),
+				base_url('assets/sweetalert/sweetalert2.min.css'),
 			);
 		$this->cabecera_script=array(
 				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
@@ -25,7 +26,7 @@ class Articulos extends CI_Controller
 				base_url('assets/dist/js/app.min.js'),
 				base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
 				base_url('assets/plugins/slimscroll/slimscroll.min.js'),
-				
+				base_url('assets/sweetalert/sweetalert2.min.js'),
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
