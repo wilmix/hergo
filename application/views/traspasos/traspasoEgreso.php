@@ -104,6 +104,43 @@ input[type=date]::-webkit-inner-spin-button {
                 </div>
             </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
             
+<!--
+            <br>
+            <hr>
+            <h3>test</h3>
+            <div class="row">
+              <div class="col-xs-12 col-md-2 has-feedback has-feedback-left">
+                  <label for="articulo_ne" style="float: left;">CodigoTest:</label><span style="margin-left: 10px;display: none;" id="cargandocodigoTest" ><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+                  <input class="form-control form-control-sm" type="text" id="articulo_impTest" name="articulo_imp"/ tabindex=5>
+                  <div style="right: 22px;top:32px;position: absolute;" id="codigocorrectoTest"><i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i></div>
+              </div>
+              <div>
+                <label>id:</label>
+                <input type="text" id="idArticulo" class="form-control form-control-sm">
+              </div>
+              <div>
+                <label>descripcion:</label>
+                <input type="text" id="descripcionArticulo" class="form-control form-control-sm">
+              </div>
+              <div>
+                <label>saldo:</label>
+                <input type="text" id="saldo" class="form-control form-control-sm">
+              </div>
+              <div>
+                <label>costo:</label>
+                <input type="text" id="costo" class="form-control form-control-sm">
+              </div>
+              <div>
+                <label>precio:</label>
+                <input type="text" id="precio" class="form-control form-control-sm">
+              </div>
+            
+            </div>
+            <h3>finTest</h3>
+            <br>
+            <hr>
+-->
+
 
                 <hr>
                 <div class="row filaarticulo"> <!--TERCERA FILA-->

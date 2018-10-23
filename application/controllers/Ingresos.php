@@ -596,13 +596,13 @@ class Ingresos extends CI_Controller
 		echo json_encode($obj);
 		
 	}
-    public function retornararticulos()
+    public function retornararticulosTest()
     {
         if($this->input->is_ajax_request() && $this->input->get('b'))
         {
-        	$b = $this->security->xss_clean($this->input->get('b'));
-        	$dato=$this->Ingresos_model->retornarArticulosBusqueda($b);        	
-
+			$b = $this->security->xss_clean($this->input->get('b'));
+			$a = $this->security->xss_clean($this->input->get('a'));
+        	$dato=$this->Ingresos_model->retornarArticulosBusquedaTest($b, $a);        	
 			echo json_encode($dato->result_array());
 		}
         else

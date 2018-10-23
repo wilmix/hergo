@@ -25,13 +25,13 @@ $(document).on("change","#almacen_imp",function(){
     {
         swal("Atencion!", "Al cambiar el almacen se quitaran los articulos de la tabla")
         swal({
-          title: "Atencion!",
-          text: "Al cambiar el almacen se quitaran los articulos de la tabla",
-          type: "warning",
-          showCancelButton: true,
-          cancelButtonText: "Cancelar",
-          confirmButtonColor: "#DD6B55",
-          confirmButtonText: "Continuar",
+            title: "Atencion!",
+            text: "Al cambiar el almacen se quitaran los articulos de la tabla",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: "Cancelar",
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Continuar",
         
         },
         function(isConfirm){
@@ -80,21 +80,19 @@ $( function() {
                 b: request.term
             },
             success: function(data) {
-               response(data);    
-               $("#cargandocliente").hide(150)
-              
+                response(data);    
+                $("#cargandocliente").hide(150)
             }
           });        
        
     }, 
 
       select: function( event, ui ) {       
-         
-          $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
-          $("#cliente_egreso").val( ui.item.nombreCliente + " - " + ui.item.documento);
-          $("#idCliente").val( ui.item.idCliente);
-          glob_guardar=true;
-          return false;
+            $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
+            $("#cliente_egreso").val( ui.item.nombreCliente + " - " + ui.item.documento);
+            $("#idCliente").val( ui.item.idCliente);
+            glob_guardar=true;
+            return false;
       }
     })
     .autocomplete( "instance" )._renderItem = function( ul, item ) {

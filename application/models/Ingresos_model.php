@@ -23,11 +23,9 @@ class Ingresos_model extends CI_Model
     }
 	public function mostrarIngresos($id=null,$ini=null,$fin=null,$alm="",$tin="")
 	{
-		if($id==null) //no tiene id de entrada 
+		if($id==null)
         {
-		  /*$sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
-				(SELECT SUM(d.total) from ingdetalle d where  d.idIngreso=i.idIngresos) as total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, total*valorTipoCambio totalsus*/
-            $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
+		    $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
             SUM(id.total) total, i.fecha, UPPER(CONCAT(u.first_name,' ', u.last_name,'')) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, SUM(id.total)/tc.tipoCambio totalsus, t.sigla, a.ciudad,
             CASE
                 WHEN i.anulado = 1 THEN 'ANULADO'
@@ -207,18 +205,18 @@ class Ingresos_model extends CI_Model
             return false;
         }        
     }
-    public function retornarArticulosBusqueda($b)
+    public function retornarArticulosBusquedaTest($b, $a)
     {
-		$sql="SELECT a.CodigoArticulo, a.Descripcion, u.Unidad
+		$sql="SELECT a.`idArticulos` id, a.CodigoArticulo codigo, a.Descripcion descripcion, u.Unidad unidad, 
+        IFNULL(a.`costoPromedioPonderado`,0) cpp,
+        IFNULL(sa.`saldo`,0) saldo,
+        IFNULL(p.`precio`, 0) precio
         FROM articulos a
-        INNER JOIN unidad u
-        ON a.idUnidad=u.idUnidad
-        where CodigoArticulo like '$b%' 
-        ORDER By CodigoArticulo asc
-        limit 5
-        ";
-        //where CodigoArticulo like '$b%' or Descripcion like '$b%' ORDER By CodigoArticulo asc
-		
+        INNER JOIN unidad u ON a.idUnidad=u.idUnidad
+        LEFT JOIN saldoarticulos sa ON sa.`idArticulo` = a.`idArticulos` AND sa.`idAlmacen` = '$a'
+        LEFT JOIN precio p ON p.`idArticulo` = a.`idArticulos`
+        WHERE a.CodigoArticulo LIKE '$b%' OR a.Descripcion LIKE '$b%'
+        ORDER BY CodigoArticulo ASC LIMIT 10";
 		$query=$this->db->query($sql);
 		return $query;
     }
@@ -445,9 +443,8 @@ class Ingresos_model extends CI_Model
             return 1;
         }
     }
-    public function retornarTipoCambio()/*retorna el ultimo tipo de cambio ANTIGUO!!!!!**/
+    public function retornarTipoCambio()
     {
-        //$sql="SELECT nmov from ingresos WHERE YEAR(fechamov)= '$gestion' and almacen='$almacen' and tipomov='$tipo' ORDER BY nmov DESC LIMIT 1";
         $sql="SELECT id from tipocambio ORDER BY id DESC LIMIT 1";
 
         $resultado=$this->db->query($sql);
@@ -461,14 +458,12 @@ class Ingresos_model extends CI_Model
             return 1;
         }
     }
-    public function retornarValorTipoCambio($id=null)/*retorna el ultimo tipo de cambio*/
+    public function retornarValorTipoCambio($id=null)
     {
-        //$sql="SELECT nmov from ingresos WHERE YEAR(fechamov)= '$gestion' and almacen='$almacen' and tipomov='$tipo' ORDER BY nmov DESC LIMIT 1";
-        if($id==null)//si es null retorna el ultimo tipo de cambio
+        if($id==null)
             $sql="SELECT * from tipocambio ORDER BY id DESC LIMIT 1";
-        else//si no retorna segun el id
+        else
             $sql="SELECT * from tipocambio where id = '$id' ORDER BY id DESC LIMIT 1";
-        //die($sql);
         $resultado=$this->db->query($sql);
         if($resultado->num_rows()>0)
         {
@@ -483,7 +478,6 @@ class Ingresos_model extends CI_Model
     public function actualizartablacostoarticulo($idArticulo,$cantidad,$costou,$idalmacen)
     {
         $sql="INSERT INTO costoarticulos(idArticulo,idAlmacen,cantidad,precioUnitario) VALUES('$idArticulo','$idalmacen','$cantidad','$costou')";
-        //die($sql);
         $this->db->query($sql);
     }
     public function retornaridtipocambio($id)
@@ -515,67 +509,8 @@ class Ingresos_model extends CI_Model
             return false;
         }
     }
-     /*consulta procedure con parametros de salida @out_param*/
-   /* public function retornarSaldo1($idArticulo,$idAlmacen)
-    {
-        $this->db->trans_start();
-
-        $success = $this->db->query("call consultar_saldo1('idAlmacen','$idArticulo',@out_param);");
-        $out_param_query = $this->db->query('select @out_param as out_param;');
-
-        $this->db->trans_complete();
-
-        if($out_param_query->num_rows()>0)
-        {
-            $fila=$out_param_query->row(); 
-            return $fila->out_param;      
-        }
-        else
-        {
-            return 0;
-        }
-
-     
-    }*/
-    //retorna tabla
- /*   public function retornarSaldo2($idArticulo,$idAlmacen) 
-    {
-        $this->db->trans_start();
-        $sql="call consultar_saldo1($idAlmacen,$idArticulo)";
-
-        $success = $this->db->query($sql);       
-
-        $this->db->trans_complete();
-      
-        if($success->num_rows()>0)
-        {
-            $fila=$success->row();             
-            return $fila;      
-        }
-        else
-        {
-            return false;
-        }
-
-    }*/
     public function retornarCosto($idArticulo) /*retorna tabla*/
     {
-        /***************************/
-        /*** LLAMAR PROCEDIMIENTO**/
-        /*YA NO ES NECESARIO POR AHORA*/
-        /* $sql="call consultarCostoArticulo($idArticulo)";        
-        $query= $this->db->query($sql);
-        mysqli_next_result($this->db->conn_id);
-        if($query->num_rows()>0)
-        {
-            $fila=$query->row();             
-            return $fila;      
-        }
-        else
-        {
-            return false;
-        }*/
-        /*********************************/
         $sql="SELECT costoPromedioPonderado from articulos where idArticulos=$idArticulo LIMIT 1";        
         $resultado=$this->db->query($sql);
         if($resultado->num_rows()>0)
@@ -591,38 +526,6 @@ class Ingresos_model extends CI_Model
     }
     public function retornarSaldo($idArticulo,$idAlmacen) /*retorna tabla*/
     {
-        /***************************/
-        /*** LLAMAR PROCEDIMIENTO**/
-        /*YA NO ES NECESARIO POR AHORA*/
-      /*  $this->db->trans_start();
-        $sql="call consultarSaldoArticulo($idArticulo,$idAlmacen)";
-
-        $success = $this->db->query($sql);       
-
-        $this->db->trans_complete();
-      
-        if($success->num_rows()>0)
-        {
-            $fila=$success->row();             
-            return $fila;      
-        }
-        else
-        {
-            return false;
-        }*/
-
-        /*$sql="call consultarSaldoArticulo($idArticulo,$idAlmacen)";
-        $query= $this->db->query($sql);
-        mysqli_next_result($this->db->conn_id);
-        if($query->num_rows()>0)
-        {
-            $fila=$query->row();             
-            return $fila;      
-        }
-        else
-        {
-            return false;
-        }*/
         $sql="SELECT saldo from saldoarticulos where idArticulo=$idArticulo and idAlmacen=$idAlmacen LIMIT 1";
         
         $resultado=$this->db->query($sql);
@@ -642,7 +545,6 @@ class Ingresos_model extends CI_Model
         $this->db->trans_start();
             $this->db->insert("ingresos", $ingreso);
             $idIngreso=$this->db->insert_id();
-
             $ingresoDetalle = array();
                 foreach ($ingreso->articulos as $fila) {
                     $detalle=new stdclass();
@@ -651,7 +553,6 @@ class Ingresos_model extends CI_Model
                     $detalle->articulo = $this->Ingresos_model->retornar_datosArticulo($fila[0]);
                     $detalle->moneda = $ingreso->moneda;
                     $detalle->cantidad = $fila[2];
-
                     if ($ingreso->moneda == 2) {
                         $detalle->punitario= $fila[5] * $tipoCambioValor;
                         $detalle->total=$fila[6] * $tipoCambioValor;
@@ -667,11 +568,9 @@ class Ingresos_model extends CI_Model
             $this->db->insert_batch("ingdetalle", $ingresoDetalle);
         
         $this->db->trans_complete();
-
         if ($this->db->trans_status() === FALSE)
         {
             return false;
-
         } else {
             
             return $idIngreso;

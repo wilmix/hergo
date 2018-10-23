@@ -1,5 +1,5 @@
-var iniciofecha=moment().subtract(0, 'year').startOf('year')
-var finfecha=moment().subtract(0, 'year').endOf('year')
+let iniciofecha=moment().subtract(0, 'year').startOf('year')
+let finfecha=moment().subtract(0, 'year').endOf('year')
 
 $(document).ready(function(){
      $(".tiponumerico").inputmask({
@@ -8,14 +8,9 @@ $(document).ready(function(){
         groupSeparator: ',',
         autoGroup: true,
         autoUnmask:true
-    });
-
-    var start = moment().subtract(0, 'year').startOf('year')
-    var end = moment().subtract(0, 'year').endOf('year')
-    var actual=moment().subtract(0, 'year').startOf('year')
-    var unanterior=moment().subtract(1, 'year').startOf('year')
-    var dosanterior=moment().subtract(2, 'year').startOf('year')
-    var tresanterior=moment().subtract(3, 'year').startOf('year')
+    })
+    let start = moment().subtract(0, 'year').startOf('year')
+    let end = moment().subtract(0, 'year').endOf('year')
  
     $(function() {
         moment.locale('es');
@@ -24,27 +19,23 @@ $(document).ready(function(){
             iniciofecha=start
             finfecha=end
         }
-        
         $('#fechapersonalizada').daterangepicker({
-
             locale: {
-                  format: 'DD/MM/YYYY',
-                  applyLabel: 'Aplicar',
-                  cancelLabel: 'Cancelar',
-                  customRangeLabel: 'Personalizado',
+                format: 'DD/MM/YYYY',
+                applyLabel: 'Aplicar',
+                cancelLabel: 'Cancelar',
+                customRangeLabel: 'Personalizado',
                 },
             startDate: start,
             endDate: end,
             ranges: {
-               'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
-               "Hace un Año": [moment().subtract(1, 'year').startOf('year'),moment().subtract(1, 'year').endOf('year')],
-               'Hace dos Años': [moment().subtract(2, 'year').startOf('year'),moment().subtract(2, 'year').endOf('year')],
-               'Hace tres Años': [moment().subtract(3, 'year').startOf('year'),moment().subtract(3, 'year').endOf('year')],               
+                'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
+                "Hace un Año": [moment().subtract(1, 'year').startOf('year'),moment().subtract(1, 'year').endOf('year')],
+                'Hace dos Años': [moment().subtract(2, 'year').startOf('year'),moment().subtract(2, 'year').endOf('year')],
+                'Hace tres Años': [moment().subtract(3, 'year').startOf('year'),moment().subtract(3, 'year').endOf('year')],               
             }
         }, cb);
-
         cb(start, end);
-
     });
     $('#fechapersonalizada').on('apply.daterangepicker', function(ev, picker) {
       retornarTablaTraspasos();
@@ -64,8 +55,6 @@ $(document).on("click", "#refresh", function () {
 
 function retornarTablaTraspasos()
 {
-
-
     ini=iniciofecha.format('YYYY-MM-DD')
     fin=finfecha.format('YYYY-MM-DD')    
     agregarcargando();
@@ -75,12 +64,10 @@ function retornarTablaTraspasos()
         dataType: "json",
         data: {i:ini,f:fin},
     }).done(function(res){
-        console.log(res)
-       datosselect= restornardatosSelect(res)
-       quitarcargando();
+        datosselect= restornardatosSelect(res)
+        quitarcargando();
         $("#tTraspasos").bootstrapTable('destroy');
         $('#tTraspasos').bootstrapTable({
-                   
             data:res,
             striped:true,
             pagination:true,
@@ -88,8 +75,6 @@ function retornarTablaTraspasos()
             search:true,
             strictSearch:true,
             filter:true,
-            //showColumns:true,
-                    
             columns:[{
                 field:'fecha',
                 title:"Fecha",
@@ -112,7 +97,7 @@ function retornarTablaTraspasos()
                 filter: {
                         type: "select",
                         data: datosselect[0]
-                    }
+                }
             },
             {
                 field:'numIngreso',
@@ -145,8 +130,8 @@ function retornarTablaTraspasos()
                 align: 'center',  
                 cellStyle:cellStyle,                  
                 filter: {
-                    type: "select",
-                    data: datosselect[2]
+                        type: "select",
+                        data: datosselect[2]
                 },
             },                  
             
@@ -160,20 +145,12 @@ function retornarTablaTraspasos()
             }]
             
         });
-        
-        //$("#tegresos").bootstrapTable('showLoading');
         $("#tegresos").bootstrapTable('resetView');
         mensajeregistrostabla(res,"#tegresos");
-
-        /*if(Object.keys(res).length<=0) $("tbody td","table#tegresos").html("No se encontraron registros")        
-        else $("tbody","table#tegresos").show()            */
-
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
     console.log( "Request Failed: " + err );
     });
-    //$("body").css("padding-right","0px");
-
 }
 function operateFormatter(value, row, index)
 {
@@ -221,7 +198,6 @@ function cellStyle(value, row, index) {
 
 function operateFormatter2(value, row, index)
 {
-
     $ret=''
 
     if(row.anulado==1)

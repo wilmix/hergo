@@ -1,8 +1,10 @@
-var glob_factorIVA=0.87;
-var glob_factorRET=0.087;
-var loc_almacen;
+let glob_factorIVA=0.87;
+let glob_factorRET=0.087;
+let loc_almacen;
+let alm = 0
 let hoy = moment().format('DD-MM-YYYY, hh:mm:ss a');
 $(document).ready(function(){    
+    alm = $("#almacen_ori").val();
     $('.fecha_traspaso').daterangepicker({
         locale: {
             format: 'DD-MM-YYYY, hh:mm:ss a'
@@ -16,34 +18,34 @@ $(document).ready(function(){
     cargarArticulos();  
 })
 $(document).on("change","#almacen_imp",function(){
-
-    var tablaaux=tablatoarray();
-    
+    let tablaaux=tablatoarray();
     if(tablaaux.length>0)
     {
         swal("Atencion!", "Al cambiar el almacen se quitaran los articulos de la tabla")
         swal({
-          title: "Atencion!",
-          text: "Al cambiar el almacen se quitaran los articulos de la tabla",
-          type: "warning",
-          showCancelButton: true,
-          cancelButtonText: "Cancelar",
-          confirmButtonColor: "#DD6B55",
-          confirmButtonText: "Continuar",
-        
+            title: "Atencion!",
+            text: "Al cambiar el almacen se quitaran los articulos de la tabla",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: "Cancelar",
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Continuar",
         },
         function(isConfirm){
-          if (isConfirm) {
+        if (isConfirm) {
             limpiarArticulo();           
             limpiarTabla();
             loc_almacen= $("#almacen_imp").val();
-          } else {
+        } else {
             $("#almacen_imp").val(loc_almacen);
-          }
+        }
         });
     }
 }); 
-
+$(document).on("change","#almacen_ori",function(){
+    alm = $("#almacen_ori").val();
+    console.log(alm);
+}); 
 
 $(document).ready(function(){ 
 
@@ -60,41 +62,41 @@ $(document).ready(function(){
 })
 /*******************CLIENTE*****************/
 $( function() {
-    $("#cliente_egreso").autocomplete(
+    console.log(alm);
+    $("#articulo_impTest").autocomplete(
     {      
-      minLength: 2,
-      autoFocus: true,
-      source: function (request, response) {        
-        $("#cargandocliente").show(150)        
-        $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
-        glob_guardar=false;
-        $.ajax({
-            url: base_url("index.php/Egresos/retornararticulos"),
-            dataType: "json",
-            data: {
-                b: request.term
-            },
-            success: function(data) {
-               response(data);    
-               $("#cargandocliente").hide(150)
-              
-            }
-          });        
-    }, 
-
-      select: function( event, ui ) {       
-         
-          $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
-          $("#cliente_egreso").val( ui.item.nombreCliente + " - " + ui.item.documento);
-          $("#idCliente").val( ui.item.idCliente);
-          glob_guardar=true;
-          return false;
-      }
-    })
-    .autocomplete( "instance" )._renderItem = function( ul, item ) {
-      
-      return $( "<li>" )
-        .append( "<a><div>" + item.nombreCliente + " </div><div style='color:#615f5f; font-size:10px'>" + item.documento + "</div></a>" )
+        minLength: 2,
+        autoFocus: true,
+        source: function (request, response) {        
+            $("#cargandocodigoTest").show(150)        
+            $("#codigocorrectoTest").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+            glob_guardar=false;
+            $.ajax({
+                url: base_url("index.php/Ingresos/retornararticulosTest"),
+                dataType: "json",
+                data: {
+                    b: request.term,
+                    a: alm
+                },
+                success: function(data) {
+                response(data);    
+                $("#cargandocodigoTest").hide(150)
+                }
+            });        
+        }, 
+        select: function( event, ui ) {       
+            $("#codigocorrectoTest").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
+            $("#articulo_impTest").val( ui.item.codigo);
+            $("#idArticulo").val( ui.item.id);
+            $("#descripcionArticulo").val( ui.item.descripcion);
+            $("#saldo").val( ui.item.saldo);
+            $("#costo").val( ui.item.cpp);
+            $("#precio").val( ui.item.precio);
+            glob_guardar=true;
+            return false;
+        }
+        }).autocomplete("instance")._renderItem = function( ul, item ) {
+        return $( "<li>" ).append( "<a><div>" + item.codigo + " </div><div style='color:#615f5f; font-size:10px'>" + item.descripcion + "</div></a>" )
         .appendTo( ul );
     };
  });
@@ -116,19 +118,7 @@ $( function() {
         $("#Descripcion_imp").val('');
         $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
         glob_agregar=false;
-       /* $.ajax({
-            url: base_url("index.php/Ingresos/retornararticulos"),
-            dataType: "json",
-            data: {
-                b: request.term
-            },
-            success: function(data) {
-               response(data);    
-               $("#cargandocodigo").hide(150)
-              
-            }
-          });    */
-           /********************/    
+ 
         var busqueda=request.term.trim()
         if(busqueda.length > 1)
         {
