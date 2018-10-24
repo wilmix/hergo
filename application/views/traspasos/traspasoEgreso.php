@@ -288,6 +288,13 @@ input[type=date]::-webkit-inner-spin-button {
               </div>
             </div>
         </form>
+        <form class="form-card">
+          <fieldset class="form-fieldset">
+            <h1>card</h1>
+            <input type="text" class="form-element-field">
+          </fieldset>
+        
+        </form>
 
       </div> <!-- /.box-body -->
     </div> <!-- /.class="box" -->
