@@ -556,11 +556,6 @@ class Facturas extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-        	if( isset( $_COOKIE['factsistemhergo'] ) ) // existe cookies?
-        	{        	
-	        	$cookie=json_decode((get_cookie('factsistemhergo')));  	        	
-	        	$cliente=$this->Cliente_model->obtenerCliente($cookie->cliente);
-        	}
         	$tipoFacturacion= ($this->security->xss_clean($this->input->post('tipoFacturacion')));
 			$fechaFac=addslashes($this->security->xss_clean($this->input->post('fechaFac')));
 			$idCliente = ($this->security->xss_clean($this->input->post('idCliente')));
@@ -600,7 +595,6 @@ class Facturas extends CI_Controller
 					$numeroFactura=1;
 			}
         	$factura=new stdclass();
-        	//$factura->idFactura=0
         	$factura->lote=$datosFactura->idDatosFactura;
         	$factura->almacen=$idAlmacen;
         	$factura->nFactura=$numeroFactura;
@@ -669,6 +663,57 @@ class Facturas extends CI_Controller
         	//var_dump($factura);
 
         	
+        }
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+
+	public function storeFactura()
+	{
+		if($this->input->is_ajax_request())
+        {
+
+			$idAlmacen=$this->session->userdata('idalmacen');		
+        	$tipoFacturacion = ($this->security->xss_clean($this->input->post('tipoFacturacion')));
+			$fechaFactura = ($this->security->xss_clean($this->input->post('fechaFac')));
+			$numFacManual = ($this->security->xss_clean($this->input->post('numFacManual')));
+        	$datosFactura=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
+			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$datosFactura->idDatosFactura);
+
+			if(!$this->validarFechaLimite($datosFactura->fechaLimite, $fechaFactura))
+			{
+				echo 'Error Limite emision';
+				die();
+			}
+			if(!$this->validarLimiteFactura($datosFactura->hasta, $ultimaFactura))
+			{
+				echo 0;
+				die();
+			}
+			if ($datosFactura->manual == 1) {
+				if(!$this->validarNumFacManual($datosFactura->desde,$datosFactura->hasta, $numFacManual))
+				{
+					echo 0;
+					die();
+				}
+				$numeroFactura = $numFacManual;
+			} else {
+				if (!$ultimaFactura) {
+					$numeroFactura = $datosFactura->desde;
+				}
+				$numeroFactura = intval($ultimaFactura->nFactura)+1;
+			}
+			$obj = new stdclass();
+			$obj->idAlmacen = $idAlmacen;
+			$obj->tipoFactura = $tipoFacturacion;
+			$obj->fechaFactura = $fechaFactura;
+			//$obj->numFactManual = $numFacManual;
+			$obj->datosFactura = $datosFactura;
+			$obj->ultimaFactura = $ultimaFactura;
+			$obj->numFactura = $numeroFactura;
+				echo json_encode($obj);
         }
 		else
 		{
@@ -750,33 +795,24 @@ class Facturas extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-        	$idAlmacen= ($this->security->xss_clean($this->input->post('idAlmacen')));			
-        	$tipoFacturacion= ($this->security->xss_clean($this->input->post('tipoFacturacion')));
-        	$fechaFactura= ($this->security->xss_clean($this->input->post('fechaFactura')));
-        	
-        	//$idAlmacen=$this->session->userdata('idalmacen');//para usuarios no administradores
+        	$idAlmacen = ($this->security->xss_clean($this->input->post('idAlmacen')));			
+        	$tipoFacturacion = ($this->security->xss_clean($this->input->post('tipoFacturacion')));
+			$fechaFactura = ($this->security->xss_clean($this->input->post('fechaFactura')));
+			$numFacManual = ($this->security->xss_clean($this->input->post('numFacManual')));
 			$resultado=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
-	
 			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$resultado->idDatosFactura);
 			
 			$errores=array();
 			$obj=new stdclass();
 			$obj->detalle=$resultado;
 			$obj->response=true;
+
 			if(!$resultado)
 			{
 				$obj->response=false;
 				$obj->resultado=null;
 				array_push($errores, "No se tiene un lote para este almacen");
 			}
-			/*if(!$ultimaFactura)
-			{
-				
-				$obj->response=false;
-				$obj->resultado=null;
-				array_push($errores, "Error no se uso el ultimo lote de facturas");
-				
-			}*/
 			if(!$this->validarFechaLimite($resultado->fechaLimite, $fechaFactura))
 			{
 				$obj->response=false;
@@ -789,17 +825,63 @@ class Facturas extends CI_Controller
 				$obj->resultado=null;
 				array_push($errores, "Error limite de facturas");
 			}
-			$obj->error=$errores;
-			if(!$ultimaFactura)
-				$obj->nfac=$resultado->desde;
-			else
+			if ($resultado->manual == 1) {
+				/*if(!$this->validarNumFacManual($resultado->desde,$resultado->hasta, $numFacManual))
+				{
+					$obj->response=false;
+					$obj->resultado=null;
+					array_push($errores, "Número de Factura manual NO ESTA EN RANGO");
+				}*/
+				if ($this->Facturacion_model->existeNumFactura($idAlmacen, $resultado->idDatosFactura, $numFacManual)) {
+					$facMan = $this->Facturacion_model->existeNumFactura($idAlmacen, $resultado->idDatosFactura, $numFacManual);
+					$obj->response=false;
+					$obj->resultado=null;
+					array_push($errores, "Número de Factura ". $facMan->nFactura . "fue emitida el ". $facMan->fechaFac);
+				}
+				$obj->nfac = $numFacManual;
+			} else {
+				if (!$ultimaFactura) {
+
+					$obj->nfac=$resultado->desde;
+				}
+				
 				$obj->nfac=intval($ultimaFactura->nFactura)+1;
+			}
+			
+			$obj->error=$errores;
+			/*$obj = new stdclass();
+			$obj->almacen = $idAlmacen;
+			$obj->tipoFacturacion = $tipoFacturacion;
+			$obj->fecha = $fechaFactura;
+			$obj->numFacManual = $numFacManual;
+			$obj->dosificacion = $resultado;
+			$obj->ultimaFactura = $ultimaFactura;*/
 			echo json_encode($obj);
 		}
 		else
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
+	}
+	private function validarNumFacManual($desde, $hasta, $actual) 
+	{
+	    $nFin= intval($hasta);
+		$nIni = intval($desde);
+		$nActual = intval($actual);
+	    return (($nActual <= $nFin && $nActual>=$nIni));
+	}
+	private function validarFechaLimite($fechalimite, $fechaactual) 
+	{
+	    $flimite = strtotime($fechalimite);
+	    $factual = strtotime($fechaactual);
+	    return (($factual <= $flimite));
+	}
+	private function validarLimiteFactura($hasta,$ultimaFactura)
+	{
+		if(!$ultimaFactura)
+			return true;
+		$actual=intval($ultimaFactura->nFactura)+1;
+			return($actual<=$hasta);
 	}
 	public function mostrarDatosDetallesFactura()
 	{
@@ -844,19 +926,7 @@ class Facturas extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	private function validarFechaLimite($fechalimite, $fechaactual) 
-	{
-	    $flimite = strtotime($fechalimite);
-	    $factual = strtotime($fechaactual);
-	    return (($factual <= $flimite));
-	}
-	private function validarLimiteFactura($hasta,$ultimaFactura)
-	{
-		if(!$ultimaFactura)
-			return true;
-		$actual=intval($ultimaFactura->nFactura)+1;
-		return($actual<=$hasta);
-	}
+	
 }
 
 

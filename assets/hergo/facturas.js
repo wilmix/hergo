@@ -99,8 +99,10 @@ $(document).on("click", "#crearFactura", function () {
         let datos = {
             idAlmacen: $("#idAlm").val(),
             tipoFacturacion: $("#tipoFacturacion").val(),
-            fechaFactura: $("#fechaFactura").val()
+            fechaFactura: $("#fechaFactura").val(),
+            numFacManual: $("#numFacManual").val(),
         }
+        console.log(datos);
         $.ajax({
             type: "POST",
             url: base_url('index.php/Facturas/consultarDatosFactura'),
@@ -153,11 +155,12 @@ $(document).on("click", "#guardarFactura", function () {
     tabla3factura = JSON.stringify(tabla3)
     let datos = {
         almacen: $("#almacen_filtro").val(),
+        tipoFacturacion: $("#tipoFacturacion").val(),
+        numFacManual: $("#numFacManual").val(),
         fechaFac: $("#fechaFactura").val(),
         moneda: $("#moneda").val(),
         total: $("#totalFacturaBs").val(),
         observaciones: $("#observacionesFactura").val(),
-        tipoFacturacion: $("#tipoFacturacion").val(),
         codigoControl: $("#codigoControl").html(),
         textqr: $("#textqr").val(),
         tabla: tabla3factura,
@@ -165,7 +168,7 @@ $(document).on("click", "#guardarFactura", function () {
     }
     $.ajax({
         type: "POST",
-        url: base_url('index.php/Facturas/guardarFactura'),
+        url: base_url('index.php/Facturas/storeFactura'),
         dataType: "json",
         data: datos,
     }).done(function (res) {
@@ -180,10 +183,10 @@ $(document).on("click", "#guardarFactura", function () {
                 allowOutsideClick: false,
             }).then(
                 function (result) {
-                    agregarcargando();
-                    location.reload();
-                    let imprimir = base_url("pdf/Factura/index/") + res;
-                    window.open(imprimir);
+                    //agregarcargando();
+                    //location.reload();
+                    //let imprimir = base_url("pdf/Factura/index/") + res;
+                    //window.open(imprimir);
                 });
 
         }
@@ -323,25 +326,6 @@ function retornarTablaFacturacion() {
         console.log("Request Failed: " + err);
     });
 }
-function restornardatosSelect(res) {
-    let cliente = new Array()
-    let vendedor = new Array()
-    let datos = new Array()
-    $.each(res, function (index, value) {
-        cliente.push(value.nombreCliente)
-        vendedor.push(value.autor)
-    })
-    vendedor.sort()
-    cliente.sort()
-    datos.push(vendedor.unique())
-    datos.push(cliente.unique())
-    return (datos)
-}
-Array.prototype.unique = function (a) {
-    return function () { return this.filter(a) }
-}(function (a, b, c) {
-    return c.indexOf(a, b + 1) < 0
-});
 function mostrarTablaDetalle(res) {
     $("#tabla2detalle").bootstrapTable('destroy');
     $("#tabla2detalle").bootstrapTable({
@@ -960,4 +944,22 @@ function cambiarMonedaTabla3() {
     }
     calcularTotalFactura();
 }
-
+function restornardatosSelect(res) {
+    let cliente = new Array()
+    let vendedor = new Array()
+    let datos = new Array()
+    $.each(res, function (index, value) {
+        cliente.push(value.nombreCliente)
+        vendedor.push(value.autor)
+    })
+    vendedor.sort()
+    cliente.sort()
+    datos.push(vendedor.unique())
+    datos.push(cliente.unique())
+    return (datos)
+}
+Array.prototype.unique = function (a) {
+    return function () { return this.filter(a) }
+}(function (a, b, c) {
+    return c.indexOf(a, b + 1) < 0
+});

@@ -41,6 +41,26 @@ class Facturacion_model extends CI_Model
             return false;
         }
 	}
+	public function existeNumFactura($alm,$lote,$nFac)
+	{
+		$sql="SELECT * 
+		FROM factura f
+		WHERE f.`lote` = $lote
+		AND f.`almacen` = $alm
+		AND f.`nFactura` = $nFac
+		LIMIT 1";		
+		$query=$this->db->query($sql);
+        if($query->num_rows()>0)
+        {
+			$fac=$query->row();
+			return ($fac);
+			
+        }
+        else
+        {
+            return false;
+        }
+	}
 	public function Listar($ini,$fin,$alm)
 	{
 		$sql="SELECT * from factura e
