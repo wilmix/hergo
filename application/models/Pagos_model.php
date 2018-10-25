@@ -196,7 +196,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function modificarPagadaFactura($pagada,$idFactura) {
 		$sql="UPDATE factura f
-		SET f.`pagada` = $pagada
+		SET f.`pagada` = $pagada, update_at=NOW()
 		WHERE f.`idFactura`=$idFactura";
 		$this->db->query($sql);
 	}

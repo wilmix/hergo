@@ -171,14 +171,14 @@ class Facturacion_model extends CI_Model
         return $query;
 	}
 	public function actualizar_estadoPagoFactura($idFactura,$saldoNuevo,$saldoPago)
-	{
+	{	
 		if($saldoNuevo==0) //pagado total
 			$pagada=1;
 		else	//pagado Parcial
 			$pagada=2;
 		if($saldoNuevo==$saldoPago)
 			$pagada=0; //no pago
-		$sql="UPDATE factura set pagada=$pagada where idFactura=$idFactura";		
+		$sql="UPDATE factura SET pagada=$pagada, update_at=NOW() WHERE idFactura=$idFactura";		
 		$query=$this->db->query($sql);		 
 		return $query;
 	}
