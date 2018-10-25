@@ -8,7 +8,42 @@ class Facturacion_model extends CI_Model
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
 	}
-	
+	public function storeFactura($factura, $tipoCambioValor)
+	{	
+        $this->db->trans_start();
+            $this->db->insert("ingresos", $factura);
+            $idFactura=$this->db->insert_id();
+            $facturaDetalle = array();
+                foreach ($factura->articulos as $fila) {
+                    $detalle=new stdclass();
+                    $detalle->idIngreso = $idIngreso;
+                    $detalle->nmov = $ingreso->nmov;
+                    $detalle->articulo = $this->Ingresos_model->retornar_datosArticulo($fila[0]);
+                    $detalle->moneda = $ingreso->moneda;
+                    $detalle->cantidad = $fila[2];
+                    if ($ingreso->moneda == 2) {
+                        $detalle->punitario= $fila[5] * $tipoCambioValor;
+                        $detalle->total=$fila[6] * $tipoCambioValor;
+                        $detalle->totaldoc=$fila[4] * $tipoCambioValor;
+                        
+                    }	elseif ($ingreso->moneda == 1) {
+                        $detalle->punitario= $fila[5];
+                        $detalle->total=$fila[6];
+                        $detalle->totaldoc=$fila[4];
+                    }
+                    array_push($ingresoDetalle,$detalle);	
+                }
+            $this->db->insert_batch("ingdetalle", $ingresoDetalle);
+        
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        } else {
+            
+            return $idIngreso;
+        }
+	}
 	public function guardar($obj)
 	{		
 		$sql=$this->db->insert("factura", $obj);

@@ -674,13 +674,20 @@ class Facturas extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-
 			$idAlmacen=$this->session->userdata('idalmacen');		
         	$tipoFacturacion = ($this->security->xss_clean($this->input->post('tipoFacturacion')));
 			$fechaFactura = ($this->security->xss_clean($this->input->post('fechaFac')));
 			$numFacManual = ($this->security->xss_clean($this->input->post('numFacManual')));
+			$idCliente = ($this->security->xss_clean($this->input->post('idCliente')));
+			$moneda = ($this->security->xss_clean($this->input->post('moneda')));
+			$total = ($this->security->xss_clean($this->input->post('total')));
+			$observaciones = ($this->security->xss_clean($this->input->post('observaciones')));
+			$codigoControl = ($this->security->xss_clean($this->input->post('codigoControl')));
+			$articulos = ($this->security->xss_clean($this->input->post('tabla')));
+
         	$datosFactura=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
 			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$datosFactura->idDatosFactura);
+			$cliente=$this->Cliente_model->obtenerCliente($idCliente);
 
 			if(!$this->validarFechaLimite($datosFactura->fechaLimite, $fechaFactura))
 			{
@@ -705,15 +712,23 @@ class Facturas extends CI_Controller
 				}
 				$numeroFactura = intval($ultimaFactura->nFactura)+1;
 			}
-			$obj = new stdclass();
-			$obj->idAlmacen = $idAlmacen;
-			$obj->tipoFactura = $tipoFacturacion;
-			$obj->fechaFactura = $fechaFactura;
-			//$obj->numFactManual = $numFacManual;
-			$obj->datosFactura = $datosFactura;
-			$obj->ultimaFactura = $ultimaFactura;
-			$obj->numFactura = $numeroFactura;
-				echo json_encode($obj);
+			$factura = new stdclass();
+			$factura->lote = $datosFactura->idDatosFactura;
+			$factura->almacen = $idAlmacen;
+			$factura->nFactura = $numeroFactura;
+			$factura->fechaFac = $fechaFactura;
+			$factura->cliente = $idCliente;
+			$factura->moneda = $moneda;
+			$factura->total = $total;
+			$factura->glosa = $observaciones;
+			$factura->codigoControl = $codigoControl;
+			$factura->autor=$this->session->userdata('user_id');
+        	$factura->fecha=date('Y-m-d H:i:s'); 
+			$factura->tipoCambio=$this->Egresos_model->retornarTipoCambio();
+			$factura->ClienteFactura=$cliente->nombreCliente;
+			$factura->ClienteNit=$cliente->documento;
+			$factura->articulos = json_decode($articulos);
+			echo json_encode($factura);
         }
 		else
 		{
@@ -826,22 +841,21 @@ class Facturas extends CI_Controller
 				array_push($errores, "Error limite de facturas");
 			}
 			if ($resultado->manual == 1) {
-				/*if(!$this->validarNumFacManual($resultado->desde,$resultado->hasta, $numFacManual))
+				if(!$this->validarNumFacManual($resultado->desde,$resultado->hasta, $numFacManual))
 				{
 					$obj->response=false;
 					$obj->resultado=null;
 					array_push($errores, "Número de Factura manual NO ESTA EN RANGO");
-				}*/
+				}
 				if ($this->Facturacion_model->existeNumFactura($idAlmacen, $resultado->idDatosFactura, $numFacManual)) {
 					$facMan = $this->Facturacion_model->existeNumFactura($idAlmacen, $resultado->idDatosFactura, $numFacManual);
 					$obj->response=false;
 					$obj->resultado=null;
-					array_push($errores, "Número de Factura ". $facMan->nFactura . "fue emitida el ". $facMan->fechaFac);
+					array_push($errores, "Número de Factura ". $facMan->nFactura . " fue emitida el ". date("d/m/Y", strtotime($facMan->fechaFac)));
 				}
 				$obj->nfac = $numFacManual;
 			} else {
 				if (!$ultimaFactura) {
-
 					$obj->nfac=$resultado->desde;
 				}
 				

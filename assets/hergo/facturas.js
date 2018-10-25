@@ -86,14 +86,20 @@ $(document).on("click", "#refresh", function () {
 $(document).on("change", "#tipoFacturacion", function () {
     if ($("#tipoFacturacion").val() == 1) {
         $(".facturaManual").removeClass("hidden")
+        $(".facturaManual").val('')
     } else {
         $(".facturaManual").addClass("hidden")
+        $(".facturaManual").val('')
     }
 })
 $(document).on("click", ".quitarTodos", function () {
     quitarTodosElementosTabla3Cliente();
 })
 $(document).on("click", "#crearFactura", function () {
+    if ($("#tipoFacturacion").val() == 1 && $("#numFacManual").val() =='' ) {
+        swal("Error", "Debe agregar número de Factura", "error")
+        return false
+    }
     let tabla3factura = $("#tabla3Factura").bootstrapTable('getData');
     if (tabla3factura.length > 0) {
         let datos = {
@@ -173,6 +179,7 @@ $(document).on("click", "#guardarFactura", function () {
         data: datos,
     }).done(function (res) {
         if (res) {
+            console.log(res);
             quitarcargando();
             $("#tabla3Factura").bootstrapTable('removeAll');
             swal({
