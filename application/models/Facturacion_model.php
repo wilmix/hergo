@@ -8,41 +8,63 @@ class Facturacion_model extends CI_Model
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
 	}
-	public function storeFactura($factura, $tipoCambioValor)
+	public function storeFactura($factura)
 	{	
         $this->db->trans_start();
-            $this->db->insert("ingresos", $factura);
+            $this->db->insert("factura", $factura);
             $idFactura=$this->db->insert_id();
-            $facturaDetalle = array();
+            if($idFactura>0) //se registro correctamente => almacenar la tabla
+        	{
+				$facturaDetalle = array();
+				$facturaEgreso=array();
                 foreach ($factura->articulos as $fila) {
                     $detalle=new stdclass();
-                    $detalle->idIngreso = $idIngreso;
-                    $detalle->nmov = $ingreso->nmov;
-                    $detalle->articulo = $this->Ingresos_model->retornar_datosArticulo($fila[0]);
-                    $detalle->moneda = $ingreso->moneda;
-                    $detalle->cantidad = $fila[2];
-                    if ($ingreso->moneda == 2) {
-                        $detalle->punitario= $fila[5] * $tipoCambioValor;
-                        $detalle->total=$fila[6] * $tipoCambioValor;
-                        $detalle->totaldoc=$fila[4] * $tipoCambioValor;
-                        
-                    }	elseif ($ingreso->moneda == 1) {
-                        $detalle->punitario= $fila[5];
-                        $detalle->total=$fila[6];
-                        $detalle->totaldoc=$fila[4];
-                    }
-                    array_push($ingresoDetalle,$detalle);	
+                    $detalle->idFactura = $idFactura;
+					$detalle->articulo = $fila->id;
+					$detalle->moneda = $factura->moneda;
+					$detalle->facturaCantidad = $fila->cantidadReal;
+					$detalle->facturaPUnitario = $fila->punitario;
+					$detalle->ArticuloNombre = $fila->Descripcion;
+					$detalle->ArticuloCodigo = $fila->CodigoArticulo;
+					$detalle->idEgresoDetalle = $fila->idEgreDetalle;
+					array_push($facturaDetalle,$detalle);
+
+					$this->Egresos_model->actualizarCantFact($fila->idEgreDetalle,$fila->cantidadReal);
+					$this->actualizarEstado($fila->idegreso);	
+					
+					$factura_egreso = new stdclass();
+					$factura_egreso->idegresos = $fila->idegreso;
+					$factura_egreso->idFactura = $idFactura;
+					array_push($facturaEgreso,$factura_egreso);
+
                 }
-            $this->db->insert_batch("ingdetalle", $ingresoDetalle);
-        
+			$this->db->insert_batch("facturadetalle", $facturaDetalle);
+			$this->db->insert_batch("factura_egresos", $facturaEgreso);
+        	}
+        	else
+        	{
+        		echo false;
+        	}
         $this->db->trans_complete();
         if ($this->db->trans_status() === FALSE)
         {
-            return false;
+			return false;
+			
         } else {
             
-            return $idIngreso;
+            return $idFactura;
         }
+	}
+	public function actualizarEstado($idEgreso)//cambia el estado si esta pendiente o facturado
+	{
+		$estado=0;
+		$cantidad=$this->Egresos_model->evaluarFacturadoTotal($idEgreso); //si es 0 facturado total si no parcial
+		if(count($cantidad)==0)//Facturado
+			$estado=1;
+		else
+			$estado=2;
+		$this->Egresos_model->actualizarEstado($idEgreso,$estado);
+		return $estado;
 	}
 	public function guardar($obj)
 	{		

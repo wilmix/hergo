@@ -224,56 +224,8 @@ class Facturas extends CI_Controller
         {
         	$idegreso= addslashes($this->security->xss_clean($this->input->post('idegreso')));
         	$egresoDetalle=FALSE;
-        	/***Retornar idcliente***/
-			//$datosEgreso=$this->Egresos_model->mostrarEgresos($idegreso);
-        	//$fila=$datosEgreso->row();
-        	//$idcliente=$fila->idcliente; 
-        	/************************/
-	      /*  if( isset( $_COOKIE['factsistemhergo'] ) ) 
-	        {	
-	        	$cookie=json_decode($this->desencriptar(get_cookie('factsistemhergo')));  
-							
-	        	if($cookie->cliente==$idcliente)// es el mismo cliente que ya se agrego en la tabla?
-	        	{
-	        		if(!in_array($idegreso, $cookie->egresos))
-	        		{
-	        			//no existe en el array entonces agregarlo	        			
-	        			array_push($cookie->egresos,$idegreso);
-	        			$egresoDetalle=$this->Egresos_model->mostrarDetalle($idegreso)->result();
-	        			$mensaje="Registro agregado correctamente";
-	        			//return $egresoDetalle;
-	        		}
-	        		else
-	        		{
-	        			//existe entonces no se puede agregar el detalle	        			
-	        			$egresoDetalle=FALSE;//return FALSE;
-	        			$mensaje="Ya se agrego este registro";
-	        		}	        		
-	        	}
-	        	else
-	        	{
-	        		//es otro cliente no hacer nada	        		
-	        		$egresoDetalle=FALSE;//return FALSE;
-	        		$mensaje="No se pueden agregar registros de otro cliente";
-	        	}
-			}	
-			else
-			{
-				//no existe cookie entonces crear nuevo
-				//si no existe la tabla 2 esta vacia y no se selecciono ningun egreso, 
-				$egresoDetalle=$this->Egresos_model->mostrarDetalle($idegreso)->result();
-				$mensaje="Se agrego el primer registro en la tabla correctamente";
-				$obj= new stdclass();
-				$obj->egresos= array($idegreso);
-				$obj->cliente=$idcliente;
-				$cookie=$obj;
-			}*/
-			//$cookienew=json_encode($cookie);
-			//$cookienew=$this->encriptar($cookienew);
-			//set_cookie('factsistemhergo',$cookienew,'3600'); 	
 			$egresoDetalle=$this->Egresos_model->mostrarDetalleFacturas($idegreso)->result();
 			$datosEgreso=$this->Egresos_model->retornarEgreso($idegreso);
-		//	print_r($datosEgreso);
 			if($datosEgreso->moneda==2)
 			{
 				for ($i=0; $i < count($egresoDetalle); $i++) 
@@ -677,6 +629,7 @@ class Facturas extends CI_Controller
 			$idAlmacen=$this->session->userdata('idalmacen');		
         	$tipoFacturacion = ($this->security->xss_clean($this->input->post('tipoFacturacion')));
 			$fechaFactura = ($this->security->xss_clean($this->input->post('fechaFac')));
+			$fechaFactura = date('Y-m-d',strtotime($fechaFactura));
 			$numFacManual = ($this->security->xss_clean($this->input->post('numFacManual')));
 			$idCliente = ($this->security->xss_clean($this->input->post('idCliente')));
 			$moneda = ($this->security->xss_clean($this->input->post('moneda')));
@@ -728,7 +681,9 @@ class Facturas extends CI_Controller
 			$factura->ClienteFactura=$cliente->nombreCliente;
 			$factura->ClienteNit=$cliente->documento;
 			$factura->articulos = json_decode($articulos);
-			echo json_encode($factura);
+			$idFactura = $this->Facturacion_model->storeFactura($factura);
+
+			echo ($idFactura);
         }
 		else
 		{

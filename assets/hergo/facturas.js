@@ -3,6 +3,7 @@ let finfecha = moment().subtract(0, 'year').endOf('year')
 let hoy = moment().format('DD-MM-YYYY')
 let $table
 let scope = this
+let clienteCorrecto = false
 window.operateEvents = {
     'click .agregartabla': function (e, value, row, index) {
         AgregarTabla(row);
@@ -20,6 +21,45 @@ window.operateEvents = {
     },
 
 }
+$( function() {
+    $("#cliente_factura").autocomplete(
+    {      
+      minLength: 3,
+      autoFocus: true,
+      source: function (request, response) {        
+        $("#cargandocliente").show(150) 
+        $.ajax({
+            url: base_url("index.php/Egresos/retornarClientes"),
+            dataType: "json",
+            data: {
+                b: request.term
+            },
+            success: function(data) {
+               response(data);    
+               $("#cargandocliente").hide(150)
+            }
+          });        
+       
+    }, 
+      select: function( event, ui ) {       
+         
+          $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
+          $("#cliente_factura").val( ui.item.nombreCliente + " - " + ui.item.documento);
+          $("#idCliente_factura").val( ui.item.idCliente);
+          $("#nit_factura").val( ui.item.documento);
+          $("#nombreFacturaPrevia").val( ui.item.nombreCliente);
+          $("#errorCliente").removeClass("hidden")
+          clienteCorrecto = true
+          return false;
+      }
+    })
+    .autocomplete( "instance" )._renderItem = function( ul, item ) {
+      
+      return $( "<li>" )
+        .append( "<a><div>" + item.nombreCliente + " </div><div style='color:#615f5f; font-size:10px'>" + item.documento + "</div></a>" )
+        .appendTo( ul );
+    };
+ });
 $(document).ready(function () {
     $('#fechaFactura').daterangepicker({
         singleDatePicker: true,
@@ -94,10 +134,15 @@ $(document).on("change", "#tipoFacturacion", function () {
 })
 $(document).on("click", ".quitarTodos", function () {
     quitarTodosElementosTabla3Cliente();
+    $("#errorCliente").addClass("hidden")
 })
 $(document).on("click", "#crearFactura", function () {
     if ($("#tipoFacturacion").val() == 1 && $("#numFacManual").val() =='' ) {
         swal("Error", "Debe agregar número de Factura", "error")
+        return false
+    }
+    if ($("#cliente_factura").val().trim() == '' && clienteCorrecto == false) {
+        swal("Error", "Debe seleccionar cliente", "error")
         return false
     }
     let tabla3factura = $("#tabla3Factura").bootstrapTable('getData');
@@ -108,7 +153,7 @@ $(document).on("click", "#crearFactura", function () {
             fechaFactura: $("#fechaFactura").val(),
             numFacManual: $("#numFacManual").val(),
         }
-        console.log(datos);
+        console.log(tabla3factura);
         $.ajax({
             type: "POST",
             url: base_url('index.php/Facturas/consultarDatosFactura'),
@@ -168,10 +213,10 @@ $(document).on("click", "#guardarFactura", function () {
         total: $("#totalFacturaBs").val(),
         observaciones: $("#observacionesFactura").val(),
         codigoControl: $("#codigoControl").html(),
-        textqr: $("#textqr").val(),
         tabla: tabla3factura,
         idCliente : idCliente,
     }
+    console.log(datos)
     $.ajax({
         type: "POST",
         url: base_url('index.php/Facturas/storeFactura'),
@@ -190,10 +235,10 @@ $(document).on("click", "#guardarFactura", function () {
                 allowOutsideClick: false,
             }).then(
                 function (result) {
-                    //agregarcargando();
-                    //location.reload();
-                    //let imprimir = base_url("pdf/Factura/index/") + res;
-                    //window.open(imprimir);
+                    agregarcargando();
+                    location.reload();
+                    let imprimir = base_url("pdf/Factura/index/") + res;
+                    window.open(imprimir);
                 });
 
         }
@@ -357,6 +402,11 @@ function mostrarTablaDetalle(res) {
                 visible: false,
             },
             {
+                field: 'id',
+                title: 'id',
+                visible: true,
+            },
+            {
                 field: 'CodigoArticulo',
                 title: 'Código',
                 align: 'center',
@@ -457,6 +507,11 @@ function mostrarTablaFactura() {
                 field: 'Sigla',
                 title: 'unidad',
                 visible: false,
+            },
+            {
+                field: 'id',
+                title: 'id',
+                visible: true,
             },
             {
                 field: 'CodigoArticulo',
@@ -784,6 +839,7 @@ function agregarRegistrosTabla3Cliente(detalle) {
         let moneda = $("#moneda").val();
             let rows = [];
             rows.push({
+                id:detalle.id,
                 idEgreDetalle: detalle.idingdetalle,
                 idegreso: detalle.idegreso,
                 Sigla: detalle.Sigla,
@@ -794,6 +850,7 @@ function agregarRegistrosTabla3Cliente(detalle) {
                 punitario: moneda == 2 ? detalle.punitario / glob_tipoCambio : detalle.punitario,
                 total: moneda == 2 ? detalle.total / glob_tipoCambio : detalle.total,
             })
+            console.log(rows)
             $("#tabla3Factura").bootstrapTable('append', rows);
     }
    
@@ -889,6 +946,7 @@ function AgregarRegistroTabla3ArrayCliente(row) {
                 dataType: "json",
                 data: { idegreso: row[0].idegreso, idegresoDetalle: row[0].idingdetalle },
             }).done(function (res) {
+                console.log(res)
                 $("#cliente_factura").val(res.cliente)
                 $("#idCliente_factura").val(res.idCliente)
                 $("#nit_factura").val(res.clienteNit)

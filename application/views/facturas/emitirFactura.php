@@ -43,7 +43,7 @@
           </div>
           <div class="col-md-6 col-xs-12">
             <div class="input-group col-md-12 col-xs-12">
-              <span class="input-group-addon">Cliente:</span><span style="margin-left: 10px;display: none;" id="cargandocliente" ><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+              <span class="input-group-addon">Cliente: <span class="badge label-success hidden" id="errorCliente"><i class="fa fa-check"></i></span> </span><span style="margin-left: 10px;display: none;" id="cargandocliente" ><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
               <input class="form-control form-control-sm" type="text" id="cliente_factura" name="cliente_factura" value="">
               <input type="text" readonly="true" name="idCliente_factura" id="idCliente_factura" class="hidden" value=""> 
               <span class="input-group-addon hidden facturaManual">N° Factura:</span>

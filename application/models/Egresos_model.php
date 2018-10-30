@@ -189,7 +189,7 @@ class Egresos_model extends CI_Model
     }
     public function mostrarDetalleFacturas($id)//lista todos los detalles de un egreso
     {
-        $sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario11, e.punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal
+        $sql="SELECT e.articulo id, a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario11, e.punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal
         FROM egredetalle e
         INNER JOIN articulos a
         ON e.articulo = a.idArticulos
