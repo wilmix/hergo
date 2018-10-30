@@ -177,6 +177,27 @@ class Configuracion extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	public function updateTipoCambio()
+	{
+		if($this->input->is_ajax_request()){
+			$id = addslashes($this->security->xss_clean($this->input->post('id')));
+			$fecha = addslashes($this->security->xss_clean($this->input->post('fecha')));
+			$tipocambio = addslashes($this->security->xss_clean($this->input->post('tipocambio')));
+			
+			if ($id == '') {
+				$res = $this->Configuracion_model->agregarTipoCambio_model($tipocambio);
+			} else {
+				$res=$this->Configuracion_model->updateTipoCambio($id, $fecha, $tipocambio);
+			}
+			
+			
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 
 	
 }

@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
     retornarTablaTipoCambio();
     $('#form_tipoCambio').bootstrapValidator({
@@ -22,23 +23,33 @@ $(document).ready(function() {
         }
         }).on('success.form.bv', function(e) {
             e.preventDefault();
-            let valuesToSubmit = $("#form_tipoCambio").serialize();  
             let formData = new FormData($('#form_tipoCambio')[0]);  
-            $.ajax({
-                url: base_url("index.php/Configuracion/agregarTipoCambio"),
+            console.log(formData)
+        $.ajax({
+                url: base_url("index.php/Configuracion/updateTipoCambio"),
                 type: 'POST',
                 data: formData,
                 cache: false,
                 contentType: false,
                 processData: false,
                 success: function (returndata) {
-                    $(".mensaje_ok").html("Se establecio el tipo de cambio Correctamente");
-                    $("#modal_ok").modal("show");
-                    $('#contact-form-success').show().fadeOut(1000);
+                    swal({
+                        title: 'Se establecio el tipo de cambio Correctamente',
+                        type: 'success',
+                        showCancelButton: false,
+                        allowOutsideClick: false,
+                    })
                     $('#modalTipoCambio').modal('hide');
-                    setTipoCambio();
                     retornarTablaTipoCambio();
-                }
+                },
+                error : function (returndata) {
+                    swal(
+                        'Error',
+                        'La fecha actual ya tiene un tipo de cambio registrada en la base de datos',
+                        'error'
+                    )
+                    //console.log(returndata);
+                },
             }); 
         });
 });
@@ -96,6 +107,14 @@ $(document).on("click",".botoncerrarmodal",function(){
                 title: 'Autor',
                 align: 'center',
                 sortable: true,
+                },
+                {   
+                field: '',            
+                title: '',
+                align: 'center',
+                sortable: true,
+                formatter: operateFormatter,
+                events:operateEvents
                 }
             ]
          });
@@ -105,4 +124,32 @@ $(document).on("click",".botoncerrarmodal",function(){
        var err = textStatus + ", " + error;
        console.log("Request Failed: " + err);
    });
+   
+}
+function operateFormatter(value, row, index){
+    return [
+        '<a class="editar" title="editar" data-toggle="modal" data-target="#editar" style="cursor:pointer">',
+        '<div><i class="fas fa-pencil-alt fa-lg"></i></div>',
+        '</a>  '       
+    ].join('');
+}
+window.operateEvents = {
+    'click .editar': function (e, value, row, index) {
+        //console.log('You click like action, row: ' + JSON.stringify(row));
+         //resetForm('#form_datosFactura')
+         mostrarModal(row)
+           // $("#tarticulo").bootstrapTable('hideLoading');            
+    },
+}
+function mostrarModal(fila)
+{
+    let fecha = formato_fecha_corta(fila.fecha)
+    $("#fechaTipoCambio").html(fecha)
+    $("#tipocambio").val(fila.tipocambio)
+    $("#id").val(fila.id)
+    $("#fecha").val(fila.fecha)
+
+
+    $('#modalTipoCambio').modal('show');
+  
 }

@@ -104,11 +104,6 @@ $(document).ready(function() {
                 }
             }); 
         });
-
-
-
-
-
 });
 
 function retornarTablaDatosFactura() {

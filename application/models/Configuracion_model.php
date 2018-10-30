@@ -44,9 +44,10 @@ class Configuracion_model extends CI_Model
 		$query=$this->db->query($sql);
 	}
 	public function agregarTipoCambio_model($tipocambio){
-		$autor=$this->session->userdata('user_id');
-		$fecha = date('Y-m-d H:i:s');
-		$sql="INSERT INTO tipocambio (fecha, tipocambio, autor) VALUES ('$fecha', '$tipocambio', '$autor')";
+		$user=$this->session->userdata('user_id');
+		$fecha = date('Y-m-d');
+		$update_at = date('Y-m-d H:i:s');
+		$sql="INSERT INTO tipocambio (fecha, tipocambio, autor, update_at) VALUES ('$fecha', '$tipocambio', '$user', $update_at)";
 		$query=$this->db->query($sql);
 	}
 	public function mostrarTipoCambio(){
@@ -56,5 +57,18 @@ class Configuracion_model extends CI_Model
 		ORDER by id DESC";
 		$query=$this->db->query($sql);		
 		return $query;
+	}
+	public function updateTipoCambio($id, $fecha, $tipocambio){
+		$user  = $this->session->userdata('user_id');
+		$update_at = date('Y-m-d H:i:s');
+		$data = array(
+				'fecha' => $fecha,
+				'tipocambio' => $tipocambio,
+				'autor' => $user,
+				'update_at' => $update_at
+				);
+		$this->db->where('id', $id);
+		$this->db->update('tipocambio', $data);
+		return $data;
 	}
 }
