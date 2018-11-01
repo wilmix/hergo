@@ -47,7 +47,7 @@ class Configuracion_model extends CI_Model
 		$user=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d');
 		$update_at = date('Y-m-d H:i:s');
-		$sql="INSERT INTO tipocambio (fecha, tipocambio, autor, update_at) VALUES ('$fecha', '$tipocambio', '$user', $update_at)";
+		$sql="INSERT INTO tipocambio (fecha, tipocambio, autor, update_at) VALUES ('$fecha', '$tipocambio', '$user', '$update_at')";
 		$query=$this->db->query($sql);
 	}
 	public function mostrarTipoCambio(){
