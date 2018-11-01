@@ -5,6 +5,7 @@
     $idtingreso=0;
     $idmoneda=0;
     $idproveedor=0;
+    $tipoDoc=1;
     if($cont)
     {
         $originalDate = $dcab->fechamov;
@@ -18,6 +19,7 @@
         $idmoneda=$dcab->idmoneda;
         $idproveedor=$dcab->idproveedor;
         $idingresocompraslocales=$idtingreso;
+        $tipoDoc = $dcab->tipoDoc;
     }
     else
     {
@@ -57,50 +59,76 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-header with-border">
-        <!--<h3 class="box-title">Ingreso Importaciones</h3>-->
+        <h3 class="box-title"> 
+          <span id="tituloIngresos">
+            <?php if ($cont): ?>
+              <?= 'Modificar ' . $dcab->tipomov . ' # ' . $dcab->n ?>
+            <?php endif ?>
+          </span>
+        </h3>
       </div>
       <div class="box-body">
-        <form action=" " method="post"  id="form_ingresoImportaciones">
+        <form action="" method="post"  id="form_ingresoImportaciones">
           <div class="form">
-          <!-- formulario PRIMERA FILA-->
+          <!-- OCULTO ID-->
             <?php if ($cont): ?>
-                <input id="idingresoimportacion" name="idingresoimportacion" type="text" class="hidden"  hidden value="<?= $dcab->idIngresos ?>">
+                <input  id="idingresoimportacion" 
+                        name="idingresoimportacion" 
+                        type="text" 
+                        class="hidden"  
+                        value="<?= $dcab->idIngresos ?>">
             <?php endif ?>
-            <div class="row"> <!--PRIMERA FILA-->
+            <div>
+              <input  id="nmov" 
+                      type="number" 
+                      class="hidden" 
+                      name="nmov" 
+                      value="<?= ($cont)?$dcab->n:""  ?>"/>
+            </div>
+            <!--PRIMERA FILA-->
+            <div class="row"> 
                <div class=" col-xs-6 col-sm-6 col-md-3">
-                <label>Almacen:</label>
-                <select class="form-control form-control-sm" id="almacen_imp" name="almacen_imp" <?= ($cont)?"disabled":"" ?>>
-                <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
-                   <?php foreach ($almacen->result_array() as $fila): ?>
-                     <option value=<?= $fila['idalmacen'] ?> <?= ($idalmacen==$fila['idalmacen'])?"selected":"" ?> ><?= $fila['almacen'] ?></option>
-                     
-                   <?php endforeach ?>
-                </select>
+                  <label>Almacen:</label>
+                  <select class="form-control form-control-sm" 
+                          id="almacen_imp" 
+                          name="almacen_imp" 
+                          <?= ($cont)?"disabled":"" ?>>
+                    <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
+                    <?php foreach ($almacen->result_array() as $fila): ?>
+                        <option value=<?= $fila['idalmacen'] ?> 
+                        <?= ($idalmacen==$fila['idalmacen'])?"selected":"" ?>>
+                        <?= $fila['almacen'] ?></option>
+                    <?php endforeach ?>
+                  </select>
                </div>
                <div class=" col-xs-6 col-sm-6 col-md-3">
                 <input type="" name="tipomov_imp" value="<?= (isset($idingreso)?$idingreso:0)?>" class="hidden">
                 <label for="tipomov_imp">Tipo de Ingreso:</label>
-                <select class="form-control form-control-sm" id="tipomov_imp2" name="tipomov_imp2"  <?= ($cont)?"disabled":"" ?> disabled>
+                <select class="form-control form-control-sm" 
+                        id="tipomov_imp2" 
+                        name="tipomov_imp2"  
+                        <?= ($cont)?"disabled":"" ?>>
                    <?php foreach ($tingreso->result_array() as $fila): ?>
                     <?php if ($cont): ?>
                       <?php if ($idtingreso==$fila['id']): ?>
                         <option value=<?= $fila['id'] ?> "selected"><?= $fila['tipomov'] ?></option>
                       <?php endif ?>
                     <?php else: ?>
-					
           					  <?php if ($idingreso==$fila['id']): ?>
                                 	<option value=<?= $fila['id'] ?> <?= ($idingreso==$fila['id'])?"selected":"" ?>><?= $fila['tipomov'] ?></option>
           					  <?php endif ?>
                     <?php endif ?>
-                     
                    <?php endforeach ?>
                 </select>
                </div>
                <div class="col-xs-6 col-sm-6 col-md-2">
-
-                  <label for="fechamov_imp" >Fecha:</label>
-                  <input id="fechamov_imp" type="text" class="form-control form-control-sm fecha_ingreso" 
-                  name="fechamov_imp" placeholder="Fecha" value="<?= ($cont)?$newDate:''  ?>"  <?= ($cont)?"disabled":"" ?> autofocus/>
+                  <label>Fecha:</label>
+                  <input  id="fechamov_imp" 
+                          type="text" 
+                          class="form-control form-control-sm fecha_ingreso" 
+                          name="fechamov_imp" 
+                          placeholder="Fecha" 
+                          value="<?= ($cont)?$newDate:''  ?>"  <?= ($cont)?"":"autofocus" ?> />
                </div>
                <div class="col-xs-6 col-sm-6 col-md-2">
                   <label for="moneda_imp">Moneda:</label>
@@ -109,96 +137,140 @@
                     <option value="2" <?= ($idmoneda==2)?"selected":"" ?>>DOLARES </option>
                   </select>
                </div>
-               <div class="col-xs-12 col-sm-6 col-md-2">
-                  <label ># Movimiento:</label>
-                  <input id="nmov_imp" type="number" class="form-control" name="nmov_imp" placeholder="# Movimiento" disabled value="<?= ($cont)?$dcab->n:""  ?>"/>
-               </div>
+               <div class="col-xs-4 col-sm-4 col-md-2">
+                         <label>Orden de Compra:</label>
+                         <input id="ordcomp_imp" 
+                                type="text" 
+                                class="form-control form-control-sm" 
+                                name="ordcomp_imp" 
+                                placeholder="Orden de Compra" 
+                                value="<?= ($cont)?$dcab->ordcomp:"" ?>" >
+                   </div>
             </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
             <div class="row"> <!--SEGUNDA FILA-->
                    <div class="col-xs-12 col-lg-6 col-md-6">
                      <label >Proveedor:</label>
-                     <!--<select class="form-control" id="proveedor_imp" name="proveedor_imp">-->
-                       <select class="form-control selectpicker" data-size="5" data-live-search="true" id="proveedor_imp" name="proveedor_imp">
+                       <select  class="form-control selectpicker" 
+                                data-size="5" data-live-search="true" 
+                                id="proveedor_imp" name="proveedor_imp">
                         <?php foreach ($proveedor->result_array() as $fila): ?>
-                         <option value=<?= $fila['idproveedor'] ?> <?= ($idproveedor==$fila['idproveedor'])?"selected":"" ?>><?= $fila['nombreproveedor'] ?></option>
+                          <option  value=<?= $fila['idproveedor'] ?> 
+                                    <?= ($idproveedor==$fila['idproveedor'])?"selected":"" ?>>
+                                    <?= $fila['nombreproveedor'] ?>
+                          </option>
                        <?php endforeach ?>
                       </select>
-
-                      <!-- Busqueda con select cambiar a autocomplete-->
-
                    </div>
-                   <div class="col-xs-4 col-sm-4 col-md-2">
-                         <label>Orden de Compra:</label>
-                         <input id="ordcomp_imp" type="text" class="form-control form-control-sm" name="ordcomp_imp" placeholder="Orden de Compra" value="<?= ($cont)?$dcab->ordcomp:""  ?>" >
-                   </div>
-                   <div class="col-xs-4 col-sm-4 col-md-2">
-                         <label>N° Factura: <small id="consinfac" style="font-size: 11px;color: #00a65a;">(con Factura)</small></label>
-                         <input id="nfact_imp" name="nfact_imp" type="text" style="text-transform:uppercase" onkeyup="javascript:this.value=this.value.toUpperCase();" class="form-control form-control-sm"  placeholder="# Factura" value="<?= ($cont)?$dcab->nfact:""  ?>">
-                   </div>
-                   <div class="col-xs-4 col-sm-4 col-md-2">
-                         <label class="hidden">N° Ingreso:</label>
-                         <input id="ningalm_imp" type="text" class="form-control form-control-sm hidden" name="ningalm_imp" placeholder="# Ingreso" value="<?= ($cont)?$dcab->ningalm:""  ?>">
-                   </div>
+                   
+                  <div class="col-xs-4 col-sm-4 col-md-2">
+                    <label >Tipo:</label>
+                    <select class="form-control form-control-sm" id="tipoDoc" name="tipoDoc">
+                        <option value="1" <?= ($tipoDoc==1)?"selected":"" ?> >CON FACTURA</option>
+                        <option value="2" <?= ($tipoDoc==2)?"selected":"" ?>>SIN FACTURA </option>
+                        <option value="3" <?= ($tipoDoc==3)?"selected":"" ?>>EN TRANSITO </option>
+                    </select>
+                  </div>
+                  <div class="col-xs-4 col-sm-4 col-md-2">
+                    <label class="tipoDocumento hidden">N° Factura:</label>
+                    <input id="nfact_imp" 
+                          name="nfact_imp" 
+                          type="text" 
+                          class="form-control form-control-sm  tipoDocumento hidden"  
+                          placeholder="# Factura" 
+                          value="<?= ($cont)?$dcab->nfact:""?>">
+                  </div>
                 </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
 
 
                 <hr>
                 <div class="row"> <!--TERCERA FILA-->
-                  <div class="col-xs-12 col-md-2 has-feedback has-feedback-left">
-                      <!--seleccionar codigo de articulo de la base de datos-->
-                     <label for="articulo_imp" style="float: left;">Codigo:</label><span style="margin-left: 10px;display: none;" id="cargandocodigo" ><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
-                     <!--<select  class="form-control selectpicker" data-size="5" data-live-search="true" id="articulo_imp" name="articulo_imp" >
-                        <?php //foreach ($articulo->result_array() as $fila): ?>
-                         <option id=<?php //$fila['idArticulos'] ?> descripcion="<?php //$fila['Descripcion'] ?>"><?php //$fila['CodigoArticulo'] ?></option>
-                       <?php //endforeach ?>
-                     </select> -->
-                     <input class="form-control form-control-sm" type="text" id="articulo_imp" name="articulo_imp"/>
-                     <div style="right: 22px;top:32px;position: absolute;" id="codigocorrecto"><i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i></div>
+
+                <div class="col-xs-12 col-md-2 has-feedback has-feedback-left">
+                  <label style="float: left;">CodigoTest:
+                    </label>
+                    <span style="margin-left: 10px;display: none;" 
+                          id="cargandocodigoTest" >
+                          <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                    </span>
+                  <input  class="form-control form-control-sm" 
+                          type="text" 
+                          id="articulo_impTest" 
+                          name="articulo_imp">
+                  <div  style="right: 22px;top:32px;position: absolute;" 
+                        id="codigocorrectoTest">
+                        <i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>
                   </div>
+              </div>
                   <div class="col-xs-12 col-md-4">
-                      <!--mostrar descripcion de articulo segun codigo-->
                      <label for="descripcion_imp">Descripcion:</label>
-                     <input type="text" class="form-control form-control-sm" id="Descripcion_imp" name="Descripcion_imp" disabled/>
+                     <input type="text" 
+                            class="form-control form-control-sm" 
+                            id="Descripcion_imp" 
+                            name="Descripcion_imp" 
+                            disabled/>
                   </div>
                   <div class="col-xs-4 col-md-2">
-                       <!--mostrar unidad de articulo segun codigo-->
                      <label for="">Unidad:</label>
-                     <input type="text" class="form-control form-control-sm" id="unidad_imp" disabled/>
+                     <input type="text" 
+                            class="form-control form-control-sm" 
+                            id="unidad_imp" 
+                            disabled/>
                   </div>
                   <div class="col-xs-4 col-md-2 ">
-                      <!--mostrar costo promedio ponderado de articulo segun codigo-->
-                     <label for="costo_imp">CostoPromedio:<span style="margin-left: 10px; display: none;" class="cargandoCostoSaldo"><i class="fa fa-spinner fa-pulse fa-fw"></i></span></label>
-                     <input type="text" class="form-control form-control-sm text-right tiponumerico" id="costo_imp" disabled/>
+                     <label for="costo_imp">CostoPromedio:
+                        <span style="margin-left: 10px; display: none;" 
+                              class="cargandoCostoSaldo">
+                        <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                        </span>
+                      </label>
+                     <input type="text" 
+                            class="form-control form-control-sm text-right tiponumerico" 
+                            id="costo_imp" 
+                            disabled/>
                   </div>
                    <div class="col-xs-4 col-md-2">
-                      <!--mostrar saldo en almacen de articulo segun codigo-->
-                     <label for="saldo_imp">Saldo:<span style="margin-left: 10px; display: none;" class="cargandoCostoSaldo"><i class="fa fa-spinner fa-pulse fa-fw"></i></span></label>
-                      <input type="text" class="form-control form-control-sm text-right tiponumerico" id="saldo_imp" disabled/>
+                     <label for="saldo_imp">Saldo:
+                        <span style="margin-left: 10px; display: none;" 
+                              class="cargandoCostoSaldo">
+                              <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                        </span>
+                      </label>
+                      <input  type="text" 
+                              class="form-control form-control-sm text-right tiponumerico" 
+                              id="saldo_imp" 
+                              disabled/>
                   </div>
-
                  </div><!-- div class="form-group-sm row"  TERCERA FILA-->
+
                  <div class="form-group row"> <!--CUARTA FILA-->
 
                   <div class="col-xs-12 col-md-4">
-                      <!--insertar costo de articulo a ingresar-->
-
                   </div>
 
                   <div class="col-xs-4 col-md-2">
-                        <!--insertar cantidad de productos a ingresar-->
                       <label>Cantidad:</label>
-                      <input type="text" style="text-align:right;" class="form-control form-control-sm" id="cantidad_imp" name="cantidad_imp" />
+                      <input  type="text" 
+                              style="text-align:right;" 
+                              class="form-control form-control-sm" 
+                              id="cantidad_imp" 
+                              name="cantidad_imp" />
                   </div>
                   <div class="col-xs-4 col-md-2">
-                      <!--insertar costo de articulo a ingresar-->
-                      <label><?= $idingresocompraslocales==2? "Total:":"Costo Unitario:" ?></label> <!--CAMBIO PARA COMPRAS LOCALES-->
-                      <input type="text" style="text-align:right;" class="form-control form-control-sm" id="punitario_imp" name="punitario_imp" />
+                      <label><?= $idingresocompraslocales==2? "Total:":"Costo Unitario:" ?></label>
+                      <input  type="text" 
+                              style="text-align:right;" 
+                              class="form-control form-control-sm" 
+                              id="punitario_imp" 
+                              name="punitario_imp" />
                   </div>
                   <div class="col-xs-4 col-md-2">
                         <!--insertar cantidad de productos a ingresar-->
                       <label>Costo Unitario:</label>
                       <input type="text" class="form-control form-control-sm tiponumerico" id="constounitario" name="" disabled/>
                   </div>
+                    <div>
+                      <input type="text" id="idArticulo" class="hidden">
+                    </div>
 
                   <div class="col-xs-12 col-md-2">
                   <label></label>
@@ -210,9 +282,10 @@
           <hr>
         <!--Tabla para mostrar articulos ingresados-->
               <div class="table-responsive">
-                <table  class="table table-condensed table-bordered table-striped">
+                <table  class="table table-condensed table-bordered table-striped" >
                   <thead>
                     <tr>
+                      <th></th>
                       <th class="col-sm-1" >Código</th>
                       <th class="col-sm-6">Artículo</th>
                       <th class="col-sm-1" class="text-right">Cantidad</th>
@@ -223,7 +296,7 @@
                       <th>&nbsp;</th>
                     </tr>
                   </thead>
-                  <tbody id="tbodyarticulos">
+                  <tbody id="tbodyarticulos" name="tabla">
                     <?php if ($cont): ?>
                         <?php foreach ($detalle as $fila): ?>
                           <?php 
@@ -231,13 +304,14 @@
                             $punitariofac=$fila['totaldoc'] / $punitariofac;
                           ?>
                             <tr>
-                                <td><input type="text" class="estilofila" disabled value="<?= $fila['CodigoArticulo'] ?>"></input></td>
-                                <td><input type="text" class="estilofila" disabled value="<?= $fila['Descripcion'] ?>"></input</td>
-                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['cantidad'] ?>"></input></td>
-                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $punitariofac ?>"></input></td><!--nuevo-->
-                                <td class="text-right"><input type="text" class="totalDoc estilofila tiponumerico" disabled value="<?= $fila['totaldoc'] ?>"></input></td><!--nuevo-->
-                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['punitario'] ?>"></input></td>
-                                <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="<?= $fila['total'] ?>"></input></td>
+                                <td><input type="text" class="estilofila hidden" disabled value="<?= $fila['idArticulo'] ?>"></td>
+                                <td><input type="text" class="estilofila" disabled value="<?= $fila['CodigoArticulo'] ?>"></td>
+                                <td><input type="text" class="estilofila" disabled value="<?= $fila['Descripcion'] ?>"></td>
+                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['cantidad'] ?>"></td>
+                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $punitariofac ?>"></td><!--nuevo-->
+                                <td class="text-right"><input type="text" class="totalDoc estilofila tiponumerico" disabled value="<?= $fila['totaldoc'] ?>"></td><!--nuevo-->
+                                <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['punitario'] ?>"></td>
+                                <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="<?= $fila['total'] ?>"></td>
                                 <td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
                             </tr>
                         <?php endforeach ?>

@@ -189,7 +189,7 @@ function mostrarTablaIngresosTraspaso(res) {
                     type: "select",
                     data: datosselect[2]
                 },
-                visible: true,
+                visible: false,
                 align: 'center',
                 searchable: true,
             },
@@ -313,11 +313,11 @@ function mostrarTablaIngresos(res) {
                 field: "autor",
                 title: "Autor",
                 searchable:true,
+                visible: false,
                 filter: {
                     type: "select",
                     data: datosselect[2]
                 },
-                visible: true,
                 align: 'center',
             },
             {

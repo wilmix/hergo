@@ -97,7 +97,6 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-
 	public function consultadetalle()
 	{
 		if(!$this->session->userdata('logeado'))
@@ -136,8 +135,6 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-
-
 	public function importaciones()
 	{
 		$this->libacceso->acceso(13);
@@ -187,7 +184,6 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-
 	public function compraslocales()
 	{
 		$this->libacceso->acceso(12);
@@ -282,8 +278,7 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-	
-    public function editarimportaciones($id=null)//cambiar nombre a editar ingresos!!!!
+	public function editarimportaciones($id=null)//cambiar nombre a editar ingresos!!!!
 	{
         //if("si no esta autorizado a editar redireccionar o enviar error!!!!")
         if($id==null) redirect("error");
@@ -434,7 +429,6 @@ class Ingresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-
     public function mostrarDetalleEditar($id)
 	{
         $res=$this->Ingresos_model->mostrarDetalle($id);
@@ -486,9 +480,6 @@ class Ingresos extends CI_Controller
 		die();*/
 		return $tabla;
 	}
-	
-	
-	//actualizar tabla costoarticulo
 	public function get_costo_articulo($codigo,$cant=0,$preciou=0,$idAlmacen,$_idArticulo=0)	//para tabla, si $_idArticulo==0 buscar id segun el codigo
 	{		
 		$cant=$cant==""?0:$cant;
@@ -624,7 +615,7 @@ class Ingresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	public function guardarIngreso()
+	public function storeIngreso()
 	{
 		if($this->input->is_ajax_request())
         {
@@ -632,16 +623,16 @@ class Ingresos extends CI_Controller
 			$ingreso->almacen = $this->security->xss_clean($this->input->post('almacen_imp'));
         	$ingreso->tipomov = $this->security->xss_clean($this->input->post('tipomov_imp'));
 			$ingreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_imp'));
-			$ingreso->fechamov = date('Y-m-d H:i:s',strtotime($ingreso->fechamov));
+			$ingreso->fechamov = date('Y-m-d',strtotime($ingreso->fechamov));
         	$ingreso->moneda = $this->security->xss_clean($this->input->post('moneda_imp'));
         	$ingreso->proveedor = $this->security->xss_clean($this->input->post('proveedor_imp'));
         	$ingreso->ordcomp = $this->security->xss_clean($this->input->post('ordcomp_imp'));
-        	$ingreso->nfact = $this->security->xss_clean($this->input->post('nfact_imp'));
-        	$ingreso->ningalm = $this->security->xss_clean($this->input->post('ningalm_imp'));
+			$ingreso->nfact = $this->security->xss_clean($this->input->post('nfact_imp'));
+			$ingreso->tipoDoc = $this->security->xss_clean($this->input->post('tipoDoc'));
         	$ingreso->obs = $this->security->xss_clean($this->input->post('obs_imp'));
 			$ingreso->articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
 
-			$tipocambio=$this->Ingresos_model->retornarValorTipoCambio();
+			$tipocambio=$this->Ingresos_model->getTipoCambio($ingreso->fechamov);
 			$ingreso->tipoCambio = $tipocambio->id;
 			$tipoCambioValor=$tipocambio->tipocambio;
 
@@ -651,7 +642,7 @@ class Ingresos extends CI_Controller
 			$gestion= date("Y", strtotime($ingreso->fechamov));
 			$ingreso->nmov = $this->Ingresos_model->retornarNumMovimiento($ingreso->tipomov,$gestion,$ingreso->almacen);
 
-			$id = $this->Ingresos_model->guardarIngreso($ingreso, $tipoCambioValor);
+			$id = $this->Ingresos_model->storeIngreso($ingreso, $tipoCambioValor);
 
 			if($id)
         	{
@@ -667,7 +658,6 @@ class Ingresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-
     public function guardarmovimiento()
     {
     	if($this->input->is_ajax_request())
@@ -698,32 +688,46 @@ class Ingresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
     }
-    public function actualizarmovimiento()
+    public function updateIngreso()
     {
-    	if($this->input->is_ajax_request())
+		if($this->input->is_ajax_request())
         {
-            $datos['idingresoimportacion'] = $this->security->xss_clean($this->input->post('idingresoimportacion'));
-        	$datos['almacen_imp'] = $this->security->xss_clean($this->input->post('almacen_imp'));
-        	$datos['tipomov_imp'] = $this->security->xss_clean($this->input->post('tipomov_imp'));
-        	$datos['fechamov_imp'] = $this->security->xss_clean($this->input->post('fechamov_imp'));
-        	$datos['moneda_imp'] = $this->security->xss_clean($this->input->post('moneda_imp'));
-        	$datos['proveedor_imp'] = $this->security->xss_clean($this->input->post('proveedor_imp'));
-        	$datos['ordcomp_imp'] = $this->security->xss_clean($this->input->post('ordcomp_imp'));
-        	$datos['nfact_imp'] = $this->security->xss_clean($this->input->post('nfact_imp'));
-        	$datos['ningalm_imp'] = $this->security->xss_clean($this->input->post('ningalm_imp'));
-        	$datos['obs_imp'] = $this->security->xss_clean($this->input->post('obs_imp'));
-        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
+			$ingreso = new stdclass();
+			$idIngresos = $this->security->xss_clean($this->input->post('idingresoimportacion'));
+			$ingreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_imp'));
+			$ingreso->fechamov = date('Y-m-d',strtotime($ingreso->fechamov));
+			$ingreso->moneda = $this->security->xss_clean($this->input->post('moneda_imp'));
+        	$ingreso->ordcomp = $this->security->xss_clean($this->input->post('ordcomp_imp'));
+		    $ingreso->proveedor = $this->security->xss_clean($this->input->post('proveedor_imp'));
+			$ingreso->nfact = $this->security->xss_clean($this->input->post('nfact_imp'));
+			$ingreso->tipoDoc = $this->security->xss_clean($this->input->post('tipoDoc'));
+			$ingreso->obs = $this->security->xss_clean($this->input->post('obs_imp'));
+			$ingreso->articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
+			
 
-        	if($this->Ingresos_model->actualizarmovimiento_model($datos))
-				echo json_encode("true");
+			$tipocambio=$this->Ingresos_model->getTipoCambio($ingreso->fechamov);
+			$ingreso->tipoCambio = $tipocambio->id;
+			$tipoCambioValor=$tipocambio->tipocambio;
+			$ingreso->autor=$this->session->userdata('user_id');
+			$ingreso->fecha = date('Y-m-d H:i:s');
+
+			$id = $this->Ingresos_model->updateIngreso($idIngresos, $ingreso, $tipoCambioValor);
+
+			if($id)
+        	{
+				echo json_encode($idIngresos);
+        	}
 			else
+			{				
 				echo json_encode("false");
+			}			
 		}
-        else
+		else
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
-    }
+	}
+	
     public function anularmovimiento()
     {
     	if($this->input->is_ajax_request())

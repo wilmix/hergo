@@ -10,8 +10,17 @@ class Ingresos extends CI_Controller {
     $lineas = $this->Ingresos_model->mostrarDetalle($id);
     $ingreso = $this->Ingresos_model->mostrarIngresos($id)->row();
     //PARAMETROS PARA LA LIBRERIA
-    $params = array('tipo' => $ingreso->tipomov, 'numeroIngreso' => $ingreso->n, 'sigla'=>$ingreso->sigla, 'fechamov'=>$ingreso->fechamov, 'almacen'=>$ingreso->almacen, 'moneda'=>$ingreso->monedasigla,
-    'proveedor' =>$ingreso->nombreproveedor,'nfact' =>$ingreso->nfact,'nIngreso' =>$ingreso->ningalm,'ordenCompra' =>$ingreso->ordcomp, 'observacion' =>$ingreso->obs);
+    $params = array('tipo' => $ingreso->tipomov, 
+                    'numeroIngreso' => $ingreso->n, 
+                    'sigla'=>$ingreso->sigla, 
+                    'fechamov'=>$ingreso->fechamov, 
+                    'almacen'=>$ingreso->almacen, 
+                    'moneda'=>$ingreso->monedasigla,
+                    'proveedor' =>$ingreso->nombreproveedor,
+                    'tipoDoc' =>$ingreso->tipoDoc,
+                    'nfact' =>$ingreso->nfact,
+                    'ordenCompra' =>$ingreso->ordcomp, 
+                    'observacion' =>$ingreso->obs);
     $this->load->library('Ingresos_lib', $params);
 
       $this->pdf = new Ingresos_lib($params);

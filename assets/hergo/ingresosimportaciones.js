@@ -1,26 +1,44 @@
 var glob_factorIVA=0.87;
 var glob_factorRET=0.087;
-
+let glob_guardar = false
 var loc_almacen;
-let hoy = moment().format('DD-MM-YYYY, hh:mm:ss a');
+let hoy
+
 $(document).ready(function(){
-    console.log(hoy);
+    fechaMod = $('#fechamov_imp').val()
+    if (fechaMod) {
+        hoy = moment(fechaMod).format('DD-MM-YYYY')
+    } else{
+        hoy = moment().format('DD-MM-YYYY, hh:mm:ss a')
+    }
     $('.fecha_ingreso').daterangepicker({
-        timePicker: true,
         startDate:hoy,
         locale: {
-            format: 'DD-MM-YYYY, hh:mm:ss a'
+            format: 'DD-MM-YYYY'
         },
         singleDatePicker: true,
         showDropdowns: true
       });    
     loc_almacen= $("#almacen_imp").val();   
     cargarArticulos(); 
+    if ($("#tipoDoc").val() == 1 || $("#tipoDoc").val() == 3) {
+        $(".tipoDocumento").removeClass("hidden")
+    } 
 })
-
+$(document).on("click","#agregar_articulo",function(){
+    if(glob_guardar)
+    {
+        agregarArticulo();
+    }
+})
+$(document).on("click",".eliminarArticulo",function(){    
+    $(this).parents("tr").remove()
+    calcularTotal()
+})
 $(document).on("change","#almacen_imp",function(){
 
     var tablaaux=tablatoarray();
+    loc_almacen = $("#almacen_imp").val()
     
     if(tablaaux.length>0)
     {
@@ -46,8 +64,6 @@ $(document).on("change","#almacen_imp",function(){
         });
     }
 }); 
-
-
 $(document).ready(function(){ 
 
     $(".tiponumerico").inputmask({
@@ -57,95 +73,93 @@ $(document).ready(function(){
         autoGroup: true,
         autoUnmask:true
     }); 
-    var glob_agregar=false;
     calcularTotal()  
 })
+$(document).on("change","#moneda_imp",function(){
+    calcularTotal()
 
- $( function() {
-    $("#articulo_imp").autocomplete(
-    {      
-      minLength: 2,
-      autoFocus: true,
-      source: function (request, response) {        
-        $("#cargandocodigo").show(150)
-        //$("#Descripcion_imp").val('');
-       $("#Descripcion_imp").val("");
-       $("#cantidad_imp").val("");
-       $("#punitario_imp").val("");
-       $("#constounitario").val("");
-       $("#unidad_imp").val("");
-       $("#costo_imp").val("");
-       $("#saldo_imp").val("");
-       /********/
-        $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
-        glob_agregar=false;
-       /* $.ajax({
-            url: base_url("index.php/Ingresos/retornararticulos"),
-            dataType: "json",
-            data: {
-                b: request.term
-            },
-            success: function(data) {
-               response(data);    
-               $("#cargandocodigo").hide(150)
-              
-            }
-          });    */
-        /********************/    
-        var busqueda=request.term.trim()
-        if(busqueda.length > 1)
-        {
-            var ExpReg = new RegExp( busqueda ,"i");        
-            response(glob_art.fuzzy(ExpReg));    
+})
+$(document).on("keyup","#nfact_imp",function(){
+    if($(this).val()=="SF")
+    {
+        $("#consinfac").html("(sin Factura)")
+        $("#consinfac").css("color","#a60000")
+    }
+    else
+    {
+        $("#consinfac").html("(con Factura)")   
+        $("#consinfac").css("color","#00a65a")
+    }
+})
+$(document).on("keyup","#cantidad_imp,#punitario_imp",function(){
+    var cant=$("#cantidad_imp").inputmask('unmaskedvalue');
+    var costo=$("#punitario_imp").inputmask('unmaskedvalue'); 
+    var tipoingreso=$("#tipomov_imp2").val()
+    cant=(cant=="")?0:cant;
+    costo=(costo=="")?0:costo;
+    if(tipoingreso==2)//si es compra local idcompralocal=2
+    {
+        costo=calculocompraslocales(cant,costo)
+    }
+    //total=cant*costo;
+    $("#constounitario").val(costo);//costo calculado
+    /***para la alerta*******/
+    var costobase=$("#costo_imp").inputmask('unmaskedvalue');//costo de base de datos
+    alertacosto(costo,costobase);
+})
+$(document).on("click","#guardarMovimiento",function(){
+    storeIngreso();
+})
+$(document).on("click","#cancelarMovimiento",function(){
+    limpiarArticulo();
+    limpiarCabecera();
+    limpiarTabla();
+})
+$(document).on("click","#actualizarMovimiento",function(){
+    updateIngreso();
+})
+$(document).on("click","#cancelarMovimientoActualizar",function(){
+    window.location.href=base_url("Ingresos");
+})
+$(document).on("click","#anularMovimiento",function(){
+    mensajeAnular("#obs_imp",
+        function(){
+            anularMovimiento();
+        },
+        function(){
+            window.location.href=base_url("Ingresos");  
         }
-        
-        $("#cargandocodigo").hide(150);
-              
-        
-        /********************/    
-    }, 
-     /* focus: function( event, ui ) {
-          //$(".solicitanuevo").val( ui.item.nombre );//si se instancio como indice un valor en este caso array("nombre"=> "valor")
-          $(".solicitanuevo").val( ui.item[0] );
-         // carregarDados();
-          return false;
-      },*/
-      select: function( event, ui ) {
-        //agregar costo articulo
-        //console.log(ui.item.CodigoArticulo);
-        idAlmacen=$("#almacen_imp").val();
-       // console.log(idAlmacen)
-       //agregar cargando
-       cargandoSaldoCosto();
-         $.ajax({
-
-            url: base_url("index.php/Ingresos/retornarcostoarticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
-            dataType: "json",
-            data: {},
-            success: function(data) {                
-                //quitar cargando
-                finCargaSaldoCosto()                 
-                console.log(data)
-                $("#costo_imp").val(data.nprecionu);
-                $("#saldo_imp").val(data.ncantidad);              
-            }
-          });    
-         //fin agregar costo articulo
-          $("#articulo_imp").val( ui.item.CodigoArticulo);
-          $("#Descripcion_imp").val( ui.item.Descripcion);
-          $("#unidad_imp").val(ui.item.Unidad);
-          $("#codigocorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
-          glob_agregar=true;
-          return false;
-      }
-    })
-    .autocomplete( "instance" )._renderItem = function( ul, item ) {
-      
-      return $( "<li>" )
-        .append( "<a><div>" + item.CodigoArticulo + " </div><div style='color:#615f5f; font-size:10px'>" + item.Descripcion + "</div></a>" )
-        .appendTo( ul );
-    };
- });
+    );
+    
+  
+})
+$(document).on("click","#recuperarMovimiento",function(){   
+    mensajeRecuperar("#obs_imp",
+        function(){
+             recuperarMovimiento();
+        },
+        function(){
+            window.location.href=base_url("Ingresos");  
+        }
+    );
+})
+$(document).on("change","#tipoDoc",function(){
+    if ($("#tipoDoc").val() == 1 || $("#tipoDoc").val() == 3) {
+        $(".tipoDocumento").removeClass("hidden")
+        $(".tipoDocumento").val('')
+    } else {
+        $(".tipoDocumento").addClass("hidden")
+        swal({
+            title: "Se eliminaran articulos",
+            text: "Se quitaran articulos de tabla",
+            type: "warning",        
+            allowOutsideClick: false,                                                                        
+            }).then(function(){
+                limpiarTabla()
+            })
+        $(".tipoDocumento").val('')
+    }
+})
 function cargandoSaldoCosto()
 {
     $(".cargandoCostoSaldo").css("display","");
@@ -154,21 +168,9 @@ function finCargaSaldoCosto()
 {
     $(".cargandoCostoSaldo").css("display","none");
 }
-
-$(document).on("click","#agregar_articulo",function(){
-    if(glob_agregar)
-    {
-        //agregarArticulo(idcosto);//despues de generar el id de costo se agrega la fila con el id de costo
-        agregarArticulo();
-    }
-})
-$(document).on("click",".eliminarArticulo",function(){    
-    $(this).parents("tr").remove()
-    calcularTotal()
-})
 function limpiarArticulo()
 {
-    $("#articulo_imp").val("");
+    $("#articulo_impTest").val("");
     $("#Descripcion_imp").val("");
     $("#cantidad_imp").val("");
     $("#punitario_imp").val("");
@@ -228,33 +230,17 @@ function calcularTotal()
     $("#totalacostodoc").val(totald)
     $("#totalacostobs").val(total)
 }
-$(document).on("change","#moneda_imp",function(){
-    calcularTotal()
-
-})
-$(document).on("keyup","#nfact_imp",function(){
-    if($(this).val()=="SF")
-    {
-        $("#consinfac").html("(sin Factura)")
-        $("#consinfac").css("color","#a60000")
-    }
-    else
-    {
-        $("#consinfac").html("(con Factura)")   
-        $("#consinfac").css("color","#00a65a")
-    }
-})
 //calculo de compras locales con y sin factura
 function calculocompraslocales(cant,costo)
 {
     var ret;    
     var pu//preciounitario
     pu=costo/cant;// calculamos el costo unitario      
-    if($("#nfact_imp").val()!="SF")  //si tiene el texto SF es sin factura         
-        ret=pu*glob_factorIVA; //confactura
+    if($("#tipoDoc").val() == 2)  //sin factura      
+        ret=pu*glob_factorRET+pu; //sinfactura  
     else                        
-        ret=pu*glob_factorRET+pu; //sinfactura     
-    console.log(ret);       
+        ret=pu*glob_factorIVA; //confactura   
+    //console.log(ret);       
     return ret;
 
 
@@ -262,7 +248,8 @@ function calculocompraslocales(cant,costo)
 function agregarArticulo() //faltaria el id costo; si se guarda en la base primero
 {
     //idcosto=12;
-    let codigo=$("#articulo_imp").val()
+    let id=$("#idArticulo").val()
+    let codigo=$("#articulo_impTest").val()
     let descripcion=$("#Descripcion_imp").val()
     let cant=$("#cantidad_imp").inputmask('unmaskedvalue');
     let costo=$("#punitario_imp").inputmask('unmaskedvalue');    
@@ -282,13 +269,14 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     let articulo
     if (tipoingreso==2) {
         articulo='<tr>'+ 
-        '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
+        '<td><input type="text" class="estilofila hidden" disabled value="'+id+'""></td>'+
+        '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></td>'+
         '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
-        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
-        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+punitfac+'""></input></td>'+  //nuevo P/U Factura
-        '<td class="text-right"><input type="text" class="totalDoc estilofila tiponumerico" disabled value="'+totalfac+'""></input></td>'+ //nuevo Total Factura
-        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></input></td>'+
-        '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
+        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></td>'+
+        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+punitfac+'""></td>'+  //nuevo P/U Factura
+        '<td class="text-right"><input type="text" class="totalDoc estilofila tiponumerico" disabled value="'+totalfac+'""></td>'+ //nuevo Total Factura
+        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+costo+'""></td>'+
+        '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></td>'+
         '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+
     '</tr>'
     } else {
@@ -318,24 +306,8 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     });
     calcularTotal()
     limpiarArticulo();
-    document.getElementById("articulo_imp").focus()
+    document.getElementById("articulo_impTest").focus()
 }
-$(document).on("keyup","#cantidad_imp,#punitario_imp",function(){
-    var cant=$("#cantidad_imp").inputmask('unmaskedvalue');
-    var costo=$("#punitario_imp").inputmask('unmaskedvalue'); 
-    var tipoingreso=$("#tipomov_imp2").val()
-    cant=(cant=="")?0:cant;
-    costo=(costo=="")?0:costo;
-    if(tipoingreso==2)//si es compra local idcompralocal=2
-    {
-        costo=calculocompraslocales(cant,costo)
-    }
-    //total=cant*costo;
-    $("#constounitario").val(costo);//costo calculado
-    /***para la alerta*******/
-    var costobase=$("#costo_imp").inputmask('unmaskedvalue');//costo de base de datos
-    alertacosto(costo,costobase);
-})
 function alertacosto(costounitario,costobase)
 {
     var valormin=(parseFloat(costobase)-parseFloat(costobase*0.15))
@@ -443,6 +415,47 @@ function actualizarMovimiento()
         alert("no se tiene datos en la tabla para guardar")
     }
 }
+function updateIngreso()
+{     
+    let formData = new FormData($('#form_ingresoImportaciones')[0]); 
+    let tableIngresos=tablatoarray();
+    let tabla=JSON.stringify(tableIngresos);
+    formData.append('tabla',tabla)
+
+    if (tableIngresos.length>0) {
+        $.ajax({
+            url: base_url("index.php/Ingresos/updateIngreso"),
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (returndata) {
+                swal({
+                    title: "Ingreso realizado!",
+                    text: "El ingreso se guardo con éxito",
+                    type: "success",        
+                    allowOutsideClick: false,                                                                        
+                    }).then(function(){
+                        console.log(returndata)
+                        window.location.href=base_url("Ingresos");
+                        //let imprimir = base_url("pdf/Ingresos/index/") + returndata;
+                        //window.open(imprimir);
+                    })
+            },
+            error : function (returndata) {
+                swal(
+                    'Error',
+                    'Error',
+                    'error'
+                )
+                console.log(returndata);
+            },
+        });
+    } else {
+        swal("Error", "No se tiene datos en la tabla para guardar","error")
+    }
+}
 function anularMovimiento()
 {     
     var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
@@ -532,46 +545,110 @@ function tablatoarray()
     var datos=""
     $.each(filas,function(index,value){
         datos=$(value).find("input").toArray()
-        tabla.push(Array($(datos[0]).val(),$(datos[1]).val(),$(datos[2]).inputmask('unmaskedvalue'),$(datos[3]).inputmask('unmaskedvalue'),$(datos[4]).inputmask('unmaskedvalue'),$(datos[5]).inputmask('unmaskedvalue'),$(datos[6]).inputmask('unmaskedvalue')))
-        //console.log(datos);
+        tabla.push(
+                    Array(
+                            $(datos[0]).val(),
+                            $(datos[1]).val(),
+                            $(datos[2]).val(),
+                            $(datos[3]).inputmask('unmaskedvalue'),
+                            $(datos[4]).inputmask('unmaskedvalue'),
+                            $(datos[5]).inputmask('unmaskedvalue'),
+                            $(datos[6]).inputmask('unmaskedvalue'),
+                            $(datos[7]).inputmask('unmaskedvalue'),
+                        ))
+        console.log(datos);
     })
     return(tabla)
-    //console.log(filas)
+    console.log(filas)
 }
-$(document).on("click","#guardarMovimiento",function(){
-    guardarmovimiento();
-})
-$(document).on("click","#cancelarMovimiento",function(){
-    limpiarArticulo();
-    limpiarCabecera();
-    limpiarTabla();
-})
-$(document).on("click","#actualizarMovimiento",function(){
-    actualizarMovimiento();
-})
-$(document).on("click","#cancelarMovimientoActualizar",function(){
-    window.location.href=base_url("Ingresos");
-})
 
-$(document).on("click","#anularMovimiento",function(){
-    mensajeAnular("#obs_imp",
-        function(){
-            anularMovimiento();
-        },
-        function(){
-            window.location.href=base_url("Ingresos");  
+function storeIngreso()
+{     
+    let formData = new FormData($('#form_ingresoImportaciones')[0]); 
+    let tableIngresos=tablatoarray();
+    let tabla=JSON.stringify(tableIngresos);
+    formData.append('tabla',tabla)
+    if (tableIngresos.length>0) {
+        $.ajax({
+            url: base_url("index.php/Ingresos/storeIngreso"),
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (returndata) {
+                console.log(returndata)
+                swal({
+                    title: "Ingreso realizado!",
+                    text: "El ingreso se guardo con éxito",
+                    type: "success",        
+                    allowOutsideClick: false,                                                                        
+                    }).then(function(){
+                        location.reload();
+                        let imprimir = base_url("pdf/Ingresos/index/") + returndata;
+                        window.open(imprimir);
+                    })
+            },
+            error : function (returndata) {
+                swal(
+                    'Error',
+                    'Error',
+                    'error'
+                )
+                console.log(returndata);
+            },
+        });
+    } else {
+        swal("Error", "No se tiene datos en la tabla para guardar","error")
+    }
+
+}
+
+let alm = $("#almacen_imp").val();
+$(document).on("change","#almacen_imp",function(){
+    alm = $("#almacen_imp").val();
+    console.log(alm);
+}); 
+
+/*******************CLIENTE*****************/
+$( function() {
+    console.log(alm);
+    $("#articulo_impTest").autocomplete(
+    {      
+        minLength: 2,
+        autoFocus: true,
+        source: function (request, response) {        
+            $("#cargandocodigoTest").show(150)        
+            $("#codigocorrectoTest").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+            glob_guardar=false;
+            $.ajax({
+                url: base_url("index.php/Ingresos/retornararticulosTest"),
+                dataType: "json",
+                data: {
+                    b: request.term,
+                    a: loc_almacen
+                },
+                success: function(data) {
+                response(data);    
+                $("#cargandocodigoTest").hide(150)
+                }
+            });        
+        }, 
+        select: function( event, ui ) {       
+            $("#codigocorrectoTest").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
+            $("#articulo_impTest").val( ui.item.codigo);
+            $("#idArticulo").val( ui.item.id);
+            $("#Descripcion_imp").val( ui.item.descripcion);
+            $("#unidad_imp").val( ui.item.unidad);
+            $("#saldo_imp").val( ui.item.saldo);
+            $("#costo_imp").val( ui.item.cpp);
+            console.log(ui)
+            glob_guardar=true;
+            return false;
         }
-    );
-    
-  
-})
-$(document).on("click","#recuperarMovimiento",function(){   
-    mensajeRecuperar("#obs_imp",
-        function(){
-             recuperarMovimiento();
-        },
-        function(){
-            window.location.href=base_url("Ingresos");  
-        }
-    );
-})
+        }).autocomplete("instance")._renderItem = function( ul, item ) {
+        return $( "<li>" ).append( "<a><div>" + item.codigo + " </div><div style='color:#615f5f; font-size:10px'>" + item.descripcion + "</div></a>" )
+        .appendTo( ul );
+    };
+ });
+/******************FIN CLIENTE*************/

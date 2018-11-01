@@ -26,7 +26,7 @@ class Ingresos_model extends CI_Model
 		if($id==null)
         {
 		    $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
-            SUM(id.total) total, i.fecha, UPPER(CONCAT(u.first_name,' ', u.last_name,'')) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, SUM(id.total)/tc.tipoCambio totalsus, t.sigla, a.ciudad,
+            SUM(id.total) total, i.fecha, UPPER(CONCAT(u.first_name,' ', u.last_name,'')) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, SUM(id.total)/tc.tipoCambio totalsus, t.sigla, a.ciudad,
             CASE
                 WHEN i.anulado = 1 THEN 'ANULADO'
                 WHEN i.estado = 0 THEN 'PENDIENTE'
@@ -57,7 +57,9 @@ class Ingresos_model extends CI_Model
         else
         {
             $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
-				SUM(id.total) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, SUM(id.total)/tc.tipoCambio totalsus
+				SUM(id.total) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, 
+                a.idalmacen, m.sigla monedasigla, i.ordcomp, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, 
+                SUM(id.total)/tc.tipoCambio totalsus,i.tipoDoc
 			FROM ingresos i
             INNER JOIN ingdetalle id
             on i.idingresos=id.idingreso
@@ -157,7 +159,16 @@ class Ingresos_model extends CI_Model
     public function mostrarIngresosDetalle($id=null,$ini=null,$fin=null,$alm="",$tin="")
     {       
         $sql="SELECT *
-                FROM (SELECT i.nmov n,i.idIngresos, i.fechamov, p.nombreproveedor, i.nfact, CONCAT(u.first_name,' ', u.last_name) autor, i.fecha,t.tipomov,a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm FROM ingresos i INNER JOIN tmovimiento t ON i.tipomov = t.id INNER JOIN provedores p ON i.proveedor=p.idproveedor INNER JOIN users u ON u.id=i.autor INNER JOIN almacenes a ON a.idalmacen=i.almacen INNER JOIN moneda m ON i.moneda=m.id WHERE DATE(i.fechamov) BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm' and t.id like '%$tin' ORDER BY i.idIngresos DESC) tabla
+                FROM (SELECT i.nmov n,i.idIngresos, i.fechamov, p.nombreproveedor, 
+                i.nfact, CONCAT(u.first_name,' ', u.last_name) autor, i.fecha,t.tipomov,a.almacen,
+                 m.sigla monedasigla, i.ordcomp,i.ningalm 
+                 FROM ingresos i 
+                INNER JOIN tmovimiento t ON i.tipomov = t.id 
+                INNER JOIN provedores p ON i.proveedor=p.idproveedor 
+                INNER JOIN users u ON u.id=i.autor 
+                INNER JOIN almacenes a ON a.idalmacen=i.almacen 
+                INNER JOIN moneda m ON i.moneda=m.id 
+                WHERE DATE(i.fechamov) BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm' and t.id like '%$tin' ORDER BY i.idIngresos DESC) tabla
                 INNER JOIN ingdetalle id
                 ON tabla.idIngresos=id.idIngreso
                 INNER JOIN articulos ar
@@ -169,7 +180,7 @@ class Ingresos_model extends CI_Model
     }
 	public function mostrarDetalle($id)
 	{
-		$sql="SELECT a.CodigoArticulo, a.Descripcion, i.cantidad,i.totaldoc, i.punitario punitario, i.total total, u.Unidad
+		$sql="SELECT a.idArticulos idArticulo, a.CodigoArticulo, a.Descripcion, i.cantidad,i.totaldoc, i.punitario punitario, i.total total, u.Unidad
 		FROM ingdetalle i
 		INNER JOIN articulos a
 		ON i.articulo = a.idArticulos
@@ -210,7 +221,8 @@ class Ingresos_model extends CI_Model
 		$sql="SELECT a.`idArticulos` id, a.CodigoArticulo codigo, a.Descripcion descripcion, u.Unidad unidad, 
         IFNULL(a.`costoPromedioPonderado`,0) cpp,
         IFNULL(sa.`saldo`,0) saldo,
-        IFNULL(p.`precio`, 0) precio
+        IFNULL(p.`precio`, 0) precio,
+        sa.`idAlmacen`
         FROM articulos a
         INNER JOIN unidad u ON a.idUnidad=u.idUnidad
         LEFT JOIN saldoarticulos sa ON sa.`idArticulo` = a.`idArticulos` AND sa.`idAlmacen` = '$a'
@@ -391,6 +403,44 @@ class Ingresos_model extends CI_Model
         return true;
 
     }
+    public function updateIngreso($id, $ingreso, $tipoCambioValor)
+    {
+        $this->db->trans_start();    
+            $this->db->where('idIngresos', $id);
+            $this->db->update('ingresos', $ingreso);
+
+            $this->db->where('idIngreso', $id);
+            $this->db->delete('ingdetalle');
+
+            $ingresoDetalle = array();
+                    foreach ($ingreso->articulos as $fila) {
+                        $detalle=new stdclass();
+                        $detalle->idIngreso = $id;
+                        $detalle->articulo = $fila[0];
+                        $detalle->moneda = $ingreso->moneda;
+                        $detalle->cantidad = $fila[3];
+                        if ($ingreso->moneda == 2) {
+                            $detalle->punitario= $fila[6] * $tipoCambioValor;
+                            $detalle->total=$fila[7] * $tipoCambioValor;
+                            $detalle->totaldoc=$fila[5] * $tipoCambioValor;
+                            
+                        }	elseif ($ingreso->moneda == 1) {
+                            $detalle->punitario= $fila[6];
+                            $detalle->total=$fila[7];
+                            $detalle->totaldoc=$fila[5];
+                        }
+                        array_push($ingresoDetalle,$detalle);	
+                    }
+                $this->db->insert_batch("ingdetalle", $ingresoDetalle);
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        } else {
+            return true;
+        }
+    }
     public function anularRecuperarMovimiento_model($datos,$anuladorecuperado)
     {
         $idingresoimportacion=$datos['idingresoimportacion'];
@@ -475,6 +525,22 @@ class Ingresos_model extends CI_Model
             return 1;
         }
     }
+    public function getTipoCambio($fecha)
+    {
+        $sql="SELECT * FROM tipocambio tc 
+                WHERE  tc.`fecha` = '$fecha'
+                ORDER BY id DESC LIMIT 1";
+        $resultado=$this->db->query($sql);
+        if($resultado->num_rows()>0)
+        {
+            $fila=$resultado->row();
+            return ($fila);
+        }
+        else
+        {
+            return FALSE;
+        }
+    }
     public function actualizartablacostoarticulo($idArticulo,$cantidad,$costou,$idalmacen)
     {
         $sql="INSERT INTO costoarticulos(idArticulo,idAlmacen,cantidad,precioUnitario) VALUES('$idArticulo','$idalmacen','$cantidad','$costou')";
@@ -540,7 +606,7 @@ class Ingresos_model extends CI_Model
         }
         
     }
-    public function guardarIngreso($ingreso, $tipoCambioValor)
+    public function storeIngreso($ingreso, $tipoCambioValor)
 	{	
         $this->db->trans_start();
             $this->db->insert("ingresos", $ingreso);
@@ -549,19 +615,18 @@ class Ingresos_model extends CI_Model
                 foreach ($ingreso->articulos as $fila) {
                     $detalle=new stdclass();
                     $detalle->idIngreso = $idIngreso;
-                    $detalle->nmov = $ingreso->nmov;
-                    $detalle->articulo = $this->Ingresos_model->retornar_datosArticulo($fila[0]);
+                    $detalle->articulo = $fila[0];
                     $detalle->moneda = $ingreso->moneda;
-                    $detalle->cantidad = $fila[2];
+                    $detalle->cantidad = $fila[3];
                     if ($ingreso->moneda == 2) {
-                        $detalle->punitario= $fila[5] * $tipoCambioValor;
-                        $detalle->total=$fila[6] * $tipoCambioValor;
-                        $detalle->totaldoc=$fila[4] * $tipoCambioValor;
+                        $detalle->punitario= $fila[6] * $tipoCambioValor;
+                        $detalle->total=$fila[7] * $tipoCambioValor;
+                        $detalle->totaldoc=$fila[5] * $tipoCambioValor;
                         
                     }	elseif ($ingreso->moneda == 1) {
-                        $detalle->punitario= $fila[5];
-                        $detalle->total=$fila[6];
-                        $detalle->totaldoc=$fila[4];
+                        $detalle->punitario= $fila[6];
+                        $detalle->total=$fila[7];
+                        $detalle->totaldoc=$fila[5];
                     }
                     array_push($ingresoDetalle,$detalle);	
                 }
