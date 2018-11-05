@@ -1,17 +1,59 @@
 var iniciofecha=moment().subtract(0, 'year').startOf('year')
 var finfecha=moment().subtract(0, 'year').endOf('year')
-let hoy = moment().format('MM-DD-YYYY');
+let hoy = moment().format('DD-MM-YYYY');
 let almacen = $("#almacen_filtro").val();
-let fechaPagoHoy = $('.fecha_pago').val();
+let fechaPagoHoy
 let idPago=$("#idPago").val();
+let idClientePago
+let nombreCliente
+$( function() {
+    $("#cliente_factura").autocomplete(
+    {      
+      minLength: 3,
+      autoFocus: true,
+      source: function (request, response) {        
+        $("#cargandocliente").show(150) 
+        $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+        clienteCorrecto=false;
+        $.ajax({
+            url: base_url("index.php/Egresos/retornarClientes"),
+            dataType: "json",
+            data: {
+                b: request.term
+            },
+            success: function(data) {
+               response(data);    
+               $("#cargandocliente").hide(150)
+            }
+          });        
+       
+    }, 
+      select: function( event, ui ) {       
+         
+          $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
+          $("#cliente_factura").val( ui.item.nombreCliente + " - " + ui.item.documento);
+          $("#idCliente_Pago").val( ui.item.idCliente);
+          $("#nombreFacturaPrevia").val( ui.item.nombreCliente);
+          $("#errorCliente").removeClass("hidden")
+          clienteCorrecto = true
+          return false;
+      }
+    })
+    .autocomplete( "instance" )._renderItem = function( ul, item ) {
+      
+      return $( "<li>" )
+        .append( "<a><div>" + item.nombreCliente + " </div><div style='color:#615f5f; font-size:10px'>" + item.documento + "</div></a>" )
+        .appendTo( ul );
+    };
+ });
 $(document).ready(function(){
     
-    $('.fecha_pago').daterangepicker({
+    $('#fechaPago').daterangepicker({
         singleDatePicker: true,
         startDate:hoy,
         autoApply:true,
         locale: {
-            format: 'MM-DD-YYYY'
+            format: 'DD-MM-YYYY'
         },
         showDropdowns: true,
       });
@@ -62,6 +104,14 @@ $(document).ready(function(){
     retornarPagosPendientes();
 })
 
+$(document).on("change",".fecha_pago",function(){
+    fechaPagoHoy = $('#fechaPago').val()
+    console.log(fechaPagoHoy)
+}) 
+$(document).on("change","#cliente_factura",function(){
+    idClientePago = $('#idCliente_Pago').val()
+    console.log(idClientePago)
+}) 
 $(document).on("change","#almacen_filtro",function(){
     retornarPagosPendientes();
 }) 
@@ -299,7 +349,7 @@ function editarPago(idPago) {
             banco:res.cabecera.banco,
             transferencia:res.cabecera.transferencia,
             cheque:res.cabecera.cheque,
-            cliente:'1',
+            cliente:idClientePago,
             tipoPago: res.cabecera.tipoPago,
                 options: [
                 { tipo: 'EFECTIVO', value: '1' },
@@ -315,6 +365,7 @@ function editarPago(idPago) {
             idPago:idPago,
             nombreCliente:res.cabecera.nombreCliente,
             numPago:res.cabecera.numPago,
+            nombreCliente:''
             
         }
         console.log(data);
@@ -345,7 +396,7 @@ function datosEditar(idPago) {
             banco:'1',
             transferencia:'',
             cheque:'',
-            cliente:'1',
+            cliente:idClientePago,
             tipoPago: '1',
                 options: [
                 { tipo: 'EFECTIVO', value: '1' },
@@ -358,6 +409,7 @@ function datosEditar(idPago) {
             moneda:1,
             glosa:'',
             guardar:false,
+            nombreCliente:''
     }
     } else {
     editarPago(idPago); 
@@ -649,12 +701,14 @@ var vmPago = new Vue({
             window.location.href = base_url("Pagos")
         },
         guardarPago:function(){
-            agregarcargando();
+             nombreCliente = $("#cliente_factura").val();
+            //agregarcargando();
+            console.log(idClientePago)
             let datos={
                 almacen: this.almacen,
-                fechaPago:moment(this.fechaPago).format('YYYY-MM-DD'),
+                fechaPago: fechaPagoHoy,
                 moneda:this.moneda,
-                cliente: this.cliente,
+                cliente: idClientePago,
                 totalPago:this.totalPago,
                 anulado:this.anulado,
                 glosa:this.glosa,
@@ -663,28 +717,36 @@ var vmPago = new Vue({
                 banco:this.banco,
                 transferencia:this.transferencia,
                 porPagar:this.porPagar,
-                nombreCliente:'VARIOS',
+                nombreCliente:nombreCliente,
             };
             
-            let clientes = datos.porPagar.map(p=>p.cliente)
-            if (clientes == 0) {
+           let clientes = datos.porPagar.map(p=>p.cliente)
+           if (clientes == 0 || !datos.cliente || nombreCliente.length <= 0) {
                 quitarcargando();
-                swal("Error", "No se puede guardar el pago","error");
+                swal({
+                    title: "No se puede guardar Pago",
+                    text: "Seleccione cliente y pago",
+                    type: "warning",        
+                    allowOutsideClick: false,                                                                        
+                    }).then(function(){
+                        console.log('borrado')
+                    })
+                return false
             }
-            let cliente = clientes.reduce( (a,b) => a==b )
+            /*let cliente = clientes.reduce( (a,b) => a==b )
             if (cliente) {
                 datos.cliente=clientes[0]
                 datos.nombreCliente = datos.porPagar[0].nombreCliente
                 
-            }
+            }*/
             datosAjx=JSON.stringify(datos);
-            console.log(vmPago.$children[1].editing);
-            if(!this.guardar || vmPago.$children[1].editing == true)
+            //console.log(vmPago.$children[1].editing);
+            /*if(!this.guardar || vmPago.$children[1].editing == true)
             {
                 quitarcargando();
                 swal("Error", "No se puede guardar el pago","error");
                 return false;
-            }
+            }*/
             $.ajax({
                 type:"POST",
                 url: base_url('index.php/Pagos/guardarPagos'), //******controlador
@@ -703,10 +765,10 @@ var vmPago = new Vue({
                         allowOutsideClick: false,  
                     }).then(
                         function(result) {   
-                        agregarcargando();                 
-                        location.reload();
-                        let imprimir = base_url("pdf/Recibo/index/") + res.id;
-                        window.open(imprimir);
+                        //agregarcargando();                 
+                        //location.reload();
+                        //let imprimir = base_url("pdf/Recibo/index/") + res.id;
+                        //window.open(imprimir);
                     });
                 }
             }).fail(function( jqxhr, textStatus, error ) {
@@ -721,8 +783,8 @@ var vmPago = new Vue({
                     allowOutsideClick: false,  
                 }).then(
                 function(result) {   
-                    agregarcargando();                 
-                    location.reload();
+                    //agregarcargando();                 
+                    //location.reload();
                 });
             });
         },

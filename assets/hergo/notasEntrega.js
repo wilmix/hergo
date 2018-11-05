@@ -68,10 +68,7 @@ $( function() {
       autoFocus: true,
       source: function (request, response) {        
         $("#cargandocliente").show(150)        
-
-
         $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
-
         glob_guardar=false;
         $.ajax({
             url: base_url("index.php/Egresos/retornarClientes"),

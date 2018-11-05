@@ -52,49 +52,71 @@
     <div class="box">
       <div class="box-body">
         <main id="app">
-          <form>
+          <form id="formPagos">
             <div class="form-row">
               <div class="form-row align-items-center col-md-3">
                 <label>Almacen: </label>
-                <select class="form-control" v-model="almacen">
+                <select class="form-control" v-model="almacen" id="almacen" name="almacen">
                   <option v-for="option in almacenes" v-bind:value="option.value">
                       {{ option.alm }}
                   </option>
                 </select>
               </div>
-              <div class="form-row align-items-center col-md-3">
+              <div class="form-row align-items-center col-md-2">
                 <label>Fecha: </label>
-                <!--<input v-model="fechaPago" class="form-control fecha_pago" type="text">-->
-                <vuejs-datepicker :bootstrap-styling="true" class="form-control" v-model="fechaPago" :format="customFormatter">
-                </vuejs-datepicker>
+                <input v-model="fechaPago" class="form-control fecha_pago" type="text" id="fechaPago" name="fechaPago">
               </div>
-              <div class="form-row align-items-center col-md-3">
+              
+
+
+                <div class="form-row align-items-center col-md-5">
+                  <label>Cliente: 
+                    <span class="badge label-success hidden" id="errorCliente">
+                      <i class="fa fa-check"></i></span> 
+                    </span>
+                    <span style="margin-left: 10px;display: none;" id="cargandocliente" >
+                      <i class="fa fa-times" style="color:#bf0707"></i>
+                    </span>
+                  </label>
+                  <input  class="form-control form-control-sm" 
+                          type="text" id="cliente_factura" 
+                          name="cliente_factura" 
+                          v-model="nombreCliente" 
+                          value="">
+                  <input  type="text" 
+                          v-model="cliente"  
+                          name="idCliente_Pago" 
+                          id="idCliente_Pago" 
+                          class="hidden"> 
+                </div>
+
+
+              <div class="form-row align-items-center col-md-2">
                   <label class="" for="">Tipo: </label>
-                  <select class="form-control" v-model="tipoPago">
-                  
+                  <select class="form-control" v-model="tipoPago" id="tipoPago" name="tipoPago">
                     <option v-for="option in options" v-bind:value="option.value">
                       {{ option.tipo }}
                     </option>
                   </select>
                 </div>
                 <div v-if="tipoPago == 2">
-                    <div class="form-row align-items-center col-md-3">
+                    <div class="form-row align-items-center col-md-2">
                       <label >Banco: </label>
-                      <select class="form-control" id="" name="" v-model="banco">
+                      <select class="form-control" v-model="banco" id="banco" name="banco">
                           <?php foreach ($bancos->result_array() as $fila): ?>
                             <option value=<?= $fila['id'] ?>> <?= $fila['sigla'] ?> </option>
                           <?php endforeach ?>
                       </select>
                     </div>
-                    <div class="form-row align-items-center col-md-3">
-                      <label class="" for="">Vaucher: </label>
-                      <input type="text" class="form-control" v-model="transferencia">
+                    <div class="form-row align-items-center col-md-2">
+                      <label>Vaucher: </label>
+                      <input type="text" class="form-control" v-model="transferencia" id="vaucher" name="vaucher">
                     </div>
                 </div>
                 <div v-if="tipoPago == 3">
-                  <div class="form-row align-items-center col-md-3">
+                  <div class="form-row align-items-center col-md-2">
                     <label >Cheque N°: </label>
-                    <input type="text" class="form-control" v-model="cheque">
+                    <input type="text" class="form-control" v-model="cheque" id="cheque" name="cheque">
                   </div>
                 </div>
             </div> <!-- class="form-row" -->

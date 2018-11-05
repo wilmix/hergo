@@ -138,6 +138,10 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
+
+			/*************AUTOCOMPLETE**********/
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
 			
 			
 			/**************INPUT MASK***************/
@@ -261,6 +265,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->almacen=$data->almacen;
 			$pago->numPago=$numPago;
 			$pago->fechaPago=$data->fechaPago;
+			$pago->fechaPago = date('Y-m-d',strtotime($pago->fechaPago));
 			$pago->moneda=$data->moneda;
 			$pago->cliente=$data->cliente;
 			$pago->totalPago=$data->totalPago;
@@ -274,10 +279,10 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->banco=$data->banco;
 			$pago->transferencia=$data->transferencia;
 			$pago->pagos=$data->porPagar;
-			$this->Pagos_model->guardarPago($pago);
+			//$this->Pagos_model->guardarPago($pago);
 			$pago->idPago=$this->retornarIdPago($pago->numPago,$pago->almacen);
 			//guardar detalle
-			$pagosFactura = array();
+			/*$pagosFactura = array();
 			foreach ($pago->pagos as $fila) {
 				$pagos=new stdclass();
 				$pagos->idPago=$pago->idPago;
@@ -293,7 +298,8 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$return=new stdClass();
 			$return->status=200;
 			$return->id=$idPago;
-			echo json_encode($return);
+			echo json_encode($return);*/
+			echo json_encode($pago);
 		}
 		else
 		{

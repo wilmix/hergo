@@ -118,7 +118,7 @@
             <?php if ($auxIdTipoIngreso!=9): ?>
               <div class="row filacabecera"> <!--SEGUNDA FILA-->
                      <div class="col-xs-12 col-lg-6 col-md-6">
-                        <label for="articulo_ne" style="float: left;">Cliente:</label><span style="margin-left: 10px;display: none;" id="cargandocliente" ><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+                        <label>Cliente:</label><span style="margin-left: 10px;display: none;" id="cargandocliente" ><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
                        <input class="form-control form-control-sm" type="text" id="cliente_egreso" name="cliente_egreso" value="<?= ($cont)?$dcab->nombreCliente:''  ?>">
                        <input type="text" readonly="true" name="idCliente" id="idCliente" class="hidden" value="<?= ($cont)?$dcab->idcliente:'0'  ?>">
                        <div style="right: 22px;top:32px;position: absolute;" id="clientecorrecto"><i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i></div>
