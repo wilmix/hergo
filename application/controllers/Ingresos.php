@@ -727,7 +727,6 @@ class Ingresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	
     public function anularmovimiento()
     {
     	if($this->input->is_ajax_request())

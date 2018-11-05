@@ -274,12 +274,16 @@ function mostrarTablaIngresos(res) {
                 sortable: true,
             },
             {
-                field: 'nfact',
-                title: "Factura",
+                field: 'tipoDoc',
+                title: "Documento",
                 align: 'center',
                 sortable: true,
                 width:'80px',
-                searchable:false,
+                searchable:true,
+                filter: {
+                    type: "select",
+                    data: datosselect[5]
+                },
             },
             {
                 field: 'monedasigla',
@@ -493,7 +497,7 @@ function verdetalle(fila) {
             $("#nmov_imp").val(fila.n)
             $("#proveedor_imp").val(fila.nombreproveedor)
             $("#ordcomp_imp").val(fila.ordcomp)
-            $("#nfact_imp").val(fila.nfact)
+            $("#nfact_imp").val(fila.tipoDoc)
             $("#ningalm_imp").val(fila.ningalm)
             $("#obs_imp").val(fila.obs)
             $("#nmovingre").html(fila.n)
@@ -629,6 +633,7 @@ function restornardatosSelect(res) {
     let autor = new Array()
     let origen = new Array()
     let estado = new Array()
+    let tipoDoc = new Array()
     let datos = new Array()
     $.each(res, function (index, value) {
         proveedor.push(value.nombreproveedor)
@@ -636,6 +641,7 @@ function restornardatosSelect(res) {
         autor.push(value.autor)
         origen.push(value.origen)
         estado.push(value.estado)
+        tipoDoc.push(value.tipoDoc)
     })
     proveedor.sort();
     tipo.sort();
@@ -645,6 +651,7 @@ function restornardatosSelect(res) {
     datos.push(autor.unique());
     datos.push(origen.unique());
     datos.push(estado.unique())
+    datos.push(tipoDoc.unique())
     return (datos);
 }
 Array.prototype.unique = function (a) {

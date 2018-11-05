@@ -113,10 +113,10 @@
             <label>N° Factura:</label>
             <input id="nfact_imp" type="text" class="form-control" name="nfact_imp" readonly="">
           </div>
-          <div class="col-xs-4 col-sm-4 col-md-2">
+          <!--<div class="col-xs-4 col-sm-4 col-md-2">
             <label>N° Ingreso:</label>
             <input id="ningalm_imp" type="text" class="form-control" name="ningalm_imp" readonly="">
-          </div>
+          </div>-->
         </div>
         <!-- div class="form-group-sm row" SEGUNDA FILA-->
         <hr>

@@ -25,32 +25,41 @@ class Ingresos_model extends CI_Model
 	{
 		if($id==null)
         {
-		    $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
-            SUM(id.total) total, i.fecha, UPPER(CONCAT(u.first_name,' ', u.last_name,'')) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, SUM(id.total)/tc.tipoCambio totalsus, t.sigla, a.ciudad,
+		    $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor,
+            SUM(id.total) total, i.fecha, UPPER(CONCAT(u.first_name,' ', u.last_name,'')) autor, 
+            i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp, i.obs, i.anulado,
+            i.tipocambio, 
+            tc.tipocambio valorTipoCambio, 
+            SUM(id.total)/tc.tipoCambio totalsus, 
+            t.sigla,
             CASE
                 WHEN i.anulado = 1 THEN 'ANULADO'
                 WHEN i.estado = 0 THEN 'PENDIENTE'
                 WHEN i.estado = 1 THEN 'APROBADO'
-		    END estado
-
-			FROM ingresos i
-            INNER JOIN ingdetalle id
-            on i.idingresos=id.idingreso
-			INNER JOIN tmovimiento  t
-			ON i.tipomov = t.id
-			INNER JOIN provedores p
-			ON i.proveedor=p.idproveedor
-			INNER JOIN users u
-			ON u.id=i.autor
-			INNER JOIN almacenes a
-			ON a.idalmacen=i.almacen
-			INNER JOIN moneda m
-			ON i.moneda=m.id
-            INNER JOIN tipocambio tc
-            ON i.tipocambio=tc.id
-            WHERE DATE(i.fechamov) BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm' and t.id like '%$tin'
-            Group By i.idIngresos 
-			ORDER BY i.nmov DESC
+            END estado,
+            CASE
+                    WHEN i.tipoDoc = 1 THEN i.nfact
+                    WHEN i.tipoDoc = 2 THEN 'SIN FACTURA'
+                    WHEN i.tipoDoc = 3 THEN 'EN TRANSITO'
+            END tipoDoc
+            FROM ingresos i
+                    INNER JOIN ingdetalle id
+                    ON i.idingresos=id.idingreso
+                    INNER JOIN tmovimiento  t
+                    ON i.tipomov = t.id
+                    INNER JOIN provedores p
+                    ON i.proveedor=p.idproveedor
+                    INNER JOIN users u
+                    ON u.id=i.autor
+                    INNER JOIN almacenes a
+                    ON a.idalmacen=i.almacen
+                    INNER JOIN moneda m
+                    ON i.moneda=m.id
+                    INNER JOIN tipocambio tc
+                    ON i.fechamov=tc.fecha
+                    WHERE DATE(i.fechamov) BETWEEN '$ini' AND '$fin' AND i.almacen LIKE '%$alm' AND t.id LIKE '%$tin'
+                    GROUP BY i.idIngresos 
+            ORDER BY i.nmov DESC
             ";
             
         }
@@ -93,8 +102,9 @@ class Ingresos_model extends CI_Model
           /*$sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact,
                 (SELECT SUM(d.total) from ingdetalle d where  d.idIngreso=i.idIngresos) as total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, total*valorTipoCambio totalsus*/
             $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor, i.nfact, 
-            SUM(id.total) total, i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp,
-            i.ningalm, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, SUM(id.total)/tc.tipoCambio totalsus, a1.almacen origen,
+            SUM(id.total) total, i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, a.almacen, 
+            m.sigla monedasigla, i.ordcomp, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio,
+            SUM(id.total)/tc.tipoCambio totalsus, a1.almacen origen,
             CASE
                 WHEN i.anulado = 1 THEN 'ANULADO'
                 WHEN i.estado = 0 THEN 'PENDIENTE'
@@ -115,13 +125,13 @@ class Ingresos_model extends CI_Model
             INNER JOIN moneda m
             ON i.moneda=m.id
             INNER JOIN tipocambio tc
-            ON i.tipocambio=tc.id
-              INNER JOIN traspasos t1
-              ON t1.idIngreso=i.idIngresos
-              INNER JOIN egresos e
-              ON t1.idEgreso=e.idegresos
-              INNER JOIN almacenes a1
-              ON a1.idalmacen=e.almacen
+            ON i.fechamov=tc.fecha
+            INNER JOIN traspasos t1
+            ON t1.idIngreso=i.idIngresos
+            INNER JOIN egresos e
+            ON t1.idEgreso=e.idegresos
+            INNER JOIN almacenes a1
+            ON a1.idalmacen=e.almacen
             WHERE DATE(i.fechamov) BETWEEN '$ini' AND '$fin' and i.almacen like '%$alm' and t.id like '%$tin'
             Group By i.idIngresos 
             ORDER BY i.idIngresos DESC
