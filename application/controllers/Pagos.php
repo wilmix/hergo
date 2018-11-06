@@ -280,12 +280,11 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->transferencia=$data->transferencia;
 			$pago->pagos=$data->porPagar;
 			
-			/*$idPago=$this->Pagos_model->storePago($pago);
+			$idPago=$this->Pagos_model->storePago($pago);
 			$return=new stdClass();
 			$return->status=200;
 			$return->id=$idPago;
-			echo json_encode($return);*/
-			echo json_encode($pago);
+			echo json_encode($return);
 
 		}
 		else
