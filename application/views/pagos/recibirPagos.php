@@ -5,9 +5,25 @@
     width:80%;
     text-align: right;
   }
-
- 
 </style>
+<main id="app">
+ <!-- Content Header (Page header) -->
+ <section class="content-header">
+      <h1>
+        <?= isset($idPago)?'Modificar Pago':'Recibir Pago'?>
+        <span v-text="numPago"></span>
+        <small v-text="nombreCliente"></small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+        <li class="active">Recibir Pago</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!-- Your Page Content Here -->
 <input type="text" id="idPago" value="<?= isset($idPago)?$idPago:0?>" class="hidden"> 
 <div class="row">
   <div class="col-xs-12">
@@ -15,17 +31,20 @@
       <div class="box-body">
           <div id="toolbar2" class="form-inline">
           <button  type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
-             <span>
-               <i class="fa fa-calendar"></i> Fecha
-             </span>
-              <i class="fa fa-caret-down"></i>
-           </button>
-            <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
+            <span>
+              <i class="fa fa-calendar"></i>
+            </span>
+            <i class="fa fa-caret-down"></i>
+          </button>
+            <select class="btn btn-primary btn-sm" 
+                    data-style="btn-primary" 
+                    id="almacen_filtro" 
+                    name="almacen_filtro">
               <?php foreach ($almacen->result_array() as $fila): ?>
-              <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
+                <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
               <?php endforeach ?>
-              <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
-              <option value="">TODOS</option>
+                <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
+                <option value="">TODOS</option>
             </select>
             <button  type="button" class="btn btn-primary btn-sm" id="refresh">
               <span>
@@ -51,30 +70,37 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body">
-        <main id="app">
+        
           <form id="formPagos">
             <div class="form-row">
               <div class="form-row align-items-center col-md-3">
                 <label>Almacen: </label>
-                <select class="form-control" v-model="almacen" id="almacen" name="almacen">
-                  <option v-for="option in almacenes" v-bind:value="option.value">
-                      {{ option.alm }}
+                <select class="form-control" 
+                        v-model="almacen" 
+                        id="almacen" 
+                        name="almacen">
+                  <option v-for="option in almacenes" 
+                          v-bind:value="option.value"
+                          v-text="option.alm">
                   </option>
                 </select>
               </div>
               <div class="form-row align-items-center col-md-2">
                 <label>Fecha: </label>
-                <input v-model="fechaPago" class="form-control fecha_pago" type="text" id="fechaPago" name="fechaPago">
+                <input  v-model="fechaPago" 
+                        class="form-control fecha_pago" 
+                        type="text" 
+                        id="fechaPago" 
+                        name="fechaPago">
               </div>
-              
-
-
-                <div class="form-row align-items-center col-md-5">
+              <div class="form-row align-items-center col-md-5">
                   <label>Cliente: 
-                    <span class="badge label-success hidden" id="errorCliente">
-                      <i class="fa fa-check"></i></span> 
+                    <span class="badge label-success hidden" 
+                          id="errorCliente">
+                      <i class="fa fa-check"></i>
                     </span>
-                    <span style="margin-left: 10px;display: none;" id="cargandocliente" >
+                    <span style="margin-left: 10px;display: none;" 
+                          id="cargandocliente" >
                       <i class="fa fa-times" style="color:#bf0707"></i>
                     </span>
                   </label>
@@ -89,29 +115,33 @@
                           id="idCliente_Pago" 
                           class="hidden"> 
                 </div>
-
-
               <div class="form-row align-items-center col-md-2">
-                  <label class="" for="">Tipo: </label>
-                  <select class="form-control" v-model="tipoPago" id="tipoPago" name="tipoPago">
-                    <option v-for="option in options" v-bind:value="option.value">
-                      {{ option.tipo }}
+                  <label>Tipo: </label>
+                  <select class="form-control" 
+                          v-model="tipoPago" 
+                          id="tipoPago" 
+                          name="tipoPago">
+                    <option v-for="option in options" 
+                            v-bind:value="option.value"
+                            v-text="option.tipo">
                     </option>
                   </select>
+              </div>
+              <div v-if="tipoPago == 2">
+                <div class="form-row align-items-center col-md-2">
+                  <label >Banco:</label>
+                    <select class="form-control" 
+                        v-model="banco" 
+                        id="banco" 
+                        name="banco">
+                      <?php foreach ($bancos->result_array() as $fila): ?>
+                        <option value=<?= $fila['id'] ?>> <?= $fila['sigla'] ?> </option>
+                      <?php endforeach ?>
+                    </select>
                 </div>
-                <div v-if="tipoPago == 2">
-                    <div class="form-row align-items-center col-md-2">
-                      <label >Banco: </label>
-                      <select class="form-control" v-model="banco" id="banco" name="banco">
-                          <?php foreach ($bancos->result_array() as $fila): ?>
-                            <option value=<?= $fila['id'] ?>> <?= $fila['sigla'] ?> </option>
-                          <?php endforeach ?>
-                      </select>
-                    </div>
-                    <div class="form-row align-items-center col-md-2">
-                      <label>Vaucher: </label>
-                      <input type="text" class="form-control" v-model="transferencia" id="vaucher" name="vaucher">
-                    </div>
+                <div class="form-row align-items-center col-md-2">
+                  <label>Vaucher: </label>
+                  <input type="text" class="form-control" v-model="transferencia" id="vaucher" name="vaucher">
                 </div>
                 <div v-if="tipoPago == 3">
                   <div class="form-row align-items-center col-md-2">
@@ -119,8 +149,7 @@
                     <input type="text" class="form-control" v-model="cheque" id="cheque" name="cheque">
                   </div>
                 </div>
-            </div> <!-- class="form-row" -->
-
+              </div> 
             <div class="table">
               <table class="table table-hover table-striped table-bordered" id="paraPagar_table">
                 <thead>
@@ -166,7 +195,7 @@
               </div>
             </div>
           </form>
-        </main>
+        
       </div>
       <!-- /.box-body -->
     </div>
@@ -174,7 +203,7 @@
   </div>
   <!-- /.col -->
 </div>
-
+</main>
 <script type="text/x-template" id="row-template">
   <tr>
       <td>{{pagar.nFactura}}</td>

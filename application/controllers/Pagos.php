@@ -14,6 +14,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 		$this->load->model("Pagos_model");//*****************aki poner el modelo
 		$this->load->model("Egresos_model");
 		$this->load->model("Facturacion_model");
+		$this->load->model("Ingresos_model");
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
 		$this->cabeceras_css=array(
@@ -166,11 +167,10 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('pagos/recibirPagos.php',$this->datos); ///*****aki poner la vista
+			//$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('pagos/recibirPagos.php',$this->datos); 
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footerscript.php',$this->datos);
-			//$this->load->view('plantilla/footer.php',$this->datos);						
 	}
 	public function editarPago($idPago=0)
 	{
@@ -203,6 +203,9 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			 $this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.css');
 			 $this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.js');
 			/***********************************/
+			/*************AUTOCOMPLETE**********/
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
 
 			$this->datos['almacen']=$this->Pagos_model->retornar_tabla("almacenes");
 			$this->datos['tipoPago']=$this->Pagos_model->retornar_tabla("tipoPago");
@@ -217,11 +220,11 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			//$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('pagos/recibirPagos.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footerscript.php',$this->datos);
-			//$this->load->view('plantilla/footer.php',$this->datos);						
+				
 	}
 	public function retornarEdicion() {
 		if ($this->input->is_ajax_request()) {
@@ -273,7 +276,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->glosa=$data->glosa;
 			$pago->autor=$this->session->userdata('user_id');
 			$pago->fecha=date('Y-m-d H:i:s');
-			$pago->tipoCambio=$this->Egresos_model->retornarTipoCambio();
+			$pago->tipoCambio=$this->ingresos_model-->getTipoCambio($pago->fechaPago);
 			$pago->tipoPago=$data->tipoPago;
 			$pago->cheque=$data->cheque;
 			$pago->banco=$data->banco;
@@ -347,10 +350,9 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$data=$this->security->xss_clean($this->input->post('datos'));
 			$data=json_decode($data);
 			$idPago=$data->idPago;
+			$gestion = date('Y',strtotime($data->fechaPago));
 
 			$pago = new stdclass();
-
-			$pago->almacen=$data->almacen;
 			$pago->fechaPago=$data->fechaPago;
 			$pago->moneda=$data->moneda;
 			$pago->cliente=$data->cliente;
@@ -358,11 +360,13 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->glosa=$data->glosa;
 			$pago->autor=$this->session->userdata('user_id');
 			$pago->fecha=date('Y-m-d H:i:s');
-			$pago->tipoCambio=$this->Egresos_model->retornarTipoCambio();
+			$pago->tipoCambio=$this->Ingresos_model->getTipoCambio($pago->fechaPago);
+			$pago->tipoCambio = $pago->tipoCambio->id;
 			$pago->tipoPago=$data->tipoPago;
 			$pago->cheque=$data->cheque;
 			$pago->banco=$data->banco;
-			$pago->transferencia=$data->transferencia;
+			$pago->transferencia = $data->transferencia;
+			$pago->gestion = $gestion;
 			if ($this->Pagos_model->editarPago($idPago,$pago,$data->porPagar)) {
 				$return=new stdClass();
 				$return->status=200;

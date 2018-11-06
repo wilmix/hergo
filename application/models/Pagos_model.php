@@ -204,7 +204,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		if ($this->db->trans_status() === FALSE) {
 			return false;
 		} else {
-			return true;
+			return $idPago;
 		}
 		
 	}

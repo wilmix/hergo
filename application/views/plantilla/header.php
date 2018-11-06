@@ -52,7 +52,7 @@
                 <img src="<?php echo $foto ?>" class="img-circle" alt="User Image">
                 <p>
                   <?php echo $nombre_usuario ?>
-                  <small>Miembro desde Nov. 2017</small>
+                  <small>Miembro de Hergo LTDA</small>
                 </p>
               </li>
               <!-- Menu Body -->

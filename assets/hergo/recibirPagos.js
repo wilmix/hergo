@@ -6,6 +6,7 @@ let fechaPagoHoy
 let idPago=$("#idPago").val();
 let idClientePago
 let nombreCliente
+let clienteCorrecto
 $( function() {
     $("#cliente_factura").autocomplete(
     {      
@@ -30,10 +31,9 @@ $( function() {
     }, 
       select: function( event, ui ) {       
          
-          $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
-          $("#cliente_factura").val( ui.item.nombreCliente + " - " + ui.item.documento);
-          $("#idCliente_Pago").val( ui.item.idCliente);
-          $("#nombreFacturaPrevia").val( ui.item.nombreCliente);
+          $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>')
+          $("#cliente_factura").val( ui.item.nombreCliente + " - " + ui.item.documento)
+          $("#idCliente_Pago").val( ui.item.idCliente)
           $("#errorCliente").removeClass("hidden")
           clienteCorrecto = true
           return false;
@@ -106,11 +106,9 @@ $(document).ready(function(){
 
 $(document).on("change",".fecha_pago",function(){
     fechaPagoHoy = $('#fechaPago').val()
-    console.log(fechaPagoHoy)
 }) 
 $(document).on("change","#cliente_factura",function(){
     idClientePago = $('#idCliente_Pago').val()
-    console.log(idClientePago)
 }) 
 $(document).on("change","#almacen_filtro",function(){
     retornarPagosPendientes();
@@ -324,7 +322,6 @@ function editarPago(idPago) {
             idPago:idPago
         },
     }).done(function(res){
-       console.log(res);
         for (let index = 0; index < res.detalle.length; index++) {
             
             saldoNuevo = Math.round(res.detalle[index].saldoNuevo*100)/100
@@ -335,7 +332,6 @@ function editarPago(idPago) {
                 res.detalle[index].saldoNuevo = parseFloat(saldoNuevo.toFixed(2))
                 res.detalle[index].pagar = parseFloat(pagar.toFixed(2))
         }
-        //console.log(res);
         data =  {
             almacen: res.cabecera.almacen,
             almacenes: [
@@ -349,7 +345,7 @@ function editarPago(idPago) {
             banco:res.cabecera.banco,
             transferencia:res.cabecera.transferencia,
             cheque:res.cabecera.cheque,
-            cliente:idClientePago,
+            cliente:res.cabecera.cliente,
             tipoPago: res.cabecera.tipoPago,
                 options: [
                 { tipo: 'EFECTIVO', value: '1' },
@@ -365,7 +361,8 @@ function editarPago(idPago) {
             idPago:idPago,
             nombreCliente:res.cabecera.nombreCliente,
             numPago:res.cabecera.numPago,
-            nombreCliente:''
+            nombreCliente:res.cabecera.nombreCliente
+
             
         }
         console.log(data);
@@ -380,7 +377,6 @@ function datosEditar(idPago) {
         url: base_url('index.php/Facturas/tipoCambio'),
         dataType: "json",
         })
-        console.log(glob_idAlmacenUsuario_1.responseJSON.idAlmacenUsuario)
 
     if (idPago == 0) {
     data = {
@@ -396,7 +392,7 @@ function datosEditar(idPago) {
             banco:'1',
             transferencia:'',
             cheque:'',
-            cliente:idClientePago,
+            cliente:'',
             tipoPago: '1',
                 options: [
                 { tipo: 'EFECTIVO', value: '1' },
@@ -409,7 +405,8 @@ function datosEditar(idPago) {
             moneda:1,
             glosa:'',
             guardar:false,
-            nombreCliente:''
+            nombreCliente:'',
+            numPago: ''
     }
     } else {
     editarPago(idPago); 
@@ -461,7 +458,8 @@ Vue.component('app-row',{
         edit:function(){    
             this.error="";     
             this.editing=true;
-            this.montopagar=this.pagar.pagar;        
+            this.montopagar=this.pagar.pagar;
+            vmPago.guardar=false;        
         },
         retornarSaldoNuevo:function(){
             var _saldoNuevo=this.pagar.saldoPago-this.montopagar;
@@ -535,11 +533,6 @@ var vmPago = new Vue({
                     swal("Atencion", "Esta factura ya fue agregada","info");
                     return false;
                 }
-                /*if(this.porPagar.map((el) => el.cliente).indexOf(row.cliente)<0)
-                {
-                    swal("Atencion", "No se pueden agregar diferentes clientes","info");
-                    return false;
-                }*/
                 this.porPagar.push(row)
                 console.log(this.porPagar);                
             }
@@ -558,7 +551,7 @@ var vmPago = new Vue({
             return total;
         },
         editarPago(){
-            console.log('editar');
+            nombreCliente = $("#cliente_factura").val();
             agregarcargando();
             let datos={
                 almacen: this.almacen,
@@ -575,27 +568,24 @@ var vmPago = new Vue({
                 porPagar:this.porPagar,
                 guardar:true,
                 idPago:idPago,
-                nombreCliente: 'VARIOS',
+                nombreCliente:this.nombreCliente,
             };
-            let  numPago = this.numPago;
+            let  numPago = this.numPago
+
             let clientes = datos.porPagar.map(p=>p.cliente)
-            if (clientes == 0) {
+           if (clientes == 0 || !datos.cliente || nombreCliente.length <= 0) {
                 quitarcargando();
-                swal("Error", "No se puede guardar el pago","error");
+                swal({
+                    title: "No se puede guardar Pago",
+                    text: "Seleccione cliente y pago",
+                    type: "warning",        
+                    allowOutsideClick: false,                                                                        
+                    }).then(function(){
+                        console.log('borrado')
+                    })
+                return false
             }
-            let cliente = clientes.reduce( (a,b) => a==b )
-            if (cliente) {
-                datos.cliente=clientes[0]
-                datos.nombreCliente = datos.porPagar[0].nombreCliente
-            }
-            console.log(datos);
             datosAjax=JSON.stringify(datos);
-            if(!this.guardar ||  vmPago.$children[1].editing == true || datos=={})
-            {
-                quitarcargando();
-                swal("Error", "No se puede guardar el pago","error");
-                return false;
-            }
             $.ajax({
                 type:"POST",
                 url: base_url('index.php/Pagos/editarPagos'),
@@ -634,8 +624,6 @@ var vmPago = new Vue({
                     window.location.href = base_url("Pagos")
                 });
             });
-
-
         },
         anularPago(){
             swal({
@@ -703,7 +691,6 @@ var vmPago = new Vue({
         guardarPago:function(){
              nombreCliente = $("#cliente_factura").val();
             //agregarcargando();
-            console.log(idClientePago)
             let datos={
                 almacen: this.almacen,
                 fechaPago: fechaPagoHoy,
@@ -718,8 +705,8 @@ var vmPago = new Vue({
                 transferencia:this.transferencia,
                 porPagar:this.porPagar,
                 nombreCliente:nombreCliente,
+                numPago: this.numPago
             };
-            
            let clientes = datos.porPagar.map(p=>p.cliente)
            if (clientes == 0 || !datos.cliente || nombreCliente.length <= 0) {
                 quitarcargando();
@@ -733,20 +720,13 @@ var vmPago = new Vue({
                     })
                 return false
             }
-            /*let cliente = clientes.reduce( (a,b) => a==b )
-            if (cliente) {
-                datos.cliente=clientes[0]
-                datos.nombreCliente = datos.porPagar[0].nombreCliente
-                
-            }*/
+            if (!this.guardar) {
+                swal("Atencion", "Confime ediciòn de monto de pago","info");
+                return false
+            }
+            
             datosAjx=JSON.stringify(datos);
-            //console.log(vmPago.$children[1].editing);
-            /*if(!this.guardar || vmPago.$children[1].editing == true)
-            {
-                quitarcargando();
-                swal("Error", "No se puede guardar el pago","error");
-                return false;
-            }*/
+
             $.ajax({
                 type:"POST",
                 url: base_url('index.php/Pagos/guardarPagos'),
@@ -782,8 +762,7 @@ var vmPago = new Vue({
                     allowOutsideClick: false,  
                 }).then(
                 function(result) {   
-                    //agregarcargando();                 
-                    //location.reload();
+                    console.log(result)
                 });
             });
         },
