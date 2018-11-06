@@ -257,15 +257,15 @@ class Pagos extends CI_Controller  /////**********nombre controlador
         {
 			$data=$this->security->xss_clean($this->input->post('d'));
 			$data=json_decode($data);
-			
-			//deberia llegar por lo menos 1 registro
-			$numPago=$this->retornarNumPago($data->almacen);
-			
+			$gestion = date('Y',strtotime($data->fechaPago));
+			$numPago=$this->retornarNumPago($data->almacen, $gestion);
+
 			$pago = new stdclass();
 			$pago->almacen=$data->almacen;
 			$pago->numPago=$numPago;
 			$pago->fechaPago=$data->fechaPago;
 			$pago->fechaPago = date('Y-m-d',strtotime($pago->fechaPago));
+			$pago->gestion= $gestion;
 			$pago->moneda=$data->moneda;
 			$pago->cliente=$data->cliente;
 			$pago->totalPago=$data->totalPago;
@@ -279,36 +279,23 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->banco=$data->banco;
 			$pago->transferencia=$data->transferencia;
 			$pago->pagos=$data->porPagar;
-			//$this->Pagos_model->guardarPago($pago);
-			$pago->idPago=$this->retornarIdPago($pago->numPago,$pago->almacen);
-			//guardar detalle
-			/*$pagosFactura = array();
-			foreach ($pago->pagos as $fila) {
-				$pagos=new stdclass();
-				$pagos->idPago=$pago->idPago;
-				$pagos->idFactura=$fila->idFactura;
-				$pagos->monto=$fila->pagar;		
-				$pagos->saldoNuevo=$fila->saldoNuevo;	
-				array_push($pagosFactura,$pagos);	
-				$this->Facturacion_model->actualizar_estadoPagoFactura($fila->idFactura,$fila->saldoNuevo,$fila->saldoPago);
-			}
-			//echo '<pre>';	print_r("id ".$fila->idFactura."saldoNuevo ".$fila->saldoNuevo."saldoPago ".$fila->saldoPago); echo '</pre>';	        	        	
-			$this->Pagos_model->guardarPago_Factura($pagosFactura);
-			$idPago = $pago->idPago;
+			
+			/*$idPago=$this->Pagos_model->storePago($pago);
 			$return=new stdClass();
 			$return->status=200;
 			$return->id=$idPago;
 			echo json_encode($return);*/
 			echo json_encode($pago);
+
 		}
 		else
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	public function retornarNumPago($almacen)
+	public function retornarNumPago($almacen, $gestion)
 	{
-		$numPago=$this->Pagos_model->obtenerNumPago($almacen);
+		$numPago=$this->Pagos_model->obtenerNumPago($almacen, $gestion);
 		return $numPago+1;
 	}
 	public function retornarIdPago($numPago,$almacen)

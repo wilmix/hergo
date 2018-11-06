@@ -749,11 +749,10 @@ var vmPago = new Vue({
             }*/
             $.ajax({
                 type:"POST",
-                url: base_url('index.php/Pagos/guardarPagos'), //******controlador
+                url: base_url('index.php/Pagos/guardarPagos'),
                 dataType: "json",
                 data: {d:datosAjx},
             }).done(function(res){
-                console.log(res);
                 if(res.status=200)
                 {
                     quitarcargando();
@@ -765,10 +764,10 @@ var vmPago = new Vue({
                         allowOutsideClick: false,  
                     }).then(
                         function(result) {   
-                        //agregarcargando();                 
-                        //location.reload();
-                        //let imprimir = base_url("pdf/Recibo/index/") + res.id;
-                        //window.open(imprimir);
+                        agregarcargando();                 
+                        location.reload();
+                        let imprimir = base_url("pdf/Recibo/index/") + res.id;
+                        window.open(imprimir);
                     });
                 }
             }).fail(function( jqxhr, textStatus, error ) {

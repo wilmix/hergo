@@ -106,14 +106,13 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function obtenerNumPago($almacen)
+	public function obtenerNumPago($almacen, $gestion)
 	{
-		$gestion= date('Y');		
-
-		$sql="SELECT MAX(p.numPago) numPago
-		FROM pago p
-		 WHERE p.almacen=$almacen
-		 AND YEAR(p.fechaPago)='$gestion'";		
+		$sql="SELECT p.`numPago`
+		FROM pago p 
+		WHERE p.`almacen` = '$almacen'
+		AND p.`gestion` = '$gestion'
+		ORDER BY p.`numPago` DESC LIMIT 1";		
 		$query=$this->db->query($sql);	
 		if($query->num_rows()>0)
         {
@@ -148,6 +147,40 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		$sql=$this->db->insert("pago", $obj);
 		return $sql;		
 	}
+	public function storePago($pago)
+	{		
+		$this->db->trans_start();
+			$this->db->insert("pago", $pago);
+            $idPago=$this->db->insert_id();
+            if($idPago>0)
+        	{
+				$pagosFactura = array();
+				foreach ($pago->pagos as $fila) {
+				$pagos=new stdclass();
+				$pagos->idPago= $idPago;
+				$pagos->idFactura=$fila->idFactura;
+				$pagos->monto=$fila->pagar;		
+				$pagos->saldoNuevo=$fila->saldoNuevo;	
+				array_push($pagosFactura,$pagos);	
+				$this->Facturacion_model->actualizar_estadoPagoFactura($fila->idFactura,$fila->saldoNuevo,$fila->saldoPago);
+				}
+			$this->db->insert_batch("pago_factura", $pagosFactura);	
+            }
+        	else
+        	{
+        		echo false;
+        	}
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+			return false;
+			
+        } else {
+            
+            return $idPago;
+        }	
+	}
+
 	public function editarPago($idPago,$pago,$detalle) {	
 		$this->db->trans_start();	
 			$this->db->where('idPago', $idPago);		
