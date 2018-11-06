@@ -12,7 +12,6 @@
       <h1>
         <?= isset($idPago)?'Modificar Pago':'Recibir Pago'?>
         <span v-text="numPago"></span>
-        <small v-text="nombreCliente"></small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>

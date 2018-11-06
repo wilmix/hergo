@@ -57,8 +57,6 @@ $(document).ready(function(){
         },
         showDropdowns: true,
       });
-
-
      $(".tiponumerico").inputmask({
         alias:"decimal",
         digits:2,
@@ -66,7 +64,7 @@ $(document).ready(function(){
         autoGroup: true,
         autoUnmask:true
     });
-    var start = moment().subtract(0, 'year').startOf('year')
+    var start = moment().subtract(10, 'year').startOf('year')
     var end = moment().subtract(0, 'year').endOf('year')
 
     $(function() {
@@ -585,6 +583,11 @@ var vmPago = new Vue({
                     })
                 return false
             }
+            if (!this.guardar) {
+                quitarcargando();
+                swal("Atencion", "Confime ediciòn de monto de pago","info");
+                return false
+            }
             datosAjax=JSON.stringify(datos);
             $.ajax({
                 type:"POST",
@@ -597,7 +600,7 @@ var vmPago = new Vue({
                     quitarcargando();
                     swal({
                         title: 'Pago Modificado',
-                        text: `El pago ${numPago} por ${datos.totalPago.toFixed(2)} Bs. de ${datos.nombreCliente} 
+                        text: `El pago ${numPago} por ${datos.totalPago.toFixed(2)} Bs. de ${nombreCliente} 
                                 se modificó con éxito`,
                         type: 'success', 
                         showCancelButton: false,
@@ -721,6 +724,7 @@ var vmPago = new Vue({
                 return false
             }
             if (!this.guardar) {
+                quitarcargando();
                 swal("Atencion", "Confime ediciòn de monto de pago","info");
                 return false
             }
@@ -738,7 +742,7 @@ var vmPago = new Vue({
                     quitarcargando();
                     swal({
                         title: 'Pago almacenado',
-                        text: `El pago por ${datos.totalPago.toFixed(2)} Bs. de ${datos.nombreCliente} se guardó con éxito`,
+                        text: `El pago por ${datos.totalPago.toFixed(2)} Bs. de ${nombreCliente} se guardó con éxito`,
                         type: 'success', 
                         showCancelButton: false,
                         allowOutsideClick: false,  
