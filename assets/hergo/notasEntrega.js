@@ -1,273 +1,216 @@
-var glob_factorIVA=0.87;
-var glob_factorRET=0.087;
-var loc_almacen;
-var glob_guardar=false;
-let glob_precio_egreso=0;
+let glob_factorIVA = 0.87;
+let glob_factorRET = 0.087;
+let loc_almacen;
+let glob_guardar = false;
+let glob_precio_egreso = 0;
 let hoy = moment().format('DD-MM-YYYY, hh:mm:ss a');
-$(document).ready(function(){ 
+$(document).ready(function () {
     $('.fecha_egreso').daterangepicker({
         singleDatePicker: true,
-        startDate:hoy,
-        autoApply:true,
+        startDate: hoy,
+        autoApply: true,
         locale: {
             format: 'DD-MM-YYYY'
         },
         showDropdowns: true,
-      });
-    loc_almacen= $("#almacen_imp").val();
-    cargarArticulos();    
+    });
+    loc_almacen = $("#almacen_ne").val();
+    //cargarArticulos();
 })
-$(document).on("change","#almacen_imp",function(){
-
-    var tablaaux=tablatoarray();
-    
-    if(tablaaux.length>0)
-    {
-        swal("Atencion!", "Al cambiar el almacen se quitaran los articulos de la tabla")
-        swal({
-            title: "Atencion!",
-            text: "Al cambiar el almacen se quitaran los articulos de la tabla",
-            type: "warning",
-            showCancelButton: true,
-            cancelButtonText: "Cancelar",
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Continuar",
-        
-        },
-        function(isConfirm){
-          if (isConfirm) {
-            limpiarArticulo();           
-            limpiarTabla();
-            loc_almacen= $("#almacen_imp").val();
-          } else {
-            $("#almacen_imp").val(loc_almacen);
-          }
-        });
-    }
-}); 
-
-
-$(document).ready(function(){ 
+$(document).ready(function () {
 
     $(".tiponumerico").inputmask({
-        alias:"decimal",
-        digits:3,
+        alias: "decimal",
+        digits: 4,
         groupSeparator: ',',
         autoGroup: true,
-        autoUnmask:true
-    }); 
-    var glob_agregar=false;
-    glob_guardar=false;
-    calcularTotal()  
+        autoUnmask: true
+    });
+    var glob_agregar = false;
+    glob_guardar = false;
+    calcularTotal()
 })
-/*******************CLIENTE*****************/
-$( function() {
-    $("#cliente_egreso").autocomplete(
-    {      
-      minLength: 2,
-      autoFocus: true,
-      source: function (request, response) {        
-        $("#cargandocliente").show(150)        
-        $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
-        glob_guardar=false;
-        $.ajax({
-            url: base_url("index.php/Egresos/retornarClientes"),
-            dataType: "json",
-            data: {
-                b: request.term
-            },
-            success: function(data) {
-                response(data);    
-                $("#cargandocliente").hide(150)
-            }
-          });        
-       
-    }, 
-
-      select: function( event, ui ) {       
-            $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
-            $("#cliente_egreso").val( ui.item.nombreCliente + " - " + ui.item.documento);
-            $("#idCliente").val( ui.item.idCliente);
-            glob_guardar=true;
-            return false;
-      }
-    })
-    .autocomplete( "instance" )._renderItem = function( ul, item ) {
-      
-      return $( "<li>" )
-        .append( "<a><div>" + item.nombreCliente + " </div><div style='color:#615f5f; font-size:10px'>" + item.documento + "</div></a>" )
-        .appendTo( ul );
-    };
- });
-/******************FIN CLIENTE*************/
- $( function() {
-    $("#articulo_imp").autocomplete(
-    {      
-      minLength: 2,
-      autoFocus: true,
-      source: function (request, response) {        
-        $("#cargandocodigo").show(150)
-        $("#Descripcion_imp").val('');
-        $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
-
-        $("#Descripcion_ne").val("");
-        $("#cantidad_ne").val("");
-        $("#punitario_ne").val("");
-        $("#descuento_ne").val("");
-        $("#unidad_ne").val("");
-        $("#costo_ne").val("");
-        $("#saldo_ne").val("");
-        glob_agregar=false;
-        /*$.ajax({
-            url: base_url("index.php/Ingresos/retornararticulos"),
-            dataType: "json",
-            data: {
-                b: request.term
-            },
-            success: function(data) {
-               response(data);    
-               $("#cargandocodigo").hide(150)
-              
-            }
-          });        */
-          /********************/    
-        var busqueda=request.term.trim()
-
-        if(busqueda.length > 1)
-        {
-            var ExpReg = new RegExp( busqueda ,"i");        
-            response(glob_art.fuzzy(ExpReg));    
-          
+$(document).on("change", "#almacen_ne", function () {
+    swal("Atencion!", "Usted esta cambiado de Almacen")
+    loc_almacen = $("#almacen_ne").val();
+    console.log(loc_almacen);
+});
+$(document).on("click", "#anularMovimientoEgreso", function () {
+    mensajeAnular("#obs_ne",
+        function () {
+            anularMovimientoEgreso();
+        },
+        function () {
+            window.location.href = base_url("Egresos");
         }
-        
-        $("#cargandocodigo").hide(150);
-              
-              
-        
-        /********************/  
-    }, 
+    );
 
-      select: function( event, ui ) {
-
-        idAlmacen=$("#almacen_ne").val();
-        cargandoSaldoPrecioArticulo()
-         $.ajax({
-
-            url: base_url("index.php/Ingresos/retornarSaldoPrecioArticulo/"+ui.item.CodigoArticulo+"/"+idAlmacen),
-            dataType: "json",
-            data: {},
-            success: function(data) {
-                finCargaSaldoPrecioArticulo()
-                glob_precio_egreso=data.precio;
-                $("#costo_ne").val(data.precio);
-                $("#saldo_ne").val(data.ncantidad);              
-                $("#punitario_ne").val("");
-                cambiarMoneda()
-            }
-          });    
-         //fin agregar costo articulo
-          $("#articulo_imp").val( ui.item.CodigoArticulo);
-          $("#Descripcion_ne").val( ui.item.Descripcion);
-          $("#unidad_ne").val(ui.item.Unidad);
-          $("#codigocorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
-          glob_agregar=true;
-          return false;
-      }
-    })
-    .autocomplete( "instance" )._renderItem = function( ul, item ) {
-      
-      return $( "<li>" )
-        .append( "<a><div>" + item.CodigoArticulo + " </div><div style='color:#615f5f; font-size:10px'>" + item.Descripcion + "</div></a>" )
-        .appendTo( ul );
-    };
- });
-function cargandoSaldoPrecioArticulo()
-{
-    $(".cargandoPrecioSaldo").css("display","");
-}
-function finCargaSaldoPrecioArticulo()
-{
-    $(".cargandoPrecioSaldo").css("display","none");
-}
-$(document).on("click","#agregar_articulo",function(){
-    if(glob_agregar)
-    {
-        //agregarArticulo(idcosto);//despues de generar el id de costo se agrega la fila con el id de costo
+})
+$(document).on("click", "#recuperarMovimientoEgreso", function () {
+    mensajeRecuperar("#obs_ne",
+        function () {
+            recuperarMovimientoEgreso();
+        },
+        function () {
+            window.location.href = base_url("Egresos");
+        }
+    );
+})
+$(document).on("click", "#agregar_articulo", function () {
+    if (glob_guardar) {
         agregarArticulo();
     }
 })
-$(document).on("click",".eliminarArticulo",function(){    
+$(document).on("click", ".eliminarArticulo", function () {
     $(this).parents("tr").remove()
     calcularTotal()
 })
-function limpiarArticulo()
-{
-    inputarray=$(".filaarticulo").find("input").toArray();
-    $.each(inputarray,function(index,value)
+$(document).on("change", "#moneda_ne", function () {
+    calcularTotal()
+})
+$(document).on("keyup", "#nfact_imp", function () {
+    if ($(this).val() == "SF") {
+        $("#consinfac").html("(sin Factura)")
+        $("#consinfac").css("color", "#a60000")
+    } else {
+        $("#consinfac").html("(con Factura)")
+        $("#consinfac").css("color", "#00a65a")
+    }
+})
+$(document).on("keyup", "#cantidad_imp,#punitario_imp", function () {
+    var cant = $("#cantidad_imp").inputmask('unmaskedvalue');
+    var costo = $("#punitario_imp").inputmask('unmaskedvalue');
+    var tipoingreso = $("#tipomov_imp2").val()
+    cant = (cant == "") ? 0 : cant;
+    costo = (costo == "") ? 0 : costo;
+    if (tipoingreso == 2) //si es compra local idcompralocal=2
     {
-        $(value).val("")
-    })        
-    glob_agregar=false;
-    $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')   
-    
+        costo = calculocompraslocales(cant, costo)
+    }
+    //total=cant*costo;
+    $("#constounitario").val(costo); //costo calculado
+    /***para la alerta*******/
+    var costobase = $("#costo_imp").inputmask('unmaskedvalue'); //costo de base de datos
+    alertacosto(costo, costobase);
+})
+$(document).on("click", "#guardarMovimiento", function () {
+    guardarmovimiento();
+})
+$(document).on("click", "#cancelarMovimiento", function () {
+    limpiarArticulo();
+    limpiarCabecera();
+    limpiarTabla();
+})
+$(document).on("click", "#actualizarMovimiento", function () {
+    actualizarMovimiento();
+})
+$(document).on("click", "#cancelarMovimientoActualizar", function () {
+    window.location.href = base_url("Ingresos");
+})
+$(document).on("click", "#anularMovimiento", function () {
+    anularMovimiento();
+    limpiarArticulo();
+    limpiarCabecera();
+    limpiarTabla();
+})
+$(document).on("click", "#recuperarMovimiento", function () {
+    recuperarMovimiento();
+    limpiarArticulo();
+    limpiarCabecera();
+    limpiarTabla();
+})
+$(document).on("change", "#moneda_ne", function () {
+    cambiarMoneda()
+})
+/*******************CLIENTE*****************/
+$(function () {
+    $("#cliente_egreso").autocomplete({
+            minLength: 2,
+            autoFocus: true,
+            source: function (request, response) {
+                $("#cargandocliente").show(150)
+                $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+                glob_guardar = false;
+                $.ajax({
+                    url: base_url("index.php/Egresos/retornarClientes"),
+                    dataType: "json",
+                    data: {
+                        b: request.term
+                    },
+                    success: function (data) {
+                        response(data);
+                        $("#cargandocliente").hide(150)
+                    }
+                });
+
+            },
+
+            select: function (event, ui) {
+                $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
+                $("#cliente_egreso").val(ui.item.nombreCliente + " - " + ui.item.documento);
+                $("#idCliente").val(ui.item.idCliente);
+                glob_guardar = true;
+                return false;
+            }
+        })
+        .autocomplete("instance")._renderItem = function (ul, item) {
+
+            return $("<li>")
+                .append("<a><div>" + item.nombreCliente + " </div><div style='color:#615f5f; font-size:10px'>" + item.documento + "</div></a>")
+                .appendTo(ul);
+        };
+});
+
+function cargandoSaldoPrecioArticulo() {
+    $(".cargandoPrecioSaldo").css("display", "");
 }
-function limpiarCabecera()
-{
-    inputarray=$(".filacabecera").find("input").toArray();
-    $.each(inputarray,function(index,value)
-    {
+function finCargaSaldoPrecioArticulo() {
+    $(".cargandoPrecioSaldo").css("display", "none");
+}
+function limpiarArticulo() {
+    inputarray = $(".filaarticulo").find("input").toArray();
+    $.each(inputarray, function (index, value) {
         $(value).val("")
-    })        
-    glob_agregar=false;
-    $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')   
+    })
+    glob_agregar = false;
+    $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+
+}
+function limpiarCabecera() {
+    $("#cliente_egreso").val("");
+    $("#pedido_ne").val("");
+    $("#cliente_egreso").val("");
+
+    glob_agregar = false;
+    $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
     $("#totalacostosus").val("");
     $("#totalacostobs").val("");
-    $("#obs_ne").val(""); 
+    $("#fechapago_ne").val("");
+    $("#obs_ne").val("");
 }
-function limpiarTabla()
-{
+function limpiarTabla() {
     $("#tbodyarticulos").find("tr").remove();
 }
-function calcularTotal()
-{
-    let moneda=$("#moneda_ne").val()
-    let totales=$(".totalCosto").toArray();
-    let total=0;
-    let dato=0;
-    $.each(totales,function(index, value){
-        dato=$(value).inputmask('unmaskedvalue');
-        total+=(dato=="")?0:parseFloat(dato)
+function calcularTotal() {
+    let moneda = $("#moneda_ne").val()
+    let totales = $(".totalCosto").toArray();
+    let total = 0;
+    let dato = 0;
+    $.each(totales, function (index, value) {
+        dato = $(value).inputmask('unmaskedvalue');
+        total += (dato == "") ? 0 : parseFloat(dato)
     })
     total = (Math.round(total * 100) / 100).toFixed(2);
-    if(moneda==1)
-    {
-        var totalDolares=total/glob_tipoCambio;
+    if (moneda == 1) {
+        var totalDolares = total / glob_tipoCambio;
         totalDolares = (Math.round(totalDolares * 100) / 100).toFixed(2);
-    }
-    else
-    {
-        var totalDolares=total;
-        total=total*glob_tipoCambio;
+    } else {
+        var totalDolares = total;
+        total = total * glob_tipoCambio;
     }
     $("#totalacostobs").val(total)
     $("#totalacostosus").val(totalDolares)
 }
-$(document).on("change","#moneda_ne",function(){
-    calcularTotal()
-})
-$(document).on("keyup","#nfact_imp",function(){
-    if($(this).val()=="SF")
-    {
-        $("#consinfac").html("(sin Factura)")
-        $("#consinfac").css("color","#a60000")
-    }
-    else
-    {
-        $("#consinfac").html("(con Factura)")   
-        $("#consinfac").css("color","#00a65a")
-    }
-})
-//calculo de compras locales con y sin factura
 function calculocompraslocales(cant, costo) {
     var ret;
     var pu //preciounitario
@@ -279,22 +222,20 @@ function calculocompraslocales(cant, costo) {
     return ret;
 
 }
-
-function agregarArticulo()
-{
+function agregarArticulo() {
     let saldoAlmacen = $("#saldo_ne").inputmask('unmaskedvalue')
     let cant = $("#cantidad_ne").inputmask('unmaskedvalue')
     let costo = $("#punitario_ne").inputmask('unmaskedvalue')
-    let codigoArticulo = $("#articulo_imp").val();
+    let codigoArticulo = $("#articulo_impTest").val();
+
+
 
     cant = parseFloat((cant == '') ? 0 : cant)
     costo = parseFloat((costo == '') ? 0 : costo)
     saldoAlmacen = parseFloat((saldoAlmacen == '') ? 0 : saldoAlmacen)
 
-    if ((cant) > 0 && (costo)>=0) 
-    {
-        if ((cant)<=(saldoAlmacen) && parseFloat(saldoAlmacen) > 0 )
-        {
+    if ((cant) > 0 && (costo) >= 0) {
+        if ((cant) <= (saldoAlmacen) && parseFloat(saldoAlmacen) > 0) {
             agregarArticuloEgresos();
         } else {
             swal({
@@ -306,19 +247,19 @@ function agregarArticulo()
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Si, Agregar',
                 cancelButtonText: 'No, Cancelar'
-            }).then((result)=>{
-                    agregarArticuloEgresos();
-                    swal({
-                        type: 'error',
-                        html: 'Usted generó un <b>NEGATIVO</b> en ' + codigoArticulo,
-                    });
-                },(dismiss) => {
-                    swal({
-                        type: 'success',
-                        title: 'Gracias por no generar negativos :)',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
+            }).then((result) => {
+                agregarArticuloEgresos();
+                swal({
+                    type: 'error',
+                    html: 'Usted generó un <b>NEGATIVO</b> en ' + codigoArticulo,
+                });
+            }, (dismiss) => {
+                swal({
+                    type: 'success',
+                    title: 'Gracias por no generar negativos :)',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
             })
         }
     } else {
@@ -329,411 +270,416 @@ function agregarArticulo()
         )
     }
 }
-
-function agregarArticuloEgresos()
-{
-    let codigo=$("#articulo_imp").val()
-    let descripcion=$("#Descripcion_ne").val()
-    let cant=$("#cantidad_ne").inputmask('unmaskedvalue')
-    let precioUnitario=$("#punitario_ne").inputmask('unmaskedvalue')
-    let descuento=$("#descuento_ne").inputmask('unmaskedvalue')
+function agregarArticuloEgresos() {
+    let codigo = $("#articulo_impTest").val()
+    let descripcion = $("#Descripcion_ne").val()
+    let cant = $("#cantidad_ne").inputmask('unmaskedvalue')
+    let precioUnitario = $("#punitario_ne").inputmask('unmaskedvalue')
+    let descuento = $("#descuento_ne").inputmask('unmaskedvalue')
+    let id = $("#idArticulo").val();
     let total
-    cant=parseFloat((cant=='') ? 0 : cant)
-    precioUnitario=parseFloat((precioUnitario=='') ? 0 : precioUnitario)
-    descuento = parseFloat((descuento=='' ? 0 : descuento))
-    precioUnitario = precioUnitario - (precioUnitario * descuento/100)
-    total = precioUnitario * cant 
+    cant = parseFloat((cant == '') ? 0 : cant)
+    precioUnitario = parseFloat((precioUnitario == '') ? 0 : precioUnitario)
+    descuento = parseFloat((descuento == '' ? 0 : descuento))
+    precioUnitario = precioUnitario - (precioUnitario * descuento / 100)
+    total = precioUnitario * cant
 
-    let articulo='<tr>'+ 
-            '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
-            '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+precioUnitario+'""></input></td>'+
-            '<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="'+total+'""></input></td>'+
-            '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+descuento+'""></input></td>'+   
-            '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'+
+    let articulo = '<tr>' +
+        '<td><input type="text" class="estilofila" disabled value="' + id + '""></input></td>' +
+        '<td><input type="text" class="estilofila" disabled value="' + codigo + '""></input></td>' +
+        '<td><input type="text" class="estilofila" disabled value="' + descripcion + '"></input</td>' +
+        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="' + cant + '""></input></td>' +
+        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="' + precioUnitario + '""></input></td>' +
+        '<td class="text-right"><input type="text" class="totalCosto estilofila currency" disabled value="' + total + '""></input></td>' +
+        '<td class="text-right"><input type="text" class="estilofila currency" disabled value="' + descuento + '""></input></td>' +
+        '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>' +
         '</tr>'
     $("#tbodyarticulos").append(articulo)
     $(".tiponumerico").inputmask({
-        alias:"decimal",
-        digits:3,
+        alias: "decimal",
+        digits: 4,
         groupSeparator: ',',
         autoGroup: true
     });
+    $(".currency").inputmask({ 
+        alias : "currency", 
+        prefix: '',
+        digits: 2,
+    });
     calcularTotal()
     limpiarArticulo();
-    document.getElementById("articulo_imp").focus()
+    document.getElementById("articulo_impTest").focus()
 }
-$(document).on("keyup","#cantidad_imp,#punitario_imp",function(){
-    var cant=$("#cantidad_imp").inputmask('unmaskedvalue');
-    var costo=$("#punitario_imp").inputmask('unmaskedvalue'); 
-    var tipoingreso=$("#tipomov_imp2").val()
-    cant=(cant=="")?0:cant;
-    costo=(costo=="")?0:costo;
-    if(tipoingreso==2)//si es compra local idcompralocal=2
-    {
-        costo=calculocompraslocales(cant,costo)
-    }
-    //total=cant*costo;
-    $("#constounitario").val(costo);//costo calculado
-    /***para la alerta*******/
-    var costobase=$("#costo_imp").inputmask('unmaskedvalue');//costo de base de datos
-    alertacosto(costo,costobase);
-})
-function alertacosto(costounitario,costobase)
-{
-    var valormin=(parseFloat(costobase)-parseFloat(costobase*0.15))
-    var valormax=(parseFloat(costobase)+parseFloat(costobase*0.15))
-    if((costounitario>valormin)&&(costounitario<valormax))
-    {
+function alertacosto(costounitario, costobase) {
+    var valormin = (parseFloat(costobase) - parseFloat(costobase * 0.15))
+    var valormax = (parseFloat(costobase) + parseFloat(costobase * 0.15))
+    if ((costounitario > valormin) && (costounitario < valormax)) {
         //se encuentra en el rango correco
-        $("#constounitario").css("background-color","#eee")
-        $("#constounitario").css("color","#555555")
+        $("#constounitario").css("background-color", "#eee")
+        $("#constounitario").css("color", "#555555")
 
-    }
-    else
-    {
+    } else {
         //fuera de rango
-        $("#constounitario").css("background-color","red")
-        $("#constounitario").css("color","#fff")
+        $("#constounitario").css("background-color", "red")
+        $("#constounitario").css("color", "#fff")
     }
 }
-function guardarmovimiento()
-{     
+function guardarmovimiento() {
     let valuesToSubmit = $("#form_egreso").serialize();
-    let tipoEgreso=$("#tipomov_ne2").text();
-    let tablaaux=tablatoarray();
-    if($("#_tipomov_ne").val()==9) //continuar en el caso de que el tipo de movimiento es baja de producto
-        var auxContinuar=true
+    let tipoEgreso = $("#tipomov_ne2").text();
+    let tablaaux = tablatoarray();
+    if ($("#_tipomov_ne").val() == 9)
+        var auxContinuar = true
     else
-        var auxContinuar=false
-    if(!glob_guardar && !auxContinuar)
-    {
-        swal("Error", "Seleccione el cliente","error")
+        var auxContinuar = false
+    if (!glob_guardar && !auxContinuar) {
+        swal("Error", "Seleccione el cliente", "error")
         return 0;
-    }    
-    if(tablaaux.length>0)
-    {
-        var tabla=JSON.stringify(tablaaux);
-        valuesToSubmit+="&tabla="+tabla;
+    }
+    if (tablaaux.length > 0) {
+        var tabla = JSON.stringify(tablaaux);
+        valuesToSubmit += "&tabla=" + tabla;
+        console.log(valuesToSubmit);
+        retornarajax(base_url("index.php/Egresos/storeEgreso"), valuesToSubmit, function (data) {
+            estado = validarresultado_ajax(data);
+            if (estado) {
+                if (data.respuesta) {
 
-        retornarajax(base_url("index.php/Egresos/guardarmovimiento"),valuesToSubmit,function(data)
-        {
-            estado=validarresultado_ajax(data);
-            if(estado)
-            {               
-                if(data.respuesta)
-                {
-                    
                     $("#modalIgresoDetalle").modal("hide");
                     swal({
                         title: 'Egreso realizado!',
-                        text: tipoEgreso+" guardada con éxito",
-                        type: 'success', 
+                        text: tipoEgreso + " guardada con éxito",
+                        type: 'success',
                         showCancelButton: false
                     }).then(
-                          function(result) {
-                            location.reload();
+                        function (result) {
+                            //location.reload();
                             let imprimir = base_url("pdf/Egresos/index/") + data.respuesta;
                             window.open(imprimir);
-                          });
-                }
-                else
-                {
+                            limpiarArticulo();
+                            limpiarCabecera();
+                            limpiarTabla();
+                        });
+                } else {
                     $(".mensaje_error").html("Error al almacenar los datos, intente nuevamente");
                     $("#modal_error").modal("show");
                 }
-                
+
             }
-        })      
-    }
-    else
-    {
-        
-        swal("Error", "No se tiene datos en la tabla para guardar","error")
+        })
+    } else {
+
+        swal("Error", "No se tiene datos en la tabla para guardar", "error")
     }
 }
-function actualizarMovimiento()
-{     
+function actualizarMovimiento() {
     var valuesToSubmit = $("#form_egreso").serialize();
-    var tablaaux=tablatoarray();
-    if(tablaaux.length>0)
-    {        var tabla=JSON.stringify(tablaaux);
+    var tablaaux = tablatoarray();
+    if (tablaaux.length > 0) {
+        var tabla = JSON.stringify(tablaaux);
 
-        valuesToSubmit+="&tabla="+tabla;    
-        retornarajax(base_url("index.php/Egresos/actualizarmovimiento"),valuesToSubmit,function(data)
-        {
-            estado=validarresultado_ajax(data);
-            if(estado)
-            {               
-                if(data.respuesta)
-                {
-                    
-                  //  $("#modalIgresoDetalle").modal("hide");
+        valuesToSubmit += "&tabla=" + tabla;
+        retornarajax(base_url("index.php/Egresos/actualizarmovimiento"), valuesToSubmit, function (data) {
+            estado = validarresultado_ajax(data);
+            if (estado) {
+                if (data.respuesta) {
+
+                    //  $("#modalIgresoDetalle").modal("hide");
                     limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
                     //$(".mensaje_ok").html("Datos actualizados correctamente");
                     //$("#modal_ok").modal("show");
                     swal(
-                          'Modificación realizada!',
-                          'La modificación se realizó con éxito!',
-                          'success'
-                        )
-                    window.location.href=base_url("Egresos");
-                }
-                else
-                {
+                        'Modificación realizada!',
+                        'La modificación se realizó con éxito!',
+                        'success'
+                    )
+                    window.location.href = base_url("Egresos");
+                } else {
                     $(".mensaje_error").html("Error al actualizar los datos, intente nuevamente");
                     $("#modal_error").modal("show");
                 }
-                
+
             }
-        })      
-    }
-    else
-    {
+        })
+    } else {
         alert("no se tiene datos en la tabla para guardar")
     }
 }
-function anularMovimiento()// X
-{     
+function anularMovimiento() // X
+{
     var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
-    var tablaaux=tablatoarray();
-    if(tablaaux.length>0)
-    {
-        var tabla=JSON.stringify(tablaaux);
+    var tablaaux = tablatoarray();
+    if (tablaaux.length > 0) {
+        var tabla = JSON.stringify(tablaaux);
 
-        valuesToSubmit+="&tabla="+tabla;    
-        retornarajax(base_url("index.php/Ingresos/anularmovimiento"),valuesToSubmit,function(data)
-        {
-            estado=validarresultado_ajax(data);
-            if(estado)
-            {               
-                if(data.respuesta)
-                {
-                    
+        valuesToSubmit += "&tabla=" + tabla;
+        retornarajax(base_url("index.php/Ingresos/anularmovimiento"), valuesToSubmit, function (data) {
+            estado = validarresultado_ajax(data);
+            if (estado) {
+                if (data.respuesta) {
+
                     $("#modalIgresoDetalle").modal("hide");
                     limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos anulados correctamente");
                     $("#modal_ok").modal("show");
-                    window.location.href=base_url("Ingresos");
-                }
-                else
-                {
+                    window.location.href = base_url("Ingresos");
+                } else {
                     $(".mensaje_error").html("Error al anular los datos, intente nuevamente");
                     $("#modal_error").modal("show");
                 }
-                
+
             }
-        })      
-    }
-    else
-    {
+        })
+    } else {
         alert("no se tiene datos en la tabla para guardar")
     }
 }
-function recuperarMovimiento()// X
-{     
+function recuperarMovimiento() // X
+{
     var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
-    var tablaaux=tablatoarray();
-    if(tablaaux.length>0)
-    {
-        var tabla=JSON.stringify(tablaaux);
+    var tablaaux = tablatoarray();
+    if (tablaaux.length > 0) {
+        var tabla = JSON.stringify(tablaaux);
 
-        valuesToSubmit+="&tabla="+tabla;    
-        retornarajax(base_url("index.php/Ingresos/recuperarmovimiento"),valuesToSubmit,function(data)
-        {
-            estado=validarresultado_ajax(data);
-            if(estado)
-            {               
-                if(data.respuesta)
-                {
-                    
+        valuesToSubmit += "&tabla=" + tabla;
+        retornarajax(base_url("index.php/Ingresos/recuperarmovimiento"), valuesToSubmit, function (data) {
+            estado = validarresultado_ajax(data);
+            if (estado) {
+                if (data.respuesta) {
+
                     $("#modalIgresoDetalle").modal("hide");
                     limpiarArticulo();
                     limpiarCabecera();
                     limpiarTabla();
                     $(".mensaje_ok").html("Datos recuperados correctamente");
                     $("#modal_ok").modal("show");
-                    window.location.href=base_url("Ingresos");
-                }
-                else
-                {
+                    window.location.href = base_url("Ingresos");
+                } else {
                     $(".mensaje_error").html("Error al recuperar los datos, intente nuevamente");
                     $("#modal_error").modal("show");
                 }
-                
+
             }
-        })      
-    }
-    else
-    {
+        })
+    } else {
         alert("no se tiene datos en la tabla para guardar")
     }
 }
-function tablatoarray()
-{
-    var tabla=new Array()
-    var filas=$("#tbodyarticulos").find("tr").toArray()
-    var datos=""
-    $.each(filas,function(index,value){
-        datos=$(value).find("input").toArray()
-        tabla.push(Array($(datos[0]).val(),$(datos[1]).val(),$(datos[2]).inputmask('unmaskedvalue'),$(datos[3]).inputmask('unmaskedvalue'),$(datos[4]).inputmask('unmaskedvalue'),$(datos[5]).inputmask('unmaskedvalue'),$(datos[6]).inputmask('unmaskedvalue')))
+function tablatoarray() {
+    var tabla = new Array()
+    var filas = $("#tbodyarticulos").find("tr").toArray()
+    var datos = ""
+    $.each(filas, function (index, value) {
+        datos = $(value).find("input").toArray()
+        tabla.push(Array(
+            $(datos[0]).val(), 
+            $(datos[1]).val(), 
+            $(datos[2]).val(), 
+            $(datos[3]).inputmask('unmaskedvalue'), 
+            $(datos[4]).inputmask('unmaskedvalue'), 
+            $(datos[5]).inputmask('unmaskedvalue'), 
+            $(datos[6]).inputmask('unmaskedvalue'), 
+        ))
     })
-    return(tabla)
+    return (tabla)
 }
-$(document).on("click","#guardarMovimiento",function(){
-    guardarmovimiento();
-})
-$(document).on("click","#cancelarMovimiento",function(){
-    limpiarArticulo();
-    limpiarCabecera();
-    limpiarTabla();
-})
-$(document).on("click","#actualizarMovimiento",function(){
-    actualizarMovimiento();
-})
-$(document).on("click","#cancelarMovimientoActualizar",function(){
-    window.location.href=base_url("Ingresos");
-})
-
-$(document).on("click","#anularMovimiento",function(){
-    anularMovimiento();
-    limpiarArticulo();
-    limpiarCabecera();
-    limpiarTabla();
-})
-$(document).on("click","#recuperarMovimiento",function(){
-    recuperarMovimiento();
-    limpiarArticulo();
-    limpiarCabecera();
-    limpiarTabla();
-})
-
-$(document).on("change","#moneda_ne",function(){
-    cambiarMoneda()
-    
-})
-
-function cambiarMoneda()
-{
-    if ($("#moneda_ne").val()==1) 
-    {
+function cambiarMoneda() {
+    if ($("#moneda_ne").val() == 1) {
         $(".costo_ne_label").html("Precio Bs")
         //$(".punitario_ne_class").val(glob_precio_egreso)   
 
-    }
-    else
-    {
+    } else {
         $(".costo_ne_label").html("Precio Dolares")
         //$(".punitario_ne_class").val(glob_precio_egreso/glob_tipoCambio)
     }
 }
+function anularMovimientoEgreso() {
 
-
-
-
-function anularMovimientoEgreso()
-{     
-   
-        var valuesToSubmit = $("#form_egreso").serialize();
-        var tablaaux=tablatoarray();
-        if(tablaaux.length>0)
-        {
-            var tabla=JSON.stringify(tablaaux);
-            valuesToSubmit+="&tabla="+tabla;
-            retornarajax(base_url("index.php/Egresos/anularmovimiento"),valuesToSubmit,function(data)
-            {
-                estado=validarresultado_ajax(data);
-                if(estado)
-                {               
-                    if(data.respuesta)
-                    {
-                        
-                       /* swal(
-                                'Anulado!',
-                                'El movimiento ha sido anulado.',
-                                'success'
-                            )*/
-                       
-                    }
-                    else
-                    {
-                        $(".mensaje_error").html("Error al anular los datos, intente nuevamente");
-                        $("#modal_error").modal("show");
-                    }
-                    
-                }
-            })      
-        }
-        else
-        {
-            alert("no se tiene datos en la tabla para guardar")
-        }
-
-    
-
-}
-function recuperarMovimientoEgreso()
-{
     var valuesToSubmit = $("#form_egreso").serialize();
-    var tablaaux=tablatoarray();
-    if(tablaaux.length>0)
-    {
-        var tabla=JSON.stringify(tablaaux);
-        valuesToSubmit+="&tabla="+tabla;    
-        retornarajax(base_url("index.php/Egresos/recuperarmovimiento"),valuesToSubmit,function(data)
-        {
-            estado=validarresultado_ajax(data);
-            if(estado)
-            {               
-                if(data.respuesta)
-                {
-               /* swal(
-                        'Recuperado!',
-                        'El movimiento ha sido recuperado.',
-                        'success' 
-                    )
-                    window.location.href=base_url("egresos");*/
-                }
-                else
-                {
+    var tablaaux = tablatoarray();
+    if (tablaaux.length > 0) {
+        var tabla = JSON.stringify(tablaaux);
+        valuesToSubmit += "&tabla=" + tabla;
+        retornarajax(base_url("index.php/Egresos/anularmovimiento"), valuesToSubmit, function (data) {
+            estado = validarresultado_ajax(data);
+            if (estado) {
+                if (data.respuesta) {
+
+                    /* swal(
+                             'Anulado!',
+                             'El movimiento ha sido anulado.',
+                             'success'
+                         )*/
+
+                } else {
                     $(".mensaje_error").html("Error al anular los datos, intente nuevamente");
                     $("#modal_error").modal("show");
                 }
-                
+
             }
-        })      
+        })
+    } else {
+        alert("no se tiene datos en la tabla para guardar")
     }
-    else
-    {
+
+
+
+}
+function recuperarMovimientoEgreso() {
+    var valuesToSubmit = $("#form_egreso").serialize();
+    var tablaaux = tablatoarray();
+    if (tablaaux.length > 0) {
+        var tabla = JSON.stringify(tablaaux);
+        valuesToSubmit += "&tabla=" + tabla;
+        retornarajax(base_url("index.php/Egresos/recuperarmovimiento"), valuesToSubmit, function (data) {
+            estado = validarresultado_ajax(data);
+            if (estado) {
+                if (data.respuesta) {
+                    /* swal(
+                             'Recuperado!',
+                             'El movimiento ha sido recuperado.',
+                             'success' 
+                         )
+                         window.location.href=base_url("egresos");*/
+                } else {
+                    $(".mensaje_error").html("Error al anular los datos, intente nuevamente");
+                    $("#modal_error").modal("show");
+                }
+
+            }
+        })
+    } else {
         alert("no se tiene datos en la tabla para guardar")
     }
 }
 
-$(document).on("click","#anularMovimientoEgreso",function(){
-    mensajeAnular("#obs_ne",
-        function(){
-            anularMovimientoEgreso();
-        },
-        function(){
-            window.location.href=base_url("Egresos");
-        }
-    );
-    
-})
 
-$(document).on("click","#recuperarMovimientoEgreso",function(){
-     mensajeRecuperar("#obs_ne",
-        function(){
-            recuperarMovimientoEgreso();
-        },
-        function(){
-             window.location.href=base_url("Egresos");
-        }
-    );
-})
 
+/*******************ARTICULO*****************/
+$( function() {
+    console.log(loc_almacen);
+    $("#articulo_impTest").autocomplete(
+    {      
+        minLength: 2,
+        autoFocus: true,
+        source: function (request, response) {        
+            $("#cargandocodigoTest").show(150)        
+            $("#codigocorrectoTest").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+            glob_guardar=false;
+            $.ajax({
+                url: base_url("index.php/Ingresos/retornararticulosTest"),
+                dataType: "json",
+                data: {
+                    b: request.term,
+                    a: loc_almacen
+                },
+                success: function(data) {
+                response(data);    
+                $("#cargandocodigoTest").hide(150)
+                }
+            });        
+        }, 
+        select: function( event, ui ) {       
+            $("#codigocorrectoTest").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
+            $("#articulo_impTest").val( ui.item.codigo);
+            $("#idArticulo").val( ui.item.id);
+            $("#Descripcion_ne").val( ui.item.descripcion);
+            $("#unidad_imp").val( ui.item.unidad);
+            $("#saldo_ne").val( ui.item.saldo);
+            $("#precio").val( ui.item.precio);
+            console.log(ui)
+            glob_guardar=true;
+            return false;
+        }
+        }).autocomplete("instance")._renderItem = function( ul, item ) {
+        return $( "<li>" ).append( "<a><div>" + item.codigo + " </div><div style='color:#615f5f; font-size:10px'>" + item.descripcion + "</div></a>" )
+        .appendTo( ul );
+    };
+ });
+
+
+
+ /******************ARTICULO ANTERIOR*************/
+/*$(function () {
+    $("#articulo_imp").autocomplete({
+            minLength: 2,
+            autoFocus: true,
+            source: function (request, response) {
+                $("#cargandocodigo").show(150)
+                $("#Descripcion_imp").val('');
+                $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+
+                $("#Descripcion_ne").val("");
+                $("#cantidad_ne").val("");
+                $("#punitario_ne").val("");
+                $("#descuento_ne").val("");
+                $("#unidad_ne").val("");
+                $("#costo_ne").val("");
+                $("#saldo_ne").val("");
+                glob_agregar = false;
+                /*$.ajax({
+                    url: base_url("index.php/Ingresos/retornararticulos"),
+                    dataType: "json",
+                    data: {
+                        b: request.term
+                    },
+                    success: function(data) {
+                       response(data);    
+                       $("#cargandocodigo").hide(150)
+                      
+                    }
+                  });        
+
+                var busqueda = request.term.trim()
+
+                if (busqueda.length > 1) {
+                    var ExpReg = new RegExp(busqueda, "i");
+                    response(glob_art.fuzzy(ExpReg));
+
+                }
+
+                $("#cargandocodigo").hide(150);
+
+
+
+
+            },
+
+            select: function (event, ui) {
+
+                idAlmacen = $("#almacen_ne").val();
+                cargandoSaldoPrecioArticulo()
+                $.ajax({
+
+                    url: base_url("index.php/Ingresos/retornarSaldoPrecioArticulo/" + ui.item.CodigoArticulo + "/" + idAlmacen),
+                    dataType: "json",
+                    data: {},
+                    success: function (data) {
+                        finCargaSaldoPrecioArticulo()
+                        glob_precio_egreso = data.precio;
+                        $("#costo_ne").val(data.precio);
+                        $("#saldo_ne").val(data.ncantidad);
+                        $("#punitario_ne").val("");
+                        cambiarMoneda()
+                    }
+                });
+                //fin agregar costo articulo
+                $("#articulo_imp").val(ui.item.CodigoArticulo);
+                $("#Descripcion_ne").val(ui.item.Descripcion);
+                $("#unidad_ne").val(ui.item.Unidad);
+                $("#codigocorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
+                glob_agregar = true;
+                return false;
+            }
+        })
+        .autocomplete("instance")._renderItem = function (ul, item) {
+
+            return $("<li>")
+                .append("<a><div>" + item.CodigoArticulo + " </div><div style='color:#615f5f; font-size:10px'>" + item.Descripcion + "</div></a>")
+                .appendTo(ul);
+        };
+});*/

@@ -179,7 +179,7 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			//$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('ingresos/importaciones/importaciones2.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
@@ -226,7 +226,7 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			//$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('ingresos/importaciones/importaciones2.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
@@ -273,7 +273,7 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			//$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('ingresos/importaciones/importaciones2.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
@@ -337,7 +337,7 @@ class Ingresos extends CI_Controller
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			//$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('ingresos/importaciones/importaciones2.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
@@ -631,6 +631,7 @@ class Ingresos extends CI_Controller
 			$ingreso->tipoDoc = $this->security->xss_clean($this->input->post('tipoDoc'));
         	$ingreso->obs = $this->security->xss_clean($this->input->post('obs_imp'));
 			$ingreso->articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
+			
 
 			$tipocambio=$this->Ingresos_model->getTipoCambio($ingreso->fechamov);
 			$ingreso->tipoCambio = $tipocambio->id;
@@ -640,6 +641,7 @@ class Ingresos extends CI_Controller
 			$ingreso->fecha = date('Y-m-d H:i:s');
 
 			$gestion= date("Y", strtotime($ingreso->fechamov));
+			$ingreso->gestion = $gestion;
 			$ingreso->nmov = $this->Ingresos_model->retornarNumMovimiento($ingreso->tipomov,$gestion,$ingreso->almacen);
 
 			$id = $this->Ingresos_model->storeIngreso($ingreso, $tipoCambioValor);

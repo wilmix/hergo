@@ -37,7 +37,7 @@ class Egresos_model extends CI_Model
                     INNER JOIN moneda m 
                     ON e.moneda=m.id 
             INNER JOIN tipocambio tc
-            ON e.tipocambio=tc.id
+            ON e.fechamov=tc.fecha
             LEFT JOIN factura_egresos fe
             ON e.idegresos=fe.idegresos
             left JOIN factura f
@@ -613,5 +613,40 @@ class Egresos_model extends CI_Model
         $query=$this->db->query($sql);
         return $query;
     }
+    public function storeEgreso($egreso)
+	{	
+        $this->db->trans_start();
+            $this->db->insert("egresos", $egreso);
+            $idEgreso=$this->db->insert_id();
+            $egresoDetalle = array();
+                foreach ($egreso->articulos as $fila) {
+                    $detalle=new stdclass();
+                    $detalle->idegreso = $idEgreso;
+                    $detalle->articulo = $fila[0];
+                    $detalle->moneda = $egreso->moneda;
+                    $detalle->cantidad = $fila[3];
+                    if ($egreso->moneda == 2) {
+                        $detalle->punitario= $fila[4] * $tipoCambioValor;
+                        $detalle->total=$fila[5] * $tipoCambioValor;
+                        $detalle->descuento=$fila[6] * $tipoCambioValor;
+                        
+                    }	elseif ($egreso->moneda == 1) {
+                        $detalle->punitario= $fila[4];
+                        $detalle->total=$fila[5];
+                        $detalle->descuento=$fila[6];
+                    }
+                    array_push($egresoDetalle,$detalle);	
+                }
+            $this->db->insert_batch("egredetalle", $egresoDetalle);
+        
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        } else {
+            
+            return $idEgreso;
+        }
+	}
   
 }

@@ -484,11 +484,11 @@ class Egresos extends CI_Controller
         	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
         	$datos['vendedor'] = $this->security->xss_clean($this->input->post('idUsuarioVendedor'));
 			$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
-			$idEgreso=$this->Egresos_model->guardarmovimiento_model($datos);
+			//$idEgreso=$this->Egresos_model->guardarmovimiento_model($datos);
 
-        	if($idEgreso)
+        	if($datos)
         	{
-				echo json_encode($idEgreso);			
+				echo json_encode($datos);			
         	}
 			else
 			{				
@@ -499,7 +499,53 @@ class Egresos extends CI_Controller
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
-    }
+	}
+	public function storeEgreso()
+	{
+		if($this->input->is_ajax_request())
+        {
+			$egreso = new stdclass();
+			$egreso->almacen = $this->security->xss_clean($this->input->post('almacen_ne'));
+			$egreso->tipomov = $this->security->xss_clean($this->input->post('tipomov_ne'));
+			$egreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_ne'));
+			$egreso->fechamov = date('Y-m-d',strtotime($egreso->fechamov));
+			$gestion = date('Y',strtotime($egreso->fechamov));
+			$egreso->cliente = $this->security->xss_clean($this->input->post('idCliente'));
+			$egreso->moneda = $this->security->xss_clean($this->input->post('moneda_ne'));
+			$egreso->obs = $this->security->xss_clean($this->input->post('obs_ne'));
+			$egreso->plazopago = $this->security->xss_clean($this->input->post('fechapago_ne'));
+			$egreso->plazopago = date('Y-m-d',strtotime($egreso->plazopago));
+			$egreso->clientePedido = $this->security->xss_clean($this->input->post('pedido_ne'));       
+			$egreso->vendedor = $this->security->xss_clean($this->input->post('idUsuarioVendedor'));
+			$egreso->nmov = $this->Egresos_model->retornarNumMovimiento($egreso->tipomov,$gestion,$egreso->almacen);
+			
+			$tipocambio = $this->Ingresos_model->getTipoCambio($egreso->fechamov);
+			$egreso->tipoCambio = $tipocambio->tipocambio;
+
+			$egreso->autor = $this->session->userdata('user_id');
+			$egreso->fecha = date('Y-m-d H:i:s');
+
+			$gestion = date("Y", strtotime($egreso->fechamov));
+			$egreso->gestion = $gestion;
+			$egreso->nmov = $this->Egresos_model->retornarNumMovimiento($egreso->tipomov ,$gestion,$egreso->almacen);
+			$egreso->articulos = json_decode($this->security->xss_clean($this->input->post('tabla')));
+
+			$id = $this->Egresos_model->storeEgreso($egreso);
+
+			if($id)
+        	{
+				echo json_encode($id);
+        	}
+			else
+			{				
+				echo json_encode(false);
+			}			
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
     public function actualizarmovimiento()
     {
     	if($this->input->is_ajax_request())
