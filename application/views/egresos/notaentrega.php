@@ -340,6 +340,8 @@
               </tbody>
             </table>
           </div>
+          
+          
           <!--div class="table-responsive"-->
 
           <div class="form-group row">
@@ -391,6 +393,54 @@
     </div> <!-- /.class="box" -->
   </div> <!-- /.class="col-xs-12" -->
 </div> <!-- /.class="row" -->
+
+
+<div>
+<h3>prueba</h3>
+<table id="egresoDetalle">
+</table>
+<button type="button" class="btn btn-primary" id="getTabla">Get Tabla</button>
+
+<div class="form-group row">
+  <div class="col-md-6 col-xs-12">
+  </div>
+  <div class="col-md-6 col-xs-12">
+    <div class="input-group col-md-12 col-xs-12">
+      <span class="input-group-addon totales">$</span>
+      <!--mostrar el total de dolares-->
+      <input type="text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalDolares">
+      <span class="input-group-addon totales">Bs</span>
+      <!--mostrar el total bolivivanos-->
+      <input type="text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalBolivianos">
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div>
+<h3>tabla editar</h3>
+<table id="tablaEditarEgreso">
+</table>
+<button type="button" class="btn btn-primary" id="getTablaMod">Get Tabla</button>
+
+<div class="form-group row">
+  <div class="col-md-6 col-xs-12">
+  </div>
+  <div class="col-md-6 col-xs-12">
+    <div class="input-group col-md-12 col-xs-12">
+      <span class="input-group-addon totales">$</span>
+      <!--mostrar el total de dolares-->
+      <input type="text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalDolaresMod">
+      <span class="input-group-addon totales">Bs</span>
+      <!--mostrar el total bolivivanos-->
+      <input type="text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalBolivianosMod">
+    </div>
+  </div>
+</div>
+
+</div>
+
 
 <!-- Modal -->
 <form action=" " method="post" id="form_clientes" enctype="multipart/form-data">

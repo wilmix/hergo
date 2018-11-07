@@ -986,8 +986,11 @@ function validateNum(value) {
         return 'no puede ser igual o menor a 0';
     }
     let data = $("#tabla3Factura").bootstrapTable('getData');
-    index = $(this).parents('tr').data('index');
-    row = (data[index]);
+    console.log(data);
+    let index = $(this).parents('tr').data('index');
+    console.log(index);
+    let row = (data[index]);
+    console.log(row);
     if (parseFloat(value) > parseFloat(row.cantidadRealAux)) {
         return 'No puede ser mayor a ' + row.cantidadRealAux;
     }

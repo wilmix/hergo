@@ -127,6 +127,10 @@ class Egresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+			/**************EDITABLE***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-table-editable.js');
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.js');
 
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
@@ -295,7 +299,7 @@ class Egresos extends CI_Controller
 	{
         $this->libacceso->acceso(43);
         if($id==null) redirect("error");
-        if(!$this->Egresos_model->puedeeditar($id)) redirect("error");
+        //if(!$this->Egresos_model->puedeeditar($id)) redirect("error");
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -317,7 +321,11 @@ class Egresos extends CI_Controller
             /**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+			/**************EDITABLE***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-table-editable.js');
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.js');
 
 
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
@@ -380,6 +388,14 @@ class Egresos extends CI_Controller
         $res=$this->Egresos_model->mostrarDetalle($id);
         $res=$res->result_array();
         return($res);
+	}
+	public function mostrarDetalleEditarPost()
+	{
+		$id = addslashes($this->security->xss_clean($this->input->post('id')));
+        $res=$this->Egresos_model->mostrarDetalle($id);
+        $res=$res->result_array();
+
+		echo json_encode($res);
 	}
 	public function AgregarFActurasResultado($tabla) //agrega la columna facturas a la tabla egreso
 	{
