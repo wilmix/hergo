@@ -16,6 +16,8 @@
         $idcliente=$dcab->idcliente;
         $idegresocompraslocales=$idtegreso;
         $idvendedor=$dcab->vendedor;
+        $nmov = $dcab->n;
+        $tipoMov = $dcab->tipomov;
     }
     else
     {
@@ -49,6 +51,22 @@
       margin: 0;
     }
 </style>
+ <!-- Content Header (Page header) -->
+ <section class="content-header">
+      <h1>
+        <?php echo isset($dcab) ?  'Modificar ':$menu.' - ' ?>
+        <span><?php echo isset($dcab) ? $tipoMov.' # '.$nmov :$opcion ?></span>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+        <li class="active"><?php echo isset($opcion) ? $opcion :"" ?></li>
+      </ol>
+</section>
+
+    <!-- Main content -->
+<section class="content">
+
+      <!-- Your Page Content Here -->
 <?php $auxIdTipoIngreso=($cont)?$idtegreso:$idegreso ?>
 <div class="row">
   <div class="col-xs-12">
@@ -108,8 +126,7 @@
               <div class="col-xs-6 col-sm-6 col-md-2">
                 <label>Fecha:</label>
                 <input id="fechamov_ne" type="text" class="form-control form-control-sm fecha_egreso" name="fechamov_ne"
-                  placeholder="Fecha" value="<?= ($cont)?$newDate:""  ?>" <?=($cont)?"disabled":"" ?>
-                autofocus/>
+                  placeholder="Fecha" value="<?= ($cont)?$newDate:""  ?>" <?=($cont)?"":"autofocus" ?> />
               </div>
               <div class="col-xs-6 col-sm-6 col-md-2">
                 <label for="moneda_ne">Moneda:</label>
@@ -308,6 +325,7 @@
                         $punitariofac= $fila['cantidad']==""?0:$fila['cantidad'];
                       ?>
                 <tr>
+                  <td><input type="text" class="estilofila" disabled value="<?= $fila['idArticulos'] ?>"></td>
                   <td><input type="text" class="estilofila" disabled value="<?= $fila['CodigoArticulo'] ?>"></td>
                   <td><input type="text" class="estilofila" disabled value="<?= $fila['Descripcion'] ?>"></td>
                   <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['cantidad'] ?>"></td>

@@ -3,8 +3,15 @@ let glob_factorRET = 0.087;
 let loc_almacen;
 let glob_guardar = false;
 let glob_precio_egreso = 0;
-let hoy = moment().format('DD-MM-YYYY, hh:mm:ss a');
+let hoy
 $(document).ready(function () {
+    fechaModEgreso = $('#fechamov_ne').val()
+    if (fechaModEgreso) {
+        hoy = moment(fechaModEgreso).format('DD-MM-YYYY')
+    } else{
+        hoy = moment().format('DD-MM-YYYY')
+    }
+
     $('.fecha_egreso').daterangepicker({
         singleDatePicker: true,
         startDate: hoy,
@@ -373,23 +380,15 @@ function guardarmovimiento() {
     }
 }
 function actualizarMovimiento() {
-    var valuesToSubmit = $("#form_egreso").serialize();
-    var tablaaux = tablatoarray();
+    let valuesToSubmit = $("#form_egreso").serialize();
+    let tablaaux = tablatoarray()
     if (tablaaux.length > 0) {
-        var tabla = JSON.stringify(tablaaux);
-
+        let tabla = JSON.stringify(tablaaux);
         valuesToSubmit += "&tabla=" + tabla;
-        retornarajax(base_url("index.php/Egresos/actualizarmovimiento"), valuesToSubmit, function (data) {
+        retornarajax(base_url("index.php/Egresos/updateEgreso"), valuesToSubmit, function (data) {
             estado = validarresultado_ajax(data);
             if (estado) {
                 if (data.respuesta) {
-
-                    //  $("#modalIgresoDetalle").modal("hide");
-                    limpiarArticulo();
-                    limpiarCabecera();
-                    limpiarTabla();
-                    //$(".mensaje_ok").html("Datos actualizados correctamente");
-                    //$("#modal_ok").modal("show");
                     swal(
                         'Modificación realizada!',
                         'La modificación se realizó con éxito!',
@@ -397,8 +396,11 @@ function actualizarMovimiento() {
                     )
                     window.location.href = base_url("Egresos");
                 } else {
-                    $(".mensaje_error").html("Error al actualizar los datos, intente nuevamente");
-                    $("#modal_error").modal("show");
+                    swal(
+                        'Error',
+                        'Error al actualizar los datos, intente nuevamente',
+                        'error'
+                    )
                 }
 
             }

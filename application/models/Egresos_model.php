@@ -73,8 +73,8 @@ class Egresos_model extends CI_Model
             ON a.idalmacen=e.almacen 
             INNER JOIN moneda m 
             ON e.moneda=m.id 
-            INNER JOIN tipocambio tc            
-            ON e.tipocambio=tc.id
+            INNER JOIN tipocambio tc 
+            ON e.fechamov=tc.fecha           
             WHERE idEgresos=$id
             ORDER BY e.idEgresos DESC
             LIMIT 1   
@@ -110,7 +110,7 @@ class Egresos_model extends CI_Model
             INNER JOIN moneda m 
             ON e.moneda=m.id 
             INNER JOIN tipocambio tc
-            ON e.tipocambio=tc.id
+            ON e.fechamov=tc.fecha
               INNER JOIN traspasos t1
               ON t1.idEgreso=e.idEgresos
               INNER JOIN ingresos i
@@ -128,8 +128,7 @@ class Egresos_model extends CI_Model
                 (SELECT FORMAT(SUM(d.total),2) from ingdetalle d where  d.idIngreso=i.idIngresos) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, a.idalmacen, m.sigla monedasigla, i.ordcomp,i.ningalm, i.obs, i.anulado,i.tipocambio
             FROM ingresos i*/
         {            
-             $sql="
-            SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido,c.documento,e.tipocambio,total/tc.tipocambio totalsus
+             $sql="SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido,c.documento,e.tipocambio,total/tc.tipocambio totalsus
             FROM egresos e
             INNER JOIN egredetalle d
             on e.idegresos=d.idegreso
@@ -144,7 +143,7 @@ class Egresos_model extends CI_Model
             INNER JOIN moneda m 
             ON e.moneda=m.id 
             INNER JOIN tipocambio tc
-            ON e.tipocambio=tc.id
+            ON e.fechamov=tc.fecha
             WHERE idEgresos=$id
             ORDER BY e.idEgresos DESC
             LIMIT 1   
@@ -156,7 +155,9 @@ class Egresos_model extends CI_Model
     }
 	public function mostrarDetalle($id)//lista todos los detalles de un egreso
 	{
-		$sql="SELECT a.CodigoArticulo, a.Descripcion, e.cantidad, e.punitario punitario11, e.punitario, e.total total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal, e.cantFact
+		$sql="SELECT a.idArticulos,a.CodigoArticulo, a.Descripcion, e.cantidad, 
+        e.punitario punitario11, e.punitario, e.total total, e.descuento, e.idingdetalle, 
+        e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal, e.cantFact
 		FROM egredetalle e
 		INNER JOIN articulos a
 		ON e.articulo = a.idArticulos
@@ -172,7 +173,7 @@ class Egresos_model extends CI_Model
         $sql="SELECT *
         FROM egresos e 
         INNER JOIN tipocambio tc
-        ON tc.id=e.tipoCambio       
+        ON e.fechamov=tc.fecha       
         WHERE e.idEgresos=$id";     
 
         $query=$this->db->query($sql);
@@ -437,8 +438,7 @@ class Egresos_model extends CI_Model
     }
     public function retornarValorTipoCambio($id=null)/*retorna el ultimo tipo de cambio*/
     {
-        //$sql="SELECT nmov from ingresos WHERE YEAR(fechamov)= '$gestion' and almacen='$almacen' and tipomov='$tipo' ORDER BY nmov DESC LIMIT 1";
-        if($id==null)//si es null retorna el ultimo tipo de cambio
+        if($id==null)
             $sql="SELECT * from tipocambio ORDER BY id DESC LIMIT 1";
         else//si no retorna segun el id
             $sql="SELECT * from tipocambio where id = '$id' ORDER BY id DESC LIMIT 1";
@@ -532,7 +532,7 @@ class Egresos_model extends CI_Model
             INNER JOIN moneda m 
             ON e.moneda=m.id 
             INNER JOIN tipocambio tc
-            ON tc.id=e.tipoCambio
+            ON tc.fecha=e.fechamov
             WHERE DATE(e.fechamov)
             BETWEEN '$ini' AND '$fin' and (e.estado=0 or e.estado=2) and e.anulado!=1";        
         if($alm>0)         
@@ -626,9 +626,9 @@ class Egresos_model extends CI_Model
                     $detalle->moneda = $egreso->moneda;
                     $detalle->cantidad = $fila[3];
                     if ($egreso->moneda == 2) {
-                        $detalle->punitario= $fila[4] * $tipoCambioValor;
-                        $detalle->total=$fila[5] * $tipoCambioValor;
-                        $detalle->descuento=$fila[6] * $tipoCambioValor;
+                        $detalle->punitario= $fila[4] * $egreso->tipoCambio;
+                        $detalle->total=$fila[5] * $egreso->tipoCambio;
+                        $detalle->descuento=$fila[6] * $egreso->tipoCambio;
                         
                     }	elseif ($egreso->moneda == 1) {
                         $detalle->punitario= $fila[4];
@@ -647,6 +647,47 @@ class Egresos_model extends CI_Model
             
             return $idEgreso;
         }
-	}
+    }
+    
+    public function updateEgreso($id, $egreso)
+	{	
+        $this->db->trans_start();
+            $this->db->where('idegresos', $id);
+            $this->db->update('egresos', $egreso);
+
+            $this->db->where('idegreso', $id);
+            $this->db->delete('egredetalle');
+
+            $egresoDetalle = array();
+                foreach ($egreso->articulos as $fila) {
+                    $detalle=new stdclass();
+                    $detalle->idegreso = $id;
+                    $detalle->articulo = $fila[0];
+                    $detalle->moneda = $egreso->moneda;
+                    $detalle->cantidad = $fila[3];
+                    if ($egreso->moneda == 2) {
+                        $detalle->punitario= $fila[4] * $egreso->tipoCambio;
+                        $detalle->total=$fila[5] * $egreso->tipoCambio;
+                        $detalle->descuento=$fila[6] * $egreso->tipoCambio;
+                        
+                    }	elseif ($egreso->moneda == 1) {
+                        $detalle->punitario= $fila[4];
+                        $detalle->total=$fila[5];
+                        $detalle->descuento=$fila[6];
+                    }
+                    array_push($egresoDetalle,$detalle);	
+                }
+            $this->db->insert_batch("egredetalle", $egresoDetalle);
+        
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        } else {
+            
+            return $id;
+        }
+    }
+    
   
 }

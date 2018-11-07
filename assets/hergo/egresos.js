@@ -539,8 +539,9 @@ function verdetalle(fila) {
     datos = {
         id: id,
         moneda: fila.moneda,
-        tipocambio: fila.tipocambio
+        tipocambio: fila.tipocambiovalor
     }
+    console.log(datos);
     retornarajax(base_url("index.php/Egresos/mostrarDetalle"), datos, function (data) {
         estado = validarresultado_ajax(data);
         //console.log(data);
@@ -561,11 +562,11 @@ function verdetalle(fila) {
             $("#tipomov_egr").val(fila.tipomov)
             $("#fechamov_egr").val(formato_fecha_corta(fila.fechamov));
             $("#moneda_egr").val(fila.monedasigla)
+            $("#tipoCambio").val(fila.tipocambiovalor)
             $("#nmov_egr").val(fila.n)
             $("#cliente_egr").val(fila.nombreCliente)
             $("#pedido_egr").val(fila.clientePedido)
             $("#fechaPago").val(formato_fecha_corta(fila.plazopago));
-            // $("#vacioEgr").val("?????????????????????")
             $("#obs_egr").val(fila.obs);
             $("#numeromovimiento").html(fila.n);
             $("#nombreModal").html(fila.tipomov);

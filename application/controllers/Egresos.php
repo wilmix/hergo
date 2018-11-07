@@ -154,7 +154,7 @@ class Egresos extends CI_Controller
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			//$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('egresos/notaentrega.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
@@ -206,7 +206,7 @@ class Egresos extends CI_Controller
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			//$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('egresos/notaentrega.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
@@ -260,7 +260,7 @@ class Egresos extends CI_Controller
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			//$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('egresos/notaentrega.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
@@ -329,14 +329,13 @@ class Egresos extends CI_Controller
             if($this->datos['dcab']->moneda==2)//si es dolares dividimos por el tipo de cambio
             {
 
-            	$tipodecambiovalor=$this->Egresos_model->retornarValorTipoCambio($this->datos['dcab']->tipocambio);            	
+            	$tipodecambiovalor=$this->Ingresos_model->getTipoCambio($this->datos['dcab']->fechamov);            	
             	$tipodecambiovalor=$tipodecambiovalor->tipocambio;
             	
 	            for ($i=0; $i < count($this->datos['detalle']) ; $i++) { 
 	            //	$this->datos['detalle'][$i]["totaldoc"]=$this->datos['detalle'][$i]["totaldoc"]/$tipodecambiovalor;
 	            	$this->datos['detalle'][$i]["punitario"]=$this->datos['detalle'][$i]["punitario"]/$tipodecambiovalor;	            	
 	            	$this->datos['detalle'][$i]["total"]=$this->datos['detalle'][$i]["total"]/$tipodecambiovalor;	  
-
 	            }		
 	           
             }
@@ -358,7 +357,7 @@ class Egresos extends CI_Controller
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);			
+			//$this->load->view('plantilla/headercontainer.php',$this->datos);			
 			$this->load->view('egresos/notaentrega.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
@@ -408,14 +407,13 @@ class Egresos extends CI_Controller
         {
         	$id = addslashes($this->security->xss_clean($this->input->post('id')));
         	$moneda = addslashes($this->security->xss_clean($this->input->post('moneda')));
-        	$idtipocambio = addslashes($this->security->xss_clean($this->input->post('tipocambio')));
+        	$tipocambio = addslashes($this->security->xss_clean($this->input->post('tipocambio')));
 			$res=$this->Egresos_model->mostrarDetalle($id);
 			$res=$res->result_array();
 			
 			/******evaluar moneda************/
 			$obj=new StdClass();
-			
-			$tipocambio=$this->Egresos_model->retornarValorTipoCambio($idtipocambio)->tipocambio;
+
 			if($moneda==2)
 			{
 				
@@ -517,7 +515,6 @@ class Egresos extends CI_Controller
 			$egreso->plazopago = date('Y-m-d',strtotime($egreso->plazopago));
 			$egreso->clientePedido = $this->security->xss_clean($this->input->post('pedido_ne'));       
 			$egreso->vendedor = $this->security->xss_clean($this->input->post('idUsuarioVendedor'));
-			$egreso->nmov = $this->Egresos_model->retornarNumMovimiento($egreso->tipomov,$gestion,$egreso->almacen);
 			
 			$tipocambio = $this->Ingresos_model->getTipoCambio($egreso->fechamov);
 			$egreso->tipoCambio = $tipocambio->tipocambio;
@@ -535,6 +532,52 @@ class Egresos extends CI_Controller
 			if($id)
         	{
 				echo json_encode($id);
+        	}
+			else
+			{				
+				echo json_encode(false);
+			}			
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function updateEgreso()
+	{
+		if($this->input->is_ajax_request())
+        {
+			$egreso = new stdclass();
+			$idEgreso = $this->security->xss_clean($this->input->post('idegreso'));
+			$egreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_ne'));
+			$egreso->fechamov = date('Y-m-d',strtotime($egreso->fechamov));
+			$gestion = date('Y',strtotime($egreso->fechamov));
+			$egreso->cliente = $this->security->xss_clean($this->input->post('idCliente'));
+			$egreso->moneda = $this->security->xss_clean($this->input->post('moneda_ne'));
+			$egreso->obs = $this->security->xss_clean($this->input->post('obs_ne'));
+			$egreso->plazopago = $this->security->xss_clean($this->input->post('fechapago_ne'));
+			$egreso->plazopago = date('Y-m-d',strtotime($egreso->plazopago));
+			$egreso->clientePedido = $this->security->xss_clean($this->input->post('pedido_ne'));       
+			$egreso->vendedor = $this->security->xss_clean($this->input->post('idUsuarioVendedor'));
+			
+			$tipocambio = $this->Ingresos_model->getTipoCambio($egreso->fechamov);
+			$egreso->tipoCambio = floatval($tipocambio->tipocambio);
+
+			$egreso->autor = $this->session->userdata('user_id');
+			$egreso->fecha = date('Y-m-d H:i:s');
+
+			$gestion = date("Y", strtotime($egreso->fechamov));
+			$egreso->gestion = $gestion;
+			$egreso->articulos = json_decode($this->security->xss_clean($this->input->post('tabla')));
+
+			$id = $this->Egresos_model->updateEgreso($idEgreso, $egreso);
+
+			$res = new stdclass();
+			$res->id = $id;
+			$res->egreso = $egreso;
+			if($id)
+        	{
+				echo json_encode($res);
         	}
 			else
 			{				
