@@ -1,11 +1,15 @@
-let glob_factorIVA = 0.87;
-let glob_factorRET = 0.087;
-let loc_almacen;
-let glob_guardar = false;
-let glob_precio_egreso = 0;
+let glob_factorIVA = 0.87
+let glob_factorRET = 0.087
+let loc_almacen
+let glob_guardar = false
+let glob_guardar_cliente = false
+let glob_precio_egreso = 0
 let hoy
 let idEgreso 
+let $table
 $(document).ready(function () {
+    glob_guardar = false;
+    calcularTotalEgresoMod()
     fechaModEgreso = $('#fechamov_ne').val()
     if (fechaModEgreso) {
         hoy = moment(fechaModEgreso).format('DD-MM-YYYY')
@@ -30,26 +34,10 @@ $(document).ready(function () {
     } else {
         retornarTablaEgresoDetalle(idEgreso)
     }
-
-    
-})
-$(document).ready(function () {
-    //tablaEgresoDetalle()
-    $(".tiponumerico").inputmask({
-        alias: "decimal",
-        digits: 4,
-        groupSeparator: ',',
-        autoGroup: true,
-        autoUnmask: true
-    });
-    var glob_agregar = false;
-    glob_guardar = false;
-    calcularTotal()
 })
 $(document).on("change", "#almacen_ne", function () {
     swal("Atencion!", "Usted esta cambiado de Almacen")
     loc_almacen = $("#almacen_ne").val();
-    console.log(loc_almacen);
 });
 $(document).on("click", "#anularMovimientoEgreso", function () {
     mensajeAnular("#obs_ne",
@@ -74,60 +62,21 @@ $(document).on("click", "#recuperarMovimientoEgreso", function () {
 })
 $(document).on("click", "#agregar_articulo", function () {
     if (glob_guardar) {
-        //console.log(glob_guardar);
-                     
-        
         agregarArticulo()
-        
-        
     }
-})
-$(document).on("click", ".eliminarArticulo", function () {
-    $(this).parents("tr").remove()
-    
-    calcularTotal()
 })
 $(document).on("change", "#moneda_ne", function () {
-    calcularTotal()
-})
-$(document).on("keyup", "#nfact_imp", function () {
-    if ($(this).val() == "SF") {
-        $("#consinfac").html("(sin Factura)")
-        $("#consinfac").css("color", "#a60000")
-    } else {
-        $("#consinfac").html("(con Factura)")
-        $("#consinfac").css("color", "#00a65a")
-    }
-})
-$(document).on("keyup", "#cantidad_imp,#punitario_imp", function () {
-    var cant = $("#cantidad_imp").inputmask('unmaskedvalue');
-    var costo = $("#punitario_imp").inputmask('unmaskedvalue');
-    var tipoingreso = $("#tipomov_imp2").val()
-    cant = (cant == "") ? 0 : cant;
-    costo = (costo == "") ? 0 : costo;
-    if (tipoingreso == 2) //si es compra local idcompralocal=2
-    {
-        costo = calculocompraslocales(cant, costo)
-    }
-    //total=cant*costo;
-    $("#constounitario").val(costo); //costo calculado
-    /***para la alerta*******/
-    var costobase = $("#costo_imp").inputmask('unmaskedvalue'); //costo de base de datos
-    alertacosto(costo, costobase);
+    calcularTotalEgresoMod()
+    cambiarMoneda()
 })
 $(document).on("click", "#guardarMovimiento", function () {
     guardarmovimiento();
 })
 $(document).on("click", "#cancelarMovimiento", function () {
-    limpiarArticulo();
-    limpiarCabecera();
-    limpiarTabla();
+    window.location.href = base_url("Egresos")
 })
 $(document).on("click", "#actualizarMovimiento", function () {
     actualizarMovimiento();
-})
-$(document).on("click", "#cancelarMovimientoActualizar", function () {
-    window.location.href = base_url("Ingresos");
 })
 $(document).on("click", "#anularMovimiento", function () {
     anularMovimiento();
@@ -141,9 +90,11 @@ $(document).on("click", "#recuperarMovimiento", function () {
     limpiarCabecera();
     limpiarTabla();
 })
-$(document).on("change", "#moneda_ne", function () {
-    cambiarMoneda()
-})
+window.operateEvents = {
+    'click .eliminarElemento': function (e, value, row, index) {
+        quitarArticulo(row)
+    },
+}
 /*******************CLIENTE*****************/
 $(function () {
     $("#cliente_egreso").autocomplete({
@@ -152,7 +103,7 @@ $(function () {
             source: function (request, response) {
                 $("#cargandocliente").show(150)
                 $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
-                glob_guardar = false;
+                glob_guardar_cliente = false;
                 $.ajax({
                     url: base_url("index.php/Egresos/retornarClientes"),
                     dataType: "json",
@@ -171,7 +122,7 @@ $(function () {
                 $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
                 $("#cliente_egreso").val(ui.item.nombreCliente + " - " + ui.item.documento);
                 $("#idCliente").val(ui.item.idCliente);
-                glob_guardar = true;
+                glob_guardar_cliente = true;
                 return false;
             }
         })
@@ -181,76 +132,54 @@ $(function () {
                 .append("<a><div>" + item.nombreCliente + " </div><div style='color:#615f5f; font-size:10px'>" + item.documento + "</div></a>")
                 .appendTo(ul);
         };
+
 });
+/*******************ARTICULO*****************/
+$( function() {
+    $("#articulo_impTest").autocomplete(
+    {      
+        minLength: 2,
+        autoFocus: true,
+        source: function (request, response) {        
+            $("#cargandocodigoTest").show(150)        
+            $("#codigocorrectoTest").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+            glob_guardar=false;
+            $.ajax({
+                url: base_url("index.php/Ingresos/retornararticulosTest"),
+                dataType: "json",
+                data: {
+                    b: request.term,
+                    a: loc_almacen
+                },
+                success: function(data) {
+                response(data);    
+                $("#cargandocodigoTest").hide(150)
+                }
+            });        
+        }, 
+        select: function( event, ui ) {       
+            $("#codigocorrectoTest").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
+            $("#articulo_impTest").val( ui.item.codigo);
+            $("#idArticulo").val( ui.item.id);
+            $("#Descripcion_ne").val( ui.item.descripcion);
+            $("#unidad_imp").val( ui.item.unidad);
+            $("#saldo_ne").val( ui.item.saldo);
+            $("#precio").val( ui.item.precio);
+            glob_guardar=true;
+            return false;
+        }
+        }).autocomplete("instance")._renderItem = function( ul, item ) {
+        return $( "<li>" ).append( "<a><div>" + item.codigo + " </div><div style='color:#615f5f; font-size:10px'>" + item.descripcion + "</div></a>" )
+        .appendTo( ul );
+    };
+ });
 
-function cargandoSaldoPrecioArticulo() {
-    $(".cargandoPrecioSaldo").css("display", "");
-}
-function finCargaSaldoPrecioArticulo() {
-    $(".cargandoPrecioSaldo").css("display", "none");
-}
-function limpiarArticulo() {
-    inputarray = $(".filaarticulo").find("input").toArray();
-    $.each(inputarray, function (index, value) {
-        $(value).val("")
-    })
-    glob_agregar = false;
-    $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
-
-}
-function limpiarCabecera() {
-    $("#cliente_egreso").val("");
-    $("#pedido_ne").val("");
-    $("#cliente_egreso").val("");
-
-    glob_agregar = false;
-    $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
-    $("#totalacostosus").val("");
-    $("#totalacostobs").val("");
-    $("#fechapago_ne").val("");
-    $("#obs_ne").val("");
-}
-function limpiarTabla() {
-    $("#tbodyarticulos").find("tr").remove();
-}
-function calcularTotal() {
-    let moneda = $("#moneda_ne").val()
-    let totales = $(".totalCosto").toArray();
-    let total = 0;
-    let dato = 0;
-    $.each(totales, function (index, value) {
-        dato = $(value).inputmask('unmaskedvalue');
-        total += (dato == "") ? 0 : parseFloat(dato)
-    })
-    total = (Math.round(total * 100) / 100).toFixed(2);
-    if (moneda == 1) {
-        var totalDolares = total / glob_tipoCambio;
-        totalDolares = (Math.round(totalDolares * 100) / 100).toFixed(2);
-    } else {
-        var totalDolares = total;
-        total = total * glob_tipoCambio;
-    }
-    $("#totalacostobs").val(total)
-    $("#totalacostosus").val(totalDolares)
-}
-function calculocompraslocales(cant, costo) {
-    var ret;
-    var pu //preciounitario
-    pu = costo / cant; // calculamos el costo unitario      
-    if ($("#nfact_imp").val() != "SF") //si tiene el texto SF es sin factura         
-        ret = pu * glob_factorIVA; //confactura
-    else
-        ret = pu * glob_factorRET + pu; //sinfactura            
-    return ret;
-
-}
 function agregarArticulo() {
     let saldoAlmacen = $("#saldo_ne").inputmask('unmaskedvalue')
     let cant = $("#cantidad_ne").inputmask('unmaskedvalue')
     let costo = $("#punitario_ne").inputmask('unmaskedvalue')
     let dcto = $("#descuento_ne").inputmask('unmaskedvalue')
     let codigoArticulo = $("#articulo_impTest").val();
-
 
     cant = parseFloat((cant == '') ? 0 : cant)
     costo = parseFloat((costo == '') ? 0 : costo)
@@ -260,8 +189,6 @@ function agregarArticulo() {
     if ((cant) > 0 && (costo) >= 0 && dcto >= 0) {
         if ((cant) <= (saldoAlmacen) && parseFloat(saldoAlmacen) > 0) {
             addArticuloTable()
-            //agregarArticuloEgresos()
-            
         } else {
             swal({
                 title: 'Saldo Insuficiente',
@@ -273,12 +200,11 @@ function agregarArticulo() {
                 confirmButtonText: 'Si, Agregar',
                 cancelButtonText: 'No, Cancelar'
             }).then((result) => {
-                addArticuloTable()
-                //agregarArticuloEgresos()
                 swal({
                     type: 'error',
                     html: 'Usted generó un <b>NEGATIVO</b> en ' + codigoArticulo,
                 });
+                addArticuloTable()
             }, (dismiss) => {
                 swal({
                     type: 'success',
@@ -296,76 +222,21 @@ function agregarArticulo() {
         )
     }
 }
-function agregarArticuloEgresos() {
-    let codigo = $("#articulo_impTest").val()
-    let descripcion = $("#Descripcion_ne").val()
-    let cant = $("#cantidad_ne").inputmask('unmaskedvalue')
-    let precioUnitario = $("#punitario_ne").inputmask('unmaskedvalue')
-    let descuento = $("#descuento_ne").inputmask('unmaskedvalue')
-    let id = $("#idArticulo").val();
-    let total
-    cant = parseFloat((cant == '') ? 0 : cant)
-    precioUnitario = parseFloat((precioUnitario == '') ? 0 : precioUnitario)
-    descuento = parseFloat((descuento == '' ? 0 : descuento))
-    precioUnitario = precioUnitario - (precioUnitario * descuento / 100)
-    total = precioUnitario * cant
-
-    let articulo = '<tr>' +
-        '<td><input type="text" class="estilofila" disabled value="' + id + '""></input></td>' +
-        '<td><input type="text" class="estilofila" disabled value="' + codigo + '""></input></td>' +
-        '<td><input type="text" class="estilofila" disabled value="' + descripcion + '"></input</td>' +
-        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="' + cant + '""></input></td>' +
-        '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="' + precioUnitario + '""></input></td>' +
-        '<td class="text-right"><input type="text" class="totalCosto estilofila currency" disabled value="' + total + '""></input></td>' +
-        '<td class="text-right"><input type="text" class="estilofila currency" disabled value="' + descuento + '""></input></td>' +
-        '<td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>' +
-        '</tr>'
-    $("#tbodyarticulos").append(articulo)
-    $(".tiponumerico").inputmask({
-        alias: "decimal",
-        digits: 4,
-        groupSeparator: ',',
-        autoGroup: true
-    });
-    $(".currency").inputmask({ 
-        alias : "currency", 
-        prefix: '',
-        digits: 2,
-    });
-    calcularTotal()
-    limpiarArticulo();
-    document.getElementById("articulo_impTest").focus()
-}
-function alertacosto(costounitario, costobase) {
-    var valormin = (parseFloat(costobase) - parseFloat(costobase * 0.15))
-    var valormax = (parseFloat(costobase) + parseFloat(costobase * 0.15))
-    if ((costounitario > valormin) && (costounitario < valormax)) {
-        //se encuentra en el rango correco
-        $("#constounitario").css("background-color", "#eee")
-        $("#constounitario").css("color", "#555555")
-
-    } else {
-        //fuera de rango
-        $("#constounitario").css("background-color", "red")
-        $("#constounitario").css("color", "#fff")
-    }
-}
 function guardarmovimiento() {
-    let valuesToSubmit = $("#form_egreso").serialize();
-    let tipoEgreso = $("#tipomov_ne2").text();
-    let tablaaux = tablatoarray();
+    let valuesToSubmit = $("#form_egreso").serialize()
+    let articulos = $("#tablaEditarEgreso").bootstrapTable('getData')
+    let tipoEgreso = $("#tipomov_ne2").text()
     if ($("#_tipomov_ne").val() == 9)
-        var auxContinuar = true
+         auxContinuar = true
     else
-        var auxContinuar = false
-    if (!glob_guardar && !auxContinuar) {
+         auxContinuar = false
+    if (!glob_guardar_cliente) {
         swal("Error", "Seleccione el cliente", "error")
-        return 0;
+        return false;
     }
-    if (tablaaux.length > 0) {
-        var tabla = JSON.stringify(tablaaux);
+    if (articulos.length > 0) {
+        let tabla = JSON.stringify(articulos);
         valuesToSubmit += "&tabla=" + tabla;
-        console.log(valuesToSubmit);
         retornarajax(base_url("index.php/Egresos/storeEgreso"), valuesToSubmit, function (data) {
             estado = validarresultado_ajax(data);
             if (estado) {
@@ -381,10 +252,11 @@ function guardarmovimiento() {
                         function (result) {
                             //location.reload();
                             let imprimir = base_url("pdf/Egresos/index/") + data.respuesta;
-                            window.open(imprimir);
-                            limpiarArticulo();
-                            limpiarCabecera();
-                            limpiarTabla();
+                            window.open(imprimir)
+                            limpiarArticulo()
+                            limpiarCabecera()
+                            limpiarTabla()
+                            limpiarTotales()
                         });
                 } else {
                     $(".mensaje_error").html("Error al almacenar los datos, intente nuevamente");
@@ -400,9 +272,9 @@ function guardarmovimiento() {
 }
 function actualizarMovimiento() {
     let valuesToSubmit = $("#form_egreso").serialize();
-    let tablaaux = tablatoarray()
-    if (tablaaux.length > 0) {
-        let tabla = JSON.stringify(tablaaux);
+    let articulos = $("#tablaEditarEgreso").bootstrapTable('getData');
+    if (articulos.length > 0) {
+        let tabla = JSON.stringify(articulos);
         valuesToSubmit += "&tabla=" + tabla;
         retornarajax(base_url("index.php/Egresos/updateEgreso"), valuesToSubmit, function (data) {
             estado = validarresultado_ajax(data);
@@ -413,44 +285,13 @@ function actualizarMovimiento() {
                         'La modificación se realizó con éxito!',
                         'success'
                     )
-                    window.location.href = base_url("Egresos");
+                    window.location.href = base_url("Egresos")
                 } else {
                     swal(
                         'Error',
                         'Error al actualizar los datos, intente nuevamente',
                         'error'
                     )
-                }
-
-            }
-        })
-    } else {
-        alert("no se tiene datos en la tabla para guardar")
-    }
-}
-function anularMovimiento() // X
-{
-    var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
-    var tablaaux = tablatoarray();
-    if (tablaaux.length > 0) {
-        var tabla = JSON.stringify(tablaaux);
-
-        valuesToSubmit += "&tabla=" + tabla;
-        retornarajax(base_url("index.php/Ingresos/anularmovimiento"), valuesToSubmit, function (data) {
-            estado = validarresultado_ajax(data);
-            if (estado) {
-                if (data.respuesta) {
-
-                    $("#modalIgresoDetalle").modal("hide");
-                    limpiarArticulo();
-                    limpiarCabecera();
-                    limpiarTabla();
-                    $(".mensaje_ok").html("Datos anulados correctamente");
-                    $("#modal_ok").modal("show");
-                    window.location.href = base_url("Ingresos");
-                } else {
-                    $(".mensaje_error").html("Error al anular los datos, intente nuevamente");
-                    $("#modal_error").modal("show");
                 }
 
             }
@@ -490,24 +331,6 @@ function recuperarMovimiento() // X
         alert("no se tiene datos en la tabla para guardar")
     }
 }
-function tablatoarray() {
-    var tabla = new Array()
-    var filas = $("#tbodyarticulos").find("tr").toArray()
-    var datos = ""
-    $.each(filas, function (index, value) {
-        datos = $(value).find("input").toArray()
-        tabla.push(Array(
-            $(datos[0]).val(), 
-            $(datos[1]).val(), 
-            $(datos[2]).val(), 
-            $(datos[3]).inputmask('unmaskedvalue'), 
-            $(datos[4]).inputmask('unmaskedvalue'), 
-            $(datos[5]).inputmask('unmaskedvalue'), 
-            $(datos[6]).inputmask('unmaskedvalue'), 
-        ))
-    })
-    return (tabla)
-}
 function cambiarMoneda() {
     if ($("#moneda_ne").val() == 1) {
         $(".costo_ne_label").html("Precio Bs")
@@ -519,23 +342,22 @@ function cambiarMoneda() {
     }
 }
 function anularMovimientoEgreso() {
-
-    var valuesToSubmit = $("#form_egreso").serialize();
-    var tablaaux = tablatoarray();
-    if (tablaaux.length > 0) {
-        var tabla = JSON.stringify(tablaaux);
-        valuesToSubmit += "&tabla=" + tabla;
+    let clienteNombre = $('#cliente_egreso').val()
+    let nmov = $('#nmov').val()
+    let valuesToSubmit = $("#form_egreso").serialize();
         retornarajax(base_url("index.php/Egresos/anularmovimiento"), valuesToSubmit, function (data) {
             estado = validarresultado_ajax(data);
             if (estado) {
                 if (data.respuesta) {
-
-                    /* swal(
-                             'Anulado!',
-                             'El movimiento ha sido anulado.',
-                             'success'
-                         )*/
-
+                    swal({
+                        title: 'Anulado!',
+                        html: 'El movimiento # ' + nmov +  ' de ' +  clienteNombre + ' ha sido ANULADO',
+                        type: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        window.location.href = base_url("Egresos")
+                    })
                 } else {
                     $(".mensaje_error").html("Error al anular los datos, intente nuevamente");
                     $("#modal_error").modal("show");
@@ -543,11 +365,6 @@ function anularMovimientoEgreso() {
 
             }
         })
-    } else {
-        alert("no se tiene datos en la tabla para guardar")
-    }
-
-
 
 }
 function recuperarMovimientoEgreso() {
@@ -577,63 +394,56 @@ function recuperarMovimientoEgreso() {
         alert("no se tiene datos en la tabla para guardar")
     }
 }
+function limpiarArticulo() {
+    inputarray = $(".filaarticulo").find("input").toArray();
+    $.each(inputarray, function (index, value) {
+        $(value).val("")
+    })
+    glob_agregar = false;
+    $("#codigocorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
 
+}
+function limpiarCabecera() {
+    $("#cliente_egreso").val("");
+    $("#pedido_ne").val("");
+    $("#cliente_egreso").val("");
 
-
-/*******************ARTICULO*****************/
-$( function() {
-    console.log(loc_almacen);
-    $("#articulo_impTest").autocomplete(
-    {      
-        minLength: 2,
-        autoFocus: true,
-        source: function (request, response) {        
-            $("#cargandocodigoTest").show(150)        
-            $("#codigocorrectoTest").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
-            glob_guardar=false;
-            $.ajax({
-                url: base_url("index.php/Ingresos/retornararticulosTest"),
-                dataType: "json",
-                data: {
-                    b: request.term,
-                    a: loc_almacen
-                },
-                success: function(data) {
-                response(data);    
-                $("#cargandocodigoTest").hide(150)
-                }
-            });        
-        }, 
-        select: function( event, ui ) {       
-            $("#codigocorrectoTest").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
-            $("#articulo_impTest").val( ui.item.codigo);
-            $("#idArticulo").val( ui.item.id);
-            $("#Descripcion_ne").val( ui.item.descripcion);
-            $("#unidad_imp").val( ui.item.unidad);
-            $("#saldo_ne").val( ui.item.saldo);
-            $("#precio").val( ui.item.precio);
-            //console.log(ui)
-            glob_guardar=true;
+    glob_agregar = false;
+    $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+    $("#totalacostosus").val("");
+    $("#totalacostobs").val("");
+    $("#fechapago_ne").val("");
+    $("#obs_ne").val("");
+}
+function limpiarTabla() {
+    $("#tablaEditarEgreso").bootstrapTable('removeAll');
+}
+function limpiarTotales() {
+    $("#totalDolaresMod").val("0")
+    $("#totalBolivianosMod").val("0")
+}
+function addArticuloTable() {
+    let dataTabla = $("#tablaEditarEgreso").bootstrapTable('getData');
+    let id = $('#idArticulo').val()
+    if(dataTabla.length>0)
+    {                
+        if(dataTabla.map((el) => el.idArticulos).indexOf(id)>=0)
+        {
+            swal("Atencion", "Ya se tiene un registro con este codigo","info");
             return false;
         }
-        }).autocomplete("instance")._renderItem = function( ul, item ) {
-        return $( "<li>" ).append( "<a><div>" + item.codigo + " </div><div style='color:#615f5f; font-size:10px'>" + item.descripcion + "</div></a>" )
-        .appendTo( ul );
-    };
- });
-
-//let articulos = []
-let $table
-//let res = []
-function addArticuloTable() {
-    console.log('addArticuloTable');
-    $("#tablaEditarEgreso").bootstrapTable('append', addArticulo());  
-    //limpiarArticulo();
-    //document.getElementById("articulo_impTest").focus()
+        $("#tablaEditarEgreso").bootstrapTable('append', addArticulo());  
+    }
+    else
+    {
+        $("#tablaEditarEgreso").bootstrapTable('append', addArticulo());  
+    }
+    limpiarArticulo();
+    document.getElementById("articulo_impTest").focus()
     calcularTotalEgresoMod()
 }
 function addArticulo() {
-    console.log('addArticulo');
+    
     let id = $('#idArticulo').val()
     let codigo = $("#articulo_impTest").val()
     let descripcion = $("#Descripcion_ne").val()
@@ -662,22 +472,13 @@ function addArticulo() {
         });
     return rows
 }
- 
-
-$(document).on("click", "#getTablaMod", function () {
-    let tabla = $("#tablaEditarEgreso").bootstrapTable('getData');
-    tabla = JSON.stringify(tabla);
-     tabla = JSON.parse(tabla)
-    console.log(tabla);
-    calcularTotalEgresoMod()
-
-})
 function formatoMoneda(value, row, index) {
     num = Math.round(value * 100) / 100
-    return (formatNumber.new(num))
+    num = num.toFixed(2);
+    return (formatNumber.new(num));
 }
 function retornarTablaEgresoDetalle(idEgreso=null) {
-    //agregarcargando();
+    agregarcargando();
 
     $.ajax({
         type: "POST",
@@ -685,11 +486,9 @@ function retornarTablaEgresoDetalle(idEgreso=null) {
         dataType: "json",
         data: { id: idEgreso },
     }).done(function (res) {
-        //quitarcargando();
-        console.log(res);
+        quitarcargando();
         $table = $("#tablaEditarEgreso").bootstrapTable('destroy');
         $('#tablaEditarEgreso').bootstrapTable({
-            
             data: res,
             clickToSelect: true,
             uniqueId: 'idArticulos',
@@ -714,10 +513,10 @@ function retornarTablaEgresoDetalle(idEgreso=null) {
                         field: 'Descripcion',
                         title: 'Descripcion',
                         class: "col-sm-7",
-                        editable: {
+                        /*editable: {
                             container: 'body',
                             type: 'text',
-                        },
+                        },*/
                     },
 
                     {
@@ -844,23 +643,16 @@ function calcularTotalEgresoMod() {
     })
     /****************Bs**************/
     let totalBs = moneda == 2 ? (parseFloat(total) * parseFloat(glob_tipoCambio)) : total;
-    $("#totalBolivianosMod").val(totalBs);
+    $("#totalBolivianosMod").val(formatoMoneda(totalBs ? totalBs : 0))
     /*************SUS***************/
     let totalSus = moneda == 2 ? total : parseFloat(total) / parseFloat(glob_tipoCambio);
-    $("#totalDolaresMod").val(totalSus);
+    $("#totalDolaresMod").val(formatoMoneda(totalSus ? totalSus : 0))
 }
- 
 function botonQuitar(value, row, index) {
     return [
         '<button type="button" class="btn btn-sm eliminarElemento" data-view="' + row.idingdetalle + '"><span class="fa fa-times" aria-hidden="true"></span></button>',
     ].join('');
 }
-window.operateEvents = {
-    'click .eliminarElemento': function (e, value, row, index) {
-        quitarArticulo(row)
-    },
-}
-
 function quitarArticulo(row) {
     ids = new Array(row.idArticulos)
     $("#tablaEditarEgreso").bootstrapTable('remove', {
@@ -869,98 +661,3 @@ function quitarArticulo(row) {
     })
     calcularTotalEgresoMod() 
 }
-
-
-
-
-/*function tablaEgresoDetalle() {
-    $table = $("#egresoDetalle").bootstrapTable('destroy');
-    $("#egresoDetalle").bootstrapTable({
-        clickToSelect: true,
-        uniqueId: 'id',
-        data: articulos,
-        columns: [
-            {
-                field: 'id',
-                title: 'id',
-            },
-            {
-                field: 'codigo',
-                title: 'Código',
-                align: 'center',
-                class: "col-sm-1",
-            },
-            {
-                field: 'descripcion',
-                title: 'Descripcion',
-                class: "col-sm-7",
-                editable: {
-                    container: 'body',
-                    type: 'text',
-                },
-            },
-            {
-                field: 'cantidad',
-                title: "Cantidad",
-                align: 'right',
-                class: "col-sm-1",
-                formatter: formatoMoneda,
-                editable: {
-                    container: 'body',
-                    type: 'text',
-                    params: { a: 1, b: 2 },
-                    inputclass: "tiponumerico",
-                    
-                    validate: function (value) {
-                        if ($.trim(value) == '') {
-                            return 'El campo es requerido';
-                        }
-                        if (!$.isNumeric(value)) {
-                            return 'El campo es numerico';
-                        }
-                        if (value < 0 || value == 0) {
-                            return 'no puede ser igual o menor a 0';
-                        }
-                    },
-                },
-            },
-            {
-                field: 'pu',
-                title: "P/U",
-                align: 'right',
-                class: "col-sm-1",
-                formatter: formatoMoneda,
-                editable: {
-                    container: 'body',
-                    type: 'text',
-                    inputclass: "tiponumerico",
-                    validate: validateNum,
-                },
-            },
-            {
-                field: 'total',
-                title: "total",
-                align: 'right',
-                class: "col-sm-1",
-                formatter: formatoMoneda,
-            },
-            {
-                field: 'dcto',
-                title: "dcto",
-                align: 'right',
-                class: "col-sm-1",
-                formatter: formatoMoneda,
-            },
-        ]
-    });
-    $table.on('editable-save.bs.table', function (e, field, row, old, $el) {
-        console.log(row);
-        var total = parseFloat(row.pu) * parseFloat(row.cantidad);
-        $("#egresoDetalle").bootstrapTable('updateByUniqueId', {
-            id: row.id,
-            row: {
-                total: total
-            }
-        });
-    });
- }*/

@@ -499,12 +499,16 @@ window.operateEvents = {
         verdetalle(row)
     },
     'click .editarEgreso': function (e, value, row, index) {
-        console.log(row.idIngresos);
-        var editar = base_url("Egresos/editarEgresos/") + row.idEgresos;
-        if (row.estado == 0) {
+        let editar = base_url("Egresos/editarEgresos/") + row.idEgresos;
+        console.log(row.anulado);
+        
+        if (row.estado == 1) {
+            swal("Error", "El registro ya se encuentra Facturado.", "error")
+        } else if (row.anulado == 1) {
+            swal("Error", "El registro seleccionado esta anulado", "error")
+        }
+        else {
             window.location.href = editar;
-        } else {
-            swal("Error", "No se puede editar el registro seleccionado. El registro ya se encuentra Facturado.", "error")
         }
     },
     'click .editarEgresoTraspaso': function (e, value, row, index) {

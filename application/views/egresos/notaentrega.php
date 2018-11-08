@@ -80,6 +80,7 @@
             <!-- formulario PRIMERA FILA-->
             <?php if ($cont): ?>
             <input id="idegreso" name="idegreso" type="text" class="hidden" value="<?= $dcab->idEgresos ?>">
+            <input id="nmov" name="nmov" type="text" class="hidden" value="<?= $nmov ?>">
             <?php endif ?>
             <div class="row">
               <!--PRIMERA FILA-->
@@ -229,51 +230,6 @@
                   <input type="text" id="idArticulo" class="hidden">
                 </div>
               </div><!-- div class="form-group-sm row"  TERCERA FILA-->
-
-              <!--TERCERA FILA-->
-              <!--
-              <div class="col-xs-12 col-md-2 has-feedback has-feedback-left">
-                <label style="float: left;">Codigo:</label>
-                <span style="margin-left: 10px;display: none;" id="cargandocodigo">
-                  <i class="fa fa-spinner fa-pulse fa-fw"></i>
-                </span>
-                <input class="form-control form-control-sm" type="text" id="articulo_imp" name="articulo_imp">
-                <div style="right: 22px;top:32px;position: absolute;" id="codigocorrecto">
-                  <i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>
-                </div>
-              </div>
-              <div class="col-xs-9 col-md-4">
-                <label>Descripcion:</label>
-                <input type="text" class="form-control form-control-sm" id="Descripcion_ne" name="Descripcion_ne"
-                  disabled />
-              </div>
-              <div class="col-xs-3 col-md-2">
-                <label>Unidad:</label>
-                <input type="text" class="form-control form-control-sm" id="unidad_ne" name="unidad_ne" disabled />
-              </div>
-              <div class="col-xs-6 col-md-2">
-                <label class="costo_ne_label">Precio Bs:</label>
-                <span style="margin-left: 10px; display: none;" class="cargandoPrecioSaldo">
-                  <i class="fa fa-spinner fa-pulse fa-fw"></i>
-                </span>
-                <input type="text" class="form-control form-control-sm text-right tiponumerico punitario_ne_class" name="costo_ne"
-                  id="costo_ne" disabled />
-              </div>
-              <div class="col-xs-6 col-md-2">
-                <label>Saldo:</label>
-                <span style="margin-left: 10px; display: none;" class="cargandoPrecioSaldo">
-                  <i class="fa fa-spinner fa-pulse fa-fw"></i>
-                </span>
-                <input type="text" class="form-control form-control-sm text-right tiponumerico" id="saldo_ne" name="saldo_ne"
-                  disabled />
-              </div>
-            </div>-->
-
-            <!-- div class="form-group-sm row"  TERCERA FILA-->
-
-
-
-
             <div class="form-group row filaarticulo">
               <!--CUARTA FILA-->
               <div class="col-xs-12 col-md-4">
@@ -356,19 +312,6 @@
     </div> <!-- /.class="box" -->
   </div> <!-- /.class="col-xs-12" -->
 </div> <!-- /.class="row" -->
-
-
-
-<div>
-<h3>tabla editar</h3>
-
-<button type="button" class="btn btn-primary" id="getTablaMod">Get Tabla</button>
-
-
-
-</div>
-
-
 <!-- Modal -->
 <form action=" " method="post" id="form_clientes" enctype="multipart/form-data">
   <div class="modal fade" id="modalcliente" role="dialog">

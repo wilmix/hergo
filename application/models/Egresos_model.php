@@ -331,22 +331,6 @@ class Egresos_model extends CI_Model
             return 1;
         }
     }
-   // public function retornarValorTipoCambio()/*retorna el ultimo tipo de cambio*/
-  /*  {
-        //$sql="SELECT nmov from ingresos WHERE YEAR(fechamov)= '$gestion' and almacen='$almacen' and tipomov='$tipo' ORDER BY nmov DESC LIMIT 1";
-        $sql="SELECT * from tipocambio ORDER BY id DESC LIMIT 1";
-
-        $resultado=$this->db->query($sql);
-        if($resultado->num_rows()>0)
-        {
-            $fila=$resultado->row();
-            return ($fila->tipocambio);
-        }
-        else
-        {
-            return 1;
-        }
-    }*/
      public function retornar_datosArticulo($dato)
     {
     	$sql="SELECT idArticulos from articulos where CodigoArticulo='$dato' LIMIT 1";
@@ -464,10 +448,10 @@ class Egresos_model extends CI_Model
         {
             $fila=$resultado->row();
 
-            if($fila->estado==0) // no esta facturado???
-                return true;
-            else
+            if($fila->estado==1) // no esta facturado???
                 return false;
+            else
+                return true;
         }
         else
         {            
@@ -590,19 +574,18 @@ class Egresos_model extends CI_Model
     {        
 
         $idegreso=$datos['idegreso'];
-        $tipomov_ne=$datos['tipomov_ne'];
-        $fechapago_ne=$datos['fechapago_ne'];
-        $moneda_ne=$datos['moneda_ne'];
-        $idCliente=$datos['idCliente'];
-        $pedido_ne=$datos['pedido_ne'];
         $obs_ne=$datos['obs_ne'];               
 
         $autor=$this->session->userdata('user_id');
         $fecha = date('Y-m-d H:i:s');
 
-        $sql="UPDATE egresos SET tipomov='$tipomov_ne',plazopago='$fechapago_ne',moneda='$moneda_ne',cliente='$idCliente',clientePedido='$pedido_ne',obs='$obs_ne',fecha='$fecha',autor='$autor', anulado='$anuladorecuperado' where idEgresos='$idegreso'";
+        $sql="UPDATE egresos 
+        SET obs= UPPER('$obs_ne'),
+            fecha='$fecha',
+            autor='$autor', 
+            anulado='$anuladorecuperado' 
+        where idEgresos='$idegreso'";
         $query=$this->db->query($sql);
-
         return true;
     }
     public function retornar_tablaUsers()
@@ -622,18 +605,18 @@ class Egresos_model extends CI_Model
                 foreach ($egreso->articulos as $fila) {
                     $detalle=new stdclass();
                     $detalle->idegreso = $idEgreso;
-                    $detalle->articulo = $fila[0];
+                    $detalle->articulo = $fila->idArticulos;
                     $detalle->moneda = $egreso->moneda;
-                    $detalle->cantidad = $fila[3];
+                    $detalle->cantidad = $fila->cantidad;
                     if ($egreso->moneda == 2) {
-                        $detalle->punitario= $fila[4] * $egreso->tipoCambio;
-                        $detalle->total=$fila[5] * $egreso->tipoCambio;
-                        $detalle->descuento=$fila[6] * $egreso->tipoCambio;
+                        $detalle->punitario= $fila->punitario * $egreso->tipoCambio;
+                        $detalle->total=$fila->total * $egreso->tipoCambio;
+                        $detalle->descuento=$fila->descuento;
                         
                     }	elseif ($egreso->moneda == 1) {
-                        $detalle->punitario= $fila[4];
-                        $detalle->total=$fila[5];
-                        $detalle->descuento=$fila[6];
+                        $detalle->punitario= $fila->punitario;
+                        $detalle->total=$fila->total;
+                        $detalle->descuento=$fila->descuento;
                     }
                     array_push($egresoDetalle,$detalle);	
                 }
@@ -662,18 +645,18 @@ class Egresos_model extends CI_Model
                 foreach ($egreso->articulos as $fila) {
                     $detalle=new stdclass();
                     $detalle->idegreso = $id;
-                    $detalle->articulo = $fila[0];
+                    $detalle->articulo = $fila->idArticulos;
                     $detalle->moneda = $egreso->moneda;
-                    $detalle->cantidad = $fila[3];
+                    $detalle->cantidad = $fila->cantidad;
                     if ($egreso->moneda == 2) {
-                        $detalle->punitario= $fila[4] * $egreso->tipoCambio;
-                        $detalle->total=$fila[5] * $egreso->tipoCambio;
-                        $detalle->descuento=$fila[6] * $egreso->tipoCambio;
+                        $detalle->punitario= $fila->punitario * $egreso->tipoCambio;
+                        $detalle->total=$fila->total * $egreso->tipoCambio;
+                        $detalle->descuento=$fila->descuento;
                         
                     }	elseif ($egreso->moneda == 1) {
-                        $detalle->punitario= $fila[4];
-                        $detalle->total=$fila[5];
-                        $detalle->descuento=$fila[6];
+                        $detalle->punitario= $fila->punitario;
+                        $detalle->total=$fila->total;
+                        $detalle->descuento=$fila->descuento;
                     }
                     array_push($egresoDetalle,$detalle);	
                 }

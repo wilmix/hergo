@@ -299,7 +299,7 @@ class Egresos extends CI_Controller
 	{
         $this->libacceso->acceso(43);
         if($id==null) redirect("error");
-        //if(!$this->Egresos_model->puedeeditar($id)) redirect("error");
+        if(!$this->Egresos_model->puedeeditar($id)) redirect("error");
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -597,7 +597,7 @@ class Egresos extends CI_Controller
 			$res->egreso = $egreso;
 			if($id)
         	{
-				echo json_encode($res);
+				echo json_encode($id);
         	}
 			else
 			{				
@@ -711,23 +711,17 @@ class Egresos extends CI_Controller
     	if($this->input->is_ajax_request())
         {
             $datos['idegreso'] = $this->security->xss_clean($this->input->post('idegreso'));        	
-        	$datos['tipomov_ne'] = $this->security->xss_clean($this->input->post('tipomov_ne'));        	
-        	$datos['fechapago_ne'] = $this->security->xss_clean($this->input->post('fechapago_ne'));
-        	$datos['moneda_ne'] = $this->security->xss_clean($this->input->post('moneda_ne'));
-        	$datos['idCliente'] = $this->security->xss_clean($this->input->post('idCliente'));
-        	$datos['pedido_ne'] = $this->security->xss_clean($this->input->post('pedido_ne'));        	
         	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
-        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
         	if($this->Egresos_model->anularRecuperarMovimiento_model($datos,1))
-				echo json_encode("true");
+				echo json_encode(true);
 			else
-				echo json_encode("false");
+				echo json_encode(false);
 		}
         else
 		{
 			die("PAGINA NO ENCONTRADA");
 		}		
-    }
+	}
     public function recuperarmovimiento()
     {
     	if($this->input->is_ajax_request())
