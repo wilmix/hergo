@@ -305,45 +305,9 @@
           <hr>
           <!--Tabla para mostrar articulos ingresados-->
           <div class="table-responsive">
-            <table class="table table-condensed table-bordered table-striped" id="tablaNotaEntrega">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th class="col-sm-1">Código</th>
-                  <th class="col-sm-7">Artículo</th>
-                  <th class="col-sm-1 text-right">Cantidad</th>
-                  <th class="col-sm-1 text-right">Precio</th>
-                  <th class="col-sm-1 text-right">Total</th>
-                  <th class="col-sm-1 text-right">Dscto.</th>
-                  <th>&nbsp;</th>
-                </tr>
-              </thead>
-              <tbody id="tbodyarticulos">
-                <?php if ($cont): ?>
-                <?php foreach ($detalle as $fila): ?>
-                <?php 
-                        $punitariofac= $fila['cantidad']==""?0:$fila['cantidad'];
-                      ?>
-                <tr>
-                  <td><input type="text" class="estilofila" disabled value="<?= $fila['idArticulos'] ?>"></td>
-                  <td><input type="text" class="estilofila" disabled value="<?= $fila['CodigoArticulo'] ?>"></td>
-                  <td><input type="text" class="estilofila" disabled value="<?= $fila['Descripcion'] ?>"></td>
-                  <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['cantidad'] ?>"></td>
-                  <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['punitario']?>"></td>
-                  <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['descuento'] ?>"></td>
-                  <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="<?= $fila['total'] ?>"></td>
-                  <td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span
-                        class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
-                </tr>
-                <?php endforeach ?>
-                <?php endif ?>
-              </tbody>
+            <table id="tablaEditarEgreso">
             </table>
           </div>
-          
-          
-          <!--div class="table-responsive"-->
-
           <div class="form-group row">
             <div class="col-md-6 col-xs-12">
             </div>
@@ -351,16 +315,15 @@
               <div class="input-group col-md-12 col-xs-12">
                 <span class="input-group-addon totales">$</span>
                 <!--mostrar el total de dolares-->
-                <input type="text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalacostosus">
+                <input type="text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalDolaresMod">
                 <span class="input-group-addon totales">Bs</span>
                 <!--mostrar el total bolivivanos-->
-                <input type="text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalacostobs">
+                <input type="text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalBolivianosMod">
               </div>
             </div>
           </div>
-          <!--row-->
-
-          <hr>
+          
+           <hr>
 
           <div class="row">
             <div class="col-xs-12 col-md-12">
@@ -395,49 +358,13 @@
 </div> <!-- /.class="row" -->
 
 
-<div>
-<h3>prueba</h3>
-<table id="egresoDetalle">
-</table>
-<button type="button" class="btn btn-primary" id="getTabla">Get Tabla</button>
-
-<div class="form-group row">
-  <div class="col-md-6 col-xs-12">
-  </div>
-  <div class="col-md-6 col-xs-12">
-    <div class="input-group col-md-12 col-xs-12">
-      <span class="input-group-addon totales">$</span>
-      <!--mostrar el total de dolares-->
-      <input type="text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalDolares">
-      <span class="input-group-addon totales">Bs</span>
-      <!--mostrar el total bolivivanos-->
-      <input type="text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalBolivianos">
-    </div>
-  </div>
-</div>
-
-</div>
 
 <div>
 <h3>tabla editar</h3>
-<table id="tablaEditarEgreso">
-</table>
+
 <button type="button" class="btn btn-primary" id="getTablaMod">Get Tabla</button>
 
-<div class="form-group row">
-  <div class="col-md-6 col-xs-12">
-  </div>
-  <div class="col-md-6 col-xs-12">
-    <div class="input-group col-md-12 col-xs-12">
-      <span class="input-group-addon totales">$</span>
-      <!--mostrar el total de dolares-->
-      <input type="text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalDolaresMod">
-      <span class="input-group-addon totales">Bs</span>
-      <!--mostrar el total bolivivanos-->
-      <input type="text" class="form-control form-control-sm text-right tiponumerico totales" disabled id="totalBolivianosMod">
-    </div>
-  </div>
-</div>
+
 
 </div>
 

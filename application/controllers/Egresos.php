@@ -392,9 +392,13 @@ class Egresos extends CI_Controller
 	public function mostrarDetalleEditarPost()
 	{
 		$id = addslashes($this->security->xss_clean($this->input->post('id')));
-        $res=$this->Egresos_model->mostrarDetalle($id);
-        $res=$res->result_array();
-
+		if (!$id) {
+			$res = [];
+		} else {
+			$res=$this->Egresos_model->mostrarDetalle($id);
+        	$res=$res->result_array();
+		}
+		
 		echo json_encode($res);
 	}
 	public function AgregarFActurasResultado($tabla) //agrega la columna facturas a la tabla egreso

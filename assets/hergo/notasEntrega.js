@@ -28,13 +28,13 @@ $(document).ready(function () {
         retornarTablaEgresoDetalle(idEgreso)
         calcularTotalEgresoMod()
     } else {
-        console.log('crear egreso');
+        retornarTablaEgresoDetalle(idEgreso)
     }
-    //cargarArticulos();
+
     
 })
 $(document).ready(function () {
-    tablaEgresoDetalle()
+    //tablaEgresoDetalle()
     $(".tiponumerico").inputmask({
         alias: "decimal",
         digits: 4,
@@ -260,7 +260,7 @@ function agregarArticulo() {
     if ((cant) > 0 && (costo) >= 0 && dcto >= 0) {
         if ((cant) <= (saldoAlmacen) && parseFloat(saldoAlmacen) > 0) {
             addArticuloTable()
-            agregarArticuloEgresos()
+            //agregarArticuloEgresos()
             
         } else {
             swal({
@@ -274,7 +274,7 @@ function agregarArticulo() {
                 cancelButtonText: 'No, Cancelar'
             }).then((result) => {
                 addArticuloTable()
-                agregarArticuloEgresos()
+                //agregarArticuloEgresos()
                 swal({
                     type: 'error',
                     html: 'Usted generó un <b>NEGATIVO</b> en ' + codigoArticulo,
@@ -622,22 +622,26 @@ $( function() {
     };
  });
 
-let articulos = []
+//let articulos = []
 let $table
+//let res = []
 function addArticuloTable() {
-    $("#egresoDetalle").bootstrapTable('append', addArticulo());  
+    console.log('addArticuloTable');
+    $("#tablaEditarEgreso").bootstrapTable('append', addArticulo());  
     //limpiarArticulo();
     //document.getElementById("articulo_impTest").focus()
-    calcularTotalEgreso()
+    calcularTotalEgresoMod()
 }
 function addArticulo() {
-    id = $('#idArticulo').val()
+    console.log('addArticulo');
+    let id = $('#idArticulo').val()
     let codigo = $("#articulo_impTest").val()
     let descripcion = $("#Descripcion_ne").val()
     let cant = $("#cantidad_ne").inputmask('unmaskedvalue')
     let precioUnitario = $("#punitario_ne").inputmask('unmaskedvalue')
     let descuento = $("#descuento_ne").inputmask('unmaskedvalue')
     let total
+    
     cant = parseFloat((cant == '') ? 0 : cant)
     precioUnitario = parseFloat((precioUnitario == '') ? 0 : precioUnitario)
     descuento = parseFloat((descuento == '' ? 0 : descuento))
@@ -646,23 +650,234 @@ function addArticulo() {
 
     rows = [];
         rows.push({
-            id : id,
-            codigo : codigo,
-            descripcion : descripcion,
+            idArticulos : id,
+            CodigoArticulo : codigo,
+            Descripcion : descripcion,
             cantidad: cant,
-            pu: precioUnitario,
+            punitario: precioUnitario,
             total: total,
-            dcto: descuento,
+            descuento: descuento,
+            cantFact:0
+
         });
     return rows
 }
- function tablaEgresoDetalle() {
-     console.log(articulos)
+ 
+
+$(document).on("click", "#getTablaMod", function () {
+    let tabla = $("#tablaEditarEgreso").bootstrapTable('getData');
+    tabla = JSON.stringify(tabla);
+     tabla = JSON.parse(tabla)
+    console.log(tabla);
+    calcularTotalEgresoMod()
+
+})
+function formatoMoneda(value, row, index) {
+    num = Math.round(value * 100) / 100
+    return (formatNumber.new(num))
+}
+function retornarTablaEgresoDetalle(idEgreso=null) {
+    //agregarcargando();
+
+    $.ajax({
+        type: "POST",
+        url: base_url('index.php/Egresos/mostrarDetalleEditarPost'),
+        dataType: "json",
+        data: { id: idEgreso },
+    }).done(function (res) {
+        //quitarcargando();
+        console.log(res);
+        $table = $("#tablaEditarEgreso").bootstrapTable('destroy');
+        $('#tablaEditarEgreso').bootstrapTable({
+            
+            data: res,
+            clickToSelect: true,
+            uniqueId: 'idArticulos',
+            columns: 
+                [
+                    {
+                        field: 'idingdetalle',
+                        title: 'unique',
+                        visible: false
+                    },
+                    {
+                        field: 'idArticulos',
+                        title: 'id',
+                    },
+                    {
+                        field: 'CodigoArticulo',
+                        title: 'Código',
+                        align: 'center',
+                        class: "col-sm-1",
+                    },
+                    {
+                        field: 'Descripcion',
+                        title: 'Descripcion',
+                        class: "col-sm-7",
+                        editable: {
+                            container: 'body',
+                            type: 'text',
+                        },
+                    },
+
+                    {
+                        field: 'cantidad',
+                        title: "Cantidad",
+                        align: 'right',
+                        class: "col-sm-1",
+                        formatter: formatoMoneda,
+                        editable: {
+                            container: 'body',
+                            type: 'text',
+                            params: { a: 1, b: 2 },
+                            inputclass: "tiponumerico",
+                            validate: validarCantidadFactura,
+                        },
+                    },
+                    {
+                        field: 'punitario',
+                        title: "P/U",
+                        align: 'right',
+                        class: "col-sm-1",
+                        formatter: formatoMoneda,
+                        editable: {
+                            container: 'body',
+                            type: 'text',
+                            inputclass: "tiponumerico",
+                            validate: validatePUedit,
+                        },
+                    },
+                    {
+                        field: 'total',
+                        title: "total",
+                        align: 'right',
+                        class: "col-sm-1",
+                        formatter: formatoMoneda,
+                    },
+                    {
+                        field: 'descuento',
+                        title: "Dcto",
+                        align: 'right',
+                        class: "col-sm-1",
+                        formatter: formatoMoneda,
+                    },
+                    {
+                        field: 'cantFact',
+                        title: 'CantFact',
+                        align: 'right',
+                        class: "col-sm-1",
+                        formatter: formatoMoneda,
+                    },
+                    {
+
+                        title: '',
+                        align: 'center',
+                        class: "col-sm-1",
+                        events: operateEvents,
+                        formatter: botonQuitar
+                    },
+                ]
+        })
+        $table.on('editable-save.bs.table', function (e, field, row, old, $el) {
+            var total = parseFloat(row.cantidad) * parseFloat(row.punitario);
+            $("#tablaEditarEgreso").bootstrapTable('updateByUniqueId', {
+                id: row.idArticulos,
+                row: {
+                    total: total
+                }
+            })
+            calcularTotalEgresoMod() 
+        })
+    }).fail(function (jqxhr, textStatus, error) {
+        var err = textStatus + ", " + error;
+        console.log("Request Failed: " + err);
+    })
+    
+}
+function validarCantidadFactura(value) {
+    value = $.trim(value);
+    if ($.trim(value) == '') {
+        return 'El dato es requerido..';
+    }
+    if (!$.isNumeric(value)) {
+        return 'Debe ingresar un numero';
+    }
+    if (value < 0 || value == 0) {
+        return 'no puede ser igual o menor a 0';
+    }
+    let data = $("#tablaEditarEgreso").bootstrapTable('getData');
+    let index = $(this).parents('tr').data('index');
+    let row = (data[index]);
+
+    if (parseFloat(value) < parseFloat(row.cantFact)) {
+        return 'La cantidad debe ser mayor o igual a la cantidad facturada' 
+    }
+    if (parseFloat(row.cantidad) == parseFloat(row.cantFact)) {
+        return 'El artículo fue facturado totalmente' 
+    }
+}
+function validatePUedit(value) {
+    value = $.trim(value);
+    if ($.trim(value) == '') {
+        return 'El dato es requerido';
+    }
+    if (!$.isNumeric(value)) {
+        return 'Debe ingresar un numero';
+    }
+    if (value < 0 ) {
+        return 'no puede ser igual a 0';
+    }
+    let data = $("#tablaEditarEgreso").bootstrapTable('getData');
+    let index = $(this).parents('tr').data('index');
+    let row = (data[index]);
+
+    if (parseFloat(row.cantidad) == parseFloat(row.cantFact)) {
+        return 'El artículo fue facturado totalmente' 
+    }
+}
+function calcularTotalEgresoMod() {
+    let moneda = $("#moneda_ne").val()
+    let tablaEgreso = $("#tablaEditarEgreso").bootstrapTable('getData');
+    let total = 0;
+    $.each(tablaEgreso, function (index, value) {
+        total = total + parseFloat(value.total);
+    })
+    /****************Bs**************/
+    let totalBs = moneda == 2 ? (parseFloat(total) * parseFloat(glob_tipoCambio)) : total;
+    $("#totalBolivianosMod").val(totalBs);
+    /*************SUS***************/
+    let totalSus = moneda == 2 ? total : parseFloat(total) / parseFloat(glob_tipoCambio);
+    $("#totalDolaresMod").val(totalSus);
+}
+ 
+function botonQuitar(value, row, index) {
+    return [
+        '<button type="button" class="btn btn-sm eliminarElemento" data-view="' + row.idingdetalle + '"><span class="fa fa-times" aria-hidden="true"></span></button>',
+    ].join('');
+}
+window.operateEvents = {
+    'click .eliminarElemento': function (e, value, row, index) {
+        quitarArticulo(row)
+    },
+}
+
+function quitarArticulo(row) {
+    ids = new Array(row.idArticulos)
+    $("#tablaEditarEgreso").bootstrapTable('remove', {
+        field: 'idArticulos',
+        values: ids
+    })
+    calcularTotalEgresoMod() 
+}
+
+
+
+
+/*function tablaEgresoDetalle() {
     $table = $("#egresoDetalle").bootstrapTable('destroy');
     $("#egresoDetalle").bootstrapTable({
         clickToSelect: true,
         uniqueId: 'id',
-        search: false,
         data: articulos,
         columns: [
             {
@@ -739,6 +954,7 @@ function addArticulo() {
         ]
     });
     $table.on('editable-save.bs.table', function (e, field, row, old, $el) {
+        console.log(row);
         var total = parseFloat(row.pu) * parseFloat(row.cantidad);
         $("#egresoDetalle").bootstrapTable('updateByUniqueId', {
             id: row.id,
@@ -747,210 +963,4 @@ function addArticulo() {
             }
         });
     });
-}
-
-function validateNum(value) {
-    value = $.trim(value);
-    if ($.trim(value) == '') {
-        return 'El dato es requerido';
-    }
-    if (!$.isNumeric(value)) {
-        return 'Debe ingresar un numero';
-    }
-    if (value < 0 || value == 0) {
-        return 'no puede ser igual o menor a 0';
-    }
-    let data = $("#egresoDetalle").bootstrapTable('getData');
-    let index = $(this).parents('tr').data('index');
-    let row = (data[index]);
-
-    if (row.dcto > 0) {
-        return 'No puede editar error' 
-    }
-}
-$(document).on("click", "#getTabla", function () {
-    let tabla = $("#egresoDetalle").bootstrapTable('getData');
-    tabla = JSON.stringify(tabla);
-     tabla = JSON.parse(tabla)
-    console.log(tabla);
-
-})
-$(document).on("click", "#getTablaMod", function () {
-    let tabla = $("#tablaEditarEgreso").bootstrapTable('getData');
-    tabla = JSON.stringify(tabla);
-     tabla = JSON.parse(tabla)
-    console.log(tabla);
-    calcularTotalEgresoMod()
-
-})
-function formatoMoneda(value, row, index) {
-    num = Math.round(value * 100) / 100
-    return (formatNumber.new(num))
-}
-function calcularTotalEgreso() {
-    let moneda = $("#moneda_ne").val()
-    let tablaEgreso = $("#egresoDetalle").bootstrapTable('getData');
-    let total = 0;
-    $.each(tablaEgreso, function (index, value) {
-        total = total + parseFloat(value.total);
-    })
-    /****************Bs**************/
-    let totalBs = moneda == 2 ? (parseFloat(total) * parseFloat(glob_tipoCambio)) : total;
-    $("#totalBolivianos").val(totalBs);
-    /*************SUS***************/
-    let totalSus = moneda == 2 ? total : parseFloat(total) / parseFloat(glob_tipoCambio);
-    $("#totalDolares").val(totalSus);
-}
-function retornarTablaEgresoDetalle(idEgreso) {
-    //agregarcargando();
-    $.ajax({
-        type: "POST",
-        url: base_url('index.php/Egresos/mostrarDetalleEditarPost'),
-        dataType: "json",
-        data: { id: idEgreso },
-    }).done(function (res) {
-        //quitarcargando();
-        $("#tablaEditarEgreso").bootstrapTable('destroy');
-        $('#tablaEditarEgreso').bootstrapTable({
-            data: res,
-            clickToSelect: true,
-            uniqueId: 'id',
-            columns: 
-                [
-                    {
-                        field: 'idArticulos',
-                        title: 'id',
-                    },
-                    {
-                        field: 'CodigoArticulo',
-                        title: 'Código',
-                        align: 'center',
-                        class: "col-sm-1",
-                    },
-                    {
-                        field: 'Descripcion',
-                        title: 'Descripcion',
-                        class: "col-sm-7",
-                        editable: {
-                            container: 'body',
-                            type: 'text',
-                        },
-                    },
-
-                    {
-                        field: 'cantidad',
-                        title: "Cantidad",
-                        align: 'right',
-                        class: "col-sm-1",
-                        formatter: formatoMoneda,
-                        editable: {
-                            container: 'body',
-                            type: 'text',
-                            params: { a: 1, b: 2 },
-                            inputclass: "tiponumerico",
-                            validate: validarCantidadFactura,
-                        },
-                    },
-                    {
-                        field: 'punitario',
-                        title: "P/U",
-                        align: 'right',
-                        class: "col-sm-1",
-                        formatter: formatoMoneda,
-                        editable: {
-                            container: 'body',
-                            type: 'text',
-                            inputclass: "tiponumerico",
-                            validate: validateNum,
-                        },
-                    },
-                    {
-                        field: 'total',
-                        title: "total",
-                        align: 'right',
-                        class: "col-sm-1",
-                        formatter: formatoMoneda,
-                    },
-                    {
-                        field: 'cantFact',
-                        title: 'CantFact',
-                        align: 'right',
-                        class: "col-sm-1",
-                        formatter: formatoMoneda,
-                    },
-                    {
-
-                        title: '<button type="button" class="btn btn-default quitarTodos"><span class="fa fa-times-circle" aria-hidden="true"></span></button>',
-                        align: 'center',
-                        class: "col-sm-1",
-                        //events: operateEvents,
-                        formatter: retornarBoton2
-                    },
-                ]
-        });
-        $table.on('editable-save.bs.table', function (e, field, row, old, $el) {
-            var total = parseFloat(row.cantidad) * parseFloat(row.punitario);
-            $("#egresoDetalle").bootstrapTable('updateByUniqueId', {
-                id: row.idArticulos,
-                row: {
-                    total: total
-                }
-            });
-        });
-    }).fail(function (jqxhr, textStatus, error) {
-        var err = textStatus + ", " + error;
-        console.log("Request Failed: " + err);
-    });
-}
-function validarCantidadFactura(value) {
-    value = $.trim(value);
-    if ($.trim(value) == '') {
-        return 'El dato es requerido..';
-    }
-    if (!$.isNumeric(value)) {
-        return 'Debe ingresar un numero';
-    }
-    if (value < 0 || value == 0) {
-        return 'no puede ser igual o menor a 0';
-    }
-    let data = $("#tablaEditarEgreso").bootstrapTable('getData');
-    let index = $(this).parents('tr').data('index');
-    let row = (data[index]);
-
-    if (parseFloat(value) < parseFloat(row.cantFact)) {
-        return 'La cantidad debe ser mayor o igual a la cantidad facturada' 
-    }
-    if (parseFloat(row.cantidad) == parseFloat(row.cantFact)) {
-        return 'El artículo fue facturado totalmente' 
-    }
-}
-function calcularTotalEgresoMod() {
-    let moneda = $("#moneda_ne").val()
-    let tablaEgreso = $("#tablaEditarEgreso").bootstrapTable('getData');
-    let total = 0;
-    $.each(tablaEgreso, function (index, value) {
-        console.log(value);
-        total = total + parseFloat(value.total);
-    })
-    /****************Bs**************/
-    let totalBs = moneda == 2 ? (parseFloat(total) * parseFloat(glob_tipoCambio)) : total;
-    $("#totalBolivianosMod").val(totalBs);
-    /*************SUS***************/
-    let totalSus = moneda == 2 ? total : parseFloat(total) / parseFloat(glob_tipoCambio);
-    $("#totalDolaresMod").val(totalSus);
-}
- 
-function operateFormatter(value, row, index) {
-    return [
-        '<button type="button" class="btn btn-default agregartabla" data-view="' + row.idEgresos + '" aria-label="Right Align">',
-        '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-        '<button type="button" class="btn btn-default quitardetabla hidden" data-remove="' + row.idEgresos + '" aria-label="Right Align">',
-        '<span class="fa fa-minus-square-o " aria-hidden="true"></span></button>',
-    ].join('');
-}
-
-function retornarBoton2(value, row, index) {
-    return [
-        '<button type="button" class="btn btn-default eliminarElemento" data-view="' + row.idingdetalle + '"><span class="fa fa-times" aria-hidden="true"></span></button>',
-    ].join('');
-}
+ }*/
