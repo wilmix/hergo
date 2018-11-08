@@ -561,13 +561,24 @@ class Egresos_model extends CI_Model
         $query=$this->db->query($sql);
         return $query->result();
     }
-     public function actualizarEstado($idEgreso,$estado)
+    public function actualizarEstado($idEgreso,$estado)
     {
          $sql="UPDATE egresos
             set estado=$estado
             WHERE idEgresos=$idEgreso          
             ";
         $query=$this->db->query($sql);        
+    }
+    public function getCantidadFacturadaActualizarEgreso($idEgreso)
+    {
+         $sql="SELECT SUM(ed.`cantidad`) cant, SUM(ed.`cantFact`) cantFact
+                FROM egredetalle ed 
+                WHERE ed.`idegreso` = $idEgreso";
+        $query=$this->db->query($sql);  
+        if($query->num_rows() > 0 )
+            return $query->row();
+        else
+            return false;      
     }
 
     public function anularRecuperarMovimiento_model($datos,$anuladorecuperado)
@@ -648,6 +659,7 @@ class Egresos_model extends CI_Model
                     $detalle->articulo = $fila->idArticulos;
                     $detalle->moneda = $egreso->moneda;
                     $detalle->cantidad = $fila->cantidad;
+                    $detalle->cantFact = $fila->cantFact;
                     if ($egreso->moneda == 2) {
                         $detalle->punitario= $fila->punitario * $egreso->tipoCambio;
                         $detalle->total=$fila->total * $egreso->tipoCambio;
@@ -661,7 +673,16 @@ class Egresos_model extends CI_Model
                     array_push($egresoDetalle,$detalle);	
                 }
             $this->db->insert_batch("egredetalle", $egresoDetalle);
-        
+            
+            $dato=$this->getCantidadFacturadaActualizarEgreso($id);  
+			if ($dato->cantFact == 0){
+                $estado = 0;
+            } else if ($dato->cant == $dato->cantFact) {
+                $estado = 1;
+            } else if ( $dato->cant > $dato->cantFact){
+                $estado = 2;
+			}
+			$this->actualizarEstado($id, $estado); 
         $this->db->trans_complete();
         if ($this->db->trans_status() === FALSE)
         {
@@ -671,6 +692,4 @@ class Egresos_model extends CI_Model
             return $id;
         }
     }
-    
-  
 }

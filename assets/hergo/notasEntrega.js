@@ -74,6 +74,7 @@ $(document).on("click", "#guardarMovimiento", function () {
 })
 $(document).on("click", "#cancelarMovimiento", function () {
     window.location.href = base_url("Egresos")
+
 })
 $(document).on("click", "#actualizarMovimiento", function () {
     actualizarMovimiento();
@@ -236,6 +237,7 @@ function guardarmovimiento() {
     }
     if (articulos.length > 0) {
         let tabla = JSON.stringify(articulos);
+        console.log(articulos);
         valuesToSubmit += "&tabla=" + tabla;
         retornarajax(base_url("index.php/Egresos/storeEgreso"), valuesToSubmit, function (data) {
             estado = validarresultado_ajax(data);
@@ -273,6 +275,7 @@ function guardarmovimiento() {
 function actualizarMovimiento() {
     let valuesToSubmit = $("#form_egreso").serialize();
     let articulos = $("#tablaEditarEgreso").bootstrapTable('getData');
+    console.log(articulos);
     if (articulos.length > 0) {
         let tabla = JSON.stringify(articulos);
         valuesToSubmit += "&tabla=" + tabla;
@@ -280,12 +283,16 @@ function actualizarMovimiento() {
             estado = validarresultado_ajax(data);
             if (estado) {
                 if (data.respuesta) {
-                    swal(
-                        'Modificación realizada!',
-                        'La modificación se realizó con éxito!',
-                        'success'
-                    )
-                    window.location.href = base_url("Egresos")
+                    console.log(data.respuesta);
+                    swal({
+                        title: 'Modificación realizada!',
+                        html: 'La modificación se realizó con éxito!',
+                        type: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        window.location.href = base_url("Egresos")
+                    })
                 } else {
                     swal(
                         'Error',

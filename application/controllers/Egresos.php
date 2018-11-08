@@ -486,7 +486,9 @@ class Egresos extends CI_Controller
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
-    }
+	}
+	
+
     public function guardarmovimiento()
     {
     	if($this->input->is_ajax_request())
@@ -597,7 +599,7 @@ class Egresos extends CI_Controller
 			$res->egreso = $egreso;
 			if($id)
         	{
-				echo json_encode($id);
+				echo json_encode($res);
         	}
 			else
 			{				
