@@ -43,14 +43,15 @@ class Configuracion_model extends CI_Model
 		WHERE idDatosFactura = $id_lote";
 		$query=$this->db->query($sql);
 	}
-	public function agregarTipoCambio_model($tipocambio){
+	public function agregarTipoCambio_model($tipocambio, $fecha)
+	{
 		$user=$this->session->userdata('user_id');
-		$fecha = date('Y-m-d');
 		$update_at = date('Y-m-d H:i:s');
 		$sql="INSERT INTO tipocambio (fecha, tipocambio, autor, update_at) VALUES ('$fecha', '$tipocambio', '$user', '$update_at')";
 		$query=$this->db->query($sql);
 	}
-	public function mostrarTipoCambio(){
+	public function mostrarTipoCambio()
+	{
 		$sql="SELECT tc.id, tc.fecha, tc.tipocambio, CONCAT(u.first_name,' ',u.last_name) AS autor
 		FROM tipocambio tc 
 		LEFT JOIN users u ON tc.autor=u.id

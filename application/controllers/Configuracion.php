@@ -181,16 +181,20 @@ class Configuracion extends CI_Controller
 	{
 		if($this->input->is_ajax_request()){
 			$id = addslashes($this->security->xss_clean($this->input->post('id')));
-			$fecha = addslashes($this->security->xss_clean($this->input->post('fecha')));
+			$fecha = addslashes($this->security->xss_clean($this->input->post('fechaCambio')));
+			$fecha = date('Y-m-d',strtotime($fecha));
 			$tipocambio = addslashes($this->security->xss_clean($this->input->post('tipocambio')));
 			
 			if ($id == '') {
-				$res = $this->Configuracion_model->agregarTipoCambio_model($tipocambio);
+				$res = $this->Configuracion_model->agregarTipoCambio_model($tipocambio, $fecha);
 			} else {
 				$res=$this->Configuracion_model->updateTipoCambio($id, $fecha, $tipocambio);
 			}
 			
-			
+			$res = new stdclass();
+			$res->id =$id;
+			$res->fecha = $fecha;
+			$res->TipoCambio = $tipocambio;
 			echo json_encode($res);
 		}
 		else

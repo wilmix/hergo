@@ -30,13 +30,13 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h3 class="modal-title modalTitulo">Establecer Tipo de cambio para: </h3> 
+                    <h3 class="modal-title modalTitulo">Establecer Tipo de cambio: <span id="fechaTitulo"></span></h3> 
                 </div>
                 <!--MODAL BODY-->
                 <div class="modal-body form form-horizontal">
                     <fieldset>
                         <div class="form-group">
-                            <label class="col-md-3 control-label"><span id="fechaTipoCambio"></span> </label>
+                            <label class="col-md-3 control-label"> Tipo Cambio</label>
                             <div class="col-md-9 inputGroupContainer">
                                 <div class="input-group">
                                     <span class="input-group-addon">
@@ -44,14 +44,24 @@
                                     </span>
                                     <input name="tipocambio" placeholder="Establecer nuevo tipo de cambio" class="form-control" name="tipocambio" id="tipocambio" type="text">
                                     <input name="id"   id="id" type="text" hidden>
-                                    <input name="fecha"   id="fecha" type="text" hidden>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group fecha-cambio">
+                            <label class="col-md-3 control-label"><span ></span> Fecha</label>
+                            <div class="col-md-9 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-screenshot"></i>
+                                    </span>
+                                    <input class="form-control" placeholder="DD/MM/YYYY" name="fechaCambio" id="fechaCambio" type="text">
                                 </div>
                             </div>
                         </div>
                     </fieldset>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default botoncerrarmodal" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary guardarTipoCambio" id="guardarTipoCambio">Modificar</button>
+                        <button type="submit" class="btn btn-primary guardarTipoCambio" id="guardarTipoCambio">Guardar</button>
                 </div>
                 </div>
                 <!-- /.<div class="modal-body form">-->

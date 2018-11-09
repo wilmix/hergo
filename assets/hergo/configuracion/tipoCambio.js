@@ -10,14 +10,25 @@ $(document).ready(function() {
         },
         excluded: ':disabled',
         fields: {          
-            tipoCambio: {
+            tipocambio: {
                 validators: {
                     notEmpty: {
-                        message: 'Establesca nuevo tipo ce cambio'
+                        message: 'Establesca nuevo tipo De cambio'
                     },
                     numeric: {
                         message: 'Debe ser de tipo Numérico'
                     }                   
+                }
+            },
+            fechaCambio: {
+                validators: {
+                    notEmpty: {
+                        message: 'Establesca fecha de tipo De cambio'
+                    },
+                    date: {
+                        format: 'DD/MM/YYYY',
+                        message: 'La fecha no es valida'
+                    }
                 }
             },
         }
@@ -39,8 +50,10 @@ $(document).ready(function() {
                         showCancelButton: false,
                         allowOutsideClick: false,
                     })
-                    $('#modalTipoCambio').modal('hide');
-                    retornarTablaTipoCambio();
+                    $('#modalTipoCambio').modal('hide')
+                    limpiarModal()
+                    //location.reload();
+                    
                 },
                 error : function (returndata) {
                     swal(
@@ -54,6 +67,8 @@ $(document).ready(function() {
         });
 });
 $(document).on("click",".botoncerrarmodal",function(){
+    
+    limpiarModal()
     resetForm('#form_tipoCambio')
  })
 
@@ -67,15 +82,14 @@ $(document).on("click",".botoncerrarmodal",function(){
    }).done(function (res) {
        quitarcargando();
        $("#tablaTipoCambio").bootstrapTable('destroy');    
-       $("#tablaTipoCambio").bootstrapTable({ ////********cambiar nombre tabla viata
+       $("#tablaTipoCambio").bootstrapTable({ 
            data: res,
-           //showToggle: true,
            toolbarAlign:'right',
            toggle:'table',
            striped: true,
            pagination: true,
            pageSize: "10",
-           //search: true,
+           search:true,
            showColumns: true,
            filter: true,
            stickyHeader: true,
@@ -118,8 +132,6 @@ $(document).on("click",".botoncerrarmodal",function(){
                 }
             ]
          });
-   
-   
    }).fail(function (jqxhr, textStatus, error) {
        var err = textStatus + ", " + error;
        console.log("Request Failed: " + err);
@@ -135,21 +147,26 @@ function operateFormatter(value, row, index){
 }
 window.operateEvents = {
     'click .editar': function (e, value, row, index) {
-        //console.log('You click like action, row: ' + JSON.stringify(row));
-         //resetForm('#form_datosFactura')
          mostrarModal(row)
-           // $("#tarticulo").bootstrapTable('hideLoading');            
     },
 }
 function mostrarModal(fila)
 {
+    console.log(fila);
+     $( ".fecha-cambio" ).addClass( "hidden" );  
     let fecha = formato_fecha_corta(fila.fecha)
-    $("#fechaTipoCambio").html(fecha)
+    $("#fechaTitulo").html(fecha)
     $("#tipocambio").val(fila.tipocambio)
     $("#id").val(fila.id)
-    $("#fecha").val(fila.fecha)
-
-
+    $("#fechaCambio").val(fecha)
     $('#modalTipoCambio').modal('show');
-  
+    
+}
+function limpiarModal(fia)
+{
+    $( ".fecha-cambio" ).removeClass( "hidden" );   
+     $("#fechaTipoCambio").val('')
+     $("#fechaTitulo").html('')
+    $("#id").val('')
+    $("#fechaCambio").val('')
 }
