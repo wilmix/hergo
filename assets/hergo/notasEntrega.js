@@ -53,6 +53,8 @@ $(document).on("change", "#fechamov_ne", function () {
                 if (!data) {
                     checkTipoCambio = false
                     swal("Atencion!", "No se tiene tipo de cambio para esta Fecha")
+                    checkTipoCambio = true
+
                 }
                glob_tipoCambio = data.tipocambio
                console.log(glob_tipoCambio);
