@@ -23,11 +23,11 @@ $(document).ready(function() {
             fechaCambio: {
                 validators: {
                     notEmpty: {
-                        message: 'Establesca fecha de tipo De cambio'
+                        message: 'Establesca fecha de tipo de cambio'
                     },
                     date: {
-                        format: 'DD/MM/YYYY',
-                        message: 'La fecha no es valida'
+                        format: 'YYYY-MM-DD',
+                        message: 'La fecha no es valida Ej: 2019-01-31 (año-mes-dia)'
                     }
                 }
             },
@@ -35,7 +35,6 @@ $(document).ready(function() {
         }).on('success.form.bv', function(e) {
             e.preventDefault();
             let formData = new FormData($('#form_tipoCambio')[0]);  
-            console.log(formData)
         $.ajax({
                 url: base_url("index.php/Configuracion/updateTipoCambio"),
                 type: 'POST',
@@ -44,6 +43,8 @@ $(document).ready(function() {
                 contentType: false,
                 processData: false,
                 success: function (returndata) {
+                    limpiarModal()
+                    resetForm('#form_tipoCambio')
                     swal({
                         title: 'Se establecio el tipo de cambio Correctamente',
                         type: 'success',
@@ -52,8 +53,7 @@ $(document).ready(function() {
                     })
                     $('#modalTipoCambio').modal('hide')
                     limpiarModal()
-                    //location.reload();
-                    
+                    retornarTablaTipoCambio()
                 },
                 error : function (returndata) {
                     swal(
@@ -66,8 +66,17 @@ $(document).ready(function() {
             }); 
         });
 });
+$(function() {
+    $('#fechaCambio').daterangepicker({
+      singleDatePicker: true,
+      showDropdowns: true,
+      locale: {
+        format: 'YYYY-MM-DD'
+      }
+    });
+  });
 $(document).on("click",".botoncerrarmodal",function(){
-    
+
     limpiarModal()
     resetForm('#form_tipoCambio')
  })
@@ -152,13 +161,12 @@ window.operateEvents = {
 }
 function mostrarModal(fila)
 {
-    console.log(fila);
      $( ".fecha-cambio" ).addClass( "hidden" );  
     let fecha = formato_fecha_corta(fila.fecha)
     $("#fechaTitulo").html(fecha)
-    $("#tipocambio").val(fila.tipocambio)
     $("#id").val(fila.id)
-    $("#fechaCambio").val(fecha)
+    $("#fechaCambio").val(fila.fecha)
+    $("#tipocambio").val(fila.tipocambio)
     $('#modalTipoCambio').modal('show');
     
 }
@@ -169,4 +177,6 @@ function limpiarModal(fia)
      $("#fechaTitulo").html('')
     $("#id").val('')
     $("#fechaCambio").val('')
+    $("#tipocambio").val('')
+
 }

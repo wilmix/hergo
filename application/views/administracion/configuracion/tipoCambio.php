@@ -42,7 +42,7 @@
                                     <span class="input-group-addon">
                                         <i class="glyphicon glyphicon-screenshot"></i>
                                     </span>
-                                    <input name="tipocambio" placeholder="Establecer nuevo tipo de cambio" class="form-control" name="tipocambio" id="tipocambio" type="text">
+                                    <input placeholder="Establecer nuevo tipo de cambio" class="form-control" name="tipocambio" id="tipocambio" type="text" autofocus>
                                     <input name="id"   id="id" type="text" hidden>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                                     <span class="input-group-addon">
                                         <i class="glyphicon glyphicon-screenshot"></i>
                                     </span>
-                                    <input class="form-control" placeholder="DD/MM/YYYY" name="fechaCambio" id="fechaCambio" type="text">
+                                    <input class="form-control" name="fechaCambio" id="fechaCambio" type="text" autocomplete="off">
                                 </div>
                             </div>
                         </div>

@@ -182,7 +182,6 @@ class Configuracion extends CI_Controller
 		if($this->input->is_ajax_request()){
 			$id = addslashes($this->security->xss_clean($this->input->post('id')));
 			$fecha = addslashes($this->security->xss_clean($this->input->post('fechaCambio')));
-			$fecha = date('Y-m-d',strtotime($fecha));
 			$tipocambio = addslashes($this->security->xss_clean($this->input->post('tipocambio')));
 			
 			if ($id == '') {
