@@ -747,5 +747,25 @@ class Egresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
     }
-        
+    public function consultarTipoCambio()
+	{
+		if($this->input->is_ajax_request())
+        {
+			$fecha = $this->security->xss_clean($this->input->post('fecha'));
+			$fecha = date('Y-m-d',strtotime($fecha));
+			$tipocambio = $this->Ingresos_model->getTipoCambio($fecha);
+			if($tipocambio)
+        	{
+				echo json_encode($tipocambio);
+        	}
+			else
+			{				
+				echo json_encode(false);
+			}			
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}    
 }

@@ -3,13 +3,13 @@
     <div class="box">
       <div class="box-body">
         <div class="text-right" class="btn-group" id="toolbar">
-          <a class="btn btn-primary btn-sm hidden-xs" href="<?php echo base_url(" egresos/VentasCaja") ?>"
+          <a class="btn btn-primary btn-sm hidden-xs" href="<?php echo base_url("egresos/VentasCaja") ?>"
             target="_blank"><i class="fa fa-plus-circle fa-lg"></i> VentaCaja</a>
 
-          <a class="btn btn-primary btn-sm hidden-xs" href="<?php echo base_url(" egresos/Notaentrega") ?>"
+          <a class="btn btn-primary btn-sm hidden-xs" href="<?php echo base_url("egresos/Notaentrega") ?>"
             target="_blank"><i class="fa fa-plus-circle fa-lg"></i> NotaEntrega</a>
 
-          <a class="btn btn-primary btn-sm hidden-xs" href="<?php echo base_url(" egresos/BajaProducto") ?>"
+          <a class="btn btn-primary btn-sm hidden-xs" href="<?php echo base_url("egresos/BajaProducto") ?>"
             target="_blank"><i class="fa fa-plus-circle fa-lg"></i> BajaProducto</a>
 
         </div>

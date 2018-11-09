@@ -7,6 +7,7 @@ let glob_precio_egreso = 0
 let hoy
 let idEgreso 
 let $table
+let checkTipoCambio 
 $(document).ready(function () {
     glob_guardar = false;
     calcularTotalEgresoMod()
@@ -35,10 +36,34 @@ $(document).ready(function () {
         retornarTablaEgresoDetalle(idEgreso)
     }
 })
+$(document).on("change", "#fechamov_ne", function () {
+    let fecha = $('#fechamov_ne').val()
+    if (hoy == fecha) {
+        console.log('ok');
+    } else {
+        console.log('buscar');
+        $.ajax({
+            type: "POST",
+            url: base_url("index.php/Egresos/consultarTipoCambio"),
+            dataType: "json",
+            data: {
+                fecha: fecha
+            },
+            success: function(data) {
+                if (!data) {
+                    checkTipoCambio = false
+                    swal("Atencion!", "No se tiene tipo de cambio para esta Fecha")
+                }
+               glob_tipoCambio = data.tipocambio
+               console.log(glob_tipoCambio);
+            }
+        });
+    }
+})
 $(document).on("change", "#almacen_ne", function () {
     swal("Atencion!", "Usted esta cambiado de Almacen")
     loc_almacen = $("#almacen_ne").val();
-});
+})
 $(document).on("click", "#anularMovimientoEgreso", function () {
     mensajeAnular("#obs_ne",
         function () {
@@ -235,9 +260,12 @@ function guardarmovimiento() {
         swal("Error", "Seleccione el cliente", "error")
         return false;
     }
+    if (!checkTipoCambio) {
+        swal("Error", "No se tiene tipo de cambio para esta Fecha", "error")
+        return false;
+    }
     if (articulos.length > 0) {
         let tabla = JSON.stringify(articulos);
-        console.log(articulos);
         valuesToSubmit += "&tabla=" + tabla;
         retornarajax(base_url("index.php/Egresos/storeEgreso"), valuesToSubmit, function (data) {
             estado = validarresultado_ajax(data);
