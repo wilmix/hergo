@@ -186,7 +186,11 @@ class Configuracion extends CI_Controller
 			
 			if ($id == '') {
 				$res = $this->Configuracion_model->agregarTipoCambio_model($tipocambio, $fecha);
-			} else {
+			} else if($id == 'egreso') {
+				$fecha = date('Y-m-d',strtotime($fecha));
+				$res = $this->Configuracion_model->agregarTipoCambio_model($tipocambio, $fecha);
+			}
+			else {
 				$res=$this->Configuracion_model->updateTipoCambio($id, $fecha, $tipocambio);
 			}
 			

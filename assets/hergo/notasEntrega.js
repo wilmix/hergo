@@ -7,7 +7,7 @@ let glob_precio_egreso = 0
 let hoy
 let idEgreso 
 let $table
-let checkTipoCambio 
+let checkTipoCambio = false
 $(document).ready(function () {
     glob_guardar = false;
     calcularTotalEgresoMod()
@@ -39,28 +39,54 @@ $(document).ready(function () {
 $(document).on("change", "#fechamov_ne", function () {
     let fecha = $('#fechamov_ne').val()
     if (hoy == fecha) {
-        console.log('ok');
+        checkTipoCambio = true
     } else {
         console.log('buscar');
         $.ajax({
             type: "POST",
+            async: false,
             url: base_url("index.php/Egresos/consultarTipoCambio"),
             dataType: "json",
             data: {
                 fecha: fecha
             },
             success: function(data) {
-                if (!data) {
-                    checkTipoCambio = false
-                    swal("Atencion!", "No se tiene tipo de cambio para esta Fecha")
-                    checkTipoCambio = true
 
-                }
-               glob_tipoCambio = data.tipocambio
-               console.log(glob_tipoCambio);
+                data ? checkTipoCambio = data : checkTipoCambio = false
+               
             }
         });
+        if (checkTipoCambio == false) {
+            mostrarModal()
+        }
     }
+})
+$(document).on("click", "#setTipoCambio", function () {
+    let fecha = $('#fechamov_ne').val()
+    let tc = $('#tipocambio').val()
+    if (!tc || tc == 0) {
+        swal("Atencion!", "Ingrese tipo cambio valido")
+        return false
+    }
+    $.ajax({
+        type: "POST",
+        url: base_url("index.php/Configuracion/updateTipoCambio"),
+        dataType: "json",
+        data: {
+            id: 'egreso',
+            fechaCambio: fecha,
+            tipocambio: tc
+        },
+        success: function(data) {
+            console.log(data);
+            checkTipoCambio = true
+            glob_tipoCambio = data.TipoCambio
+            console.log(glob_tipoCambio);
+            $('#modalTipoCambio').modal('hide')
+            swal("Atencion!", "Agrego un tipo de cambio para" + data.fecha)
+            $('#tipocambio').val('')
+        }
+    });
 })
 $(document).on("change", "#almacen_ne", function () {
     swal("Atencion!", "Usted esta cambiado de Almacen")
@@ -697,4 +723,8 @@ function quitarArticulo(row) {
         values: ids
     })
     calcularTotalEgresoMod() 
+}
+function mostrarModal()
+{
+    $('#modalTipoCambio').modal('show');
 }

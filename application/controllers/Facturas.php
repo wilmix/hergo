@@ -11,7 +11,7 @@ class Facturas extends CI_Controller
 			$this->load->library('LibAcceso');
 			
 			/*******/
-		//$this->load->model("ingresos_model");
+		$this->load->model("Ingresos_model");
 		$this->load->model("Egresos_model");
 		$this->load->model("Cliente_model");
 		$this->load->model("Facturacion_model");
@@ -497,12 +497,20 @@ class Facturas extends CI_Controller
 	}
 	public function tipoCambio()
 	{
-		$tipoCambio=$this->Egresos_model->retornarValorTipoCambio();
-		$idAlmacenUsuario = $this->session->userdata['datosAlmacen']->idalmacen;
-		$obj2=new stdclass();
-		$obj2->tipoCambio=$tipoCambio->tipocambio;	
-		$obj2->idAlmacenUsuario = $idAlmacenUsuario;
-		echo json_encode($obj2);
+		//$tipoCambio=$this->Egresos_model->retornarValorTipoCambio();
+		$fechaActual = $this->security->xss_clean($this->input->post('fechaActual'));
+		$tipoCambio = $this->Ingresos_model->getTipoCambio($fechaActual);
+		if ($tipoCambio) {
+			$idAlmacenUsuario = $this->session->userdata['datosAlmacen']->idalmacen;
+			$obj2=new stdclass();
+			$obj2->tipoCambio=$tipoCambio->tipocambio;	
+			$obj2->hoy = $tipoCambio->fecha;
+			$obj2->idAlmacenUsuario = $idAlmacenUsuario;
+			echo json_encode($obj2);
+		} else {
+			echo json_encode(false);
+		}
+		
 	}
 	public function guardarFactura()
 	{
