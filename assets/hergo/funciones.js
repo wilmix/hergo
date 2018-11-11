@@ -1,5 +1,6 @@
 let glob_tipoCambio = 0;
 let glob_art = [];
+let glob_alm_usu
 let fechaHoySystem 
 
 $(document).ready(function () 
@@ -27,6 +28,9 @@ function setTipoCambio(fechaActual) {
     if (!res) {
       swal("Atencion!", "No se tiene tipo de cambio para la fecha")
     } 
+    
+    glob_alm_usu = res.idAlmacenUsuario
+    console.log(glob_alm_usu);
     $('#mostrarTipoCambio').text(res.tipoCambio);
     glob_tipoCambio = res.tipoCambio;
     console.log(res.tipoCambio);

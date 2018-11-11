@@ -277,6 +277,8 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->autor=$this->session->userdata('user_id');
 			$pago->fecha=date('Y-m-d H:i:s');
 			$pago->tipoCambio=$this->Ingresos_model->getTipoCambio($pago->fechaPago);
+			$tipocambio = $this->Ingresos_model->getTipoCambio($pago->fechaPago);
+			$pago->tipoCambio = $tipocambio->tipocambio;
 			$pago->tipoPago=$data->tipoPago;
 			$pago->cheque=$data->cheque;
 			$pago->banco=$data->banco;

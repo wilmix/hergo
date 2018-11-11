@@ -7,6 +7,7 @@ let idPago=$("#idPago").val();
 let idClientePago
 let nombreCliente
 let clienteCorrecto
+let checkTipoCambio = false
 $( function() {
     $("#cliente_factura").autocomplete(
     {      
@@ -102,9 +103,62 @@ $(document).ready(function(){
     retornarPagosPendientes();
 })
 
-$(document).on("change",".fecha_pago",function(){
+$(document).on("change","#fechaPago",function(){
     fechaPagoHoy = $('#fechaPago').val()
+    let fecha = $('#fechaPago').val()
+    if (hoy == fecha) {
+        checkTipoCambio = true
+    } else {
+        console.log('buscar');
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: base_url("index.php/Egresos/consultarTipoCambio"),
+            dataType: "json",
+            data: {
+                fecha: fecha
+            },
+            success: function(data) {
+
+                data ? checkTipoCambio = data : checkTipoCambio = false
+               
+            }
+        });
+        if (checkTipoCambio == false) {
+            mostrarModal()
+        } else {
+            glob_tipoCambio = checkTipoCambio.tipocambio
+            console.log(checkTipoCambio.fecha+ ' - ' +glob_tipoCambio)
+        }
+    }
 }) 
+$(document).on("click", "#setTipoCambio", function () {
+    let fecha = $('#fechaPago').val()
+    let tc = $('#tipocambio').val()
+    if (!tc || tc == 0) {
+        swal("Atencion!", "Ingrese tipo cambio valido")
+        return false
+    }
+    $.ajax({
+        type: "POST",
+        url: base_url("index.php/Configuracion/updateTipoCambio"),
+        dataType: "json",
+        data: {
+            id: 'egreso',
+            fechaCambio: fecha,
+            tipocambio: tc
+        },
+        success: function(data) {
+            console.log(data);
+            checkTipoCambio = true
+            glob_tipoCambio = data.TipoCambio
+            console.log(glob_tipoCambio);
+            $('#modalTipoCambio').modal('hide')
+            swal("Atencion!", "Agrego un tipo de cambio para " + formato_fecha_corta(data.fecha))
+            $('#tipocambio').val('')
+        }
+    });
+})
 $(document).on("change","#cliente_factura",function(){
     idClientePago = $('#idCliente_Pago').val()
 }) 
@@ -368,17 +422,10 @@ function editarPago(idPago) {
     return data
 }
 function datosEditar(idPago) {
-    let glob_idAlmacenUsuario_1 = new Object();
-     glob_idAlmacenUsuario_1=$.ajax({
-        async: false,
-        type:"POST",
-        url: base_url('index.php/Facturas/tipoCambio'),
-        dataType: "json",
-        })
-
+    let idAlmacenActual = $('#idAlmacenActual').val()
     if (idPago == 0) {
     data = {
-            almacen:glob_idAlmacenUsuario_1.responseJSON.idAlmacenUsuario,
+            almacen:idAlmacenActual,
                 almacenes: [
                 { alm: 'CENTRAL HERGO', value: '1' },
                 { alm: 'DEPOSITO EL ALTO', value: '2' },
@@ -410,6 +457,10 @@ function datosEditar(idPago) {
     editarPago(idPago); 
     }
     return data
+}
+function mostrarModal()
+{
+    $('#modalTipoCambio').modal('show');
 }
 
 Vue.component('app-row',{
@@ -722,6 +773,10 @@ var vmPago = new Vue({
                         console.log('borrado')
                     })
                 return false
+            }
+            if (!checkTipoCambio) {
+                swal("Error", "No se tiene tipo de cambio para esta Fecha", "error")
+                return false;
             }
             if (!this.guardar) {
                 quitarcargando();
