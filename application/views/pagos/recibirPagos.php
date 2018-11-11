@@ -34,7 +34,7 @@
 
       <!-- Your Page Content Here -->
 <input type="text" id="idPago" value="<?= isset($idPago)?$idPago:0?>" class="hidden"> 
-<input type="text" id="fechaEditar" value="<?= isset($idPago)?$fechaEditar:''?>" class=""> 
+<input type="text" id="fechaEditar" value="<?= isset($idPago)?$fechaEditar:''?>" class="hidden"> 
 
 
 <div class="row">
