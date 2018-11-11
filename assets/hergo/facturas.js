@@ -4,6 +4,7 @@ let hoy = moment().format('DD-MM-YYYY')
 let $table
 let scope = this
 let clienteCorrecto = false
+let checkTipoCambio = false
 window.operateEvents = {
     'click .agregartabla': function (e, value, row, index) {
         AgregarTabla(row);
@@ -114,6 +115,61 @@ $(document).ready(function () {
     });
     retornarTablaFacturacion();
 })
+$(document).on("change", "#fechaFactura", function () {
+    let fecha = $('#fechaFactura').val()
+    if (hoy == fecha) {
+        checkTipoCambio = true
+    } else {
+        console.log('buscar');
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: base_url("index.php/Egresos/consultarTipoCambio"),
+            dataType: "json",
+            data: {
+                fecha: fecha
+            },
+            success: function(data) {
+
+                data ? checkTipoCambio = data : checkTipoCambio = false
+               
+            }
+        });
+        if (checkTipoCambio == false) {
+           mostrarModal()
+        } else {
+            glob_tipoCambio = checkTipoCambio.tipocambio
+            console.log(checkTipoCambio.fecha+ ' - ' +glob_tipoCambio)
+        }
+    }
+})
+$(document).on("click", "#setTipoCambio", function () {
+    let fecha = $('#fechaFactura').val()
+    let tc = $('#tipocambio').val()
+    if (!tc || tc == 0) {
+        swal("Atencion!", "Ingrese tipo cambio valido")
+        return false
+    }
+    $.ajax({
+        type: "POST",
+        url: base_url("index.php/Configuracion/updateTipoCambio"),
+        dataType: "json",
+        data: {
+            id: 'egreso',
+            fechaCambio: fecha,
+            tipocambio: tc
+        },
+        success: function(data) {
+            console.log(data);
+            checkTipoCambio = true
+            glob_tipoCambio = data.TipoCambio
+            console.log(glob_tipoCambio);
+            $('#modalTipoCambio').modal('hide')
+            swal("Atencion!", "Agrego un tipo de cambio para " + formato_fecha_corta(data.fecha))
+            $('#tipocambio').val('')
+        }
+    });
+})
 $(document).on("change", "#almacen_filtro", function () {
     retornarTablaFacturacion();
 })
@@ -144,6 +200,10 @@ $(document).on("click", "#crearFactura", function () {
     if ($("#cliente_factura").val().trim() == '' && clienteCorrecto == false) {
         swal("Error", "Debe seleccionar cliente", "error")
         return false
+    }
+    if (!checkTipoCambio) {
+        swal("Error", "No se tiene tipo de cambio para esta Fecha", "error")
+        return false;
     }
     let tabla3factura = $("#tabla3Factura").bootstrapTable('getData');
     if (tabla3factura.length > 0) {
@@ -255,6 +315,10 @@ $(document).on("change", "#moneda", function () {
     cambiarMonedaTabla3();
 })
 
+function mostrarModal()
+{
+    $('#modalTipoCambio').modal('show');
+}
 function retornarTablaFacturacion() {
     agregarcargando();
     ini = iniciofecha.format('YYYY-MM-DD')

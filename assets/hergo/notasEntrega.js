@@ -58,6 +58,9 @@ $(document).on("change", "#fechamov_ne", function () {
         });
         if (checkTipoCambio == false) {
             mostrarModal()
+        } else {
+            glob_tipoCambio = checkTipoCambio.tipocambio
+            console.log(checkTipoCambio.fecha+ ' - ' +glob_tipoCambio)
         }
     }
 })
@@ -83,7 +86,7 @@ $(document).on("click", "#setTipoCambio", function () {
             glob_tipoCambio = data.TipoCambio
             console.log(glob_tipoCambio);
             $('#modalTipoCambio').modal('hide')
-            swal("Atencion!", "Agrego un tipo de cambio para" + data.fecha)
+            swal("Atencion!", "Agrego un tipo de cambio para" + formato_fecha_corta(data.fecha))
             $('#tipocambio').val('')
         }
     });

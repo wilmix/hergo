@@ -652,8 +652,8 @@ class Ingresos extends CI_Controller
         	}
 			else
 			{				
-				echo json_encode("false");
-			}			
+				echo json_encode(false);
+			}
 		}
 		else
 		{

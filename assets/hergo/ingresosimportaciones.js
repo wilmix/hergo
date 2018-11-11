@@ -3,6 +3,7 @@ var glob_factorRET=0.087;
 let glob_guardar = false
 var loc_almacen;
 let hoy
+let checkTipoCambio = false
 
 $(document).ready(function(){
     fechaMod = $('#fechamov_imp').val()
@@ -24,6 +25,61 @@ $(document).ready(function(){
     if ($("#tipoDoc").val() == 1 || $("#tipoDoc").val() == 3) {
         $(".tipoDocumento").removeClass("hidden")
     } 
+})
+$(document).on("change", "#fechamov_imp", function () {
+    let fecha = $('#fechamov_imp').val()
+    if (hoy == fecha) {
+        checkTipoCambio = true
+    } else {
+        console.log('buscar');
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: base_url("index.php/Egresos/consultarTipoCambio"),
+            dataType: "json",
+            data: {
+                fecha: fecha
+            },
+            success: function(data) {
+
+                data ? checkTipoCambio = data : checkTipoCambio = false
+               
+            }
+        });
+        if (checkTipoCambio == false) {
+            mostrarModal()
+        } else {
+            glob_tipoCambio = checkTipoCambio.tipocambio
+            console.log(checkTipoCambio.fecha+ ' - ' +glob_tipoCambio)
+        }
+    }
+})
+$(document).on("click", "#setTipoCambio", function () {
+    let fecha = $('#fechamov_imp').val()
+    let tc = $('#tipocambio').val()
+    if (!tc || tc == 0) {
+        swal("Atencion!", "Ingrese tipo cambio valido")
+        return false
+    }
+    $.ajax({
+        type: "POST",
+        url: base_url("index.php/Configuracion/updateTipoCambio"),
+        dataType: "json",
+        data: {
+            id: 'egreso',
+            fechaCambio: fecha,
+            tipocambio: tc
+        },
+        success: function(data) {
+            console.log(data);
+            checkTipoCambio = true
+            glob_tipoCambio = data.TipoCambio
+            console.log(glob_tipoCambio);
+            $('#modalTipoCambio').modal('hide')
+            swal("Atencion!", "Agrego un tipo de cambio para" + formato_fecha_corta(data.fecha))
+            $('#tipocambio').val('')
+        }
+    });
 })
 $(document).on("click","#agregar_articulo",function(){
     if(glob_guardar)
@@ -331,6 +387,10 @@ function guardarmovimiento()
     var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
     var tablaaux=tablatoarray();
     //console.log(tablaaux);
+    if (!checkTipoCambio) {
+        swal("Error", "No se tiene tipo de cambio para esta Fecha", "error")
+        return false;
+    }
     if(tablaaux.length>0)
     {
         var tabla=JSON.stringify(tablaaux);
@@ -561,6 +621,11 @@ function tablatoarray()
     return(tabla)
     console.log(filas)
 }
+function mostrarModal()
+{
+    $('#modalTipoCambio').modal('show');
+}
+
 
 function storeIngreso()
 {     
@@ -568,6 +633,10 @@ function storeIngreso()
     let tableIngresos=tablatoarray();
     let tabla=JSON.stringify(tableIngresos);
     formData.append('tabla',tabla)
+    if (!checkTipoCambio) {
+        swal("Error", "No se tiene tipo de cambio para esta Fecha", "error")
+        return false;
+    }
     if (tableIngresos.length>0) {
         $.ajax({
             url: base_url("index.php/Ingresos/storeIngreso"),
@@ -577,7 +646,6 @@ function storeIngreso()
             contentType: false,
             processData: false,
             success: function (returndata) {
-                console.log(returndata)
                 swal({
                     title: "Ingreso realizado!",
                     text: "El ingreso se guardo con éxito",
@@ -595,7 +663,6 @@ function storeIngreso()
                     'Error',
                     'error'
                 )
-                console.log(returndata);
             },
         });
     } else {
