@@ -166,9 +166,10 @@ class Configuracion extends CI_Controller
 			$this->Configuracion_model->agregarTipoCambio_model($tipocambio);
 		}
 	}
-	public function mostrarTipoCambio(){//******cambiar a funcion del modelo
+	public function mostrarTipoCambio()
+	{
 		if($this->input->is_ajax_request()){
-			$res=$this->Configuracion_model->mostrarTipoCambio(); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+			$res=$this->Configuracion_model->mostrarTipoCambio();
 			$res=$res->result_array();
 			echo json_encode($res);
 		}

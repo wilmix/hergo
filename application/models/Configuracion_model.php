@@ -55,7 +55,7 @@ class Configuracion_model extends CI_Model
 		$sql="SELECT tc.id, tc.fecha, tc.tipocambio, CONCAT(u.first_name,' ',u.last_name) AS autor
 		FROM tipocambio tc 
 		LEFT JOIN users u ON tc.autor=u.id
-		ORDER by id DESC";
+		ORDER by tc.fecha DESC";
 		$query=$this->db->query($sql);		
 		return $query;
 	}

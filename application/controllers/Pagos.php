@@ -212,6 +212,10 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$this->datos['bancos']=$this->Pagos_model->retornar_tabla("bancos");
 			
 			$this->datos['idPago']=$idPago;
+			$this->datos['cab']=$this->getPagoCabecera($idPago);
+			//echo json_encode ($this->datos['cab']);
+
+
 			
 
 			/***********************************/
@@ -225,6 +229,19 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footerscript.php',$this->datos);
 				
+	}
+	public function getPagoCabecera($id)
+	{
+		$res = $this->Pagos_model->retornarEdicion($id);
+        if($res->num_rows()>0)
+    	{
+    		$fila=$res->row();
+    		return $fila;
+    	}
+        else
+        {
+            return(false);
+        }
 	}
 	public function retornarEdicion() {
 		if ($this->input->is_ajax_request()) {
@@ -276,7 +293,6 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->glosa=$data->glosa;
 			$pago->autor=$this->session->userdata('user_id');
 			$pago->fecha=date('Y-m-d H:i:s');
-			$pago->tipoCambio=$this->Ingresos_model->getTipoCambio($pago->fechaPago);
 			$tipocambio = $this->Ingresos_model->getTipoCambio($pago->fechaPago);
 			$pago->tipoCambio = $tipocambio->tipocambio;
 			$pago->tipoPago=$data->tipoPago;
@@ -356,14 +372,15 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 
 			$pago = new stdclass();
 			$pago->fechaPago=$data->fechaPago;
+			$pago->fechaPago = date('Y-m-d',strtotime($pago->fechaPago));
 			$pago->moneda=$data->moneda;
 			$pago->cliente=$data->cliente;
 			$pago->totalPago=$data->totalPago;
-			$pago->glosa=$data->glosa;
+			$pago->glosa=strtoupper($data->glosa);
 			$pago->autor=$this->session->userdata('user_id');
 			$pago->fecha=date('Y-m-d H:i:s');
-			$pago->tipoCambio=$this->Ingresos_model->getTipoCambio($pago->fechaPago);
-			$pago->tipoCambio = $pago->tipoCambio->id;
+			$tipocambio = $this->Ingresos_model->getTipoCambio($pago->fechaPago);
+			$pago->tipoCambio = $tipocambio->tipocambio;
 			$pago->tipoPago=$data->tipoPago;
 			$pago->cheque=$data->cheque;
 			$pago->banco=$data->banco;

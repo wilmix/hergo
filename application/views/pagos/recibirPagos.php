@@ -1,3 +1,13 @@
+<?php
+
+    $edit=(isset($cab))?true:false;//si existe datos cabecera true si existe => editar
+    if($edit)
+    {
+      $fechaEditar=$cab->fechaPago;
+    }
+
+?>
+
 <style>
  .montopagar
   {
@@ -24,6 +34,9 @@
 
       <!-- Your Page Content Here -->
 <input type="text" id="idPago" value="<?= isset($idPago)?$idPago:0?>" class="hidden"> 
+<input type="text" id="fechaEditar" value="<?= isset($idPago)?$fechaEditar:''?>" class=""> 
+
+
 <div class="row">
   <div class="col-xs-12">
     <div class="box">

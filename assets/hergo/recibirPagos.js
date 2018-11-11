@@ -8,6 +8,7 @@ let idClientePago
 let nombreCliente
 let clienteCorrecto
 let checkTipoCambio = false
+
 $( function() {
     $("#cliente_factura").autocomplete(
     {      
@@ -48,6 +49,12 @@ $( function() {
     };
  });
 $(document).ready(function(){
+    if (idPago=='') {
+        hoy = hoy
+    } else {
+        fechaEditar = $("#fechaEditar").val();
+        hoy  = moment(fechaEditar).format('DD-MM-YYYY');
+    }
     
     $('#fechaPago').daterangepicker({
         singleDatePicker: true,
@@ -374,6 +381,7 @@ function editarPago(idPago) {
             idPago:idPago
         },
     }).done(function(res){
+        console.log(res);
         for (let index = 0; index < res.detalle.length; index++) {
             
             saldoNuevo = Math.round(res.detalle[index].saldoNuevo*100)/100
@@ -392,7 +400,6 @@ function editarPago(idPago) {
                 { alm: 'POTOSI', value: '3' },
                 { alm: 'SANTA CRUZ', value: '4' },
                 ],
-            tipoPago: res.cabecera.tipoPago,
             fechaPago: res.cabecera.fechaPago,
             banco:res.cabecera.banco,
             transferencia:res.cabecera.transferencia,
@@ -601,10 +608,11 @@ var vmPago = new Vue({
         },
         editarPago(){
             nombreCliente = $("#cliente_factura").val();
+            fechaPagoHoy = $("#fechaPago").val();
             agregarcargando();
             let datos={
                 almacen: this.almacen,
-                fechaPago:moment(this.fechaPago).format('YYYY-MM-DD'),
+                fechaPago:fechaPagoHoy,
                 moneda:this.moneda,
                 cliente: this.cliente,
                 totalPago:this.totalPago,
@@ -620,7 +628,7 @@ var vmPago = new Vue({
                 nombreCliente:this.nombreCliente,
             };
             let  numPago = this.numPago
-
+            console.log(datos);
             let clientes = datos.porPagar.map(p=>p.cliente)
            if (clientes == 0 || !datos.cliente || nombreCliente.length <= 0) {
                 quitarcargando();
@@ -672,11 +680,7 @@ var vmPago = new Vue({
                     type: 'error', 
                     showCancelButton: false,
                     allowOutsideClick: false,  
-                }).then(
-                function(result) {   
-                    agregarcargando();                 
-                    window.location.href = base_url("Pagos")
-                });
+                })
             });
         },
         anularPago(){
