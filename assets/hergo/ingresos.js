@@ -49,8 +49,11 @@ window.operateEvents = {
         verdetalle(row)
     },
     'click .editarIngreso': function (e, value, row, index) {
-        let editar = base_url("Ingresos/editarimportaciones/") + row.idIngresos;
-        window.location.href = editar;
+        if (row.anulado == 1) {
+            swal("Error", "El registro seleccionado esta anulado", "error")
+        }
+        let editar = base_url("Ingresos/editarimportaciones/") + row.idIngresos
+        window.location.href = editar
     },
     'click .imprimirIngreso': function (e, value, row, index) {
         let imprimir = base_url("pdf/Ingresos/index/") + row.idIngresos;
