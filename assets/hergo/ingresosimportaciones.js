@@ -4,6 +4,7 @@ let glob_guardar = false
 var loc_almacen;
 let hoy
 let checkTipoCambio = false
+let articulos = []
 
 $(document).ready(function(){
     fechaMod = $('#fechamov_imp').val()
@@ -314,6 +315,18 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     costo=(costo=="")?0:costo;
     let tipoingreso=$("#tipomov_imp2").val()
     let total;
+    if (articulos.length>0) {
+        if(articulos.map((el) => el.id).indexOf(id)>=0)
+        {
+            swal("Atencion", "Ya se tiene un registro con este codigo","info");
+            return false;
+        }
+        articulos.push({id})
+
+    } else {
+        articulos.push({id})
+    }
+
 
     if(tipoingreso==2)//si es compra local idcompralocal=2
     {
@@ -321,7 +334,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
         costo=calculocompraslocales(cant,costo)
     } 
     total=cant*costo; 
-    var punitfac=cant==0?0:(totalfac/cant);
+    let punitfac=cant==0?0:(totalfac/cant);
     let articulo
     if (tipoingreso==2) {
         articulo='<tr>'+ 

@@ -470,7 +470,7 @@ class Traspasos extends CI_Controller
 	{
 		$total=0;
 		foreach ($tabla as $fila) {
-			$total+=$fila[4];
+			$total+=$fila[5];
 		}
 		return $total;
 	}
