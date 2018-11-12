@@ -290,7 +290,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->cliente=$data->cliente;
 			$pago->totalPago=$data->totalPago;
 			$pago->anulado=$data->anulado;
-			$pago->glosa=$data->glosa;
+			$pago->glosa=strtoupper($data->glosa);
 			$pago->autor=$this->session->userdata('user_id');
 			$pago->fecha=date('Y-m-d H:i:s');
 			$tipocambio = $this->Ingresos_model->getTipoCambio($pago->fechaPago);
@@ -334,7 +334,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
         {
 
 			$idPago=$this->security->xss_clean($this->input->post('idPago'));	
-			$msj=$this->security->xss_clean($this->input->post('msj'));	
+			$msj=strtoupper($this->security->xss_clean($this->input->post('msj')));	
 			$this->Pagos_model->anularPago($idPago, $msj);
 			$facturas=$this->Pagos_model->retornarIdFacturas($idPago);	
 			$return=new stdClass();

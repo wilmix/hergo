@@ -341,6 +341,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
         console.log('pu'+punitfac);
         console.log('total'+totalfac);
         articulo='<tr>'+ 
+        '<td><input type="text" class="estilofila hidden" disabled value="'+id+'""></td>'+
         '<td><input type="text" class="estilofila" disabled value="'+codigo+'""></input></td>'+
         '<td><input type="text" class="estilofila" disabled value="'+descripcion+'"></input</td>'+
         '<td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="'+cant+'""></input></td>'+

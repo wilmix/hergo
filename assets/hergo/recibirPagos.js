@@ -49,11 +49,16 @@ $( function() {
     };
  });
 $(document).ready(function(){
-    if (idPago=='') {
+    console.log(idPago)
+   
+    if (idPago==0) {
         hoy = hoy
+        console.log(hoy)
     } else {
         fechaEditar = $("#fechaEditar").val();
-        hoy  = moment(fechaEditar).format('DD-MM-YYYY');
+        hoy  = moment(fechaEditar).format('DD-MM-YYYY')
+        console.log(hoy)
+        
     }
     
     $('#fechaPago').daterangepicker({
