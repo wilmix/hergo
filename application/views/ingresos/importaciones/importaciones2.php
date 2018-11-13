@@ -20,6 +20,7 @@
         $idproveedor=$dcab->idproveedor;
         $idingresocompraslocales=$idtingreso;
         $tipoDoc = $dcab->tipoDoc;
+        $tipoMov = $dcab->tipomov;
     }
     else
     {
@@ -59,13 +60,10 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-header with-border">
-        <h3 class="box-title"> 
-          <span id="tituloIngresos">
-            <?php if ($cont): ?>
-              <?= 'Modificar ' . $dcab->tipomov . ' # ' . $dcab->n ?>
-            <?php endif ?>
-          </span>
-        </h3>
+      <h1>
+        <?php echo isset($dcab) ?  'Modificar ':$menu.' - ' ?>
+        <span><?php echo isset($dcab) ? $tipoMov.' # '.$dcab->n :$opcion ?></span>
+      </h1>
       </div>
       <div class="box-body">
         <form action="" method="post"  id="form_ingresoImportaciones">
