@@ -634,8 +634,7 @@ class Ingresos extends CI_Controller
 			
 
 			$tipocambio=$this->Ingresos_model->getTipoCambio($ingreso->fechamov);
-			$ingreso->tipoCambio = $tipocambio->id;
-			$tipoCambioValor=$tipocambio->tipocambio;
+			$ingreso->tipoCambio=$tipocambio->tipocambio;
 
 			$ingreso->autor=$this->session->userdata('user_id');
 			$ingreso->fecha = date('Y-m-d H:i:s');
@@ -644,7 +643,7 @@ class Ingresos extends CI_Controller
 			$ingreso->gestion = $gestion;
 			$ingreso->nmov = $this->Ingresos_model->retornarNumMovimiento($ingreso->tipomov,$gestion,$ingreso->almacen);
 
-			$id = $this->Ingresos_model->storeIngreso($ingreso, $tipoCambioValor);
+			$id = $this->Ingresos_model->storeIngreso($ingreso);
 
 			if($id)
         	{
@@ -708,12 +707,11 @@ class Ingresos extends CI_Controller
 			
 
 			$tipocambio=$this->Ingresos_model->getTipoCambio($ingreso->fechamov);
-			$ingreso->tipoCambio = $tipocambio->id;
-			$tipoCambioValor=$tipocambio->tipocambio;
+			$ingreso->tipoCambio = $tipocambio->tipocambio;
 			$ingreso->autor=$this->session->userdata('user_id');
 			$ingreso->fecha = date('Y-m-d H:i:s');
 
-			$id = $this->Ingresos_model->updateIngreso($idIngresos, $ingreso, $tipoCambioValor);
+			$id = $this->Ingresos_model->updateIngreso($idIngresos, $ingreso);
 
 			if($id)
         	{

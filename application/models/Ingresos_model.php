@@ -413,7 +413,7 @@ class Ingresos_model extends CI_Model
         return true;
 
     }
-    public function updateIngreso($id, $ingreso, $tipoCambioValor)
+    public function updateIngreso($id, $ingreso)
     {
         $this->db->trans_start();    
             $this->db->where('idIngresos', $id);
@@ -430,9 +430,9 @@ class Ingresos_model extends CI_Model
                         $detalle->moneda = $ingreso->moneda;
                         $detalle->cantidad = $fila[3];
                         if ($ingreso->moneda == 2) {
-                            $detalle->punitario= $fila[6] * $tipoCambioValor;
-                            $detalle->total=$fila[7] * $tipoCambioValor;
-                            $detalle->totaldoc=$fila[5] * $tipoCambioValor;
+                            $detalle->punitario= $fila[6] * $ingreso->tipoCambio;
+                            $detalle->total=$fila[7] * $ingreso->tipoCambio;
+                            $detalle->totaldoc=$fila[5] * $ingreso->tipoCambio;
                             
                         }	elseif ($ingreso->moneda == 1) {
                             $detalle->punitario= $fila[6];
@@ -616,7 +616,7 @@ class Ingresos_model extends CI_Model
         }
         
     }
-    public function storeIngreso($ingreso, $tipoCambioValor)
+    public function storeIngreso($ingreso)
 	{	
         $this->db->trans_start();
             $this->db->insert("ingresos", $ingreso);
@@ -629,9 +629,9 @@ class Ingresos_model extends CI_Model
                     $detalle->moneda = $ingreso->moneda;
                     $detalle->cantidad = $fila[3];
                     if ($ingreso->moneda == 2) {
-                        $detalle->punitario= $fila[6] * $tipoCambioValor;
-                        $detalle->total=$fila[7] * $tipoCambioValor;
-                        $detalle->totaldoc=$fila[5] * $tipoCambioValor;
+                        $detalle->punitario= $fila[6] * $ingreso->tipoCambio;
+                        $detalle->total=$fila[7] * $ingreso->tipoCambio;
+                        $detalle->totaldoc=$fila[5] * $ingreso->tipoCambio;
                         
                     }	elseif ($ingreso->moneda == 1) {
                         $detalle->punitario= $fila[6];
