@@ -152,8 +152,8 @@ class Traspasos extends CI_Controller
         	$ini=$this->security->xss_clean($this->input->post("i"));//fecha inicio
         	$fin=$this->security->xss_clean($this->input->post("f"));//fecha fin
         	
-        	//$res=$this->Traspasos_model->listar($ini,$fin);
-			$res=$this->traspasos->listar($ini,$fin);
+        	$res=$this->Traspasos_model->listar($ini,$fin);
+			//$res=$this->traspasos->listar($ini,$fin);
 			$res=$res->result_array();			
 			
 			echo json_encode($res);
@@ -235,6 +235,70 @@ class Traspasos extends CI_Controller
 			else
 			{				
 				echo json_encode("false");
+			}
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function storeTraspaso()
+    {
+    	if($this->input->is_ajax_request())
+        {
+			$ingreso = new stdclass();
+			$ingreso->almacen = $this->security->xss_clean($this->input->post('almacen_des'));
+        	$ingreso->tipomov = 3;
+			$ingreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_ne'));
+			$ingreso->fechamov = date('Y-m-d',strtotime($ingreso->fechamov));
+        	$ingreso->moneda = $this->security->xss_clean($this->input->post('moneda_ne'));
+        	$ingreso->proveedor = 69;
+        	$ingreso->ordcomp = $this->security->xss_clean($this->input->post('pedido_ne'));
+			$ingreso->nfact = '';
+			$ingreso->tipoDoc = 3;
+			$ingreso->obs = $this->security->xss_clean($this->input->post('obs_ne'));
+			$tipocambio=$this->Ingresos_model->getTipoCambio($ingreso->fechamov);
+			$ingreso->tipoCambio=$tipocambio->tipocambio;
+			$ingreso->autor=$this->session->userdata('user_id');
+			$ingreso->fecha = date('Y-m-d H:i:s');
+			$gestion= date("Y", strtotime($ingreso->fechamov));
+			$ingreso->gestion = $gestion;
+			$ingreso->nmov = $this->Ingresos_model->retornarNumMovimiento($ingreso->tipomov,$gestion,$ingreso->almacen);
+			$articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
+			$ingreso->articulos=$this->convertirTablaIngresos($articulos);
+			
+			$egreso = new stdclass();
+			$egreso->almacen = $this->security->xss_clean($this->input->post('almacen_ori'));
+			$egreso->tipomov = 8;
+			$egreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_ne'));
+			$egreso->fechamov = date('Y-m-d',strtotime($egreso->fechamov));
+			$gestion = date('Y',strtotime($egreso->fechamov));
+			$egreso->cliente = 1801;
+			$egreso->moneda = $this->security->xss_clean($this->input->post('moneda_ne'));
+			$egreso->obs = $this->security->xss_clean($this->input->post('obs_ne'));
+			$egreso->plazopago = $egreso->fechamov;
+			$egreso->plazopago = date('Y-m-d',strtotime($egreso->plazopago));
+			$egreso->clientePedido = $this->security->xss_clean($this->input->post('pedido_ne'));       
+			$egreso->vendedor = $this->session->userdata('user_id');
+			$tabla=$this->convertirTablaEgresos($articulos);
+			$tipocambio = $this->Ingresos_model->getTipoCambio($egreso->fechamov);
+			$egreso->tipoCambio = $tipocambio->tipocambio;
+			$egreso->autor = $this->session->userdata('user_id');
+			$egreso->fecha = date('Y-m-d H:i:s');
+			$egreso->gestion = $gestion;
+			$egreso->nmov = $this->Egresos_model->retornarNumMovimiento($egreso->tipomov ,$gestion,$egreso->almacen);
+			$egreso->articulos = json_decode(json_encode($tabla),false);
+
+			$res = $this->Traspasos_model->storeTraspaso($ingreso,$egreso);
+
+        	if($res)
+        	{
+        		//$this->retornarcostoarticulo_tabla($datos['tabla'],$datos['almacen_imp']);
+				echo json_encode($res);
+        	}
+			else
+			{				
+				echo json_encode(false);
 			}
 		}
         else
@@ -446,9 +510,11 @@ class Traspasos extends CI_Controller
 			$tablaIngresos[$i][1]=$tabla[$i][1];
 			$tablaIngresos[$i][2]=$tabla[$i][2];
 			$tablaIngresos[$i][3]=$tabla[$i][3];
-			$tablaIngresos[$i][4]=0;
-			$tablaIngresos[$i][5]=$tabla[$i][3];
+			$tablaIngresos[$i][4]=$tabla[$i][4];
+			$tablaIngresos[$i][5]=$tabla[$i][5];
 			$tablaIngresos[$i][6]=$tabla[$i][4];
+			$tablaIngresos[$i][7]=$tabla[$i][5];
+
 		}
 		return $tablaIngresos;	
 	}
@@ -456,13 +522,14 @@ class Traspasos extends CI_Controller
 	{
 		$tablaIngresos= array();
 		for ($i=0; $i < count($tabla) ; $i++) { 
-			$tablaIngresos[$i][0]=$tabla[$i][0];
-			$tablaIngresos[$i][1]=$tabla[$i][1];
-			$tablaIngresos[$i][2]=$tabla[$i][2];
-			$tablaIngresos[$i][3]=$tabla[$i][3];
-			$tablaIngresos[$i][4]=0;
-			$tablaIngresos[$i][5]=$tabla[$i][4];			
-			$tablaIngresos[$i][6]=$tabla[$i][6];	
+			$tablaIngresos[$i]['idArticulos']=$tabla[$i][0];
+			$tablaIngresos[$i]['CodigoArticulo']=$tabla[$i][1];
+			$tablaIngresos[$i]['Descripcion']=$tabla[$i][2];
+			$tablaIngresos[$i]['cantFact']=0;
+			$tablaIngresos[$i]['cantidad']=$tabla[$i][3];
+			$tablaIngresos[$i]['descuento']=0;			
+			$tablaIngresos[$i]['punitario']=$tabla[$i][4];	
+			$tablaIngresos[$i]['total']=$tabla[$i][5];	
 		}
 		return $tablaIngresos;	
 	}

@@ -85,7 +85,7 @@ function retornarTablaTraspasos()
             },
             {
                 field:'numEgreso',
-                title:"N",
+                title:"Nº Egreso",
                 align: 'center',
                 sortable:true,  
                 width:"20px",               
@@ -101,7 +101,7 @@ function retornarTablaTraspasos()
             },
             {
                 field:'numIngreso',
-                title:"N",
+                title:"Nº Ingreso",
                 align: 'center',
                 sortable:true, 
                 width:"20px",                     
@@ -115,14 +115,6 @@ function retornarTablaTraspasos()
                         data: datosselect[1]
                 }
             },
-            {
-                field:'total',
-                title:"Total",
-                align: 'right',
-                sortable:true,
-                formatter: operateFormatter3,
-                searchable:false,
-            },  
             {
                 field:"estadoT",
                 title:"Estado",

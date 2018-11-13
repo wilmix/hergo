@@ -360,14 +360,15 @@ function guardarmovimiento() {
     } else {
         console.log('ajax');
 
-        /*if (tablaaux.length > 0 && !(almOrigen === almDestino)) {
+        if (tablaaux.length > 0 && !(almOrigen === almDestino)) {
             let tabla = JSON.stringify(tablaaux);
 
             valuesToSubmit += "&tabla=" + tabla;
             console.log(tabla);
 
-            retornarajax(base_url("index.php/Traspasos/guardarmovimiento"), valuesToSubmit, function (data) {
+            retornarajax(base_url("index.php/Traspasos/storeTraspaso"), valuesToSubmit, function (data) {
                 estado = validarresultado_ajax(data);
+                console.log(data);
                 if (estado) {
                     if (data.respuesta) {
 
@@ -382,7 +383,7 @@ function guardarmovimiento() {
                             showCancelButton: false
                         }).then(
                             function (result) {
-                                location.reload();
+                                //location.reload();
                             });
                     } else {
                         $(".mensaje_error").html("Error al almacenar los datos, intente nuevamente");
@@ -394,7 +395,7 @@ function guardarmovimiento() {
         } else {
 
             swal("Error", "No se tiene datos para guardar. ", "error")
-        }*/
+        }
     }
 
 }
@@ -508,12 +509,12 @@ function tablatoarray()
         datos=$(value).find("input").toArray()
         tabla.push(
                     Array(
-                            $(datos[0]).val(),
-                            $(datos[1]).val(),
-                            $(datos[2]).val(),
-                            $(datos[3]).inputmask('unmaskedvalue'),
-                            $(datos[4]).inputmask('unmaskedvalue'),
-                            $(datos[5]).inputmask('unmaskedvalue'),
+                            $(datos[0]).val(), //id
+                            $(datos[1]).val(), //codigo
+                            $(datos[2]).val(),  //descrip
+                            $(datos[3]).inputmask('unmaskedvalue'), //cantidad
+                            $(datos[4]).inputmask('unmaskedvalue'), //costo
+                            $(datos[5]).inputmask('unmaskedvalue'), //total
                         ))
     })
     return(tabla)

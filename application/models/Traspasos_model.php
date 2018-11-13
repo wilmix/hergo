@@ -17,8 +17,8 @@ class Traspasos_model extends CI_Model
 	}
 	public function listar($ini=null,$fin=null)
 	{
-		$sql="SELECT t.idTraspasos, a.almacen as origen,b.almacen as destino,i.estado,t.fecha, 
-		t.total, t.idEgreso, e.anulado, e.`nmov` numEgreso, i.`nmov` numIngreso,
+		$sql="SELECT t.idTraspasos, a.almacen as origen,b.almacen as destino,i.estado,e.fechamov fecha, 
+		t.idEgreso, e.anulado, e.`nmov` numEgreso, i.`nmov` numIngreso,
 		CASE
 			WHEN e.anulado = 1 THEN 'ANULADO'
 			WHEN i.estado = 0 THEN 'PENDIENTE'
@@ -33,8 +33,8 @@ class Traspasos_model extends CI_Model
 		on e.almacen=a.idalmacen 
 		INNER JOIN almacenes b
 		on i.almacen=b.idalmacen 
-		WHERE t.fecha BETWEEN '$ini' AND '$fin'
-		ORDER BY t.fecha DESC";				
+		WHERE e.fechamov BETWEEN '$ini' AND '$fin'
+		ORDER BY t.idTraspasos DESC";				
 		$query=$this->db->query($sql);		
 		return $query;
 	}
@@ -110,7 +110,36 @@ class Traspasos_model extends CI_Model
 		$sql="UPDATE traspasos SET total=$this->total where idIngreso=$this->idIngreso AND idEgreso=$this->idEgreso";	
         $this->db->query($sql);
         return true;
-    }
+	}
+	
+	public function storeTraspaso($ingreso,$egreso)
+	{	
+        $this->db->trans_start();
+			$idIngreso = $this->Ingresos_model->storeIngreso($ingreso);
+			$idEgreso = $this->Egresos_model->storeEgreso($egreso);
+
+			$traspaso = new stdclass();
+			$traspaso->idIngreso = $idIngreso;
+			$traspaso->idEgreso = $idEgreso;
+
+			$this->db->insert("traspasos", $traspaso);
+			$idTraspaso=$this->db->insert_id();
+			
+			$res = new stdclass();
+			$res->ingreso = $idIngreso;
+			$res->egreso = $idEgreso;
+			$res->traspaso = $idTraspaso;
+
+
+		$this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        } else {
+            
+            return $res;
+        }
+	}
   
 
 }
