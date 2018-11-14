@@ -3,7 +3,7 @@
         <div class="box">
             <div class="box-body">
             <div class="container">
-                <div id="toolbar2" class="form-inline">
+                <div id="" class="form-inline">
                     <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
                     <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
                         <?php foreach ($almacen->result_array() as $fila): ?>
@@ -11,9 +11,9 @@
                         <?php endforeach ?>
                         <option value="">TODOS</option>
                     </select>
-                    <select class="form-control"  data-style="btn-primary" id="articulos_filtro" name="articulos_filtro">
+                    <select class="form-control"  data-style="btn-primary" id="articulos_filtro" name="articulos_filtro" multiple="multiple">
                         <?php foreach ($articulos->result_array() as $fila): ?>
-                        <option value=<?= $fila['idArticulos'] ?> ><?= $fila['CodigoArticulo'].' | '.$fila['Descripcion'] ?></option>
+                        <option value=<?= $fila['CodigoArticulo'] ?> ><?= $fila['CodigoArticulo'].' | '.$fila['Descripcion'] ?></option>
                         <?php endforeach ?>
                     </select>
                     <button  type="button" class="btn btn-primary btn-sm" id="refresh">
@@ -28,8 +28,9 @@
                     </h2>
                     <h3 id="nombreArticulo"></h3>
                 </div>
-                <table id="tablaKardex" data-toolbar="#toolbar2" data-toggle="table">
-                </table>
+                <div id="tablas">
+                </div>
+                
                 </div>
             </div>
         </div>

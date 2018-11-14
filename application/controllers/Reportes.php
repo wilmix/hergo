@@ -690,15 +690,35 @@ class Reportes extends CI_Controller
 		}
 		
 	}
-	public function mostrarKardexIndividual()  //******cambiar a funcion del modelo
+	public function showKardexIndividual()  //******cambiar a funcion del modelo
 	{
+		ini_set('max_execution_time', 0); 
+		ini_set('memory_limit','2048M');
 		if($this->input->is_ajax_request())
         {
-			$alm=$this->security->xss_clean($this->input->post("a")); //almacen
-			$art=$this->security->xss_clean($this->input->post("art"));//tipo de ingreso
-			$res=$this->Reportes_model->mostrarKardexIndividual($art,$alm); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
-			$res=$res->result_array();
-			echo json_encode($res);
+			$alm=$this->security->xss_clean($this->input->post("alm"));
+			$a=$this->security->xss_clean($this->input->post("a"));
+			$b=$this->security->xss_clean($this->input->post("b"));
+			$kardex = [];
+			$articulos = $this->Reportes_model->getArticulosID($a, $b)->result();
+			//$res=$this->Reportes_model->showKardexIndividual($a, $b); 
+			foreach ($articulos as $articulo) {
+				$arr = [];
+				$articuloKardex = $this->Reportes_model->mostrarKardexIndividual($articulo->id,$alm);
+				$articuloKardex->next_result();
+				$articuloKardex->result();
+				array_push($arr, 	$articulo->codigo, 
+									$articulo->descrip, 
+									$articulo->unidad,
+									$articulo->marca,
+									$articulo->linea,
+									$articuloKardex->result_object);
+				array_push($kardex, $arr);
+			}
+
+			
+			echo json_encode($kardex);
+			//echo json_encode($kardex[0]->result_object);
 		}
 		else
 		{

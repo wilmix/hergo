@@ -255,6 +255,31 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function showKardexIndividual($a,$b) 
+	{ 
+		
+		$idArticulos = $this->getArticulosID($a, $b);
+		
+		foreach ($idArticulos as $id) {
+			echo  'valor es '.$id;
+		}
+
+	
+		return $idArticulos;
+	}
+	public function getArticulosID($a,$b) 
+	{ 
+	
+			$sql="SELECT a.`idArticulos` id, a.`CodigoArticulo` codigo, a.`Descripcion` descrip , u.`Sigla` unidad, m.`Marca` marca, l.`Sigla` linea
+			FROM articulos a
+			INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
+			INNER JOIN marca m ON m.`idMarca` = a.`idMarca` 
+			INNER JOIN linea l ON l.`idLinea` = a.`idLinea`
+			WHERE a.`CodigoArticulo` BETWEEN '$a' AND '$b'
+			ORDER BY a.`CodigoArticulo`;";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 	public function kardexIndividualCliente($cliente,$almacen="",$ini,$fin) {
 		$sql="SELECT * FROM 
 		(	SELECT    c.`idCliente`, c.`nombreCliente`,'$ini' fecha, '-' numDocumento, '1' almacen,  'SALDO INICIAL' detalle,  

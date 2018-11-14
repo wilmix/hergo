@@ -1,18 +1,25 @@
 $(document).ready(function() {
     tituloReporte()
-    $('#articulos_filtro').select2()});
+    $('#articulos_filtro').select2({
+        theme: "classic",
+        maximumSelectionLength: 2
+    })
+})
 $(document).on("click", "#kardex", function () {
     tituloReporte();
-    retornarKardex();
+    
+    //retornarKardex();
     
 })
 $(document).on("click", "#refresh", function () {
     tituloReporte();
+    $('#tablas').empty();
     retornarKardex();
 })
 $(document).on("change", "#articulos_filtro", function () {
     tituloReporte();
-    retornarKardex();
+    //retornarKardex();
+    console.log($('#articulos_filtro').val());
 })
 $(document).on("change", "#almacen_filtro", function () {
     tituloReporte();
@@ -21,136 +28,163 @@ $(document).on("change", "#almacen_filtro", function () {
 
 
 function retornarKardex() {
-    var alm = $("#almacen_filtro").val()
-    var art = $("#articulos_filtro").val()
+    let alm = $("#almacen_filtro").val()
+    let art = $("#articulos_filtro").val()
+    let a = art[0]
+    let b = art[1]
+    if (!b) {
+        b = a
+    }
     agregarcargando();
     $.ajax({
         type: "POST",
-        url: base_url('index.php/Reportes/mostrarKardexIndividual'),
+        url: base_url('index.php/Reportes/showKardexIndividual'),
         dataType: "json",
         data: {
-            a: alm,
-            art: art
+            alm: alm,
+            a: a,
+            b:b
         },
     }).done(function (res) {
+        for (let i = 0; i < res.length; i++) {
+            let codigo = res[i][0]
+            let descrip = res[i][1]
+            let unidad = res[i][2]
+            let marca = res[i][3]
+            let sigla = res[i][4]
+            let element = res[i][5]
+            $("#tablas").append(`   
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">${codigo} - ${descrip}<h3></h3>
+                </div>
+                <div class="box-body no-padding">
+                    <table id="tablaKardex${i}" data-toggle="table"> 
+                    </table>
+                </div>
+            </div>`);
+            let nombreTabla = `#tablaKardex${i}`
+            agregarTabla(element, nombreTabla)
+    }
         quitarcargando(); 
-        console.log(alm + " " + art)
-        $("#tablaKardex").bootstrapTable('destroy');    
-        $("#tablaKardex").bootstrapTable({ ////********cambiar nombre tabla viata
-            data: res,
-            striped: true,
-            //pagination: true,
-            //pageSize: "100",
-            //search: true,
-            //showColumns: true,
-            filter: true,
-            stickyHeader: true,
-            stickyHeaderOffsetY: '50px',
-            showFooter: true,
-            footerStyle: footerStyle,
-            columns: [
-                {
-                    field: 'almacen',
-                    title: 'Alm',
-                    align: 'center',
-                    visible: true
-                },
-                {
-                    field: 'fecha',
-                    title: 'Fecha',
-                    align: 'center',
-                    formatter: formato_fecha_corta
-
-                },
-                {
-                    field: 'tipo',
-                    title: 'Tipo',
-                    align: 'center'
-                },
-                {
-                    field: 'numMov',
-                    title: 'N° Mov',
-                    align: 'center'
-                },
-                {
-                    field: 'nombreproveedor',
-                    title: 'Cliente | Proveedor',
-                    align: 'left'
-                },
-                
-                {
-                    field: 'punitario',
-                    title: 'P/U',
-                    align: 'right',
-                    formatter: operateFormatter3,
-                },
-                
-                {
-                    field: 'cantidad',
-                    title: 'Cantidad',
-                    align: 'right',
-                    visible: false,
-                    formatter: operateFormatter3,
-                    //footerFormatter: sumaColumna
-                },
-                {
-                    field: 'cantidad',
-                    title: 'Ingresos',
-                    align: 'right',
-                    formatter: ingresos,
-                    footerFormatter: sumaIngresos
-                },
-                {
-                    field: 'cantidad',
-                    title: 'Factura',
-                    align: 'right',
-                    formatter: factura,
-                    footerFormatter: sumaFactura
-
-                },
-                {
-                    field: 'cantidad',
-                    title: 'N.E.',
-                    align: 'right',
-                    formatter: notaEntrega,
-                   footerFormatter: sumaNE
-                },
-                {
-                    field: 'cantidad',
-                    title: 'Traspaso',
-                    align: 'right',
-                    formatter: traspaso,
-                    footerFormatter: sumaOtros
-                },
-                {
-                    field: '_cantidad',
-                    title: 'Saldo',
-                    align: 'right',
-                    //visible: false,
-                    formatter: operateFormatter3,
-                    //footerFormatter: saldo
-                },
-                {
-                    field: '_total',
-                    title: 'Total',
-                    align: 'right',
-                    formatter: operateFormatter3,
-                    //footerFormatter: total
-                },
-                
-                {
-                    field: '_cpp',
-                    title: 'CPP',
-                    align: 'right',
-                    formatter: costoPromedio4,
-                    //footerFormatter: cpp
-                },
-            ]
-          });
     }).fail(function (jqxhr, textStatus, error) {
         var err = textStatus + ", " + error;
         console.log("Request Failed: " + err);
     });
+}
+function agregarTabla(res , nombre) {
+    $(nombre).bootstrapTable('destroy');    
+    $(nombre).bootstrapTable({
+        data: res,
+        striped: true,
+        //pagination: true,
+        //pageSize: "100",
+        //search: true,
+        //showColumns: true,
+        filter: true,
+        stickyHeader: true,
+        stickyHeaderOffsetY: '50px',
+        showFooter: true,
+        footerStyle: footerStyle,
+        columns: [
+            {
+                field: 'almacen',
+                title: 'Alm',
+                align: 'center',
+                visible: true
+            },
+            {
+                field: 'fecha',
+                title: 'Fecha',
+                align: 'center',
+                formatter: formato_fecha_corta
+
+            },
+            {
+                field: 'tipo',
+                title: 'Tipo',
+                align: 'center'
+            },
+            {
+                field: 'numMov',
+                title: 'N° Mov',
+                align: 'center'
+            },
+            {
+                field: 'nombreproveedor',
+                title: 'Cliente | Proveedor',
+                align: 'left'
+            },
+            
+            {
+                field: 'punitario',
+                title: 'P/U',
+                align: 'right',
+                formatter: operateFormatter3,
+            },
+            
+            {
+                field: 'cantidad',
+                title: 'Cantidad',
+                align: 'right',
+                visible: false,
+                formatter: operateFormatter3,
+                //footerFormatter: sumaColumna
+            },
+            {
+                field: 'cantidad',
+                title: 'Ingresos',
+                align: 'right',
+                formatter: ingresos,
+                footerFormatter: sumaIngresos
+            },
+            {
+                field: 'cantidad',
+                title: 'Factura',
+                align: 'right',
+                formatter: factura,
+                footerFormatter: sumaFactura
+
+            },
+            {
+                field: 'cantidad',
+                title: 'N.E.',
+                align: 'right',
+                formatter: notaEntrega,
+               footerFormatter: sumaNE
+            },
+            {
+                field: 'cantidad',
+                title: 'Traspaso',
+                align: 'right',
+                formatter: traspaso,
+                footerFormatter: sumaOtros
+            },
+            {
+                field: '_cantidad',
+                title: 'Saldo',
+                align: 'right',
+                //visible: false,
+                formatter: operateFormatter3,
+                //footerFormatter: saldo
+            },
+            {
+                field: '_total',
+                title: 'Total',
+                align: 'right',
+                formatter: operateFormatter3,
+                //footerFormatter: total
+            },
+            
+            {
+                field: '_cpp',
+                title: 'CPP',
+                align: 'right',
+                formatter: costoPromedio4,
+                //footerFormatter: cpp
+            },
+        ]
+      });
 }
 function operateFormatter3(value, row, index) {
     num = Math.round(value * 100) / 100
@@ -166,7 +200,7 @@ function tituloReporte() {
     almText = $('#almacen_filtro').find(":selected").text();
     nomArticulo = $('#articulos_filtro').find(':selected').text();
     $('#tituloReporte').text(almText);
-    $('#nombreArticulo').text(nomArticulo);
+    //$('#nombreArticulo').text(nomArticulo);
 }
 function ingresos(value, row, index) {
     $ret = ''
