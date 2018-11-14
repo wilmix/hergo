@@ -1,23 +1,24 @@
-let iniciofecha=moment().subtract(0, 'year').startOf('year')
-let finfecha=moment().subtract(0, 'year').endOf('year')
+let iniciofecha = moment().subtract(0, 'year').startOf('year')
+let finfecha = moment().subtract(0, 'year').endOf('year')
 
-$(document).ready(function(){
-     $(".tiponumerico").inputmask({
-        alias:"decimal",
-        digits:2,
+$(document).ready(function () {
+    $(".tiponumerico").inputmask({
+        alias: "decimal",
+        digits: 2,
         groupSeparator: ',',
         autoGroup: true,
-        autoUnmask:true
+        autoUnmask: true
     })
     let start = moment().subtract(0, 'year').startOf('year')
     let end = moment().subtract(0, 'year').endOf('year')
- 
-    $(function() {
+
+    $(function () {
         moment.locale('es');
+
         function cb(start, end) {
             $('#fechapersonalizada span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
-            iniciofecha=start
-            finfecha=end
+            iniciofecha = start
+            finfecha = end
         }
         $('#fechapersonalizada').daterangepicker({
             locale: {
@@ -25,27 +26,27 @@ $(document).ready(function(){
                 applyLabel: 'Aplicar',
                 cancelLabel: 'Cancelar',
                 customRangeLabel: 'Personalizado',
-                },
+            },
             startDate: start,
             endDate: end,
             ranges: {
                 'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
-                "Hace un Año": [moment().subtract(1, 'year').startOf('year'),moment().subtract(1, 'year').endOf('year')],
-                'Hace dos Años': [moment().subtract(2, 'year').startOf('year'),moment().subtract(2, 'year').endOf('year')],
-                'Hace tres Años': [moment().subtract(3, 'year').startOf('year'),moment().subtract(3, 'year').endOf('year')],               
+                "Hace un Año": [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+                'Hace dos Años': [moment().subtract(2, 'year').startOf('year'), moment().subtract(2, 'year').endOf('year')],
+                'Hace tres Años': [moment().subtract(3, 'year').startOf('year'), moment().subtract(3, 'year').endOf('year')],
             }
         }, cb);
         cb(start, end);
     });
-    $('#fechapersonalizada').on('apply.daterangepicker', function(ev, picker) {
-      retornarTablaTraspasos();
+    $('#fechapersonalizada').on('apply.daterangepicker', function (ev, picker) {
+        retornarTablaTraspasos();
     });
     retornarTablaTraspasos();
 })
-$(document).on("change","#almacen_filtro",function(){
+$(document).on("change", "#almacen_filtro", function () {
     retornarTablaTraspasos();
 })
-$(document).on("change","#tipo_filtro",function(){
+$(document).on("change", "#tipo_filtro", function () {
     retornarTablaTraspasos();
 })
 $(document).on("click", "#refresh", function () {
@@ -53,157 +54,157 @@ $(document).on("click", "#refresh", function () {
 })
 
 
-function retornarTablaTraspasos()
-{
-    ini=iniciofecha.format('YYYY-MM-DD')
-    fin=finfecha.format('YYYY-MM-DD')    
+function retornarTablaTraspasos() {
+    ini = iniciofecha.format('YYYY-MM-DD')
+    fin = finfecha.format('YYYY-MM-DD')
     agregarcargando();
     $.ajax({
-        type:"POST",
+        type: "POST",
         url: base_url('index.php/Traspasos/motrarTraspasos'),
         dataType: "json",
-        data: {i:ini,f:fin},
-    }).done(function(res){
-        datosselect= restornardatosSelect(res)
+        data: {
+            i: ini,
+            f: fin
+        },
+    }).done(function (res) {
+        datosselect = restornardatosSelect(res)
         quitarcargando();
         $("#tTraspasos").bootstrapTable('destroy');
         $('#tTraspasos').bootstrapTable({
-            data:res,
-            striped:true,
-            pagination:true,
-            pageSize:"100",
-            search:true,
-            strictSearch:true,
-            filter:true,
-            columns:[{
-                field:'fecha',
-                title:"Fecha",
-                sortable:true,
-                align: 'center',
-                formatter: formato_fecha_corta,
-                searchable:false,
-            },
-            {
-                field:'numEgreso',
-                title:"Nº Egreso",
-                align: 'center',
-                sortable:true,  
-                width:"20px",               
-            },
-            {
-                field:'origen',
-                title:"Almacen Origen",
-                sortable:true,                 
-                filter: {
+            data: res,
+            striped: true,
+            pagination: true,
+            pageSize: "100",
+            search: true,
+            strictSearch: true,
+            filter: true,
+            columns: [{
+                    field: 'fecha',
+                    title: "Fecha",
+                    sortable: true,
+                    align: 'center',
+                    formatter: formato_fecha_corta,
+                    searchable: false,
+                },
+                {
+                    field: 'numEgreso',
+                    title: "Nº Egreso",
+                    align: 'center',
+                    sortable: true,
+                    width: "20px",
+                },
+                {
+                    field: 'origen',
+                    title: "Almacen Origen",
+                    sortable: true,
+                    filter: {
                         type: "select",
                         data: datosselect[0]
-                }
-            },
-            {
-                field:'numIngreso',
-                title:"Nº Ingreso",
-                align: 'center',
-                sortable:true, 
-                width:"20px",                     
-            },
-            {
-                field:'destino',
-                title:"Almacen Destino",
-                sortable:true,                 
-                filter: {
+                    }
+                },
+                {
+                    field: 'numIngreso',
+                    title: "Nº Ingreso",
+                    align: 'center',
+                    sortable: true,
+                    width: "20px",
+                },
+                {
+                    field: 'destino',
+                    title: "Almacen Destino",
+                    sortable: true,
+                    filter: {
                         type: "select",
                         data: datosselect[1]
-                }
-            },
-            {
-                field:"estadoT",
-                title:"Estado",
-                sortable:true,
-                align: 'center',  
-                cellStyle:cellStyle,                  
-                filter: {
+                    }
+                },
+                {
+                    field: "estadoT",
+                    title: "Estado",
+                    sortable: true,
+                    align: 'center',
+                    cellStyle: cellStyle,
+                    filter: {
                         type: "select",
                         data: datosselect[2]
+                    },
                 },
-            },                  
-            
-            {
-                title: 'Acciones',
-                align: 'center',
-                width: '100px',
-                events: operateEvents,
-                searchable:false,
-                formatter: operateFormatter
-            }]
-            
+
+                {
+                    title: 'Acciones',
+                    align: 'center',
+                    width: '100px',
+                    events: operateEvents,
+                    searchable: false,
+                    formatter: operateFormatter
+                }
+            ]
+
         });
         $("#tegresos").bootstrapTable('resetView');
-        mensajeregistrostabla(res,"#tegresos");
-    }).fail(function( jqxhr, textStatus, error ) {
-    var err = textStatus + ", " + error;
-    console.log( "Request Failed: " + err );
+        mensajeregistrostabla(res, "#tegresos");
+    }).fail(function (jqxhr, textStatus, error) {
+        var err = textStatus + ", " + error;
+        console.log("Request Failed: " + err);
     });
 }
-function operateFormatter(value, row, index)
-{
+
+function operateFormatter(value, row, index) {
     return [
         '<button type="button" class="btn btn-default verTraspaso" aria-label="Right Align" data-toggle="tooltip" title="Ver">',
-        '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',        
+        '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
     ].join('');
 }
+
 function cellStyle(value, row, index) {
-    if (row.estadoT =='PENDIENTE') {
-        return { 
+    if (row.estadoT == 'PENDIENTE') {
+        return {
             css: {
-            "color":"red",
-            "text-decoration": "underline overline",
-            "font-weight": "bold",
-            "font-style": "italic",
-            "padding-top": "15px",
-            } 
+                "color": "red",
+                "text-decoration": "underline overline",
+                "font-weight": "bold",
+                "font-style": "italic",
+                "padding-top": "15px",
+            }
         }
-     }else if (row.estadoT =='APROBADO'){
-        return { 
+    } else if (row.estadoT == 'APROBADO') {
+        return {
             css: {
-            "color":"green",
-            "text-decoration": "underline overline",
-            "font-weight": "bold",
-            "font-style": "italic",
-            "padding-top": "15px",
-            } 
+                "color": "green",
+                "text-decoration": "underline overline",
+                "font-weight": "bold",
+                "font-style": "italic",
+                "padding-top": "15px",
+            }
         }
 
-     } else {
-        return { 
+    } else {
+        return {
             css: {
-            "color":"black",
-            "text-decoration": "underline overline",
-            "font-weight": "bold",
-            "font-style": "italic",
-            "padding-top": "15px",
-            } 
+                "color": "black",
+                "text-decoration": "underline overline",
+                "font-weight": "bold",
+                "font-style": "italic",
+                "padding-top": "15px",
+            }
         }
-     }
-     return {};
-     
+    }
+    return {};
+
 }
 
-function operateFormatter2(value, row, index)
-{
-    $ret=''
+function operateFormatter2(value, row, index) {
+    $ret = ''
 
-    if(row.anulado==1)
-    {        
-        $ret='<span class="label label-warning">ANULADO</span>';
+    if (row.anulado == 1) {
+        $ret = '<span class="label label-warning">ANULADO</span>';
+    } else {
+        if (value == 0)
+            $ret = '<span class="label label-danger">PENDIENTE</span>';
+        if (value == 1)
+            $ret = '<span class="label label-success">APROBADO</span>';
     }
-    else
-    {
-       if(value==0)
-            $ret='<span class="label label-danger">PENDIENTE</span>';
-        if(value==1)
-            $ret='<span class="label label-success">APROBADO</span>';
-    }
-    
+
     return ($ret);
 }
 
@@ -212,173 +213,105 @@ function operateFormatter3(value, row, index) {
     num = num.toFixed(2);
     return (formatNumber.new(num));
 }
-function mostrarFactura(value, row, index)
-{       
-    var cadena=""
-    $.each(value,function(index,val){
-        cadena+=val.nFactura
+
+function mostrarFactura(value, row, index) {
+    var cadena = ""
+    $.each(value, function (index, val) {
+        cadena += val.nFactura
         // cadena+=" - ";
-        if(index<value.length-1)
-            cadena+=" - ";                           
+        if (index < value.length - 1)
+            cadena += " - ";
     })
-    
-    return (cadena); 
+
+    return (cadena);
 }
 /***********Eventos*************/
 window.operateEvents = {
     'click .verTraspaso': function (e, value, row, index) {
-     // fila=JSON.stringify(row);
         verdetalle(row)
     },
-    'click .editarEgreso': function (e, value, row, index) {
-      //console.log(row.idIngresos);
-      var editar=base_url("Egresos/editaregresos/")+row.idEgresos;
-      if(row.estado==0)
-      {
-        window.location.href = editar;
-      }
-      else
-      {
-        swal("Error", "No se puede editar el registro seleccionado","error")
-      }        
-    },
     'click .imprimirIngreso': function (e, value, row, index) {
-     //alert(JSON.stringify(row));
+        //alert(JSON.stringify(row));
     }
 };
-function verdetalle(fila)
-{
-  //console.log(fila)
-    id=fila.idEgreso
-    //console.log(id);
-    datos={id:id}
-    //console.log(fila)
-    retornarajax(base_url("index.php/Traspasos/mostrarDetalle"),datos,function(data)
-    {
-        estado=validarresultado_ajax(data);
-        if(estado)
-        {
-            //console.log(data.respuesta)
+
+function verdetalle(fila) {
+    id = fila.idEgreso
+    datos = {
+        id: id
+    }
+    retornarajax(base_url("index.php/Traspasos/mostrarDetalle"), datos, function (data) {
+        estado = validarresultado_ajax(data);
+        if (estado) {
             mostrarDetalle(data.respuesta);
-            //console.log(glob_tipoCambio)
-            var totalnn=fila.total
-            console.log(totalnn);
-            
-           /* var totalsus=totalnn;
-            var totalbs=totalnn;
-            if(fila.moneda==1)
-            {
-                totalsus=totalsus/glob_tipoCambio;
-                totalsus=parseFloat(totalsus)    
-            }
-            else
-            {
-                totalbs=totalbs*glob_tipoCambio;
-            }*/
-            
 
-            //console.log(sus)
-            //sus=sus.toLocaleString()
-      
-            $("#facturadonofacturado").html(operateFormatter2(fila.estado, fila))
-            $("#almacen_ori").val(fila.origen)
-            $("#almacen_des").val(fila.destino)
+            $("#almacen_ori").val(fila.origen + ' # ' + fila.numEgreso)
+            $("#almacen_des").val(fila.destino + ' # ' + fila.numIngreso)
             $("#fechamov_egr").val(formato_fecha_corta(fila.fecha));
-            $("#moneda_egr").val(fila.monedasigla)
-            $("#nmov_egr").val(fila.n)
-            $("#cliente_egr").val(fila.nombreCliente)
-            $("#pedido_egr").val(fila.clientePedido)
-            $("#fechaPago").val(formato_fecha_corta(fila.plazopago));
-           // $("#vacioEgr").val("?????????????????????")
+            $("#pedido").val(fila.clientePedido)
             $("#obs_egr").val(fila.obs);
-            $("#numeromovimiento").html(fila.n);
-            $("#nombreModal").html(fila.tipomov);
-            /***pendienteaprobado***/
-            var boton="";
-            //if(fila.estado=="0")
-               // boton='<button type="button" class="btn btn-success" datastd="'+fila.idIngresos+'" id="btnaprobado">Aprobado</button>';
-            //else
-              //  boton='<button type="button" class="btn btn-danger" datastd="'+fila.idIngresos+'" id="btnpendiente">Pendiente</button>';
-            var csFact="Sin factura";
-            if(fila.nfact!="SF")
-                csFact="Con factura";
-
-
-            $("#pendienteaprobado").html(boton);
-            $("#totalsusdetalle").val();
-            $("#totalbsdetalle").val(totalnn);
-            $("#titulo_modalIgresoDetalle").html(" - "+fila.tipomov+ " - "+csFact);
             $("#modalEgresoDetalle").modal("show");
-
-           //$("#nrofactura").html("")                    
-            var cadena=""
-            $.each(fila.factura,function(index,val){
-
-                cadena+="<option>"+val.nFactura+"</option>"
-            })
-            $("#facturasnum").html(cadena);                   
-
         }
     })
 }
-function mostrarDetalle(res)
-{
+
+function mostrarDetalle(res) {
     //console.log(res)
     $("#tTraspasodetalle").bootstrapTable('destroy');
-        $("#tTraspasodetalle").bootstrapTable({
+    $("#tTraspasodetalle").bootstrapTable({
 
-            data:res,
-            striped:true,
-            pagination:true,
-            clickToSelect:true,
-            search:false,
-            columns:[
-            {
+        data: res,
+        striped: true,
+        pagination: true,
+        clickToSelect: true,
+        search: false,
+        columns: [{
                 field: 'CodigoArticulo',
                 title: 'Código',
                 align: 'center',
-                width:'100px',
-                sortable:true,
+                width: '100px',
+                sortable: true,
             },
             {
                 field: 'Descripcion',
                 title: 'Descripcion',
-                sortable:true,
+                sortable: true,
             },
             {
-                field:'cantidad',
-                title:"Cantidad",
+                field: 'cantidad',
+                title: "Cantidad",
                 align: 'right',
-                width:'100px',
-                sortable:true,
+                width: '100px',
+                sortable: true,
             },
             {
-                field:'punitario',
-                title:"P/U Bs",
+                field: 'punitario',
+                title: "P/U Bs",
                 align: 'right',
-                width:'100px',
-                sortable:true,
+                width: '100px',
+                visible: false,
+                sortable: true,
             },
             {
-                field:'total',
-                title:"Total",
+                field: 'total',
+                title: "Total",
                 align: 'right',
-                width:'100px',
-                sortable:true,
+                width: '100px',
+                visible: false,
+                sortable: true,
             },
 
-            ]
-        });
+        ]
+    });
 }
 
-function restornardatosSelect(res)
-{
+function restornardatosSelect(res) {
 
     let origen = new Array()
     let destino = new Array()
     let estado = new Array()
-    let datos =new Array()
-    $.each(res, function(index, value){
+    let datos = new Array()
+    $.each(res, function (index, value) {
 
         origen.push(value.origen)
         destino.push(value.destino)
@@ -390,9 +323,13 @@ function restornardatosSelect(res)
     datos.push(origen.unique())
     datos.push(destino.unique())
     datos.push(estado.unique())
-    console.log(datos);    
-    return(datos);
+    console.log(datos);
+    return (datos);
 }
-Array.prototype.unique=function(a){
-  return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
+Array.prototype.unique = function (a) {
+    return function () {
+        return this.filter(a)
+    }
+}(function (a, b, c) {
+    return c.indexOf(a, b + 1) < 0
 });
