@@ -2,8 +2,10 @@ let glob_factorIVA = 0.87;
 let glob_factorRET = 0.087;
 let loc_almacen;
 let alm = 0
-let hoy = moment().format('DD-MM-YYYY, hh:mm:ss a');
+let hoy = moment().format('DD-MM-YYYY');
 let articulos = []
+let checkTipoCambio = false
+
 $(document).ready(function () {
     alm = $("#almacen_ori").val();
     $('.fecha_traspaso').daterangepicker({
@@ -13,7 +15,6 @@ $(document).ready(function () {
         singleDatePicker: true,
         startDate: hoy,
         showDropdowns: true,
-        timePicker: true
     });
     loc_almacen = $("#almacen_imp").val();
 })
@@ -45,7 +46,60 @@ $(document).on("change", "#almacen_ori", function () {
     alm = $("#almacen_ori").val();
     console.log(alm);
 });
+$(document).on("change", "#fechamov_ne", function () {
+    let fecha = $('#fechamov_ne').val()
+    if (hoy == fecha) {
+        checkTipoCambio = true
+    } else {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: base_url("index.php/Egresos/consultarTipoCambio"),
+            dataType: "json",
+            data: {
+                fecha: fecha
+            },
+            success: function(data) {
 
+                data ? checkTipoCambio = data : checkTipoCambio = false
+               
+            }
+        });
+        if (checkTipoCambio == false) {
+            mostrarModal()
+        } else {
+            glob_tipoCambio = checkTipoCambio.tipocambio
+            console.log(checkTipoCambio.fecha+ ' - ' +glob_tipoCambio)
+        }
+    }
+})
+$(document).on("click", "#setTipoCambio", function () {
+    let fecha = $('#fechamov_ne').val()
+    let tc = $('#tipocambio').val()
+    if (!tc || tc == 0) {
+        swal("Atencion!", "Ingrese tipo cambio valido")
+        return false
+    }
+    $.ajax({
+        type: "POST",
+        url: base_url("index.php/Configuracion/updateTipoCambio"),
+        dataType: "json",
+        data: {
+            id: 'egreso',
+            fechaCambio: fecha,
+            tipocambio: tc
+        },
+        success: function(data) {
+            console.log(data);
+            checkTipoCambio = true
+            glob_tipoCambio = data.TipoCambio
+            console.log(glob_tipoCambio);
+            $('#modalTipoCambio').modal('hide')
+            swal("Atencion!", "Agrego un tipo de cambio para" + formato_fecha_corta(data.fecha))
+            $('#tipocambio').val('')
+        }
+    });
+})
 $(document).ready(function () {
 
     $(".tiponumerico").inputmask({
@@ -59,7 +113,7 @@ $(document).ready(function () {
     var glob_guardar = false;
     calcularTotal()
 })
-/*******************ARTICULO TEST*****************/
+/*******************ARTICULO*****************/
 $(function () {
    $("#articulo_impTest").autocomplete({
         minLength: 2,
@@ -350,9 +404,10 @@ function guardarmovimiento() {
     let tablaaux = tablatoarray();
     let almOrigen = $("#almacen_ori").val();
     let almDestino = $("#almacen_des").val();
-
-    console.log(valuesToSubmit);
-    console.log(tablaaux);
+    if (!checkTipoCambio) {
+        swal("Error", "No se tiene tipo de cambio para esta Fecha", "error")
+        return false;
+    }
     if (almOrigen === almDestino) {
         swal("Error", "Almacen de destino es el mismo que el origen", "error")
     } else if (almDestino === "") {
@@ -500,6 +555,11 @@ function recuperarTraspaso() // X
         alert("no se tiene datos en la tabla para guardar")
     }
 }
+function mostrarModal()
+{
+    $('#modalTipoCambio').modal('show');
+}
+
 function tablatoarray()
 {
     var tabla=new Array()
