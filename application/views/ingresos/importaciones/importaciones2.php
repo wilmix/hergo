@@ -345,7 +345,7 @@
             <div class="row">
                 <div class="col-xs-12">
                 <?php if ($cont): ?>
-                    <button type="button" class="btn btn-primary" id="actualizarMovimiento">Actualizar Movimiento</button>
+                    <button type="button" class="btn btn-primary" id="actualizarMovimiento">Modificar Movimiento</button>
                       <?php if ($dcab->anulado==0): ?>
                         <button type="button" class="btn btn-warning" id="anularMovimiento">Anular Movimiento</button>  
                       <?php else: ?>

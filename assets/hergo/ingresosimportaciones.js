@@ -504,16 +504,18 @@ function updateIngreso()
             contentType: false,
             processData: false,
             success: function (returndata) {
+                console.log(returndata);
+                console.log(parseInt(returndata));
                 swal({
-                    title: "Ingreso realizado!",
-                    text: "El ingreso se guardo con éxito",
+                    title: "Ingreso modificado!",
+                    text: "El ingreso se modificó con éxito",
                     type: "success",        
                     allowOutsideClick: false,                                                                        
                     }).then(function(){
                         console.log(returndata)
                         window.location.href=base_url("Ingresos");
-                        //let imprimir = base_url("pdf/Ingresos/index/") + returndata;
-                        //window.open(imprimir);
+                        let imprimir = base_url("pdf/Ingresos/index/") + returndata;
+                        window.open(imprimir);
                     })
             },
             error : function (returndata) {

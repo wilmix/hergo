@@ -464,7 +464,8 @@ function actualizarMovimiento() {
         var tabla = JSON.stringify(tablaaux);
 
         valuesToSubmit += "&tabla=" + tabla;
-        retornarajax(base_url("index.php/Traspasos/actualizar"), valuesToSubmit, function (data) {
+        console.log(valuesToSubmit);
+        /*retornarajax(base_url("index.php/Traspasos/actualizar"), valuesToSubmit, function (data) {
             estado = validarresultado_ajax(data);
             if (estado) {
                 if (data.respuesta) {
@@ -482,7 +483,7 @@ function actualizarMovimiento() {
                 }
 
             }
-        })
+        })*/
     } else {
         alert("no se tiene datos en la tabla para guardar")
     }

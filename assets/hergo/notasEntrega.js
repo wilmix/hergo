@@ -334,7 +334,6 @@ function guardarmovimiento() {
 function actualizarMovimiento() {
     let valuesToSubmit = $("#form_egreso").serialize();
     let articulos = $("#tablaEditarEgreso").bootstrapTable('getData');
-    console.log(articulos);
     if (articulos.length > 0) {
         let tabla = JSON.stringify(articulos);
         valuesToSubmit += "&tabla=" + tabla;
@@ -342,7 +341,7 @@ function actualizarMovimiento() {
             estado = validarresultado_ajax(data);
             if (estado) {
                 if (data.respuesta) {
-                    console.log(data.respuesta);
+                    console.log(data.respuesta.id);
                     swal({
                         title: 'Modificación realizada!',
                         html: 'La modificación se realizó con éxito!',
@@ -351,6 +350,8 @@ function actualizarMovimiento() {
                         confirmButtonText: 'Ok',
                     }).then((result) => {
                         window.location.href = base_url("Egresos")
+                        let imprimir = base_url("pdf/Egresos/index/") + data.respuesta.id;
+                            window.open(imprimir)
                     })
                 } else {
                     swal(

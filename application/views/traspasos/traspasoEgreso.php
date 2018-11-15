@@ -83,7 +83,7 @@ input[type=date]::-webkit-inner-spin-button {
               <!--ALMACEN DESTINO-->
               <div class=" col-xs-6 col-sm-6 col-md-3">
                 <label>Almacen Destino:</label>
-                <select autofocus class="form-control form-control-sm" id="almacen_des" name="almacen_des" <?=($cont)?"disabled":""
+                <select <?=($cont)?"":"autofocus" ?> class="form-control form-control-sm" id="almacen_des" name="almacen_des" <?=($cont)?"disabled":""
                   ?>>
                   <option value="">SELECCIONE ALMACEN</option>
                   <?php foreach ($almacen->result_array() as $fila): ?>
@@ -100,7 +100,7 @@ input[type=date]::-webkit-inner-spin-button {
               <div class="col-xs-6 col-sm-6 col-md-2">
                 <label>Fecha:</label>
                 <input id="fechamov_ne" type="text" class="form-control form-control-sm fecha_traspaso" name="fechamov_ne"
-                  placeholder="Fecha" value="<?= ($cont)?$newDate:''  ?>" <?=($cont)?"disabled":"" ?>>
+                  placeholder="Fecha" value="<?= ($cont)?$newDate:''  ?>" <?=($cont)?"autofocus":"" ?>>
               </div>
               <div>
                 <label class="hidden">Moneda:</label>
@@ -188,7 +188,7 @@ input[type=date]::-webkit-inner-spin-button {
             <table class="table table-condensed table-bordered table-striped" data-show-columns="true">
               <thead>
                 <tr>
-                  <th>id</th>
+                  <th class="col-sm-1"> id</th>
                   <th class="col-sm-1">Código</th>
                   <th class="col-sm-7">Artículo</th>
                   <th class="col-sm-1" class="text-right">Cantidad</th>
@@ -202,33 +202,27 @@ input[type=date]::-webkit-inner-spin-button {
                 <?php foreach ($detalle as $fila): ?>
                 <?php 
                             $punitariofac= $fila['cantidad']==""?0:$fila['cantidad'];
-                            //$punitariofac=$fila['totaldoc'] / $punitariofac;
                           ?>
                 <tr>
-                  <td></td>
-                  <td><input type="text" class="estilofila" disabled value="<?= $fila['CodigoArticulo'] ?>"></input></td>
-                  <td><input type="text" class="estilofila" disabled value="<?= $fila['Descripcion'] ?>"></input</td>
-                      <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['cantidad'] ?>"></input></td>
-                  <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['punitario']?>"></input></td>
-                  <!--nuevo-->
-
-                  <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="<?= $fila['total'] ?>"></input></td>
-                  <!--<td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value=""></input></td>-->
-                  <!--nuevo-->
-                  <td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align"><span
-                        class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
+                  <td><input type="text" class="estilofila" disabled value="<?= $fila['idArticulos'] ?>"></td>
+                  <td><input type="text" class="estilofila" disabled value="<?= $fila['CodigoArticulo'] ?>"></td>
+                  <td><input type="text" class="estilofila" disabled value="<?= $fila['Descripcion'] ?>"></td>
+                  <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['cantidad'] ?>"></td>
+                  <td class="text-right"><input type="text" class="estilofila tiponumerico" disabled value="<?= $fila['punitario']?>"></td>
+                  <td class="text-right"><input type="text" class="totalCosto estilofila tiponumerico" disabled value="<?= $fila['total'] ?>"></td>
+                  <td><button type="button" class="btn btn-default eliminarArticulo" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                      </button>
+                  </td>
                 </tr>
                 <?php endforeach ?>
                 <?php endif ?>
-
               </tbody>
             </table>
           </div>
-          <!--div class="table-responsive"-->
 
           <div class="form-group row">
             <div class="col-md-6 col-xs-12">
-
             </div>
             <div class="col-md-6 col-xs-12">
               <div class="input-group col-md-12 col-xs-12">
@@ -255,7 +249,7 @@ input[type=date]::-webkit-inner-spin-button {
           <div class="row">
             <div class="col-xs-12">
               <?php if ($cont): ?>
-              <button type="button" class="btn btn-primary" id="actualizarMovimiento">Actualizar Traspaso</button>
+              <button type="button" class="btn btn-primary" id="actualizarMovimiento">Modificar Traspaso</button>
               <?php if ($dcab->anulado==0): ?>
               <button type="button" class="btn btn-warning" id="anularTraspaso">Anular Traspaso</button>
               <?php else: ?>

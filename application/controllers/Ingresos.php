@@ -712,10 +712,11 @@ class Ingresos extends CI_Controller
 			$ingreso->fecha = date('Y-m-d H:i:s');
 
 			$id = $this->Ingresos_model->updateIngreso($idIngresos, $ingreso);
+			$id = intval($id);
 
 			if($id)
         	{
-				echo json_encode($idIngresos);
+				echo json_encode($id);
         	}
 			else
 			{				

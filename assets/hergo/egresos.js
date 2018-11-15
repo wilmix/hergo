@@ -512,9 +512,9 @@ window.operateEvents = {
         }
     },
     'click .editarEgresoTraspaso': function (e, value, row, index) {
-        //console.log(row.idIngresos);
-        var editar = base_url("Traspasos/edicion/") + row.idEgresos;
-        if (row.estado == '') {
+        console.log(row);
+        var editar = base_url("Traspasos/modificarTraspaso/") + row.idEgresos;
+        if (row.estado == 'TRASPASO') {
             window.location.href = editar;
         } else {
             swal("Error", "No se puede editar el registro seleccionado. El registro ya se encuentra Facturado.", "error")

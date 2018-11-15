@@ -98,12 +98,12 @@ class Articulos extends CI_Controller
         	if($id=="")
         	{
         		$nom_imagen=$this->subir_imagen($id,$_FILES);
-        		$this->Articulo_model->agregarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen);
+        		$this->Articulo_model->agregarArticulo_model($id,strtoupper($codigo) ,strtoupper($descripcion),$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen);
         	}
         	else
         	{
         		$nom_imagen=$this->subir_imagen($id,$_FILES);
-        		$this->Articulo_model->editarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen);
+        		$this->Articulo_model->editarArticulo_model($id,strtoupper($codigo),strtoupper($descripcion),$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen);
         	}
         }
         echo "{}";       

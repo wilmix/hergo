@@ -78,7 +78,7 @@ class Traspasos_model extends CI_Model
 	}
 	public function obtenerUltimoTraspaso($idEgreso)
 	{
-		$sql="SELECT t.idTraspasos, a.almacen as origen,b.almacen as destino,t.estado,t.fecha, t.total,a.idalmacen as idorigen,b.idalmacen as iddestino, t.idIngreso, t.idEgreso
+		$sql="SELECT t.idTraspasos, a.almacen as origen,b.almacen as destino,a.idalmacen as idorigen,b.idalmacen as iddestino, t.idIngreso, t.idEgreso
 		FROM traspasos t
 		INNER JOIN ingresos i
 		ON t.idIngreso=i.idIngresos
