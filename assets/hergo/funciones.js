@@ -367,19 +367,7 @@ Array.prototype.fuzzy = function (search) {
   }, this);
   return _return;
 };
-/*****************************************************************/
-/*****************************************************************/
-/*****************************************************************/
-function cargarArticulos() {
-  $.ajax({
-    url: base_url("index.php/Ingresos/retornarTodosArticulos"),
-    dataType: "json",
-    success: function (data) {
-      glob_art = data;
 
-    }
-  });
-}
 
 function mantenerMenu() {
   var pathname = window.location.pathname;

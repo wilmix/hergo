@@ -22,7 +22,6 @@ $(document).ready(function(){
         showDropdowns: true
       });    
     loc_almacen= $("#almacen_imp").val();   
-    cargarArticulos(); 
     if ($("#tipoDoc").val() == 1 || $("#tipoDoc").val() == 3) {
         $(".tipoDocumento").removeClass("hidden")
     } 
