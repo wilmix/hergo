@@ -2,7 +2,7 @@ $(document).ready(function() {
     tituloReporte()
     $('#articulos_filtro').select2({
         theme: "classic",
-        maximumSelectionLength: 2
+       // maximumSelectionLength: 2
     })
 })
 $(document).on("click", "#kardex", function () {
@@ -30,11 +30,6 @@ $(document).on("change", "#almacen_filtro", function () {
 function retornarKardex() {
     let alm = $("#almacen_filtro").val()
     let art = $("#articulos_filtro").val()
-    let a = art[0]
-    let b = art[1]
-    if (!b) {
-        b = a
-    }
     agregarcargando();
     $.ajax({
         type: "POST",
@@ -42,8 +37,7 @@ function retornarKardex() {
         dataType: "json",
         data: {
             alm: alm,
-            a: a,
-            b:b
+            art: art,
         },
     }).done(function (res) {
         for (let i = 0; i < res.length; i++) {

@@ -697,28 +697,54 @@ class Reportes extends CI_Controller
 		if($this->input->is_ajax_request())
         {
 			$alm=$this->security->xss_clean($this->input->post("alm"));
-			$a=$this->security->xss_clean($this->input->post("a"));
-			$b=$this->security->xss_clean($this->input->post("b"));
+			$art=$this->input->post("art");
+			$lenght = count($art);
 			$kardex = [];
-			$articulos = $this->Reportes_model->getArticulosID($a, $b)->result();
-			//$res=$this->Reportes_model->showKardexIndividual($a, $b); 
-			foreach ($articulos as $articulo) {
-				$arr = [];
-				$articuloKardex = $this->Reportes_model->mostrarKardexIndividual($articulo->id,$alm);
-				$articuloKardex->next_result();
-				$articuloKardex->result();
-				array_push($arr, 	$articulo->codigo, 
-									$articulo->descrip, 
-									$articulo->unidad,
-									$articulo->marca,
-									$articulo->linea,
-									$articuloKardex->result_object);
-				array_push($kardex, $arr);
+			if ($lenght < 3) {
+				if ($lenght == 1) {
+					$a = $art[0];
+					$b = $a;
+				} else {
+					$a = $art[0];
+					$b = $art[1];
+				}
+				$articulos = $this->Reportes_model->getArticulosID($a, $b)->result();
+				foreach ($articulos as $articulo) {
+					$arr = [];
+					$articuloKardex = $this->Reportes_model->mostrarKardexIndividual($articulo->id,$alm);
+					$articuloKardex->next_result();
+					$articuloKardex->result();
+					array_push($arr, 	$articulo->codigo, 
+										$articulo->descrip, 
+										$articulo->unidad,
+										$articulo->marca,
+										$articulo->linea,
+										$articuloKardex->result_object);
+					array_push($kardex, $arr);
+				}
+				echo json_encode($kardex);
+			} else if ($lenght > 2){
+				$articulos = [];
+				$codigos = $art;
+				foreach ($codigos as $codigo) {
+					$datos = $this->Reportes_model->getArticulosID($codigo, $codigo)->row();
+					array_push($articulos, $datos);  
+				}
+				foreach ($articulos as $articulo) {
+					$arr = [];
+					$articuloKardex = $this->Reportes_model->mostrarKardexIndividual($articulo->id,$alm);
+					$articuloKardex->next_result();
+					$articuloKardex->result();
+					array_push($arr, 	$articulo->codigo, 
+										$articulo->descrip, 
+										$articulo->unidad,
+										$articulo->marca,
+										$articulo->linea,
+										$articuloKardex->result_object);
+					array_push($kardex, $arr);
+				}
+				echo json_encode($kardex);
 			}
-
-			
-			echo json_encode($kardex);
-			//echo json_encode($kardex[0]->result_object);
 		}
 		else
 		{
