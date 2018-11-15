@@ -454,14 +454,67 @@ function guardarmovimiento() {
     }
 
 }
+function updateTraspaso() {
+    let valuesToSubmit = $("#form_egreso").serialize();
+    let tablaaux = tablatoarray();
+    let almOrigen = $("#almacen_ori").val();
+    let almDestino = $("#almacen_des").val();
+    if (!checkTipoCambio) {
+        swal("Error", "No se tiene tipo de cambio para esta Fecha", "error")
+        return false;
+    }
+    if (almOrigen === almDestino) {
+        swal("Error", "Almacen de destino es el mismo que el origen", "error")
+    } else if (almDestino === "") {
+        swal("Error", "Seleccione almacen de destino", "error")
+    } else {
+        console.log('ajax');
 
+        if (tablaaux.length > 0 && !(almOrigen === almDestino)) {
+            let tabla = JSON.stringify(tablaaux);
+
+            valuesToSubmit += "&tabla=" + tabla;
+            console.log(tabla);
+
+            retornarajax(base_url("index.php/Traspasos/updateTraspaso"), valuesToSubmit, function (data) {
+                estado = validarresultado_ajax(data);
+                console.log(data);
+                if (estado) {
+                    if (data.respuesta) {
+
+                        $("#modalIgresoDetalle").modal("hide");
+                        limpiarArticulo();
+                        limpiarCabecera();
+                        limpiarTabla();
+                        swal({
+                            title: 'Traspaso modificado!',
+                            text: "Traspaso modificado con éxito",
+                            type: 'success',
+                            showCancelButton: false
+                        }).then(
+                            function (result) {
+                                window.location.href = base_url("Traspasos")
+                            });
+                    } else {
+                        $(".mensaje_error").html("Error al almacenar los datos, intente nuevamente");
+                        $("#modal_error").modal("show");
+                    }
+
+                }
+            })
+        } else {
+
+            swal("Error", "No se tiene datos para guardar. ", "error")
+        }
+    }
+    
+}
 function actualizarMovimiento() {
-    var valuesToSubmit = $("#form_egreso").serialize();
-    var tablaaux = tablatoarray();
-    console.log(valuesToSubmit)
-    console.log(tablaaux);
+    let valuesToSubmit = $("#form_egreso").serialize();
+    let tablaaux = tablatoarray();
+
     if (tablaaux.length > 0) {
-        var tabla = JSON.stringify(tablaaux);
+        let tabla = JSON.stringify(tablaaux);
 
         valuesToSubmit += "&tabla=" + tabla;
         console.log(valuesToSubmit);
@@ -592,7 +645,8 @@ $(document).on("click", "#cancelarMovimiento", function () {
     window.location.href = base_url("Ingresos");
 })
 $(document).on("click", "#actualizarMovimiento", function () {
-    actualizarMovimiento();
+    updateTraspaso();
+    console.log('update');
 })
 $(document).on("click", "#cancelarMovimientoActualizar", function () {
     window.location.href = base_url("Egresos");

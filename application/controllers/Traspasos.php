@@ -305,7 +305,61 @@ class Traspasos extends CI_Controller
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
-    }
+	}
+	public function updateTraspaso()
+	{
+		if($this->input->is_ajax_request())
+        {
+			$egreso = new stdclass();
+			$articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
+			$tabla=$this->convertirTablaEgresos($articulos);
+			$idEgreso = $this->security->xss_clean($this->input->post('idEgreso'));
+			$egreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_ne'));
+			$egreso->fechamov = date('Y-m-d',strtotime($egreso->fechamov));
+			$gestion = date('Y',strtotime($egreso->fechamov));
+			$egreso->moneda = $this->security->xss_clean($this->input->post('moneda_ne'));
+			$egreso->obs = $this->security->xss_clean($this->input->post('obs_ne'));
+			$egreso->plazopago = $this->security->xss_clean($this->input->post('fechamov_ne'));
+			$egreso->plazopago = date('Y-m-d',strtotime($egreso->plazopago));
+			$egreso->clientePedido = $this->security->xss_clean($this->input->post('pedido_ne'));       
+			$egreso->vendedor = $this->session->userdata('user_id');
+			$tipocambio = $this->Ingresos_model->getTipoCambio($egreso->fechamov);
+			$egreso->tipoCambio = floatval($tipocambio->tipocambio);
+			$egreso->autor = $this->session->userdata('user_id');
+			$egreso->fecha = date('Y-m-d H:i:s');
+			$egreso->gestion = $gestion;
+			$egreso->articulos = json_decode(json_encode($tabla),false);
+
+			$ingreso = new stdclass();
+			$idIngresos = $this->security->xss_clean($this->input->post('idIngreso'));
+			$ingreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_ne'));
+			$ingreso->fechamov = date('Y-m-d',strtotime($ingreso->fechamov));
+			$ingreso->ordcomp = $this->security->xss_clean($this->input->post('pedido_ne'));
+			$ingreso->moneda = $this->security->xss_clean($this->input->post('moneda_ne'));
+			$ingreso->obs = $this->security->xss_clean($this->input->post('obs_ne'));
+			$tipocambio=$this->Ingresos_model->getTipoCambio($ingreso->fechamov);
+			$ingreso->tipoCambio = $tipocambio->tipocambio;
+			$ingreso->autor=$this->session->userdata('user_id');
+			$ingreso->fecha = date('Y-m-d H:i:s');
+			$ingreso->articulos=$this->convertirTablaIngresos($articulos);
+			$ingreso->gestion = $gestion;
+
+			$updateTraspaso = $this->Traspasos_model->updateTraspaso($idIngresos, $ingreso,$idEgreso, $egreso);
+
+			if($updateTraspaso)
+        	{
+				echo json_encode($updateTraspaso);
+        	}
+			else
+			{				
+				echo json_encode(false);
+			}			
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
     public function actualizar()
     {
 

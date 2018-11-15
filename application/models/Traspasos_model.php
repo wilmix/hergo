@@ -140,6 +140,26 @@ class Traspasos_model extends CI_Model
             return $res;
         }
 	}
+	public function updateTraspaso($idIng, $ingreso,$idEgre, $egreso)
+	{	
+        $this->db->trans_start();
+			$this->Egresos_model->updateEgreso($idEgre, $egreso);
+			$this->Ingresos_model->updateIngreso($idIng, $ingreso);
+
+			$this->db->set('estado', '0');
+			$this->db->where('idIngresos', $idIng);
+			$this->db->update('ingresos');
+
+
+		$this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        } else {
+            
+            return true;
+        }
+	}
   
 
 }

@@ -512,17 +512,20 @@ function verdetalle(fila) {
                 boton = '<button type="button" class="btn btn-danger" datastd="' + fila.idIngresos + '" id="btnpendiente">Pendiente</button>';
             }    
             let csFact = "";
-            if (fila.nfact == "SF") {
+            if (fila.tipoDoc == "SIN FACTURA") {
                 csFact = "Sin factura"
             } else if (fila.tipomov == "Traspaso de Almacen") {
-                if (fila.estado==1) {
+                if (fila.estado=='APROBADO') {
                     csFact = "Aprobado"
                 } else {
                     csFact = "Pendiente"
                 }
+            } else if (fila.tipoDoc == "EN TRANSITO"){
+                csFact = "Documentos en Transito"
             } else {
                 csFact = "Con factura"
             }
+
             totaldoc = totaldoc * 100 / 100;
             totaldoc = totaldoc.toFixed(2);
             totalsis = totalsis * 100 / 100;

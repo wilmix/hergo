@@ -60,6 +60,7 @@ input[type=date]::-webkit-inner-spin-button {
             <!-- formulario PRIMERA FILA-->
             <?php if ($cont): ?>
             <input id="idegreso" name="idegreso" type="text" class="hidden" hidden value="<?= $dcab->idEgresos ?>">
+            
             <?php endif ?>
 
             <div class="row filacabecera">
