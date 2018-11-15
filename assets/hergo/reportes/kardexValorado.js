@@ -5,12 +5,6 @@ $(document).ready(function() {
        // maximumSelectionLength: 2
     })
 })
-$(document).on("click", "#kardex", function () {
-    tituloReporte();
-    
-    //retornarKardex();
-    
-})
 $(document).on("click", "#refresh", function () {
     tituloReporte();
     $('#tablas').empty();
@@ -18,8 +12,6 @@ $(document).on("click", "#refresh", function () {
 })
 $(document).on("change", "#articulos_filtro", function () {
     tituloReporte();
-    //retornarKardex();
-    console.log($('#articulos_filtro').val());
 })
 $(document).on("change", "#almacen_filtro", function () {
     tituloReporte();
@@ -31,6 +23,10 @@ $(document).on("change", "#almacen_filtro", function () {
 function retornarKardex() {
     let alm = $("#almacen_filtro").val()
     let art = $("#articulos_filtro").val()
+    if (!art) {
+        swal("Atencion!", "Seleccióne al menos un artículo")
+        return false
+    }
     agregarcargando();
     $.ajax({
         type: "POST",
@@ -45,9 +41,7 @@ function retornarKardex() {
             let codigo = res[i][0]
             let descrip = res[i][1]
             let unidad = res[i][2]
-            let marca = res[i][3]
-            let sigla = res[i][4]
-            let element = res[i][5]
+            let element = res[i][3]
             $("#tablas").append(`   
             <div class="box">
                 <div class="box-header">

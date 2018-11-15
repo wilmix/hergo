@@ -717,8 +717,8 @@ class Reportes extends CI_Controller
 					array_push($arr, 	$articulo->codigo, 
 										$articulo->descrip, 
 										$articulo->unidad,
-										$articulo->marca,
-										$articulo->linea,
+										//$articulo->marca,
+										//$articulo->linea,
 										$articuloKardex->result_object);
 					array_push($kardex, $arr);
 				}
@@ -738,8 +738,8 @@ class Reportes extends CI_Controller
 					array_push($arr, 	$articulo->codigo, 
 										$articulo->descrip, 
 										$articulo->unidad,
-										$articulo->marca,
-										$articulo->linea,
+										//$articulo->marca,
+										//$articulo->linea,
 										$articuloKardex->result_object);
 					array_push($kardex, $arr);
 				}

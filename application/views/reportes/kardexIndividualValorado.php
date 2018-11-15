@@ -11,7 +11,7 @@
                         <?php endforeach ?>
                         <option value="">TODOS</option>
                     </select>
-                    <select class="form-control"  data-style="btn-primary" id="articulos_filtro" name="articulos_filtro" multiple="multiple">
+                    <select class="form-control"  data-style="btn-primary" id="articulos_filtro" name="articulos_filtro" multiple="multiple" style="width: 50%">
                         <?php foreach ($articulos->result_array() as $fila): ?>
                         <option value=<?= $fila['CodigoArticulo'] ?> ><?= $fila['CodigoArticulo'].' | '.$fila['Descripcion'] ?></option>
                         <?php endforeach ?>

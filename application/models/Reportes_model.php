@@ -270,11 +270,8 @@ class Reportes_model extends CI_Model
 	public function getArticulosID($a,$b) 
 	{ 
 	
-			$sql="SELECT a.`idArticulos` id, a.`CodigoArticulo` codigo, a.`Descripcion` descrip , u.`Sigla` unidad, m.`Marca` marca, l.`Sigla` linea
-			FROM articulos a
-			INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
-			INNER JOIN marca m ON m.`idMarca` = a.`idMarca` 
-			INNER JOIN linea l ON l.`idLinea` = a.`idLinea`
+			$sql="SELECT a.`idArticulos` id, a.`CodigoArticulo` codigo, a.`Descripcion` descrip, a.`Sigla` unidad
+			FROM hergo2.articulos_activos a
 			WHERE a.`CodigoArticulo` BETWEEN '$a' AND '$b'
 			ORDER BY a.`CodigoArticulo`;";
 		$query=$this->db->query($sql);		
