@@ -23,6 +23,7 @@ $(document).on("change", "#articulos_filtro", function () {
 })
 $(document).on("change", "#almacen_filtro", function () {
     tituloReporte();
+    $('#tablas').empty();
     retornarKardex();
 })
 
