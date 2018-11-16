@@ -24,6 +24,7 @@
             $fax = $this->datos['fax'];
             $idTipoMov = $this->datos['idTipoMov'];
             $almDes = $this->datos['almDes'];
+            $nIng = $this->datos['nIng'];
 
             //TITULO
             $this->SetXY(10,10);
@@ -46,12 +47,12 @@
             
                 //****ENCABEZADO****
                 if ($idTipoMov == '8') {
-                    $this->SetXY(80,25);
+                    $this->SetXY(80,22);
                     $this->SetFont('Arial','B',12);
                     $this->Cell(20,6, utf8_decode('Origen:'),0,0,'');
                     $this->SetFont('Arial','',12);
                     $this->Cell(150, 6, utf8_decode($almacen), 0,0,'L');
-                    $this->SetXY(80,32);
+                    $this->SetXY(80,28);
                     $this->SetFont('Arial','B',12);
                     $this->Cell(20,6, utf8_decode('Destino:'),0,0,'');
                     $this->SetFont('Arial','',12);
@@ -86,8 +87,10 @@
                 }
                 
                     if ($idTipoMov == '8') {
-
-                            $this->Ln(6);
+                            $this->SetXY(170,25);
+                            $this->SetFont('Arial','B',15);
+                            $this->Cell(35,8,utf8_decode('IT - '.$nIng),1,1,'C');
+                            $this->Ln(4);
                     } else {
                             //factura n
                             $this->SetXY(170,27);
@@ -99,7 +102,7 @@
                             $this->Ln(10);
                     }
                     
-                    
+
                     //ENCABEZADO TABLA
                     $this->SetX(10);
                     $this->Ln(1);

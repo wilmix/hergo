@@ -28,6 +28,7 @@ class Egresos extends CI_Controller {
         'moneda' => $egreso->moneda,
         'vendedor'=> $egreso->vendedor,
         'almDes'=>$egreso->almDes,
+        'nIng'=>$egreso->nIng,
         'idTipoMov'=>$egreso->idtipomov,
         'userName' => $this->session->userdata['nombre']
     );
