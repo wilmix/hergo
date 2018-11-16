@@ -562,5 +562,51 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-
+	public function mostrarReporteEgreso ($ini=null,$fin=null,$alm="",$tin="") 
+	{ 
+		$sql="SELECT id,
+		codigo,
+		siglaMov, 
+		almacen, 
+		tipomov,  
+		cliente, 
+		fecha, 
+		fechamov, 
+		nmov,  
+		descripcion, 
+		uni, 
+		mon, 
+		SUM(cantidad) cantidad,
+		punitario,
+		SUM(total) total,
+		SUM(totalDolares) totalDolares,
+		nombreAlmacen
+		FROM
+		(
+			SELECT 	ed.`idingdetalle` id, e.`almacen`,e.`tipomov`, tm.`tipomov` siglaMov, c.`nombreCliente` cliente, e.`fechamov`, e.`nmov`, 
+				a.`CodigoArticulo` codigo, a.`Descripcion` descripcion, 
+				u.`Sigla` uni, m.`sigla` mon, ed.`cantidad` , ed.`punitario`,
+				ROUND((ed.`punitario` * ed.`cantidad`),2) total, 
+				ROUND((ed.`punitario` /tc.`tipocambio`  * ed.`cantidad`),2) totalDolares,
+				e.`fecha` , al.`almacen` nombreAlmacen
+			FROM egredetalle ed
+				INNER JOIN egresos e ON e.`idegresos` = ed.`idegreso`
+				INNER JOIN articulos a ON a.`idArticulos` = ed.`articulo`
+				INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
+				INNER JOIN moneda m ON m.`id`= e.`moneda`
+				INNER JOIN tmovimiento tm ON tm.`id` = e.`tipomov`
+				INNER JOIN clientes c ON c.`idCliente` = e.`cliente`
+				INNER JOIN tipocambio tc ON tc.`fecha` = e.`fechamov`
+				INNER JOIN almacenes al ON al.`idalmacen` = e.`almacen`
+				WHERE  e.`fechamov` BETWEEN '$ini' AND '$fin'
+					AND e.`tipomov` LIKE '%$tin' 
+					AND e.`almacen` LIKE '%$alm' 
+					AND e.`anulado` = 0 
+			ORDER BY e.`almacen`, e.`tipomov` , cliente, nmov
+		)egr
+		GROUP BY  almacen,tipomov, cliente, id  WITH ROLLUP";
+		
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 }
