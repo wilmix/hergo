@@ -283,13 +283,13 @@ function guardarmovimiento() {
     let valuesToSubmit = $("#form_egreso").serialize()
     let articulos = $("#tablaEditarEgreso").bootstrapTable('getData')
     let tipoEgreso = $("#tipomov_ne2").text()
-    if ($("#_tipomov_ne").val() == 9)
-         auxContinuar = true
-    else
-         auxContinuar = false
-    if (!glob_guardar_cliente) {
+    if ($("#_tipomov_ne").val() == 9){
+        glob_guardar_cliente = true
+    } else {
+        if (!glob_guardar_cliente) {
         swal("Error", "Seleccione el cliente", "error")
         return false;
+        }
     }
     if (!checkTipoCambio) {
         swal("Error", "No se tiene tipo de cambio para esta Fecha", "error")
