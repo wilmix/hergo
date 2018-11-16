@@ -193,7 +193,10 @@ class Egresos extends CI_Controller
 
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
-
+			/**************EDITABLE***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-table-editable.js');
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.js');
 			$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
             $this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
 		  	$this->datos['fecha']=date('Y-m-d');
@@ -245,7 +248,11 @@ class Egresos extends CI_Controller
 
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
-
+			/**************EDITABLE***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-table-editable.js');
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.js');
+			
 			$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
             $this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
 		  	$this->datos['fecha']=date('Y-m-d');
