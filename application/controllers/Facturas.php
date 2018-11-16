@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once APPPATH."/third_party/codigoControl/CodigoControlV7.php";
 class Facturas extends CI_Controller
 {
 	private $datos;
@@ -646,7 +647,10 @@ class Facturas extends CI_Controller
 			$codigoControl = ($this->security->xss_clean($this->input->post('codigoControl')));
 			$articulos = ($this->security->xss_clean($this->input->post('tabla')));
 
-        	$datosFactura=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
+			$datosFactura=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
+			$numero_autorizacion = $datosFactura->autorizacion;
+			$clave = $datosFactura->llaveDosificacion;
+
 			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$datosFactura->idDatosFactura);
 			$cliente=$this->Cliente_model->obtenerCliente($idCliente);
 
@@ -673,6 +677,13 @@ class Facturas extends CI_Controller
 				}
 				$numeroFactura = intval($ultimaFactura->nFactura)+1;
 			}
+
+			$numero_factura = $numeroFactura;
+			$nit_cliente = trim($cliente->documento);
+			$fecha_compra = date('Ymd',strtotime($fechaFactura));
+			$monto_compra = round($total,0);
+			$codigoControlGenerado = CodigoControlV7::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, $monto_compra, $clave);
+
 			$factura = new stdclass();
 			$factura->lote = $datosFactura->idDatosFactura;
 			$factura->almacen = $idAlmacen;
@@ -682,7 +693,7 @@ class Facturas extends CI_Controller
 			$factura->moneda = $moneda;
 			$factura->total = $total;
 			$factura->glosa = $observaciones;
-			$factura->codigoControl = $codigoControl;
+			$factura->codigoControl =  ($datosFactura->manual == 1) ? '' : $codigoControlGenerado;
 			$factura->autor=$this->session->userdata('user_id');
         	$factura->fecha=date('Y-m-d H:i:s'); 
 			$factura->tipoCambio=$this->Egresos_model->retornarTipoCambio();
@@ -691,7 +702,7 @@ class Facturas extends CI_Controller
 			$factura->articulos = json_decode($articulos);
 			$idFactura = $this->Facturacion_model->storeFactura($factura);
 
-			echo ($idFactura);
+			echo json_encode($idFactura); 
         }
 		else
 		{
