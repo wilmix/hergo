@@ -152,7 +152,7 @@
               <li class="estadoVentasCostoItem"><a href="<?php echo base_url("reportes/estadoVentasCostoItem") ?>">Estado de Ventas y Costos</a></li>
               <li class="ventasClientesItems"><a href="<?php echo base_url("reportes/ventasClientesItems") ?>">Movimientos Item Cliente</a></li>
               <li class="reporteIngresos"><a href="<?php echo base_url("reportes/reporteIngresos") ?>">Reporte Ingresos</a></li>
-              <li class="reporteIngresos"><a href="<?php echo base_url("reportes/reporteEgresos") ?>">Reporte Egresos</a></li>
+              <li class="reporteEgresos"><a href="<?php echo base_url("reportes/reporteEgresos") ?>">Reporte Egresos</a></li>
 
           <!--
             <li><a href="<?php echo base_url("reportes/movimientosClientes") ?>">Movimientos Item Clientes</a></li>
