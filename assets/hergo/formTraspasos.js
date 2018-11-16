@@ -426,7 +426,6 @@ function guardarmovimiento() {
                 console.log(data);
                 if (estado) {
                     if (data.respuesta) {
-
                         $("#modalIgresoDetalle").modal("hide");
                         limpiarArticulo();
                         limpiarCabecera();
@@ -438,7 +437,8 @@ function guardarmovimiento() {
                             showCancelButton: false
                         }).then(
                             function (result) {
-                                //location.reload();
+                                let imprimir = base_url("pdf/Egresos/index/") + data.respuesta.egreso;
+                                window.open(imprimir);
                             });
                     } else {
                         $(".mensaje_error").html("Error al almacenar los datos, intente nuevamente");

@@ -153,6 +153,8 @@ function operateFormatter(value, row, index) {
     return [
         '<button type="button" class="btn btn-default verTraspaso" aria-label="Right Align" data-toggle="tooltip" title="Ver">',
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
+        '<button type="button" class="btn btn-default imprimirEgreso" aria-label="Right Align" data-toggle="tooltip" title="Imprimir">',
+        '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
     ].join('');
 }
 
@@ -230,8 +232,9 @@ window.operateEvents = {
     'click .verTraspaso': function (e, value, row, index) {
         verdetalle(row)
     },
-    'click .imprimirIngreso': function (e, value, row, index) {
-        //alert(JSON.stringify(row));
+    'click .imprimirEgreso': function (e, value, row, index) {
+        let imprimir = base_url("pdf/Egresos/index/") + row.idEgreso;
+        window.open(imprimir);
     }
 };
 

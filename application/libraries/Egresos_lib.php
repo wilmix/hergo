@@ -22,7 +22,8 @@
             $direccion = $this->datos['direccion'];
             $telefono = $this->datos['telefono'];
             $fax = $this->datos['fax'];
-            
+            $idTipoMov = $this->datos['idTipoMov'];
+            $almDes = $this->datos['almDes'];
 
             //TITULO
             $this->SetXY(10,10);
@@ -44,44 +45,61 @@
             $this->Ln(10);
             
                 //****ENCABEZADO****
-                //$this->SetX(15);
-                //proveedor
-                $this->SetFont('Arial','B',9);
-                $this->Cell(20,6, utf8_decode('Señores: '),0,0,'');
-                $this->SetFont('Arial','',9);
-                $this->Cell(100, 6, utf8_decode($nombreCliente), 0,0,'L');
-                $this->SetFont('Arial','B',9);
-                $this->Cell(10,6, utf8_decode('NIT: '),0,0,'');
-                $this->SetFont('Arial','',9);
-                $this->Cell(30, 6, $documento, 0,0,'L');
-                $this->Ln(6);
-                $this->SetFont('Arial','B',9);
-                $this->Cell(20,6, utf8_decode('Dirección: '),0,0,'');
-                $this->SetFont('Arial','',9);
-                $this->Cell(140, 6, utf8_decode($direccion), 0,0,'L');
-                $this->Ln(6);
-                $this->SetFont('Arial','B',9);
-                $this->Cell(20,6, utf8_decode('Teléfono: '),0,0,'');
-                $this->SetFont('Arial','',9);
-                $this->Cell(35, 6, $telefono, 0,0,'L');
-                $this->SetFont('Arial','B',9);
-                $this->Cell(10,6, utf8_decode('Fax: '),0,0,'');
-                $this->SetFont('Arial','',9);
-                $this->Cell(30, 6, $fax, 0,0,'L');
-                $this->SetFont('Arial','B',9);
-                $this->Cell(20,6, utf8_decode('Pedido No: '),0,0,'');
-                $this->SetFont('Arial','',9);
-                $this->Cell(45, 6, utf8_decode($clientePedido), 0,0,'L');
-                    //factura n
-                    $this->SetXY(170,27);
+                if ($idTipoMov == '8') {
+                    $this->SetXY(80,25);
                     $this->SetFont('Arial','B',12);
-                    $this->Cell(35,7,utf8_decode('FACTURA N°'),1,1,'C');
-                    $this->SetXY(170,34);
+                    $this->Cell(20,6, utf8_decode('Origen:'),0,0,'');
+                    $this->SetFont('Arial','',12);
+                    $this->Cell(150, 6, utf8_decode($almacen), 0,0,'L');
+                    $this->SetXY(80,32);
                     $this->SetFont('Arial','B',12);
-                    $this->Cell(35,10, '',1,0,'C');
-                    $this->Ln(10);
+                    $this->Cell(20,6, utf8_decode('Destino:'),0,0,'');
+                    $this->SetFont('Arial','',12);
+                    $this->Cell(150, 6, utf8_decode($almDes), 0,0,'L');
+                } else {
+                    $this->SetFont('Arial','B',9);
+                    $this->Cell(20,6, utf8_decode('Señores: '),0,0,'');
+                    $this->SetFont('Arial','',9);
+                    $this->Cell(100, 6, utf8_decode($nombreCliente), 0,0,'L');
+                    $this->SetFont('Arial','B',9);
+                    $this->Cell(10,6, utf8_decode('NIT: '),0,0,'');
+                    $this->SetFont('Arial','',9);
+                    $this->Cell(30, 6, $documento, 0,0,'L');
+                    $this->Ln(6);
+                    $this->SetFont('Arial','B',9);
+                    $this->Cell(20,6, utf8_decode('Dirección: '),0,0,'');
+                    $this->SetFont('Arial','',9);
+                    $this->Cell(140, 6, utf8_decode($direccion), 0,0,'L');
+                    $this->Ln(6);
+                    $this->SetFont('Arial','B',9);
+                    $this->Cell(20,6, utf8_decode('Teléfono: '),0,0,'');
+                    $this->SetFont('Arial','',9);
+                    $this->Cell(35, 6, $telefono, 0,0,'L');
+                    $this->SetFont('Arial','B',9);
+                    $this->Cell(10,6, utf8_decode('Fax: '),0,0,'');
+                    $this->SetFont('Arial','',9);
+                    $this->Cell(30, 6, $fax, 0,0,'L');
+                    $this->SetFont('Arial','B',9);
+                    $this->Cell(20,6, utf8_decode('Pedido No: '),0,0,'');
+                    $this->SetFont('Arial','',9);
+                    $this->Cell(45, 6, utf8_decode($clientePedido), 0,0,'L');
+                }
                 
+                    if ($idTipoMov == '8') {
 
+                            $this->Ln(6);
+                    } else {
+                            //factura n
+                            $this->SetXY(170,27);
+                            $this->SetFont('Arial','B',12);
+                            $this->Cell(35,7,utf8_decode('FACTURA N°'),1,1,'C');
+                            $this->SetXY(170,34);
+                            $this->SetFont('Arial','B',12);
+                            $this->Cell(35,10, '',1,0,'C');
+                            $this->Ln(10);
+                    }
+                    
+                    
                     //ENCABEZADO TABLA
                     $this->SetX(10);
                     $this->Ln(1);

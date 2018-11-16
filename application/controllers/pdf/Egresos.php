@@ -27,7 +27,8 @@ class Egresos extends CI_Controller {
         'fax' => $egreso->fax,
         'moneda' => $egreso->moneda,
         'vendedor'=> $egreso->vendedor,
-        //'tipoCambio'=>$egreso->tipocambiovalor,
+        'almDes'=>$egreso->almDes,
+        'idTipoMov'=>$egreso->idtipomov,
         'userName' => $this->session->userdata['nombre']
     );
     $year = date('y',strtotime($egreso->fechamov));
