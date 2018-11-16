@@ -162,6 +162,7 @@ function mostrarTablaIngresosTraspaso(res) {
                 field: 'monedasigla',
                 title: "Moneda",
                 align: 'right',
+                visible: false,
                 width:'20px',
                 sortable: true,
                 searchable: false,
@@ -170,6 +171,7 @@ function mostrarTablaIngresosTraspaso(res) {
                 field: 'totalsus',
                 title: "Total Sus",
                 align: 'right',
+                visible: false,
                 width:'100px',
                 sortable: true,
                 formatter: operateFormatter3,
@@ -180,6 +182,7 @@ function mostrarTablaIngresosTraspaso(res) {
                 title: "Total Bs",
                 width:'100px',
                 align: 'right',
+                visible: false,
                 sortable: true,
                 searchable: false,
                 formatter: operateFormatter3,
@@ -470,6 +473,7 @@ function operateFormatter3(value, row, index) {
 function verdetalle(fila) {
     console.log(fila)
     id = fila.idIngresos
+    tipomov = fila.tipomov
 
     datos = {
         id: id,
@@ -480,7 +484,12 @@ function verdetalle(fila) {
         if (estado) {
             var totaldoc = 0;
             var totalsis = 0;
-            mostrarDetalle(data.respuesta);
+            if (tipomov == 'Traspaso de Almacen') {
+                mostrarDetalleTraspaso(data.respuesta)
+            } else {
+                mostrarDetalle(data.respuesta)
+            }
+            
             $.each(data.respuesta, function (index, value) {
                 totaldoc += value.totaldoc
                 totalsis += value.total
@@ -598,6 +607,77 @@ function mostrarDetalle(res) {
                 field: 'total',
                 title: "Total",
                 align: 'right',
+                width: '10%',
+                sortable: true,
+                formatter: operateFormatter3,
+                footerFormatter: sumaColumna
+            },
+        ]
+    });
+}
+function mostrarDetalleTraspaso(res) {
+    $("#tingresosdetalle").bootstrapTable('destroy');
+    $("#tingresosdetalle").bootstrapTable({
+        data: res,
+        striped: true,
+        pagination: true,
+        clickToSelect: true,
+        search: false,
+        showFooter: true,
+        footerStyle: footerStyle,
+        columns: [{
+                field: 'CodigoArticulo',
+                title: 'Código',
+                align: 'center',
+                width: '10%',
+                sortable: true,
+            },
+            {
+                field: 'Descripcion',
+                title: 'Descripcion',
+                width: '40%',
+                sortable: true,
+            },
+            {
+                field: 'cantidad',
+                title: "Cantidad",
+                align: 'right',
+                width: '10%',
+                sortable: true,
+            },
+            {
+                field: '',
+                title: "P/U Documento",
+                align: 'right',
+                width: '10%',
+                sortable: true,
+                visible: false,
+                formatter: punitariofac,
+            },
+            {
+                field: 'totaldoc',
+                title: "Total Documento",
+                align: 'right',
+                width: '10%',
+                visible: false,
+                sortable: true,
+                formatter: operateFormatter3,
+                footerFormatter: sumaColumna
+            },
+            {
+                field: 'punitario',
+                title: "C/U Sistema",
+                align: 'right',
+                width: '10%',
+                visible: false,
+                sortable: true,
+                formatter: operateFormatter3,
+            },
+            {
+                field: 'total',
+                title: "Total",
+                align: 'right',
+                visible: false,
                 width: '10%',
                 sortable: true,
                 formatter: operateFormatter3,

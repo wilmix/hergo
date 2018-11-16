@@ -105,7 +105,7 @@ function mostrarTablaEgresosTraspasos(res) {
                 width: '1%',
                 align: 'right',
                 sortable: true,
-                visible: true,
+                visible: false,
                 filter: {
                     type: "select",
                     data: ["$US", "BS."],
@@ -117,6 +117,7 @@ function mostrarTablaEgresosTraspasos(res) {
                 width: '7%',
                 align: 'right',
                 sortable: true,
+                visible: false,
                 formatter: operateFormatter3,
                 filter: {
                     type: "input"
@@ -128,6 +129,7 @@ function mostrarTablaEgresosTraspasos(res) {
                 width: '7%',
                 align: 'right',
                 sortable: true,
+                visible: false,
                 formatter: operateFormatter3,
                 filter: {
                     type: "input"
@@ -137,6 +139,7 @@ function mostrarTablaEgresosTraspasos(res) {
                 field: "estado",
                 title: "Estado",
                 width: '7%',
+                visible:false,
                 sortable: true,
                 align: 'center',
                 cellStyle:cellStyle,
@@ -148,7 +151,7 @@ function mostrarTablaEgresosTraspasos(res) {
                 width: '8%',
                 title: "N° Pedido",
                 sortable: true,
-                visible: false,
+                visible: true,
                 align: 'center',
             },
             {
@@ -538,7 +541,7 @@ function calcularTotalDetalle(detalle) {
 }
 
 function verdetalle(fila) {
-    //console.log(fila)
+    tipomov = fila.tipomov
     id = fila.idEgresos
     datos = {
         id: id,
@@ -550,7 +553,12 @@ function verdetalle(fila) {
         estado = validarresultado_ajax(data);
         //console.log(data);
         if (estado) {
-            mostrarDetalle(data.respuesta.resultado);
+            if (tipomov == 'Traspaso A Almacen') {
+                mostrarDetalleTraspaso(data.respuesta.resultado);
+            } else {
+                mostrarDetalle(data.respuesta.resultado);
+            }
+            
             var totalnn = calcularTotalDetalle(data.respuesta.resultado)
             var tipocambioEgreso = data.respuesta.tipocambio;
             var totalsus = totalnn;
@@ -666,6 +674,79 @@ function mostrarDetalle(res) {
             {
                 field: 'cantFact',
                 title: "CantFact",
+                align: 'right',
+                width: '5%',
+                sortable: true,
+            },
+        ]
+    });
+}
+function mostrarDetalleTraspaso(res) {
+    $("#tegresosdetalle").bootstrapTable('destroy');
+    $("#tegresosdetalle").bootstrapTable({
+
+        data: res,
+        striped: true,
+        pagination: true,
+        clickToSelect: true,
+        search: false,
+        showFooter: true,
+        footerStyle: footerStyle,
+        columns: [{
+                field: 'CodigoArticulo',
+                title: 'Código',
+                align: 'center',
+                width: '10%',
+                sortable: true,
+            },
+            {
+                field: 'Descripcion',
+                title: 'Descripcion',
+                width: '50%',
+                sortable: true,
+            },
+            {
+                field: 'cantidad',
+                title: "Cantidad",
+                align: 'right',
+                width: '10%',
+                formatter: operateFormatter3,
+                sortable: true,
+            },
+            //PARA COMPARAR CON FACTURA           
+            {
+                field: 'punitario',
+                title: "P/U Bs",
+                align: 'right',
+                visible:false,
+                width: '10%',
+                formatter: operateFormatter3,
+                sortable: true,
+            },
+            {
+                field: 'total',
+                title: "Total",
+                visible:false,
+                align: 'right',
+                width: '10%',
+                formatter: operateFormatter3,
+                sortable: true,
+                footerFormatter: sumaColumna
+            },
+            {
+                field: 'descuento',
+                title: "% Dscnt",
+                visible:false,
+                align: 'right',
+                width: '5%',
+                formatter: operateFormatter3,
+                sortable: true,
+            },
+            
+            {
+                field: 'cantFact',
+                title: "CantFact",
+                visible:false,
                 align: 'right',
                 width: '5%',
                 sortable: true,
