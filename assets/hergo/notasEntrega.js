@@ -221,7 +221,7 @@ $( function() {
             $("#Descripcion_ne").val( ui.item.descripcion);
             $("#unidad_imp").val( ui.item.unidad);
             $("#saldo_ne").val( ui.item.saldo);
-            $("#precio").val( ui.item.precio);
+            $("#precio").val(($("#tipomov_ne2").val()=='9') ? formatoCosto(ui.item.cpp) : ui.item.precio);
             glob_guardar=true;
             return false;
         }
@@ -399,14 +399,26 @@ function recuperarMovimiento() // X
     }
 }
 function cambiarMoneda() {
-    if ($("#moneda_ne").val() == 1) {
-        $(".costo_ne_label").html("Precio Bs")
-        //$(".punitario_ne_class").val(glob_precio_egreso)   
-
+    if ($("#tipomov_ne2").val()=='9') {
+        if ($("#moneda_ne").val() == 1) {
+            $(".costo_ne_label").html("Costo Bs")
+            //$(".punitario_ne_class").val(glob_precio_egreso)   
+    
+        } else {
+            $(".costo_ne_label").html("Costo Dolares")
+            //$(".punitario_ne_class").val(glob_precio_egreso/glob_tipoCambio)
+        }
     } else {
-        $(".costo_ne_label").html("Precio Dolares")
-        //$(".punitario_ne_class").val(glob_precio_egreso/glob_tipoCambio)
+        if ($("#moneda_ne").val() == 1) {
+            $(".costo_ne_label").html("Precio Bs")
+            //$(".punitario_ne_class").val(glob_precio_egreso)   
+    
+        } else {
+            $(".costo_ne_label").html("Precio Dolares")
+            //$(".punitario_ne_class").val(glob_precio_egreso/glob_tipoCambio)
+        }
     }
+    
 }
 function anularMovimientoEgreso() {
     let clienteNombre = $('#cliente_egreso').val()
@@ -544,6 +556,11 @@ function formatoMoneda(value, row, index) {
     num = num.toFixed(2);
     return (formatNumber.new(num));
 }
+function formatoCosto(value, row, index) {
+    num = Math.round(value * 100) / 100
+    num = num.toFixed(4);
+    return (formatNumber.new(num));
+}
 function retornarTablaEgresoDetalle(idEgreso=null) {
     agregarcargando();
 
@@ -602,7 +619,7 @@ function retornarTablaEgresoDetalle(idEgreso=null) {
                     },
                     {
                         field: 'punitario',
-                        title: "P/U",
+                        title: ($("#tipomov_ne2").val()=='9') ? 'Costo': 'Precio',
                         align: 'right',
                         class: "col-sm-1",
                         formatter: formatoMoneda,
@@ -615,7 +632,7 @@ function retornarTablaEgresoDetalle(idEgreso=null) {
                     },
                     {
                         field: 'total',
-                        title: "total",
+                        title: "Total",
                         align: 'right',
                         class: "col-sm-1",
                         formatter: formatoMoneda,

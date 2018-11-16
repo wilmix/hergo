@@ -209,11 +209,7 @@
                   <input type="text" class="form-control form-control-sm" id="unidad_imp" disabled />
                 </div>
                 <div class="col-xs-4 col-md-2 ">
-                  <label for="costo_imp">Precio:
-                    <span style="margin-left: 10px; display: none;" class="cargandoCostoSaldo">
-                      <i class="fa fa-spinner fa-pulse fa-fw"></i>
-                    </span>
-                  </label>
+                  <label ><?= ($auxIdTipoIngreso==9) ? "Costo:" : "Precio:"?> </label>
                   <input type="text" class="form-control form-control-sm text-right tiponumerico" id="precio"
                     disabled />
                 </div>
@@ -239,7 +235,7 @@
                 <input type="text" style="text-align:right;" class="form-control form-control-sm" id="cantidad_ne" name="cantidad_ne" />
               </div>
               <div class="col-xs-4 col-md-2">
-                <label class="costo_ne_label">Precio Bs:</label>
+                <label class="costo_ne_label"><?= ($auxIdTipoIngreso==9) ? "Costo:" : "Precio:"?></label>
                 <input type="text" style="text-align:right;" class="form-control form-control-sm" id="punitario_ne"
                   name="punitario_ne" />
               </div>
