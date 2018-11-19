@@ -737,21 +737,12 @@ class Ingresos extends CI_Controller
     	if($this->input->is_ajax_request())
         {
             $datos['idingresoimportacion'] = $this->security->xss_clean($this->input->post('idingresoimportacion'));
-        	$datos['almacen_imp'] = $this->security->xss_clean($this->input->post('almacen_imp'));
-        	$datos['tipomov_imp'] = $this->security->xss_clean($this->input->post('tipomov_imp'));
-        	$datos['fechamov_imp'] = $this->security->xss_clean($this->input->post('fechamov_imp'));
-        	$datos['moneda_imp'] = $this->security->xss_clean($this->input->post('moneda_imp'));
-        	$datos['proveedor_imp'] = $this->security->xss_clean($this->input->post('proveedor_imp'));
-        	$datos['ordcomp_imp'] = $this->security->xss_clean($this->input->post('ordcomp_imp'));
-        	$datos['nfact_imp'] = $this->security->xss_clean($this->input->post('nfact_imp'));
-        	$datos['ningalm_imp'] = $this->security->xss_clean($this->input->post('ningalm_imp'));
         	$datos['obs_imp'] = $this->security->xss_clean($this->input->post('obs_imp'));
-        	$datos['tabla']=json_decode($this->security->xss_clean($this->input->post('tabla')));
 
-        	if($this->Ingresos_model->anularRecuperarMovimiento_model($datos,1))
-				echo json_encode("true");
+        	if($this->Ingresos_model->anularRecuperarMovimiento_model($datos))
+				echo json_encode(true);
 			else
-				echo json_encode("false");
+				echo json_encode(false);
 		}
         else
 		{

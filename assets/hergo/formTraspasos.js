@@ -542,28 +542,26 @@ function actualizarMovimiento() {
     }
 }
 
-function anularTraspaso() // X
+function anularTraspaso()
 {
-    var valuesToSubmit = $("#form_egreso").serialize();
-    var tablaaux = tablatoarray();
-    console.log(valuesToSubmit)
-    console.log(tablaaux);
-    if (tablaaux.length > 0) {
-        var tabla = JSON.stringify(tablaaux);
-
-        valuesToSubmit += "&tabla=" + tabla;
-        retornarajax(base_url("index.php/Traspasos/anularTransferencia"), valuesToSubmit, function (data) {
+        let almDest = $('#almacen_des').find(":selected").text();
+        let almOri = $('#almacen_ori').find(":selected").text();
+        let valuesToSubmit = $("#form_egreso").serialize()
+        console.log(valuesToSubmit);
+        retornarajax(base_url("index.php/Traspasos/anularTraspaso"), valuesToSubmit, function (data) {
             estado = validarresultado_ajax(data);
+            console.log(data);
             if (estado) {
                 if (data.respuesta) {
-
-                    $("#modalIgresoDetalle").modal("hide");
-                    limpiarArticulo();
-                    limpiarCabecera();
-                    limpiarTabla();
-                    $(".mensaje_ok").html("Datos anulados correctamente");
-                    $("#modal_ok").modal("show");
-                    window.location.href = base_url("Egresos");
+                    swal({
+                        title: 'Anulado!',
+                        html: 'El traspaso de' + almOri +  ' a ' +  almDest + ' ha sido ANULADO',
+                        type: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        //window.location.href = base_url("Egresos")
+                    })
                 } else {
                     $(".mensaje_error").html("Error al anular los datos, intente nuevamente");
                     $("#modal_error").modal("show");
@@ -571,9 +569,6 @@ function anularTraspaso() // X
 
             }
         })
-    } else {
-        alert("no se tiene datos en la tabla para guardar")
-    }
 }
 
 function recuperarTraspaso() // X
@@ -654,10 +649,14 @@ $(document).on("click", "#cancelarMovimientoActualizar", function () {
 
 $(document).on("click", "#anularTraspaso", function () {
     console.log('anularTraspaso');
-    /*anularTraspaso();
-    limpiarArticulo();
-    limpiarCabecera();
-    limpiarTabla();*/
+    mensajeAnular("#obs_ne",
+        function () {
+            anularTraspaso();
+        },
+        function () {
+            //window.location.href = base_url("Egresos");
+        }
+    );
 })
 $(document).on("click", "#recuperarTraspaso", function () {
     recuperarTraspaso();

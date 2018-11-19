@@ -451,20 +451,15 @@ class Ingresos_model extends CI_Model
             return $id;
         }
     }
-    public function anularRecuperarMovimiento_model($datos,$anuladorecuperado)
+    public function anularRecuperarMovimiento_model($datos)
     {
         $idingresoimportacion=$datos['idingresoimportacion'];
-        //$almacen_imp=$datos['almacen_imp'];
-        $tipomov_imp=$datos['tipomov_imp'];
-        //$fechamov_imp=$datos['fechamov_imp'];
-        $moneda_imp=$datos['moneda_imp'];
-        $proveedor_imp=$datos['proveedor_imp'];
-        $ordcomp_imp=$datos['ordcomp_imp'];
-        $nfact_imp=$datos['nfact_imp'];
         $obs_imp=strtoupper($datos['obs_imp']);
         $autor=$this->session->userdata('user_id');
         $fecha = date('Y-m-d H:i:s');
-        $sql="UPDATE ingresos SET proveedor='$proveedor_imp',moneda='$moneda_imp',nfact='$nfact_imp',ordcomp='$ordcomp_imp',obs='$obs_imp',fecha='$fecha',autor='$autor', anulado='$anuladorecuperado', estado=0 where idIngresos='$idingresoimportacion'";
+        $sql="UPDATE ingresos 
+        SET obs='$obs_imp',fecha='$fecha',autor='$autor', anulado='1', estado=0 
+        where idIngresos='$idingresoimportacion'";
         $query=$this->db->query($sql);
         
         return true;

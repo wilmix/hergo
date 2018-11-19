@@ -725,7 +725,7 @@ class Egresos extends CI_Controller
         {
             $datos['idegreso'] = $this->security->xss_clean($this->input->post('idegreso'));        	
         	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
-        	if($this->Egresos_model->anularRecuperarMovimiento_model($datos,1))
+        	if($this->Egresos_model->anularRecuperarMovimiento_model($datos))
 				echo json_encode(true);
 			else
 				echo json_encode(false);

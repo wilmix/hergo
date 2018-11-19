@@ -587,7 +587,7 @@ class Egresos_model extends CI_Model
             return false;      
     }
 
-    public function anularRecuperarMovimiento_model($datos,$anuladorecuperado)
+    public function anularRecuperarMovimiento_model($datos)
     {        
 
         $idegreso=$datos['idegreso'];
@@ -600,7 +600,7 @@ class Egresos_model extends CI_Model
         SET obs= UPPER('$obs_ne'),
             fecha='$fecha',
             autor='$autor', 
-            anulado='$anuladorecuperado' 
+            anulado='1' 
         where idEgresos='$idegreso'";
         $query=$this->db->query($sql);
         return true;

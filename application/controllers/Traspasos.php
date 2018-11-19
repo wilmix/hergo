@@ -809,7 +809,25 @@ class Traspasos extends CI_Controller
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
-    }
+	}
+	public function anularTraspaso(){
+		if($this->input->is_ajax_request())
+        {
+			
+			$datos['idegreso'] = $this->security->xss_clean($this->input->post('idEgreso'));       	
+			$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
+			$datos['idingresoimportacion'] = $this->security->xss_clean($this->input->post('idIngreso')); 
+			$datos['obs_imp'] = $this->security->xss_clean($this->input->post('obs_ne'));
+
+			$res = $this->Traspasos_model->anularTraspaso($datos);
+
+			echo json_encode ($res);
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
     public function recuperarTransferencia()
     {
     	if($this->input->is_ajax_request())
