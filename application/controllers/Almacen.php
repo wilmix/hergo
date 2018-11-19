@@ -10,6 +10,7 @@ class Almacen extends CI_Controller
 		$this->libacceso->acceso(1);
 		$this->load->helper('url');	
 		$this->load->model("Almacen_model");
+		$this->load->model("Ingresos_model");
 		$this->cabeceras_css=array(
 				base_url('assets/bootstrap/css/bootstrap.min.css'),
 				base_url("assets/fa/css/font-awesome.min.css"),
@@ -23,8 +24,13 @@ class Almacen extends CI_Controller
 				base_url('assets/dist/js/app.min.js'),
 				base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
 				base_url('assets/plugins/slimscroll/slimscroll.min.js'),
+				base_url('assets/plugins/daterangepicker/moment.min.js'),
 				
 			);
+			$hoy = date('Y-m-d');
+		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
+		$tipoCambio = $tipoCambio->tipocambio;
+		$this->datos['tipoCambio'] = $tipoCambio;
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
 			if($this->session->userdata('foto')==NULL)

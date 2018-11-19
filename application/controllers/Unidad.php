@@ -15,6 +15,7 @@ class Unidad extends CI_Controller {
         $this->load->helper('url');
         $this->load->model("Articulo_model");
         $this->load->model("Unidad_model");
+        $this->load->model("Ingresos_model");
         $this->cabeceras_css = array(
             base_url('assets/bootstrap/css/bootstrap.min.css'),
             base_url("assets/fa/css/font-awesome.min.css"),
@@ -30,9 +31,15 @@ class Unidad extends CI_Controller {
             base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
             base_url('assets/plugins/slimscroll/slimscroll.min.js'),
             base_url('assets/sweetalert/sweetalert2.min.js'),
+            base_url('assets/plugins/daterangepicker/moment.min.js'),
+
         );
         $this->datos['nombre_usuario'] = $this->session->userdata('nombre');
         $this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
+        $hoy = date('Y-m-d');
+		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
+		$tipoCambio = $tipoCambio->tipocambio;
+		$this->datos['tipoCambio'] = $tipoCambio;
 
         if ($this->session->userdata('foto') == NULL)
             $this->datos['foto'] = base_url('assets/imagenes/ninguno.png');

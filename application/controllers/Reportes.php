@@ -15,6 +15,7 @@ class Reportes extends CI_Controller
 		/*******/
 		$this->load->helper('url');
 		$this->load->model("Reportes_model");
+		$this->load->model("Ingresos_model");
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
 		$this->cabeceras_css=array(
@@ -55,6 +56,10 @@ class Reportes extends CI_Controller
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
+		$hoy = date('Y-m-d');
+		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
+		$tipoCambio = $tipoCambio->tipocambio;
+		$this->datos['tipoCambio'] = $tipoCambio;
 			if($this->session->userdata('foto')==NULL)
 				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
 			else

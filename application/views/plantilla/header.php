@@ -34,7 +34,7 @@
           <!-- Tipo de cambio -->
           <li>
             <a href="<?php echo base_url("index.php/configuracion/tipoCambio") ?>">
-              <i class="fas fa-dollar-sign"> T/C: <span id="mostrarTipoCambio"></span> </i>
+              <i class="fas fa-dollar-sign"> T/C:  <span id="mostrarTipoCambio" ><?= $tipoCambio ?></span> </i>
             </a>
           </li>
           <!-- User Account Menu -->

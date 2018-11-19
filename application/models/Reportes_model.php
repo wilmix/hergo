@@ -434,7 +434,7 @@ class Reportes_model extends CI_Model
 			) tbl";
 		} else {
 		$sql="SELECT 	sigla,
-		IF(almacen IS NULL,'', linea) linea,  
+		 linea,  
 		IF(almacen IS NULL,'', codigo) codigo,  
 		IF(almacen IS NULL,'', costo) costo, 
 		IF(almacen IS NULL,'', saldo) saldo, 

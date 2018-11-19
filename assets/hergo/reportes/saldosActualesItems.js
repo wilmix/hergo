@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
     tituloReporte()
     retornarSaldos()
@@ -16,6 +17,9 @@ $(document).on("click", "#refresh", function () {
     tituloReporte();
     retornarSaldos();
 })
+$(document).on("change", "#moneda", function () {
+    retornarSaldos();
+})
 $(document).on("change", "#articulos_filtro", function () {
     tituloReporte();
     retornarSaldos();
@@ -26,7 +30,9 @@ $(document).on("change", "#almacen_filtro", function () {
 })
 
 function retornarSaldos() {
+
     let alm = $("#almacen_filtro").val()
+    
     if (alm>0) {
         retornarSaldosAlmacen()
     } else {
@@ -37,8 +43,7 @@ function retornarSaldos() {
 
 function retornarSaldosAlmacen() {
     let alm = $("#almacen_filtro").val()
-    console.log(`ALM: ${alm}`);
-
+    let mon = $("#moneda").val()
     agregarcargando();
     $.ajax({
         type: "POST",
@@ -50,7 +55,7 @@ function retornarSaldosAlmacen() {
     }).done(function (res) {
         quitarcargando(); 
         datosselect = restornardatosSelect(res)
-        console.log(res);
+        //console.log(res);
         $("#tablaSaldos").bootstrapTable('destroy');    
         $("#tablaSaldos").bootstrapTable({ 
             data: res,
@@ -99,6 +104,7 @@ function retornarSaldosAlmacen() {
                     align: 'center',
                     width:'150px',
                     searchable: false,
+                    visible: false
                 },
                 {
                     field: 'costo',
@@ -139,6 +145,16 @@ function retornarSaldosAlmacen() {
                     width:'90px',
                     searchable: false,
                     formatter: operateFormatter3,
+                    visible: mon==1 ? false  : true
+                },
+                {
+                    field: 'vTotal',
+                    title: 'Total $U$',
+                    align: 'right',
+                    width:'90px',
+                    searchable: false,
+                    formatter: dolares,
+                    visible: mon==1 ? true  : false
                 },
             ]
           });
@@ -148,6 +164,7 @@ function retornarSaldosAlmacen() {
     });
 }
 function retornarSaldosGeneral() {
+    let mon = $("#moneda").val()
     agregarcargando();
     $.ajax({
         type: "POST",
@@ -157,7 +174,6 @@ function retornarSaldosGeneral() {
             alm: '',
         },
     }).done(function (res) {
-        console.log(res);
         datosselect = restornardatosSelect(res)
         quitarcargando(); 
         $("#tablaSaldos").bootstrapTable('destroy');    
@@ -243,11 +259,21 @@ function retornarSaldosGeneral() {
                 },
                 {
                     field: 'vTotal',
-                    title: 'Total',
+                    title: 'Total BOB',
                     align: 'right',
                     width:'90px',
                     searchable: false,
                     formatter: operateFormatter3,
+                    visible: mon==1 ? false  : true
+                },
+                {
+                    field: 'vTotal',
+                    title: 'Total $U$',
+                    align: 'right',
+                    width:'90px',
+                    searchable: false,
+                    formatter: dolares,
+                    visible: mon==1 ? true  : false
                 },
             ]
           });
@@ -277,7 +303,14 @@ function operateFormatter3(value, row, index) {
 
         num = Math.round(value * 100) / 100
         num = num.toFixed(2);
-        return (formatNumber.new(num));
+        return (formatNumber.new(num))
+
+}
+function dolares(value, row, index) {
+
+    num = Math.round(value * 100) / 100
+    num = (num / glob_tipoCambio).toFixed(2)
+    return (formatNumber.new(num))
 
 }
 function costoPromedio4(value, row, index) {

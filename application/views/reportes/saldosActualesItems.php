@@ -10,6 +10,11 @@
                         <?php endforeach ?>
                         <option value="" >TODOS</option>
                     </select>
+                    
+                    <select id="moneda" class="btn btn-primary btn-sm">
+                        <option value="0">BOB</option>
+                        <option value="1">$U$</option>
+                    </select>
 
                     <button  type="button" class="btn btn-primary btn-sm" id="saldos">
                         <span>

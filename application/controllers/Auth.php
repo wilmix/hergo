@@ -13,6 +13,8 @@ class Auth extends CI_Controller {
 		$this->load->library(array('ion_auth','form_validation'));
 		$this->load->helper(array('url','language'));
 		$this->load->model('ion_auth_model');//solo para guardar fotos
+		$this->load->model("Ingresos_model");
+
 
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
 
@@ -32,6 +34,10 @@ class Auth extends CI_Controller {
 				
 			);
 		$this->data['nombre_usuario']= $this->session->userdata('nombre');
+		$hoy = date('Y-m-d');
+			$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
+			$tipoCambio = $tipoCambio->tipocambio;
+			$this->data['tipoCambio'] = $tipoCambio;
 			if($this->session->userdata('foto')==NULL)
 				$this->data['foto']=base_url('assets/imagenes/ninguno.png');
 			else
@@ -91,6 +97,7 @@ class Auth extends CI_Controller {
 			$this->data['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
 			$this->data['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 			$this->data['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
+			
 			$this->data['titulo']="Usuarios";
 			$this->data['users'] = $this->ion_auth->users()->result();
 			foreach ($this->data['users'] as $k => $user)

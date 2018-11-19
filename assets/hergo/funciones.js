@@ -12,6 +12,7 @@ $(document).ready(function ()
     }, 50);
 
   })
+  glob_tipoCambio = parseFloat($("#mostrarTipoCambio").text())
   fechaHoySystem = moment().endOf('day')
   fechaHoySystem = moment(fechaHoySystem).format("YYYY-MM-DD");
   setTipoCambio(fechaHoySystem);
@@ -31,9 +32,9 @@ function setTipoCambio(fechaActual) {
     
     glob_alm_usu = res.idAlmacenUsuario
     console.log(glob_alm_usu);
-    $('#mostrarTipoCambio').text(res.tipoCambio);
-    glob_tipoCambio = res.tipoCambio;
-    console.log(res.tipoCambio);
+    //$('#mostrarTipoCambio').text(res.tipoCambio);
+    //glob_tipoCambio = res.tipoCambio;
+    console.log(glob_tipoCambio);
   }).fail(function (jqxhr, textStatus, error) {
     var err = textStatus + ", " + error;
     console.log("Request Failed: " + err);

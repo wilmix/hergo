@@ -57,6 +57,10 @@ class Egresos extends CI_Controller
 		$this->datos['nombre_actual']=$this->session->userdata['nombre'];
 		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
+		$hoy = date('Y-m-d');
+		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
+		$tipoCambio = $tipoCambio->tipocambio;
+		$this->datos['tipoCambio'] = $tipoCambio;
 			if($this->session->userdata('foto')==NULL)
 				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
 			else
