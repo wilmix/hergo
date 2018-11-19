@@ -135,17 +135,7 @@ function mostrarTablaEgresosTraspasos(res) {
                     type: "input"
                 }
             },
-            {
-                field: "estado",
-                title: "Estado",
-                width: '7%',
-                visible:false,
-                sortable: true,
-                align: 'center',
-                cellStyle:cellStyle,
-                //formatter: operateFormatter2,
-
-            },
+            
             {
                 field: "clientePedido",
                 width: '8%',
@@ -162,6 +152,17 @@ function mostrarTablaEgresosTraspasos(res) {
                 visible: false,
                 align: 'center',
                 formatter: formato_fecha_corta,
+            },
+            {
+                field: "estado",
+                title: "Estado",
+                width: '7%',
+                visible:true,
+                sortable: true,
+                align: 'center',
+                cellStyle:cellStyle,
+                //formatter: operateFormatter2,
+
             },
             {
                 field: "autor",
@@ -459,7 +460,12 @@ function operateFormatter(value, row, index) {
 function operateFormatter2(value, row, index) {
     $ret = ''
     if (row.sigla=='ET') {
-        $ret = '<span class="label label-default">Traspaso</span>'
+        if (row.anulado == 1) {
+            $ret = '<span class="label label-warning">Anulado</span>'
+        } else {
+            $ret = '<span class="label label-default">Traspaso</span>'
+        }
+        
     } else if(row.sigla=='EB'){
         $ret = '<span class="label label-default">BajaProducto</span>'
     } 
@@ -520,7 +526,7 @@ window.operateEvents = {
         if (row.estado == 'TRASPASO') {
             window.location.href = editar;
         } else {
-            swal("Error", "No se puede editar el registro seleccionado. El registro ya se encuentra Facturado.", "error")
+            swal("Error", "No se puede editar el registro esta ANULADO.", "error")
         }
     },
     'click .imprimirEgreso': function (e, value, row, index) {
@@ -543,6 +549,7 @@ function calcularTotalDetalle(detalle) {
 function verdetalle(fila) {
     tipomov = fila.tipomov
     id = fila.idEgresos
+    console.log(fila);
     datos = {
         id: id,
         moneda: fila.moneda,
@@ -551,7 +558,7 @@ function verdetalle(fila) {
     console.log(datos);
     retornarajax(base_url("index.php/Egresos/mostrarDetalle"), datos, function (data) {
         estado = validarresultado_ajax(data);
-        //console.log(data);
+        console.log(data);
         if (estado) {
             if (tipomov == 'Traspaso A Almacen') {
                 mostrarDetalleTraspaso(data.respuesta.resultado);
