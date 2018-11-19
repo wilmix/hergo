@@ -653,10 +653,11 @@ $(document).on("click", "#cancelarMovimientoActualizar", function () {
 })
 
 $(document).on("click", "#anularTraspaso", function () {
-    anularTraspaso();
+    console.log('anularTraspaso');
+    /*anularTraspaso();
     limpiarArticulo();
     limpiarCabecera();
-    limpiarTabla();
+    limpiarTabla();*/
 })
 $(document).on("click", "#recuperarTraspaso", function () {
     recuperarTraspaso();
