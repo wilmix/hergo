@@ -609,4 +609,43 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function mostrarReporteFacturas ($ini, $fin, $alm="") 
+	{ 
+		$sql="SELECT id,
+		idAlm,
+		almacen,
+		fechaFac,
+		lote,
+		nFactura,
+		codigo,
+		descr,
+		uni,
+		pu,
+		SUM(cantidad) cantidad,
+		SUM(total) total,
+		cliente,
+		puDolares,
+		SUM(totalDolares) totalDolares
+		FROM
+		(
+		SELECT 	fd.`id`, f.`almacen` idAlm, al.`almacen`, f.`fechaFac`, f.`lote`, f.`nFactura`, fd.`ArticuloCodigo` codigo, fd.`ArticuloNombre` descr, u.`Sigla` uni, 
+			ROUND(fd.`facturaPUnitario`,2) pu, fd.`facturaCantidad` cantidad, ROUND((fd.`facturaCantidad` * fd.`facturaPUnitario`),2) total, f.`ClienteFactura` cliente, ROUND(fd.`facturaPUnitario`/tc.`tipocambio`,2) puDolares,
+			ROUND((fd.`facturaCantidad` * fd.`facturaPUnitario` / tc.`tipocambio`),2) totalDolares
+		FROM facturadetalle fd
+			INNER JOIN factura f ON f.`idFactura` = fd.`idFactura`
+			INNER JOIN articulos a ON a.`idArticulos` = fd.`articulo`
+			INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
+			INNER JOIN moneda m ON m.`id`= f.`moneda`
+			INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
+			INNER JOIN tipocambio tc ON tc.`fecha` = f.`fechaFac`
+			INNER JOIN almacenes al ON al.`idalmacen` = f.`almacen`
+			WHERE  f.`fechaFac` BETWEEN '$ini' AND '$fin'
+			AND f.`almacen` LIKE '%$alm' 
+			AND f.`anulada` = 0 
+		ORDER BY f.fechaFac,  f.`nFactura`, fd.`ArticuloCodigo`
+		)fac
+		GROUP BY  almacen,fechaFac, id  WITH ROLLUP";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 }
