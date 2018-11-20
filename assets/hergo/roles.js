@@ -7,6 +7,7 @@ $(document).on("change", "#users_filtro", function () {
     retornarRoles(idUser);
     
 })
+
 function retornarRoles() 
 {   
     agregarcargando(idUser);
@@ -110,7 +111,7 @@ function activar (idUser, idSubMenu) {
     }).done(function(res){
         console.log(idUser, idSubMenu);
         console.log('ok');
-        //retornarRoles(idUser);
+        retornarRoles(idUser);
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;
     console.log( "Request Failed: " + err );
