@@ -34,6 +34,7 @@ class Auth extends CI_Controller {
 				base_url('assets/plugins/slimscroll/slimscroll.min.js'),
 				
 			);
+		
 		$this->data['nombre_usuario']= $this->session->userdata('nombre');
 		$hoy = date('Y-m-d');
 		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
@@ -102,7 +103,7 @@ class Auth extends CI_Controller {
 			$this->data['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
 			$this->data['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 			$this->data['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
-			
+			$this->data['user_id_actual']=$this->session->userdata['user_id'];
 			$this->data['titulo']="Usuarios";
 			$this->data['users'] = $this->ion_auth->users()->result();
 			foreach ($this->data['users'] as $k => $user)
@@ -546,7 +547,9 @@ class Auth extends CI_Controller {
         $this->form_validation->set_rules('phone', $this->lang->line('create_user_validation_phone_label'), 'trim');
         $this->form_validation->set_rules('company', $this->lang->line('create_user_validation_company_label'), 'trim');
         $this->form_validation->set_rules('password', $this->lang->line('create_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[password_confirm]');
-        $this->form_validation->set_rules('password_confirm', $this->lang->line('create_user_validation_password_confirm_label'), 'required');
+		$this->form_validation->set_rules('password_confirm', $this->lang->line('create_user_validation_password_confirm_label'), 'required');
+		$this->form_validation->set_rules('almacen', $this->lang->line('edit_user_validation_almacen_label'), 'required');
+		
 
         if ($this->form_validation->run() == true)
         {
@@ -558,7 +561,8 @@ class Auth extends CI_Controller {
                 'first_name' => $this->input->post('first_name'),
                 'last_name'  => $this->input->post('last_name'),
                 'company'    => $this->input->post('company'),
-                'phone'      => $this->input->post('phone'),
+				'phone'      => $this->input->post('phone'),
+				'almacen'      => $this->input->post('almacen'),
             );
         }
         if ($this->form_validation->run() == true && $this->ion_auth->register($identity, $password, $email, $additional_data))
@@ -637,6 +641,14 @@ class Auth extends CI_Controller {
                 'value' => $this->form_validation->set_value('password_confirm'),
                 'placeholder' => 'Cofirmar contraseña',//modificado para bootstrap
                 'class' => 'form-control',//modificado para bootstrap
+			);
+			$this->data['almacen'] = array(
+                'name'  => 'almacen',
+                'id'    => 'almacen',
+                'type'  => 'text',
+                'value' => $this->form_validation->set_value('almacen'),
+                'placeholder' => 'Almacen',//modificado para bootstrap
+                'class' => 'form-control',//modificado para bootstrap
             );
 
             //$this->_render_page('auth/create_user', $this->data);
@@ -658,6 +670,7 @@ class Auth extends CI_Controller {
 	{
 		$this->data['title'] = $this->lang->line('edit_user_heading');
 		$this->data['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
+		$this->data['user_id_actual']=$this->session->userdata['user_id'];
 		$this->data['titulo']="Editar Usuario";
 
 		if (!$this->ion_auth->logged_in() || (!$this->ion_auth->is_admin() && !($this->ion_auth->user()->row()->id == $id)))
@@ -674,6 +687,7 @@ class Auth extends CI_Controller {
 		$this->form_validation->set_rules('last_name', $this->lang->line('edit_user_validation_lname_label'), 'required');
 		$this->form_validation->set_rules('phone', $this->lang->line('edit_user_validation_phone_label'), 'required');
 		$this->form_validation->set_rules('company', $this->lang->line('edit_user_validation_company_label'), 'required');
+		$this->form_validation->set_rules('almacen', $this->lang->line('edit_user_validation_almacen_label'), 'required');
 
 		if (isset($_POST) && !empty($_POST))
 		{
@@ -697,6 +711,7 @@ class Auth extends CI_Controller {
 					'last_name'  => $this->input->post('last_name'),
 					'company'    => $this->input->post('company'),
 					'phone'      => $this->input->post('phone'),
+					'almacen'    => $this->input->post('almacen'),
 				);
 
 				// update the password if it was posted
@@ -817,6 +832,15 @@ class Auth extends CI_Controller {
 			'type' => 'password',
 			'placeholder' => 'Confirmar contraseña',//modificado para bootstrap
             'class' => 'form-control',//modificado para bootstrap
+		);
+		$this->data['almacen'] = array(
+			'name'  => 'almacen',
+			'id'    => 'almacen',
+			'type'  => 'text',
+			'value' => $this->form_validation->set_value('almacen'),
+			'value' => $this->form_validation->set_value('almacen', $user->almacen),
+			'placeholder' => 'Almacen',//modificado para bootstrap
+			'class' => 'form-control',//modificado para bootstrap
 		);
 		$this->data['cabeceras_css']= $this->cabeceras_css;
 		$this->data['cabeceras_script']= $this->cabecera_script;

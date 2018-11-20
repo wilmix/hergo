@@ -60,6 +60,15 @@ if(isset($message)){ ?>
                             
                           </div>
                         </div>
+                        <div class="form-group">
+                          <label for="inputEmail3" class="col-sm-2 control-label">Almacen</label>
+                          <div class="col-sm-10">
+                           <?php 
+                              echo form_input($almacen);
+                           ?>
+                            
+                          </div>
+                        </div>
 
 
                     </div>

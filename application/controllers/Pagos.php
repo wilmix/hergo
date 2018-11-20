@@ -57,6 +57,8 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
+		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
+
 		$hoy = date('Y-m-d');
 		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
 		if ($tipoCambio) {

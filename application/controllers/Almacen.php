@@ -36,7 +36,7 @@ class Almacen extends CI_Controller
 			} else {
 				$this->datos['tipoCambio'] = 'No se tiene tipo de cambio para la fecha';
 			}
-
+		$this->datos['user_id_actual']=$this->session->userdata['user_id'];	
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
 			if($this->session->userdata('foto')==NULL)
