@@ -199,8 +199,8 @@ function mostrarModal(fila)
     $("#uso").val(fila.EnUso)
 
     $("#productoarticulo").val(fila.ProductoServicio)
-    $(".modal-title").html("Editar articulo")
-    $("#bguardar_articulo").html("Editar")
+    $(".modal-title").html("Modificar articulo")
+    $("#bguardar_articulo").html("Modificar")
     $("#modalarticulo").modal("show");
   
 }
@@ -329,6 +329,7 @@ function retornarTabla()
 }
 function mostrarimagen(value, row, index)
 {
+    console.log(value);
     let ruta=""
     let imagen=""
     if((value=="")||(value==null))
