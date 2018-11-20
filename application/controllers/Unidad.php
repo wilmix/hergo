@@ -35,6 +35,7 @@ class Unidad extends CI_Controller {
 
         );
         $this->datos['nombre_usuario'] = $this->session->userdata('nombre');
+		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
         $this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
         $hoy = date('Y-m-d');
 		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
