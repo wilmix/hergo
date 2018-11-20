@@ -71,7 +71,7 @@ if(isset($message)){ ?>
                         </div>
                         <?php } ?>
                         <div class="form-group">
-                          <label for="inputEmail3" class="col-sm-2 control-label">Compañia</label>
+                          <label for="inputEmail3" class="col-sm-2 control-label">Cargo</label>
                           <div class="col-sm-10">
                            <?php 
                               echo form_input($company);

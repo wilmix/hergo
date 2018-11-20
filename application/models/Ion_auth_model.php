@@ -881,15 +881,16 @@ class Ion_auth_model extends CI_Model
 		}
 
 		// check if the default set in config exists in database
-		$query = $this->db->get_where($this->tables['groups'],array('name' => $this->config->item('default_group', 'ion_auth')),1)->row();
+		
+		/*$query = $this->db->get_where($this->tables['groups'],array('name' => $this->config->item('default_group', 'ion_auth')),1)->row();
 		if( !isset($query->id) && empty($groups) )
 		{
 			$this->set_error('account_creation_invalid_default_group');
 			return FALSE;
-		}
+		}*/
 
 		// capture default group details
-		$default_group = $query;
+		//$default_group = $query;
 
 		// IP Address
 		$ip_address = $this->_prepare_ip($this->input->ip_address());

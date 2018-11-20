@@ -111,11 +111,6 @@ class Auth extends CI_Controller {
 			}
 			$this->data['cabeceras_css']= $this->cabeceras_css;
 			$this->data['cabeceras_script']= $this->cabecera_script;
-			$this->data['cabeceras_css'][]=base_url('assets/plugins/datatables/dataTables.bootstrap.css');
-			$this->data['cabeceras_css'][]=base_url('assets/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css');
-			$this->data['cabeceras_script'][]=base_url('assets/plugins/datatables/jquery.dataTables.min.js');
-			$this->data['cabeceras_script'][]=base_url('assets/plugins/datatables/dataTables.bootstrap.min.js');
-			$this->data['cabeceras_script'][]=base_url('assets/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js');
 
 
 			$this->load->view('plantilla/head.php',$this->data);
@@ -662,6 +657,8 @@ class Auth extends CI_Controller {
 	public function edit_user($id)
 	{
 		$this->data['title'] = $this->lang->line('edit_user_heading');
+		$this->data['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
+		$this->data['titulo']="Editar Usuario";
 
 		if (!$this->ion_auth->logged_in() || (!$this->ion_auth->is_admin() && !($this->ion_auth->user()->row()->id == $id)))
 		{
@@ -1022,6 +1019,7 @@ class Auth extends CI_Controller {
 		// Contar envían por el plugin
 		$Imagenes =count(isset($_FILES['imagenes']['name'])?$_FILES['imagenes']['name']:0);
 		$infoImagenesSubidas = array();
+		$nombreArchivo="";
 		
 		for($i = 0; $i < $Imagenes; $i++) {
 
@@ -1034,14 +1032,14 @@ class Auth extends CI_Controller {
 
 		  move_uploaded_file($nombreTemporal,$rutaArchivo);
 		  
-		  $infoImagenesSubidas[$i]=array("caption"=>"$nombreArchivo","height"=>"120px","url"=>"http://localhost/hergo/up/borrar.php","key"=>$nombreArchivo);
-		  $ImagenesSubidas[$i]="<img  height='120px'  src='http://localhost/hergo/imagenes/$rutaArchivo' class='file-preview-image'>";
+		  //$infoImagenesSubidas[$i]=array("caption"=>"$nombreArchivo","height"=>"120px","url"=>"http://localhost/hergo/up/borrar.php","key"=>$nombreArchivo);
+		  //$ImagenesSubidas[$i]="<img  height='120px'  src='http://localhost/hergo/imagenes/$rutaArchivo' class='file-preview-image'>";
 		  }
-		$arr = array("file_id"=>0,"overwriteInitial"=>true,"initialPreviewConfig"=>$infoImagenesSubidas,
-		       "initialPreview"=>$ImagenesSubidas);
+		/*$arr = array("file_id"=>0,"overwriteInitial"=>true,"initialPreviewConfig"=>$infoImagenesSubidas,
+		       "initialPreview"=>$ImagenesSubidas);*/
 		
 		$this->ion_auth_model->guardar_foto_model($nombreArchivo,$id);
-		
+		return($nombreArchivo);
 
 		//echo json_encode($arr);
 	}
