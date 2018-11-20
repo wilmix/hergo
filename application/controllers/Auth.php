@@ -39,9 +39,9 @@ class Auth extends CI_Controller {
 		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
 		if ($tipoCambio) {
 			$tipoCambio = $tipoCambio->tipocambio;
-			$this->datos['tipoCambio'] = $tipoCambio;
+			$this->data['tipoCambio'] = $tipoCambio;
 		} else {
-			$this->datos['tipoCambio'] = 'No se tiene tipo de cambio para la fecha';
+			$this->data['tipoCambio'] = 'No se tiene tipo de cambio para la fecha';
 		}
 			if($this->session->userdata('foto')==NULL)
 				$this->data['foto']=base_url('assets/imagenes/ninguno.png');
