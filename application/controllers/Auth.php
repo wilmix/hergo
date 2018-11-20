@@ -719,14 +719,14 @@ class Auth extends CI_Controller {
 				{
 					$data['password'] = $this->input->post('password');
 				}
+				$this->subir_imagen($id);
+				$this->session->set_userdata("nombre",$data['first_name']." ".$data['last_name']);
 
-
-
-				// Only allow updating groups if user is admin
+				// NOT Only allow updating groups if user is admin
 				if ($this->ion_auth->is_admin())
 				{
-					$this->subir_imagen($id);
-					$this->session->set_userdata("nombre",$data['first_name']." ".$data['last_name']);
+					
+					
 					//Update the groups user belongs to
 					$groupData = $this->input->post('groups');
 
@@ -846,7 +846,7 @@ class Auth extends CI_Controller {
 		$this->data['cabeceras_script']= $this->cabecera_script;
 		$this->data['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
 		$this->data['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
-		$this->data['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales\es.js');
+		$this->data['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
             
            
 
