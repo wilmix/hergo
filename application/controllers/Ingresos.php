@@ -54,8 +54,12 @@ class Ingresos extends CI_Controller
 		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 		$hoy = date('Y-m-d');
 		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
-		$tipoCambio = $tipoCambio->tipocambio;
-		$this->datos['tipoCambio'] = $tipoCambio;
+		if ($tipoCambio) {
+			$tipoCambio = $tipoCambio->tipocambio;
+			$this->datos['tipoCambio'] = $tipoCambio;
+		} else {
+			$this->datos['tipoCambio'] = 'No se tiene tipo de cambio para la fecha';
+		}
 			if($this->session->userdata('foto')==NULL)
 				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
 			else

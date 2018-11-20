@@ -14,6 +14,7 @@ class Auth extends CI_Controller {
 		$this->load->helper(array('url','language'));
 		$this->load->model('ion_auth_model');//solo para guardar fotos
 		$this->load->model("Ingresos_model");
+		date_default_timezone_set("America/La_Paz");
 
 
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
@@ -35,9 +36,13 @@ class Auth extends CI_Controller {
 			);
 		$this->data['nombre_usuario']= $this->session->userdata('nombre');
 		$hoy = date('Y-m-d');
-			$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
+		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
+		if ($tipoCambio) {
 			$tipoCambio = $tipoCambio->tipocambio;
-			$this->data['tipoCambio'] = $tipoCambio;
+			$this->datos['tipoCambio'] = $tipoCambio;
+		} else {
+			$this->datos['tipoCambio'] = 'No se tiene tipo de cambio para la fecha';
+		}
 			if($this->session->userdata('foto')==NULL)
 				$this->data['foto']=base_url('assets/imagenes/ninguno.png');
 			else
