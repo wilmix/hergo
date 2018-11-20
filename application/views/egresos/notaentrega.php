@@ -228,7 +228,7 @@
               </div><!-- div class="form-group-sm row"  TERCERA FILA-->
             <div class="form-group row filaarticulo">
               <!--CUARTA FILA-->
-              <div class="col-xs-12 col-md-4">
+              <div class="col-xs-12  <?= ($auxIdTipoIngreso==9)?'col-md-6':'col-md-4' ?>">
               </div>
               <div class="col-xs-4 col-md-2">
                 <label>Cantidad:</label>
@@ -237,9 +237,9 @@
               <div class="col-xs-4 col-md-2">
                 <label class="costo_ne_label"><?= ($auxIdTipoIngreso==9) ? "Costo:" : "Precio:"?></label>
                 <input type="text" style="text-align:right;" class="form-control form-control-sm" id="punitario_ne"
-                  name="punitario_ne" />
+                  name="punitario_ne" <?= ($auxIdTipoIngreso==9)?'tabindex="-1"':'' ?>/>
               </div>
-              <div class="col-xs-4 col-md-2">
+              <div class="col-xs-4 col-md-2 <?= ($auxIdTipoIngreso==9)?'hidden':'' ?>">
                 <label>% Descuento:</label>
                 <input type="text" style="text-align:right;" class="form-control form-control-sm" id="descuento_ne"
                   name="descuento_ne" />

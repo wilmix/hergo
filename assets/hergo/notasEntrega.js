@@ -222,6 +222,7 @@ $( function() {
             $("#unidad_imp").val( ui.item.unidad);
             $("#saldo_ne").val( ui.item.saldo);
             $("#precio").val(($("#tipomov_ne2").val()=='9') ? formatoCosto(ui.item.cpp) : ui.item.precio);
+            $("#punitario_ne").val(($("#tipomov_ne2").val()=='9') ? formatoCosto(ui.item.cpp) : '');
             glob_guardar=true;
             return false;
         }
