@@ -758,20 +758,21 @@ class Facturas extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
+
 			$idFactura= addslashes($this->security->xss_clean($this->input->post('idFactura')));
 			$msjAnular= addslashes($this->security->xss_clean($this->input->post('msj')));
-						
-        	
-        	$facturaEgresos=$this->FacturaEgresos_model->obtenerPorFactura($idFactura);
 
-			$this->Facturacion_model->anularFactura($idFactura, $msjAnular);
-			$this->actualizarRestarCantFact($idFactura);
+			$factura = $this->Facturacion_model->obtenerFactura($idFactura);
+			$pagada = $factura->pagada;
+			if ($pagada == 0) {
+				$anularFactura = $this->Facturacion_model->anularFactura($idFactura, $msjAnular);
+			} else {
+				$anularFactura = false;
+			}
 
-		//******	$this->actualizarEstado($facturaEgresos->idegresos);
+			echo json_encode($anularFactura);
 
-			/******actualizar estado en egreso****/
-			$this->FacturaEgresos_model->actualizarFparcial_noFacturado($idFactura,$facturaEgresos->idegresos);
-			echo json_encode(1);
+
 		}
 		else
 		{

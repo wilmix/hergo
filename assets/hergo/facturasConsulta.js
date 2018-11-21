@@ -306,7 +306,7 @@ function tipoNumeroMovimiento(value, row, index) {
 
 function formatoBotones(value, row, index)
 {
-    if(row.anulada==1)
+    if(row.anulada==1 || row.pagada != 0)
     {
         return [
         '<button type="button" class="btn btn-default verFactura"  aria-label="Right Align" data-toggle="tooltip" title="Ver">',
@@ -316,7 +316,7 @@ function formatoBotones(value, row, index)
         '<button type="button" class="btn btn-default printFactura" aria-label="Right Align" data-toggle="tooltip" title="Imprimir">',
         '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
         ].join('');    
-    }
+    } 
     else
     {
         return [
@@ -367,33 +367,45 @@ window.eventosBotones = {
     },
     'click .anularFactura': function (e, value, row, index) {    
         console.log(row);     
-        swal({
-          title: 'Esta seguro?',
-          text: `Se anulara la factura ${row.nFactura} de ${row.ClienteFactura}`,      
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Aceptar',
-          cancelButtonText:'Cancelar',                
-        }).then(function () {
+        if (row.pagada == 0) {
+             swal({
+                    title: 'Esta seguro?',
+                    text: `Se anulara la factura ${row.nFactura} de ${row.ClienteFactura}`,      
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText:'Cancelar',                
+                    }).then(function () {
 
+                        swal({
+                            title: 'Anular movimiento',
+                            text: 'Cual es el motivo de anulacion?',
+                            input: 'text',
+                            type: 'info',
+                            showCancelButton: true,
+                            confirmButtonText: 'Aceptar',
+                            cancelButtonText:'Cancelar',                
+                        }).then(function (texto) {
+                            anularFactura(row, texto); 
+                                swal({
+                                    type: 'success',
+                                    title: 'Anulado!',
+                                    allowOutsideClick: false, 
+                                    html: `FACTURA ${row.nFactura} ANULADA POR:  ${texto}`
+                                }).then(function(){})
+                        })
+                    })
+        } else {
             swal({
-                title: 'Anular movimiento',
-                text: 'Cual es el motivo de anulacion?',
-                input: 'text',
-                type: 'info',
-                showCancelButton: true,
+                title: 'Error',
+                html: `La factura ${row.nFactura} de ${row.ClienteFactura} se encuentra <br> <b>PAGADA</b>`,      
+                type: 'warning',
+                showCancelButton: false,
                 confirmButtonText: 'Aceptar',
                 cancelButtonText:'Cancelar',                
-            }).then(function (texto) {
-                 anularFactura(row, texto); 
-                    swal({
-                        type: 'success',
-                        title: 'Anulado!',
-                        allowOutsideClick: false, 
-                        html: `FACTURA ${row.nFactura} ANULADA POR:  ${texto}`
-                    }).then(function(){})
               })
-        })
+        }
+       
         
     },      
 };
@@ -410,8 +422,16 @@ function anularFactura(row,txtAnular)
         dataType: "json",
         data:data
     }).done(function(res){  
-        
-       retornarTablaFacturacion();
+       if (res) {
+        retornarTablaFacturacion()
+       } else {
+        swal({
+            title: 'Error',
+            text: `No se pudo anular la factura ${row.nFactura} de ${row.ClienteFactura}`,      
+            type: 'error',
+            })
+       }
+       
       
     }).fail(function( jqxhr, textStatus, error ) {
     var err = textStatus + ", " + error;

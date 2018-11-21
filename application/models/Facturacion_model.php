@@ -6,6 +6,8 @@ class Facturacion_model extends CI_Model
 	{	
 		parent::__construct();
 		$this->load->helper('date');
+		$this->load->model("FacturaDetalle_model");
+		$this->load->model("FacturaEgresos_model");
 		date_default_timezone_set("America/La_Paz");
 	}
 	public function storeFactura($factura)
@@ -220,12 +222,34 @@ class Facturacion_model extends CI_Model
 	}
 	public function anularFactura($idFactura,$msj)
 	{
-		$msj = strval($msj);
-		$sql="UPDATE factura set anulada=1,glosa='$msj' where idFactura=$idFactura;";
-       
-		$query=$this->db->query($sql);
-        
-        return $query;
+		$this->db->trans_start();
+			
+			$facturaEgresos=$this->FacturaEgresos_model->obtenerPorFactura($idFactura);
+
+			$msj = strval($msj);
+			$sql="UPDATE factura set anulada=1,glosa='$msj' where idFactura=$idFactura;";
+			$this->db->query($sql);
+
+			$facturaDetalle=$this->obtenerDetalleFactura($idFactura);		
+			foreach ($facturaDetalle as $fila) 
+			{
+				
+				if($fila["idEgresoDetalle"]!=null)
+					$this->Egresos_model->actualizarRestarCantFact($fila["idEgresoDetalle"],$fila["facturaCantidad"]);		
+			}
+
+			$this->FacturaEgresos_model->actualizarFparcial_noFacturado($idFactura,$facturaEgresos->idegresos);
+
+
+		$this->db->trans_complete();
+		if ($this->db->trans_status() === FALSE)
+		{
+			return false;
+			
+		} else {
+			
+			return true;
+		}
 	}
 	public function actualizar_estadoPagoFactura($idFactura,$saldoNuevo,$saldoPago)
 	{	

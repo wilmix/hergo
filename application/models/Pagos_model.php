@@ -22,7 +22,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		INNER JOIN tipoPago tp ON tp.`id`= p.`tipoPago`
 		WHERE p.fechaPago
 		BETWEEN '$ini' AND '$fin' AND p.almacen like '%$alm'
-		AND f.`anulada` = 0
+		-- AND f.`anulada` = 0
 		GROUP BY p.`idPago`
 		ORDER BY p.`idPago` DESC";
 		$query=$this->db->query($sql);		
