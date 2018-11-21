@@ -32,7 +32,9 @@ class Linea extends CI_Controller {
             base_url('assets/plugins/daterangepicker/moment.min.js'),
         );
         $this->datos['nombre_usuario'] = $this->session->userdata('nombre');
-		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
+        $this->datos['user_id_actual']=$this->session->userdata['user_id'];
+		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
+        
 
         $this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
         $hoy = date('Y-m-d');

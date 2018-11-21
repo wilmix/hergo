@@ -31,6 +31,8 @@ class CodigoControl extends CI_Controller
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
+		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
+
 		$hoy = date('Y-m-d');
 		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
 		if ($tipoCambio) {

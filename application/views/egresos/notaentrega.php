@@ -6,7 +6,7 @@
     $idmoneda=0;
     $idcliente=0;
     $idvendedor=0;
-    if($cont) //editar
+        if($cont) //editar
     {
         $originalDate = $dcab->fechamov;      
         $newDate = date("Y-m-d", strtotime($originalDate));//revisar mes y año    
@@ -68,6 +68,8 @@
 
       <!-- Your Page Content Here -->
 <?php $auxIdTipoIngreso=($cont)?$idtegreso:$idegreso ?>
+<?php $auxIdAlmacen=($cont)?$idalmacen:$idalmacen ?>
+
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
@@ -81,13 +83,14 @@
             <?php if ($cont): ?>
             <input id="idegreso" name="idegreso" type="text" class="hidden" value="<?= $dcab->idEgresos ?>">
             <input id="nmov" name="nmov" type="text" class="hidden" value="<?= $nmov ?>">
+            
             <?php endif ?>
             <div class="row">
               <!--PRIMERA FILA-->
               <div class=" col-xs-6 col-sm-6 col-md-3">
-                <label>Almacen:</label>
-                <select class="form-control form-control-sm" id="almacen_ne" name="almacen_ne" <?=($cont)?"disabled":""
-                  ?>>
+              <input type="text" name="almacen" value="<?= ($auxIdAlmacen)?>" class="hidden">
+                <label>Almacen: </label>
+                <select class="form-control form-control-sm" id="almacen_ne" name="almacen_ne" <?= ($cont)?"disabled":""?> <?= ($this->ion_auth->is_admin())?"readonly":"readonly"?>>
                   <option value=<?=$id_Almacen_actual ?>
                     selected="selected">
                     <?= $almacen_actual ?>
@@ -102,8 +105,8 @@
               </div>
               <div class=" col-xs-6 col-sm-6 col-md-3">
                 <input type="" name="tipomov_ne" id="_tipomov_ne" value="<?= ($auxIdTipoIngreso)?>" class="hidden">
-                <label>Tipo de Ingreso:</label>
-                <select class="form-control form-control-sm" id="tipomov_ne2" name="tipomov_ne2" disabled>
+                <label>Tipo de Egreso:</label>
+                <select class="form-control form-control-sm" id="tipomov_ne2" name="tipomov_ne2" >
                   <?php foreach ($tegreso->result_array() as $fila): ?>
                   <?php if ($cont): ?>
                   <!--EDITAR-->

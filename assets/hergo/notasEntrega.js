@@ -96,12 +96,20 @@ $(document).on("change", "#almacen_ne", function () {
     loc_almacen = $("#almacen_ne").val();
 })
 $(document).on("click", "#anularMovimientoEgreso", function () {
+    almForm = $('#almacen_ne').val()
+    almUser = $('#idAlmacenUsuario').val()
+    isAdmin = $('#isAdmin').val()
+    if (almForm != almUser && isAdmin == '') {
+        swal("Error", "No se puede Anular", "error")
+        console.log('error');
+        return false
+    }
     mensajeAnular("#obs_ne",
         function () {
-            anularMovimientoEgreso();
+            anularMovimientoEgreso()
         },
         function () {
-            window.location.href = base_url("Egresos");
+            window.location.href = base_url("Egresos")
         }
     );
 
@@ -302,29 +310,28 @@ function guardarmovimiento() {
         retornarajax(base_url("index.php/Egresos/storeEgreso"), valuesToSubmit, function (data) {
             estado = validarresultado_ajax(data);
             if (estado) {
-                if (data.respuesta) {
-
-                    $("#modalIgresoDetalle").modal("hide");
-                    swal({
-                        title: 'Egreso realizado!',
-                        text: tipoEgreso + " guardada con éxito",
-                        type: 'success',
-                        showCancelButton: false
-                    }).then(
-                        function (result) {
-                            //location.reload();
-                            let imprimir = base_url("pdf/Egresos/index/") + data.respuesta;
-                            window.open(imprimir)
-                            limpiarArticulo()
-                            limpiarCabecera()
-                            limpiarTabla()
-                            limpiarTotales()
-                        });
-                } else {
-                    $(".mensaje_error").html("Error al almacenar los datos, intente nuevamente");
-                    $("#modal_error").modal("show");
-                }
-
+                $("#modalIgresoDetalle").modal("hide");
+                swal({
+                    title: 'Egreso realizado!',
+                    text: tipoEgreso + " guardada con éxito",
+                    type: 'success',
+                    showCancelButton: false
+                }).then(
+                    function (result) {
+                        let imprimir = base_url("pdf/Egresos/index/") + data.respuesta;
+                        window.open(imprimir)
+                        limpiarArticulo()
+                        limpiarCabecera()
+                        limpiarTabla()
+                        limpiarTotales()
+                    });
+            } else {
+                swal({
+                    title: 'Error!',
+                    text: 'No se puede guardar el egreso',
+                    type: 'error',
+                    showCancelButton: false
+                })
             }
         })
     } else {
@@ -427,8 +434,8 @@ function anularMovimientoEgreso() {
     let valuesToSubmit = $("#form_egreso").serialize();
         retornarajax(base_url("index.php/Egresos/anularmovimiento"), valuesToSubmit, function (data) {
             estado = validarresultado_ajax(data);
+            console.log(estado);
             if (estado) {
-                if (data.respuesta) {
                     swal({
                         title: 'Anulado!',
                         html: 'El movimiento # ' + nmov +  ' de ' +  clienteNombre + ' ha sido ANULADO',
@@ -436,13 +443,15 @@ function anularMovimientoEgreso() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Ok',
                     }).then((result) => {
-                        window.location.href = base_url("Egresos")
+                       // window.location.href = base_url("Egresos")
                     })
-                } else {
-                    $(".mensaje_error").html("Error al anular los datos, intente nuevamente");
-                    $("#modal_error").modal("show");
-                }
-
+            } else {
+                swal({
+                    title: 'Error!',
+                    text: 'No se puede anular el egreso',
+                    type: 'error',
+                    showCancelButton: false
+                })
             }
         })
 

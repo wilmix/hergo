@@ -7,9 +7,7 @@ class Egresos extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->library('LibAcceso');
-		
 		$this->load->helper('url');
-		
 		$this->load->model("Ingresos_model");
 		$this->load->model("Egresos_model");
 		$this->load->model("Cliente_model");
@@ -77,7 +75,7 @@ class Egresos extends CI_Controller
 		$this->libacceso->acceso(15);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
-
+			
 			$this->datos['menu']="Egresos";
 			$this->datos['opcion']="Consultas Egresos";
 			$this->datos['titulo']="Egresos";
@@ -96,11 +94,6 @@ class Egresos extends CI_Controller
             $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
 			$this->datos['tipoingreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
 			
-			
-
-
-			//$this->datos['ingresos']=$this->Ingresos_model->mostrarIngresos();
-
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
@@ -505,7 +498,7 @@ class Egresos extends CI_Controller
 	}
 	
 
-    public function guardarmovimiento()
+    public function guardarmovimiento() //xxxxxxx
     {
     	if($this->input->is_ajax_request())
         {
@@ -543,6 +536,10 @@ class Egresos extends CI_Controller
 			$egreso = new stdclass();
 			$egreso->almacen = $this->security->xss_clean($this->input->post('almacen_ne'));
 			$egreso->tipomov = $this->security->xss_clean($this->input->post('tipomov_ne'));
+			if ($egreso->almacen != $this->datos['id_Almacen_actual'] && !$this->ion_auth->is_admin()) {
+					echo 'almacen'.$egreso->almacen.' usu'.$this->datos['id_Almacen_actual'].' admin '.$this->ion_auth->is_admin().$egreso->tipomov;
+					return false;
+			} 			
 			$egreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_ne'));
 			$egreso->fechamov = date('Y-m-d',strtotime($egreso->fechamov));
 			$gestion = date('Y',strtotime($egreso->fechamov));
@@ -627,7 +624,7 @@ class Egresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-    public function actualizarmovimiento()
+    public function actualizarmovimiento()//xxxxxxx
     {
     	if($this->input->is_ajax_request())
         {
@@ -654,7 +651,7 @@ class Egresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
     }
-    public function retornarpreciorticulo($idarticulo,$idAlmacen)
+    public function retornarpreciorticulo($idarticulo,$idAlmacen) //xxxxxxx
 	{
 		$idArticulo=$this->Ingresos_model->retornar_datosArticulo($idarticulo);		
 		$saldo=$this->Egresos_model->retornarsaldoarticulo_model($idArticulo,$idAlmacen);
@@ -682,7 +679,7 @@ class Egresos extends CI_Controller
 		
 		echo json_encode($obj);
 	}
-	public function get_costo_articuloEgreso($codigo,$cant=0,$preciou=0,$idAlmacen)	//para tabla
+	public function get_costo_articuloEgreso($codigo,$cant=0,$preciou=0,$idAlmacen)	//xxxxxxx
 	{		
 		$cant=$cant==""?0:$cant;
 		$preciou=$preciou==""?0:$preciou;
@@ -714,7 +711,7 @@ class Egresos extends CI_Controller
 		
 		return $obj;
 	}
-	public function actualizarCostoArticuloEgreso($tabla,$idalmacen)
+	public function actualizarCostoArticuloEgreso($tabla,$idalmacen) //xxxxxxx
 	{
 		
 		foreach ($tabla as $fila) 
@@ -729,9 +726,18 @@ class Egresos extends CI_Controller
     	if($this->input->is_ajax_request())
         {
             $datos['idegreso'] = $this->security->xss_clean($this->input->post('idegreso'));        	
-        	$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
-        	if($this->Egresos_model->anularRecuperarMovimiento_model($datos))
-				echo json_encode(true);
+			$datos['obs_ne'] = $this->security->xss_clean($this->input->post('obs_ne'));
+			$id = intval( $datos['idegreso']);
+			$egreso = $this->Egresos_model->mostrarEgresos($id)->row();
+			$almacen = $egreso->idalmacen;
+			if ($almacen != $this->datos['id_Almacen_actual'] && !$this->ion_auth->is_admin()) {
+				echo 'error almacen usuario';
+				return false;
+			}
+
+			$anular = $this->Egresos_model->anularRecuperarMovimiento_model($datos);
+        	if($anular)
+				echo json_encode($anular);
 			else
 				echo json_encode(false);
 		}
@@ -740,7 +746,7 @@ class Egresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}		
 	}
-    public function recuperarmovimiento()
+    public function recuperarmovimiento()//xxxxxxx
     {
     	if($this->input->is_ajax_request())
         {

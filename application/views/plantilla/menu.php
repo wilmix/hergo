@@ -12,6 +12,10 @@
       <div class="pull-left info">
         <p><?php echo $nombre_usuario ?></p>
         <p><?php echo $almacen_usuario ?></p>
+        <input type="text" value = "<?= $id_Almacen_actual ?>" class="hidden" id="idAlmacenUsuario">
+        <input type="text" value = "<?= ($this->ion_auth->is_admin())?"admin":""?>" class="hidden" id="isAdmin">
+
+
         <!-- Status -->
         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
       </div>

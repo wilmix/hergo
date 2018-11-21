@@ -22,7 +22,10 @@ class Egresos_model extends CI_Model
                 WHEN estado = 2 THEN 'PARCIAL'	
             END estadoF, estado
             FROM(
-                    SELECT DISTINCTROW d.idingdetalle, e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, ( d.total) total1,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,c.documento,e.tipocambio, tc.tipocambio tipocambiovalor,f.nFactura,GROUP_CONCAT(DISTINCTROW f.nfactura SEPARATOR '-') factura 
+                    SELECT DISTINCTROW d.idingdetalle, e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, 
+                    c.nombreCliente, ( d.total) total1,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, 
+                    e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,
+                    c.documento,e.tipocambio, tc.tipocambio tipocambiovalor,f.nFactura,GROUP_CONCAT(DISTINCTROW f.nfactura SEPARATOR '-') factura, e.almacen idAlmacen
                     FROM egresos e
                     INNER JOIN egredetalle d
                     on e.idegresos=d.idegreso

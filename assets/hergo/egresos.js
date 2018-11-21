@@ -508,9 +508,14 @@ window.operateEvents = {
         verdetalle(row)
     },
     'click .editarEgreso': function (e, value, row, index) {
+        almForm = row.idAlmacen
+        almUser = $('#idAlmacenUsuario').val()
+        isAdmin = $('#isAdmin').val()
+        if (almForm != almUser && isAdmin == '') {
+            swal("Error", "No se puede Editar", "error")
+            return false
+        }
         let editar = base_url("Egresos/editarEgresos/") + row.idEgresos;
-        console.log(row.anulado);
-        
         if (row.estado == 1) {
             swal("Error", "El registro ya se encuentra Facturado.", "error")
         } else if (row.anulado == 1) {
