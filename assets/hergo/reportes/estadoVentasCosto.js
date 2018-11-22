@@ -15,6 +15,11 @@ $(document).on("click", "#refresh", function () {
     tituloReporte() 
     retornarestadoVentasCosto();
 })
+$(document).on("click", "#excel", function () {
+    alm = $("#almacen_filtro").val()
+    let excel = base_url("ReportesExcel/estadoVentasCostoItem/"+alm);
+    location.href = (excel);
+})
 
 function retornarestadoVentasCosto() 
 {   

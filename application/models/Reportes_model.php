@@ -400,6 +400,43 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function mostrarEstadoVentasCostoXLS($alm="")
+	{ 
+		$sql="SELECT sigla, linea, 
+		idArticulo idArticulo, codigo, descrip, unidad, costo, ppVenta, SUM(saldo) saldo,
+		SUM(saldoValorado) saldoValorado, cantidadVendida, SUM(totalCosto) totalCosto, SUM(totalVentas) totalVentas, SUM(utilidad) utilidad
+		FROM
+		(
+		SELECT l.`Sigla` sigla, l.`Linea` linea, idArticulo, a.`CodigoArticulo` codigo, a.`Descripcion` descrip, u.`Unidad` unidad, a.`costoPromedioPonderado` costo, IFNULL(ppVenta,0) ppVenta , saldo,
+		(a.`costoPromedioPonderado` * saldo) saldoValorado, cantidadVendida, (cantidadVendida * a.`costoPromedioPonderado`) totalCosto, (cantidadVendida * IFNULL(ppVenta,0)) totalVentas,
+		((cantidadVendida * IFNULL(ppVenta,0)) - (cantidadVendida * a.`costoPromedioPonderado`)) utilidad
+		FROM (
+		SELECT *
+		FROM
+		(
+		SELECT sa.idArticulo , (sa.saldo + sa.notaEntrega) saldo, sa.`facturado` cantidadVendida 
+		FROM saldoarticulos sa
+		WHERE sa.`idAlmacen` LIKE '%$alm'
+		) sal
+		LEFT JOIN ( SELECT * FROM (
+			SELECT fd.articulo , (SUM(fd.`facturaPUnitario` * fd.facturaCantidad) ) / SUM(fd.`facturaCantidad`)  ppVenta
+			FROM factura f
+			INNER JOIN facturadetalle fd ON fd.`idFactura` = f.`idFactura`
+			INNER JOIN articulos a ON a.idArticulos = fd.articulo
+			WHERE YEAR(f.`fechaFac`)=YEAR(NOW()) AND f.`anulada` = 0 AND f.`almacen` LIKE '%$alm'
+			GROUP BY fd.articulo
+			)tbl) ppv ON ppv.articulo = idArticulo
+		) todo
+		INNER JOIN articulos a ON a.`idArticulos` = idArticulo
+		INNER JOIN unidad u ON u.`idUnidad`= a.`idUnidad`
+		INNER JOIN linea l ON l.`idLinea` = a.`idLinea`
+		ORDER BY l.`Sigla`, a.`CodigoArticulo`
+		) tbl
+		GROUP BY sigla, codigo WITH ROLLUP	
+		";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 	public function mostrarSaldosActualesItems($alm="",$linea="")
 	{ 
 		if ($alm >0) {
