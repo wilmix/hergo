@@ -92,33 +92,8 @@ $(document).on("click",".eliminarArticulo",function(){
     calcularTotal()
 })
 $(document).on("change","#almacen_imp",function(){
-
-    var tablaaux=tablatoarray();
     loc_almacen = $("#almacen_imp").val()
-    
-    if(tablaaux.length>0)
-    {
-        swal("Atencion!", "Al cambiar el almacen se quitaran los articulos de la tabla")
-        swal({
-          title: "Atencion!",
-          text: "Al cambiar el almacen se quitaran los articulos de la tabla",
-          type: "warning",
-          showCancelButton: true,
-          cancelButtonText: "Cancelar",
-          confirmButtonColor: "#DD6B55",
-          confirmButtonText: "Continuar",
-        
-        },
-        function(isConfirm){
-          if (isConfirm) {
-            limpiarArticulo();           
-            limpiarTabla();
-            loc_almacen= $("#almacen_imp").val();
-          } else {
-            $("#almacen_imp").val(loc_almacen);
-          }
-        });
-    }
+    swal("Atencion!", "Usted esta cambiado de Almacen")
 }); 
 $(document).ready(function(){ 
 
@@ -164,6 +139,13 @@ $(document).on("keyup","#cantidad_imp,#punitario_imp",function(){
     alertacosto(costo,costobase);
 })
 $(document).on("click","#guardarMovimiento",function(){
+    almForm = $('#almacen_imp').val()
+    almUser = $('#idAlmacenUsuario').val()
+    isAdmin = $('#isAdmin').val()
+    if (almForm != almUser && isAdmin == '') {
+        swal("Error", "No se puede guardar movimiento", "error")
+        return false
+    }
     storeIngreso();
 })
 $(document).on("click","#cancelarMovimiento",function(){
@@ -178,6 +160,13 @@ $(document).on("click","#cancelarMovimientoActualizar",function(){
     window.location.href=base_url("Ingresos");
 })
 $(document).on("click","#anularMovimiento",function(){
+    almForm = $('#almacen_imp').val()
+    almUser = $('#idAlmacenUsuario').val()
+    isAdmin = $('#isAdmin').val()
+    if (almForm != almUser && isAdmin == '') {
+        swal("Error", "No se puede Anular", "error")
+        return false
+    }
     mensajeAnular("#obs_imp",
         function(){
             anularMovimiento();

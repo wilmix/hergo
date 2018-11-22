@@ -49,6 +49,13 @@ window.operateEvents = {
         verdetalle(row)
     },
     'click .editarIngreso': function (e, value, row, index) {
+        almForm = row.idAlmacen
+        almUser = $('#idAlmacenUsuario').val()
+        isAdmin = $('#isAdmin').val()
+        if (almForm != almUser && isAdmin == '') {
+            swal("Error", "No se puede Editar", "error")
+            return false
+        }
         if (row.anulado == 1) {
             swal("Error", "El registro seleccionado esta anulado", "error")
         }

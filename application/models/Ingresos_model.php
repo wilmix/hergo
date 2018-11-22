@@ -31,7 +31,7 @@ class Ingresos_model extends CI_Model
             i.tipocambio, 
             tc.tipocambio valorTipoCambio, 
             SUM(id.total)/tc.tipoCambio totalsus, 
-            t.sigla,
+            t.sigla, i.almacen idAlmacen,
             CASE
                 WHEN i.anulado = 1 THEN 'ANULADO'
                 WHEN i.estado = 0 THEN 'PENDIENTE'

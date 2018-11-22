@@ -134,6 +134,14 @@ $(document).on("change", "#moneda_ne", function () {
     cambiarMoneda()
 })
 $(document).on("click", "#guardarMovimiento", function () {
+    almForm = $('#almacen_ne').val()
+    almUser = $('#idAlmacenUsuario').val()
+    isAdmin = $('#isAdmin').val()
+    if (almForm != almUser && isAdmin == '') {
+        swal("Error", "No se puede guardar movimiento", "error")
+        console.log('error');
+        return false
+    }
     guardarmovimiento();
 })
 $(document).on("click", "#cancelarMovimiento", function () {
