@@ -528,6 +528,7 @@ class Auth extends CI_Controller {
         $identity_column = $this->config->item('identity','ion_auth');
 		$this->data['identity_column'] = $identity_column;
 		$this->data['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
+		$this->data['user_id_actual']=$this->session->userdata['user_id'];
 		$this->data['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 		$this->data['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
 		$this->data['titulo']="Crear Usuario";
@@ -670,6 +671,7 @@ class Auth extends CI_Controller {
 	{
 		$this->data['title'] = $this->lang->line('edit_user_heading');
 		$this->data['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
+		$this->data['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 		$this->data['user_id_actual']=$this->session->userdata['user_id'];
 		$this->data['titulo']="Editar Usuario";
 
