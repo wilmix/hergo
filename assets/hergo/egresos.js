@@ -534,8 +534,6 @@ window.operateEvents = {
             swal("Error", "No se puede Editar", "error")
             return false
         }
-        console.log('editar');
-        return false
         var editar = base_url("Traspasos/modificarTraspaso/") + row.idEgresos;
         if (row.estado == 'TRASPASO') {
             window.location.href = editar;
