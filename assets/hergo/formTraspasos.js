@@ -19,6 +19,7 @@ $(document).ready(function () {
     loc_almacen = $("#almacen_imp").val();
 })
 $(document).on("change", "#almacen_imp", function () {
+    clg
     let tablaaux = tablatoarray();
     if (tablaaux.length > 0) {
         swal("Atencion!", "Al cambiar el almacen se quitaran los articulos de la tabla")
@@ -44,7 +45,7 @@ $(document).on("change", "#almacen_imp", function () {
 });
 $(document).on("change", "#almacen_ori", function () {
     alm = $("#almacen_ori").val();
-    console.log(alm);
+    swal("Atencion!", "Usted esta cambiado de Almacen")
 });
 $(document).on("change", "#fechamov_ne", function () {
     let fecha = $('#fechamov_ne').val()
@@ -631,13 +632,20 @@ function tablatoarray()
 }
 
 $(document).on("click", "#guardarMovimiento", function () {
+    almForm = $('#almacen_ori').val()
+    almUser = $('#idAlmacenUsuario').val()
+    isAdmin = $('#isAdmin').val()
+    if (almForm != almUser && isAdmin == '') {
+        swal("Error", "No se puede guardar movimiento", "error")
+        return false
+    }
     guardarmovimiento();
 })
 $(document).on("click", "#cancelarMovimiento", function () {
     limpiarArticulo();
     limpiarCabecera();
     limpiarTabla();
-    window.location.href = base_url("Ingresos");
+    window.location.href = base_url("Traspasos");
 })
 $(document).on("click", "#actualizarMovimiento", function () {
     updateTraspaso();
