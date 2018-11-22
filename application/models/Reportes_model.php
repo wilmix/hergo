@@ -365,7 +365,7 @@ class Reportes_model extends CI_Model
 		END codigo
 		FROM(
 		SELECT sigla, linea, 
-		idArticulo idArticulo, codigo, descrip, unidad, costo, ppVenta, saldo,
+		idArticulo idArticulo, codigo, descrip, unidad, costo, ppVenta, SUM(saldo) saldo,
 		SUM(saldoValorado) saldoValorado, cantidadVendida, SUM(totalCosto) totalCosto, SUM(totalVentas) totalVentas, SUM(utilidad) utilidad
 		FROM
 		(

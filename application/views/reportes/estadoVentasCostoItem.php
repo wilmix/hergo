@@ -10,11 +10,23 @@
                     <?php endforeach ?>
                     <option value="">TODOS</option>
                 </select>
+
+                <select id="moneda" class="btn btn-primary btn-sm">
+                    <option value="0">BOB</option>
+                    <option value="1">$U$</option>
+                </select>
+
+                <button  type="button" class="btn btn-primary btn-sm" id="refresh">
+                    <span>
+                    <i class="fa fa-share-square"></i>
+                    </span>
+                </button>
           </div>
 
           <div class="text-center">
-            <h2>ESTADO DE VENTAS Y COSTOS POR ITEM</h2>
-            <h3>Gestion Actual</h3>
+            <h2>ESTADO DE VENTAS Y COSTOS POR ITEM <span > Gestion Actual</span></h2>
+            <h3 id="tituloReporte"></h3>
+            <h4 id="monedaTitulo"></h4>
           </div>
           <table 
             id="estadoVentasCostos" 

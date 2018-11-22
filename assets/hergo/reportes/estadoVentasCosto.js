@@ -1,24 +1,35 @@
 
 $(document).ready(function(){
+    tituloReporte() 
     retornarestadoVentasCosto();
 }) 
 $(document).on("change", "#almacen_filtro", function () {
+    tituloReporte() 
+    retornarestadoVentasCosto();
+})
+$(document).on("change", "#moneda", function () {
+    tituloReporte() 
+    retornarestadoVentasCosto();
+})
+$(document).on("click", "#refresh", function () {
+    tituloReporte() 
     retornarestadoVentasCosto();
 })
 
-function retornarestadoVentasCosto() //*******************************
+function retornarestadoVentasCosto() 
 {   
+    let mon = $("#moneda").val()
     alm = $("#almacen_filtro").val();
     agregarcargando();
     $.ajax({
         type:"POST",
-        url: base_url('index.php/Reportes/mostrarEstadoVentasCosto'), //******controlador
+        url: base_url('index.php/Reportes/mostrarEstadoVentasCosto'),
         dataType: "json",
         data: {
             alm: alm
         },
     }).done(function(res){
-        console.log(alm);
+        console.log(glob_tipoCambio);
     	quitarcargando();
         $("#estadoVentasCostos").bootstrapTable('destroy');
         $("#estadoVentasCostos").bootstrapTable({       
@@ -27,7 +38,6 @@ function retornarestadoVentasCosto() //*******************************
                     striped:true,
                     search:true,
                     filter:true,
-                    strictSearch: true,
                     stickyHeader: true,
                     stickyHeaderOffsetY: '50px',
                     showFooter: true,
@@ -62,10 +72,28 @@ function retornarestadoVentasCosto() //*******************************
                     },
                     {
                         field: 'costo',
-                        title: 'Costo Uni.',
+                        title: 'C/U BOB.',
                         align: 'right',
                         width:'80px',
-                        visible: true,
+                        visible: mon==1 ? false  : true,
+                        searchable: false,
+                        formatter: formatoDecimal,
+                    },
+                    {
+                        field: 'costo',
+                        title: 'C/U $U$.',
+                        align: 'right',
+                        width:'80px',
+                        visible: mon==1 ? true  : false,
+                        searchable: false,
+                        formatter: formatoDecimalDolares,
+                    },
+                    {
+                        field: 'ppVenta',
+                        title: 'P.P. Venta',
+                        align: 'right',
+                        width:'80px',
+                        visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
                     },
@@ -74,9 +102,9 @@ function retornarestadoVentasCosto() //*******************************
                         title: 'P.P. Venta',
                         align: 'right',
                         width:'80px',
-                        visible: true,
+                        visible: mon==1 ? true  : false,
                         searchable: false,
-                        formatter: formatoDecimal,
+                        formatter: formatoDecimalDolares,
                     },
                     {
                         field: 'saldo',
@@ -92,9 +120,19 @@ function retornarestadoVentasCosto() //*******************************
                         title: 'Saldo Valorado',
                         align: 'right',
                         width:'80px',
-                        visible: true,
+                        visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
+                        footerFormatter: sumaColumna
+                    },
+                    {
+                        field: 'saldoValorado',
+                        title: 'Saldo Valorado',
+                        align: 'right',
+                        width:'80px',
+                        visible: mon==1 ? true  : false,
+                        searchable: false,
+                        formatter: formatoDecimalDolares,
                         footerFormatter: sumaColumna
                     },
                     {
@@ -111,7 +149,27 @@ function retornarestadoVentasCosto() //*******************************
                         title: 'Total Costo',
                         align: 'right',
                         width:'80px',
-                        visible: true,
+                        visible: mon==1 ? false  : true,
+                        searchable: false,
+                        formatter: formatoDecimal,
+                        footerFormatter: sumaColumna
+                    },
+                    {
+                        field: 'totalCosto',
+                        title: 'Total Costo',
+                        align: 'right',
+                        width:'80px',
+                        visible: mon==1 ? true  : false,
+                        searchable: false,
+                        formatter: formatoDecimalDolares,
+                        footerFormatter: sumaColumna
+                    },
+                    {
+                        field: 'totalVentas',
+                        title: 'Total Ventas',
+                        align: 'right',
+                        width:'80px',
+                        visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
                         footerFormatter: sumaColumna
@@ -121,7 +179,17 @@ function retornarestadoVentasCosto() //*******************************
                         title: 'Total Ventas',
                         align: 'right',
                         width:'80px',
-                        visible: true,
+                        visible: mon==1 ? true  : false,
+                        searchable: false,
+                        formatter: formatoDecimalDolares,
+                        footerFormatter: sumaColumna
+                    },
+                    {
+                        field: 'utilidad',
+                        title: 'Utilidad',
+                        align: 'right',
+                        width:'80px',
+                        visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
                         footerFormatter: sumaColumna
@@ -131,9 +199,9 @@ function retornarestadoVentasCosto() //*******************************
                         title: 'Utilidad',
                         align: 'right',
                         width:'80px',
-                        visible: true,
+                        visible: mon==1 ? true  : false,
                         searchable: false,
-                        formatter: formatoDecimal,
+                        formatter: formatoDecimalDolares,
                         footerFormatter: sumaColumna
                     },
 
@@ -144,8 +212,14 @@ function retornarestadoVentasCosto() //*******************************
     console.log( "Request Failed: " + err );
     });
  }
-function formatoDecimal(value, row, index) {
+ function formatoDecimal(value, row, index) {
     num=Math.round(value * 100) / 100
+    num=num.toFixed(2);
+    return (formatNumber.new(num));
+}
+ function formatoDecimalDolares(value, row, index) {
+    num=Math.round(value * 100) / 100
+    num = num / glob_tipoCambio
     num=num.toFixed(2);
     return (formatNumber.new(num));
 }
@@ -185,4 +259,11 @@ function rowStyle(row, index) {
         };
     }
     return {};
+}
+function tituloReporte() {
+    almText = $('#almacen_filtro').find(":selected").text();
+    moneda = ($('#moneda').val() == 1) ? 'DOLARES' : 'BOLIVIANOS'
+    
+    $('#tituloReporte').text(almText);
+    $('#monedaTitulo').text(moneda);
 }
