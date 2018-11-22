@@ -376,7 +376,7 @@ class Reportes_model extends CI_Model
 		SELECT *
 		FROM
 		(
-		SELECT sa.idArticulo , sa.saldo, sa.`facturado` cantidadVendida 
+		SELECT sa.idArticulo , (sa.saldo + sa.notaEntrega) saldo, sa.`facturado` cantidadVendida 
 		FROM saldoarticulos sa
 		WHERE sa.`idAlmacen` LIKE '%$alm'
 		) sal
