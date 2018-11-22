@@ -298,6 +298,14 @@ window.operateEvents = {
         window.open(imprimir);
     },
     'click .editarPago': function (e, value, row, index) {
+        console.log(row);
+        almForm = row.idAlmacenPago
+        almUser = $('#idAlmacenUsuario').val()
+        isAdmin = $('#isAdmin').val()
+        if (almForm != almUser && isAdmin == '') {
+            swal("Error", "No se puede Editar", "error")
+            return false
+        }
         let editar = base_url("Pagos/editarPago/") + row.idPago;
         window.location.href = editar;
         //window.open(editar);

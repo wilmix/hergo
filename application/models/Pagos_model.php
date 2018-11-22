@@ -10,7 +10,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		date_default_timezone_set("America/La_Paz");
 	}
 	public function mostrarPagos($ini=null,$fin=null,$alm="") { 
-		$sql="SELECT p.`idPago`, a.`almacen`, p.`numPago`, p.`fechaPago`, c.`nombreCliente`, p.`totalPago`, 
+		$sql="SELECT p.`idPago`, a.`almacen`, p.`numPago`, p.`fechaPago`, c.`nombreCliente`, p.`totalPago`, p.almacen idAlmacenPago,
 		p.`anulado`, CONCAT(u.`first_name`, ' ' , u.`last_name`) autor, p.`fecha`, f.`pagada`, m.`sigla`, tp.`tipoPago`
 		FROM pago_factura pf
 		INNER JOIN pago p ON p.`idPago`= pf.`idPago`

@@ -177,6 +177,9 @@ $(document).on("change","#cliente_factura",function(){
 $(document).on("change","#almacen_filtro",function(){
     retornarPagosPendientes();
 }) 
+$(document).on("change","#almacen",function(){
+    swal("Atencion!", "Usted esta cambiado de Almacen")
+}) 
 $(document).on("click", "#refresh", function () {
     retornarPagosPendientes();
 })
@@ -689,6 +692,13 @@ var vmPago = new Vue({
             });
         },
         anularPago(){
+            almForm = $('#almacen').val()
+            almUser = $('#idAlmacenUsuario').val()
+            isAdmin = $('#isAdmin').val()
+            if (almForm != almUser && isAdmin == '') {
+                swal("Error", "No se puede Anular", "error")
+                return false
+            }
             swal({
               title: 'Esta seguro?',
               text: `Se anulara el recibo ${this.numPago} de ${this.nombreCliente}`,      
@@ -752,8 +762,15 @@ var vmPago = new Vue({
             window.location.href = base_url("Pagos")
         },
         guardarPago:function(){
+            almForm = $('#almacen').val()
+            almUser = $('#idAlmacenUsuario').val()
+            isAdmin = $('#isAdmin').val()
+            if (almForm != almUser && isAdmin == '') {
+                swal("Error", "No se puede guardar movimiento", "error")
+                console.log('error');
+                return false
+            }
              nombreCliente = $("#cliente_factura").val();
-            //agregarcargando();
             let datos={
                 almacen: this.almacen,
                 fechaPago: fechaPagoHoy,
