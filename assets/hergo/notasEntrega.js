@@ -443,7 +443,7 @@ function anularMovimientoEgreso() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Ok',
                     }).then((result) => {
-                       // window.location.href = base_url("Egresos")
+                        window.location.href = base_url("Egresos")
                     })
             } else {
                 swal({
