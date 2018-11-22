@@ -527,6 +527,15 @@ window.operateEvents = {
     },
     'click .editarEgresoTraspaso': function (e, value, row, index) {
         console.log(row);
+        almForm = row.idAlmacen
+        almUser = $('#idAlmacenUsuario').val()
+        isAdmin = $('#isAdmin').val()
+        if (almForm != almUser && isAdmin == '') {
+            swal("Error", "No se puede Editar", "error")
+            return false
+        }
+        console.log('editar');
+        return false
         var editar = base_url("Traspasos/modificarTraspaso/") + row.idEgresos;
         if (row.estado == 'TRASPASO') {
             window.location.href = editar;

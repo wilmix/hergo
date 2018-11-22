@@ -99,7 +99,7 @@ class Egresos_model extends CI_Model
         {
           $sql="SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total, e.fecha, CONCAT(u.first_name,' ', u.last_name) autor,
            e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,c.documento,e.tipocambio, sum(d.total)/tc.tipocambio totalsus, 
-           a1.almacen destino,
+           a1.almacen destino, e.almacen idAlmacen,
            CASE
                 WHEN e.anulado = 1 THEN 'ANULADO'
                 WHEN t.sigla = 'ET' THEN 'TRASPASO'
