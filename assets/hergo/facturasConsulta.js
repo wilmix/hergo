@@ -366,7 +366,13 @@ window.eventosBotones = {
         window.open(imprimir);
     },
     'click .anularFactura': function (e, value, row, index) {    
-        console.log(row);     
+        almForm = row.idAlmacen
+        almUser = $('#idAlmacenUsuario').val()
+        isAdmin = $('#isAdmin').val()
+        if (almForm != almUser && isAdmin == '') {
+            swal("Error", "No se puede Anular", "error")
+            return false
+        }
         if (row.pagada == 0) {
              swal({
                     title: 'Esta seguro?',

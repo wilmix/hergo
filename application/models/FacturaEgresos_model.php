@@ -33,7 +33,7 @@ class FacturaEgresos_model extends CI_Model
 		$sql="SELECT f.`idFactura`, f.`lote`, df.`manual`, f.`nFactura`, f.`fechaFac`, f.`ClienteNit`, f.`ClienteFactura`,  t.`sigla`, 
 		f.`total`, CONCAT(u.first_name,' ', u.last_name) AS vendedor, f.`anulada`, f.fecha,
 		GROUP_CONCAT(DISTINCT e.nmov ORDER BY e.nmov ASC SEPARATOR ' - ') AS movimientos, f.glosa,
-		f.`pagada`, 
+		f.`pagada`, f.almacen idAlmacen,
 		CASE
 			WHEN f.`anulada` = 1 THEN 'ANULADA'
 			WHEN f.`pagada` = 0 THEN 'NO PAGADA'
