@@ -147,9 +147,9 @@ class ReportesExcel extends CI_Controller
         $writer->save('php://output'); // download file 
  
     }
-    public function estadoVentasCostoItem($alm = '')
+    public function estadoVentasCostoItem($alm, $tc)
     {
-
+		$alm = ($alm == 'NN') ? '' : $alm;
 		$spreadsheet = new Spreadsheet();
 		$sheet = $spreadsheet->getActiveSheet();
 		$sheet->setTitle('EstadoCostoVentas');
@@ -216,8 +216,8 @@ class ReportesExcel extends CI_Controller
                 $this->array_push_assoc($x, array('utilidad'=> $linea['utilidad']));
             } else if ($linea['codigo'] == '')  {
                 $this->array_push_assoc($x, array('idArticulo'=> ''));
-                $this->array_push_assoc($x, array('sigla'=> ''));
-                $this->array_push_assoc($x, array('linea'=> ''));
+                $this->array_push_assoc($x, array('sigla'=> $linea['sigla']));
+                $this->array_push_assoc($x, array('linea'=> $linea['linea']));
                 $this->array_push_assoc($x, array('codigo'=> ''));
                 $this->array_push_assoc($x, array('descrip'=> 'TOTAL '.$linea['linea']));
                 $this->array_push_assoc($x, array('unidad'=> ''));
@@ -230,22 +230,38 @@ class ReportesExcel extends CI_Controller
                 $this->array_push_assoc($x, array('totalVentas'=> $linea['totalVentas']));
                 $this->array_push_assoc($x, array('utilidad'=> $linea['utilidad']));
             } else {
-                $this->array_push_assoc($x, array('idArticulo'=> $linea['idArticulo']));
-                $this->array_push_assoc($x, array('sigla'=> $linea['sigla']));
-                $this->array_push_assoc($x, array('linea'=> $linea['linea']));
-                $this->array_push_assoc($x, array('codigo'=> $linea['codigo']));
-                $this->array_push_assoc($x, array('descrip'=> $linea['descrip']));
-                $this->array_push_assoc($x, array('unidad'=> $linea['unidad']));
-                $this->array_push_assoc($x, array('costo'=> $linea['costo']));
-                $this->array_push_assoc($x, array('ppVenta'=> $linea['ppVenta']));
-                $this->array_push_assoc($x, array('saldo'=> $linea['saldo']));
-                $this->array_push_assoc($x, array('saldoValorado'=> $linea['saldoValorado']));
-                $this->array_push_assoc($x, array('cantidadVendida'=> $linea['cantidadVendida']));
-                $this->array_push_assoc($x, array('totalCosto'=> $linea['totalCosto']));
-                $this->array_push_assoc($x, array('totalVentas'=> $linea['totalVentas']));
-                $this->array_push_assoc($x, array('utilidad'=> $linea['utilidad']));
+				if ($tc == 'BOB') {
+					$this->array_push_assoc($x, array('idArticulo'=> $linea['idArticulo']));
+					$this->array_push_assoc($x, array('sigla'=> $linea['sigla']));
+					$this->array_push_assoc($x, array('linea'=> $linea['linea']));
+					$this->array_push_assoc($x, array('codigo'=> $linea['codigo']));
+					$this->array_push_assoc($x, array('descrip'=> $linea['descrip']));
+					$this->array_push_assoc($x, array('unidad'=> $linea['unidad']));
+					$this->array_push_assoc($x, array('costo'=> $linea['costo']));
+					$this->array_push_assoc($x, array('ppVenta'=> $linea['ppVenta']));
+					$this->array_push_assoc($x, array('saldo'=> $linea['saldo']));
+					$this->array_push_assoc($x, array('saldoValorado'=> $linea['saldoValorado']));
+					$this->array_push_assoc($x, array('cantidadVendida'=> $linea['cantidadVendida']));
+					$this->array_push_assoc($x, array('totalCosto'=> $linea['totalCosto']));
+					$this->array_push_assoc($x, array('totalVentas'=> $linea['totalVentas']));
+					$this->array_push_assoc($x, array('utilidad'=> $linea['utilidad']));
+				} else {
+					$this->array_push_assoc($x, array('idArticulo'=> $linea['idArticulo']));
+					$this->array_push_assoc($x, array('sigla'=> $linea['sigla']));
+					$this->array_push_assoc($x, array('linea'=> $linea['linea']));
+					$this->array_push_assoc($x, array('codigo'=> $linea['codigo']));
+					$this->array_push_assoc($x, array('descrip'=> $linea['descrip']));
+					$this->array_push_assoc($x, array('unidad'=> $linea['unidad']));
+					$this->array_push_assoc($x, array('costo'=> $linea['costo']/$tc));
+					$this->array_push_assoc($x, array('ppVenta'=> $linea['ppVenta'] / $tc));
+					$this->array_push_assoc($x, array('saldo'=> $linea['saldo'] / $tc));
+					$this->array_push_assoc($x, array('saldoValorado'=> $linea['saldoValorado'] / $tc));
+					$this->array_push_assoc($x, array('cantidadVendida'=> $linea['cantidadVendida'] / $tc));
+					$this->array_push_assoc($x, array('totalCosto'=> $linea['totalCosto'] / $tc));
+					$this->array_push_assoc($x, array('totalVentas'=> $linea['totalVentas'] / $tc));
+					$this->array_push_assoc($x, array('utilidad'=> $linea['utilidad'] / $tc));
+				}
             }
-            
             array_push($dataExcel, $x);
         }
 
@@ -259,7 +275,7 @@ class ReportesExcel extends CI_Controller
             $alm = 'SANTA CRUZ';
         } else if ($alm == '') {
             $alm = 'TODOS';
-        }
+        } 
         
         //echo '<pre>'; print_r($dataExcel); echo '</pre>';
         //return false;
@@ -273,36 +289,36 @@ class ReportesExcel extends CI_Controller
         
 		$writer = new Xlsx($spreadsheet);
 		$spreadsheet->getActiveSheet()->getColumnDimension('A')->setVisible(false);
-        $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(60);
+		$spreadsheet->getActiveSheet()->getColumnDimension('B')->setVisible(false);
+		$spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(60);
+		$spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(30);
 
         foreach(range('G','N') as $columnID)
         {
             $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setWidth(12);
         }
 		//$spreadsheet->getActiveSheet()->getColumnDimension('G:N')->setWidth(20);
+		$filename = 'estadoVentasCostoItem';
+        $fecha = date('d-m-Y');
 		$spreadsheet->getActiveSheet()->getStyle('G1:N5000')->getNumberFormat()->setFormatCode('#,##0.00');
         $spreadsheet->getActiveSheet()->getRowDimension('4')->setRowHeight(40);
-        $spreadsheet->getActiveSheet()->mergeCells('A1:N1');
+        $spreadsheet->getActiveSheet()->mergeCells('A1:M1');
         $spreadsheet->getActiveSheet()->setCellValue('A1', 'ESTADO DE VENTAS Y COSTO POR ITEM');
-        $spreadsheet->getActiveSheet()->mergeCells('A2:N2');
+        $spreadsheet->getActiveSheet()->mergeCells('A2:M2');
         $spreadsheet->getActiveSheet()->setCellValue('A2', $alm);
-        $spreadsheet->getActiveSheet()->mergeCells('A3:N3');
-        $spreadsheet->getActiveSheet()->setCellValue('A3', 'BOLIVIANOS');
+		$spreadsheet->getActiveSheet()->mergeCells('A3:M3');
+		$moneda = ($tc == 'BOB') ? 'BOLIVIANOS' : 'DOLARES';
+		$spreadsheet->getActiveSheet()->setCellValue('A3', $moneda);
+		$spreadsheet->getActiveSheet()->setCellValue('N3', $fecha);
+		$spreadsheet->getActiveSheet()->setCellValue('N2', 'TC: ' . $tc);
         $spreadsheet->getActiveSheet()->getStyle('A1:C3')->applyFromArray($styleArray);
         $spreadsheet->getActiveSheet()->getStyle('B4:N4')->getAlignment()->setWrapText(true);
         $spreadsheet->getActiveSheet()->getStyle('B4:N4')
         ->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         $spreadsheet->getActiveSheet()->getStyle('A1');
         $spreadsheet->getActiveSheet()->freezePane('B5');
+		$spreadsheet->getActiveSheet()->setAutoFilter('A4:N4');
 
-        
-		/*$spreadsheet->getActiveSheet()->setAutoFilter(
-			$spreadsheet->getActiveSheet()
-				->calculateWorksheetDimension()
-		);*/
-		
-		$filename = 'estadoVentasCostoItem';
-        $fecha = date('d-m-Y');
         
  
         header('Content-Type: application/vnd.ms-excel');

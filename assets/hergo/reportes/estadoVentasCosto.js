@@ -16,8 +16,12 @@ $(document).on("click", "#refresh", function () {
     retornarestadoVentasCosto();
 })
 $(document).on("click", "#excel", function () {
-    alm = $("#almacen_filtro").val()
-    let excel = base_url("ReportesExcel/estadoVentasCostoItem/"+alm);
+    let alm = $("#almacen_filtro").val()
+    let mon = $("#moneda").val()
+    let tc = (mon == 1) ?  glob_tipoCambio : 'BOB'
+    alm = (alm == '') ?  'NN' : alm
+    let excel = base_url("ReportesExcel/estadoVentasCostoItem/"+alm+"/"+tc);
+    console.log(excel);
     location.href = (excel);
 })
 
@@ -31,7 +35,7 @@ function retornarestadoVentasCosto()
         url: base_url('index.php/Reportes/mostrarEstadoVentasCosto'),
         dataType: "json",
         data: {
-            alm: alm
+            alm: alm,
         },
     }).done(function(res){
         console.log(glob_tipoCambio);
