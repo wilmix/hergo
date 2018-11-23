@@ -19,18 +19,18 @@ $(document).ready(function(){
         fields: {
             codigo: {
                 validators: {
-                        stringLength: {
+                        /*stringLength: {
                         min: 6,
                         max: 6,
                         message: 'Ingrese cógigo válido'
-                    },
+                    },*/
                     notEmpty: {
                         message: 'Campo obligatorio'
                     },
-                    regexp: {
+                    /*regexp: {
                         regexp: /[A-Z]{2}[0-9]{4}/,
                         message: 'Formato de código incorrecto'
-                    }
+                    }*/
                 }
             },
             descripcion: {
