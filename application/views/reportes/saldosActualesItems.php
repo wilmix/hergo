@@ -2,6 +2,9 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-body">
+                <div class="form-inline">
+                    <button class="btn btn-default pull-right" id="excel" data-toggle="tooltip" title="Excel"><i class="far fa-file-excel"> </i> Excel </button>
+                </div>
                 <div id="toolbar2" class="form-inline">
                     <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
                         <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
@@ -21,6 +24,7 @@
                         <i class="fa fa-share-square"></i>
                         </span>
                     </button>
+
                 </div>
                 <div class="text-center">
                     <h2>Saldos Actuales de Items  -

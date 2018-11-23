@@ -28,6 +28,15 @@ $(document).on("change", "#almacen_filtro", function () {
     tituloReporte();
     retornarSaldos();
 })
+$(document).on("click", "#excel", function () {
+    let alm = $("#almacen_filtro").val()
+    let mon = $("#moneda").val()
+    let tc = (mon == 1) ?  glob_tipoCambio : 'BOB'
+    alm = (alm == '') ?  'NN' : alm
+    let excel = base_url("ReportesExcel/saldoActualesItem/"+alm+"/"+tc);
+    console.log(excel);
+    location.href = (excel);
+})
 
 function retornarSaldos() {
 
@@ -44,6 +53,7 @@ function retornarSaldos() {
 function retornarSaldosAlmacen() {
     let alm = $("#almacen_filtro").val()
     let mon = $("#moneda").val()
+    let tc = glob_tipoCambio
     agregarcargando();
     $.ajax({
         type: "POST",
@@ -108,11 +118,22 @@ function retornarSaldosAlmacen() {
                 },
                 {
                     field: 'costo',
-                    title: 'Costo.Uni.',
+                    title: 'C/U BOB',
                     align: 'right',
                     width:'80px',
                     searchable: false,
+                    visible: mon==1 ? false  : true,
                     formatter: operateFormatter3,
+                    
+                },
+                {
+                    field: 'costo',
+                    title: 'C/U $U$',
+                    align: 'right',
+                    width:'80px',
+                    searchable: false,
+                    visible: mon==1 ? true  : false,
+                    formatter: dolares,
                     
                 },
                 {
@@ -309,7 +330,8 @@ function operateFormatter3(value, row, index) {
 function dolares(value, row, index) {
 
     num = Math.round(value * 100) / 100
-    num = (num / glob_tipoCambio).toFixed(2)
+    num = num / glob_tipoCambio
+    num = num.toFixed(2);
     return (formatNumber.new(num))
 
 }

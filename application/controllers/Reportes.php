@@ -1034,8 +1034,7 @@ class Reportes extends CI_Controller
 		if($this->input->is_ajax_request())
         {
 			$alm=$this->security->xss_clean($this->input->post("alm"));
-			$linea=$this->security->xss_clean($this->input->post("linea"));  
-			$res=$this->Reportes_model->mostrarSaldosActualesItems($alm,$linea);
+			$res=$this->Reportes_model->mostrarSaldosActualesItems($alm);
 			$res=$res->result_array();
 			echo json_encode($res);
 		}

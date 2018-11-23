@@ -437,23 +437,25 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarSaldosActualesItems($alm="",$linea="")
+	public function mostrarSaldosActualesItems($alm="")
 	{ 
 		if ($alm >0) {
 			$sql = "SELECT 
+			sigla, 
+			linea, 
 			IF(codigo IS NULL,'',codigo) codigo, 
 			IF(codigo IS NULL,'',descripcion) descripcion, 
+			IF(codigo IS NULL,'',unidad) unidad,
 			IF(codigo IS NULL AND linea IS NULL,'TOTAL GENERAL: ',IF(codigo IS NULL,CONCAT('TOTAL ',linea), almacen)) almacen, 
 			IF(codigo IS NULL,'',costo) costo, 
 			IF(codigo IS NULL,'',saldo) saldo, 
 			IF(codigo IS NULL,'',remision) remision, 
 			IF(codigo IS NULL,'',saldoAlm) saldoAlm, 
-			vTotal, linea, 
-			IF(codigo IS NULL,'',unidad) unidad
+			vTotal
 			FROM (
 			SELECT 
 			IF(alm.almacen IS NULL,'',a.`CodigoArticulo`) codigo, 
-			a.`Descripcion` descripcion,
+			a.`Descripcion` descripcion, l.`Sigla` sigla,
 			IF(l.`Linea` IS NULL,'TOTAL ',alm.`almacen`)almacen, 
 			a.`costoPromedioPonderado` costo, 
 			SUM((sa.`saldo` +  sa.`notaEntrega`)) saldo,
@@ -466,18 +468,14 @@ class Reportes_model extends CI_Model
 			INNER JOIN almacenes alm ON alm.idalmacen = sa.idAlmacen
 			INNER JOIN linea l ON l.idLinea = a.idLinea
 			INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
-			WHERE sa.`idAlmacen` = $alm
-			GROUP BY    l.`Linea` ASC, a.`CodigoArticulo` ASC WITH ROLLUP
+			WHERE sa.`idAlmacen` = '$alm'
+			GROUP BY    l.`Sigla` ASC, a.`CodigoArticulo` ASC WITH ROLLUP
 			) tbl";
 		} else {
-		$sql="SELECT 	sigla,
-		 linea,  
+		$sql="SELECT 	
+		sigla,
+		linea,  
 		IF(almacen IS NULL,'', codigo) codigo,  
-		IF(almacen IS NULL,'', costo) costo, 
-		IF(almacen IS NULL,'', saldo) saldo, 
-		IF(almacen IS NULL,'', remision) remision, 
-		IF(almacen IS NULL,'', saldoAlm)saldoAlm, 
-		vTotal, 
 		IF(almacen IS NULL,'', descripcion) descripcion, 
 		IF(almacen IS NULL,'', unidad) unidad,  
 		CASE
@@ -485,7 +483,12 @@ class Reportes_model extends CI_Model
 			WHEN codigo IS NULL AND almacen IS NULL THEN CONCAT('TOTAL ', linea)
 			WHEN almacen IS NULL THEN CONCAT('TOTAL ', codigo)
 			ELSE almacen
-		END almacen
+		END almacen,
+		IF(almacen IS NULL,'', costo) costo, 
+		IF(almacen IS NULL,'', saldo) saldo, 
+		IF(almacen IS NULL,'', remision) remision, 
+		IF(almacen IS NULL,'', saldoAlm)saldoAlm, 
+		vTotal
 		FROM( 
 			SELECT 
 			l.`Sigla` sigla, u.unidad,
