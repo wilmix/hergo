@@ -15,7 +15,15 @@ function tituloReporte() {
     almText = $('#almacen_filtro').find(":selected").text();
     $('#tituloReporte').text(almText);
 }
-
+$(document).on("click", "#excel", function () {
+    let alm = $("#almacen_filtro").val()
+    let mon = $("#moneda").val()
+    let tc = (mon == 1) ?  glob_tipoCambio : 'BOB'
+    alm = (alm == '') ?  'NN' : alm
+    let excel = base_url("ReportesExcel/facturasPendientesPago/"+alm);
+    console.log(excel);
+    location.href = (excel);
+})
 function retornarFacturasPendientes()
 {
     almacen = $("#almacen_filtro").val();
@@ -65,9 +73,9 @@ function retornarFacturasPendientes()
                 {
                     field: 'almacen',
                     title: 'Almacen',
-                    width:'50px',
+                    width:'150px',
                     sortable: true,
-                    visible: false
+                    visible: almacen==''?true:false
                 },
                 {
                     field: 'lote',

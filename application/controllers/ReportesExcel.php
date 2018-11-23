@@ -461,6 +461,151 @@ class ReportesExcel extends CI_Controller
         header('Cache-Control: max-age=0');
         $writer->save('php://output');
  
+	}
+	public function facturasPendientesPago($alm)
+    {
+		$alm = ($alm == 'NN') ? '' : $alm;
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();
+		$sheet->setTitle('FacturasPendientesPago');
+		$styleArray = [
+			'font' => [
+				'bold' => true,
+			],
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+			],
+			'borders' => [
+				'top' => [
+					'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+				],
+			],
+			/*'fill' => [
+				'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+				'rotation' => 90,
+				'startColor' => [
+					'argb' => 'FFA0A0A0',
+				],
+				'endColor' => [
+					'argb' => 'FFFFFFFF',
+				],
+			],*/
+		];
+		
+        $spreadsheet->getActiveSheet()->getStyle('A4:J4')->applyFromArray($styleArray);
+        $sheet->setCellValue('A4', 'id');
+        $sheet->setCellValue('B4', 'ALMACEN');
+		$sheet->setCellValue('C4', 'LOTE');
+		$sheet->setCellValue('D4', 'Nº FACTURA');
+		$sheet->setCellValue('E4', 'FECHA');
+		$sheet->setCellValue('F4', 'CLIENTE');
+		$sheet->setCellValue('G4', 'TOTAL');
+		$sheet->setCellValue('H4', 'MONTO PAGADO');
+		$sheet->setCellValue('I4', 'SALDO');
+
+        
+
+		$res=$this->Reportes_model->mostrarFacturasPendientesPago($alm);
+		$res=$res->result_array();
+		$dataExcel = [];
+		foreach ($res as $linea) {
+            $x = [];
+            if ($linea['cliente'] == '' && $linea['id'] == '') {
+                $this->array_push_assoc($x, array('id'=> ''));
+				$this->array_push_assoc($x, array('almacen'=> ''));
+				$this->array_push_assoc($x, array('lote'=> ''));
+				$this->array_push_assoc($x, array('nFactura'=> ''));
+				$this->array_push_assoc($x, array('fechaFac'=> ''));
+				$this->array_push_assoc($x, array('cliente'=> 'TOTAL GENERAL:'));
+				$this->array_push_assoc($x, array('total'=>$linea['total']));
+				$this->array_push_assoc($x, array('montoPagado'=> $linea['montoPagado']));
+				$this->array_push_assoc($x, array('saldo'=> ''));
+            } else if ($linea['id'] == '')  {
+				$this->array_push_assoc($x, array('id'=> ''));
+				$this->array_push_assoc($x, array('almacen'=> ''));
+				$this->array_push_assoc($x, array('lote'=> ''));
+				$this->array_push_assoc($x, array('nFactura'=> ''));
+				$this->array_push_assoc($x, array('fechaFac'=> ''));
+				$this->array_push_assoc($x, array('cliente'=> 'TOTAL: '.$linea['cliente']));
+				$this->array_push_assoc($x, array('total'=>$linea['total']));
+				$this->array_push_assoc($x, array('montoPagado'=> $linea['montoPagado']));
+				$this->array_push_assoc($x, array('saldo'=> floatval($linea['total']) - floatval($linea['montoPagado'])));
+            } else {
+	
+					$this->array_push_assoc($x, array('id'=> $linea['id']));
+					$this->array_push_assoc($x, array('almacen'=> $linea['almacen']));
+					$this->array_push_assoc($x, array('lote'=> $linea['lote']));
+					$this->array_push_assoc($x, array('nFactura'=> $linea['nFactura']));
+					$this->array_push_assoc($x, array('fechaFac'=> $linea['fechaFac']));
+					$this->array_push_assoc($x, array('cliente'=> $linea['cliente']));
+					$this->array_push_assoc($x, array('total'=> $linea['total']));
+					$this->array_push_assoc($x, array('montoPagado'=> $linea['montoPagado']));
+					$this->array_push_assoc($x, array('saldo'=> floatval($linea['total']) - floatval($linea['montoPagado'])));
+            }
+            array_push($dataExcel, $x);
+        }
+		
+		
+        //echo '<pre>'; print_r($dataExcel); echo '</pre>';
+		//return false;
+		
+		$spreadsheet->getActiveSheet()
+		->fromArray(
+			$dataExcel,  // The data to set
+			NULL,        // Array values with this value will not be set
+			'A5'         // Top left coordinate of the worksheet range where
+						//    we want to set these values (default is A1)
+		);
+        
+		$writer = new Xlsx($spreadsheet);
+		$spreadsheet->getActiveSheet()->getColumnDimension('A')->setVisible(false);
+		$spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(60);
+		$spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+
+		//$spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(30);
+
+
+        foreach(range('G','I') as $columnID)
+        {
+            $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setWidth(12);
+        }
+		$filename = 'FacturasPendientesPago';
+        $fecha = date('d-m-Y');
+		if($alm == 1){
+            $alm = 'CENTRAL HERGO';
+        } else if ($alm == 2) {
+            $alm = 'DEPOSITO ALTO';
+        } else if ($alm == 3) {
+            $alm = 'POTOSI';
+        } else if ($alm == 4) {
+            $alm = 'SANTA CRUZ';
+        } else if ($alm == '') {
+            $alm = 'TODOS';
+        } 
+		$spreadsheet->getActiveSheet()->getStyle('G1:I5000')->getNumberFormat()->setFormatCode('#,##0.00');
+        $spreadsheet->getActiveSheet()->getRowDimension('4')->setRowHeight(40);
+        $spreadsheet->getActiveSheet()->mergeCells('A1:H1');
+        $spreadsheet->getActiveSheet()->setCellValue('A1', 'FACTURAS PENDIENTES PAGO');
+        $spreadsheet->getActiveSheet()->mergeCells('A2:H2');
+        $spreadsheet->getActiveSheet()->setCellValue('A2', $alm);
+		$spreadsheet->getActiveSheet()->mergeCells('A3:H3');
+		//$moneda = ($tc == 'BOB') ? 'BOLIVIANOS' : 'DOLARES';
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'BOLIVIANOS');
+		$spreadsheet->getActiveSheet()->setCellValue('I3', $fecha);
+		//$spreadsheet->getActiveSheet()->setCellValue('L2', 'TC: ' . $tc);
+        $spreadsheet->getActiveSheet()->getStyle('A1:C3')->applyFromArray($styleArray);
+        $spreadsheet->getActiveSheet()->getStyle('B4:L4')->getAlignment()->setWrapText(true);
+        $spreadsheet->getActiveSheet()->getStyle('B4:L4')
+        ->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $spreadsheet->getActiveSheet()->getStyle('A1');
+        $spreadsheet->getActiveSheet()->freezePane('B5');
+		$spreadsheet->getActiveSheet()->setAutoFilter('A4:H4');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'. $filename . ' ' . $alm .'.xlsx"'); 
+        header('Cache-Control: max-age=0');
+        $writer->save('php://output');
+ 
     }
 
 }
