@@ -223,7 +223,7 @@ class Reportes_model extends CI_Model
 	}
 	public function mostrarDiarioIngresos($ini=null,$fin=null,$alm="",$tin="") 
 	{ //cambiar la consulta
-		$sql="SELECT alm.almacen, i.fechamov, i.tipomov,t.sigla, i.nmov, i.ordcomp, i.ningalm, p.nombreproveedor, 
+		$sql="SELECT alm.almacen, i.fechamov, i.tipomov,t.sigla, i.nmov, i.ordcomp, p.nombreproveedor, 
 		a.CodigoArticulo, a.Descripcion, u.Unidad,  id.cantidad, id.punitario, id.total, i.obs
 		from ingresos i
 		inner join provedores p

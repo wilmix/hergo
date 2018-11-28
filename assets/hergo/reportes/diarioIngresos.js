@@ -139,12 +139,6 @@ function retornarTablaIngresos() {
                     align: 'center'
                 },
                 {
-                    field: 'ningalm',
-                    title: 'N° Ing.',
-                    sortable: true,
-                    align: 'center'
-                },
-                {
                     field: 'nombreproveedor',
                     title: 'Proveedor',
                     sortable: true,
