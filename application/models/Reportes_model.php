@@ -17,7 +17,7 @@ class Reportes_model extends CI_Model
 	}
 	public function retornarArticulos() {
 		$sql="SELECT idArticulos, CodigoArticulo,Descripcion
-		FROM hergo2.articulos_activos
+		FROM articulos_activos
 		WHERE SUBSTRING(CodigoArticulo,1,2)<>'SR'";
 		$query=$this->db->query($sql);		
 		return $query;
@@ -248,9 +248,9 @@ class Reportes_model extends CI_Model
 	public function mostrarKardexIndividual($art="",$alm="") 
 	{ 
 		if ($alm=="") {
-			$sql="call hergo2.testKardexGeneral($art);";
+			$sql="call testKardexGeneral($art);";
 		} else {
-			$sql="call hergo2.testKardex2($art,$alm);";
+			$sql="call testKardex2($art,$alm);";
 		}
 		$query=$this->db->query($sql);		
 		return $query;
@@ -271,7 +271,7 @@ class Reportes_model extends CI_Model
 	{ 
 	
 			$sql="SELECT a.`idArticulos` id, a.`CodigoArticulo` codigo, a.`Descripcion` descrip, a.`Sigla` unidad
-			FROM hergo2.articulos_activos a
+			FROM articulos_activos a
 			WHERE a.`CodigoArticulo` BETWEEN '$a' AND '$b'
 			ORDER BY a.`CodigoArticulo`;";
 		$query=$this->db->query($sql);		

@@ -513,7 +513,7 @@ class Reportes extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-	public function mostrarNEporFac()  //******cambiar a funcion del modelo
+	public function mostrarNEporFac()  
 	{
 		if($this->input->is_ajax_request())
         {
@@ -563,7 +563,7 @@ class Reportes extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-	public function mostrarFacturacionClientes()  //******cambiar a funcion del modelo
+	public function mostrarFacturacionClientes()  
 	{
 		if($this->input->is_ajax_request())
         {
@@ -683,7 +683,7 @@ class Reportes extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-	public function mostrarDiarioIngresos()  //******cambiar a funcion del modelo
+	public function mostrarDiarioIngresos()  
 	{
 		if($this->input->is_ajax_request())
         {
@@ -701,7 +701,7 @@ class Reportes extends CI_Controller
 		}
 		
 	}
-	public function showKardexIndividual()  //******cambiar a funcion del modelo
+	public function showKardexIndividual()  
 	{
 		ini_set('max_execution_time', 0); 
 		ini_set('memory_limit','2048M');
@@ -897,7 +897,7 @@ class Reportes extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-	public function mostrarLibroVentas()  //******cambiar a funcion del modelo
+	public function mostrarLibroVentas()  
 	{
 		if($this->input->is_ajax_request())
         {
@@ -913,7 +913,7 @@ class Reportes extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	public function mostrarLibroVentasTotales()  //******cambiar a funcion del modelo
+	public function mostrarLibroVentasTotales()  
 	{
 		if($this->input->is_ajax_request())
         {
@@ -964,7 +964,7 @@ class Reportes extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-	public function mostrarKardexIndividualCliente()  //******cambiar a funcion del modelo
+	public function mostrarKardexIndividualCliente()  
 	{
 		if($this->input->is_ajax_request())
         {
@@ -1144,7 +1144,7 @@ class Reportes extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-	public function mostrarReporteIngreso()  //******cambiar a funcion del modelo
+	public function mostrarReporteIngreso()  
 	{
 		if($this->input->is_ajax_request())
         {
