@@ -69,29 +69,29 @@ class Dashboard_model extends CI_Model
 	public function mostrarInfo()
 	{ 
 		$sql="	SELECT 'lp-NEG' alm, COUNT(a.`laPaz`) cant
-				FROM hergo2.`articulos_activos` a
+				FROM `articulos_activos` a
 				WHERE a.`laPaz` < 0
 				
 				UNION ALL 
 				SELECT 'pts-NEG', COUNT(a.`potosi`)
-				FROM hergo2.`articulos_activos` a
+				FROM `articulos_activos` a
 				WHERE a.`potosi` < 0
 				UNION ALL 
 				SELECT 'scz-NEG', COUNT(a.`santacruz`)
-				FROM hergo2.`articulos_activos` a
+				FROM `articulos_activos` a
 				WHERE a.`santacruz` < 0
 				
 				UNION ALL
 				SELECT 'lp-ACT' , COUNT(a.`laPaz`) 
-				FROM hergo2.`articulos_activos` a
+				FROM `articulos_activos` a
 				WHERE a.`laPaz` <> '-'
 				UNION ALL
 				SELECT 'pts-ACT', COUNT(a.`potosi`)
-				FROM hergo2.`articulos_activos` a
+				FROM `articulos_activos` a
 				WHERE a.`potosi` <> '-'
 				UNION ALL
 				SELECT 'scz-ACT', COUNT(a.`santacruz`)
-				FROM hergo2.`articulos_activos` a
+				FROM `articulos_activos` a
 				WHERE a.`santacruz` <> '-'";
 		$query=$this->db->query($sql);		
 		return $query;
