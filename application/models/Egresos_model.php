@@ -62,7 +62,7 @@ class Egresos_model extends CI_Model
              $sql="SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  
             e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, 
             m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido,c.documento,e.tipocambio,total/tc.tipocambio totalsus , 
-            e.vendedor, tc.tipocambio, c.direccion, c.telefono, c.fax, ades.`almacen` almDes, ing.`nmov` nIng
+            e.vendedor, CONCAT(uv.first_name,' ', uv.last_name) nVendedor,  tc.tipocambio, c.direccion, c.telefono, c.fax, ades.`almacen` almDes, ing.`nmov` nIng
             FROM egresos e
             INNER JOIN egredetalle d
             on e.idegresos=d.idegreso
@@ -72,6 +72,8 @@ class Egresos_model extends CI_Model
             ON e.cliente=c.idCliente
             INNER JOIN users u 
             ON u.id=e.autor 
+            INNER JOIN users uv 
+            ON uv.id=e.vendedor 
             INNER JOIN almacenes a 
             ON a.idalmacen=e.almacen 
             INNER JOIN moneda m 

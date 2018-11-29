@@ -253,7 +253,8 @@ function agregarArticulo() {
     let cant = $("#cantidad_ne").inputmask('unmaskedvalue')
     let costo = $("#punitario_ne").inputmask('unmaskedvalue')
     let dcto = $("#descuento_ne").inputmask('unmaskedvalue')
-    let codigoArticulo = $("#articulo_impTest").val();
+    let codigoArticulo = $("#articulo_impTest").val()
+    let iniCod = codigoArticulo.substr(0,2)
 
     cant = parseFloat((cant == '') ? 0 : cant)
     costo = parseFloat((costo == '') ? 0 : costo)
@@ -261,7 +262,7 @@ function agregarArticulo() {
     saldoAlmacen = parseFloat((saldoAlmacen == '') ? 0 : saldoAlmacen)
 
     if ((cant) > 0 && (costo) >= 0 && dcto >= 0) {
-        if ((cant) <= (saldoAlmacen) && parseFloat(saldoAlmacen) > 0) {
+        if ((cant) <= (saldoAlmacen) && parseFloat(saldoAlmacen) > 0 || iniCod == 'SR') {
             addArticuloTable()
         } else {
             swal({

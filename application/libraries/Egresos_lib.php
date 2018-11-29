@@ -25,6 +25,7 @@
             $idTipoMov = $this->datos['idTipoMov'];
             $almDes = $this->datos['almDes'];
             $nIng = $this->datos['nIng'];
+            $vendedor = $this->datos['nVendedor'];
 
             //TITULO
             $this->SetXY(10,10);
@@ -123,6 +124,7 @@
             $plazoPago = date('d/m/Y',strtotime($this->datos['plazoPago']));
             $userName = $this->datos['userName'];
             $autor = $this->datos['autor'];
+            $vendedor = $this->datos['nVendedor'];
             $this->SetLineWidth(0.5);
             $this->Line(10,127,206,127);
             $this->SetY(-25);
@@ -138,7 +140,7 @@
             $this->SetY(-20);
             $this->SetFont('Arial','I', 9);
             $this->Cell(25,5, 'Emitido por:',0,0,'L',1);
-            $this->Cell(40, 5, utf8_decode($autor), 0,0,'L');
+            $this->Cell(40, 5, utf8_decode($vendedor), 0,0,'L');
             $this->SetFont('Arial','I', 9);
             $this->Cell(20,5, 'Autorizado:',0,0,'L');
             $this->Cell(40, 5, '', 0,0,'L');

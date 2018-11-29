@@ -224,10 +224,13 @@ class Facturacion_model extends CI_Model
 	{
 		$this->db->trans_start();
 			
+			$autor = $this->session->userdata('user_id');
+        	$fecha = date('Y-m-d H:i:s'); 
+			
 			$facturaEgresos=$this->FacturaEgresos_model->obtenerPorFactura($idFactura);
 
 			$msj = strval($msj);
-			$sql="UPDATE factura set anulada=1,glosa='$msj' where idFactura=$idFactura;";
+			$sql="UPDATE factura set anulada=1,glosa='$msj',autor='$autor',update_at='$fecha' where idFactura=$idFactura;";
 			$this->db->query($sql);
 
 			$facturaDetalle=$this->obtenerDetalleFactura($idFactura);		

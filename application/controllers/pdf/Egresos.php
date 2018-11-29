@@ -27,6 +27,7 @@ class Egresos extends CI_Controller {
         'fax' => $egreso->fax,
         'moneda' => $egreso->moneda,
         'vendedor'=> $egreso->vendedor,
+        'nVendedor'=> $egreso->nVendedor,
         'almDes'=>$egreso->almDes,
         'nIng'=>$egreso->nIng,
         'idTipoMov'=>$egreso->idtipomov,
