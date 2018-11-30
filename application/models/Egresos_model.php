@@ -174,7 +174,8 @@ class Egresos_model extends CI_Model
 		ON e.articulo = a.idArticulos
         INNER JOIN unidad u
         ON a.idUnidad=u.idUnidad
- 		WHERE e.idegreso=$id";
+         WHERE e.idegreso=$id
+         ORDER BY a.CodigoArticulo";
 
 		$query=$this->db->query($sql);
 		return $query;
