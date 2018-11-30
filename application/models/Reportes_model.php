@@ -41,29 +41,32 @@ class Reportes_model extends CI_Model
     }
 	public function mostrarNEporFac($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
-		$sql="SELECT e.nmov n,e.idEgresos,t.sigla, e.fechamov, c.nombreCliente, SUM(d.total) total,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, a.almacen, m.sigla monedasigla			FROM egresos e
-			INNER JOIN egredetalle d
-			ON e.idegresos=d.idegreso
-			INNER JOIN tmovimiento t 
-			ON e.tipomov = t.id 
-			INNER JOIN clientes c 
-			ON e.cliente=c.idCliente
-			INNER JOIN users u 
-			ON u.id=e.autor 
-			INNER JOIN almacenes a 
-			ON a.idalmacen=e.almacen 
-			INNER JOIN moneda m 
-			ON e.moneda=m.id 
-            INNER JOIN tipocambio tc
-            ON e.tipocambio=tc.id
-			WHERE
-			e.`estado`<>1
-			AND t.id = 7
-			AND e.fechamov 
-			BETWEEN '$ini' AND '$fin'
-			AND e.almacen LIKE '%$alm'
-			GROUP BY e.idegresos
-			ORDER BY c.nombreCliente";
+		$sql="SELECT e.`cliente`, e.nmov n,e.idEgresos,t.sigla, e.fechamov, c.nombreCliente, ROUND((SUM(d.`total`)) - (SUM(d.`cantFact` * d.`punitario`)),2) total,  e.estado,e.fecha, 
+		CONCAT(u.first_name,' ', u.last_name) autor, a.almacen, m.sigla monedasigla
+		FROM egresos e
+					INNER JOIN egredetalle d
+					ON e.idegresos=d.idegreso
+					INNER JOIN tmovimiento t 
+					ON e.tipomov = t.id 
+					INNER JOIN clientes c 
+					ON e.cliente=c.idCliente
+					INNER JOIN users u 
+					ON u.id=e.autor 
+					INNER JOIN almacenes a 
+					ON a.idalmacen=e.almacen 
+					INNER JOIN moneda m 
+					ON e.moneda=m.id 
+					INNER JOIN tipocambio tc
+					ON e.`fechamov` = tc.`fecha`
+					WHERE
+					e.`estado`<>1
+					AND t.id = 7
+					AND e.anulado = 0
+					AND e.fechamov 
+					BETWEEN '$ini' AND '$fin'
+					AND e.almacen LIKE '%$alm'
+					GROUP BY e.idegresos
+					ORDER BY c.nombreCliente, n";
 		
 		$query=$this->db->query($sql);		
 		return $query;
