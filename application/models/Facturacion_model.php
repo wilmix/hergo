@@ -139,7 +139,7 @@ class Facturacion_model extends CI_Model
 	}
 	public function obtenerFactura($idFactura)
 	{
-		$sql="SELECT f.*,t.tipocambio cambiovalor, a.almacen, a.direccion, a.Telefonos, a.ciudad, a.sucursal
+		$sql="SELECT f.*,t.tipocambio cambiovalor, a.almacen, a.direccion, a.Telefonos, a.ciudad, a.sucursal, f.almacen idAlmacen
 		From factura f
 		INNER JOIN tipocambio t 
 		ON f.tipoCambio=t.id
@@ -220,7 +220,7 @@ class Facturacion_model extends CI_Model
 		$query=$this->db->query($sql);        
         return ($query->result_array());
 	}
-	public function anularFactura($idFactura,$msj)
+	public function anularFactura($idFactura,$msj,$idAlmacen)
 	{
 		$this->db->trans_start();
 			
@@ -242,9 +242,9 @@ class Facturacion_model extends CI_Model
 			}
 
 			$this->FacturaEgresos_model->actualizarFparcial_noFacturado($idFactura,$facturaEgresos->idegresos);
-
-
-		$this->db->trans_complete();
+			$this->db->query("CALL actualizarTablaSaldoFactura($idFactura, $idAlmacen)");
+			
+			$this->db->trans_complete();
 		if ($this->db->trans_status() === FALSE)
 		{
 			return false;

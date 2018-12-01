@@ -764,8 +764,9 @@ class Facturas extends CI_Controller
 
 			$factura = $this->Facturacion_model->obtenerFactura($idFactura);
 			$pagada = $factura->pagada;
+			$idAlmacen = $factura->idAlmacen;
 			if ($pagada == 0) {
-				$anularFactura = $this->Facturacion_model->anularFactura($idFactura, $msjAnular);
+				$anularFactura = $this->Facturacion_model->anularFactura($idFactura, $msjAnular, $idAlmacen);
 			} else {
 				$anularFactura = false;
 			}
