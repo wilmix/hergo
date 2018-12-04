@@ -83,7 +83,7 @@ class Ingresos_model extends CI_Model
 			INNER JOIN moneda m
 			ON i.moneda=m.id
             INNER JOIN tipocambio tc
-            ON i.tipocambio=tc.id
+            ON i.fechamov = tc.fecha
             WHERE idIngresos=$id
 			ORDER BY i.idIngresos DESC
             LIMIT 1

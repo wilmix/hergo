@@ -615,7 +615,8 @@ class Egresos_model extends CI_Model
     {
         $sql="SELECT id, CONCAT(first_name, ' ', last_name) AS nombre, almacen 
         FROM users
-        WHERE active = 1";
+        WHERE active = 1
+        ORDER BY nombre";
         $query=$this->db->query($sql);
         return $query;
     }

@@ -199,6 +199,7 @@ function retornarTablaDatosFactura() {
                 {   
                     field: 'llaveDosificacion',            
                     title: 'Llave de Dosificación',
+                    visible: false,
                 },
                 {   
                     field: 'glosa01',            

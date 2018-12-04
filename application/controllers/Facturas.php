@@ -682,10 +682,11 @@ class Facturas extends CI_Controller
 				}
 				$numeroFactura = $numFacManual;
 			} else {
-				if (!$ultimaFactura) {
+				if ($ultimaFactura) {
+					$numeroFactura = intval($ultimaFactura->nFactura)+1;
+				} else {
 					$numeroFactura = $datosFactura->desde;
 				}
-				$numeroFactura = intval($ultimaFactura->nFactura)+1;
 			}
 
 			$numero_factura = $numeroFactura;
@@ -841,11 +842,12 @@ class Facturas extends CI_Controller
 				}
 				$obj->nfac = $numFacManual;
 			} else {
-				if (!$ultimaFactura) {
+				if ($ultimaFactura) {
+					$obj->nfac=intval($ultimaFactura->nFactura)+1;
+				} else {
 					$obj->nfac=$resultado->desde;
 				}
 				
-				$obj->nfac=intval($ultimaFactura->nFactura)+1;
 			}
 			
 			$obj->error=$errores;

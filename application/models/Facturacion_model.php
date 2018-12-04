@@ -142,7 +142,7 @@ class Facturacion_model extends CI_Model
 		$sql="SELECT f.*,t.tipocambio cambiovalor, a.almacen, a.direccion, a.Telefonos, a.ciudad, a.sucursal, f.almacen idAlmacen
 		From factura f
 		INNER JOIN tipocambio t 
-		ON f.tipoCambio=t.id
+		ON f.`fechaFac` = t.`fecha`
 		INNER JOIN almacenes a
 		ON a.idalmacen = f.almacen
 		Where f.idFactura=$idFactura";
