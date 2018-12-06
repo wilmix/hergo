@@ -164,7 +164,7 @@ class Facturacion_model extends CI_Model
 		df.glosa01,df.glosa02, df.glosa03, df.manual
 		FROM factura f
 		INNER JOIN tipocambio t 
-		ON f.tipoCambio=t.id
+		ON f.fechaFac = t.fecha
 		INNER JOIN almacenes a
 		ON a.idalmacen = f.almacen
 		INNER JOIN datosfactura df

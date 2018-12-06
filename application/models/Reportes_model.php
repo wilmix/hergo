@@ -591,7 +591,7 @@ class Reportes_model extends CI_Model
 		INNER JOIN moneda m ON m.`id`= i.`moneda`
 		INNER JOIN tmovimiento tm ON tm.`id` = i.`tipomov`
 		INNER JOIN provedores p ON p.`idproveedor` = i.`proveedor`
-		INNER JOIN tipocambio tc ON tc.`id` = i.`tipoCambio`
+		INNER JOIN tipocambio tc ON tc.fecha = i.fechamov
 		INNER JOIN almacenes al ON al.`idalmacen` = i.`almacen`
 		WHERE  i.`fechamov` BETWEEN '$ini' AND '$fin'
 			AND i.`tipomov` LIKE '%$tin' 
