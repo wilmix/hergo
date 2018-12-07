@@ -1,4 +1,4 @@
-var iniciofecha=moment().subtract(0, 'year').startOf('year')
+var iniciofecha=moment().subtract(10, 'year').startOf('year')
 var finfecha=moment().subtract(0, 'year').endOf('year')
 let hoy = moment().format('DD-MM-YYYY');
 let almacen = $("#almacen_filtro").val();

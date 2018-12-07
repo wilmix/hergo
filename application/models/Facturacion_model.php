@@ -164,7 +164,7 @@ class Facturacion_model extends CI_Model
 		df.glosa01,df.glosa02, df.glosa03, df.manual
 		FROM factura f
 		INNER JOIN tipocambio t 
-		ON f.tipoCambio=t.id
+		ON f.`fechaFac` = t.`fecha`
 		INNER JOIN almacenes a
 		ON a.idalmacen = f.almacen
 		INNER JOIN datosfactura df
@@ -228,6 +228,7 @@ class Facturacion_model extends CI_Model
         	$fecha = date('Y-m-d H:i:s'); 
 			
 			$facturaEgresos=$this->FacturaEgresos_model->obtenerPorFactura($idFactura);
+			$idEgreso = $facturaEgreso->idegresos;
 
 			$msj = strval($msj);
 			$sql="UPDATE factura set anulada=1,glosa='$msj',autor='$autor',update_at='$fecha' where idFactura=$idFactura;";
@@ -243,6 +244,7 @@ class Facturacion_model extends CI_Model
 
 			$this->FacturaEgresos_model->actualizarFparcial_noFacturado($idFactura,$facturaEgresos->idegresos);
 			$this->db->query("CALL actualizarTablaSaldoFactura($idFactura, $idAlmacen)");
+			//$this->db->query("UPDATE egresos e SET e.estado = 0 WHERE ");
 			
 			$this->db->trans_complete();
 		if ($this->db->trans_status() === FALSE)
