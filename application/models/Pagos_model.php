@@ -88,7 +88,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		INNER JOIN factura f ON f.`idFactura` = pf.`idFactura`
 		INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
 		INNER JOIN clientes cp ON cp.`idCliente` = p.`cliente`
-		INNER JOIN users u ON u.`id`= p.`autor`
+		LEFT JOIN users u ON u.`id`= p.`autor`
 		INNER JOIN moneda m ON m.`id` = p.`moneda`
 		INNER JOIN almacenes a ON a.`idalmacen` = p.`almacen`
 		INNER JOIN tipoPago tp ON tp.`id` = p.`tipoPago`
