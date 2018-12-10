@@ -36,7 +36,9 @@
             $this->SetFont('Arial','',12);
             $this->Cell(10,6, 'Recibimos de: '. $this->datos['nombreCliente'],0,0,'L');
             $this->SetXY(10,38);
-            $literal = NumeroALetras::convertir($this->datos['totalPago'],'BOLIVIANOS');
+            $entera = intval($this->datos['totalPago']);
+            $ctvs = intval(($this->datos['totalPago'] - $entera) * 100);  
+            $literal = NumeroALetras::convertir($this->datos['totalPago']).$ctvs.'/100 '.'BOLIVIANOS';
             $this->Cell(10,6, 'La suma de: '.$literal,0,0,'L');
             $this->SetXY(10,45);
             $this->Cell(10,6, 'Por concepto de: ',0,0,'L');

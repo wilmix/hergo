@@ -57,7 +57,7 @@ class Recibo extends CI_Controller {
                 $this->pdf->Cell(165,5,'TOTAL BOB',0,0,'R',1);
                 $this->pdf->Cell(20,5,number_format($totalPago, 2, ".", ","),0,1,'R',1); 
                 $this->pdf->SetFont('Courier','B',9);
-                //$this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
+                //$this->pdf->Cell(9,6,$ctvs,0,0,'L',1);
                 //$literal = NumeroALetras::convertir($totalPago,'BOLIVIANOS','CENTAVOS');
                 //$this->pdf->Cell(186,6,$literal,0,0,'l',1);
         
