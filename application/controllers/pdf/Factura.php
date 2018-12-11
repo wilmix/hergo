@@ -69,6 +69,9 @@ class Factura extends CI_Controller {
                         $this->pdf->Cell(20,5,number_format(($linea->facturaCantidad*$linea->facturaPUnitario), 2, ".", ","),'',0,'R',1);
                     $this->pdf->Ln(5);
                 }
+                $entera = intval($totalFactura);
+                $ctvs = intval(($totalFactura - $entera) * 100);
+                $ctvs = ($ctvs == 0) ? '00' : $ctvs;
 
                 $this->pdf->SetFont('Times','B',10);
                 $this->pdf->SetFillColor(255,255,255);
@@ -76,7 +79,7 @@ class Factura extends CI_Controller {
                 $this->pdf->Cell(25,5,number_format($totalFactura, 2, ".", ","),0,1,'R',1); 
                 $this->pdf->SetFont('Courier','B',9);
                 $this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
-                $literal = NumeroALetras::convertir($totalFactura,'BOLIVIANOS','CENTAVOS');
+                $literal = NumeroALetras::convertir($totalFactura).$ctvs.'/100 '.'BOLIVIANOS';
                 $this->pdf->Cell(188,6,$literal,0,0,'l',1);
 
             } else {
@@ -93,7 +96,11 @@ class Factura extends CI_Controller {
                         $this->pdf->Cell(20,5,number_format((($linea->facturaCantidad*$linea->facturaPUnitario)/$tipoCambio), 2, ".", ","),'',0,'R',1);
                     $this->pdf->Ln(5);
                 }
+
                 $totalBolivianos = $totalFactura*$tipoCambio;
+                $entera = intval($totalBolivianos);
+                $ctvs = intval(($totalBolivianos - $entera) * 100);
+                $ctvs = ($ctvs == 0) ? '00' : $ctvs;
                 $this->pdf->SetFont('Times','B',10);
                 $this->pdf->SetFillColor(255,255,255);
                 $this->pdf->Cell(172,5,'TOTAL $u$',0,0,'R',1);
@@ -104,7 +111,7 @@ class Factura extends CI_Controller {
                 $this->pdf->Cell(25,5,number_format($totalBolivianos, 2, ".", ","),0,1,'R',1); 
                 $this->pdf->SetFont('Courier','B',9);
                 $this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
-                $literal = NumeroALetras::convertir($totalBolivianos,'BOLIVIANOS','CENTAVOS');
+                $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';
                 $this->pdf->Cell(188,6,$literal,0,0,'l',1);
             }
             
