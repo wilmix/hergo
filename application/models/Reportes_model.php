@@ -464,7 +464,7 @@ class Reportes_model extends CI_Model
 			SUM((sa.`saldo` +  sa.`notaEntrega`)) saldo,
 			SUM(sa.`notaEntrega`) remision, 
 			SUM(`saldo`) saldoAlm,
-			SUM((sa.`saldo` * a.costoPromedioPonderado)) vTotal,
+			SUM(((sa.`saldo` +  sa.`notaEntrega`) * a.costoPromedioPonderado)) vTotal,
 			IF(alm.`almacen` IS NULL,'',l.Linea) linea, u.`Unidad`
 			FROM saldoarticulos sa
 			INNER JOIN articulos a ON a.`idArticulos` = sa.`idArticulo`
@@ -502,7 +502,7 @@ class Reportes_model extends CI_Model
 			SUM((sa.`saldo` +  sa.`notaEntrega`)) saldo, 
 			SUM(sa.`notaEntrega`) remision, 
 			SUM(sa.`saldo`) saldoAlm,
-			SUM((sa.`saldo` * a.costoPromedioPonderado)) vTotal,
+			SUM(((sa.`saldo` +  sa.`notaEntrega`) * a.costoPromedioPonderado)) vTotal,
 			l.`Linea` linea
 			FROM saldoarticulos sa
 			INNER JOIN articulos a ON a.`idArticulos` = sa.`idArticulo`
