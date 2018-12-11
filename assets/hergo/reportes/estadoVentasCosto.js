@@ -38,8 +38,8 @@ function retornarestadoVentasCosto()
             alm: alm,
         },
     }).done(function(res){
-        console.log(glob_tipoCambio);
-    	quitarcargando();
+        quitarcargando();
+        datosselect = restornardatosSelect(res)
         $("#estadoVentasCostos").bootstrapTable('destroy');
         $("#estadoVentasCostos").bootstrapTable({       
 
@@ -49,16 +49,20 @@ function retornarestadoVentasCosto()
                     filter:true,
                     stickyHeader: true,
                     stickyHeaderOffsetY: '50px',
-                    showFooter: true,
+                    //showFooter: true,
                     footerStyle: footerStyle,
                     rowStyle:rowStyle,
                 columns:
                 [
                     {
-                        field: 'sigla',
+                        field: 'linea',
                         title: 'Linea',
                         align: 'center',
-                        visible: true
+                        visible: true,
+                        filter: {
+                            type: "select",
+                            data: datosselect[0]
+                        },
                     },
                     {
                         field: 'codigo',
@@ -276,3 +280,23 @@ function tituloReporte() {
     $('#tituloReporte').text(almText);
     $('#monedaTitulo').text(moneda);
 }
+function restornardatosSelect(res) {
+
+
+    let linea = new Array()
+    var datos = new Array()
+    $.each(res, function (index, value) {
+        linea.push(value.linea)
+    })
+
+    linea.sort();
+    datos.push(linea.unique());
+    return (datos);
+}
+Array.prototype.unique = function (a) {
+    return function () {
+        return this.filter(a)
+    }
+}(function (a, b, c) {
+    return c.indexOf(a, b + 1) < 0
+});

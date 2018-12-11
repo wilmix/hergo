@@ -223,12 +223,22 @@ class ReportesExcel extends CI_Controller
                 $this->array_push_assoc($x, array('unidad'=> ''));
                 $this->array_push_assoc($x, array('costo'=> ''));
                 $this->array_push_assoc($x, array('ppVenta'=> ''));
-                $this->array_push_assoc($x, array('saldo'=> ''));
-                $this->array_push_assoc($x, array('saldoValorado'=> $linea['saldoValorado']));
-                $this->array_push_assoc($x, array('cantidadVendida'=> ''));
-                $this->array_push_assoc($x, array('totalCosto'=> $linea['totalCosto']));
-                $this->array_push_assoc($x, array('totalVentas'=> $linea['totalVentas']));
-                $this->array_push_assoc($x, array('utilidad'=> $linea['utilidad']));
+				$this->array_push_assoc($x, array('saldo'=> ''));
+				if ($tc == 'BOB') {
+					$this->array_push_assoc($x, array('saldoValorado'=> $linea['saldoValorado']));
+					$this->array_push_assoc($x, array('cantidadVendida'=> ''));
+					$this->array_push_assoc($x, array('totalCosto'=> $linea['totalCosto']));
+					$this->array_push_assoc($x, array('totalVentas'=> $linea['totalVentas']));
+					$this->array_push_assoc($x, array('utilidad'=> $linea['utilidad']));
+				} else {
+					$this->array_push_assoc($x, array('saldoValorado'=> $linea['saldoValorado'] / $tc));
+					$this->array_push_assoc($x, array('cantidadVendida'=> ''));
+					$this->array_push_assoc($x, array('totalCosto'=> $linea['totalCosto'] / $tc));
+					$this->array_push_assoc($x, array('totalVentas'=> $linea['totalVentas'] / $tc));
+					$this->array_push_assoc($x, array('utilidad'=> $linea['utilidad'] / $tc));
+				}
+				
+                
             } else {
 				if ($tc == 'BOB') {
 					$this->array_push_assoc($x, array('idArticulo'=> $linea['idArticulo']));
@@ -254,9 +264,9 @@ class ReportesExcel extends CI_Controller
 					$this->array_push_assoc($x, array('unidad'=> $linea['unidad']));
 					$this->array_push_assoc($x, array('costo'=> $linea['costo']/$tc));
 					$this->array_push_assoc($x, array('ppVenta'=> $linea['ppVenta'] / $tc));
-					$this->array_push_assoc($x, array('saldo'=> $linea['saldo'] / $tc));
+					$this->array_push_assoc($x, array('saldo'=> $linea['saldo']));
 					$this->array_push_assoc($x, array('saldoValorado'=> $linea['saldoValorado'] / $tc));
-					$this->array_push_assoc($x, array('cantidadVendida'=> $linea['cantidadVendida'] / $tc));
+					$this->array_push_assoc($x, array('cantidadVendida'=> $linea['cantidadVendida']));
 					$this->array_push_assoc($x, array('totalCosto'=> $linea['totalCosto'] / $tc));
 					$this->array_push_assoc($x, array('totalVentas'=> $linea['totalVentas'] / $tc));
 					$this->array_push_assoc($x, array('utilidad'=> $linea['utilidad'] / $tc));
@@ -287,6 +297,17 @@ class ReportesExcel extends CI_Controller
             $spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setWidth(12);
         }
 		//$spreadsheet->getActiveSheet()->getColumnDimension('G:N')->setWidth(20);
+		if($alm == 1){
+            $alm = 'CENTRAL HERGO';
+        } else if ($alm == 2) {
+            $alm = 'DEPOSITO ALTO';
+        } else if ($alm == 3) {
+            $alm = 'POTOSI';
+        } else if ($alm == 4) {
+            $alm = 'SANTA CRUZ';
+        } else if ($alm == '') {
+            $alm = 'TODOS';
+        } 
 		$filename = 'estadoVentasCostoItem';
         $fecha = date('d-m-Y');
 		$spreadsheet->getActiveSheet()->getStyle('G1:N5000')->getNumberFormat()->setFormatCode('#,##0.00');
@@ -307,17 +328,6 @@ class ReportesExcel extends CI_Controller
         $spreadsheet->getActiveSheet()->getStyle('A1');
         $spreadsheet->getActiveSheet()->freezePane('B5');
 		$spreadsheet->getActiveSheet()->setAutoFilter('A4:N4');
-		if($alm == 1){
-            $alm = 'CENTRAL HERGO';
-        } else if ($alm == 2) {
-            $alm = 'DEPOSITO ALTO';
-        } else if ($alm == 3) {
-            $alm = 'POTOSI';
-        } else if ($alm == 4) {
-            $alm = 'SANTA CRUZ';
-        } else if ($alm == '') {
-            $alm = 'TODOS';
-        } 
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="'. $filename . ' ' . $alm .'.xlsx"'); 
         header('Cache-Control: max-age=0');
@@ -564,6 +574,7 @@ class ReportesExcel extends CI_Controller
 		$spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(10);
 
 		//$spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(30);
+
 
 
         foreach(range('G','I') as $columnID)
