@@ -49,12 +49,13 @@ class Egresos extends CI_Controller {
         $this->pdf->SetFont('Arial', '', 8);
 
         if ($egreso->moneda==='1') {
-            $n = 1;
+            /*$n = 1;
             $totalEgreso=0;
             foreach ($lineas->result() as $linea) {
                 $totalEgreso += $linea->total;
                 $this->pdf->SetFillColor(255,255,255);
                     $this->pdf->Cell(5,5,$n++,'',0,'C',0); ///NUMERO DE FILA
+
                     $this->pdf->Cell(15,5,number_format($linea->cantidad, 2, ".", ","),'',0,'R',0);
                     $this->pdf->Cell(10,5,$linea->Sigla,'',0,'C',0);
                     $this->pdf->Cell(15,5,$linea->CodigoArticulo,'',0,'C',0);
@@ -70,7 +71,7 @@ class Egresos extends CI_Controller {
                 $this->pdf->SetFont('Courier','B',9);
                 $this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
                 $literal = NumeroALetras::convertir($totalEgreso,'BOLIVIANOS','CENTAVOS');
-                $this->pdf->Cell(186,6,$literal,0,0,'l',1);
+                $this->pdf->Cell(186,6,$literal,0,0,'l',1);*/
 
 
         } elseif ($egreso->moneda==='2') {

@@ -47,10 +47,16 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		return $query;
 	}
 	public function retornarEdicion($idPago) {
-		$sql="SELECT *
-		FROM pago p
-		INNER JOIN clientes c ON c.`idCliente` = p.`cliente`
-		WHERE p.idPago = $idPago";
+		$sql="SELECT p.`idPago`, p.`almacen`, p.`numPago`, p.`moneda`, p.`cliente`, p.`totalPago` ,p.`anulado`, p.`glosa`, p.`fechaPago`,
+		p.`autor`, p.fecha, p.`tipoCambio`, p.`tipoPago`, p.`cheque` , p.`banco`, p.`transferencia`, p.imagen, p.`gestion`, tp.`tipoPago`,p.`cheque`,
+		c.`idCliente`, c.`nombreCliente`, c.`documento`, a.`almacen` nomAlmacen, a.`sucursal`, concat(u.`first_name`, ' ',u.`last_name`) userName, p.`tipoPago` idTipoPago , b.`sigla` nomBanco
+			FROM pago p
+			INNER JOIN clientes c ON c.`idCliente` = p.`cliente`
+			INNER JOIN almacenes a ON a.idalmacen = p.almacen
+			INNER join tipoPago tp on tp.`id` = p.`tipoPago`
+			LEFT JOIN users u on u.id = p.autor
+			LEFT JOIN bancos b ON b.`id` = p.`banco`
+			WHERE p.idPago = $idPago";
 		//die($sql);
 		$query=$this->db->query($sql);		
 		return $query;
@@ -67,7 +73,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		f.`total` ,
 		(f.total-sum(pf.`monto`)) saldoNuevo,
 		sum(pf.`monto`) pagar,
-		pf.`saldoNuevo` saldoPago
+		pf.`saldoNuevo` saldoPago, f.`lote`
 		
 		FROM pago_factura pf
 		INNER JOIN factura f ON f.`idFactura` =pf.`idFactura`
