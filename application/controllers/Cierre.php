@@ -6,10 +6,10 @@ class Cierre extends CI_Controller
 	public function __construct()
 	{	
 		parent::__construct();
-		$this->load->library('LibAcceso');
-		$this->libacceso->acceso(1);
+		//$this->load->library('LibAcceso');
+		//$this->libacceso->acceso(1);
 		$this->load->helper('url');	
-		$this->load->model("Almacen_model");
+		$this->load->model("Cierre_model");
 		$this->load->model("Ingresos_model");
 		$this->cabeceras_css=array(
                 base_url('assets/bootstrap/css/bootstrap.min.css'),
@@ -20,9 +20,12 @@ class Cierre extends CI_Controller
                 base_url("assets/hergo/estilos.css"),
                 base_url('assets/plugins/steps/css/main.css'),
 				base_url('assets/plugins/steps/css/jquery.steps.css'),
-                
-                
-			);
+				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
+				base_url('assets/plugins/table-boot/plugin/select2.min.css'),				
+				base_url('assets/sweetalert/sweetalert2.min.css'),
+				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),
+				base_url('assets/plugins/daterangepicker/daterangepicker.css')	
+		);
 		$this->cabecera_script=array(
                 base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
                 base_url('assets/plugins/jQueryUI/jquery-ui.min.js'),
@@ -30,8 +33,23 @@ class Cierre extends CI_Controller
 				base_url('assets/bootstrap/js/bootstrap.min.js'),
 				base_url('assets/dist/js/app.min.js'),
 				base_url('assets/plugins/slimscroll/slimscroll.min.js'),
-                base_url('assets/plugins/daterangepicker/moment.min.js'),
-			);
+				base_url('assets/plugins/daterangepicker/moment.min.js'),
+				base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
+				base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
+				base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
+				base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
+				base_url('assets/plugins/table-boot/js/tableExport.js'),
+				base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
+				base_url('assets/plugins/table-boot/plugin/select2.min.js'),
+				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
+        		base_url('assets/plugins/daterangepicker/moment.min.js'),
+        		base_url('assets/plugins/slimscroll/slimscroll.min.js'),        		
+        		base_url('assets/sweetalert/sweetalert2.min.js'),
+				base_url('assets/busqueda/underscore-min.js'),
+				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
+				base_url('assets/plugins/daterangepicker/daterangepicker.js'),
+				base_url('assets/plugins/daterangepicker/locale/es.js')
+		);
 			
 			$hoy = date('Y-m-d');
 			$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
@@ -80,6 +98,56 @@ class Cierre extends CI_Controller
             
 	}
 
+	public function showPendientes()
+	{
+		if($this->input->is_ajax_request())
+        {
+			$gestion = 2018;
+        	$res=$this->Cierre_model->showPendientes($gestion);
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function showNegativos()
+	{
+		if($this->input->is_ajax_request())
+        {
+			$gestion = 2018;
+        	$res=$this->Cierre_model->showNegativos();
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function backupDataBase()
+	{
+		$this->load->dbutil();
+
+		$prefs = array(     
+			'format'      => 'zip',             
+			'filename'    => 'my_db_backup.sql'
+			);
+		
+		
+		$backup =& $this->dbutil->backup($prefs); 
+		
+		$db_name = 'backup-on-'. date("Y-m-d-H-i-s") .'.zip';
+		$save = 'pathtobkfolder/'.$db_name;
+		
+		$this->load->helper('file');
+		write_file($save, $backup); 
+		
+		
+		$this->load->helper('download');
+		force_download($db_name, $backup);
+	}
 
 
 }
