@@ -5,17 +5,89 @@ $(document).ready(function(){
         bodyTag: "section",
         transitionEffect: "slideLeft",
         autoFocus: true
-    });
+    })
+
+    $('#form_tipoCambio').bootstrapValidator({
+             
+        feedbackIcons: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+        },
+        excluded: ':disabled',
+        fields: {          
+            tipocambio: {
+                validators: {
+                    notEmpty: {
+                        message: 'Establesca nuevo tipo De cambio'
+                    },
+                    numeric: {
+                        message: 'Debe ser de tipo Numérico'
+                    }                   
+                }
+            },
+            fechaCambio: {
+                validators: {
+                    notEmpty: {
+                        message: 'Establesca fecha de tipo de cambio'
+                    },
+                    date: {
+                        format: 'YYYY-MM-DD',
+                        message: 'La fecha no es valida Ej: 2019-01-31 (año-mes-dia)'
+                    }
+                }
+            },
+        }
+        }).on('success.form.bv', function(e) {
+            e.preventDefault();
+            let formData = new FormData($('#form_tipoCambio')[0]);  
+        $.ajax({
+                url: base_url("index.php/Configuracion/updateTipoCambio"),
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (returndata) {
+                    limpiarModal()
+                    resetForm('#form_tipoCambio')
+                    swal({
+                        title: 'Se establecio el tipo de cambio Correctamente',
+                        type: 'success',
+                        showCancelButton: false,
+                        allowOutsideClick: false,
+                    })
+                    $('#modalTipoCambio').modal('hide')
+                    limpiarModal()
+                },
+                error : function (returndata) {
+                    swal(
+                        'Error',
+                        'La fecha actual ya tiene un tipo de cambio registrada en la base de datos',
+                        'error'
+                    )
+                    //console.log(returndata);
+                },
+            }); 
+        });
 })
 $(function() {
     $('#fechaCambio').daterangepicker({
-      singleDatePicker: true,
-      showDropdowns: true,
-      locale: {
+        singleDatePicker: true,
+        showDropdowns: true,
+        locale: {
         format: 'YYYY-MM-DD'
-      }
+        }
     });
-  });
+});
+$(document).on("click", "#backupDB", function () {
+    agregarcargando()
+    let backup = base_url("cierre/backupDataBase/")
+    console.log(backup)
+    location.href = (backup)
+    quitarcargando()
+})
+
 
 $(document).on("click", "#btnVerificarPendientes", function () {
     retornarVerificarPendientes();
@@ -23,7 +95,16 @@ $(document).on("click", "#btnVerificarPendientes", function () {
 $(document).on("click", "#btnVerificarNegativos", function () {
     retornarVerificarNegativos();
 })
+function limpiarModal(fia)
+{
+    $( ".fecha-cambio" ).removeClass( "hidden" );   
+     $("#fechaTipoCambio").val('')
+     $("#fechaTitulo").html('')
+    $("#id").val('')
+    $("#fechaCambio").val('')
+    $("#tipocambio").val('')
 
+}
 function retornarVerificarPendientes()
 {
     agregarcargando();
@@ -73,7 +154,7 @@ function retornarVerificarPendientes()
                     field: 'fecha',
                     title: 'Fecha',
                     sortable: true,
-                    width:'10px',
+                    width:'100px',
                     align: 'center',
                 },
                 {
@@ -197,3 +278,19 @@ function retornarVerificarNegativos()
         console.log("Request Failed: " + err);
     });
 }
+function base_url(complemento) {
+    complemento = (complemento) ? complemento : '';
+    var baseurl = $('#baseurl').val();
+    return baseurl + complemento;
+  }
+  function resetForm(id) {
+    $(id)[0].reset();
+    $(id).bootstrapValidator('resetForm', true);
+  }
+  function agregarcargando() {
+    $("#cargando").css("display", "block")
+  }
+  
+  function quitarcargando() {
+    $("#cargando").css("display", "none")
+  }

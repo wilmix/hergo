@@ -82,7 +82,7 @@ class Cierre extends CI_Controller
             $this->datos['cabeceras_script']= $this->cabecera_script;
 
 			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			//$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/cierre.js');
 
 
@@ -128,22 +128,23 @@ class Cierre extends CI_Controller
 	}
 	public function backupDataBase()
 	{
+		ini_set('max_execution_time', 0); 
+		ini_set('memory_limit','2048M');
 		$this->load->dbutil();
 
 		$prefs = array(     
 			'format'      => 'zip',             
-			'filename'    => 'my_db_backup.sql'
+			'filename'    => 'hergo_backup.sql'
 			);
 		
 		
 		$backup =& $this->dbutil->backup($prefs); 
-		
+
 		$db_name = 'backup-on-'. date("Y-m-d-H-i-s") .'.zip';
 		$save = 'pathtobkfolder/'.$db_name;
 		
 		$this->load->helper('file');
 		write_file($save, $backup); 
-		
 		
 		$this->load->helper('download');
 		force_download($db_name, $backup);
