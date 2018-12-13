@@ -42,24 +42,33 @@
                         </div>
                     </section>
 
-                    <h3>Datos Inventario Inicial</h3>
+                    <h3>Cierre</h3>
                     <section>
                         <div class="text-center">
-                            <h4>Agregar tipo de Cambio para Inventario Inicial</h4>
-                            <br>
-                            <button class="btn btn-primary text-center btnnuevo"  data-toggle="modal" data-target="#modalTipoCambio">Agregar Tipo Cambio</button>
-                            <br>
-                            <hr>
                             <br>
                             <h4>Crear y descargar backup de la Base de Datos</h4>
                             <br>
                             <button class="btn btn-primary text-center btnnuevo" id="backupDB">Backup</button>
+                            <br>
+                            <hr>
+                            <h4>Fecha de Inventario Inicial</h4>
+                            <div class="fecha-cambio">
+                            <label class="col-md-4 control-label"><span ></span> </label>
+                            <div class="col-md-4 inputGroupContainer">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-screenshot"></i>
+                                    </span>
+                                    <input class="form-control" name="fechaCambio" id="fechaCambio" type="text">
+                                </div>
+                            </div>
+                            </div>
+                            <br>
+                            <br>
+                            <h4>Generar cierre para todas las sucursales</h4>
+                            <br>
+                            <button class="btn btn-primary text-center btnnuevo" id="generarCierre">Generar</button>
                         </div>
-                    </section>
-
-                    <h3>Cierre</h3>
-                    <section>
-                        <p>Cerrar Gestión e Iniciar siguiente gestión</p>
                     </section>
                 </div>
                 <!-- /.box-body -->
@@ -69,8 +78,8 @@
         <!-- /.col -->
     </div>
 
-    <!-- Modal -->
-<form action=" " method="post" id="form_tipoCambio">
+<!-- Modal TIPO CAMBIO-->
+<form method="post" id="form_tipoCambio">
     <div class="modal fade" id="modalTipoCambio" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -90,26 +99,14 @@
                                     <span class="input-group-addon">
                                         <i class="glyphicon glyphicon-screenshot"></i>
                                     </span>
-                                    <input placeholder="Establecer nuevo tipo de cambio" class="form-control" name="tipocambio" id="tipocambio" type="text" autofocus>
-                                    <input name="id"   id="id" type="text" hidden>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group fecha-cambio">
-                            <label class="col-md-3 control-label"><span ></span> Fecha</label>
-                            <div class="col-md-9 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="glyphicon glyphicon-screenshot"></i>
-                                    </span>
-                                    <input class="form-control" name="fechaCambio" id="fechaCambio" type="text" autocomplete="off">
+                                    <input placeholder="Establecer nuevo tipo de cambio" class="form-control" name="tipocambio" id="tipocambio" type="text" autofocus autocomplete="off">
                                 </div>
                             </div>
                         </div>
                     </fieldset>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default botoncerrarmodal" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary guardarTipoCambio" id="guardarTipoCambio">Guardar</button>
+                        <button type="button" class="btn btn-primary" id="setTipoCambio">Guardar</button>
                 </div>
                 </div>
                 <!-- /.<div class="modal-body form">-->

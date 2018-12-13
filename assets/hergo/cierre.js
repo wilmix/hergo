@@ -71,6 +71,30 @@ $(document).ready(function(){
             }); 
         });
 })
+$(document).on("change", "#fechaCambio", function () {
+    let fecha = $('#fechaCambio').val()
+        console.log('buscar');
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: base_url("index.php/Egresos/consultarTipoCambio"),
+            dataType: "json",
+            data: {
+                fecha: fecha
+            },
+            success: function(data) {
+
+                data ? checkTipoCambio = data : checkTipoCambio = false
+               
+            }
+        });
+        if (checkTipoCambio == false) {
+            mostrarModal()
+        } else {
+            glob_tipoCambio = checkTipoCambio.tipocambio
+            console.log(checkTipoCambio.fecha+ ' - ' +glob_tipoCambio)
+        }
+})
 $(function() {
     $('#fechaCambio').daterangepicker({
         singleDatePicker: true,
@@ -86,6 +110,25 @@ $(document).on("click", "#backupDB", function () {
     console.log(backup)
     location.href = (backup)
     quitarcargando()
+})
+$(document).on("click", "#generarCierre", function () {
+    let fecha = $('#fechaCambio').val()
+    console.log(fecha);
+    return false
+    $.ajax({
+        type: "POST",
+        url: base_url('index.php/cierre/generarCierre'),
+        dataType: "json",
+        data: { fecha: fecha,
+        },
+    }).done(function (res) {
+        //quitarcargando(); 
+        console.log(res);
+
+    }).fail(function (jqxhr, textStatus, error) {
+        var err = textStatus + ", " + error;
+        console.log("Request Failed: " + err);
+    });
 })
 
 
@@ -294,3 +337,43 @@ function base_url(complemento) {
   function quitarcargando() {
     $("#cargando").css("display", "none")
   }
+
+  function mantenerMenu() {
+    var pathname = window.location.pathname;
+    var dir = pathname.split("/")
+    var menu = dir[dir.length - 1];
+    var x = $("#masterMenu").find("." + menu).addClass("active").closest(".treeview").addClass("active");;
+  
+  }
+
+  function mostrarModal()
+{
+    $('#modalTipoCambio').modal('show');
+}
+$(document).on("click", "#setTipoCambio", function () {
+    let fecha = $('#fechaCambio').val()
+    let tc = $('#tipocambio').val()
+    if (!tc || tc == 0) {
+        swal("Atencion!", "Ingrese tipo cambio valido")
+        return false
+    }
+    $.ajax({
+        type: "POST",
+        url: base_url("index.php/Configuracion/updateTipoCambio"),
+        dataType: "json",
+        data: {
+            id: 'egreso',
+            fechaCambio: fecha,
+            tipocambio: tc
+        },
+        success: function(data) {
+            console.log(data);
+            checkTipoCambio = true
+            glob_tipoCambio = data.TipoCambio
+            console.log(glob_tipoCambio);
+            $('#modalTipoCambio').modal('hide')
+            swal("Atencion!", "Agrego un tipo de cambio para" + formato_fecha_corta(data.fecha))
+            $('#tipocambio').val('')
+        }
+    });
+})

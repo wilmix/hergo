@@ -45,6 +45,30 @@ class Cierre_model extends CI_Model
 
 		$query=$this->db->query($sql);
 		return $query;
+    }
+    public function showIdAlmacenes()
+	{
+		$sql="SELECT a.`idalmacen` id, a.`almacen`
+        FROM almacenes a
+        ORDER BY a.`idalmacen`
+        ";
+		$query=$this->db->query($sql);
+		return $query;
+    }
+    public function itemsSaldos($alm)
+	{
+		$sql="SELECT 
+        sa.`idArticulo` '0', a.`CodigoArticulo` '1', a.`Descripcion` '2', ROUND(SUM((sa.`saldo` +  sa.`notaEntrega`)),4) '3', 
+        IFNULL(a.`costoPromedioPonderado`,0) '4',
+        ((sa.`saldo` +  sa.`notaEntrega`)) * IFNULL(a.`costoPromedioPonderado`,0) '5',
+        IFNULL(a.`costoPromedioPonderado`,0) '6',
+        ((sa.`saldo` +  sa.`notaEntrega`)) * IFNULL(a.`costoPromedioPonderado`,0) '7'
+        FROM saldoarticulos sa
+        INNER JOIN articulos a ON a.`idArticulos` = sa.`idArticulo`
+        WHERE sa.`idAlmacen` = '$alm'
+        GROUP BY a.`CodigoArticulo`";
+		$query=$this->db->query($sql);
+		return $query;
 	}
 
 }
