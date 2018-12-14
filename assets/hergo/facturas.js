@@ -182,9 +182,13 @@ $(document).on("click", "#refresh", function () {
 $(document).on("change", "#tipoFacturacion", function () {
     if ($("#tipoFacturacion").val() == 1) {
         $(".facturaManual").removeClass("hidden")
+        $("#fechaFactura").removeAttr("disabled")
         $(".facturaManual").val('')
     } else {
         $(".facturaManual").addClass("hidden")
+        $("#fechaFactura").attr({
+            disabled: "disabled"
+        });
         $(".facturaManual").val('')
     }
 })
