@@ -153,52 +153,73 @@ class Cierre extends CI_Controller
 		if($this->input->is_ajax_request())
         {
 			$fechaII = $this->security->xss_clean($this->input->post('fecha'));
-			$idAlmacens = $this->Cierre_model->showIdAlmacenes()->result();
-			$res=$idAlmacens;
-			$todo = [];
-			foreach ($idAlmacens as $value) {
-				$ingreso = new stdclass();
-				$ingreso->almacen =  $value->id;
-				$ingreso->tipomov = 1;
-				$ingreso->fechamov = date('Y-m-d',strtotime($fechaII));
-				$gestion= date("Y", strtotime($ingreso->fechamov));
-				$ingreso->moneda = 1;
-				$ingreso->proveedor = 69;
+			$gestionII= date("Y", strtotime($fechaII));
+			$invIni = $this->generarInventarioInicial($fechaII);
+			$saldos = $this->updateSaldos($gestionII);
+			$ret = new stdclass();
+			$ret->invIni = $invIni;
+			$ret->saldos = $saldos;
+			echo json_encode($ret);
 
-				$tipocambio=$this->Ingresos_model->getTipoCambio($ingreso->fechamov);
-				if (!$tipocambio) {
-					echo 'No se tiene tipo de cambio para el '.$ingreso->fechamov;
-					return false;
-				}
-				$ingreso->tipoCambio=$tipocambio->tipocambio;
-
-				$ingreso->autor=$this->session->userdata('user_id');
-				$ingreso->fecha = date('Y-m-d H:i:s');
-
-				$gestion= date("Y", strtotime($ingreso->fechamov));
-				$ingreso->gestion = $gestion;
-				$ingreso->obs = 'INVENTARIO INICIAL '.$gestion. ' ' . $value->almacen;
-				$ingreso->nmov = $this->Ingresos_model->retornarNumMovimiento($ingreso->tipomov,$gestion,$ingreso->almacen);
-				$ingreso->articulos= $this->Cierre_model->itemsSaldos($ingreso->almacen)->result_array();
-				//echo json_encode($ingreso);
-				if (empty($ingreso->articulos)) {
-					$id = '';
-					$msj = 'El almacen '.$value->almacen. ' '.'no tiene articulos';
-				} else {
-					$id = $this->Ingresos_model->storeIngreso($ingreso);
-					$msj = 'El Inventrio inicial de '.$value->almacen . ' se generó con éxito.';
-				}
-				$rta = new stdclass();
-				$rta->id = $id;
-				$rta->msj = $msj;
-
-				array_push($todo,$rta);
-			}
-			echo json_encode($todo);
 		}
 		else
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
+	}
+	public function generarInventarioInicial($fechaII)
+	{
+		$idAlmacens = $this->Cierre_model->showIdAlmacenes()->result();
+		$res=$idAlmacens;
+		$todo = [];
+		foreach ($idAlmacens as $value) {
+			$ingreso = new stdclass();
+			$ingreso->almacen =  $value->id;
+			$ingreso->tipomov = 1;
+			$ingreso->fechamov = date('Y-m-d',strtotime($fechaII));
+			$gestion= date("Y", strtotime($ingreso->fechamov));
+			$ingreso->moneda = 1;
+			$ingreso->proveedor = 69;
+
+			$tipocambio=$this->Ingresos_model->getTipoCambio($ingreso->fechamov);
+			if (!$tipocambio) {
+				echo 'No se tiene tipo de cambio para el '.$ingreso->fechamov;
+				return false;
+			}
+			$ingreso->tipoCambio=$tipocambio->tipocambio;
+
+			$ingreso->autor=$this->session->userdata('user_id');
+			$ingreso->fecha = date('Y-m-d H:i:s');
+
+			$gestion= date("Y", strtotime($ingreso->fechamov));
+			$ingreso->gestion = $gestion;
+			$ingreso->obs = 'INVENTARIO INICIAL '.$gestion. ' ' . $value->almacen;
+			$ingreso->nmov = $this->Ingresos_model->retornarNumMovimiento($ingreso->tipomov,$gestion,$ingreso->almacen);
+			$ingreso->articulos= $this->Cierre_model->itemsSaldos($ingreso->almacen)->result_array();
+			//echo json_encode($ingreso);
+			if (empty($ingreso->articulos)) {
+				$id = '';
+				$msj = 'El almacen '.$value->almacen. ' '.'no tiene articulos';
+			} else {
+				$id = $this->Ingresos_model->storeIngreso($ingreso);
+				$msj = 'El Inventrio inicial de '.$value->almacen . ' se generó con éxito.';
+			}
+
+			$rta = new stdclass();
+			$rta->id = $id;
+			$rta->msj = $msj;
+
+			array_push($todo,$rta);
+		}
+
+		return ($todo);
+	}
+	public function updateSaldos($gestion)
+	{
+		$ingresos = $this->Cierre_model->selectInventarioInicial($gestion)->result();
+		$egresos =  $this->Cierre_model->notasEntregaPendientes()->result();
+
+		$saldos = $this->Cierre_model->updateSaldos($ingresos, $egresos, $gestion);
+		return $saldos;
 	}
 }

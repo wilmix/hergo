@@ -112,9 +112,10 @@ $(document).on("click", "#backupDB", function () {
     quitarcargando()
 })
 $(document).on("click", "#generarCierre", function () {
+    agregarcargando()
     let fecha = $('#fechaCambio').val()
     console.log(fecha);
-    return false
+    //return false
     $.ajax({
         type: "POST",
         url: base_url('index.php/cierre/generarCierre'),
@@ -122,7 +123,7 @@ $(document).on("click", "#generarCierre", function () {
         data: { fecha: fecha,
         },
     }).done(function (res) {
-        //quitarcargando(); 
+        quitarcargando(); 
         console.log(res);
 
     }).fail(function (jqxhr, textStatus, error) {
@@ -344,6 +345,15 @@ function base_url(complemento) {
     var menu = dir[dir.length - 1];
     var x = $("#masterMenu").find("." + menu).addClass("active").closest(".treeview").addClass("active");;
   
+  }
+  function formato_fecha_corta(value, row, index) {
+    var fecha = ""
+    //console.log(value)
+    if ((value == "0000-00-00 00:00:00") || (value == "") || (value == null))
+      fecha = "sin fecha de registro"
+    else
+      fecha = moment(value, "YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY")
+    return fecha
   }
 
   function mostrarModal()

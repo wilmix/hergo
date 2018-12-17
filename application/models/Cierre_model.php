@@ -46,6 +46,26 @@ class Cierre_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
     }
+    public function notasEntregaPendientes()
+	{
+		$sql="SELECT e.`idegresos` , e.`almacen`
+        FROM egresos e 
+        WHERE  e.`estado` <> 1
+        AND e.`tipomov` = 7
+        AND e.`anulado` = 0";
+
+		$query=$this->db->query($sql);
+		return $query;
+    }
+    public function selectInventarioInicial($gestion)
+	{
+		$sql="SELECT i.`idIngresos`, i.`almacen`
+        FROM ingresos i
+        WHERE i.`gestion` = $gestion
+        AND i.`tipomov` = 1";
+		$query=$this->db->query($sql);
+		return $query;
+    }
     public function showIdAlmacenes()
 	{
 		$sql="SELECT a.`idalmacen` id, a.`almacen`
@@ -69,6 +89,29 @@ class Cierre_model extends CI_Model
         GROUP BY a.`CodigoArticulo`";
 		$query=$this->db->query($sql);
 		return $query;
-	}
+    }
+    public function updateSaldos($ingresos, $egresos, $gestion)
+	{	
+        $this->db->trans_start();
+            $this->db->query("UPDATE config SET gestionActual = '$gestion';");
+            $this->db->query("SET FOREIGN_KEY_CHECKS=0;");
+            $this->db->query("TRUNCATE TABLE saldoarticulos;");   
+            $this->db->query("SET FOREIGN_KEY_CHECKS=1;");
+
+            foreach ($ingresos as $value) {
+                $this->db->query("CALL actualizarTablaSaldoIngreso($value->idIngresos, $value->almacen);");
+            }
+            foreach ($egresos as $value) {
+                $this->db->query("CALL actualizarTablaSaldoEgreso($value->idegresos, $value->almacen);");
+            }
+
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 }
