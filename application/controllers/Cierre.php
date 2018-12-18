@@ -150,6 +150,8 @@ class Cierre extends CI_Controller
 	}
 	public function generarCierre()
 	{
+		ini_set('max_execution_time', 0); 
+		ini_set('memory_limit','2048M');
 		if($this->input->is_ajax_request())
         {
 			$fechaII = $this->security->xss_clean($this->input->post('fecha'));
@@ -160,7 +162,6 @@ class Cierre extends CI_Controller
 			$ret->invIni = $invIni;
 			$ret->saldos = $saldos;
 			echo json_encode($ret);
-
 		}
 		else
 		{
@@ -179,6 +180,7 @@ class Cierre extends CI_Controller
 			$ingreso->fechamov = date('Y-m-d',strtotime($fechaII));
 			$gestion= date("Y", strtotime($ingreso->fechamov));
 			$ingreso->moneda = 1;
+			$ingreso->estado=1;
 			$ingreso->proveedor = 69;
 
 			$tipocambio=$this->Ingresos_model->getTipoCambio($ingreso->fechamov);
@@ -196,13 +198,13 @@ class Cierre extends CI_Controller
 			$ingreso->obs = 'INVENTARIO INICIAL '.$gestion. ' ' . $value->almacen;
 			$ingreso->nmov = $this->Ingresos_model->retornarNumMovimiento($ingreso->tipomov,$gestion,$ingreso->almacen);
 			$ingreso->articulos= $this->Cierre_model->itemsSaldos($ingreso->almacen)->result_array();
-			//echo json_encode($ingreso);
+
 			if (empty($ingreso->articulos)) {
 				$id = '';
 				$msj = 'El almacen '.$value->almacen. ' '.'no tiene articulos';
 			} else {
 				$id = $this->Ingresos_model->storeIngreso($ingreso);
-				$msj = 'El Inventrio inicial de '.$value->almacen . ' se generó con éxito.';
+				$msj = 'El Inventrio inicial  '.$gestion.' de '.$value->almacen . ' se generó con éxito.';
 			}
 
 			$rta = new stdclass();

@@ -112,24 +112,58 @@ $(document).on("click", "#backupDB", function () {
     quitarcargando()
 })
 $(document).on("click", "#generarCierre", function () {
-    agregarcargando()
-    let fecha = $('#fechaCambio').val()
-    console.log(fecha);
-    //return false
-    $.ajax({
-        type: "POST",
-        url: base_url('index.php/cierre/generarCierre'),
-        dataType: "json",
-        data: { fecha: fecha,
-        },
-    }).done(function (res) {
-        quitarcargando(); 
-        console.log(res);
+        swal({
+            title: 'Cierre de Gestión',
+            html: "Se realizará el cierre de gestión",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Aceptar',
+            cancelButtonText: 'No, Cancelar'
+        }).then((result) => {
+            swal({
+                type: 'success',
+                html: 'El cierre de gestión esta en proceso.',
+            });
+            agregarcargando()
+            let fecha = $('#fechaCambio').val()
+            console.log(fecha);
+            //return false
+            $.ajax({
+                type: "POST",
+                url: base_url('index.php/cierre/generarCierre'),
+                dataType: "json",
+                data: { fecha: fecha,
+                },
+            }).done(function (res) {
+                let rspta = ''
+                res.invIni.forEach(element => {
+                    rspta += element.msj + '<br>'
+                });
+                let resSaldos = res.saldos ? 'Los SALDOS articulos se actualizaron con éxito': 'Error Saldos Articulos'
+                rspta += resSaldos
+                swal({
+                    type: 'success',
+                    width: 600,
+                    html: rspta,
+                });
+                quitarcargando(); 
 
-    }).fail(function (jqxhr, textStatus, error) {
-        var err = textStatus + ", " + error;
-        console.log("Request Failed: " + err);
-    });
+            }).fail(function (jqxhr, textStatus, error) {
+                var err = textStatus + ", " + error;
+                console.log("Request Failed: " + err);
+            })
+        }, (dismiss) => {
+            swal({
+                type: 'error',
+                title: 'Se canceló el cierre de Gestión',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        })
+      return false
+    
 })
 
 

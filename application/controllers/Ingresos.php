@@ -711,6 +711,7 @@ class Ingresos extends CI_Controller
 			$ingreso->nfact = $this->security->xss_clean($this->input->post('nfact_imp'));
 			$ingreso->tipoDoc = $this->security->xss_clean($this->input->post('tipoDoc'));
 			$ingreso->obs = $this->security->xss_clean($this->input->post('obs_imp'));
+			$ingreso->estado = 0;
 			$ingreso->articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
 			
 
