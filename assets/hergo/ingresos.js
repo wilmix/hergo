@@ -236,6 +236,7 @@ function mostrarTablaIngresosTraspaso(res) {
     });
 }
 function mostrarTablaIngresos(res) {
+    almacen = $("#almacen_filtro").val()
     $("#tingresos").bootstrapTable({
 
         data: res,
@@ -255,6 +256,14 @@ function mostrarTablaIngresos(res) {
                 align: 'center',
                 sortable: true,
                 searchable: true,
+            },
+            {
+                field: 'almacen',
+                title: 'Almacen',
+                align: 'center',
+                sortable: true,
+                searchable: false,
+                visible: !almacen?true:false,
             },
             {
                 field: 'sigla',
@@ -423,7 +432,7 @@ function retornarTablaIngresos() {
             ti: tipoingreso
         },
     }).done(function (res) {
-        console.log(res);
+        //console.log(res);
         quitarcargando();
         datosselect = restornardatosSelect(res)
 
