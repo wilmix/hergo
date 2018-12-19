@@ -157,7 +157,7 @@ class Cierre extends CI_Controller
 			$fechaII = $this->security->xss_clean($this->input->post('fecha'));
 			$gestionII= date("Y", strtotime($fechaII));
 			$pendientes = $this->Cierre_model->showPendientes($gestionII)->result();
-			$negativos = [];//$this->Cierre_model->showNegativos()->result();
+			$negativos = $this->Cierre_model->showNegativos()->result();
 			$gestionActual = $this->Cierre_model->gestionActual()->row();
 			if ($gestionII != $gestionActual->gestionActual+1) {
 				echo json_encode(false);
