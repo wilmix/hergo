@@ -691,4 +691,20 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function showReportePagos ($ini, $fin, $alm="") 
+	{ 
+		$sql="SELECT pf.`id`, pf.`idPago`, pf.`idFactura`,
+		p.`numPago`, p.`fechaPago`, c.`nombreCliente`,  f.`nFactura`, p.`glosa`, sum(pf.`monto`) total, f.`lote`
+		from pago_factura pf
+		inner join factura f on f.`idFactura` = pf.`idFactura`
+		inner join pago p on p.`idPago` = pf.`idPago`
+		inner join clientes c on c.`idCliente` = f.`cliente`
+		where year(p.`fechaPago`) = 2018 
+		and p.`anulado` = 0
+		and p.`almacen` = 1
+		group by  p.`numPago` desc, pf.`id` with rollup
+		";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 }
