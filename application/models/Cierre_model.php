@@ -90,6 +90,13 @@ class Cierre_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
     }
+
+    public function gestionActual()
+	{
+		$sql="SELECT gestionActual FROM config LIMIT 1";
+		$query=$this->db->query($sql);
+		return $query;
+    }
     public function updateSaldos($ingresos, $egresos, $gestion)
 	{	
         $this->db->trans_start();

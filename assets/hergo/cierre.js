@@ -4,7 +4,8 @@ $(document).ready(function(){
         headerTag: "h3",
         bodyTag: "section",
         transitionEffect: "slideLeft",
-        autoFocus: true
+        enableAllSteps: true,
+        enablePagination :false,
     })
 
     $('#form_tipoCambio').bootstrapValidator({
@@ -122,13 +123,17 @@ $(document).on("click", "#generarCierre", function () {
             confirmButtonText: 'Si, Aceptar',
             cancelButtonText: 'No, Cancelar'
         }).then((result) => {
-            swal({
-                type: 'success',
-                html: 'El cierre de gestión esta en proceso.',
-            });
             agregarcargando()
+            swal({
+                //type: 'success',
+                showConfirmButton: false,
+                title: 'Procesando...',
+                html: 'El proceso de cierre de gestión puede durar unos minutos...',
+            });
             let fecha = $('#fechaCambio').val()
-            console.log(fecha);
+            let date = new Date(fecha)
+            console.log(date.getFullYear())
+            console.log(fecha)
             //return false
             $.ajax({
                 type: "POST",
@@ -137,6 +142,16 @@ $(document).on("click", "#generarCierre", function () {
                 data: { fecha: fecha,
                 },
             }).done(function (res) {
+                console.log(res);
+                quitarcargando(); 
+                if (!res) {
+                    swal({
+                        type: 'error',
+                        title: 'Error!',
+                        html: 'Existen movimientos pendientes, artículos negativos o error fecha de inicio de gestión',
+                    });
+                    return false
+                }
                 let rspta = ''
                 res.invIni.forEach(element => {
                     rspta += element.msj + '<br>'
@@ -148,7 +163,6 @@ $(document).on("click", "#generarCierre", function () {
                     width: 600,
                     html: rspta,
                 });
-                quitarcargando(); 
 
             }).fail(function (jqxhr, textStatus, error) {
                 var err = textStatus + ", " + error;
@@ -194,8 +208,6 @@ function retornarVerificarPendientes()
         }, 
     }).done(function (res) {
         quitarcargando();
-        console.log(res);
-        //datosselect = restornardatosSelect(res);
         $("#verificarPendientes").bootstrapTable('destroy');
         $("#verificarPendientes").bootstrapTable({ 
             data: res,
@@ -267,8 +279,6 @@ function retornarVerificarNegativos()
         }, 
     }).done(function (res) {
         quitarcargando();
-        console.log(res);
-        //datosselect = restornardatosSelect(res);
         $("#verificarNegativos").bootstrapTable('destroy');
         $("#verificarNegativos").bootstrapTable({ 
             data: res,

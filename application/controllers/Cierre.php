@@ -156,12 +156,25 @@ class Cierre extends CI_Controller
         {
 			$fechaII = $this->security->xss_clean($this->input->post('fecha'));
 			$gestionII= date("Y", strtotime($fechaII));
-			$invIni = $this->generarInventarioInicial($fechaII);
-			$saldos = $this->updateSaldos($gestionII);
-			$ret = new stdclass();
-			$ret->invIni = $invIni;
-			$ret->saldos = $saldos;
-			echo json_encode($ret);
+			$pendientes = $this->Cierre_model->showPendientes($gestionII)->result();
+			$negativos = [];//$this->Cierre_model->showNegativos()->result();
+			$gestionActual = $this->Cierre_model->gestionActual()->row();
+			if ($gestionII != $gestionActual->gestionActual+1) {
+				echo json_encode(false);
+			} else if ($pendientes) {
+				echo json_encode(false);
+				return false;
+			} else if ($negativos) {
+				echo json_encode(false);
+				return false;
+			} else {
+				$invIni = $this->generarInventarioInicial($fechaII);
+				$saldos = $this->updateSaldos($gestionII);
+				$ret = new stdclass();
+				$ret->invIni = $invIni;
+				$ret->saldos = $saldos;
+				echo json_encode($ret);
+			}
 		}
 		else
 		{
