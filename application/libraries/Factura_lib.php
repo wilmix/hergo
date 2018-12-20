@@ -8,10 +8,9 @@
         public function __construct($params){
             parent::__construct();
             $this->datos = $params;
-            //date_default_timezone_set('America/Bolivia/La_Paz');
-            date_default_timezone_set("America/La_Paz");
         }
         public function Header() {
+            //$this->setlocale(LC_ALL,"es_ES");
             $almacen = $this->datos['almacen'];
             $direccion = $this->datos['direccion'];
             $Telefonos = $this->datos['Telefonos'];
@@ -30,7 +29,8 @@
             $userName = $this->datos['userName'];
             $year = date('Y',strtotime($fechaFac));
             $dia = date('d',strtotime($fechaFac));
-            $mes = date('M',strtotime($fechaFac));
+            $mes = date('n',strtotime($fechaFac));
+            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
             $fechaFacQR = date('d/m/Y',strtotime($this->datos['fechaFac']));
             $total = $this->datos['total'];
             $baseCreditoFiscal = $total*87/100;
@@ -42,7 +42,7 @@
 
             //var_dump($manual);
             if ($manual==='0') {
-                $this->SetY(-47);
+                $this->SetY(-136);
                 $this->SetX(177);
                 $this->Image('https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl='.$qr.'&.png',NULL,NULL,35,35,'PNG');
             }
@@ -55,10 +55,10 @@
             $this->Cell(0,15, 'FACTURA',0,0,'C');
             $this->Ln(10);
 
-            $this->SetFont('Arial','B',10);
+            /*$this->SetFont('Arial','B',10);
             $this->Cell(0,10, 'COPIA CONTABILIDAD',0,0,'C');
             $this->Ln(5);
-            $this->Cell(0,10, utf8_decode('Sin Derecho a Crédito Fiscal'),0,0,'C');
+            $this->Cell(0,10, utf8_decode('Sin Derecho a Crédito Fiscal'),0,0,'C');*/
 
             //SUCURSAL
             $this->SetXY(13,18);
@@ -80,26 +80,26 @@
             $this->SetXY(138,17);
             $this->SetFont('Arial','B',8);
             $this->SetTextColor(0,0,0);
-            $this->Cell(25,8, utf8_decode('FACTURA N°:'),0,0,'C');
+            $this->Cell(32,8, utf8_decode('FACTURA N°:'),0,0,'R');
             $this->SetFont('Arial','B',14);
-            $this->Cell(45,8, utf8_decode($nFactura),0,0,'C');
+            $this->Cell(35,8, utf8_decode($nFactura),0,0,'C');
             $this->SetXY(138,25);
             $this->SetFont('Arial','B',7);
-            $this->Cell(25,8, utf8_decode('AUNTORIZACIÓN N°:'),0,0,'C');
+            $this->Cell(32,8, utf8_decode('AUNTORIZACIÓN N°:'),0,0,'R');
             $this->SetFont('Arial','B',11);
-            $this->Cell(45,8, utf8_decode($autorizacion),0,0,'C');
+            $this->Cell(35,8, utf8_decode($autorizacion),0,0,'C');
             $this->SetXY(138,33);
             $this->SetFont('Arial','I',7);
             $this->MultiCell(70,5, utf8_decode($glosa03),0,'C',false);
 
             
                 //****ENCABEZADO****
-                $this->SetXY(13,37);
+                $this->SetXY(13,42);
                 //cliente
                 $this->SetFont('Arial','B',9);
                 $this->Cell(25,6, utf8_decode('Lugar y Fecha: '),0,0,'');
                 $this->SetFont('Arial','',9);
-                $this->Cell(100, 6, utf8_decode($ciudad . ', ' .$dia. ' de '. $mes . ' del '. $year), 0,0,'L');
+                $this->Cell(100, 6, utf8_decode($ciudad . ', ' .$dia. ' de '. $meses[($mes)-1] . ' del '. $year), 0,0,'L');
                 $this->SetFont('Arial','B',9);
                 $this->Ln(6);
                 $this->SetX(13);
@@ -115,7 +115,7 @@
                 
 
                     //ENCABEZADO TABLA
-                    $this->SetX(13);
+                    $this->SetX(15);
                     $this->Ln(1);
                     $this->SetFillColor(235,235,235);
                     $this->SetFont('Arial','B',8); 
@@ -137,35 +137,35 @@
             $glosa = $this->datos['glosa'];
             $manual = $this->datos['manual'];
             $this->SetLineWidth(0.5);
-            $this->Line(10,151,208,151);
+            $this->Line(10,143,208,143); //ok
 
 
             if ($manual==='0') {
-                $this->SetY(-40);
+                $this->SetY(-130);
                 $this->SetFont('Arial','B',7);
                 $this->Cell(10,5, utf8_decode('NOTA: '),0,0,'');
                 $this->Cell(160,5, utf8_decode($glosa),0,0,'L');
-                $this->SetY(-35);
+                /*$this->SetY(-35);
                 $this->SetFont('Arial','',7);
-                $this->Cell(170,5, utf8_decode(''),0,0,'');
+                $this->Cell(170,5, utf8_decode(''),0,0,'');*/
             } else {
-                $this->SetY(-40);
+                $this->SetY(-130);
                 $this->SetFont('Arial','',7);
                 $this->Cell(10,5, utf8_decode('NOTA: '),0,0,'');
                 $this->Cell(160,5, utf8_decode($glosa. 'Factura Manual'),0,0,'L');
-                $this->SetY(-35);
+                /*$this->SetY(-35);
                 $this->SetFont('Arial','',7);
-                $this->Cell(170,5, utf8_decode(''),0,0,'');
+                $this->Cell(170,5, utf8_decode(''),0,0,'');*/
             }
             
 
             if ($manual === '0') {
-                $this->SetY(-30);
+                $this->SetY(-120);
                 $this->SetFont('Arial','B',7);
                 $this->Cell(40,5, utf8_decode('FECHA LÍMITE DE EMISIÓN: '),0,0,'');
                 $this->SetFont('Arial','',8);
                 $this->Cell(30,5, utf8_decode($fechaLimite),0,0,'C');
-                $this->SetY(-25);
+                $this->SetY(-115);
                 $this->SetFont('Arial','B',7);
                 $this->Cell(40,5, utf8_decode('CÓDIGO DE CONTROL: '),0,0,'');
                 $this->SetFont('Arial','',8);
@@ -174,14 +174,14 @@
             
             
                 //leyendas
-                $this->SetY(-16);
+                $this->SetY(-103);
                 $this->SetFont('Arial','',7);
                 $this->Cell(0,4, utf8_decode($glosa01),0,0,'C');
-                $this->SetY(-12);
+                $this->SetY(-99);
                 $this->SetFont('Arial','',7);
                 $this->Cell(0,4, utf8_decode($glosa02),0,0,'C');
                 //NUMERO PIED PAGINA
-                $this->SetY(-10);
+                $this->SetY(-97);
                 $this->SetFont('Arial','I', 8);
                 $this->Cell(0,10, 'Pagina '.$this->PageNo().'/{nb}',0,0,'C' );
         }

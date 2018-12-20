@@ -47,9 +47,10 @@ class Factura extends CI_Controller {
     
     $this->load->library('Factura_lib', $params);
         $this->pdf = new Factura_lib($params);
-        $this->pdf->AddPage('L',array(215,195));
+        //$this->pdf->AddPage('P',array(195,216));
+        $this->pdf->AddPage('P','Letter');
         $this->pdf->AliasNbPages();
-        $this->pdf->SetAutoPageBreak(true,40);
+        $this->pdf->SetAutoPageBreak(true,135); //40
         $this->pdf->SetTitle('FAC' . '-' .$factura->nFactura. '-' . $year);
         $this->pdf->SetLeftMargin(10);
         $this->pdf->SetRightMargin(10);
@@ -61,9 +62,10 @@ class Factura extends CI_Controller {
                 foreach ($lineas->result() as $linea) {
                     $totalFactura += ($linea->facturaCantidad*$linea->facturaPUnitario);
                     $this->pdf->SetFillColor(255,255,255);
-                        $this->pdf->Cell(15,5,number_format($linea->facturaCantidad, 2, ".", ","),'',0,'R',0);
-                        $this->pdf->Cell(10,5,$linea->Sigla,'',0,'C',0);
-                        $this->pdf->Cell(15,5,$linea->ArticuloCodigo,'',0,'C',0);
+                        // cell(w , h, 'dato', border, ln, align, fill)
+                        $this->pdf->Cell(15,5,number_format($linea->facturaCantidad, 2, ".", ","),'',0,'C',0);
+                        $this->pdf->Cell(10,5,$linea->Sigla,'',0,'C',0); //unidad $linea->Sigla
+                        $this->pdf->Cell(15,5,$linea->ArticuloCodigo,'',0,'C',0); //codigo $linea->ArticuloCodigo
                         $this->pdf->Cell(118,5,utf8_decode($linea->ArticuloNombre),0,0,'L',0);
                         $this->pdf->Cell(20,5,number_format($linea->facturaPUnitario, 2, ".", ","),0,0,'R',1);
                         $this->pdf->Cell(20,5,number_format(($linea->facturaCantidad*$linea->facturaPUnitario), 2, ".", ","),'',0,'R',1);
@@ -73,10 +75,10 @@ class Factura extends CI_Controller {
                 $ctvs = intval(($totalFactura - $entera) * 100);
                 $ctvs = ($ctvs == 0) ? '00' : $ctvs;
 
-                $this->pdf->SetFont('Times','B',10);
+                $this->pdf->SetFont('Times','B',9);
                 $this->pdf->SetFillColor(255,255,255);
-                $this->pdf->Cell(172,5,'TOTAL BOB',0,0,'R',1);
-                $this->pdf->Cell(25,5,number_format($totalFactura, 2, ".", ","),0,1,'R',1); 
+                $this->pdf->Cell(179,5,'TOTAL Bs.','T',0,'R',1);
+                $this->pdf->Cell(19,5,number_format($totalFactura, 2, ".", ","),'T',1,'R',1); 
                 $this->pdf->SetFont('Courier','B',9);
                 $this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
                 $literal = NumeroALetras::convertir($totalFactura).$ctvs.'/100 '.'BOLIVIANOS';
@@ -101,14 +103,14 @@ class Factura extends CI_Controller {
                 $entera = intval($totalBolivianos);
                 $ctvs = intval(($totalBolivianos - $entera) * 100);
                 $ctvs = sprintf('%02d',$ctvs);
-                $this->pdf->SetFont('Times','B',10);
+                $this->pdf->SetFont('Times','B',9);
                 $this->pdf->SetFillColor(255,255,255);
-                $this->pdf->Cell(172,5,'TOTAL $u$',0,0,'R',1);
-                $this->pdf->Cell(25,5,number_format($totalFactura, 2, ".", ","),0,1,'R',1); 
-                $this->pdf->Cell(172,5,'Tipo Cambio:',0,0,'R',1);
-                $this->pdf->Cell(25,5,number_format($tipoCambio, 2, ".", ","),0,1,'R',1);
-                $this->pdf->Cell(172,5,'TOTAL BOB',0,0,'R',1);
-                $this->pdf->Cell(25,5,number_format($totalBolivianos, 2, ".", ","),0,1,'R',1); 
+                $this->pdf->Cell(179,5,'TOTAL $u$','T',0,'R',1);
+                $this->pdf->Cell(19,5,number_format($totalFactura, 2, ".", ","),'T',1,'R',1); 
+                $this->pdf->Cell(179,5,'Tipo Cambio:',0,0,'R',1);
+                $this->pdf->Cell(19,5,number_format($tipoCambio, 2, ".", ","),0,1,'R',1);
+                $this->pdf->Cell(179,5,'TOTAL Bs.',0,0,'R',1);
+                $this->pdf->Cell(19,5,number_format($totalBolivianos, 2, ".", ","),0,1,'R',1); 
                 $this->pdf->SetFont('Courier','B',9);
                 $this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
                 $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';

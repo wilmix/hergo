@@ -210,8 +210,8 @@ class Facturacion_model extends CI_Model
 		GROUP BY fe.idFactura  */
 	public function obtenerDetalleFactura($idFactura)
 	{
-		$sql=" 
-		SELECT f.*, u.Sigla from facturadetalle f 
+		$sql="SELECT f.`id`, f.`idFactura`, f.`articulo`,f.`moneda`, f.`facturaPUnitario`, f.`ArticuloCodigo`, f.`ArticuloNombre`, f.`idEgresoDetalle`, u.Sigla
+		from facturadetalle f 
 		INNER JOIN articulos a
 		ON a.idArticulos=f.articulo
 		INNER JOIN unidad u
