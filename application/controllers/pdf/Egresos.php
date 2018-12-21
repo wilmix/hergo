@@ -31,7 +31,10 @@ class Egresos extends CI_Controller {
         'almDes'=>$egreso->almDes,
         'nIng'=>$egreso->nIng,
         'idTipoMov'=>$egreso->idtipomov,
-        'userName' => $this->session->userdata['nombre']
+        'userName' => $this->session->userdata['nombre'],
+        'almDirec'=>$egreso->almDirec,
+        'almFono'=>$egreso->almFono,
+
     );
     $year = date('y',strtotime($egreso->fechamov));
     /*echo '<pre>';
@@ -40,10 +43,11 @@ class Egresos extends CI_Controller {
     
     $this->load->library('Egresos_lib', $params);
         $this->pdf = new Egresos_lib($params);
-        $this->pdf->AddPage('L',array(215,152));
+        //$this->pdf->AddPage('L',array(215,152));
+        $this->pdf->AddPage('P','Letter');
         $this->pdf->AliasNbPages();
         $this->pdf->SetTitle($egreso->sigla . ' - ' .$egreso->n . ' - ' . $year);
-        $this->pdf->SetAutoPageBreak(true,25);
+        $this->pdf->SetAutoPageBreak(true,150);//25
         $this->pdf->SetLeftMargin(10);
         $this->pdf->SetRightMargin(10);
         $this->pdf->SetFont('Arial', '', 8);
@@ -64,13 +68,18 @@ class Egresos extends CI_Controller {
                     $this->pdf->Cell(20,5,number_format($linea->total, 2, ".", ","),0,0,'R',1);
                 $this->pdf->Ln(5);
             }
-            $this->pdf->SetFont('Times','B',10);
+            $entera = intval($totalEgreso);
+            $ctvs = intval(($totalEgreso - $entera) * 100);
+            $ctvs = ($ctvs == 0) ? '00' : $ctvs;
+                $this->pdf->SetFont('Arial','B',8);
                 $this->pdf->SetFillColor(255,255,255);
-                $this->pdf->Cell(175,5,'TOTAL BOB',0,0,'R',1);
+                $this->pdf->Cell(175,5,'TOTAL Bs.',0,0,'R',1);
                 $this->pdf->Cell(20,5,number_format($totalEgreso, 2, ".", ","),0,1,'R',1); 
-                $this->pdf->SetFont('Courier','B',9);
+                $this->pdf->SetFont('Times','B',9);
                 $this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
-                $literal = NumeroALetras::convertir($totalEgreso,'BOLIVIANOS','CENTAVOS');
+                //$literal = NumeroALetras::convertir($totalEgreso,'BOLIVIANOS','CENTAVOS');
+                //$this->pdf->Cell(186,6,$literal,0,0,'l',1);
+                $literal = NumeroALetras::convertir($totalEgreso).$ctvs.'/100 '.'BOLIVIANOS';
                 $this->pdf->Cell(186,6,$literal,0,0,'l',1);
 
 

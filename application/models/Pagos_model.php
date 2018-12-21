@@ -49,7 +49,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	public function retornarEdicion($idPago) {
 		$sql="SELECT p.`idPago`, p.`almacen`, p.`numPago`, p.`moneda`, p.`cliente`, p.`totalPago` ,p.`anulado`, p.`glosa`, p.`fechaPago`,
 		p.`autor`, p.fecha, p.`tipoCambio`, p.`tipoPago`, p.`cheque` , p.`banco`, p.`transferencia`, p.imagen, p.`gestion`, tp.`tipoPago`,p.`cheque`,
-		c.`idCliente`, c.`nombreCliente`, c.`documento`, a.`almacen` nomAlmacen, a.`sucursal`, concat(u.`first_name`, ' ',u.`last_name`) userName, p.`tipoPago` idTipoPago , b.`sigla` nomBanco
+		c.`idCliente`, c.`nombreCliente`, c.`documento`, a.`almacen` nomAlmacen, a.`sucursal`, a.direccion, a.Telefonos, concat(u.`first_name`, ' ',u.`last_name`) userName, p.`tipoPago` idTipoPago , b.`sigla` nomBanco
 			FROM pago p
 			INNER JOIN clientes c ON c.`idCliente` = p.`cliente`
 			INNER JOIN almacenes a ON a.idalmacen = p.almacen

@@ -24,18 +24,21 @@ class Recibo extends CI_Controller {
       'idTipoPago' => $pago->idTipoPago,
       'nomBanco' => $pago->nomBanco,
       'cheque' => $pago->cheque,
-
+      'direccion'=> $pago->direccion,
+      'telefonos'=> $pago->Telefonos,
+      'transferencia'=> $pago->transferencia,
       //$this->session->userdata['nombre']
   );
-  $year = date('y',strtotime($pago->fechaPago));
+        $year = date('y',strtotime($pago->fechaPago));
     /*print_r($lineas);
     return false;*/
-    $this->load->library('Recibo_lib', $params);
+        $this->load->library('Recibo_lib', $params);
         $this->pdf = new Recibo_lib($params);
-        $this->pdf->AddPage('L',array(215,152));
+        //$this->pdf->AddPage('L',array(215,152));
+        $this->pdf->AddPage('P','Letter');
         $this->pdf->AliasNbPages();
        // $this->pdf->SetTitle($egreso->sigla . ' - ' .$egreso->n . ' - ' . $year);
-        $this->pdf->SetAutoPageBreak(true,25);
+        $this->pdf->SetAutoPageBreak(true,160);
         $this->pdf->SetLeftMargin(10);
         $this->pdf->SetRightMargin(10);
         $this->pdf->SetFont('Arial', '', 8);
@@ -45,22 +48,18 @@ class Recibo extends CI_Controller {
             foreach ($lineas as $linea) {
                 $totalPago += $linea->pagar;
                 $this->pdf->SetFillColor(255,255,255);
-                    $this->pdf->Cell(15,5,$n++,'',0,'C',0); ///NUMERO DE FILA
-                    $this->pdf->Cell(15,5,$linea->lote,'',0,'C',0);
+                    $this->pdf->Cell(20,5,$n++,'',0,'C',0); ///NUMERO DE FILA
+                    $this->pdf->Cell(20,5,$linea->lote,'',0,'C',0);
                     $this->pdf->Cell(25,5,$linea->nFactura,'',0,'C',0);
                     $this->pdf->Cell(100,5,utf8_decode($linea->nombreCliente),0,0,'L',0);
                     $this->pdf->Cell(30,5,number_format($linea->pagar, 2, ".", ","),0,0,'R',1);
                 $this->pdf->Ln(5);
             }
-            $this->pdf->SetFont('Times','B',10);
+            $this->pdf->SetFont('Arial','B',8);
                 $this->pdf->SetFillColor(255,255,255);
-                $this->pdf->Cell(165,5,'TOTAL BOB',0,0,'R',1);
+                $this->pdf->Cell(175,5,'TOTAL Bs.',0,0,'R',1);
                 $this->pdf->Cell(20,5,number_format($totalPago, 2, ".", ","),0,1,'R',1); 
                 $this->pdf->SetFont('Courier','B',9);
-                //$this->pdf->Cell(9,6,$ctvs,0,0,'L',1);
-                //$literal = NumeroALetras::convertir($totalPago,'BOLIVIANOS','CENTAVOS');
-                //$this->pdf->Cell(186,6,$literal,0,0,'l',1);
-        
     
         //guardar
       $this->pdf->Output(' - ' , 'I');

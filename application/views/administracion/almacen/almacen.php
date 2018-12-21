@@ -17,18 +17,22 @@
               >
               <thead>
                   <tr>
-                      <th>Nombre de almacen</th>
+                      <th>Nombre</th>
+                      <th>Sucursal</th>
                       <th>Direccion</th>
                       <th>Ciudad</th>
-                      <th></th>
+                      <th>Telefonos</th>
                   </tr>
               </thead>
               <tbody>                   
                  <?php foreach ($almacen->result_array() as $fila): ?>
                    <tr id="<?= $fila['idalmacen'] ?>">
                      <td><?= $fila['almacen'] ?></td>
+                     <td><?= $fila['sucursal'] ?></td>
                      <td><?= $fila['direccion'] ?></td>
                      <td><?= $fila['ciudad'] ?></td>
+                     <td><?= $fila['Telefonos'] ?></td>
+                     <td></td>
                      <td>
                        <div class="text-right">
                         <button class="btn btn-default botoneditar"><i class=" fa fa-pencil" ></i></button>

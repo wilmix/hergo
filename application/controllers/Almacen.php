@@ -61,11 +61,11 @@ class Almacen extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/almacen.js');
 			/**************TABLA*****************/
-        $this->datos['cabeceras_css'][] = base_url('assets/plugins/table-boot/css/bootstrap-table.css');
-        $this->datos['cabeceras_script'][] = base_url('assets/plugins/table-boot/js/bootstrap-table.js');
-        $this->datos['cabeceras_script'][] = base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js');
-        $this->datos['cabeceras_script'][] = base_url('assets/plugins/table-boot/js/bootstrap-table-export.js');
-        $this->datos['cabeceras_script'][] = base_url('assets/plugins/table-boot/js/tableExport.js');
+			$this->datos['cabeceras_css'][] = base_url('assets/plugins/table-boot/css/bootstrap-table.css');
+			$this->datos['cabeceras_script'][] = base_url('assets/plugins/table-boot/js/bootstrap-table.js');
+			$this->datos['cabeceras_script'][] = base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js');
+			$this->datos['cabeceras_script'][] = base_url('assets/plugins/table-boot/js/bootstrap-table-export.js');
+			$this->datos['cabeceras_script'][] = base_url('assets/plugins/table-boot/js/tableExport.js');
 			
 			/*************TABLE***************/
 			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/css/bootstrap-table.css'); 
@@ -84,35 +84,6 @@ class Almacen extends CI_Controller
 			$this->load->view('administracion/almacen/almacen.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
-	}
-	function prueba()
-	{
-		$this->datos['menu']="Administracion";
-			$this->datos['opcion']="Almacen";
-			$this->datos['titulo']="Agregar Almacen";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			/**************TABLA*****************/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/datatables/dataTables.bootstrap.css');
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/datatables/jquery.dataTables.min.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/datatables/dataTables.bootstrap.min.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js');
-			/***********************************/
-
-			$this->datos['almacen']=$this->Almacen_model->retornar_tabla("almacen");
-			//print_r($this->datos['almacen']);
-			$this->load->view('plantilla/head.php',$this->datos);
-			
-			$this->load->view('administracion/almacen/alm.php',$this->datos);
-			//$this->load->view('plantilla/footer.php',$this->datos);
-	}
-	public function ajaxSubmit()
-	{
-		echo "ajax";
 	}
 	public function agregarAlmacen()
 	{

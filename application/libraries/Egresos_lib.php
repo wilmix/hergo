@@ -34,6 +34,13 @@
             $this->SetFont('Arial','B',9);
             $this->SetXY(15,20);
             $this->Cell(40,6, utf8_decode($almacen),0,0,'C');
+            $this->Ln(3);
+            $this->SetX(15);
+            $this->SetFont('Arial','',5);
+            $this->Cell(40,6, utf8_decode($this->datos['almDirec']),0,0,'C');
+            $this->Ln(3);
+            $this->SetX(15);
+            $this->Cell(40,6, utf8_decode($this->datos['almFono']),0,0,'C');
             $this->SetXY(10,10);
             $this->SetFont('Arial','B',18);
             $this->Cell(0,8, $tipoMov,0,0,'C');
@@ -44,7 +51,7 @@
             $this->SetXY(170,17);
             $this->SetFont('Arial','B',12);
             $this->Cell(35,8, $fechamov,1,0,'C');
-            $this->Ln(10);
+            $this->Ln(15);
             
                 //****ENCABEZADO****
                 if ($idTipoMov == '8') {
@@ -127,7 +134,7 @@
             $vendedor = $this->datos['nVendedor'];
             $this->SetLineWidth(0.5);
             $this->Line(10,127,206,127);
-            $this->SetY(-25);
+            $this->SetY(-150);
             $this->SetFont('Arial','BI', 9);
             $this->Cell(15,5, 'NOTA: ',0,0,'L',1);
             $this->SetFont('Arial','I', 8);
@@ -137,7 +144,7 @@
             $this->Cell(45, 5, '', 0,0,'L');
             
             $this->Ln(5);
-            $this->SetY(-20);
+            $this->SetY(-145);
             $this->SetFont('Arial','I', 9);
             $this->Cell(25,5, 'Emitido por:',0,0,'L',1);
             $this->Cell(40, 5, utf8_decode($vendedor), 0,0,'L');
@@ -147,7 +154,7 @@
             $this->Cell(30,5, 'Nombre:',0,0,'L');
             $this->Cell(45, 5, '', 0,0,'L');
 
-            $this->SetY(-15);
+            $this->SetY(-140);
             $this->SetFont('Arial','I', 9);
             $this->Cell(25,5, 'Fecha de Pago: ',0,0,'L');
             $this->Cell(40, 5, $plazoPago, 0,0,'L');
@@ -159,7 +166,7 @@
 
 
                 //NUMERO PIED PAGINA
-                $this->SetY(-12);
+                $this->SetY(-138);
                 $this->SetFont('Arial','I', 8);
                 $this->Cell(0,10, 'Pagina '.$this->PageNo().'/{nb}',0,0,'C' );
         }
