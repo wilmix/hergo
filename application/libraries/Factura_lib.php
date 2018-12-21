@@ -36,6 +36,8 @@
             $baseCreditoFiscal = $total*87/100;
             $ClienteNit = $this->datos['ClienteNit'];
             $codigoControl = $this->datos['codigoControl'];
+            $idAlmacen = $this->datos['idAlmacen'];
+
 
             $qr = $nit.'|'.$nFactura.'|'.$autorizacion.'|'.$fechaFacQR.'|'.number_format($total, 2, ".","")
             .'|'.$baseCreditoFiscal.'|'.$codigoControl.'|'.$ClienteNit.'|'.'0'.'|'.'0'.'|'.'0'.'|'.'0';
@@ -48,12 +50,14 @@
             }
 
             //TITULO
-            $this->SetXY(10,10);
+            $this->SetXY(10,9);
             $this->Image('images/hergo.jpeg', 15, 8, 45 );
             $this->SetFont('Arial','B',24);
             $this->SetTextColor(0,0,200);
             $this->Cell(0,15, 'FACTURA',0,0,'C');
             $this->Ln(10);
+            $this->SetFont('Arial','B',12);
+            $this->Cell(0,10, 'ORIGINAL',0,0,'C');
 
             /*$this->SetFont('Arial','B',10);
             $this->Cell(0,10, 'COPIA CONTABILIDAD',0,0,'C');
@@ -61,14 +65,22 @@
             $this->Cell(0,10, utf8_decode('Sin Derecho a Crédito Fiscal'),0,0,'C');*/
 
             //SUCURSAL
-            $this->SetXY(13,18);
-            $this->SetFont('Arial','B',8);
+            $this->SetXY(10,18);
             //$this->SetTextColor(0,0,0);
+            if ($idAlmacen == 1) {
+                $this->Ln(2);
+            }
+            if ($idAlmacen != 1) {
+                $this->SetFont('Arial','B',7);
+                $this->Cell(60,4,utf8_decode($this->datos['matrizSucursal']),0,1,'C');
+                $this->SetFont('Arial','',5);
+                $this->Cell(60,4,utf8_decode($this->datos['matrizDireccion']),0,1,'C');
+                 $this->Cell(60,4,utf8_decode($this->datos['matrizTelefonos']),0,1,'C');
+            }
+            $this->SetFont('Arial','B',7);
             $this->Cell(60,4,utf8_decode($sucursal),0,1,'C');
-            $this->SetX(13);
-            $this->SetFont('Arial','',7);
+            $this->SetFont('Arial','',5);
             $this->Cell(60,4,utf8_decode($direccion),0,1,'C');
-            $this->SetX(13);
             $this->Cell(60,4,utf8_decode($Telefonos),0,1,'C');
 
 
@@ -182,7 +194,7 @@
                 $this->Cell(0,4, utf8_decode($glosa02),0,0,'C');
                 //NUMERO PIED PAGINA
                 $this->SetY(-97);
-                $this->SetFont('Arial','I', 8);
+                $this->SetFont('Arial','I', 9);
                 $this->Cell(0,10, 'Pagina '.$this->PageNo().'/{nb}',0,0,'C' );
         }
 

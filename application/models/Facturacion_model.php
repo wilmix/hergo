@@ -161,7 +161,7 @@ class Facturacion_model extends CI_Model
 	{
 		$sql="SELECT f.*,t.tipocambio cambiovalor, a.almacen, a.direccion, a.Telefonos, a.ciudad, a.sucursal, 
 		df.idDatosFactura, df.nit, df.autorizacion, df.fechaLimite, df.llaveDosificacion, 
-		df.glosa01,df.glosa02, df.glosa03, df.manual
+		df.glosa01,df.glosa02, df.glosa03, df.manual, f.almacen idAlmacen
 		FROM factura f
 		INNER JOIN tipocambio t 
 		ON f.`fechaFac` = t.`fecha`
@@ -278,6 +278,14 @@ class Facturacion_model extends CI_Model
 		Where idFactura=$idFactura
 		order by f.ArticuloCodigo";
 		$query=$this->db->query($sql);        
+        return $query;
+	}
+	public function obtenerAlmacenMatriz($alm)
+	{
+		$sql="SELECT * 
+		FROM almacenes a 
+		WHERE a.`idalmacen` = $alm";
+		$query=$this->db->query($sql)->row();        
         return $query;
 	}
 }

@@ -9,9 +9,11 @@ class Factura extends CI_Controller {
     $this->load->model('Facturacion_model');
     $factura = $this->Facturacion_model->obtenerFacturaPDF($id);
     $lineas = $this->Facturacion_model->obtenerDetalleFacturaPDF($id);
+    $matriz = $this->Facturacion_model->obtenerAlmacenMatriz(1);
 
     $params = array(
         'almacen' => $factura->almacen,
+        'idAlmacen' => $factura->idAlmacen,
         'direccion' => $factura->direccion,
         'Telefonos' => $factura->Telefonos,
         'ciudad' => $factura->ciudad,
@@ -34,9 +36,10 @@ class Factura extends CI_Controller {
         'manual' => $factura->manual,
         'nFactura' => $factura->nFactura,
         'total'=>$factura->total,
-        'userName' => $this->session->userdata['nombre']
-        
-
+        'userName' => $this->session->userdata['nombre'],
+        'matrizSucursal' =>$matriz->sucursal,
+        'matrizDireccion' =>$matriz->direccion,
+        'matrizTelefonos' =>$matriz->Telefonos,
     );
     $year = date('y',strtotime($factura->fechaFac));
     /*echo $id;
