@@ -90,7 +90,7 @@ function retornarTablaPagos()
                         title: 'ID',
                         visible:false,
                         sortable:true,
-                        searchable: true,
+                        searchable: false,
                         align: 'center',
                     },
                     {   

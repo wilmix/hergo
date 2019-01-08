@@ -24,7 +24,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		BETWEEN '$ini' AND '$fin' AND p.almacen like '%$alm'
 		-- AND f.`anulada` = 0
 		GROUP BY p.`idPago`
-		ORDER BY p.`idPago` DESC";
+		ORDER BY p.`numPago` DESC";
 		$query=$this->db->query($sql);		
 		return $query;
 	}

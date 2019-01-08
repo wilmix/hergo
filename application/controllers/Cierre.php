@@ -6,8 +6,7 @@ class Cierre extends CI_Controller
 	public function __construct()
 	{	
 		parent::__construct();
-		//$this->load->library('LibAcceso');
-		//$this->libacceso->acceso(1);
+		$this->load->library('LibAcceso');
 		$this->load->helper('url');	
 		$this->load->model("Cierre_model");
 		$this->load->model("Ingresos_model");
@@ -71,6 +70,7 @@ class Cierre extends CI_Controller
 	}
 	public function index()
 	{
+		$this->libacceso->acceso(44);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 		
@@ -150,6 +150,7 @@ class Cierre extends CI_Controller
 	}
 	public function generarCierre()
 	{
+		$this->libacceso->acceso(44);
 		ini_set('max_execution_time', 0); 
 		ini_set('memory_limit','2048M');
 		if($this->input->is_ajax_request())
