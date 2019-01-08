@@ -59,7 +59,7 @@ class Dashboard_model extends CI_Model
 				LEFT JOIN ingdetalle AS id ON id.`idIngreso` = i.`idIngresos`  AND i.`almacen` = 1
 				LEFT JOIN ingdetalle AS id3 ON id3.`idIngreso` = i.`idIngresos`  AND i.`almacen` = 3
 				LEFT JOIN ingdetalle AS id4 ON id4.`idIngreso` = i.`idIngresos`  AND i.`almacen` = 4
-		WHERE i.`fecha`BETWEEN '$ini' AND '$ini' + INTERVAL 1 DAY
+		WHERE i.`fecha` = '$ini' -- BETWEEN '$ini' AND '$ini' + INTERVAL 1 DAY
 		AND i.`anulado`=0
 		AND i.`tipomov`= 2 AND 16
 		GROUP BY DAY(i.`fechamov`)";
@@ -70,16 +70,19 @@ class Dashboard_model extends CI_Model
 	{ 
 		$sql="	SELECT 'lp-NEG' alm, COUNT(a.`laPaz`) cant
 				FROM `articulos_activos` a
-				WHERE a.`laPaz` < 0
+				WHERE a.`laPaz` < -0.001
+				AND SUBSTRING(CodigoArticulo,1,2)<>'SR'
 				
 				UNION ALL 
 				SELECT 'pts-NEG', COUNT(a.`potosi`)
 				FROM `articulos_activos` a
-				WHERE a.`potosi` < 0
+				WHERE a.`potosi` < -0.001
+				AND SUBSTRING(CodigoArticulo,1,2)<>'SR'
 				UNION ALL 
 				SELECT 'scz-NEG', COUNT(a.`santacruz`)
 				FROM `articulos_activos` a
-				WHERE a.`santacruz` < 0
+				WHERE a.`santacruz` < -0.001
+				AND SUBSTRING(CodigoArticulo,1,2)<>'SR'
 				
 				UNION ALL
 				SELECT 'lp-ACT' , COUNT(a.`laPaz`) 
