@@ -90,6 +90,7 @@ class Reportes_model extends CI_Model
 		WHERE f.`anulada` = 0 
 		AND f.`pagada` <>1 
 		AND f.`almacen` LIKE '%$almacen'
+		AND  f.`nFactura` > 0
 		GROUP BY f.`idFactura` 
 		ORDER BY f.`ClienteFactura`
 		)tbla
