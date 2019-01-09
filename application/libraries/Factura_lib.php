@@ -54,10 +54,10 @@
             $this->Image('images/hergo.jpeg', 15, 8, 45 );
             $this->SetFont('Arial','B',24);
             $this->SetTextColor(0,0,200);
-            $this->Cell(0,15, 'FACTURA',0,0,'C');
+            $this->Cell(0,15, '',0,0,'C');
             $this->Ln(10);
             $this->SetFont('Arial','B',12);
-            $this->Cell(0,10, 'ORIGINAL',0,0,'C');
+            $this->Cell(0,10, '',0,0,'C');
 
             /*$this->SetFont('Arial','B',10);
             $this->Cell(0,10, 'COPIA CONTABILIDAD',0,0,'C');
