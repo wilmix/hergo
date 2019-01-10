@@ -142,6 +142,14 @@ $(document).on("click","#guardarMovimiento",function(){
     almForm = $('#almacen_imp').val()
     almUser = $('#idAlmacenUsuario').val()
     isAdmin = $('#isAdmin').val()
+    fechaIngreso = $('#fechamov_imp').val()
+    ingresoYear = moment(fechaIngreso).format('YYYY')
+    var actualDate = new Date();
+    var actualYear = actualDate.getFullYear();
+    if (actualYear != ingresoYear) {
+        swal("Error", "Fecha no se encuentra en la gestiòn actual", "error")
+        return false
+    }
     if (almForm != almUser && isAdmin == '') {
         swal("Error", "No se puede guardar movimiento", "error")
         return false

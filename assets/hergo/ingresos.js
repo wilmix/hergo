@@ -49,6 +49,13 @@ window.operateEvents = {
         verdetalle(row)
     },
     'click .editarIngreso': function (e, value, row, index) {
+        var actualDate = new Date();
+        var actualYear = actualDate.getFullYear();
+        ingresoYear = moment(row.fechamov).format('YYYY')
+        if (actualYear != ingresoYear) {
+            swal("Error", "No se puede modificar. El movimiento no es de la gestiòn actual", "error")
+            return false
+        }
         almForm = row.idAlmacen
         almUser = $('#idAlmacenUsuario').val()
         isAdmin = $('#isAdmin').val()
@@ -90,6 +97,14 @@ $(document).on("click", "#btnaprobado", function () {
     })
 })
 $(document).on("click", "#btnpendiente", function () {
+    fechaIngreso = $('#fechamov_imp').val()
+    ingresoYear = moment(fechaIngreso).format('YYYY')
+    var actualDate = new Date();
+    var actualYear = actualDate.getFullYear();
+    if (actualYear != ingresoYear) {
+        swal("Error", "Fecha no se encuentra en la gestiòn actual", "error")
+        return false
+    }
     id = $(this).attr("datastd");
     datos = {
         d: 0,
