@@ -18,7 +18,8 @@ class Reportes_model extends CI_Model
 	public function retornarArticulos() {
 		$sql="SELECT idArticulos, CodigoArticulo,Descripcion
 		FROM articulos_activos
-		WHERE SUBSTRING(CodigoArticulo,1,2)<>'SR'";
+		-- WHERE SUBSTRING(CodigoArticulo,1,2)<>'SR'
+		";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
@@ -114,7 +115,8 @@ class Reportes_model extends CI_Model
 	{ //cambiar la consulta
 		$sql="SELECT *, (aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz`) total
  		FROM articulos_activos aa
-		WHERE SUBSTRING(CodigoArticulo,1,2)<>'SR'";
+		-- WHERE SUBSTRING(CodigoArticulo,1,2)<>'SR'
+		";
 		$query=$this->db->query($sql);		
 		return $query;
 	}

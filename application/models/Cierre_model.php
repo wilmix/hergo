@@ -77,20 +77,20 @@ class Cierre_model extends CI_Model
     }
     public function itemsSaldos($alm)
 	{
-		$sql="SELECT * , cantidad AS '5'
+		$sql="SELECT * , cantidad AS '3'
         FROM
         (
         SELECT 
-                sa.`idArticulo` '0', a.`CodigoArticulo` '1', a.`Descripcion` '2', ROUND(SUM((sa.`saldo` +  sa.`notaEntrega`)),4) '3', 
+                sa.`idArticulo` '0', a.`CodigoArticulo` '1', a.`Descripcion` '2', ROUND(SUM((sa.`saldo` +  sa.`notaEntrega`)),4) cantidad, 
                 IFNULL(a.`costoPromedioPonderado`,0) '4',
-                ((sa.`saldo` +  sa.`notaEntrega`)) * IFNULL(a.`costoPromedioPonderado`,0) cantidad,
+                ((sa.`saldo` +  sa.`notaEntrega`)) * IFNULL(a.`costoPromedioPonderado`,0) '5',
                 IFNULL(a.`costoPromedioPonderado`,0) '6',
                 ((sa.`saldo` +  sa.`notaEntrega`)) * IFNULL(a.`costoPromedioPonderado`,0) '7'
                 FROM saldoarticulos sa
                 INNER JOIN articulos a ON a.`idArticulos` = sa.`idArticulo`
                 WHERE sa.`idAlmacen` = '$alm' 
                 GROUP BY a.`CodigoArticulo`
-                ) tbla
+          ) tbla
                 
         WHERE cantidad > 0";
 		$query=$this->db->query($sql);
