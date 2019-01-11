@@ -50,8 +50,11 @@ window.operateEvents = {
     },
     'click .editarIngreso': function (e, value, row, index) {
         var actualDate = new Date();
+        console.log(actualDate);
         var actualYear = actualDate.getFullYear();
+        console.log(actualYear);
         ingresoYear = moment(row.fechamov).format('YYYY')
+        console.log(ingresoYear);
         if (actualYear != ingresoYear) {
             swal("Error", "No se puede modificar. El movimiento no es de la gestiòn actual", "error")
             return false
