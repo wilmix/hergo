@@ -233,7 +233,7 @@ class Ingresos_model extends CI_Model
         IFNULL(sa.`saldo`,0) saldo,
         IFNULL(p.`precio`, 0) precio,
         sa.`idAlmacen`
-        FROM articulos a
+        FROM articulos_enUso a
         INNER JOIN unidad u ON a.idUnidad=u.idUnidad
         LEFT JOIN saldoarticulos sa ON sa.`idArticulo` = a.`idArticulos` AND sa.`idAlmacen` = '$a'
         LEFT JOIN precio p ON p.`idArticulo` = a.`idArticulos`
