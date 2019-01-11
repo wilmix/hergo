@@ -234,6 +234,7 @@ function retornarTabla()
                 field: 'idArticulos',            
                 title: 'id',
                 align: 'center',
+                sortable:true,
             },  
             {   
                 field: 'Imagen',            
@@ -277,7 +278,7 @@ function retornarTabla()
             },
             {
                 field:"precio",
-                title:"Precio",
+                title:"Precio BOB",
                 sortable:true,
                 searchable: false,
                 align: 'center',
