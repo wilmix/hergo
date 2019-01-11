@@ -229,9 +229,9 @@ class Ingresos_model extends CI_Model
     public function retornarArticulosBusquedaTest($b, $a)
     {
 		$sql="SELECT a.`idArticulos` id, a.CodigoArticulo codigo, a.Descripcion descripcion, u.Unidad unidad, 
-        IFNULL(a.`costoPromedioPonderado`,0) cpp,
-        IFNULL(sa.`saldo`,0) saldo,
-        IFNULL(a.precio, 0) precio,
+        ROUND(IFNULL(a.`costoPromedioPonderado`,0),2) cpp,
+        ROUND(IFNULL(sa.`saldo`,0),2) saldo,
+        ROUND(IFNULL(a.precio, 0),2) precio,
         sa.`idAlmacen`
         FROM articulos_enUso a
         INNER JOIN unidad u ON a.idUnidad=u.idUnidad

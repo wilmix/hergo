@@ -281,7 +281,8 @@ function retornarTabla()
                 title:"Precio BOB",
                 sortable:true,
                 searchable: false,
-                align: 'center',
+                align: 'right',
+                formatter: formato_moneda,
                 visible:true
             },
             {
