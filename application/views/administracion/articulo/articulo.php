@@ -170,6 +170,16 @@ th:hover .filterControl {
               </div>
               <!-- Numero de parte ALFANUMERICO-->
               <div class="form-group">
+                <label class="col-md-3 col-lg-3 control-label" for="partearticulo">Precio</label>  
+                <div class="col-md-9 col-lg-9 inputGroupContainer">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-money"></i></span>
+                    <input  name="precio" class="form-control" id="precio" type="text">
+                  </div>
+                </div>
+              </div>
+              <!-- Numero de parte ALFANUMERICO-->
+              <div class="form-group">
                 <label class="col-md-3 col-lg-3 control-label" for="partearticulo">Número de Parte</label>  
                 <div class="col-md-9 col-lg-9 inputGroupContainer">
                   <div class="input-group">

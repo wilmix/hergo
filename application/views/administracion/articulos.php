@@ -74,6 +74,18 @@
               </div>
             </div>
             </div>
+
+            <div class="form-group">
+              <label class="col-md-4 control-label">Precio</label>  
+              <div class="col-md-4 inputGroupContainer">
+              <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
+              <input  name="precio" placeholder="W1003181" class="form-control"  type="text" >
+                </div>
+              </div>
+            </div>
+
+
             <!-- Numero de parte ALFANUMERICO-->
 
             <div class="form-group">

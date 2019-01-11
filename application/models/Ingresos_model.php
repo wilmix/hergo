@@ -231,12 +231,11 @@ class Ingresos_model extends CI_Model
 		$sql="SELECT a.`idArticulos` id, a.CodigoArticulo codigo, a.Descripcion descripcion, u.Unidad unidad, 
         IFNULL(a.`costoPromedioPonderado`,0) cpp,
         IFNULL(sa.`saldo`,0) saldo,
-        IFNULL(p.`precio`, 0) precio,
+        IFNULL(a.precio, 0) precio,
         sa.`idAlmacen`
         FROM articulos_enUso a
         INNER JOIN unidad u ON a.idUnidad=u.idUnidad
         LEFT JOIN saldoarticulos sa ON sa.`idArticulo` = a.`idArticulos` AND sa.`idAlmacen` = '$a'
-        LEFT JOIN precio p ON p.`idArticulo` = a.`idArticulos`
         WHERE a.CodigoArticulo LIKE '$b%' OR a.Descripcion LIKE '$b%'
         ORDER BY CodigoArticulo ASC LIMIT 10";
 		$query=$this->db->query($sql);

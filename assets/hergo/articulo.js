@@ -194,6 +194,7 @@ function mostrarModal(fila)
     asignarselect(fila.Marca,$("#marcaarticulo"))
     asignarselect(fila.Linea,$("#lineaarticulo"))
     $("#partearticulo").val(fila.NumParte)
+    $("#precio").val(fila.precio)
     $("#arancelariaarticulo").val(fila.PosicionArancelaria)
     asignarselect(fila.Requisito,$("#autorizaarticulo"))
     $("#uso").val(fila.EnUso)
@@ -275,6 +276,14 @@ function retornarTabla()
                 align: 'center',
             },
             {
+                field:"precio",
+                title:"Precio",
+                sortable:true,
+                searchable: false,
+                align: 'center',
+                visible:true
+            },
+            {
                 field:"NumParte",
                 title:"Nro. de Parte",
                 sortable:true,
@@ -288,6 +297,7 @@ function retornarTabla()
                 field:"Requisito",
                 title:"Requisito",
                 sortable:true,
+                visible:false
             },
             {
                 field:"ProductoServicio",
