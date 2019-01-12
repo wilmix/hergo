@@ -146,10 +146,10 @@ $(document).on("click","#guardarMovimiento",function(){
     ingresoYear = moment(fechaIngreso).format('YYYY')
     var actualDate = new Date();
     var actualYear = actualDate.getFullYear();
-    if (actualYear != ingresoYear) {
+    /*if (actualYear != ingresoYear) {
         swal("Error", "Fecha no se encuentra en la gestiòn actual", "error")
         return false
-    }
+    }*/
     if (almForm != almUser && isAdmin == '') {
         swal("Error", "No se puede guardar movimiento", "error")
         return false
