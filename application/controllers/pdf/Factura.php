@@ -10,6 +10,7 @@ class Factura extends CI_Controller {
     $factura = $this->Facturacion_model->obtenerFacturaPDF($id);
     $lineas = $this->Facturacion_model->obtenerDetalleFacturaPDF($id);
     $matriz = $this->Facturacion_model->obtenerAlmacenMatriz(1);
+    $pedido_factura = $this->Facturacion_model->obtenerPedido($id);
 
     $params = array(
         'almacen' => $factura->almacen,
@@ -18,6 +19,7 @@ class Factura extends CI_Controller {
         'Telefonos' => $factura->Telefonos,
         'ciudad' => $factura->ciudad,
         'fechaFac' => $factura->fechaFac,
+        'pedido' => $pedido_factura->pedido,
         'glosa'=> $factura->glosa,
         'codigoControl' => $factura->codigoControl,
         'ClienteFactura' => $factura->ClienteFactura,
@@ -53,7 +55,7 @@ class Factura extends CI_Controller {
         //$this->pdf->AddPage('P',array(195,216));
         $this->pdf->AddPage('P','Letter');
         $this->pdf->AliasNbPages();
-        $this->pdf->SetAutoPageBreak(true,135); //40
+        $this->pdf->SetAutoPageBreak(true,140); //40
         $this->pdf->SetTitle('FAC' . '-' .$factura->nFactura. '-' . $year);
         $this->pdf->SetLeftMargin(10);
         $this->pdf->SetRightMargin(10);

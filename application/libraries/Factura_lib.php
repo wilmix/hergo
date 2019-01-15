@@ -37,6 +37,7 @@
             $ClienteNit = $this->datos['ClienteNit'];
             $codigoControl = $this->datos['codigoControl'];
             $idAlmacen = $this->datos['idAlmacen'];
+            $pedido = $this->datos['pedido'];
 
 
             $qr = $nit.'|'.$nFactura.'|'.$autorizacion.'|'.$fechaFacQR.'|'.number_format($total, 2, ".","")
@@ -122,7 +123,22 @@
                 $this->Cell(15,6, utf8_decode('NIT/CI: '),0,0,'');
                 $this->SetFont('Arial','',9);
                 $this->Cell(30, 6, utf8_decode($ClienteNit), 0,0,'L');
-                $this->Ln(6);
+                
+                
+                if ($pedido) {
+                    $this->Ln(6);
+                    $this->SetX(13);
+                    $this->SetFont('Arial','B',9);
+                    $this->Cell(25,6, utf8_decode('OC/PedidoNº: '),0,0,'');
+                    $this->SetFont('Arial','',9);
+                    $this->Cell(125, 6, utf8_decode($pedido), 0,0,'L');
+                    $this->Ln(8);
+                } else {
+                    $this->Ln(8);
+                }
+                
+
+                
 
                 
 
@@ -149,7 +165,7 @@
             $glosa = $this->datos['glosa'];
             $manual = $this->datos['manual'];
             $this->SetLineWidth(0.5);
-            $this->Line(10,143,208,143); //ok
+            $this->Line(10,140,208,140); //ok
 
 
             if ($manual==='0') {
