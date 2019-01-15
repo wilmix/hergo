@@ -183,7 +183,7 @@ class Facturacion_model extends CI_Model
 	}
 	public function obtenerPedido($idFactura)
 	{
-		$sql="SELECT GROUP_CONCAT(e.clientePedido SEPARATOR '-') pedido, f.`codigoControl`
+		$sql="SELECT GROUP_CONCAT(DISTINCTROW e.clientePedido SEPARATOR '-') pedido, f.`codigoControl`
 		FROM factura_egresos fe
 		INNER JOIN egresos e
 		ON fe.idegresos=e.idegresos

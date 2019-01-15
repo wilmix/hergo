@@ -757,6 +757,7 @@ class Facturas extends CI_Controller
 	}
 	public function anularFactura()
 	{
+		$this->libacceso->acceso(45);
 		if($this->input->is_ajax_request())
         {
 
