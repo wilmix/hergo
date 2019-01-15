@@ -33,7 +33,7 @@
             $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
             $fechaFacQR = date('d/m/Y',strtotime($this->datos['fechaFac']));
             $total = $this->datos['total'];
-            $baseCreditoFiscal = $total*87/100;
+            $baseCreditoFiscal = $total;
             $ClienteNit = $this->datos['ClienteNit'];
             $codigoControl = $this->datos['codigoControl'];
             $idAlmacen = $this->datos['idAlmacen'];
@@ -41,7 +41,7 @@
 
 
             $qr = $nit.'|'.$nFactura.'|'.$autorizacion.'|'.$fechaFacQR.'|'.number_format($total, 2, ".","")
-            .'|'.$baseCreditoFiscal.'|'.$codigoControl.'|'.$ClienteNit.'|'.'0'.'|'.'0'.'|'.'0'.'|'.'0';
+            .'|'.number_format($total, 2, ".","").'|'.$codigoControl.'|'.$ClienteNit.'|'.'0'.'|'.'0'.'|'.'0'.'|'.'0';
 
             //var_dump($manual);
             if ($manual==='0') {
