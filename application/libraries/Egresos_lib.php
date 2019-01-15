@@ -81,17 +81,18 @@
                     $this->Cell(140, 6, utf8_decode($direccion), 0,0,'L');
                     $this->Ln(6);
                     $this->SetFont('Arial','B',9);
+                    $this->Cell(20,6, utf8_decode('Pedido Nº: '),0,0,'');
+                    $this->SetFont('Arial','',9);
+                    $this->Cell(60, 6, $clientePedido, 0,0,'L');
+                    $this->SetFont('Arial','B',9);
+                    $this->Cell(10,6, utf8_decode(''),0,0,'');
+                    $this->SetFont('Arial','',9);
+                    $this->Cell(30, 6, '', 0,0,'L');
+                    $this->SetFont('Arial','B',9);
                     $this->Cell(20,6, utf8_decode('Teléfono: '),0,0,'');
                     $this->SetFont('Arial','',9);
-                    $this->Cell(35, 6, $telefono, 0,0,'L');
-                    $this->SetFont('Arial','B',9);
-                    $this->Cell(10,6, utf8_decode('Fax: '),0,0,'');
-                    $this->SetFont('Arial','',9);
-                    $this->Cell(30, 6, $fax, 0,0,'L');
-                    $this->SetFont('Arial','B',9);
-                    $this->Cell(20,6, utf8_decode('Pedido No: '),0,0,'');
-                    $this->SetFont('Arial','',9);
-                    $this->Cell(45, 6, utf8_decode($clientePedido), 0,0,'L');
+                    $this->Cell(45, 6, utf8_decode($telefono), 0,0,'L');
+                    $this->Ln(6);
                 }
                 
                     if ($idTipoMov == '8') {
@@ -112,7 +113,7 @@
                     
 
                     //ENCABEZADO TABLA
-                    $this->SetX(10);
+                    $this->SetXY(10,50);
                     $this->Ln(1);
                     $this->SetFillColor(235,235,235);
                     $this->SetFont('Arial','B',8); 
@@ -139,9 +140,7 @@
             $this->Cell(15,5, 'NOTA: ',0,0,'L',1);
             $this->SetFont('Arial','I', 8);
             $this->Cell(110, 5, utf8_decode($observaciones), 0,0,'L',1);
-            $this->SetFont('Arial','BI', 9);
-            $this->Cell(30,5, 'Recibi Conforme:',0,0,'L',1);
-            $this->Cell(45, 5, '', 0,0,'L');
+            
             
             $this->Ln(5);
             $this->SetY(-145);
@@ -151,7 +150,7 @@
             $this->SetFont('Arial','I', 9);
             $this->Cell(20,5, 'Autorizado:',0,0,'L');
             $this->Cell(40, 5, '', 0,0,'L');
-            $this->Cell(30,5, 'Nombre:',0,0,'L');
+            $this->Cell(30,5, 'Nombre: ................................................................',0,0,'L');
             $this->Cell(45, 5, '', 0,0,'L');
 
             $this->SetY(-140);
@@ -161,8 +160,12 @@
             $this->SetFont('Arial','I', 9);
             $this->Cell(20,5, 'Nombre:',0,0,'L');
             $this->Cell(40, 5, '', 0,0,'L');
-            $this->Cell(30,5, 'C.I.:',0,0,'L');
+            $this->Cell(30,5, 'C.I.: .......................................................................',0,0,'L');
             $this->Cell(45, 5, '',0,0,'L');
+
+            $this->SetXY(160,-135);
+            $this->SetFont('Arial','BI', 9);
+            $this->Cell(30,5, 'Recibi Conforme',0,0,'L',1);
 
 
                 //NUMERO PIED PAGINA
