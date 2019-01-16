@@ -49,12 +49,12 @@ class Articulo_model extends CI_Model
 		$fecha = date('Y-m-d H:i:s');
 		if($nom_imagen=="")
 			$sql="UPDATE articulos SET CodigoArticulo='$codigo', Descripcion='$descripcion', NumParte='$parte', idUnidad='$unidad', 
-			idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito=$autoriza, ProductoServicio='$proser', 
+			idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito='$autoriza', ProductoServicio='$proser', 
 			EnUso='$uso', detalleLargo='???', Autor='$autor', Fecha='$fecha', precio='$precio' WHERE idArticulos=$id";
 		else
 			$sql="UPDATE articulos SET CodigoArticulo='$codigo', Descripcion='$descripcion', NumParte='$parte', idUnidad='$unidad', 
-			idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito=$autoriza, ProductoServicio='$proser', 
-			EnUso='$uso', detalleLargo='???', Autor='$autor', Fecha='$fecha',Imagen='$nom_imagen'  precio='$precio' WHERE idArticulos=$id";
+			idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito='$autoriza', ProductoServicio='$proser', 
+			EnUso='$uso', detalleLargo='???', Autor='$autor', Fecha='$fecha',Imagen='$nom_imagen', precio='$precio' WHERE idArticulos=$id";
 		$query=$this->db->query($sql);		
 	}
 }
