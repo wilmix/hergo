@@ -87,7 +87,15 @@ $(document).ready(function () {
                     // $("#modal_ok").modal("show");
                     $('#contact-form-success').show().fadeOut(10000);
                     $('#modalcliente').modal('hide');
-                }
+                },
+                error : function (returndata) {
+                    swal(
+                        'Error',
+                        'El número de documento ya se encuentra registrado en nuestra bases de datos',
+                        'error'
+                    )
+                    //console.log(returndata);
+                }, 
             });
         });
 });

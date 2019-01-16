@@ -87,7 +87,13 @@ $(document).on("click","#agregar_articulo",function(){
         agregarArticulo();
     }
 })
-$(document).on("click",".eliminarArticulo",function(){    
+$(document).on("click",".eliminarArticulo",function(){   
+   let id=$("#idArticulo").val()
+    articulos.forEach(function(index, element) {
+        if (index.id == id) {
+            delete articulos[element]
+        }
+    })
     $(this).parents("tr").remove()
     calcularTotal()
 })
@@ -312,6 +318,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     let tipoingreso=$("#tipomov_imp2").val()
     let total;
     if (articulos.length>0) {
+        console.log(articulos);
         if(articulos.map((el) => el.id).indexOf(id)>=0)
         {
             swal("Atencion", "Ya se tiene un registro con este codigo","info");

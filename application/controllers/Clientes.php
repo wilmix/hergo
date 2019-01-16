@@ -128,12 +128,12 @@ class Clientes extends CI_Controller
         	if($id=="")//es nuevo, agregar
         	{
         		
-        		$result = $this->Cliente_model->agregarCliente_model($id,$tipo_doc,$carnet,strtoupper($nombre_cliente),$clientetipo,strtoupper($direccion),$phone,$fax,$email,$website);
+        		$result = $this->Cliente_model->agregarCliente_model($id,$tipo_doc,trim($carnet),trim(strtoupper($nombre_cliente)),$clientetipo,strtoupper($direccion),$phone,$fax,$email,$website);
         	}
         	else //existe, editar
         	{
         		
-        		$result = $this->Cliente_model->editarCliente_model($id,$tipo_doc,$carnet,strtoupper($nombre_cliente),$clientetipo,strtoupper($direccion),$phone,$fax,$email,$website);
+        		$result = $this->Cliente_model->editarCliente_model($id,$tipo_doc,trim($carnet),trim(strtoupper($nombre_cliente)),$clientetipo,strtoupper($direccion),$phone,$fax,$email,$website);
         	}
         }
         echo $result;
