@@ -184,7 +184,7 @@ th:hover .filterControl {
                 <div class="col-md-9 col-lg-9 inputGroupContainer">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
-                    <input  name="parte" placeholder="W1003181" class="form-control" id="partearticulo" type="text" style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    <input  name="parte"  class="form-control" id="partearticulo" type="text" style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();">
                   </div>
                 </div>
               </div>
@@ -194,7 +194,7 @@ th:hover .filterControl {
                 <div class="col-md-9 col-lg-9 inputGroupContainer">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-indent-left"></i></span>
-                    <input  name="posicion" placeholder="8424100000" class="form-control" id="arancelariaarticulo" type="number">
+                    <input  name="posicion"  class="form-control" id="arancelariaarticulo" type="text">
                   </div>
                 </div>
               </div>

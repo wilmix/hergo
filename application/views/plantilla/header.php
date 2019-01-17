@@ -60,10 +60,10 @@
               </li>
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="<?php echo base_url('index.php/auth/edit_user/'.$user_id_actual) ?>" class="btn btn-default btn-flat">Perfil</a>
+                  <a href="<?php echo base_url('index.php/auth/edit_user/'.$user_id_actual) ?>" class="btn btn-primary btn-flat">Perfil</a>
                 </div>
                 <div class="pull-right">
-                  <a href="<?php echo base_url('index.php/auth/logout') ?>" class="btn btn-default btn-flat">Cerrar Sesión</a>
+                  <a href="<?php echo base_url('index.php/auth/logout') ?>" class="btn btn-primary btn-flat">Cerrar Sesión</a>
                 </div>
               </li>
             </ul>

@@ -72,17 +72,15 @@ $(document).ready(function(){
             parte: {
                 validators: {
                      stringLength: {
-                        min: 3,
+                        min: 1,
                     },
                 }
             },
             posicion: {
                 validators: {                 
-                    between: {
-                        min: 0,
-                        max: 9999999999999999,
-                        message: 'Ingrese Posicion Arancelaria Valida'
-                    }
+                    stringLength: {
+                        min: 1,
+                    },
                 }
             },
             autoriza: {

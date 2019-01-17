@@ -82,7 +82,7 @@
                   <option value="2">$u$</option>
                 </select>
               <span class="input-group-btn">
-                <button class="btn btn-default" type="button" id="crearFactura"><span class="fa fa-print"></span> Factura</button>
+                <button class="btn btn-primary" type="button" id="crearFactura"><span class="fa fa-print"></span> Factura</button>
               </span>
             </div>
           </div>

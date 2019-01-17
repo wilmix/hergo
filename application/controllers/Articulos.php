@@ -117,7 +117,8 @@ class Articulos extends CI_Controller
         	else
         	{
         		$nom_imagen=$this->subir_imagen($id,$_FILES);
-        		$this->Articulo_model->editarArticulo_model($id,strtoupper($codigo),strtoupper($descripcion),$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen,$precio);
+				$this->Articulo_model->editarArticulo_model($id,strtoupper($codigo),strtoupper($descripcion),$unidad,$marca,$linea,$parte,
+				$posicion,$autoriza,$proser,$uso,$nom_imagen,$precio);
         	}
         }
         echo "{}";       
