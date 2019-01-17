@@ -37,7 +37,7 @@ class Recibo extends CI_Controller {
         //$this->pdf->AddPage('L',array(215,152));
         $this->pdf->AddPage('P','Letter');
         $this->pdf->AliasNbPages();
-       // $this->pdf->SetTitle($egreso->sigla . ' - ' .$egreso->n . ' - ' . $year);
+       $this->pdf->SetTitle('REC' . ' - ' .$pago->numPago . ' - ' . $year);
         $this->pdf->SetAutoPageBreak(true,160);
         $this->pdf->SetLeftMargin(10);
         $this->pdf->SetRightMargin(10);
@@ -62,6 +62,6 @@ class Recibo extends CI_Controller {
                 $this->pdf->SetFont('Courier','B',9);
     
         //guardar
-      $this->pdf->Output(' - ' , 'I');
+      $this->pdf->Output('REC'. ' - ' . $pago->numPago . ' - ' . $year . '.pdf', 'I');
   }
 }
