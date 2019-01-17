@@ -1086,6 +1086,8 @@ class Reportes extends CI_Controller
 	}
 	public function mostrarVentasClientesItems() 
 	{
+		ini_set('max_execution_time', 0); 
+		ini_set('memory_limit','2048M');
 		if($this->input->is_ajax_request())
         {
 			$ini=$this->security->xss_clean($this->input->post("ini"));
