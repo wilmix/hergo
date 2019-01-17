@@ -62,6 +62,6 @@ class Recibo extends CI_Controller {
                 $this->pdf->SetFont('Courier','B',9);
     
         //guardar
-      $this->pdf->Output('REC'. ' - ' . $pago->numPago . ' - ' . $year . '.pdf', 'I');
+      $this->pdf->Output('REC'. ' - ' . $pago->numPago . ' - ' . $year . ' - ' . $pago->nombreCliente .  '.pdf', 'I');
   }
 }
