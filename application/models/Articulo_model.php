@@ -39,22 +39,29 @@ class Articulo_model extends CI_Model
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
-		$sql="INSERT INTO articulos (CodigoArticulo, Descripcion, NumParte, idUnidad, idMarca, idLinea, PosicionArancelaria, idRequisito, ProductoServicio, EnUso, detalleLargo, Autor, Fecha,Imagen,precio) 
-		VALUES('$codigo','$descripcion','$parte','$unidad','$marca','$linea','$posicion','$autoriza','$proser','$uso','','$autor','$fecha','$nom_imagen', '$precio')";
+		$sql="INSERT INTO 
+		articulos (CodigoArticulo, Descripcion, NumParte, idUnidad, idMarca, 
+		idLinea, PosicionArancelaria, idRequisito, ProductoServicio, EnUso, 
+		detalleLargo, Autor, Fecha,Imagen,precio) 
+		VALUES('$codigo','$descripcion','$parte','$unidad','$marca','
+		$linea','$posicion','$autoriza','$proser','$uso',
+		'','$autor','$fecha','$nom_imagen', '$precio')";
 		$query=$this->db->query($sql);
 	}
 	public function editarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen,$precio)
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
-		if($nom_imagen=="")
+		if($nom_imagen=="") {
 			$sql="UPDATE articulos SET CodigoArticulo='$codigo', Descripcion='$descripcion', NumParte='$parte', idUnidad='$unidad', 
 			idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito='$autoriza', ProductoServicio='$proser', 
 			EnUso='$uso', detalleLargo='???', Autor='$autor', Fecha='$fecha', precio='$precio' WHERE idArticulos=$id";
-		else
+		}	
+		else {
 			$sql="UPDATE articulos SET CodigoArticulo='$codigo', Descripcion='$descripcion', NumParte='$parte', idUnidad='$unidad', 
 			idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito='$autoriza', ProductoServicio='$proser', 
 			EnUso='$uso', detalleLargo='???', Autor='$autor', Fecha='$fecha',Imagen='$nom_imagen', precio='$precio' WHERE idArticulos=$id";
+		}
 		$query=$this->db->query($sql);		
 	}
 }

@@ -287,11 +287,13 @@ function retornarTabla()
                 field:"NumParte",
                 title:"Nro. de Parte",
                 sortable:true,
+                visible:true
             },
             {
                 field:"PosicionArancelaria",
                 title:"Posicion<br>Arancelaria",
                 sortable:true,
+                visible:true
             },
             {
                 field:"Requisito",

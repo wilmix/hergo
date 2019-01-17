@@ -106,7 +106,6 @@ class Articulos extends CI_Controller
         	$proser = addslashes($this->security->xss_clean($this->input->post('proser')));
 			$uso = addslashes($this->security->xss_clean($this->input->post('uso')));
 			$precio = addslashes($this->security->xss_clean($this->input->post('precio')));
-        	      
         	
         	if($id=="")
         	{

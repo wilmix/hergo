@@ -184,7 +184,7 @@ th:hover .filterControl {
                 <div class="col-md-9 col-lg-9 inputGroupContainer">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-tag"></i></span>
-                    <input  name="parte"  class="form-control" id="partearticulo" type="text" style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    <input  name="parte"  class="form-control" id="partearticulo" type="text">
                   </div>
                 </div>
               </div>
