@@ -6,7 +6,7 @@ class Articulo_model extends CI_Model
 	{	
 		parent::__construct();
 		$this->load->helper('date');
-		date_default_timezone_set("America/La_Paz");
+		//date_default_timezone_set("America/La_Paz");
 	}
 	public function retornar_tabla($tabla)
 	{
