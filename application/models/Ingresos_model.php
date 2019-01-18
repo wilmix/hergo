@@ -203,7 +203,7 @@ class Ingresos_model extends CI_Model
 	}
 	public function editarestado_model($d, $id)
 	{
-		$sql="UPDATE ingresos SET estado='$d'WHERE idIngresos=$id";
+		$sql="UPDATE ingresos SET estado='$d', aprobado=NOW() WHERE idIngresos=$id";
 		$query=$this->db->query($sql);
 		return $query;
 	}
@@ -457,7 +457,7 @@ class Ingresos_model extends CI_Model
         $autor=$this->session->userdata('user_id');
         $fecha = date('Y-m-d H:i:s');
         $sql="UPDATE ingresos 
-        SET obs='$obs_imp',fecha='$fecha',autor='$autor', anulado='1', estado=0 
+        SET obs='$obs_imp',fecha=NOW(),autor='$autor', anulado='1', estado=0 
         where idIngresos='$idingresoimportacion'";
         $query=$this->db->query($sql);
         

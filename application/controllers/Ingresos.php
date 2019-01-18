@@ -645,7 +645,7 @@ class Ingresos extends CI_Controller
 			$ingreso->tipoCambio=$tipocambio->tipocambio;
 
 			$ingreso->autor=$this->session->userdata('user_id');
-			$ingreso->fecha = date('Y-m-d H:i:s');
+			//$ingreso->fecha = date('Y-m-d H:i:s');
 
 			$gestion= date("Y", strtotime($ingreso->fechamov));
 			$ingreso->gestion = $gestion;
@@ -718,7 +718,7 @@ class Ingresos extends CI_Controller
 			$tipocambio=$this->Ingresos_model->getTipoCambio($ingreso->fechamov);
 			$ingreso->tipoCambio = $tipocambio->tipocambio;
 			$ingreso->autor=$this->session->userdata('user_id');
-			$ingreso->fecha = date('Y-m-d H:i:s');
+			//$ingreso->fecha = date('Y-m-d H:i:s');
 
 			$id = $this->Ingresos_model->updateIngreso($idIngresos, $ingreso);
 			$id = intval($id);
