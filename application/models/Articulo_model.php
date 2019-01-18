@@ -43,8 +43,8 @@ class Articulo_model extends CI_Model
 		articulos (CodigoArticulo, Descripcion, NumParte, idUnidad, idMarca, 
 		idLinea, PosicionArancelaria, idRequisito, ProductoServicio, EnUso, 
 		detalleLargo, Autor, Fecha,Imagen,precio) 
-		VALUES('$codigo','$descripcion','$parte','$unidad','$marca','
-		$linea','$posicion','$autoriza','$proser','$uso',
+		VALUES('$codigo','$descripcion','$parte','$unidad','$marca',
+		'$linea','$posicion','$autoriza','$proser','$uso',
 		'','$autor','$fecha','$nom_imagen', '$precio')";
 		$query=$this->db->query($sql);
 	}
