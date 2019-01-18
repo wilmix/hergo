@@ -231,7 +231,7 @@ class Facturacion_model extends CI_Model
 			$idEgreso = $facturaEgreso->idegresos;
 
 			$msj = strval($msj);
-			$sql="UPDATE factura set anulada=1,glosa='$msj',autor='$autor',update_at='$fecha' where idFactura=$idFactura;";
+			$sql="UPDATE factura set anulada=1,glosa='$msj',autor='$autor',update_at=NOW() where idFactura=$idFactura;";
 			$this->db->query($sql);
 
 			$facturaDetalle=$this->obtenerDetalleFactura($idFactura);		

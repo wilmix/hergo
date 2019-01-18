@@ -607,7 +607,7 @@ class Egresos_model extends CI_Model
 
         $sql="UPDATE egresos 
         SET obs= UPPER('$obs_ne'),
-            fecha='$fecha',
+            fecha=NOW(),
             autor='$autor', 
             anulado='1' 
         where idEgresos='$idegreso'";

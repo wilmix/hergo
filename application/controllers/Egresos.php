@@ -555,7 +555,7 @@ class Egresos extends CI_Controller
 			$egreso->tipoCambio = $tipocambio->tipocambio;
 
 			$egreso->autor = $this->session->userdata('user_id');
-			$egreso->fecha = date('Y-m-d H:i:s');
+			//$egreso->fecha = date('Y-m-d H:i:s');
 
 			$gestion = date("Y", strtotime($egreso->fechamov));
 			$egreso->gestion = $gestion;
@@ -599,7 +599,7 @@ class Egresos extends CI_Controller
 			$egreso->tipoCambio = floatval($tipocambio->tipocambio);
 
 			$egreso->autor = $this->session->userdata('user_id');
-			$egreso->fecha = date('Y-m-d H:i:s');
+			//$egreso->fecha = date('Y-m-d H:i:s');
 
 			$gestion = date("Y", strtotime($egreso->fechamov));
 			$egreso->gestion = $gestion;

@@ -42,10 +42,10 @@ class Articulo_model extends CI_Model
 		$sql="INSERT INTO 
 		articulos (CodigoArticulo, Descripcion, NumParte, idUnidad, idMarca, 
 		idLinea, PosicionArancelaria, idRequisito, ProductoServicio, EnUso, 
-		detalleLargo, Autor, Fecha,Imagen,precio) 
+		detalleLargo, Autor, Imagen,precio) 
 		VALUES('$codigo','$descripcion','$parte','$unidad','$marca',
 		'$linea','$posicion','$autoriza','$proser','$uso',
-		'','$autor',NOW(),'$nom_imagen', '$precio')";
+		'','$autor','$nom_imagen', '$precio')";
 		$query=$this->db->query($sql);
 	}
 	public function editarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen,$precio)
@@ -55,12 +55,12 @@ class Articulo_model extends CI_Model
 		if($nom_imagen=="") {
 			$sql="UPDATE articulos SET CodigoArticulo='$codigo', Descripcion='$descripcion', NumParte='$parte', idUnidad='$unidad', 
 			idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito='$autoriza', ProductoServicio='$proser', 
-			EnUso='$uso', detalleLargo='???', Autor='$autor', Fecha=NOW(), precio='$precio' WHERE idArticulos=$id";
+			EnUso='$uso', detalleLargo='???', Autor='$autor',  precio='$precio' WHERE idArticulos=$id";
 		}	
 		else {
 			$sql="UPDATE articulos SET CodigoArticulo='$codigo', Descripcion='$descripcion', NumParte='$parte', idUnidad='$unidad', 
 			idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito='$autoriza', ProductoServicio='$proser', 
-			EnUso='$uso', detalleLargo='???', Autor='$autor', Fecha=NOW(),Imagen='$nom_imagen', precio='$precio' WHERE idArticulos=$id";
+			EnUso='$uso', detalleLargo='???', Autor='$autor', Imagen='$nom_imagen', precio='$precio' WHERE idArticulos=$id";
 		}
 		$query=$this->db->query($sql);		
 	}

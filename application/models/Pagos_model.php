@@ -221,7 +221,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function anularPago($idPago,$msj)
 	{
-		$sql="UPDATE pago SET anulado=1, glosa='$msj' WHERE idPago=$idPago";
+		$sql="UPDATE pago SET anulado=1, glosa='$msj', fecha=NOW() WHERE idPago=$idPago";
 		$this->db->query($sql);
 	}
 	public function retornarIdFacturas($idPago)

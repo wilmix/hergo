@@ -706,7 +706,7 @@ class Facturas extends CI_Controller
 			$factura->glosa = $observaciones;
 			$factura->codigoControl =  ($datosFactura->manual == 1) ? '' : $codigoControlGenerado;
 			$factura->autor=$this->session->userdata('user_id');
-        	$factura->fecha=date('Y-m-d H:i:s'); 
+        	//$factura->fecha=date('Y-m-d H:i:s'); 
 			$factura->tipoCambio=$this->Egresos_model->retornarTipoCambio();
 			$factura->ClienteFactura=$cliente->nombreCliente;
 			$factura->ClienteNit=$cliente->documento;

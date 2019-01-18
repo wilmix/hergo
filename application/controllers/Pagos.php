@@ -302,7 +302,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->anulado=$data->anulado;
 			$pago->glosa=strtoupper($data->glosa);
 			$pago->autor=$this->session->userdata('user_id');
-			$pago->fecha=date('Y-m-d H:i:s');
+			//$pago->fecha=date('Y-m-d H:i:s');
 			$tipocambio = $this->Ingresos_model->getTipoCambio($pago->fechaPago);
 			$pago->tipoCambio = $tipocambio->tipocambio;
 			$pago->tipoPago=$data->tipoPago;
@@ -388,7 +388,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->totalPago=$data->totalPago;
 			$pago->glosa=strtoupper($data->glosa);
 			$pago->autor=$this->session->userdata('user_id');
-			$pago->fecha=date('Y-m-d H:i:s');
+			//$pago->fecha=date('Y-m-d H:i:s');
 			$tipocambio = $this->Ingresos_model->getTipoCambio($pago->fechaPago);
 			$pago->tipoCambio = $tipocambio->tipocambio;
 			$pago->tipoPago=$data->tipoPago;
