@@ -92,6 +92,7 @@ class Articulos extends CI_Controller
 	}
 	public function agregarArticulo()
 	{
+		$this->libacceso->acceso(46);
 		if($this->input->is_ajax_request())
         {
         	$id = addslashes($this->security->xss_clean($this->input->post('id_articulo')));
