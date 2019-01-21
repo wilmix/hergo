@@ -38,9 +38,20 @@ class Ingresos extends CI_Controller {
       $totalInventario=0;
       $totalDocumento=0;
       foreach ($lineas->result() as $linea) {
-        $totalInventario += $linea->total;
-        $totalDocumento += $linea->totaldoc;
-        $costoUniDoc= $linea->totaldoc/$linea->cantidad;
+        if ($ingreso->moneda == 2) {
+          $totalInventario += $linea->total/$linea->tipocambio;
+          $totalDocumento += $linea->totaldoc/$linea->tipocambio;
+          $costoUniDoc= $linea->totaldoc/$linea->cantidad/$linea->tipocambio;
+          $linea->totaldoc = $linea->totaldoc/$linea->tipocambio;
+          $linea->punitario = $linea->punitario/$linea->tipocambio;
+          $linea->total = $linea->total/$linea->tipocambio;
+
+        } else {
+          $totalInventario += $linea->total;
+          $totalDocumento += $linea->totaldoc;
+          $costoUniDoc= $linea->totaldoc/$linea->cantidad;
+        }
+        
 
         $this->pdf->SetX(10);
         $this->pdf->SetFillColor(255,255,255);
@@ -64,7 +75,11 @@ class Ingresos extends CI_Controller {
       $this->pdf->SetFillColor(232,232,232); 
       $this->pdf->Cell(13,7,'Total: ','1',0,'L',1);
       $this->pdf->SetFont('Times','I',10);
-      $literal = NumeroALetras::convertir($totalInventario, 'BOLIVIANOS', 'CENTAVOS');
+      if ($ingreso->moneda == 2) {
+        $literal = NumeroALetras::convertir($totalInventario, 'DOLARES');
+      } else {
+        $literal = NumeroALetras::convertir($totalInventario, 'BOLIVIANOS');
+      }
       $this->pdf->Cell(160,7,$literal,'1',0,'l',1);
       $this->pdf->SetFont('Arial','B',9);
       $this->pdf->Cell(40,7,number_format($totalDocumento, 2, ".", ","),'1',0,'R',1); //TOTAL DOCUMENTO
