@@ -18,14 +18,6 @@
                         <option value="">TODOS</option>
                     </select>
 
-                    <select class="form-control"  data-style="btn-primary" id="articulos_filtro" name="articulos_filtro">
-                        <option value="" selected>TODOS</option>
-                        <?php foreach ($articulos->result_array() as $fila): ?>
-                        <option value=<?= $fila['idArticulos'] ?> ><?= $fila['CodigoArticulo'].' | '.$fila['Descripcion'] ?></option>
-                        <?php endforeach ?>
-                        
-                    </select>
-
                     <button  type="button" class="btn btn-primary btn-sm" id="refresh">
                         <span>
                         <i class="fa fa-share-square"></i>

@@ -1,5 +1,5 @@
 
-var iniciofecha = moment().subtract(5, 'year').startOf('year')
+var iniciofecha = moment().subtract(0, 'year').startOf('year')
 var finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function () {
     $('#articulos_filtro').select2({
@@ -85,17 +85,19 @@ function retornarVentasClienteItems() {
                 res[index].vendedor = ''
                 res[index].pUni = ''
                 res[index].facCant = ''
+                res[index].codigo = res[index].codigo == null ? '' : res[index].codigo
             } else if (res[index].nFactura == null) {
-                res[index].descripcion = ''
+                res[index].descripcion = res[index].descripcion
                 res[index].fechaFac = ' '
                 res[index].almacen = ''
-                res[index].nombreCliente = `TOTAL ${res[index].codigo}:`
-                res[index].codigo = ''
+                res[index].nombreCliente = ''
+                res[index].codigo = res[index].codigo == null ? '' : res[index].codigo
                 res[index].vendedor = ''
             }
         }
         console.log(res);
         quitarcargando(); 
+        datosselect = restornardatosSelect(res);
         $("#tablaVentasClientesItems").bootstrapTable('destroy');    
         $("#tablaVentasClientesItems").bootstrapTable({ 
             data: res,
@@ -110,11 +112,20 @@ function retornarVentasClienteItems() {
                     field: 'codigo',
                     title: 'Codigo',
                     align: 'center',
+                    width:'100px',
+                    filter: {
+                        type: "select",
+                        data: datosselect[1]
+                    }
                 },
                 {
                     field: 'descripcion',
                     title: 'Descripcion',
                     align: 'left',
+                    filter: {
+                        type: "select",
+                        data: datosselect[0]
+                    }
                 },
                 {
                     field: 'almacen',
@@ -127,6 +138,7 @@ function retornarVentasClienteItems() {
                     title: 'Fecha',
                     align: 'center',
                     width:'100px',
+                    formatter: formato_fecha_corta
 
                 },
                 {
@@ -145,11 +157,12 @@ function retornarVentasClienteItems() {
                 {
                     field: 'nombreCliente',
                     title: 'Cliente',
-                    align: 'left'
+                    align: 'left',
+                    
                 },
         
                 {
-                    field: 'pUni',
+                    field: 'precioUnitario',
                     title: 'P/U',
                     align: 'right',
                     width:'100px',
@@ -157,7 +170,7 @@ function retornarVentasClienteItems() {
                     //footerFormatter: sumaColumna
                 },
                 {
-                    field: 'facCant',
+                    field: 'cantidad',
                     title: 'Cant.',
                     align: 'right',
                     width:'100px',
@@ -226,3 +239,28 @@ function tituloReporte() {
     $('#nombreCliente').text(nomCliente);
 }
 
+function restornardatosSelect(res) {
+
+    var descripcion = new Array()
+    var codigo = new Array()
+    var datos = new Array()
+    $.each(res, function (index, value) {
+        descripcion.push(value.descripcion)
+        codigo.push(value.codigo)
+    })
+
+    descripcion.sort();
+    codigo.sort();
+  
+    datos.push(descripcion.unique());
+    datos.push(codigo.unique());
+    console.log(datos);
+    return (datos);
+}
+Array.prototype.unique = function (a) {
+    return function () {
+        return this.filter(a)
+    }
+}(function (a, b, c) {
+    return c.indexOf(a, b + 1) < 0
+});

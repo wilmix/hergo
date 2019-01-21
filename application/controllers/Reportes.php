@@ -1070,7 +1070,7 @@ class Reportes extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
 			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-			$this->datos['articulos']=$this->Reportes_model->retornarArticulos();
+			//$this->datos['articulos']=$this->Reportes_model->retornarArticulos();
 			$this->datos['linea']=$this->Reportes_model->retornar_tabla("linea");
 			/*echo '<pre>';
 			print_r($this->Reportes_model->retornarArticulos()->result());
@@ -1093,8 +1093,7 @@ class Reportes extends CI_Controller
 			$ini=$this->security->xss_clean($this->input->post("ini"));
 			$fin=$this->security->xss_clean($this->input->post("fin"));
 			$alm=$this->security->xss_clean($this->input->post("alm")); 
-			$item=$this->security->xss_clean($this->input->post("item"));  
-			$res=$this->Reportes_model->mostrarVentasClientesItems($ini, $fin, $alm, $item);
+			$res=$this->Reportes_model->mostrarVentasClientesItems($ini, $fin, $alm);
 			$res=$res->result_array();
 			
 			echo json_encode($res);
@@ -1265,6 +1264,60 @@ class Reportes extends CI_Controller
         	$fin=$this->security->xss_clean($this->input->post("f"));
 			$alm=$this->security->xss_clean($this->input->post("a"));
 			$res=$this->Reportes_model->mostrarReporteFacturas($ini,$fin,$alm);
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+		
+	}
+
+	public function reporteClienteItems()
+	{
+		//$this->libacceso->acceso(41);
+		if(!$this->session->userdata('logeado'))
+			redirect('auth', 'refresh');
+
+			$this->datos['menu']="Reportes";
+			$this->datos['opcion']="Reporte Ventas por Cliente - Items";
+			$this->datos['titulo']="Reporte Ventas por Cliente - Items";
+
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
+			/*************AUTOCOMPLETE**********/
+            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
+	        /*************DATERANGEPICKER**********/
+	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
+			/**************FUNCION***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/clienteItems.js'); 				
+			/**************INPUT MASK***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+
+			$this->load->view('plantilla/head.php',$this->datos);
+			$this->load->view('plantilla/header.php',$this->datos);
+			$this->load->view('plantilla/menu.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('reportes/clientesItems.php',$this->datos);
+			$this->load->view('plantilla/footcontainer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
+	}
+	public function showClienteItems()
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$ini=$this->security->xss_clean($this->input->post("i"));
+        	$fin=$this->security->xss_clean($this->input->post("f"));
+			$alm=$this->security->xss_clean($this->input->post("a"));
+			$res=$this->Reportes_model->showClienteItems($ini,$fin,$alm);
 			$res=$res->result_array();
 			echo json_encode($res);
 		}

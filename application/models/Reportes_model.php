@@ -518,42 +518,30 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarVentasClientesItems($ini, $fin, $alm="", $item="")
+	public function mostrarVentasClientesItems($ini, $fin, $alm="")
 	{ 
-			$sql = "SELECT
-			almacen,
-			idArt,
-			codigo, 
-			descripcion, 
-			DATE_FORMAT(fechaFac,'%d-%m-%Y') fechaFac, 
-			nFactura, 
-			documento, 
-			nombreCliente, 
-			avg(precioUnitario) pUni, 
-			sum(facturaCantidad) facCant, 
-			sum(total) total, 
-			vendedor
+			$sql = "SELECT * , SUM(cantidadFactura)cantidad, SUM(cantidadFactura * precioUnitario) total
 			FROM
 			(
-			SELECT  f.`almacen`, a.`idArticulos` idArt, a.`CodigoArticulo` codigo, a.`Descripcion` descripcion, f.`fechaFac`, f.`nFactura`, c.`documento` , 
-			c.`nombreCliente`, fd.`facturaPUnitario` precioUnitario, fd.`facturaCantidad`,
-			(fd.`facturaPUnitario` * fd.`facturaCantidad`) total ,  CONCAT(uv.`first_name`, ' ', uv.`last_name`) vendedor, e.`tipomov`
-			FROM
-			facturadetalle fd
-			INNER JOIN articulos a ON a.`idArticulos` = fd.`articulo`
-			INNER JOIN factura f ON f.`idFactura` = fd.`idFactura`
-			INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
-			INNER JOIN factura_egresos fe ON fe.`idFactura`= f.`idFactura`
-			INNER JOIN egresos e ON e.`idegresos` = fe.`idegresos`
-			INNER JOIN users uv ON uv.`id` = e.`vendedor`
-			WHERE f.anulada = 0
-			GROUP BY fd.`id` 
-			ORDER BY codigo, f.fechaFac, f.`nFactura`
-			)tbl
-			 where fechaFac between '$ini' and '$fin'
-			 and almacen like '%$alm'
-			 and idArt like '%$item'
-			 group by codigo, nFactura with rollup";
+			SELECT  fd.`id`, fd.`articulo`, f.`almacen`, a.`idArticulos` idArt, a.`CodigoArticulo` codigo, a.`Descripcion` descripcion, f.`fechaFac`, f.`nFactura`, c.`documento`, c.`nombreCliente`, 
+			fd.`facturaPUnitario` precioUnitario, 
+			(fd.`facturaCantidad`) cantidadFactura,
+			(fd.`facturaPUnitario` * fd.`facturaCantidad`) total ,  
+			CONCAT(uv.`first_name`, ' ', uv.`last_name`) vendedor
+						FROM
+						facturadetalle fd
+						INNER JOIN articulos a ON a.`idArticulos` = fd.`articulo`
+						INNER JOIN factura f ON f.`idFactura` = fd.`idFactura`
+						INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
+						INNER JOIN factura_egresos fe ON fe.`idFactura`= f.`idFactura`
+						INNER JOIN egresos e ON e.`idegresos` = fe.`idegresos`
+						INNER JOIN users uv ON uv.`id` = e.`vendedor`
+						WHERE f.anulada = 0 
+						AND f.`fechaFac` BETWEEN '$ini' AND '$fin'
+						 AND f.`almacen` LIKE '%$alm'
+						 GROUP BY fd.`id`
+						ORDER BY codigo,nombreCliente
+			)tbla GROUP BY codigo, nFactura WITH ROLLUP";
 
 		$query=$this->db->query($sql);		
 		return $query;
@@ -705,6 +693,28 @@ class Reportes_model extends CI_Model
 		and p.`anulado` = 0
 		and p.`almacen` = 1
 		group by  p.`numPago` desc, pf.`id` with rollup
+		";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+	public function showClienteItems ($ini, $fin, $alm="") 
+	{ 
+		$sql="SELECT f.`almacen`, fd.`articulo` idArticulo, f.`nFactura`, f.`cliente`idCliente, f.`ClienteFactura`, fd.`ArticuloCodigo` codigo, 
+		fd.`ArticuloNombre` descrip, u.`Sigla` uni, 
+		ROUND(AVG(fd.`facturaPUnitario`),2) puni,
+		SUM(fd.`facturaCantidad`) cantidad,
+		SUM((fd.`facturaPUnitario`) * (fd.`facturaCantidad`)) total,
+		ROUND(AVG(fd.`facturaPUnitario`),2) puni,
+		ROUND(AVG(fd.`facturaPUnitario` / tc.`tipocambio`),2) puDolares,
+		ROUND(SUM((fd.`facturaPUnitario`) * (fd.`facturaCantidad`) / tc.`tipocambio`),2) totalDolares
+		FROM facturadetalle fd
+		INNER JOIN factura f ON f.`idFactura` = fd.`idFactura`
+		INNER JOIN articulos a ON a.`idArticulos` = fd.`articulo`
+		INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
+		INNER JOIN tipocambio tc ON tc.`fecha` = f.`fechaFac`
+		WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin' 
+		AND f.`anulada` = 0 AND f.`almacen` LIKE '%$alm' 
+		GROUP BY f.`ClienteFactura`, fd.`ArticuloCodigo` WITH ROLLUP
 		";
 		$query=$this->db->query($sql);		
 		return $query;
