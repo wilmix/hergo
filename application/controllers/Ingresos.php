@@ -323,15 +323,15 @@ class Ingresos extends CI_Controller
             if($this->datos['dcab']->moneda==2)//si es dolares dividimos por el tipo de cambio
             {
 
-            	$tipodecambiovalor=$this->Ingresos_model->retornarValorTipoCambio($this->datos['dcab']->tipocambio);            	
-            	$tipodecambiovalor=$tipodecambiovalor->tipocambio;
+            	//$tipodecambiovalor=$this->Ingresos_model->retornarValorTipoCambio($this->datos['dcab']->tipocambio);            	
+            	//$tipodecambiovalor=$tipodecambiovalor->tipocambio;
             	
 	            for ($i=0; $i < count($this->datos['detalle']) ; $i++) { 
-	            	$this->datos['detalle'][$i]["totaldoc"]=$this->datos['detalle'][$i]["totaldoc"]/$tipodecambiovalor;
-	            	$this->datos['detalle'][$i]["punitario"]=$this->datos['detalle'][$i]["punitario"]/$tipodecambiovalor;	            	
-	            	$this->datos['detalle'][$i]["total"]=$this->datos['detalle'][$i]["total"]/$tipodecambiovalor;	  
+	            	$this->datos['detalle'][$i]["totaldoc"]=$this->datos['detalle'][$i]["totaldoc"]/$this->datos['detalle'][$i]["tipocambio"];
+	            	$this->datos['detalle'][$i]["punitario"]=$this->datos['detalle'][$i]["punitario"]/$this->datos['detalle'][$i]["tipocambio"];	            	
+	            	$this->datos['detalle'][$i]["total"]=$this->datos['detalle'][$i]["total"]/$this->datos['detalle'][$i]["tipocambio"];	  
 
-	            }		
+				}
 	           
             }
            
@@ -412,23 +412,17 @@ class Ingresos extends CI_Controller
 			$res=$this->Ingresos_model->mostrarDetalle($id);
 			$res=$res->result_array();
 			
-
-			$idtipocambio=$this->Ingresos_model->retornaridtipocambio($id);
 			
 			if($moneda==2)//si es dolares dividimos por el tipo de cambio
             {
-            	$tipodecambiovalor=$this->Ingresos_model->retornarValorTipoCambio($idtipocambio);  
-            	$tipodecambiovalor=$tipodecambiovalor->tipocambio;
+
             	 for ($i=0; $i < count($res) ; $i++) { 
-	            	$res[$i]["totaldoc"]=$res[$i]["totaldoc"]/$tipodecambiovalor;
-	            	$res[$i]["punitario"]=$res[$i]["punitario"]/$tipodecambiovalor;	            	
-	            	$res[$i]["total"]=$res[$i]["total"]/$tipodecambiovalor;	  
+	            	$res[$i]["totaldoc"]=$res[$i]["totaldoc"]/$res[$i]["tipocambio"];
+	            	$res[$i]["punitario"]=$res[$i]["punitario"]/$res[$i]["tipocambio"];	            	
+	            	$res[$i]["total"]=$res[$i]["total"]/$res[$i]["tipocambio"];	  
 
 	            }
-	            /*echo "<pre>";
-            	print_r($this->datos['detalle']);
-            	echo "</pre>";*/
-            	//die();	
+
             }
 			echo json_encode($res);
 		}

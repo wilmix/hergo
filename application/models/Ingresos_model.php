@@ -190,12 +190,16 @@ class Ingresos_model extends CI_Model
     }
 	public function mostrarDetalle($id)
 	{
-		$sql="SELECT a.idArticulos idArticulo, a.CodigoArticulo, a.Descripcion, i.cantidad,i.totaldoc, i.punitario punitario, i.total total, u.Unidad
-		FROM ingdetalle i
+		$sql="SELECT a.idArticulos idArticulo, a.CodigoArticulo, a.Descripcion, id.cantidad,id.totaldoc, id.punitario punitario, id.total total, u.Unidad, tc.`tipocambio`
+		FROM ingdetalle id
 		INNER JOIN articulos a
-		ON i.articulo = a.idArticulos
+		ON id.articulo = a.idArticulos
         INNER JOIN unidad u
-        on u.idUnidad = a.idUnidad
+        ON u.idUnidad = a.idUnidad
+        inner join ingresos i
+        on i.`idIngresos` = id.`idIngreso`
+        inner join tipocambio tc
+        on tc.`fecha` = i.`fechamov`
         WHERE idIngreso=$id
         ORDER BY a.CodigoArticulo";
 		$query=$this->db->query($sql);
@@ -511,12 +515,14 @@ class Ingresos_model extends CI_Model
             return 1;
         }
     }
-    public function retornarValorTipoCambio($id=null)
+    public function retornarValorTipoCambio($fecha=null)
     {
         if($id==null)
             $sql="SELECT * from tipocambio ORDER BY id DESC LIMIT 1";
         else
-            $sql="SELECT * from tipocambio where id = '$id' ORDER BY id DESC LIMIT 1";
+            $sql="SELECT * from tipocambio tc
+            where tc.`fecha` = '$fecha'
+            ORDER BY id DESC LIMIT 1";
         $resultado=$this->db->query($sql);
         if($resultado->num_rows()>0)
         {
@@ -549,20 +555,20 @@ class Ingresos_model extends CI_Model
         $sql="INSERT INTO costoarticulos(idArticulo,idAlmacen,cantidad,precioUnitario) VALUES('$idArticulo','$idalmacen','$cantidad','$costou')";
         $this->db->query($sql);
     }
-    public function retornaridtipocambio($id)
+    public function retornarFechaIngreso($id)
     {
-        $sql="SELECT tipoCambio from ingresos where idIngresos=$id LIMIT 1";
+        $sql="SELECT fechamov from ingresos where idIngresos=$id LIMIT 1";
         
         $resultado=$this->db->query($sql);
-        if($resultado->num_rows()>0)
+        /*if($resultado->num_rows()>0)
         {
             $fila=$resultado->row();
-            return ($fila->tipoCambio);
+            return ($fila->fechamov);
         }
         else
         {
             return 0;
-        }
+        }*/
     }
     public function retornarIngresosTabla($idIngreso)
     {
