@@ -646,6 +646,14 @@ function mostrarDetalle(res) {
                 formatter: operateFormatter3,
                 footerFormatter: sumaColumna
             },
+            {
+                field: 'cpp',
+                title: "CPP",
+                align: 'right',
+                width: '10%',
+                sortable: true,
+                formatter: operateFormatter3,
+            },
         ]
     });
 }
