@@ -71,14 +71,17 @@ class Ingresos extends CI_Controller {
       $this->pdf->Ln(2);
      
       // TOTALES
+      $entera = intval($totalInventario);
+      $ctvs = intval(($totalInventario - $entera) * 100);
+      $ctvs = ($ctvs == 0) ? '00' : $ctvs;
       $this->pdf->SetFont('Times','BI',10);
       $this->pdf->SetFillColor(232,232,232); 
       $this->pdf->Cell(13,7,'Total: ','1',0,'L',1);
       $this->pdf->SetFont('Times','I',10);
       if ($ingreso->moneda == 2) {
-        $literal = NumeroALetras::convertir($totalInventario, 'DOLARES');
+        $literal = NumeroALetras::convertir($totalInventario).$ctvs.'/100 '.'DOLARES';
       } else {
-        $literal = NumeroALetras::convertir($totalInventario, 'BOLIVIANOS');
+        $literal = NumeroALetras::convertir($totalInventario).$ctvs.'/100 '.'BOLIVIANOS';
       }
       $this->pdf->Cell(160,7,$literal,'1',0,'l',1);
       $this->pdf->SetFont('Arial','B',9);
