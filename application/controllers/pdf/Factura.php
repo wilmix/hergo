@@ -78,6 +78,7 @@ class Factura extends CI_Controller {
                 }
                 $entera = intval($totalFactura);
                 $ctvs = round(($totalFactura - $entera) * 100);
+                $ctvs = sprintf('%02d',$ctvs);
                 $ctvs = ($ctvs == 0) ? '00' : $ctvs;
 
                 $this->pdf->SetFont('Times','B',9);
@@ -108,6 +109,7 @@ class Factura extends CI_Controller {
                 $entera = intval($totalBolivianos);
                 $ctvs = round(($totalBolivianos - $entera) * 100);
                 $ctvs = sprintf('%02d',$ctvs);
+                $ctvs = ($ctvs == 0) ? '00' : $ctvs;
                 $this->pdf->SetFont('Times','B',9);
                 $this->pdf->SetFillColor(255,255,255);
                 $this->pdf->Cell(179,5,'TOTAL $u$','T',0,'R',1);
