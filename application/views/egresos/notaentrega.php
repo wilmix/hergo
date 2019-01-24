@@ -83,6 +83,8 @@
             <?php if ($cont): ?>
             <input id="idegreso" name="idegreso" type="text" class="hidden" value="<?= $dcab->idEgresos ?>">
             <input id="nmov" name="nmov" type="text" class="hidden" value="<?= $nmov ?>">
+            <input id="idMoneda" name="idMoneda" type="text" class="hidden" value="<?= $idmoneda ?>">
+
             
             <?php endif ?>
             <div class="row">

@@ -169,12 +169,16 @@ class Egresos_model extends CI_Model
 	{
 		$sql="SELECT a.idArticulos,a.CodigoArticulo, a.Descripcion, e.cantidad, 
         e.punitario punitario11, e.punitario, e.total total, e.descuento, e.idingdetalle, 
-        e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal, e.cantFact
+        e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal, e.cantFact, tc.`tipocambio`
 		FROM egredetalle e
 		INNER JOIN articulos a
 		ON e.articulo = a.idArticulos
         INNER JOIN unidad u
         ON a.idUnidad=u.idUnidad
+        INNER JOIN egresos eg
+		ON eg.`idegresos` = e.`idegreso`
+		INNER JOIN tipocambio tc
+		ON eg.`fechamov` = tc.`fecha`
          WHERE e.idegreso=$id
          ORDER BY a.CodigoArticulo";
 

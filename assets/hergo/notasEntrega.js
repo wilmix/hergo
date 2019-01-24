@@ -582,13 +582,19 @@ function formatoCosto(value, row, index) {
 }
 function retornarTablaEgresoDetalle(idEgreso=null) {
     agregarcargando();
-
     $.ajax({
         type: "POST",
         url: base_url('index.php/Egresos/mostrarDetalleEditarPost'),
         dataType: "json",
         data: { id: idEgreso },
     }).done(function (res) {
+        let idMoneda = $("#idMoneda").val();
+        if (idMoneda == 2) {
+            res.forEach(art => {
+                art.punitario = art.punitario / art.tipocambio
+                art.total = art.total / art.tipocambio
+            });
+        }
         quitarcargando();
         $table = $("#tablaEditarEgreso").bootstrapTable('destroy');
         $('#tablaEditarEgreso').bootstrapTable({
