@@ -77,7 +77,7 @@ class Factura extends CI_Controller {
                     $this->pdf->Ln(5);
                 }
                 $entera = intval($totalFactura);
-                $ctvs = intval(($totalFactura - $entera) * 100);
+                $ctvs = round(($totalFactura - $entera) * 100);
                 $ctvs = ($ctvs == 0) ? '00' : $ctvs;
 
                 $this->pdf->SetFont('Times','B',9);
