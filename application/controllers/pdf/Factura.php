@@ -106,7 +106,7 @@ class Factura extends CI_Controller {
 
                 $totalBolivianos = round($totalFactura*$tipoCambio,2);
                 $entera = intval($totalBolivianos);
-                $ctvs = intval(($totalBolivianos - $entera) * 100);
+                $ctvs = round(($totalBolivianos - $entera) * 100);
                 $ctvs = sprintf('%02d',$ctvs);
                 $this->pdf->SetFont('Times','B',9);
                 $this->pdf->SetFillColor(255,255,255);
