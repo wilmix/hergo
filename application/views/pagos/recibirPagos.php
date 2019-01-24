@@ -100,7 +100,7 @@
               </div>
               <div class="form-row align-items-center col-md-2">
                 <label>Fecha: </label>
-                <input  v-model="fechaPago" 
+                <input 
                         class="form-control fecha_pago" 
                         type="text" 
                         id="fechaPago" 
@@ -140,6 +140,24 @@
                     </option>
                   </select>
               </div>
+              <div v-if="tipoPago == 1">
+                <div class="form-row align-items-center col-md-2">
+                  <label >Banco:</label>
+                    <select class="form-control" 
+                        v-model="banco" 
+                        id="banco" 
+                        name="banco">
+                      <?php foreach ($bancos->result_array() as $fila): ?>
+                        <option value=<?= $fila['id'] ?>> <?= $fila['sigla'] ?> </option>
+                      <?php endforeach ?>
+                    </select>
+                </div>
+                <div class="form-row align-items-center col-md-2">
+                  <label>Vaucher: </label>
+                  <input type="text" class="form-control" v-model="transferencia" id="vaucher" name="vaucher">
+                </div>
+                
+              </div>
               <div v-if="tipoPago == 2">
                 <div class="form-row align-items-center col-md-2">
                   <label >Banco:</label>
@@ -156,13 +174,14 @@
                   <label>Vaucher: </label>
                   <input type="text" class="form-control" v-model="transferencia" id="vaucher" name="vaucher">
                 </div>
-                <div v-if="tipoPago == 3">
+                
+              </div>
+              <div v-if="tipoPago == 3">
                   <div class="form-row align-items-center col-md-2">
                     <label >Cheque N°: </label>
                     <input type="text" class="form-control" v-model="cheque" id="cheque" name="cheque">
                   </div>
-                </div>
-              </div> 
+                </div> 
             <div class="table">
               <table class="table table-hover table-striped table-bordered" id="paraPagar_table">
                 <thead>

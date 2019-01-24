@@ -413,7 +413,7 @@ function editarPago(idPago) {
             transferencia:res.cabecera.transferencia,
             cheque:res.cabecera.cheque,
             cliente:res.cabecera.cliente,
-            tipoPago: res.cabecera.tipoPago,
+            tipoPago: res.cabecera.idTipoPago,
                 options: [
                 { tipo: 'EFECTIVO', value: '1' },
                 { tipo: 'TRANSFERENCIA', value: '2' },
@@ -496,9 +496,10 @@ Vue.component('app-row',{
     },
     methods:{     
         remove:function(){
-            console.log(this.index);
+            //console.log(vmPago.porPagar);
             //vm.tasks.splice(this.index,1);
             this.$emit('removerfila',this.index);
+            vmPago.selectClient(vmPago.porPagar)
         },
         update:function(){
             this.error="";
@@ -589,7 +590,9 @@ var vmPago = new Vue({
                 this.guardar=false;
         },
         agregarPago:function(row){
+            //console.log(this.porPagar.map((el) => el.cliente));
             
+            //this.selectClient(this.porPagar)
             if(this.porPagar.length>0)
             {                
                 if(this.porPagar.map((el) => el.nFactura).indexOf(row.nFactura)>=0)
@@ -598,11 +601,16 @@ var vmPago = new Vue({
                     return false;
                 }
                 this.porPagar.push(row)
-                console.log(this.porPagar);                
+                //this.nombreCliente = row.nombreCliente
+                //this.cliente = row.cliente
+                this.selectClient(this.porPagar)
             }
             else
             {
                 this.porPagar.push(row)
+                //this.nombreCliente = row.nombreCliente
+                //this.cliente = row.cliente
+                this.selectClient(this.porPagar)
             }                      
             this.guardar=true;
         },
@@ -617,12 +625,14 @@ var vmPago = new Vue({
         editarPago(){
             nombreCliente = $("#cliente_factura").val();
             fechaPagoHoy = $("#fechaPago").val();
+            nombreCliente = $("#cliente_factura").val();
+            cliente = $("#idCliente_Pago").val();
             agregarcargando();
             let datos={
                 almacen: this.almacen,
                 fechaPago:fechaPagoHoy,
                 moneda:this.moneda,
-                cliente: this.cliente,
+                cliente: cliente,
                 totalPago:this.totalPago,
                 anulado:this.anulado,
                 glosa:this.glosa,
@@ -633,22 +643,23 @@ var vmPago = new Vue({
                 porPagar:this.porPagar,
                 guardar:true,
                 idPago:idPago,
-                nombreCliente:this.nombreCliente,
+                nombreCliente:nombreCliente,
             };
             let  numPago = this.numPago
-            console.log(datos);
-            let clientes = datos.porPagar.map(p=>p.cliente)
-           if (clientes == 0 || !datos.cliente || nombreCliente.length <= 0) {
+            quitarcargando()
+            //console.log(datos);
+            //let clientes = datos.porPagar.map(p=>p.cliente)
+            if (datos.cliente =='' || datos.nombreCliente == '') {
                 quitarcargando();
                 swal({
                     title: "No se puede guardar Pago",
                     text: "Seleccione cliente y pago",
                     type: "warning",        
                     allowOutsideClick: false,                                                                        
-                    }).then(function(){
-                        console.log('borrado')
-                    })
-                return false
+                 }).then(function(){
+                     console.log('error en cliente')
+                 })
+                 return false
             }
             if (!this.guardar) {
                 quitarcargando();
@@ -673,9 +684,11 @@ var vmPago = new Vue({
                         showCancelButton: false,
                         allowOutsideClick: false,  
                     }).then(
-                        function(result) {   
-                        agregarcargando();                 
-                        window.location.href = base_url("Pagos")
+                        function(result) {  
+                            agregarcargando();                 
+                            window.location.href = base_url("Pagos")
+                            let imprimir = base_url("pdf/Recibo/index/") + res.id;
+                            window.open(imprimir);
                     });
                 }
             }).fail(function( jqxhr, textStatus, error ) {
@@ -771,11 +784,13 @@ var vmPago = new Vue({
                 return false
             }
              nombreCliente = $("#cliente_factura").val();
+             cliente = $("#idCliente_Pago").val();
+
             let datos={
                 almacen: this.almacen,
                 fechaPago: fechaPagoHoy,
                 moneda:this.moneda,
-                cliente: idClientePago,
+                cliente: cliente,
                 totalPago:this.totalPago,
                 anulado:this.anulado,
                 glosa:this.glosa,
@@ -787,19 +802,20 @@ var vmPago = new Vue({
                 nombreCliente:nombreCliente,
                 numPago: this.numPago
             };
-           let clientes = datos.porPagar.map(p=>p.cliente)
-           if (clientes == 0 || !datos.cliente || nombreCliente.length <= 0) {
-                quitarcargando();
-                swal({
-                    title: "No se puede guardar Pago",
-                    text: "Seleccione cliente y pago",
-                    type: "warning",        
-                    allowOutsideClick: false,                                                                        
-                    }).then(function(){
-                        console.log('borrado')
-                    })
-                return false
-            }
+           
+          
+           if (datos.cliente =='' || datos.nombreCliente == '') {
+            quitarcargando();
+            swal({
+                title: "No se puede guardar Pago",
+                text: "Seleccione cliente y pago",
+                type: "warning",        
+                allowOutsideClick: false,                                                                        
+             }).then(function(){
+                 console.log('error en cliente')
+             })
+             return false
+           }
             if (!checkTipoCambio) {
                 swal("Error", "No se tiene tipo de cambio para esta Fecha", "error")
                 return false;
@@ -809,16 +825,26 @@ var vmPago = new Vue({
                 swal("Atencion", "Confime ediciòn de monto de pago","info");
                 return false
             }
+            cliente = $("#idCliente_Pago").val();
             
-            datosAjx=JSON.stringify(datos);
+            datos.cliente = cliente
 
+            ///la clave
+            let clientes2 = datos.porPagar.map(p=>p.cliente)
+            //console.log(clientes2);
+            cliRed = clientes2.reduce((a , b) => (a == b) ? a : false)
+            cliRed = (cliRed == false) ? 'varios' : cliRed
+            //console.log(cliRed)
+
+            console.log(datos);
+            datosAjax=JSON.stringify(datos);
             $.ajax({
                 type:"POST",
                 url: base_url('index.php/Pagos/guardarPagos'),
                 dataType: "json",
-                data: {d:datosAjx},
+                data: {d:datosAjax},
             }).done(function(res){
-                if(res.status=200)
+                if(res.status==200)
                 {
                     quitarcargando();
                     swal({
@@ -833,6 +859,18 @@ var vmPago = new Vue({
                         location.reload();
                         let imprimir = base_url("pdf/Recibo/index/") + res.id;
                         window.open(imprimir);
+                    });
+                } else if (res.status == false){
+                    quitarcargando();
+                    swal({
+                        title: 'Error',
+                        text: "Error al guardar el pago",
+                        type: 'error', 
+                        showCancelButton: false,
+                        allowOutsideClick: false,  
+                    }).then(
+                            function(result) {   
+                            console.log('error al guardar pago');
                     });
                 }
             }).fail(function( jqxhr, textStatus, error ) {
@@ -850,6 +888,24 @@ var vmPago = new Vue({
                     console.log(result)
                 });
             });
+        },
+        selectClient:function (datosCliente) {
+                if (datosCliente.length <= 0) {
+                    this.cliente = ''
+                this.nombreCliente = ''
+                } else {
+                    let clientes2 = datosCliente.map(p=>p.cliente)
+                    cliRed = clientes2.reduce((a , b) => (a == b) ? a : false)
+                    cliRed = (cliRed == false) ? 1 : cliRed
+                    let clientesNombres = datosCliente.map(p=>p.nombreCliente)
+                    clientesNombres = clientesNombres.reduce((a , b) => (a == b) ? a : false)
+                    clientesNombres = (clientesNombres == false) ? 'VARIOS' : clientesNombres
+                    this.cliente = cliRed
+                    this.nombreCliente = clientesNombres
+                    return false
+                }
+                
+
         },
         customFormatter(date) {
             return moment(date).format('DD MMMM YYYY');

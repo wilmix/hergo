@@ -312,11 +312,18 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->pagos=$data->porPagar;
 			
 			$idPago=$this->Pagos_model->storePago($pago);
-			$return=new stdClass();
-			$return->status=200;
-			$return->id=$idPago;
-			echo json_encode($return);
-
+			if ($idPago == false) {
+				$return=new stdClass();
+				$return->status=false;
+				echo json_encode($return);
+			} else {
+				$return=new stdClass();
+				$return->status=200;
+				$return->id=$idPago;
+				echo json_encode($return);
+			}
+			
+			
 		}
 		else
 		{
@@ -396,12 +403,15 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->banco=$data->banco;
 			$pago->transferencia = $data->transferencia;
 			$pago->gestion = $gestion;
-			if ($this->Pagos_model->editarPago($idPago,$pago,$data->porPagar)) {
+			$editarPago = $this->Pagos_model->editarPago($idPago,$pago,$data->porPagar);
+			if ($editarPago) {
 				$return=new stdClass();
 				$return->status=200;
+				$return->id = $editarPago;
 				echo json_encode($return);
 			} else {
-				die("PAGINA NO ENCONTRADA");
+				echo json_encode($pago);
+				return false;
 			}
 		}
 		else
