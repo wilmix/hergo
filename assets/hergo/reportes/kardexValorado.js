@@ -45,7 +45,7 @@ function retornarKardex() {
             $("#tablas").append(`   
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">${codigo} - ${descrip}<h3></h3>
+                    <h3 class="box-title">${codigo} - ${descrip} - ${unidad}<h3></h3>
                 </div>
                 <div class="box-body no-padding">
                     <table id="tablaKardex${i}" data-toggle="table"> 
