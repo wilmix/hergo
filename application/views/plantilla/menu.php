@@ -173,6 +173,19 @@
         </ul>
       </li>
       <li class="treeview">
+            <a href="#"><i class="fa fa-trademark"></i> <span>Reportes 3M</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+                
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li class="ventasTM"><a href="<?php echo base_url("reportes/ventasTM") ?>">Ventas TM</a></li>
+              <li class="inventarioTM"><a href="<?php echo base_url("reportes/inventarioTM") ?>">Inventario TM</a></li>
+              <!-- <li class=""><a href="#">Modificar Pagos</a></li> -->
+            </ul>
+          </li>
+      <li class="treeview">
         <a href="#"><i class="fa fa-users"></i> <span>Usuarios</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>

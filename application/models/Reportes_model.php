@@ -719,4 +719,36 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function showVentasTM ($ini, $fin, $alm="") 
+	{ 
+		$sql="SELECT fd.`ArticuloCodigo` codigo, fd.`ArticuloNombre` descripcion, f.`ClienteNit` nit, f.`ClienteFactura` razon, fd.`facturaCantidad` cantidad,
+		u.`Unidad` unidad,  fd.`facturaPUnitario` pu, f.`total` total, 'BOB' moneda, f.`fechaFac` fecha, '' ubigeo,  f.`nFactura` numDoc, 'FA' tipo,
+		'NO DEFINIDO' nodef, 'NO DEFINIDO' vend, 'NO DEFINIDO' zona,al.`ciudad`,  'NO DEFINIDO', '' regalo , f.`almacen`
+		FROM facturadetalle fd
+		inner join factura f on f.`idFactura` = fd.`idFactura`
+		inner join articulos a on a.`idArticulos` = fd.`articulo`
+		inner join marca m on m.`idMarca` = a.`idMarca`
+		INNER JOIN unidad u ON a.`idUnidad` = u.`idUnidad`
+		INNER JOIN almacenes al on al.`idalmacen` = f.`almacen`
+		WHERE f.`anulada` = 0 AND m.`idMarca` = 30 AND  f.`almacen` LIKE '%$alm' AND
+		f.`fechaFac` BETWEEN '$ini' AND '$fin' 
+		ORDER BY f.`almacen`, f.`fechaFac`, fd.`ArticuloCodigo`, f.`ClienteFactura`
+		";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+	public function showInventarioTM () 
+	{ 
+		$sql="SELECT a.`CodigoArticulo` codigo, a.`Descripcion` descripcion, round(sa.`saldo`,2) cantidad, u.`Unidad`, DATE_FORMAT(NOW(), '%Y-%m-%d') fecha, alm.`almacen`
+		FROM saldoarticulos sa
+		INNER JOIN articulos a ON a.`idArticulos` = sa.`idArticulo`
+		INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
+		INNER JOIN marca m ON m.`idMarca` = a.`idMarca`
+		INNER JOIN almacenes alm ON alm.`idalmacen` = sa.`idAlmacen`
+		WHERE m.`idMarca` = 30 AND sa.`saldo`<> 0
+		ORDER BY a.`CodigoArticulo`
+		";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 }
