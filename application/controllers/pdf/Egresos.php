@@ -69,7 +69,7 @@ class Egresos extends CI_Controller {
                 $this->pdf->Ln(5);
             }
             $entera = intval($totalEgreso);
-            $ctvs = intval(($totalEgreso - $entera) * 100);
+            $ctvs = round(($totalEgreso - $entera) * 100);
             $ctvs = ($ctvs == 0) ? '00' : $ctvs;
                 $this->pdf->SetFont('Arial','B',8);
                 $this->pdf->SetFillColor(255,255,255);
@@ -100,6 +100,9 @@ class Egresos extends CI_Controller {
                 $this->pdf->Ln(5);
             }
             $totalBolivianos = $totalEgreso*$tipoCambio;
+            $entera = intval( $totalBolivianos);
+            $ctvs = round(($totalBolivianos - $entera) * 100);
+            $ctvs = ($ctvs == 0) ? '00' : $ctvs;
             $this->pdf->SetFont('Times','B',10);
             $this->pdf->SetFillColor(255,255,255);
             $this->pdf->Cell(175,5,'TOTAL $u$',0,0,'R',1);
@@ -110,8 +113,11 @@ class Egresos extends CI_Controller {
             $this->pdf->Cell(20,5,number_format($totalBolivianos, 2, ".", ","),0,1,'R',1); 
             $this->pdf->SetFont('Courier','B',9);
             $this->pdf->Cell(10,6,'SON: ',0,0,'L',1);
-            $literal = NumeroALetras::convertir($totalBolivianos,'BOLIVIANOS','CENTAVOS');
-            $this->pdf->Cell(185,6,$literal,0,0,'l',1);
+            $entera = intval( $totalBolivianos);
+            $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';
+            $this->pdf->Cell(186,6,$literal,0,0,'l',1);
+            //$literal = NumeroALetras::convertir($totalBolivianos,'BOLIVIANOS','CENTAVOS');
+            //$this->pdf->Cell(185,6,$literal,0,0,'l',1);
         } 
         //guardar
       $this->pdf->Output($egreso->sigla . ' - ' . $egreso->n . ' - ' . $year, 'I');
