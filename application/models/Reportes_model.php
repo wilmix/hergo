@@ -27,7 +27,7 @@ class Reportes_model extends CI_Model
 		$sql="SELECT f.`cliente`, c.`nombreCliente`, c.`documento`
 			FROM factura f
 				INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
-				WHERE YEAR(f.`fechaFac`) BETWEEN (YEAR(NOW())-2) AND YEAR(NOW())
+				WHERE YEAR(f.`fechaFac`) BETWEEN (YEAR(NOW())-5) AND YEAR(NOW())
 				GROUP BY f.`cliente`
 				ORDER BY c.`nombreCliente`";
 		$query=$this->db->query($sql);		
