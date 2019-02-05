@@ -36,9 +36,8 @@ $(document).ready(function () {
                 'Hoy': [moment(), moment()],
                 "Mes Actual": [moment().subtract(0, 'month').startOf('month'), moment().subtract(0, 'month').endOf('month')],
                 "Hace un mes": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                'Hace dos meses': [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
-                'Hace tres meses': [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],
                 'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
+                'Hace un Año': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
             }
         }, cb);
 
@@ -242,9 +241,12 @@ function rowStyle(row, index) {
 function tituloReporte() {
     almText = $('#almacen_filtro').find(":selected").text();
     tipoText = $('#tipo_filtro').find(':selected').text();
+    let ini = iniciofecha.format('DD/MM/YYYY')
+    let fin = finfecha.format('DD/MM/YYYY')
+
     $('#tituloAlmacen').text(almText);
     $('#tituloTipo').text(tipoText);
-    $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
+    $('#ragoFecha').text("DEL " + ini + "  AL  " + fin);
 
 }
 

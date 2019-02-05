@@ -66,7 +66,7 @@
               <span class="input-group-addon" id="">
                   <span class="fa fa-calendar"></span>
               </span>
-                <input type="text" class="form-control" value="" id="fechaFactura" aria-describedby="sizing-addon2" ><!--disabled-->
+                <input type="text" class="form-control" value="" id="fechaFactura" aria-describedby="sizing-addon2" disabled="disabled"><!--disabled-->
               <span class="input-group-addon">
                   <span class="fa fa-qrcode"></span>
               </span>
