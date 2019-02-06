@@ -600,10 +600,13 @@ class Egresos extends CI_Controller
 
 			$egreso->autor = $this->session->userdata('user_id');
 			//$egreso->fecha = date('Y-m-d H:i:s');
+			$gestionFechaEgreso = date("Y", strtotime($egreso->fechamov)); 
 
-			$gestionUpdate = date("Y", strtotime($egreso->fechamov));
+			$gestionUpdate = $this->Egresos_model->gestionUpdate($idEgreso)->gestion; 
 			$gestionActual = $this->Egresos_model->getGestionActual()->gestionActual;
-			if ($gestionUpdate != $gestionActual) {
+			//echo json_encode($gestionEgreso. '  -  actual ' . $gestionUpdate);
+			//return false;
+			if ($gestionUpdate != $gestionFechaEgreso) {
 				echo json_encode (false);
 				return false;
 			}

@@ -608,6 +608,18 @@ class Egresos_model extends CI_Model
         else
             return false;      
     }
+    public function gestionUpdate($id)
+    {
+         $sql="SELECT e.`gestion`
+         FROM egresos e
+         WHERE  e.`idegresos` = '$id' 
+         LIMIT 1";
+        $query=$this->db->query($sql);  
+        if($query->num_rows() > 0 )
+            return $query->row();
+        else
+            return false;      
+    }
 
     public function anularRecuperarMovimiento_model($datos)
     {        
