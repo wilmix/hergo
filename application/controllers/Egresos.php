@@ -601,8 +601,13 @@ class Egresos extends CI_Controller
 			$egreso->autor = $this->session->userdata('user_id');
 			//$egreso->fecha = date('Y-m-d H:i:s');
 
-			$gestion = date("Y", strtotime($egreso->fechamov));
-			$egreso->gestion = $gestion;
+			$gestionUpdate = date("Y", strtotime($egreso->fechamov));
+			$gestionActual = $this->Egresos_model->getGestionActual()->gestionActual;
+			if ($gestionUpdate != $gestionActual) {
+				echo json_encode (false);
+				return false;
+			}
+			//$egreso->gestion = $gestion;
 			$egreso->articulos = json_decode($this->security->xss_clean($this->input->post('tabla')));
 
 			$id = $this->Egresos_model->updateEgreso($idEgreso, $egreso);

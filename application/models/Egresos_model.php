@@ -599,6 +599,15 @@ class Egresos_model extends CI_Model
         else
             return false;      
     }
+    public function getGestionActual()
+    {
+         $sql="SELECT gestionActual FROM config LIMIT 1";
+        $query=$this->db->query($sql);  
+        if($query->num_rows() > 0 )
+            return $query->row();
+        else
+            return false;      
+    }
 
     public function anularRecuperarMovimiento_model($datos)
     {        
