@@ -708,6 +708,12 @@ class Ingresos extends CI_Controller
 			$ingreso->estado = 0;
 			$ingreso->articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
 			
+			$gestionFechaIngreso = date("Y", strtotime($ingreso->fechamov)); 
+			$gestionUpdate = $this->Ingresos_model->gestionUpdate($idIngresos)->gestion; 
+
+			if ($gestionUpdate != $gestionFechaIngreso) {
+				die(false);
+			}
 
 			$tipocambio=$this->Ingresos_model->getTipoCambio($ingreso->fechamov);
 			$ingreso->tipoCambio = $tipocambio->tipocambio;
@@ -723,7 +729,7 @@ class Ingresos extends CI_Controller
         	}
 			else
 			{				
-				echo json_encode("false");
+				echo json_encode(false);
 			}			
 		}
 		else

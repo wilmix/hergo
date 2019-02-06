@@ -608,7 +608,7 @@ class Egresos extends CI_Controller
 			//return false;
 			if ($gestionUpdate != $gestionFechaEgreso) {
 				echo json_encode (false);
-				return false;
+				die (false);
 			}
 			//$egreso->gestion = $gestion;
 			$egreso->articulos = json_decode($this->security->xss_clean($this->input->post('tabla')));

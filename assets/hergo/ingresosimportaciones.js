@@ -507,19 +507,27 @@ function updateIngreso()
             contentType: false,
             processData: false,
             success: function (returndata) {
-                console.log(returndata);
-                console.log(parseInt(returndata));
-                swal({
-                    title: "Ingreso modificado!",
-                    text: "El ingreso se modificó con éxito",
-                    type: "success",        
-                    allowOutsideClick: false,                                                                        
-                    }).then(function(){
-                        console.log(returndata)
-                        window.location.href=base_url("Ingresos");
-                        let imprimir = base_url("pdf/Ingresos/index/") + returndata;
-                        window.open(imprimir);
-                    })
+                if (returndata) {
+                    swal({
+                        title: "Ingreso modificado!",
+                        text: "El ingreso se modificó con éxito",
+                        type: "success",        
+                        allowOutsideClick: false,                                                                        
+                        }).then(function(){
+                            console.log(returndata)
+                            window.location.href=base_url("Ingresos");
+                            let imprimir = base_url("pdf/Ingresos/index/") + returndata;
+                            window.open(imprimir);
+                        })
+                    return false
+                } else {
+                    swal(
+                        'Error',
+                        'Error al actualizar , revise los datos e intente nuevamente',
+                        'error'
+                    )
+                    return false
+                }
             },
             error : function (returndata) {
                 swal(
@@ -634,7 +642,7 @@ function tablatoarray()
                             $(datos[6]).inputmask('unmaskedvalue'),
                             $(datos[7]).inputmask('unmaskedvalue'),
                         ))
-        console.log(datos);
+        //console.log(datos);
     })
     return(tabla)
     console.log(filas)

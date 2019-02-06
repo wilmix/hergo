@@ -368,12 +368,12 @@ function actualizarMovimiento() {
                     }).then((result) => {
                         window.location.href = base_url("Egresos")
                         let imprimir = base_url("pdf/Egresos/index/") + data.respuesta.id;
-                            window.open(imprimir)
+                        window.open(imprimir)
                     })
                 } else {
                     swal(
                         'Error',
-                        'Error al actualizar los datos, intente nuevamente',
+                        'Error al modificar, revise los datos e intente nuevamente',
                         'error'
                     )
                 }

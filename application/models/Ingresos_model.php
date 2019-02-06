@@ -21,6 +21,18 @@ class Ingresos_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
     }
+    public function gestionUpdate($id)
+    {
+         $sql="SELECT i.`gestion`
+            FROM ingresos i
+            WHERE i.`idIngresos` = '$id'
+            LIMIT 1";
+        $query=$this->db->query($sql);  
+        if($query->num_rows() > 0 )
+            return $query->row();
+        else
+            return false;      
+    }
 	public function mostrarIngresos($id=null,$ini=null,$fin=null,$alm="",$tin="")
 	{
 		if($id==null)
