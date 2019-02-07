@@ -656,6 +656,12 @@ function mostrarDetalle(res) {
                 sortable: true,
             },
             {
+                field: 'Sigla',
+                title: 'Uni.',
+                align: 'center',
+                sortable: true,
+            },
+            {
                 field: 'cantidad',
                 title: "Cantidad",
                 align: 'right',

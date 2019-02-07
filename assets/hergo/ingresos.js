@@ -613,6 +613,12 @@ function mostrarDetalle(res) {
                 sortable: true,
             },
             {
+                field: 'Unidad',
+                title: 'Uni.',
+                align: 'center',
+                width: '10%',
+            },
+            {
                 field: '',
                 title: "P/U Documento",
                 align: 'right',
@@ -620,6 +626,7 @@ function mostrarDetalle(res) {
                 sortable: true,
                 formatter: punitariofac,
             },
+            
             {
                 field: 'totaldoc',
                 title: "Total Documento",
