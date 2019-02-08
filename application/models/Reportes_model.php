@@ -76,10 +76,10 @@ class Reportes_model extends CI_Model
 	{ 
 		$sql="SELECT id, almacen, cliente, lote, nFactura, fechaFac,
 		SUM(total) total,
-		SUM(montoPagado) montoPagado
+		SUM(montoPagado) montoPagado, vendedor, plazopago
 		FROM
 		(
-		SELECT f.`idFactura` id, a.`almacen`, f.`ClienteFactura` cliente, f.`lote`, f.`nFactura`, f.`fechaFac`, f.`total`, IFNULL(pr.monto,0) montoPagado
+			SELECT f.`idFactura` id, a.`almacen`, f.`ClienteFactura` cliente, f.`lote`, f.`nFactura`, f.`fechaFac`, f.`total`, IFNULL(pr.monto,0) montoPagado, CONCAT(u.`first_name`, ' ', u.`last_name`) vendedor, e.`plazopago`
 		FROM factura f
 		LEFT JOIN 
 		(SELECT pf.`idPago`, pf.`idFactura`, SUM(pf.`monto`) monto
@@ -88,6 +88,9 @@ class Reportes_model extends CI_Model
 		GROUP BY pf.`idFactura`) pr
 		ON f.`idFactura` = pr.idFactura
 		INNER JOIN almacenes a ON a.`idalmacen` = f.`almacen`
+		INNER JOIN factura_egresos fe ON fe.`idFactura` = f.`idFactura`
+		INNER JOIN egresos e ON e.`idegresos` = fe.`idegresos`
+		INNER JOIN users u ON u.`id` = e.`vendedor`
 		WHERE f.`anulada` = 0 
 		AND f.`pagada` <>1 
 		AND f.`almacen` LIKE '%$almacen'
