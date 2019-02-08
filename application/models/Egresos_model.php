@@ -519,7 +519,8 @@ class Egresos_model extends CI_Model
     public function ListarparaFacturacion($ini,$fin,$alm,$tipo)
     {        
         $sql="SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, c.nombreCliente, sum(d.total) total,  e.estado,e.fecha, 
-            CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, 
+            CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, m.sigla monedasigla, -- e.obs, 
+            e.anulado, e.plazopago, 
             e.clientePedido,c.idcliente,sum(d.total)/tc.tipocambio totalsus , tc.tipocambio
             FROM egresos e
             INNER JOIN egredetalle d

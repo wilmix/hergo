@@ -1,4 +1,4 @@
-let iniciofecha = moment().subtract(0, 'year').startOf('year')
+let iniciofecha = moment().subtract(10, 'year').startOf('year')
 let finfecha = moment().subtract(0, 'year').endOf('year')
 let hoy = moment().format('DD-MM-YYYY')
 let $table
@@ -83,7 +83,7 @@ $(document).ready(function () {
         autoGroup: true,
         autoUnmask: true
     });
-    let start = moment().subtract(0, 'year').startOf('year')
+    let start = moment().subtract(10, 'year').startOf('year')
     let end = moment().subtract(0, 'year').endOf('year')
     $(function () {
         moment.locale('es');
@@ -341,8 +341,8 @@ function retornarTablaFacturacion() {
         $('#tfacturas').bootstrapTable({
             data: res,
             striped: true,
-            pagination: true,
-            pageSize: "50",
+            //pagination: true,
+            //pageSize: "1000",
             search: true,
             filter: true,
             showColumns: true,
@@ -408,13 +408,21 @@ function retornarTablaFacturacion() {
                     searchable: false,
                     sortable: true,
                 },
-                {   
-                    field: "estado",
-                    title: "Estado",
+                {
+                    field: "plazopago",
+                    title: "Plazo Pago",
                     sortable: true,
-                    align: 'center',
+                    visible: false,
                     searchable: false,
-                    formatter: operateFormatter2,
+                    align: 'center',
+                    formatter: formato_fecha_corta,
+                },
+                {
+                    field: "clientePedido",
+                    title: "Pedido",
+                    visible: false,
+                    searchable: false,
+                    align: 'left',
                 },
                 {
                     field: "autor",
@@ -425,18 +433,19 @@ function retornarTablaFacturacion() {
                         data: datosselect[0]
                     }
                 },
-                {
-                    field: "fecha",
-                    title: "Fecha",
+                {   
+                    field: "estado",
+                    title: "Estado",
                     sortable: true,
-                    visible: false,
-                    searchable: false,
                     align: 'center',
+                    searchable: false,
+                    formatter: operateFormatter2,
                 },
                 {
                     title: 'Acciones',
                     align: 'center',
                     searchable: false,
+                    visible: true,
                     events: operateEvents,
                     formatter: operateFormatter
                 }]

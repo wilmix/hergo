@@ -32,6 +32,7 @@
           id="tfacturas"
           data-toolbar="#toolbar2">              
         </table>
+        <hr>
         <div class="form-group row">
           <div class="col-md-6 col-xs-12">
             <div class = "input-group col-md-12 col-xs-12">
