@@ -26,6 +26,8 @@
             $almDes = $this->datos['almDes'];
             $nIng = $this->datos['nIng'];
             $vendedor = $this->datos['nVendedor'];
+            
+
 
             //TITULO
             $this->SetXY(10,10);
@@ -133,6 +135,8 @@
             $userName = $this->datos['userName'];
             $autor = $this->datos['autor'];
             $vendedor = $this->datos['nVendedor'];
+            $saldoDeudor = $this->datos['saldoDeudor'];
+            $fechaPriFac = $saldoDeudor ? ' - ' . date('d/m/Y',strtotime($this->datos['fechaPrimeraFac'])): '';
             $this->SetLineWidth(0.5);
             $this->Line(10,127,206,127);
             $this->SetY(-150);
@@ -162,6 +166,14 @@
             $this->Cell(40, 5, '', 0,0,'L');
             $this->Cell(30,5, 'C.I.: .......................................................................',0,0,'L');
             $this->Cell(45, 5, '',0,0,'L');
+
+            $this->SetXY(10,-135);
+            $this->SetFont('Arial','I', 9);
+            $this->Cell(30,5, 'Saldo Deudor: ',0,0,'L',1);
+
+            $this->SetXY(35,-135);
+            $this->SetFont('Arial','I', 9);
+            $this->Cell(30,5, number_format($saldoDeudor, 2, ".", ",") . ' '.  $fechaPriFac,0,0,'L',1);
 
             $this->SetXY(160,-135);
             $this->SetFont('Arial','BI', 9);

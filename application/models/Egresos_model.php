@@ -734,4 +734,16 @@ class Egresos_model extends CI_Model
             return $id;
         }
     }
+    public function saldoDeudorCliente($idCliente)
+    {
+         $sql="SELECT f.`fechaFac`, (SUM(f.`total`) - IFNULL(0,SUM(pf.`monto`))) AS saldoDeudor
+         FROM factura f 
+         LEFT JOIN pago_factura pf ON pf.`idFactura` = f.`idFactura`
+         WHERE f.`cliente` = '$idCliente'
+         AND (f.`pagada` = 0 OR f.`pagada` = 2)
+         AND f.`anulada` = 0
+         ORDER BY f.`fechaFac`";
+        $query=$this->db->query($sql);
+        return $query;        
+    }
 }

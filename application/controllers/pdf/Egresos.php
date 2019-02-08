@@ -9,6 +9,9 @@ class Egresos extends CI_Controller {
     $this->load->model('Egresos_model');
     $lineas = $this->Egresos_model->mostrarDetalle($id);
     $egreso = $this->Egresos_model->mostrarEgresos($id)->row();
+    $idCliente = $egreso->idcliente;
+    $saldoDeudor = $this->Egresos_model->saldoDeudorCliente($idCliente)->row();
+
     $params = array(
         'almacen' => $egreso->almacen,
         'autor' => $egreso->autor,
@@ -34,11 +37,13 @@ class Egresos extends CI_Controller {
         'userName' => $this->session->userdata['nombre'],
         'almDirec'=>$egreso->almDirec,
         'almFono'=>$egreso->almFono,
+        'saldoDeudor'=>$saldoDeudor->saldoDeudor,
+        'fechaPrimeraFac'=>$saldoDeudor->fechaFac,
 
     );
     $year = date('y',strtotime($egreso->fechamov));
     /*echo '<pre>';
-    print_r($egreso);
+    print_r($idCliente);
     echo '</pre>';*/
     
     $this->load->library('Egresos_lib', $params);
@@ -120,6 +125,6 @@ class Egresos extends CI_Controller {
             //$this->pdf->Cell(185,6,$literal,0,0,'l',1);
         } 
         //guardar
-      $this->pdf->Output($egreso->sigla . ' - ' . $egreso->n . ' - ' . $year, 'I');
+      $this->pdf->Output($egreso->sigla . ' - ' . $egreso->n . ' - ' . $year.'.pdf', 'I');
   }
 }
