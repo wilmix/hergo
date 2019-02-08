@@ -168,6 +168,12 @@ function retornarTablaFacturacion()
                 }
             },
             {
+                field:'emisor',
+                title:"Emitido por:",
+                align: 'center',
+                visible:false,
+            },
+            {
                 field:'fecha',
                 title:"Fecha",
                 align:'center',
