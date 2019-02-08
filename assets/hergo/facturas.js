@@ -349,6 +349,13 @@ function retornarTablaFacturacion() {
             strictSearch: true,
             columns: [
                 {
+                    field: 'almacen',
+                    title: 'Almacen',
+                    searchable: false,
+                    visible: (alm == '' ? true : false),
+                    sortable: true,
+                },
+                {
                     field: 'n',
                     title: 'N',
                     align: 'center',
