@@ -45,6 +45,7 @@ class Reportes extends CI_Controller
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.js'),
 				base_url('assets/plugins/table-boot/plugin/FileSaver.min.js'),
+				base_url('assets/plugins/table-boot/js/xlsx.full.min.js'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
         		base_url('assets/plugins/daterangepicker/moment.min.js'),
         		base_url('assets/plugins/slimscroll/slimscroll.min.js'),        		

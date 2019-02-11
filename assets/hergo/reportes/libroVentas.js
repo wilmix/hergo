@@ -9,6 +9,14 @@ $(document).ready(function () {
     autoUnmask: true
   });
 
+  $('#export').click(function () {
+    $('#tablaLibroVentas').tableExport({
+      type:'excel',
+    fileName: 'InventariosTM',
+    numbers: {output : false}
+    })
+  });
+
   var start = moment().subtract(1, 'month').startOf('month')
   var end = moment().subtract(1, 'month').endOf('month')
 
@@ -88,7 +96,7 @@ function retornarLibroVentas() {
       data: res,
       striped: true,
       pagination: true,
-      pageSize: "100",
+      pageSize: "1000",
       search: true,
       showColumns: true,
       filter: true,

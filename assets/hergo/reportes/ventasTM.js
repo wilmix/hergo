@@ -9,6 +9,14 @@ $(document).ready(function () {
     autoUnmask: true
   });
 
+  $('#export').click(function () {
+    $('#tablaTMventas').tableExport({
+      type:'excel',
+      fileName: 'VentasTM',
+      numbers: {output : false}
+    })
+  });
+
   var start = moment().subtract(1, 'month').startOf('month')
   var end = moment().subtract(1, 'month').endOf('month')
 

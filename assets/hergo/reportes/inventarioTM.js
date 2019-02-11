@@ -1,8 +1,19 @@
 $(document).ready(function () {
     returnInventarioTM()
+    let $table = $('#tablaTMinventario');
+  console.log($table);
+
+//let $table = $('#tablaTMinventario');
+//console.log($table);
+$('#export').click(function () {
+  $('#tablaTMinventario').tableExport({
+    type:'excel',
+    fileName: 'InventariosTM',
+    numbers: {output : false}
+  })
+});
+
 })
-
-
 function returnInventarioTM() {
     agregarcargando();
     $.ajax({
@@ -12,7 +23,7 @@ function returnInventarioTM() {
       data: {},
     }).done(function (res) {
       quitarcargando();
-      console.log(res);
+      //console.log(res);
       //datosselect = restornardatosSelect(res);
       $("#tablaTMinventario").bootstrapTable('destroy');
       $("#tablaTMinventario").bootstrapTable({
@@ -41,11 +52,14 @@ function returnInventarioTM() {
             field: 'cantidad',
             title: 'Cantidad',
             sortable: true,
+            align: 'right'
           },
           {
             field: 'Unidad',
             title: 'Unidad',
             sortable: true,
+            align: 'center'
+
           },
           {
             field: 'fecha',
@@ -57,7 +71,7 @@ function returnInventarioTM() {
           {
             field: 'almacen',
             title: 'Almacen',
-            visible: true
+            visible: false
           },
         ]
       });
