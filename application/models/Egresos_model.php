@@ -736,13 +736,29 @@ class Egresos_model extends CI_Model
     }
     public function saldoDeudorCliente($idCliente)
     {
-         $sql="SELECT f.`fechaFac`, (SUM(f.`total`) - IFNULL(0,SUM(pf.`monto`))) AS saldoDeudor
-         FROM factura f 
-         LEFT JOIN pago_factura pf ON pf.`idFactura` = f.`idFactura`
-         WHERE f.`cliente` = '$idCliente'
-         AND (f.`pagada` = 0 OR f.`pagada` = 2)
-         AND f.`anulada` = 0
-         ORDER BY f.`fechaFac`";
+         $sql="SELECT fechaFac,(SUM(total) - SUM(montoPagado)) saldoDeudor
+         FROM
+         (
+         SELECT f.`idFactura` id, a.`almacen`, f.`ClienteFactura` cliente, f.`lote`, f.`nFactura`, f.`fechaFac`, f.`total`, IFNULL(pr.monto,0) montoPagado, CONCAT(u.`first_name`, ' ', u.`last_name`) vendedor, e.`plazopago`
+                 FROM factura f
+                 LEFT JOIN 
+                 (SELECT pf.`idPago`, pf.`idFactura`, SUM(pf.`monto`) monto
+                 FROM pago_factura pf 
+                 INNER JOIN pago p ON pf.`idPago` = p.`idPago` AND p.`anulado` = 0
+                 GROUP BY pf.`idFactura`) pr
+                 ON f.`idFactura` = pr.idFactura
+                 INNER JOIN almacenes a ON a.`idalmacen` = f.`almacen`
+                 INNER JOIN factura_egresos fe ON fe.`idFactura` = f.`idFactura`
+                 INNER JOIN egresos e ON e.`idegresos` = fe.`idegresos`
+                 INNER JOIN users u ON u.`id` = e.`vendedor`
+                 WHERE f.`anulada` = 0 
+                 AND f.`pagada` <>1 
+                 AND f.`cliente` = $idCliente
+                 -- AND f.`almacen` LIKE '%1'
+                 AND  f.`nFactura` > 0
+                 GROUP BY f.`idFactura` 
+                 ORDER BY f.`fechaFac`
+         ) tb";
         $query=$this->db->query($sql);
         return $query;        
     }

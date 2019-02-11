@@ -148,27 +148,31 @@
             
             $this->Ln(5);
             $this->SetY(-145);
-            $this->SetFont('Arial','I', 9);
+            $this->SetFont('Arial','BI', 9);
             $this->Cell(25,5, 'Emitido por:',0,0,'L',1);
-            $this->Cell(40, 5, utf8_decode($vendedor), 0,0,'L');
             $this->SetFont('Arial','I', 9);
+            $this->Cell(40, 5, utf8_decode($vendedor), 0,0,'L');
+            $this->SetFont('Arial','BI', 9);
             $this->Cell(20,5, 'Autorizado:',0,0,'L');
+            $this->SetFont('Arial','I', 9);
             $this->Cell(40, 5, '', 0,0,'L');
             $this->Cell(30,5, 'Nombre: ................................................................',0,0,'L');
             $this->Cell(45, 5, '', 0,0,'L');
 
             $this->SetY(-140);
-            $this->SetFont('Arial','I', 9);
+            $this->SetFont('Arial','BI', 9);
             $this->Cell(25,5, 'Fecha de Pago: ',0,0,'L');
-            $this->Cell(40, 5, $plazoPago, 0,0,'L');
             $this->SetFont('Arial','I', 9);
+            $this->Cell(40, 5, $plazoPago, 0,0,'L');
+            $this->SetFont('Arial','BI', 9);
             $this->Cell(20,5, 'Nombre:',0,0,'L');
             $this->Cell(40, 5, '', 0,0,'L');
+            $this->SetFont('Arial','I', 9);
             $this->Cell(30,5, 'C.I.: .......................................................................',0,0,'L');
             $this->Cell(45, 5, '',0,0,'L');
 
             $this->SetXY(10,-135);
-            $this->SetFont('Arial','I', 9);
+            $this->SetFont('Arial','BI', 9);
             $this->Cell(30,5, 'Saldo Deudor: ',0,0,'L',1);
 
             $this->SetXY(35,-135);
@@ -181,7 +185,7 @@
 
 
                 //NUMERO PIED PAGINA
-                $this->SetY(-138);
+                $this->SetY(-135);
                 $this->SetFont('Arial','I', 8);
                 $this->Cell(0,10, 'Pagina '.$this->PageNo().'/{nb}',0,0,'C' );
         }

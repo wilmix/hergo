@@ -217,12 +217,12 @@
             <div class="row">
               <div class="col-xs-12">
               <?php if (isset($idPago)): ?>
-                  <button type="button" class="btn btn-primary" id="editarPago" @click="editarPago">Modificar Pago</button>  
+                  <button type="button" class="btn btn-primary" id="editarPago" @click.once="editarPago">Modificar Pago</button>  
                   <button type="button" class="btn btn-warning" id="anularPago" @click="anularPago">Anular Movimiento</button>
                   <button type="button" class="btn btn-danger" id="cancelarPago" @click="cancelarPago">Cancelar Pago</button>
                 <?php else: ?>
-                  <button type="button" class="btn btn-primary" id="guardarPago" @click="guardarPago">Guardar Pago</button> 
-                  <button type="button" class="btn btn-danger" id="cancelarPago" @click="cancelarPago">Cancelar Pago</button>
+                  <button type="button" class="btn btn-primary" id="guardarPago" @click.once="guardarPago">Guardar Pago</button> 
+                  <button type="button" class="btn btn-danger" id="cancelarPago" @click.once="cancelarPago">Cancelar Pago</button>
                 <?php endif ?>
               </div>
             </div>
