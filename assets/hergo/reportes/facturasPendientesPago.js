@@ -133,6 +133,13 @@ function retornarFacturasPendientes()
                     width:'100px',
                     formatter: operateFormatter3,
                 },
+                {
+                    field: 'vendedor',
+                    title: 'Responsable',
+                    sortable: true,
+                    width:'200px',
+                    align: 'center',
+                },
                 
             ]
         });
