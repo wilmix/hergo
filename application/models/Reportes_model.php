@@ -164,7 +164,7 @@ class Reportes_model extends CI_Model
 		INNER JOIN almacenes a ON a.`idalmacen` = f.`almacen`
 		WHERE fechaFac BETWEEN '$ini' AND '$fin'
 		AND f.almacen LIKE '%$alm'
-		ORDER BY  a.`idalmacen`,df.manual, nFactura
+		ORDER BY  a.`idalmacen`,df.manual desc, nFactura
 		";
 		
 		$query=$this->db->query($sql);		

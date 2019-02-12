@@ -104,12 +104,7 @@ function retornarLibroVentas() {
       showFooter: true,
       footerStyle: footerStyle,
       columns: [
-        {
-          field: 'almacen',
-          title: 'Almacen',
-          visible: alm == '' ? true : false,
-          sortable: true,
-        },
+        
         {
           field: '',
           title: 'E',
@@ -239,7 +234,13 @@ function retornarLibroVentas() {
             data: ["MAN", "COM"]
           },
           formatter: tipoFactura
-        }
+        },
+        {
+          field: 'almacen',
+          title: 'Almacen',
+          visible: alm == '' ? true : false,
+          sortable: true,
+        },
       ]
     });
   }).fail(function (jqxhr, textStatus, error) {
