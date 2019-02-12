@@ -91,7 +91,7 @@ class NumeroALetras
         }
         if (intval($miles) > 0) {
             if ($miles == '001') {
-                $converted .= 'MIL ';
+                $converted .= 'UN MIL ';
             } else if (intval($miles) > 0) {
                 $converted .= sprintf('%sMIL ', self::convertGroup($miles));
             }

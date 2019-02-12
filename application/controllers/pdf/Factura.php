@@ -87,12 +87,7 @@ class Factura extends CI_Controller {
                 $this->pdf->Cell(19,5,number_format($totalFactura, 2, ".", ","),'T',1,'R',1); 
                 $this->pdf->SetFont('Courier','B',9);
                 $this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
-                if ($entera < 2000 && $entera >999) {
-                    $literal = 'UN '. NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';
-                } else {
-                    $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';
-                }
-                
+                $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';
                 $this->pdf->Cell(188,6,$literal,0,0,'l',1);
 
             } else {
@@ -125,12 +120,7 @@ class Factura extends CI_Controller {
                 $this->pdf->Cell(19,5,number_format($totalBolivianos, 2, ".", ","),0,1,'R',1); 
                 $this->pdf->SetFont('Courier','B',9);
                 $this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
-                if ($entera < 2000 && $entera >999) {
-                    $literal = 'UN '. NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';
-                } else {
-                    $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';
-                }
-                
+                $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';
                 $this->pdf->Cell(188,6,$literal,0,0,'l',1);
             }
             
