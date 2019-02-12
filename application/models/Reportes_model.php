@@ -152,18 +152,19 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarLibroVentas($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
-	{ //cambiar la consulta
+	public function mostrarLibroVentas($ini=null,$fin=null,$alm="") 
+	{
 		$sql="SELECT fechaFac, nFactura, df.autorizacion, anulada, c.documento, c.nombreCliente,
 		IF(f.`anulada`=1,0,f.`total`) sumaDetalle,
 		IF(anulada = 1 , 0 , ROUND ((f.total*13/100),2))  AS debito, 
-		IFNULL(codigoControl, 0) AS codigoControl , df.manual
+		IFNULL(codigoControl, 0) AS codigoControl , df.manual, f.almacen idAlm, a.`almacen`, a.`ciudad`
 		FROM factura AS f
 		INNER JOIN datosfactura AS df ON df.idDatosFactura=f.lote
 		INNER JOIN clientes AS c ON c.idCliente = f.cliente
+		INNER JOIN almacenes a ON a.`idalmacen` = f.`almacen`
 		WHERE fechaFac BETWEEN '$ini' AND '$fin'
-		AND f.almacen LIKE '$alm'
-		ORDER BY  df.manual, nFactura
+		AND f.almacen LIKE '%$alm'
+		ORDER BY  a.`idalmacen`,df.manual, nFactura
 		";
 		
 		$query=$this->db->query($sql);		
@@ -207,23 +208,28 @@ class Reportes_model extends CI_Model
 		AND df.manual=0
 		union
 		/*Suma Total*/
-		SELECT IFNULL(NULL, 'Total') ,ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)),2) AS sumaTotal
-		FROM factura AS f
-		INNER JOIN datosfactura AS df ON df.idDatosFactura=f.lote
-		INNER JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura
-		WHERE fechaFac BETWEEN '$ini' AND '$fin'
-		AND f.almacen LIKE '%$alm'
-		AND anulada=0
+		SELECT IFNULL(NULL, 'Total'), ROUND(SUM(f.`total`),2)
+		FROM factura f
+		WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin'
+		AND f.`almacen` LIKE '%$alm'
+		AND f.`anulada` = 0
+
 		union
+		SELECT IFNULL(NULL, 'Total'), ROUND(SUM(f.`total` *13/100 ),2)
+		FROM factura f
+		WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin'
+		AND f.`almacen` LIKE '%$alm'
+		AND f.`anulada` = 0
+
 		/*Suma Debito*/
-		SELECT IFNULL(NULL, 'debito') ,ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)*13/100),2) AS debito
+		/*SELECT IFNULL(NULL, 'debito') ,ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)*13/100),2) AS debito
 		FROM factura AS f
 		INNER JOIN datosfactura AS df ON df.idDatosFactura=f.lote
 		INNER JOIN clientes AS c ON c.idCliente = f.cliente
 		INNER JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura
 		WHERE fechaFac BETWEEN '$ini' AND '$fin'
 		AND f.almacen LIKE '%$alm'
-		AND anulada=0
+		AND anulada=0*/
 		 ";
 		
 		$query=$this->db->query($sql);		

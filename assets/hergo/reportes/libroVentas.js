@@ -1,5 +1,6 @@
-var iniciofecha = moment().subtract(1, 'month').startOf('month')
-var finfecha = moment().subtract(1, 'month').endOf('month')
+let iniciofecha = moment().subtract(1, 'month').startOf('month')
+let finfecha = moment().subtract(1, 'month').endOf('month')
+let almText = $('#almacen_filtro').find(":selected").text();
 $(document).ready(function () {
   $(".tiponumerico").inputmask({
     alias: "decimal",
@@ -10,9 +11,10 @@ $(document).ready(function () {
   });
 
   $('#export').click(function () {
+    let mes = iniciofecha.format('MMMM').toUpperCase()
     $('#tablaLibroVentas').tableExport({
-      type:'excel',
-    fileName: 'InventariosTM',
+    type:'excel',
+    fileName: 'LibroVentasIVA_' + almText + '_' + mes,
     numbers: {output : false}
     })
   });
@@ -85,13 +87,10 @@ function retornarLibroVentas() {
       a: alm
     }, //**** variables para filtro
   }).done(function (res) {
-    //console.log(res);
     quitarcargando();
-    //console.log(ini);
-    //console.log(fin);
     datosselect = restornardatosSelect(res);
     $("#tablaLibroVentas").bootstrapTable('destroy');
-    $("#tablaLibroVentas").bootstrapTable({ ////********cambiar nombre tabla viata
+    $("#tablaLibroVentas").bootstrapTable({ 
 
       data: res,
       striped: true,
@@ -105,6 +104,12 @@ function retornarLibroVentas() {
       showFooter: true,
       footerStyle: footerStyle,
       columns: [
+        {
+          field: 'almacen',
+          title: 'Almacen',
+          visible: alm == '' ? true : false,
+          sortable: true,
+        },
         {
           field: '',
           title: 'E',
