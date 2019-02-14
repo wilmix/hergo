@@ -118,38 +118,6 @@ function retornarLibroVentas() {
           formatter: contar
         },
         {
-          field: 'fechaFac',
-          title: 'Fecha',
-          sortable: true,
-          formatter: formato_fecha_corta
-        },
-        {
-          field: 'nFactura',
-          title: 'N° Factura',
-          align: 'center',
-          sortable: true,
-        },
-        {
-          field: 'autorizacion',
-          title: 'N° Autorización',
-          sortable: true,
-          filter: {
-            type: "select",
-            data: datosselect[0]
-          }
-        },
-        {
-          field: 'anulada',
-          title: 'Estado',
-          sortable: true,
-          align: 'center',
-          filter: {
-            type: "select",
-            data: ["Anulada", "Válida"]
-          },
-          formatter: estadoFactura
-        },
-        {
           field: 'documento',
           title: 'Nit Cliente',
           formatter: estadoAnuladoNIT,
@@ -167,6 +135,27 @@ function retornarLibroVentas() {
           footerFormatter: "Total"
         },
         {
+          field: 'nFactura',
+          title: 'N° Factura',
+          align: 'center',
+          sortable: true,
+        },
+        {
+          field: 'autorizacion',
+          title: 'N° Autorización',
+          sortable: true,
+          filter: {
+            type: "select",
+            data: datosselect[0]
+          }
+        },
+        {
+          field: 'fechaFac',
+          title: 'Fecha',
+          sortable: true,
+          formatter: formato_fecha_corta
+        },
+        {
           field: 'sumaDetalle',
           title: 'Total Venta',
           sortable: true,
@@ -177,16 +166,64 @@ function retornarLibroVentas() {
         {
           field: '',
           title: 'ICE',
-          visible: false,
+          visible: true,
           sortable: true,
+          formatter: operateFormatterCero
         },
         {
           field: '',
           title: 'EXP',
-          visible: false,
+          visible: true,
           sortable: true,
+          formatter: operateFormatterCero
         },
         {
+          field: 'sumaDetalle',
+          title: 'Importe Neto',
+          sortable: true,
+          align: 'right',
+          formatter: estadoAnuladoTotal,
+          footerFormatter: sumaColumna
+        },
+        {
+          field: 'debito',
+          title: 'Debito Fiscal',
+          sortable: true,
+          align: 'right',
+          formatter: estadoAnuladoDebito,
+          footerFormatter: sumaColumna
+        },
+        {
+          field: 'anulada',
+          title: 'Estado',
+          sortable: true,
+          align: 'center',
+          filter: {
+            type: "select",
+            data: ["Anulada", "Válida"]
+          },
+          formatter: estadoFactura
+        },
+        {
+          field: 'VA',
+          title: 'EstadoVA',
+          sortable: true,
+          align: 'center',
+          visible: false
+        },
+        {
+          field: 'codigoControl',
+          title: 'Codigo Control',
+          sortable: true
+
+        },
+        {
+          field: 'almacen',
+          title: 'Almacen',
+          visible: alm == '' ? true : false,
+          sortable: true,
+        },
+        /*{
           field: '',
           title: 'Taza Cero',
           visible: false,
@@ -209,21 +246,8 @@ function retornarLibroVentas() {
           title: ' Importe Base Debito Fiscal',
           visible: false,
           sortable: true
-        },
-        {
-          field: 'debito',
-          title: 'Debito Fiscal',
-          sortable: true,
-          align: 'right',
-          formatter: estadoAnuladoDebito,
-          footerFormatter: sumaColumna
-        },
-        {
-          field: 'codigoControl',
-          title: 'Codigo Control',
-          sortable: true
-
-        },
+        },*/
+        
         {
           field: 'manual',
           title: 'Tipo',
@@ -235,12 +259,7 @@ function retornarLibroVentas() {
           },
           formatter: tipoFactura
         },
-        {
-          field: 'almacen',
-          title: 'Almacen',
-          visible: alm == '' ? true : false,
-          sortable: true,
-        },
+        
       ]
     });
   }).fail(function (jqxhr, textStatus, error) {
@@ -296,6 +315,10 @@ function operateFormatter3(value, row, index) {
   num = Math.round(value * 100) / 100
   num = num.toFixed(2);
   return (formatNumber.new(num));
+}
+function operateFormatterCero(value, row, index) {
+ valor  = value == '' || value == null ? 0 : value
+ return valor
 }
 
 function sumaColumna(data) {

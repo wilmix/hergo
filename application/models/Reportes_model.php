@@ -158,7 +158,7 @@ class Reportes_model extends CI_Model
 		$sql="SELECT fechaFac, nFactura, df.autorizacion, anulada, c.documento, c.nombreCliente,
 		IF(f.`anulada`=1,0,f.`total`) sumaDetalle,
 		IF(anulada = 1 , 0 , ROUND ((f.total*13/100),2))  AS debito, 
-		IFNULL(codigoControl, 0) AS codigoControl , df.manual, f.almacen idAlm, a.`almacen`, a.`ciudad`
+		IF(codigoControl='', 0,codigoControl ) AS codigoControl , df.manual, f.almacen idAlm, a.`almacen`, a.`ciudad`, IF(anulada = 0, 'V', 'A') VA
 		FROM factura AS f
 		INNER JOIN datosfactura AS df ON df.idDatosFactura=f.lote
 		INNER JOIN clientes AS c ON c.idCliente = f.cliente
