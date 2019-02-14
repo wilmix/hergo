@@ -72,7 +72,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarFacturasPendientesPago($almacen="")
+	public function mostrarFacturasPendientesPago($almacen="", $ini, $fin)
 	{ 
 		$sql="SELECT id, almacen, cliente, lote, nFactura, fechaFac,
 		SUM(total) total,
@@ -91,7 +91,8 @@ class Reportes_model extends CI_Model
 		INNER JOIN factura_egresos fe ON fe.`idFactura` = f.`idFactura`
 		INNER JOIN egresos e ON e.`idegresos` = fe.`idegresos`
 		INNER JOIN users u ON u.`id` = e.`vendedor`
-		WHERE f.`anulada` = 0 
+		WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin' 
+		AND f.`anulada` = 0 
 		AND f.`pagada` <>1 
 		AND f.`almacen` LIKE '%$almacen'
 		AND  f.`nFactura` > 0

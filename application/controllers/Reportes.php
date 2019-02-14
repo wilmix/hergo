@@ -25,6 +25,7 @@ class Reportes extends CI_Controller
 				base_url("assets/dist/css/skins/skin-blue.min.css"),
 				base_url("assets/hergo/estilos.css"),
 				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
+				base_url('assets/plugins/table-boot/css/tableexport.css'),
 				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.css'),	
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),				
@@ -35,17 +36,19 @@ class Reportes extends CI_Controller
 				base_url('assets/bootstrap/js/bootstrap.min.js'),
 				base_url('assets/dist/js/app.min.js'),
 				base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
+
+				base_url('assets/plugins/table-boot/js/xlsx.min.js'),
+				base_url('assets/plugins/table-boot/js/FileSaver.min.js'),
+				base_url('assets/plugins/table-boot/js/tableExport.js'),
+
 				base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
 				base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
-				base_url('assets/plugins/table-boot/js/tableExport.js'),
-				base_url('assets/plugins/table-boot/js/xlsx.core.min.js'),
+				//base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
 				base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
 				base_url('assets/plugins/table-boot/plugin/select2.min.js'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.js'),
-				base_url('assets/plugins/table-boot/plugin/FileSaver.min.js'),
-				base_url('assets/plugins/table-boot/js/xlsx.full.min.js'),
+				//base_url('assets/plugins/table-boot/js/xlsx.full.min.js'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
         		base_url('assets/plugins/daterangepicker/moment.min.js'),
         		base_url('assets/plugins/slimscroll/slimscroll.min.js'),        		
@@ -470,8 +473,10 @@ class Reportes extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-        	$almacen=$this->security->xss_clean($this->input->post("almacen")); 
-			$res=$this->Reportes_model->mostrarFacturasPendientesPago($almacen); 
+			$almacen=$this->security->xss_clean($this->input->post('almacen')); 
+			$ini=$this->security->xss_clean($this->input->post('ini')); 
+			$fin=$this->security->xss_clean($this->input->post('fin')); 
+			$res=$this->Reportes_model->mostrarFacturasPendientesPago($almacen, $ini, $fin); 
 			$res=$res->result_array();
 			echo json_encode($res);
 		}

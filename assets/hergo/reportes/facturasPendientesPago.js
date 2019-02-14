@@ -1,11 +1,71 @@
-$(document).ready(function() {
+var iniciofecha = moment().subtract(10, 'year').startOf('year')
+var finfecha = moment().subtract(0, 'year').endOf('year')
+$(document).ready(function () {
+    tituloReporte()
+    $(".tiponumerico").inputmask({
+        alias: "decimal",
+        digits: 2,
+        groupSeparator: ',',
+        autoGroup: true,
+        autoUnmask: true
+    });
+
+    var start = moment().subtract(10, 'year').startOf('year')
+    var end = moment().subtract(0, 'year').endOf('year')
+    var actual = moment().subtract(0, 'year').startOf('year')
+    var unanterior = moment().subtract(1, 'year').startOf('year')
+    var dosanterior = moment().subtract(2, 'year').startOf('year')
+    var tresanterior = moment().subtract(3, 'year').startOf('year')
+
+    $(function () {
+        moment.locale('es');
+
+        function cb(start, end) {
+            $('#fechapersonalizada span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
+            iniciofecha = start
+            finfecha = end
+        }
+
+        $('#fechapersonalizada').daterangepicker({
+
+            locale: {
+                format: 'DD/MM/YYYY',
+                applyLabel: 'Aplicar',
+                cancelLabel: 'Cancelar',
+                customRangeLabel: 'Personalizado',
+            },
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
+                "Hace un Año": [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+                'Hace dos Años': [moment().subtract(2, 'year').startOf('year'), moment().subtract(2, 'year').endOf('year')],
+                'Todo': [moment().subtract(10, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
+            }
+        }, cb);
+
+        cb(start, end);
+
+    });
+    $('#fechapersonalizada').on('apply.daterangepicker', function (ev, picker) {
+        tituloReporte()
+        retornarFacturasPendientes();
+    });
     tituloReporte()
     retornarFacturasPendientes();
-});
+})
+$(document).on("change", "#almacen_filtro", function () {
+    retornarFacturasPendientes();
+}) //para cambio filtro segun cada uno
+
+/*$(document).ready(function() {
+    tituloReporte()
+    retornarFacturasPendientes();
+});*/
 $(document).on("change", "#almacen_filtro", function () {
     tituloReporte()
     retornarFacturasPendientes();
-}) //para cambio filtro segun cada uno
+}) 
 $(document).on("click", "#pendientes", function () {
     tituloReporte();
     retornarFacturasPendientes();
@@ -26,6 +86,8 @@ $(document).on("click", "#excel", function () {
 })
 function retornarFacturasPendientes()
 {
+    ini = iniciofecha.format('YYYY-MM-DD')
+    fin = finfecha.format('YYYY-MM-DD')
     almacen = $("#almacen_filtro").val();
     agregarcargando();
     $.ajax({
@@ -33,7 +95,9 @@ function retornarFacturasPendientes()
         url: base_url('index.php/Reportes/mostrarFacturasPendientesPago'),
         dataType: "json",
         data: {
-            almacen : almacen
+            almacen : almacen,
+            ini: ini,
+            fin: fin
         }, 
     }).done(function (res) {
         quitarcargando();
@@ -56,7 +120,7 @@ function retornarFacturasPendientes()
 
             }
         }
-        console.log(res);
+        //console.log(res);
         datosselect = restornardatosSelect(res);
         $("#tablaFacturasPendientes").bootstrapTable('destroy');
         $("#tablaFacturasPendientes").bootstrapTable({ 
