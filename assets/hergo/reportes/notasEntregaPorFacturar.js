@@ -1,6 +1,13 @@
 var iniciofecha = moment().subtract(5, 'year').startOf('year')
 var finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function () {
+    $('#export').click(function () {
+        $('#tablaNotasEntregaFacturar').tableExport({
+        type:'excel',
+        fileName: 'NotasEntregaPendientesPago',
+        numbers: {output : false}
+        })
+      });
     tituloReporte()
     $(".tiponumerico").inputmask({
         alias: "decimal",
@@ -90,9 +97,6 @@ function retornarNEporFac() //*******************************
             searchOnEnterKey: true,
             showColumns: true,
             filter: true,
-            showExport: true,
-            exportTypes: ['xlsx'],
-            exportDataType: 'basic',
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',
             showFooter: true,
