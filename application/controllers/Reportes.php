@@ -19,43 +19,38 @@ class Reportes extends CI_Controller
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
 		$this->cabeceras_css=array(
-				base_url('assets/bootstrap/css/bootstrap.min.css'),
-				base_url("assets/fa/css/font-awesome.min.css"),
-				base_url("assets/dist/css/AdminLTE.min.css"),
-				base_url("assets/dist/css/skins/skin-blue.min.css"),
-				base_url("assets/hergo/estilos.css"),
-				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
-				base_url('assets/plugins/table-boot/css/tableexport.css'),
-				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.css'),	
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),				
-				base_url('assets/sweetalert/sweetalert2.min.css'),
-		);
-		$this->cabecera_script=array(
-				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
-				base_url('assets/bootstrap/js/bootstrap.min.js'),
-				base_url('assets/dist/js/app.min.js'),
-				base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
-
-				base_url('assets/plugins/table-boot/js/xlsx.min.js'),
-				base_url('assets/plugins/table-boot/js/FileSaver.min.js'),
-				base_url('assets/plugins/table-boot/js/tableExport.js'),
-
-				base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
-				//base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
-				base_url('assets/plugins/table-boot/plugin/select2.min.js'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.js'),
-				//base_url('assets/plugins/table-boot/js/xlsx.full.min.js'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
-        		base_url('assets/plugins/daterangepicker/moment.min.js'),
-        		base_url('assets/plugins/slimscroll/slimscroll.min.js'),        		
-        		base_url('assets/sweetalert/sweetalert2.min.js'),
-        		
-
-		);
+			base_url('assets/bootstrap/css/bootstrap.min.css'),
+			base_url("assets/fa/css/font-awesome.min.css"),
+			base_url("assets/dist/css/AdminLTE.min.css"),
+			base_url("assets/dist/css/skins/skin-blue.min.css"),
+			base_url("assets/hergo/estilos.css"),
+			base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
+			base_url('assets/plugins/table-boot/plugin/select2.min.css'),
+			base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.css'),	
+			base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),				
+			base_url('assets/sweetalert/sweetalert2.min.css'),
+			);
+			$this->cabecera_script=array(
+					base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
+					base_url('assets/bootstrap/js/bootstrap.min.js'),
+					base_url('assets/dist/js/app.min.js'),
+					base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
+					base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
+					base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
+					base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
+					base_url('assets/plugins/table-boot/js/tableExport.js'),
+					base_url('assets/plugins/table-boot/js/xlsx.core.min.js'),
+					base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
+					base_url('assets/plugins/table-boot/plugin/select2.min.js'),
+					base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
+					base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.js'),
+					base_url('assets/plugins/table-boot/plugin/FileSaver.min.js'),
+					base_url('assets/plugins/table-boot/js/xlsx.full.min.js'),
+					base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
+					base_url('assets/plugins/daterangepicker/moment.min.js'),
+					base_url('assets/plugins/slimscroll/slimscroll.min.js'),        		
+					base_url('assets/sweetalert/sweetalert2.min.js'),
+			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
