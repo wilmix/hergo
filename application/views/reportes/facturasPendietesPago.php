@@ -3,7 +3,7 @@
     <div class="box">
       <div class="box-body">
       <div class="form-inline">
-          <button class="btn btn-success pull-right" id="excel" data-toggle="tooltip" title="Excel"><i class="far fa-file-excel"> </i> Excel </button>
+          <button class="btn btn-success pull-right" id="export" data-toggle="tooltip" title="Excel"><i class="far fa-file-excel"> </i> Excel </button>
       </div>
           <div id="toolbar2" class="form-inline">
             <button  type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">

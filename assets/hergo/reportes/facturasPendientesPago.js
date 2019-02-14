@@ -1,6 +1,15 @@
 var iniciofecha = moment().subtract(10, 'year').startOf('year')
 var finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function () {
+    $('#export').click(function () {
+        let ppp = $("#select2-4rkh-container").val()
+        console.log(ppp);
+        $('#tablaFacturasPendientes').tableExport({
+        type:'excel',
+        fileName: 'FacturasPendientesPago',
+        numbers: {output : false}
+        })
+      });
     tituloReporte()
     $(".tiponumerico").inputmask({
         alias: "decimal",
