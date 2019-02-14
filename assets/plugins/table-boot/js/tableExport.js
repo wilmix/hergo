@@ -1967,21 +1967,11 @@
             var selectidx = 0;
 
             htmlData = '';
-            $.each(html, function () {
-              if ( $(this).is("input") )
-                htmlData += $cell.find('input').eq(inputidx++).val();
-              else if ( $(this).is("select") )
-                htmlData += $cell.find('select option:selected').eq(selectidx++).text();
-              else if ( $(this).is("br") )
-                htmlData += "<br>";
-              else {
-                if ( typeof $(this).html() === 'undefined' )
-                  htmlData += $(this).text();
-                else if ( jQuery().bootstrapTable === undefined ||
-                  ($(this).hasClass('filterControl') !== true &&
-                    $(cell).parents('.detail-view').length === 0) )
-                  htmlData += $(this).html();
-              }
+            $.each( html, function() {
+              if ( typeof $(this).html() === 'undefined' )
+                htmlData += $(this).text();
+              else if ( typeof $(this).attr('class') === 'undefined' || $(this).hasClass('th-inner') === true )
+                htmlData += $(this).html();
             });
           }
         }
