@@ -40,7 +40,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
     }
-	public function mostrarNEporFac($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
+	public function mostrarNEporFac($ini=null,$fin=null,$alm="") 
 	{ //cambiar la consulta
 		$sql="SELECT e.`cliente`, e.nmov n,e.idEgresos,t.sigla, e.fechamov, c.nombreCliente, ROUND((SUM(d.`total`)) - (SUM(d.`cantFact` * d.`punitario`)),2) total,  e.estado,e.fecha, 
 		CONCAT(u.first_name,' ', u.last_name) autor, a.almacen, m.sigla monedasigla
@@ -104,7 +104,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarListaPrecios() ///********* nombre de la funcion mostrar
+	public function mostrarListaPrecios() 
 	{ //cambiar la consulta
 		$sql="SELECT CodigoArticulo, Descripcion, unidad.Sigla, precio AS Bolivianos, precio/6.96 AS Dolares
 		FROM articulos
@@ -114,7 +114,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarSaldos() ///********* nombre de la funcion mostrar
+	public function mostrarSaldos() 
 	{ //cambiar la consulta
 		$sql="SELECT *, (aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz`) total
  		FROM articulos_activos aa
@@ -123,33 +123,79 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarFacturacionClientes($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
-	{ //cambiar la consulta
-		$sql="SELECT clientes.nombreCliente, SUM(total) AS total, ROUND((SUM(total) / tc.`tipocambio`),2) totalDolares
+	public function mostrarFacturacionClientes($ini=null,$fin=null,$alm="") 
+	{ 
+		if ($alm=='') {
+			$sql="SELECT IFNULL(nombreCliente,'TOTAL GENERAL') nombreCliente, SUM(total) total, SUM(totalDolares) totalDolares, id,almacen
+			FROM
+			(
+			SELECT clientes.nombreCliente, SUM(total) AS total, ROUND((SUM(total) / tc.`tipocambio`),2) totalDolares, a.`almacen`, factura.`idFactura` id
+						FROM factura
+						INNER JOIN clientes ON clientes.idCliente = factura.cliente
+						INNER JOIN tipocambio tc ON tc.`fecha` = factura.`fechaFac`
+						INNER JOIN almacenes a ON a.`idalmacen` = factura.`almacen`
+						WHERE fechaFac BETWEEN '2019-01-01' AND '2019-12-31'
+						AND factura.almacen LIKE '%'
+						AND factura.anulada = 0
+						GROUP BY clientes.nombreCliente, factura.`almacen`
+						ORDER BY total DESC
+			)fcl
+			GROUP BY nombreCliente , id WITH ROLLUP
+			";
+		} else {
+		$sql="SELECT clientes.nombreCliente, SUM(total) AS total, ROUND((SUM(total) / tc.`tipocambio`),2) totalDolares, a.`almacen`, factura.`idFactura` id
 			FROM factura
 			INNER JOIN clientes ON clientes.idCliente = factura.cliente
 			INNER JOIN tipocambio tc ON tc.`fecha` = factura.`fechaFac`
+			inner join almacenes a on a.`idalmacen` = factura.`almacen`
 			WHERE fechaFac BETWEEN '$ini' AND '$fin'
 			AND factura.almacen LIKE '%$alm'
 			AND factura.anulada = 0
 			GROUP BY clientes.nombreCliente
 			ORDER BY total DESC";
+		}
+		
 		
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarVentasLineaMes($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
-	{ //cambiar la consulta
-		$sql="	SELECT linea.Sigla, linea.Linea, sum(facturadetalle.facturaCantidad*facturadetalle.facturaPUnitario) as total
+	public function mostrarVentasLineaMes($ini=null,$fin=null,$alm='')
+	{ 
+		if ($alm == '') {
+		$sql="SELECT Sigla, Linea, SUM(total) total , almacen, SUM(dolares) dolares, id
+		FROM
+		(
+		SELECT linea.Sigla, linea.Linea, SUM(facturadetalle.facturaCantidad*facturadetalle.facturaPUnitario) AS total, a.almacen, 
+		(SUM(facturadetalle.facturaCantidad*facturadetalle.facturaPUnitario) / tc.`tipocambio`) dolares, facturadetalle.`id`, a.`idalmacen`
+						FROM facturadetalle
+						INNER JOIN articulos ON articulos.idArticulos = facturadetalle.articulo
+						INNER JOIN linea ON linea.idLinea=articulos.idLinea
+						INNER JOIN factura ON factura.idFactura=facturadetalle.idFactura
+						INNER JOIN almacenes a ON a.`idalmacen` = factura.`almacen`
+						INNER JOIN tipocambio tc ON tc.`fecha` = factura.`fechaFac`
+						WHERE fechaFac BETWEEN '$ini' and '$fin'
+						AND factura.anulada = 0
+						GROUP BY linea, almacen
+						ORDER BY a.`idalmacen`
+		)sa
+		GROUP BY    Linea , id WITH ROLLUP
+		";
+		} else {
+		$sql="	SELECT linea.Sigla, linea.Linea, sum(facturadetalle.facturaCantidad*facturadetalle.facturaPUnitario) as total, a.almacen, 
+		(SUM(facturadetalle.facturaCantidad*facturadetalle.facturaPUnitario) / tc.`tipocambio`) dolares, facturadetalle.`id`, a.`idalmacen`
 				from facturadetalle
 				inner join articulos on articulos.idArticulos = facturadetalle.articulo
 				inner join linea on linea.idLinea=articulos.idLinea
 				inner join factura on factura.idFactura=facturadetalle.idFactura
+				INNER join almacenes a on a.`idalmacen` = factura.`almacen`
+				inner join tipocambio tc on tc.`fecha` = factura.`fechaFac`
 				where fechaFac between '$ini' and '$fin'
 				and factura.anulada = 0
 				and factura.almacen LIKE '%$alm'
-				group by linea
+				group by linea, almacen
 				order by sigla";
+		}
+		
 		
 		$query=$this->db->query($sql);		
 		return $query;

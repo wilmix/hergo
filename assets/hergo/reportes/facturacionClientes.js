@@ -1,6 +1,14 @@
 var iniciofecha = moment().subtract(0, 'year').startOf('year')
 var finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function () {
+    $('#export').click(function () {
+        $('#tablaFacturacionClientes').tableExport({
+        type:'excel',
+        fileName: 'Facturacion Clientes',
+        numbers: {output : false}
+        })
+      });
+
     tituloReporte();
     $(".tiponumerico").inputmask({
         alias: "decimal",
@@ -82,20 +90,26 @@ function retornarfacturacionClientes() //*******************************
             data: res,
             striped: true,
             search: true,
-            searchOnEnterKey: true,
+            //searchOnEnterKey: true,
             showColumns: true,
             filter: true,
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',
-            showFooter: true,
+            rowStyle:rowStyle,
+            showFooter: (alm == '')?false:true,
+            filter: true,
             footerStyle: footerStyle,
-            columns: [{
+            columns: [
+                {
+                    field: 'almacen',
+                    title: 'Almacen',
+                    formatter: formatAlm,
+                    visible: alm == '' ? true : false
+                },
+                {
                     field: 'nombreCliente',
                     title: 'Cliente',
                     sortable: true,
-                    filter: {
-                        type: "input"
-                    }
                 },
                 {
                     field: 'total',
@@ -120,13 +134,20 @@ function retornarfacturacionClientes() //*******************************
 }
 function tituloReporte() {
     almText = $('#almacen_filtro').find(":selected").text();
+    let ini = iniciofecha.format('DD/MM/YYYY')
+    let fin = finfecha.format('DD/MM/YYYY')
     $('#tituloAlmacen').text(almText);
-    $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
+    //$('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
+    $('#ragoFecha').text("DEL " + ini + "  AL  " + fin);
 }
 function operateFormatter3(value, row, index) {
     num = Math.round(value * 100) / 100
     num = num.toFixed(2);
     return (formatNumber.new(num));
+}
+function formatAlm(value, row, index) {
+    let alm = row.id == null ? '' : row.almacen
+    return (alm);
 }
 function footerStyle(value, row, index) {
     return {
@@ -141,6 +162,23 @@ function footerStyle(value, row, index) {
       }
     };
   }
+  function rowStyle(row, index) {
+    if (row.id==null) {
+        return {
+            css: {
+                //"font-weight": "bold",
+                //"border-top": "3px solid white",
+                //"border-bottom": "3px solid white",
+                "text-align": "right",
+                //"padding": "15px",
+                "background-color": "#3c8dbc",
+                "color": "white",
+               // "font-size":"120%",
+            }
+        };
+    }
+    return {};
+}
   function sumaColumna(data) {
     field = this.field;
     let totalSum = data.reduce(function (sum, row) {

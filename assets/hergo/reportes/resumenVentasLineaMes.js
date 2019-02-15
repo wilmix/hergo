@@ -1,6 +1,13 @@
 var iniciofecha = moment().subtract(0, 'year').startOf('year')
 var finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function () {
+    $('#export').click(function () {
+        $('#tablaResumenVentasLineaMes').tableExport({
+        type:'excel',
+        fileName: 'ResumenVentasLineaMes',
+        numbers: {output : false}
+        })
+    });
     $(".tiponumerico").inputmask({
         alias: "decimal",
         digits: 2,
@@ -57,11 +64,15 @@ $(document).ready(function () {
 $(document).on("change", "#almacen_filtro", function () {
     tituloReporte()
     retornarVentasLineaMes();
-}) //para cambio filtro segun cada uno
+})
+$(document).on("click", "#refresh", function () {
+    tituloReporte()
+    retornarVentasLineaMes();
+})
 
 
 
-function retornarVentasLineaMes() //*******************************
+function retornarVentasLineaMes() 
 {
     ini = iniciofecha.format('YYYY-MM-DD')
     fin = finfecha.format('YYYY-MM-DD')
@@ -69,7 +80,7 @@ function retornarVentasLineaMes() //*******************************
     agregarcargando();
     $.ajax({
         type: "POST",
-        url: base_url('index.php/Reportes/mostrarVentasLineaMes'), //******controlador
+        url: base_url('index.php/Reportes/mostrarVentasLineaMes'),
         dataType: "json",
         data: {
             i: ini,
@@ -78,54 +89,66 @@ function retornarVentasLineaMes() //*******************************
         }, //**** variables para filtro
     }).done(function (res) {
         quitarcargando();
-        console.log(res);
-        //console.log(alm);
-        //datosselect= restornardatosSelect(res);
         $("#tablaResumenVentasLineaMes").bootstrapTable('destroy');
-        $("#tablaResumenVentasLineaMes").bootstrapTable({ ////********cambiar nombre tabla viata
+        $("#tablaResumenVentasLineaMes").bootstrapTable({ 
 
             data: res,
             striped: true,
-            pagination: true,
-            pageSize: "100",
             search: true,
             searchOnEnterKey: true,
             showColumns: true,
-            showFooter: true,
+            showFooter: alm == '' ? false : true,
             footerStyle: footerStyle,
             filter: true,
-            showExport: true,
-            exportTypes: ['xlsx'],
-            exportDataType: 'basic',
-            /*exportOptions:{
-                            bookType:"xlsx",
-                            type:'excel',
-                            fileName: 'Notas',
-                            worksheetName: "Notas"
-                          },*/
-            //groupBy:true,
-            //groupByField:'nombreCliente',
+            rowStyle:rowStyle,
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',
-            columns: [{
+            columns: [
+                {
+                    field: 'almacen',
+                    title: 'Almacen',
+                    align: 'center',
+                    formatter: formAlm
+
+                },
+                {
                     field: 'Sigla',
                     title: 'Sigla',
-                    sortable: true,
-                    align: 'center'
+                    sortable: false,
+                    align: 'center',
+                    visible:false
 
                 },
                 {
                     field: 'Linea',
                     title: 'Linea',
-                    align: 'center',
+                    align: 'left',
+                    sortable: true,
                 },
                 {
                     field: 'total',
-                    title: 'Total',
+                    title: 'Total BOB',
                     align: 'right',
+                    sortable: true,
                     formatter: operateFormatter3,
                     footerFormatter: sumaColumna
-                }
+                },
+                {
+                    field: 'dolares',
+                    title: 'Total $U$',
+                    align: 'right',
+                    sortable: true,
+                    formatter: operateFormatter3,
+                    footerFormatter: sumaColumna
+                },
+                {
+                    field: 'id',
+                    title: 'id',
+                    sortable: true,
+                    align: 'center',
+                    visible:false
+
+                },
             ]
         });
     }).fail(function (jqxhr, textStatus, error) {
@@ -133,11 +156,31 @@ function retornarVentasLineaMes() //*******************************
         console.log("Request Failed: " + err);
     });
 }
-
+function rowStyle(row, index) {
+    if (row.id==null) {
+        return {
+            css: {
+                //"font-weight": "bold",
+                //"border-top": "3px solid white",
+                //"border-bottom": "3px solid white",
+                "text-align": "right",
+                //"padding": "15px",
+                "background-color": "#3c8dbc",
+                "color": "white",
+               // "font-size":"120%",
+            }
+        };
+    }
+    return {};
+}
 function operateFormatter3(value, row, index) {
     num = Math.round(value * 100) / 100
     num = num.toFixed(2);
     return (formatNumber.new(num));
+}
+function formAlm(value, row, index) {
+    let alm = (row.id == null || row.Sigla == null) ? '': row.almacen
+    return (alm);
 }
 
 function footerStyle(value, row, index) {
