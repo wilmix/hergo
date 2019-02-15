@@ -125,9 +125,10 @@ class Reportes_model extends CI_Model
 	}
 	public function mostrarFacturacionClientes($ini=null,$fin=null,$alm="") ///********* nombre de la funcion mostrar
 	{ //cambiar la consulta
-		$sql="SELECT clientes.nombreCliente, SUM(total) AS total
+		$sql="SELECT clientes.nombreCliente, SUM(total) AS total, ROUND((SUM(total) / tc.`tipocambio`),2) totalDolares
 			FROM factura
 			INNER JOIN clientes ON clientes.idCliente = factura.cliente
+			INNER JOIN tipocambio tc ON tc.`fecha` = factura.`fechaFac`
 			WHERE fechaFac BETWEEN '$ini' AND '$fin'
 			AND factura.almacen LIKE '%$alm'
 			AND factura.anulada = 0

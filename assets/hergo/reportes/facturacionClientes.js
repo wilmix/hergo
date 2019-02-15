@@ -54,8 +54,10 @@ $(document).ready(function () {
 })
 $(document).on("change", "#almacen_filtro", function () {
     retornarfacturacionClientes();
-}) //para cambio filtro segun cada uno
-
+})
+$(document).on("change", "#moneda", function () {
+    retornarfacturacionClientes();
+})
 
 
 function retornarfacturacionClientes() //*******************************
@@ -75,33 +77,18 @@ function retornarfacturacionClientes() //*******************************
         }, //**** variables para filtro
     }).done(function (res) {
         quitarcargando();
-        console.log(res);
-        //console.log(alm);
-        //datosselect= restornardatosSelect(res);
         $("#tablaFacturacionClientes").bootstrapTable('destroy');
-        $("#tablaFacturacionClientes").bootstrapTable({ ////********cambiar nombre tabla viata
-
+        $("#tablaFacturacionClientes").bootstrapTable({ 
             data: res,
             striped: true,
-            pagination: true,
-            pageSize: "100",
             search: true,
             searchOnEnterKey: true,
             showColumns: true,
             filter: true,
-            showExport: true,
-            exportTypes: ['xlsx'],
-            exportDataType: 'basic',
-            /*exportOptions:{
-                            bookType:"xlsx",
-                            type:'excel',
-                            fileName: 'Notas',
-                            worksheetName: "Notas"
-                          },*/
-            //groupBy:true,
-            //groupByField:'nombreCliente',
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',
+            showFooter: true,
+            footerStyle: footerStyle,
             columns: [{
                     field: 'nombreCliente',
                     title: 'Cliente',
@@ -112,9 +99,17 @@ function retornarfacturacionClientes() //*******************************
                 },
                 {
                     field: 'total',
-                    title: 'Total ',
+                    title: 'Total BOB',
                     align: 'right',
-                    formatter: operateFormatter3
+                    formatter: operateFormatter3,
+                    footerFormatter: sumaColumna,
+                },
+                {
+                    field: 'totalDolares',
+                    title: 'Total $U$',
+                    align: 'right',
+                    formatter: operateFormatter3,
+                    footerFormatter: sumaColumna,
                 }
             ]
         });
@@ -133,6 +128,26 @@ function operateFormatter3(value, row, index) {
     num = num.toFixed(2);
     return (formatNumber.new(num));
 }
+function footerStyle(value, row, index) {
+    return {
+      css: {
+        "font-weight": "bold",
+        "border-top": "3px solid white",
+        "border-bottom": "3px solid white",
+        "text-align": "right",
+        "padding": "15px",
+        "background-color": "#3c8dbc",
+        "color": "white"
+      }
+    };
+  }
+  function sumaColumna(data) {
+    field = this.field;
+    let totalSum = data.reduce(function (sum, row) {
+      return sum + (+row[field]);
+    }, 0);
+    return (formatNumber.new(totalSum.toFixed(2)));
+  }
 
 function restornardatosSelect(res) {
 
