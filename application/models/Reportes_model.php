@@ -134,8 +134,8 @@ class Reportes_model extends CI_Model
 						INNER JOIN clientes ON clientes.idCliente = factura.cliente
 						INNER JOIN tipocambio tc ON tc.`fecha` = factura.`fechaFac`
 						INNER JOIN almacenes a ON a.`idalmacen` = factura.`almacen`
-						WHERE fechaFac BETWEEN '2019-01-01' AND '2019-12-31'
-						AND factura.almacen LIKE '%'
+						WHERE fechaFac BETWEEN '$ini' AND '$fin'
+						-- AND factura.almacen LIKE '%'
 						AND factura.anulada = 0
 						GROUP BY clientes.nombreCliente, factura.`almacen`
 						ORDER BY total DESC
