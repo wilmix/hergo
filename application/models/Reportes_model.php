@@ -159,44 +159,40 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarVentasLineaMes($ini=null,$fin=null,$alm='')
+	public function mostrarVentasLineaMes($ini,$fin,$alm='')
 	{ 
-		if ($alm == '') {
-		$sql="SELECT Sigla, Linea, SUM(total) total , almacen, SUM(dolares) dolares, id
-		FROM
-		(
-		SELECT linea.Sigla, linea.Linea, SUM(facturadetalle.facturaCantidad*facturadetalle.facturaPUnitario) AS total, a.almacen, 
-		(SUM(facturadetalle.facturaCantidad*facturadetalle.facturaPUnitario) / tc.`tipocambio`) dolares, facturadetalle.`id`, a.`idalmacen`
-						FROM facturadetalle
-						INNER JOIN articulos ON articulos.idArticulos = facturadetalle.articulo
-						INNER JOIN linea ON linea.idLinea=articulos.idLinea
-						INNER JOIN factura ON factura.idFactura=facturadetalle.idFactura
-						INNER JOIN almacenes a ON a.`idalmacen` = factura.`almacen`
-						INNER JOIN tipocambio tc ON tc.`fecha` = factura.`fechaFac`
-						WHERE fechaFac BETWEEN '$ini' and '$fin'
-						AND factura.anulada = 0
-						GROUP BY linea, almacen
-						ORDER BY a.`idalmacen`
-		)sa
-		GROUP BY    Linea , id WITH ROLLUP
+		$sql="SELECT  Linea, Sigla,
+		SUM(CASE WHEN MONTH(fechaFac)=1 THEN total ELSE 0 END) AS ene,
+		SUM(CASE WHEN MONTH(fechaFac)=2 THEN total ELSE 0 END) AS feb,
+		SUM(CASE WHEN MONTH(fechaFac)=3 THEN total ELSE 0 END) AS mar,
+		SUM(CASE WHEN MONTH(fechaFac)=4 THEN total ELSE 0 END) AS abr,
+		SUM(CASE WHEN MONTH(fechaFac)=5 THEN total ELSE 0 END) AS may,
+		SUM(CASE WHEN MONTH(fechaFac)=6 THEN total ELSE 0 END) AS jun,
+		SUM(CASE WHEN MONTH(fechaFac)=7 THEN total ELSE 0 END) AS jul,
+		SUM(CASE WHEN MONTH(fechaFac)=8 THEN total ELSE 0 END) AS ago,
+		SUM(CASE WHEN MONTH(fechaFac)=9 THEN total ELSE 0 END) AS sep,
+		SUM(CASE WHEN MONTH(fechaFac)=10 THEN total ELSE 0 END) AS ocb,
+		SUM(CASE WHEN MONTH(fechaFac)=11 THEN total ELSE 0 END) AS nov,
+		SUM(CASE WHEN MONTH(fechaFac)=12 THEN total ELSE 0 END) AS dic,
+		SUM(total) total,
+		SUM(CASE WHEN MONTH(fechaFac)=1 THEN dolares ELSE 0 END) AS eneD,
+		SUM(CASE WHEN MONTH(fechaFac)=2 THEN dolares ELSE 0 END) AS febD,
+		SUM(CASE WHEN MONTH(fechaFac)=3 THEN dolares ELSE 0 END) AS marD,
+		SUM(CASE WHEN MONTH(fechaFac)=4 THEN dolares ELSE 0 END) AS abrD,
+		SUM(CASE WHEN MONTH(fechaFac)=5 THEN dolares ELSE 0 END) AS mayD,
+		SUM(CASE WHEN MONTH(fechaFac)=6 THEN dolares ELSE 0 END) AS junD,
+		SUM(CASE WHEN MONTH(fechaFac)=7 THEN dolares ELSE 0 END) AS julD,
+		SUM(CASE WHEN MONTH(fechaFac)=8 THEN dolares ELSE 0 END) AS agoD,
+		SUM(CASE WHEN MONTH(fechaFac)=9 THEN dolares ELSE 0 END) AS sepD,
+		SUM(CASE WHEN MONTH(fechaFac)=10 THEN dolares ELSE 0 END) AS ocbD,
+		SUM(CASE WHEN MONTH(fechaFac)=11 THEN dolares ELSE 0 END) AS novD,
+		SUM(CASE WHEN MONTH(fechaFac)=12 THEN dolares ELSE 0 END) AS dicD,
+		SUM(dolares) totalD
+		FROM detalleLinea
+		WHERE fechaFac BETWEEN '$ini' AND '$fin'
+		AND almacen LIKE '%$alm'
+		GROUP BY Linea WITH ROLLUP
 		";
-		} else {
-		$sql="	SELECT linea.Sigla, linea.Linea, sum(facturadetalle.facturaCantidad*facturadetalle.facturaPUnitario) as total, a.almacen, 
-		(SUM(facturadetalle.facturaCantidad*facturadetalle.facturaPUnitario) / tc.`tipocambio`) dolares, facturadetalle.`id`, a.`idalmacen`
-				from facturadetalle
-				inner join articulos on articulos.idArticulos = facturadetalle.articulo
-				inner join linea on linea.idLinea=articulos.idLinea
-				inner join factura on factura.idFactura=facturadetalle.idFactura
-				INNER join almacenes a on a.`idalmacen` = factura.`almacen`
-				inner join tipocambio tc on tc.`fecha` = factura.`fechaFac`
-				where fechaFac between '$ini' and '$fin'
-				and factura.anulada = 0
-				and factura.almacen LIKE '%$alm'
-				group by linea, almacen
-				order by sigla";
-		}
-		
-		
 		$query=$this->db->query($sql);		
 		return $query;
 	}

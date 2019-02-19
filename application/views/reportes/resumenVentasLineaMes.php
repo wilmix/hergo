@@ -1,7 +1,6 @@
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
-      <div class="container">
         <div class="box-body">
         <button class="btn btn-success pull-right" id="export" data-toggle="tooltip" title="Excel"><i class="far fa-file-excel"> </i> Excel </button>
             <div id="toolbar2" class="form-inline">
@@ -19,15 +18,22 @@
                 <?php endforeach ?>
                 <option value="">TODOS</option>
               </select>
+              
+              <select id="moneda" class="btn btn-primary btn-sm">
+                  <option value="0">BOB</option>
+                  <option value="1">$U$</option>
+              </select>
+
               <button  type="button" class="btn btn-primary btn-sm" id="refresh">
-                        <span>
-                        <i class="fa fa-share-square"></i>
-                        </span>
-                    </button>
+                  <span>
+                  <i class="fa fa-share-square"></i>
+                  </span>
+              </button>
             </div>
               <div class="text-center">
               <h2>RESUMEN VENTAS LINEA MES - <span id="tituloAlmacen"></span></h2>
               <h4 id="ragoFecha"></h4>
+              <h5 id="monedaTitulo"></h5>
             </div>
             <table 
               id="tablaResumenVentasLineaMes" 
@@ -36,7 +42,7 @@
             </table>
 
           </div>
-        </div>
+
       <!-- /.box-body -->
     </div>
     <!-- /.box -->

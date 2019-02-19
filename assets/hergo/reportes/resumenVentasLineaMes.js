@@ -44,10 +44,7 @@ $(document).ready(function () {
             endDate: end,
             ranges: {
                 'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
-                'Mes Actual': [moment().subtract(0, 'month').startOf('month'), moment().subtract(0, 'month').endOf('month')],
-                'Hace un Mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                'Hace dos Meses': [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
-                'Hace tres Meses': [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],
+                'Hace un año': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
             }
         }, cb);
 
@@ -69,6 +66,11 @@ $(document).on("click", "#refresh", function () {
     tituloReporte()
     retornarVentasLineaMes();
 })
+$(document).on("change", "#moneda", function () {
+    tituloReporte()
+    retornarVentasLineaMes();
+})
+
 
 
 
@@ -76,7 +78,10 @@ function retornarVentasLineaMes()
 {
     ini = iniciofecha.format('YYYY-MM-DD')
     fin = finfecha.format('YYYY-MM-DD')
-    alm = $("#almacen_filtro").val();
+    alm = $("#almacen_filtro").val()
+    mon = $("#moneda").val()
+    console.log(mon);
+
     agregarcargando();
     $.ajax({
         type: "POST",
@@ -97,58 +102,131 @@ function retornarVentasLineaMes()
             search: true,
             searchOnEnterKey: true,
             showColumns: true,
-            showFooter: alm == '' ? false : true,
-            footerStyle: footerStyle,
             filter: true,
             rowStyle:rowStyle,
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',
             columns: [
                 {
-                    field: 'almacen',
-                    title: 'Almacen',
+                    field: 'Linea',
+                    title: 'Linea',
                     align: 'center',
-                    formatter: formAlm
-
+                    sortable: true,
+                    // formatter: formTotal,
                 },
                 {
                     field: 'Sigla',
                     title: 'Sigla',
-                    sortable: false,
                     align: 'center',
+                    sortable: true,
                     visible:false
 
                 },
                 {
-                    field: 'Linea',
-                    title: 'Linea',
-                    align: 'left',
-                    sortable: true,
-                },
-                {
-                    field: 'total',
-                    title: 'Total BOB',
+                    field: mon == 1 ? 'eneD' : 'ene',
+                    title: 'Enero',
                     align: 'right',
                     sortable: true,
                     formatter: operateFormatter3,
-                    footerFormatter: sumaColumna
+                    
                 },
                 {
-                    field: 'dolares',
-                    title: 'Total $U$',
+                    field: mon == 1 ? 'febD' : 'feb',
+                    title: 'Febrero',
                     align: 'right',
                     sortable: true,
                     formatter: operateFormatter3,
-                    footerFormatter: sumaColumna
+                    
                 },
                 {
-                    field: 'id',
-                    title: 'id',
+                    field: mon == 1 ? 'marD' : 'mar',
+                    title: 'Marzo',
+                    align: 'right',
                     sortable: true,
-                    align: 'center',
-                    visible:false
+                    formatter: operateFormatter3,
+                    
+                },
+                {
+                    field: mon == 1 ? 'abrD' : 'abr',
+                    title: 'Abril',
+                    align: 'right',
+                    sortable: true,
+                    formatter: operateFormatter3,
+                    
+                },
+                {
+                    field: mon == 1 ? 'marD' : 'mar',
+                    title: 'Mayo',
+                    align: 'right',
+                    sortable: true,
+                    formatter: operateFormatter3,
+                    
+                },
+                {
+                    field: mon == 1 ? 'junD' : 'jun',
+                    title: 'Junio',
+                    align: 'right',
+                    sortable: true,
+                    formatter: operateFormatter3,
+                    
+                },
+                {
+                    field: mon == 1 ? 'julD' : 'jul',
+                    title: 'Julio',
+                    align: 'right',
+                    sortable: true,
+                    formatter: operateFormatter3,
+                    
+                },
+                {
+                    field: mon == 1 ? 'agoD' : 'ago',
+                    title: 'Agosto',
+                    align: 'right',
+                    sortable: true,
+                    formatter: operateFormatter3,
+                    
+                },
+                {
+                    field: mon == 1 ? 'sepD' : 'sep',
+                    title: 'Septiembre',
+                    align: 'right',
+                    sortable: true,
+                    formatter: operateFormatter3,
+                    
+                },
+                {
+                    field: mon == 1 ? 'ocbD' : 'ocb',
+                    title: 'Octubre',
+                    align: 'right',
+                    sortable: true,
+                    formatter: operateFormatter3,
+                    
+                },
+                {
+                    field: mon == 1 ? 'novD' : 'nov',
+                    title: 'Noviembre',
+                    align: 'right',
+                    sortable: true,
+                    formatter: operateFormatter3,
+                    
+                },
+                {
+                    field: mon == 1 ? 'dicD' : 'dic',
+                    title: 'Diciembre',
+                    align: 'right',
+                    sortable: true,
+                    formatter: operateFormatter3,
+                    
+                },
+                {
+                    field: mon == 1 ? 'totalD' : 'total',
+                    title: 'Total',
+                    align: 'right',
+                    sortable: true,
+                    formatter: operateFormatter3,
+                    
+                },
 
-                },
             ]
         });
     }).fail(function (jqxhr, textStatus, error) {
@@ -157,7 +235,7 @@ function retornarVentasLineaMes()
     });
 }
 function rowStyle(row, index) {
-    if (row.id==null) {
+    if (row.Linea==null) {
         return {
             css: {
                 //"font-weight": "bold",
@@ -178,9 +256,9 @@ function operateFormatter3(value, row, index) {
     num = num.toFixed(2);
     return (formatNumber.new(num));
 }
-function formAlm(value, row, index) {
-    let alm = (row.id == null || row.Sigla == null) ? '': row.almacen
-    return (alm);
+function formTotal(value, row, index) {
+    let total = (row.Linea == null ) ? 'TOTAL': row.Linea
+    return (total);
 }
 
 function footerStyle(value, row, index) {
@@ -202,11 +280,15 @@ function sumaColumna(data) {
     let totalSum = data.reduce(function (sum, row) {
         return sum + (+row[field]);
     }, 0);
+    console.log(totalSum);
     return (formatNumber.new(totalSum.toFixed(2)));
 }
 
 function tituloReporte() {
-    almText = $('#almacen_filtro').find(":selected").text();
+    let almText = $('#almacen_filtro').find(":selected").text();
+    let mon = $('#moneda').val();
+    mon = mon == 1 ? 'DOLARES' : 'BOLIVIANOS'
     $('#tituloAlmacen').text(almText);
     $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
+    $('#monedaTitulo').text(mon);
 }
