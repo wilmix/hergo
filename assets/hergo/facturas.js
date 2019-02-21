@@ -1080,8 +1080,8 @@ function validateNum(value) {
     }
 }
 function cambiarMonedaTabla3() {
-    console.log('cambiarMoneda');
-    return false
+    //console.log('cambiarMoneda');
+    //return false
     let moneda = $("#moneda").val();
     let totalRows = ($('#tabla3Factura').bootstrapTable('getOptions').data.length)
     for (let index = 0; index < totalRows; index++) {
