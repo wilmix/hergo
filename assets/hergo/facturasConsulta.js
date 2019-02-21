@@ -148,6 +148,15 @@ function retornarTablaFacturacion()
                 
             },
             {
+                field:'moneda',
+                title:'Moneda',                
+                visible:false,
+                filter: {
+                            type: 'select',
+                            data: datosselect[3]
+                        }
+            },
+            {
                 field:'total',
                 title:"Total",                
                 sortable:true,
@@ -155,7 +164,6 @@ function retornarTablaFacturacion()
                 searchable: false,
                 width:'100px',
                 formatter:operateFormatter3,
-                filter: { type: "input" },
             },
             {
                 field:'vendedor',
@@ -263,17 +271,20 @@ function restornardatosSelect(res)
     let cliente = new Array()
     let vendedor = new Array()
     let estado = new Array()
+    let moneda = new Array()
     let datos =new Array()
     $.each(res, function(index, value){
         cliente.push(value.ClienteFactura)
         vendedor.push(value.vendedor)
         estado.push(value.pagadaF)
+        moneda.push(value.moneda)
     })
     cliente.sort();
     vendedor.sort();
     datos.push(cliente.unique())
     datos.push(vendedor.unique())
     datos.push(estado.unique())
+    datos.push(moneda.unique())
     return(datos);
 }
 Array.prototype.unique = function (a) {

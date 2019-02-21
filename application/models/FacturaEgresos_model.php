@@ -35,6 +35,10 @@ class FacturaEgresos_model extends CI_Model
 		GROUP_CONCAT(DISTINCT e.nmov ORDER BY e.nmov ASC SEPARATOR ' - ') AS movimientos, f.glosa,
 		f.`pagada`, f.almacen idAlmacen,
 		CASE
+			WHEN f.moneda = 1 THEN 'BOB'
+			WHEN f.moneda = 2 THEN CONCAT('$','U$')
+		END moneda,
+		CASE
 			WHEN f.`anulada` = 1 THEN 'ANULADA'
 			WHEN f.`pagada` = 0 THEN 'NO PAGADA'
 			WHEN f.`pagada` = 1 THEN 'PAGADA'
