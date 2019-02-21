@@ -45,7 +45,7 @@ $(document).ready(function () {
 
     });
     $('#fechapersonalizada').on('apply.daterangepicker', function (ev, picker) {
-        
+        tituloReporte();
         retornarClienteItems();
     });
     tituloReporte();
@@ -57,9 +57,11 @@ $(document).on("change", "#almacen_filtro", function () {
     retornarClienteItems();
 })
 $(document).on("change", "#moneda", function () {
+    tituloReporte();
     retornarClienteItems();
 })
 $(document).on("click", "#refresh", function () {
+    tituloReporte();
     retornarClienteItems();
 })
 
