@@ -57,14 +57,18 @@ $(document).ready(function () {
     });
     $('#fechapersonalizada').on('apply.daterangepicker', function (ev, picker) {
         retornarfacturacionClientes();
+        tituloReporte();
     });
     retornarfacturacionClientes();
+    tituloReporte();
 })
 $(document).on("change", "#almacen_filtro", function () {
     retornarfacturacionClientes();
+    tituloReporte();
 })
 $(document).on("change", "#moneda", function () {
     retornarfacturacionClientes();
+    tituloReporte();
 })
 
 
@@ -134,9 +138,11 @@ function retornarfacturacionClientes() //*******************************
 }
 function tituloReporte() {
     almText = $('#almacen_filtro').find(":selected").text();
+    console.log(almText);
     let ini = iniciofecha.format('DD/MM/YYYY')
     let fin = finfecha.format('DD/MM/YYYY')
     $('#tituloAlmacen').text(almText);
+
     //$('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
     $('#ragoFecha').text("DEL " + ini + "  AL  " + fin);
 }
