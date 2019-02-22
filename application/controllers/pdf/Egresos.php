@@ -93,15 +93,15 @@ class Egresos extends CI_Controller {
             $n = 1;
             $totalEgreso=0;
             foreach ($lineas->result() as $linea) {
-                $totalEgreso += $linea->total/$tipoCambio;
+                $totalEgreso += $linea->total;
                 $this->pdf->SetFillColor(255,255,255);
                     $this->pdf->Cell(5,5,$n++,'',0,'C',0); ///NUMERO DE FILA
                     $this->pdf->Cell(15,5,number_format($linea->cantidad, 2, ".", ","),'',0,'R',0);
                     $this->pdf->Cell(10,5,$linea->Sigla,'',0,'C',0);
                     $this->pdf->Cell(15,5,$linea->CodigoArticulo,'',0,'C',0);
                     $this->pdf->Cell(110,5,utf8_decode($linea->Descripcion),0,0,'L',0);
-                    $this->pdf->Cell(20,5,number_format($linea->punitario/$tipoCambio, 2, ".", ","),0,0,'R',1);
-                    $this->pdf->Cell(20,5,number_format($linea->total/$tipoCambio, 2, ".", ","),'',0,'R',1);
+                    $this->pdf->Cell(20,5,number_format($linea->punitario, 2, ".", ","),0,0,'R',1);
+                    $this->pdf->Cell(20,5,number_format($linea->total, 2, ".", ","),'',0,'R',1);
                 $this->pdf->Ln(5);
             }
             $totalBolivianos = $totalEgreso*$tipoCambio;

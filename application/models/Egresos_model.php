@@ -12,7 +12,15 @@ class Egresos_model extends CI_Model
 	{
 		if($id==null) //no tiene id de entrada
         {
-		  $sql="SELECT *, SUM(total1) total, SUM( total1)/tipocambiovalor totalsus,
+		  $sql="SELECT *, 
+            CASE
+                WHEN moneda = 2 THEN ROUND(SUM(totalDol),2)
+                WHEN moneda = 1 THEN ROUND(ROUND(SUM(total1),2) / tipocambiovalor,2)
+            END totalsus,
+            CASE
+                WHEN moneda = 2 THEN ROUND((SUM(totalDol) * ROUND(tipocambiovalor,2)),2)
+                WHEN moneda = 1 THEN ROUND(SUM(total1),2)
+            END total,
             CASE
                 WHEN anulado = 1 THEN 'ANULADO'
                 WHEN sigla = 'ET' THEN 'TRASPASO'
@@ -23,7 +31,8 @@ class Egresos_model extends CI_Model
             END estadoF, estado
             FROM(
                     SELECT DISTINCTROW d.idingdetalle, e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, 
-                    c.nombreCliente, ( d.total) total1,  e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, 
+                    c.nombreCliente, ROUND(d.total,2) total1, ROUND((ROUND(d.`punitario` / tc.`tipocambio`,2) * d.`cantidad`),2) totalDol,
+                    e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, 
                     e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,
                     c.documento,e.tipocambio, tc.tipocambio tipocambiovalor,f.nFactura,GROUP_CONCAT(DISTINCTROW f.nfactura SEPARATOR '-') factura, e.almacen idAlmacen
                     FROM egresos e
@@ -168,8 +177,18 @@ class Egresos_model extends CI_Model
 	public function mostrarDetalle($id)//lista todos los detalles de un egreso
 	{
 		$sql="SELECT a.idArticulos,a.CodigoArticulo, a.Descripcion, e.cantidad, 
-        e.punitario punitario11, e.punitario, e.total total, e.descuento, e.idingdetalle, 
-        e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal, e.cantFact, tc.`tipocambio`
+        e.punitario punitario11, 
+        tc.`tipocambio`,
+        e.descuento, e.idingdetalle, 
+        e.idegreso, u.Sigla, round(e.cantidad-e.cantFact,2) cantidadReal, round(e.cantFact,2) cantFact,
+        case
+		when eg.moneda = 2 THEN ROUND(e.`punitario` / tc.`tipocambio`,2)
+		when eg.moneda = 1 THEN round(e.punitario,2)
+        end punitario,
+        case
+		when eg.moneda = 2 THEN round((ROUND(e.`punitario` / tc.`tipocambio`,2) * e.`cantidad`),2)
+		when eg.moneda = 1 THEN round(e.total,2)
+        end total
 		FROM egredetalle e
 		INNER JOIN articulos a
 		ON e.articulo = a.idArticulos

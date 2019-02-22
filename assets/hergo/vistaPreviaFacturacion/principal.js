@@ -25,7 +25,7 @@
         methods:{
     
             lugarFecha: function(){
-                var fechaFormato = moment(this.fecha, 'DD-MM-YYYY');
+                var fechaFormato = moment(this.fecha, 'DD/MM/YYYY');
                 var dia=fechaFormato.format("DD");
                 var mes=fechaFormato.format("MMMM");
                 var anio=fechaFormato.format("YYYY");    
@@ -34,10 +34,13 @@
             },
             retornarTotal: function(){
                 totalfact=0;
-                this.datosFactura.forEach(function(detalle) {
-                    totalfact+=parseFloat(detalle.facturaCantidad*detalle.facturaPUnitario);
-                })
-               return totalfact;
+
+                    this.datosFactura.forEach(function(detalle) {
+                        totalfact+=parseFloat(detalle.facturaCantidad*detalle.facturaPUnitario);
+                    })
+                //totalfact = this.moneda == 2 ? 100 : 500
+                //console.log(totalfact);
+               return totalfact.toFixed(2);
             
                 
             },
@@ -83,11 +86,9 @@
                 $("#qrcodeimg").html("");
               
                 if(parseInt(this.manual)==0) {
-                    
-                    var fecha    = moment(this.fecha, 'YYYY-MM-DD').format('DD/MM/YYYY');
-                    var monto    = this.retornarTotal().toString();
+                    let monto    = this.moneda == 1 ? this.retornarTotal().toString() :  this.retornarTotal()*this.tipocambio
               
-                    var codigoqr = (this.nit + "|" + this.numero + "|" + this.autorizacion + "|" +fecha + "|" + monto+ "|" + monto +"|" + this.codigoControl +"|" + this.ClienteNit + "|0|0|0|0");
+                    let codigoqr = (this.nit + "|" + this.numero + "|" + this.autorizacion + "|" +this.fecha + "|" + monto+ "|" + monto +"|" + this.codigoControl +"|" + this.ClienteNit + "|0|0|0|0");
                    
                     generarQr("qrcodeimg",codigoqr)
                 }

@@ -450,9 +450,9 @@ class Egresos extends CI_Controller
 				foreach ($res as $fila) 
 				{
 					
-					$fila["punitario1"] = $fila["punitario11"]/$tipocambio;
-				    $fila["punitario"] = $fila["punitario"]/$tipocambio;
-				    $fila["total"] = $fila["total"]/$tipocambio;
+					$fila["punitario1"] = $fila["punitario11"];
+				    $fila["punitario"] = $fila["punitario"];
+				    $fila["total"] = $fila["total"];
 				    array_push($resultado, $fila);
 				}
 				$res=$resultado;

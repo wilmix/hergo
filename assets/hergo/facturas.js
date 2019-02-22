@@ -668,11 +668,11 @@ function mostrarTablaFactura() {
         ]
     });
     $table.on('editable-save.bs.table', function (e, field, row, old, $el) {
-        var total = parseFloat(row.punitario) * parseFloat(row.cantidadReal);
+        let total = parseFloat(row.punitario) * parseFloat(row.cantidadReal);
         $("#tabla3Factura").bootstrapTable('updateByUniqueId', {
             id: row.idEgreDetalle,
             row: {
-                total: total
+                total: total.toFixed(2)
             }
         });
         calcularTotalFactura();
@@ -913,8 +913,8 @@ function agregarRegistrosTabla3(detalle) {
         Descripcion: detalle.Descripcion,
         cantidadRealAux: detalle.cantidadReal,
         cantidadReal: detalle.cantidadReal,
-        punitario: moneda == 2 ? detalle.punitario / glob_tipoCambio : detalle.punitario,
-        total: moneda == 2 ? detalle.total / glob_tipoCambio : detalle.total,
+        punitario: detalle.punitario.toFixed(2),//moneda == 2 ? detalle.punitario / glob_tipoCambio : detalle.punitario,
+        total: detalle.total.toFixed(2) //moneda == 2 ? detalle.total.toFixed(2) / glob_tipoCambio : detalle.total.toFixed(2),
     })
     $("#tabla3Factura").bootstrapTable('append', rows);
 }
@@ -931,8 +931,8 @@ function agregarRegistrosTabla3Cliente(detalle) {
                 Descripcion: detalle.Descripcion,
                 cantidadRealAux: detalle.cantidadReal,
                 cantidadReal: detalle.cantidadReal,
-                punitario: moneda == 2 ? detalle.punitario / glob_tipoCambio : detalle.punitario,
-                total: moneda == 2 ? detalle.total / glob_tipoCambio : detalle.total,
+                punitario: detalle.punitario.toFixed(2),// moneda == 2 ? detalle.punitario / glob_tipoCambio : detalle.punitario,
+                total: detalle.total.toFixed(2) //moneda == 2 ? detalle.total.toFixed(2) / glob_tipoCambio : detalle.total.toFixed(2),
             })
             console.log(rows)
             $("#tabla3Factura").bootstrapTable('append', rows);
@@ -1091,8 +1091,8 @@ function cambiarMonedaTabla3() {
         $('#tabla3Factura').bootstrapTable('updateRow', {
             index: index,
             row: {
-                punitario: nuevopunitario,
-                total: cantidad * nuevopunitario
+                //punitario: nuevopunitario,
+                total: cantidad * punitario
             }
         });
     }
