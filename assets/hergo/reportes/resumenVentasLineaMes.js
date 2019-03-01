@@ -155,7 +155,7 @@ function retornarVentasLineaMes()
                     
                 },
                 {
-                    field: mon == 1 ? 'marD' : 'mar',
+                    field: mon == 1 ? 'marD' : 'may',
                     title: 'Mayo',
                     align: 'right',
                     sortable: true,

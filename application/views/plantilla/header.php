@@ -2,7 +2,7 @@
 <style>
   body {
     /* el tamaño por defecto es 14px */
-    font-size: 16px;
+    font-size: 14px;
 }
 </style>
 <body class="skin-blue sidebar-mini fixed">

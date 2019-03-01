@@ -848,6 +848,7 @@ function AgregarRegistroTabla3Cliente(row, index, btn) {
                 dataType: "json",
                 data: { idegreso: row.idegreso, idegresoDetalle: row.idingdetalle },
             }).done(function (res) {
+                console.log(res);
                 $("#cliente_factura").val(res.cliente);
                 $("#idCliente_factura").val(res.idCliente);
                 $("#nit_factura").val(res.clienteNit);
@@ -911,10 +912,10 @@ function agregarRegistrosTabla3(detalle) {
         Sigla: detalle.Sigla,
         CodigoArticulo: detalle.CodigoArticulo,
         Descripcion: detalle.Descripcion,
-        cantidadRealAux: detalle.cantidadReal,
-        cantidadReal: detalle.cantidadReal,
-        punitario: detalle.punitario.toFixed(2),//moneda == 2 ? detalle.punitario / glob_tipoCambio : detalle.punitario,
-        total: detalle.total.toFixed(2) //moneda == 2 ? detalle.total.toFixed(2) / glob_tipoCambio : detalle.total.toFixed(2),
+        cantidadRealAux: parseFloat(detalle.cantidadReal),
+        cantidadReal: parseFloat(detalle.cantidadReal),
+        punitario: parseFloat(detalle.punitario),//moneda == 2 ? detalle.punitario / glob_tipoCambio : detalle.punitario,
+        total: parseFloat(detalle.total).toFixed(2) //moneda == 2 ? detalle.total.toFixed(2) / glob_tipoCambio : detalle.total.toFixed(2),
     })
     $("#tabla3Factura").bootstrapTable('append', rows);
 }
@@ -929,12 +930,11 @@ function agregarRegistrosTabla3Cliente(detalle) {
                 Sigla: detalle.Sigla,
                 CodigoArticulo: detalle.CodigoArticulo,
                 Descripcion: detalle.Descripcion,
-                cantidadRealAux: detalle.cantidadReal,
-                cantidadReal: detalle.cantidadReal,
-                punitario: detalle.punitario.toFixed(2),// moneda == 2 ? detalle.punitario / glob_tipoCambio : detalle.punitario,
-                total: detalle.total.toFixed(2) //moneda == 2 ? detalle.total.toFixed(2) / glob_tipoCambio : detalle.total.toFixed(2),
+                cantidadRealAux: parseFloat(detalle.cantidadReal),
+                cantidadReal: parseFloat(detalle.cantidadReal),
+                punitario: parseFloat(detalle.punitario),// moneda == 2 ? detalle.punitario / glob_tipoCambio : detalle.punitario,
+                total: parseFloat(detalle.total).toFixed(2) //moneda == 2 ? detalle.total.toFixed(2) / glob_tipoCambio : detalle.total.toFixed(2),
             })
-            console.log(rows)
             $("#tabla3Factura").bootstrapTable('append', rows);
     }
    
@@ -1030,7 +1030,7 @@ function AgregarRegistroTabla3ArrayCliente(row) {
                 dataType: "json",
                 data: { idegreso: row[0].idegreso, idegresoDetalle: row[0].idingdetalle },
             }).done(function (res) {
-                console.log(res)
+                //console.log(res)
                 $("#cliente_factura").val(res.cliente)
                 $("#idCliente_factura").val(res.idCliente)
                 $("#nit_factura").val(res.clienteNit)
