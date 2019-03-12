@@ -490,6 +490,15 @@ function operateFormatter3(value, row, index) {
     return (formatNumber.new(num));
 }
 
+function totalEgreso (value, row, index) {
+    console.log(row.cantidad);
+    console.log(row.punitario);
+    let cant = (Math.round(row.cantidad * 100) / 100).toFixed(2)
+    let pu = (Math.round(row.punitario * 100) / 100).toFixed(2)
+    num = cant * pu
+    return (formatNumber.new(num.toFixed(2)));
+}
+
 function mostrarFactura(value, row, index) {
     var cadena = ""
     $.each(value, function (index, val) {
@@ -632,6 +641,7 @@ function verdetalle(fila) {
 }
 
 function mostrarDetalle(res) {
+    console.log(res);
     $("#tegresosdetalle").bootstrapTable('destroy');
     $("#tegresosdetalle").bootstrapTable({
 
@@ -683,9 +693,9 @@ function mostrarDetalle(res) {
                 title: "Total",
                 align: 'right',
                 width: '10%',
-                formatter: operateFormatter3,
+                formatter: totalEgreso,
                 sortable: true,
-                footerFormatter: sumaColumna
+                footerFormatter: sumaColumnaEgreso
             },
             {
                 field: 'descuento',
@@ -707,6 +717,7 @@ function mostrarDetalle(res) {
     });
 }
 function mostrarDetalleTraspaso(res) {
+    console.log(res);
     $("#tegresosdetalle").bootstrapTable('destroy');
     $("#tegresosdetalle").bootstrapTable({
 
@@ -792,13 +803,19 @@ function footerStyle(value, row, index) {
         }
     };
 }
+function sumaColumnaEgreso(data) {
+    let totalSum = data.reduce(function (sum, row) {
+      return sum + ( + (row['punitario'] * row['cantidad']) );
+    }, 0);
+    return (formatNumber.new(totalSum.toFixed(2)));
+}
 function sumaColumna(data) {
     field = this.field;
     let totalSum = data.reduce(function (sum, row) {
       return sum + (+row[field]);
     }, 0);
     return (formatNumber.new(totalSum.toFixed(2)));
-  }
+}
 
 function punitariofac(value, row, index) {
 

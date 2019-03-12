@@ -698,10 +698,13 @@ function operateFormatter2(value, row, index) {
 }
 function operateFormatter3(value, row, index) {
     num = Math.round(value * 100) / 100
+    num = num.toFixed(2)
     return (formatNumber.new(num))
 }
 function totalTabla2(value, row, index) {
-    return (operateFormatter3(row.punitario * row.cantidadReal));
+    let pu = (Math.round(row.punitario * 100) / 100).toFixed(2)
+    let cant = (Math.round(row.cantidadReal * 100) / 100).toFixed(2)
+    return (operateFormatter3(pu * cant));
 }
 function mostrarDatosCliente(row) {
     $("#nombreClienteTabla1").val(row.nombreCliente);
@@ -944,7 +947,8 @@ function calcularTotalFactura() {
     let tabla3factura = $("#tabla3Factura").bootstrapTable('getData');
     let total = 0;
     $.each(tabla3factura, function (index, value) {
-        total = total + parseFloat(value.total);
+        aux = (value.punitario * value.cantidadReal)
+        total = total + parseFloat(aux.toFixed(2))
     })
     /****************Bs**************/
     let totalBs = moneda == 2 ? (parseFloat(total) * parseFloat(glob_tipoCambio)) : total;

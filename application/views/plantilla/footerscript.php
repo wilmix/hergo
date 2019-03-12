@@ -1,12 +1,5 @@
 <!-- Main Footer -->
-  <footer class="main-footer">
-    <!-- To the right -->
-    <div class="pull-right hidden-xs">
-      <strong>Sistema Diseñado por Luis Chavez y Willy Salas</strong> 
-    </div>
-    <!-- Default to the left -->
-    <strong>Copyright &copy; 2018 <a href="#">Hergo Ltda.</a> Pruebas</strong> 
-  </footer>
+
 </div>
 <!-- ./wrapper -->
 

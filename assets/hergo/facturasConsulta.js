@@ -474,7 +474,6 @@ function agregarDatosInicialesFacturaModal(row)
         dataType: "json",
         data:data
     }).done(function(res){
-        console.log(res);
         if(res.response)
         {
             agregarDatosFacturaModal(res.datosFactura,row);
@@ -504,7 +503,7 @@ function mostrardatosmodal(data)
         vmVistaPrevia.datosFactura=data.data2;
         if (vmVistaPrevia.moneda==2) {
             for (let i = 0; i < vmVistaPrevia.datosFactura.length; i++) {
-                vmVistaPrevia.datosFactura[i].facturaPUnitario = vmVistaPrevia.datosFactura[i].facturaPUnitario/tipocambioFactura;
+                vmVistaPrevia.datosFactura[i].facturaPUnitario = (vmVistaPrevia.datosFactura[i].facturaPUnitario/tipocambioFactura).toFixed(2);
             }
         } 
 

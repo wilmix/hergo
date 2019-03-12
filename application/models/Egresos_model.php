@@ -31,7 +31,7 @@ class Egresos_model extends CI_Model
             END estadoF, estado
             FROM(
                     SELECT DISTINCTROW d.idingdetalle, e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, 
-                    c.nombreCliente, ROUND(d.total,2) total1, ROUND((ROUND(d.`punitario` / tc.`tipocambio`,2) * d.`cantidad`),2) totalDol,
+                    c.nombreCliente, (round(d.`punitario`,2) * d.`cantidad`) total1, ROUND((ROUND(d.`punitario` / tc.`tipocambio`,2) * d.`cantidad`),2) totalDol,
                     e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, 
                     e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,
                     c.documento,e.tipocambio, tc.tipocambio tipocambiovalor,f.nFactura,GROUP_CONCAT(DISTINCTROW f.nfactura SEPARATOR '-') factura, e.almacen idAlmacen

@@ -10,7 +10,7 @@ let $table
 let checkTipoCambio = false
 $(document).ready(function () {
     glob_guardar = false;
-    calcularTotalEgresoMod()
+    //calcularTotalEgresoMod()
     fechaModEgreso = $('#fechamov_ne').val()
     if (fechaModEgreso) {
         hoy = moment(fechaModEgreso).format('DD-MM-YYYY')
@@ -256,8 +256,11 @@ function agregarArticulo() {
     let codigoArticulo = $("#articulo_impTest").val()
     let iniCod = codigoArticulo.substr(0,2)
 
+
     cant = parseFloat((cant == '') ? 0 : cant)
+    cant = cant.toFixed(2)
     costo = parseFloat((costo == '') ? 0 : costo)
+    costo = costo.toFixed(2)
     dcto = parseFloat(dcto == '' ? 0 : dcto)
     saldoAlmacen = parseFloat((saldoAlmacen == '') ? 0 : saldoAlmacen)
 
@@ -550,8 +553,10 @@ function addArticulo() {
     let descuento = $("#descuento_ne").inputmask('unmaskedvalue')
     let total
     
-    cant = parseFloat((cant == '') ? 0 : cant)
-    precioUnitario = parseFloat((precioUnitario == '') ? 0 : precioUnitario)
+    cant = parseFloat((cant == '') ? 0 : cant).toFixed(2)
+    cant = parseFloat(cant)
+    precioUnitario = parseFloat((precioUnitario == '') ? 0 : precioUnitario).toFixed(2)
+    precioUnitario = parseFloat(precioUnitario)
     descuento = parseFloat((descuento == '' ? 0 : descuento))
     precioUnitario = precioUnitario - (precioUnitario * descuento / 100)
     total = precioUnitario * cant
@@ -577,7 +582,7 @@ function formatoMoneda(value, row, index) {
 }
 function formatoCosto(value, row, index) {
     num = Math.round(value * 100) / 100
-    num = num.toFixed(4);
+    num = num.toFixed(2);
     return (formatNumber.new(num));
 }
 function retornarTablaEgresoDetalle(idEgreso=null) {
@@ -702,6 +707,15 @@ function retornarTablaEgresoDetalle(idEgreso=null) {
     })
     
 }
+$(document).on("click", ".editable-click", function () {
+    $(".tiponumerico").inputmask({
+        alias: "decimal",
+        digits: 2,
+        groupSeparator: ',',
+        autoGroup: true,
+        autoUnmask: true
+    });
+})
 function validarCantidadFactura(value) {
     value = $.trim(value);
     if ($.trim(value) == '') {

@@ -128,7 +128,8 @@ class Facturas extends CI_Controller
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('facturas/facturas.php',$this->datos);
 			$this->load->view('facturas/vistaPrevia.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);			
+			$this->load->view('plantilla/footcontainer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);			
 			$this->load->view('plantilla/footerscript.php',$this->datos);
 	}
 
@@ -181,7 +182,7 @@ class Facturas extends CI_Controller
 			$this->load->view('facturas/emitirFactura.php',$this->datos);
 			$this->load->view('facturas/vistaPrevia.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			//$this->load->view('plantilla/footer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
 			$this->load->view('plantilla/footerscript.php',$this->datos);
 			/*borrar cookie facturacion*/
 			

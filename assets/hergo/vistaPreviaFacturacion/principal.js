@@ -36,11 +36,12 @@
                 totalfact=0;
 
                     this.datosFactura.forEach(function(detalle) {
-                        totalfact+=parseFloat(detalle.facturaCantidad*detalle.facturaPUnitario);
+                        pu = detalle.facturaPUnitario
+                        totalfact+=parseFloat(detalle.facturaCantidad*pu);
                     })
                 //totalfact = this.moneda == 2 ? 100 : 500
                 //console.log(totalfact);
-               return totalfact.toFixed(2);
+               return totalfact;
             
                 
             },
@@ -86,9 +87,15 @@
                 $("#qrcodeimg").html("");
               
                 if(parseInt(this.manual)==0) {
-                    let monto    = this.moneda == 1 ? this.retornarTotal().toString() :  this.retornarTotal()*this.tipocambio
+                    let monto    = this.moneda == 1 ? this.retornarTotal() :  this.retornarTotal()*this.tipocambio
+                    monto = monto.toFixed(2)
+                    let fechaqr = moment(this.fecha, 'DD/MM/YYYY')
+                    let dia=fechaqr.format("DD");
+                    let mes=fechaqr.format("MM");
+                    let gestion=fechaqr.format("YYYY");
+                    fechaqr = dia + '/' + mes + '/' + gestion
               
-                    let codigoqr = (this.nit + "|" + this.numero + "|" + this.autorizacion + "|" +this.fecha + "|" + monto+ "|" + monto +"|" + this.codigoControl +"|" + this.ClienteNit + "|0|0|0|0");
+                    let codigoqr = (this.nit + "|" + this.numero + "|" + this.autorizacion + "|" + fechaqr + "|" + monto+ "|" + monto +"|" + this.codigoControl +"|" + this.ClienteNit + "|0|0|0|0");
                    
                     generarQr("qrcodeimg",codigoqr)
                 }

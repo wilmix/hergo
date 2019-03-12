@@ -65,7 +65,7 @@ class Factura extends CI_Controller {
             if ($factura->moneda==='1') {
                 $totalFactura=0;
                 foreach ($lineas->result() as $linea) {
-                    $totalFactura += ($linea->facturaCantidad*$linea->facturaPUnitario);
+                    $totalFactura += (($linea->facturaCantidad)*($linea->facturaPUnitario));
                     $this->pdf->SetFillColor(255,255,255);
                         // cell(w , h, 'dato', border, ln, align, fill)
                         $this->pdf->Cell(15,5,number_format($linea->facturaCantidad, 2, ".", ","),'',0,'C',0);
@@ -94,14 +94,17 @@ class Factura extends CI_Controller {
                 $tipoCambio = floatval($factura->cambiovalor);
                 $totalFactura=0;
                 foreach ($lineas->result() as $linea) {
-                    $totalFactura += (($linea->facturaCantidad*$linea->facturaPUnitario)/$tipoCambio);
+                    $pu = ($linea->facturaPUnitario);
+                    $cant = ($linea->facturaCantidad);
+                    //echo round($pu/$tipoCambio,2) * $cant;
+                    $totalFactura += (round($linea->facturaCantidad,2) * round($linea->facturaPUnitario/$tipoCambio,2));
                     $this->pdf->SetFillColor(255,255,255);
                         $this->pdf->Cell(15,5,number_format($linea->facturaCantidad, 2, ".", ","),'',0,'R',0);
                         $this->pdf->Cell(10,5,$linea->Sigla,'',0,'C',0);
                         $this->pdf->Cell(15,5,$linea->ArticuloCodigo,'',0,'C',0);
                         $this->pdf->Cell(118,5,utf8_decode($linea->ArticuloNombre),0,0,'L',0);
                         $this->pdf->Cell(20,5,number_format(($linea->facturaPUnitario/$tipoCambio), 2, ".", ","),0,0,'R',1);
-                        $this->pdf->Cell(20,5,number_format((($linea->facturaCantidad*$linea->facturaPUnitario)/$tipoCambio), 2, ".", ","),'',0,'R',1);
+                        $this->pdf->Cell(20,5,number_format(( $linea->facturaCantidad * round($linea->facturaPUnitario/$tipoCambio,2) ), 2, ".", ","),'',0,'R',1);
                     $this->pdf->Ln(5);
                 }
 

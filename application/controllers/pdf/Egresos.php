@@ -11,7 +11,6 @@ class Egresos extends CI_Controller {
     $egreso = $this->Egresos_model->mostrarEgresos($id)->row();
     $idCliente = $egreso->idcliente;
     $saldoDeudor = $this->Egresos_model->saldoDeudorCliente($idCliente)->row();
-
     $params = array(
         'almacen' => $egreso->almacen,
         'autor' => $egreso->autor,
@@ -61,7 +60,7 @@ class Egresos extends CI_Controller {
             $n = 1;
             $totalEgreso=0;
             foreach ($lineas->result() as $linea) {
-                $totalEgreso += $linea->total;
+                $totalEgreso += $linea->punitario * $linea->cantidad;
                 $this->pdf->SetFillColor(255,255,255);
                     $this->pdf->Cell(5,5,$n++,'',0,'C',0); ///NUMERO DE FILA
 
@@ -70,7 +69,7 @@ class Egresos extends CI_Controller {
                     $this->pdf->Cell(15,5,$linea->CodigoArticulo,'',0,'C',0);
                     $this->pdf->Cell(110,5,utf8_decode($linea->Descripcion),0,0,'L',0);
                     $this->pdf->Cell(20,5,number_format($linea->punitario, 2, ".", ","),0,0,'R',1);
-                    $this->pdf->Cell(20,5,number_format($linea->total, 2, ".", ","),0,0,'R',1);
+                    $this->pdf->Cell(20,5,number_format(round($linea->punitario,2) * $linea->cantidad, 2, ".", ","),0,0,'R',1);
                 $this->pdf->Ln(5);
             }
             $entera = intval($totalEgreso);
@@ -93,7 +92,7 @@ class Egresos extends CI_Controller {
             $n = 1;
             $totalEgreso=0;
             foreach ($lineas->result() as $linea) {
-                $totalEgreso += $linea->total;
+                $totalEgreso += $linea->punitario * $linea->cantidad;
                 $this->pdf->SetFillColor(255,255,255);
                     $this->pdf->Cell(5,5,$n++,'',0,'C',0); ///NUMERO DE FILA
                     $this->pdf->Cell(15,5,number_format($linea->cantidad, 2, ".", ","),'',0,'R',0);
@@ -101,7 +100,7 @@ class Egresos extends CI_Controller {
                     $this->pdf->Cell(15,5,$linea->CodigoArticulo,'',0,'C',0);
                     $this->pdf->Cell(110,5,utf8_decode($linea->Descripcion),0,0,'L',0);
                     $this->pdf->Cell(20,5,number_format($linea->punitario, 2, ".", ","),0,0,'R',1);
-                    $this->pdf->Cell(20,5,number_format($linea->total, 2, ".", ","),'',0,'R',1);
+                    $this->pdf->Cell(20,5,number_format($linea->punitario * $linea->cantidad, 2, ".", ","),'',0,'R',1);
                 $this->pdf->Ln(5);
             }
             $totalBolivianos = $totalEgreso*$tipoCambio;
