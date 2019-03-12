@@ -24,14 +24,6 @@ th:hover .filterControl {
 
       <table id="tarticulo"
             data-toggle="table"
-             data-height="550"
-             data-search="true"             
-             data-show-columns="true"
-             data-page-size="200"
-             data-pagination="true"
-             data-search="true"
-             data-striped="false"
-             data-toolbar-align="right"
              data-toolbar="#toolbar">
            <thead>
     <tr>

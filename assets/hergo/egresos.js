@@ -202,8 +202,8 @@ function mostrarTablaEgresos(res) {
 
         data: res,
         striped: true,
-        pagination: true,
-        pageSize: "100",
+        pagination: false,
+        pageSize: "500",
         search: true,
         filter: true,
         showColumns: true,

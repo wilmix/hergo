@@ -96,7 +96,7 @@ $(document).on("click",".botoncerrarmodal",function(){
            toolbarAlign:'right',
            toggle:'table',
            striped: true,
-           pagination: true,
+           pagination: false,
            pageSize: "10",
            search:true,
            showColumns: true,

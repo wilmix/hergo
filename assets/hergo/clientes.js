@@ -154,10 +154,12 @@ function retornarTablaClientes()
             
             data:res,           
             striped:true,
-            pagination:true,
+            pagination:false,
             pageSize:100,
             clickToSelect:true,
             search:true,
+            height:700,
+            showColumns: true,
             showExport:true,
             exportTypes:['excel','csv'],
             exportDataType:'all',

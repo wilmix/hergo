@@ -123,7 +123,7 @@ function retornarTablaDatosFactura() {
             toolbarAlign:'right',
             toggle:'table',
             striped: true,
-            pagination: true,
+            pagination: false,
             pageSize: "10",
             //search: true,
             showColumns: true,

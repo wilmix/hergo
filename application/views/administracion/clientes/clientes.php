@@ -8,15 +8,6 @@
 
           <table 
              data-toggle="table"
-             data-height="550"
-             data-search="true"
-             data-show-columns="true"
-             data-show-columns="true"
-             data-page-size="200"
-             data-pagination="true"
-             data-search="true"
-             data-striped="false"
-             data-toolbar-align="right"
              data-toolbar="#toolbar"
              id="tclientes"
              >

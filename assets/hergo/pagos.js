@@ -74,7 +74,7 @@ function retornarTablaPagos()
 
                 data:res,           
                     striped: true,
-                    pagination: true,
+                    pagination: false,
                     pageSize: "100",
                     search: true,
                     filter: true,

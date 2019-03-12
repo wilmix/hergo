@@ -76,6 +76,8 @@ function retornarTablaTraspasos() {
             pagination: true,
             pageSize: "100",
             search: true,
+            stickyHeader: true,
+            stickyHeaderOffsetY: '50px',
             strictSearch: true,
             filter: true,
             columns: [{

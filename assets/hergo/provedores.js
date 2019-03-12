@@ -124,11 +124,13 @@ function retornarTablaProveedor()
             
             data:res,           
             striped:true,
-            pagination:true,
+            pagination:false,
             pageSize:25,
             clickToSelect:true,
             search:true,
+            height:700,
             showExport:true,
+            showColumns: true,
             exportTypes:['excel','csv'],
             exportDataType:'all',
             exportOptions:{fileName: 'Proveedores',worksheetName: "Proveedores"},
@@ -136,7 +138,7 @@ function retornarTablaProveedor()
             {   
                 field: 'idproveedor',            
                 title: 'id',
-                visible:false,
+                visible:true,
             },  
             {   
                 field: 'documentotipo',            
