@@ -16,14 +16,16 @@ function retornarListaPrecios() //*******************************
 
                 data:res,    
                     striped:true,
+                    showColumns: true,
                     //pagination:true,
                     //pageSize:"100",
-                    //search:true,
+                    search:true,
                     //searchOnEnterKey:true,
                     //showColumns:true,
                     filter:true,
                     //showExport:true,
                     stickyHeader: true,
+                    showToggle:true,
                     stickyHeaderOffsetY: '50px',
                 columns:
                 [
@@ -32,24 +34,26 @@ function retornarListaPrecios() //*******************************
                         title: 'Codigo',
                         sortable:true,
                         align: 'center',
-                        filter: { type: "input" }
+                        //filter: { type: "input" }
                     },
                     {   
                         field: 'Descripcion',            
                         title: 'Descripción',
                         sortable:true,
-                        filter: { type: "input" }
+                        //filter: { type: "input" }
                     },
                     {   
                         field: 'Sigla',            
                         title: 'Unidad',
                         sortable:true,
+                        searchable: false,
                         align: 'center'
                     },
                     {   
                         field: 'Dolares',            
                         title: 'Dólares',
                         align: 'right',
+                        searchable: false,
                         sortable:true,
                         formatter: operateFormatter3
                     },
@@ -57,6 +61,7 @@ function retornarListaPrecios() //*******************************
                         field: 'Bolivianos',            
                         title: 'Bolivianos',
                         align: 'right',
+                        searchable: false,
                         sortable:true,
                         formatter: operateFormatter3
                     }

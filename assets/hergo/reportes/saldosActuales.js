@@ -25,6 +25,7 @@ function retornarSaldosActuales() //*******************************
                     search:true,
                     filter:true,
                     //strictSearch: true,
+                    showToggle:true,
                     stickyHeader: true,
                     stickyHeaderOffsetY: '50px',
                 columns:
