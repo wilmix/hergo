@@ -67,6 +67,7 @@ $(document).on("change", "#almacen_filtro", function () {
 
 function retornarNEporFac() //*******************************
 {
+    tituloReporte()
     ini = iniciofecha.format('YYYY-MM-DD')
     fin = finfecha.format('YYYY-MM-DD')
     alm = $("#almacen_filtro").val();

@@ -2,7 +2,6 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-body">
-            <div class="container">
                 <div id="toolbar2" class="form-inline">
                     <button  type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
                         <span>
@@ -35,12 +34,12 @@
                     <h2>Kardex Individual de Cliente -
                         <span id="nombreCliente"></span>
                     </h2>
-                    <h4 id="tituloReporte"></h4>
+                    <h3 id="tituloReporte"></h3>
+                    <h4 id="ragoFecha"></h4>
                 </div>
                 <table id="tablaKardex" data-toolbar="#toolbar2" data-toggle="table">
                 </table>
-                </div>
-            </div>
+             </div>
         </div>
     </div>
 </div>

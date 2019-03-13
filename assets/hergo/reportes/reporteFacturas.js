@@ -67,6 +67,7 @@ $(document).on("click", "#refresh", function () {
 
 
 function retornarReporteFacturas() {
+    tituloReporte();
     let ini = iniciofecha.format('YYYY-MM-DD')
     let fin = finfecha.format('YYYY-MM-DD')
     let alm = $("#almacen_filtro").val()

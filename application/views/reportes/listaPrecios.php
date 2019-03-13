@@ -5,7 +5,6 @@
           <div id="toolbar2" class="form-inline">
           
           </div>
-          <div class="container">
           <div class="text-center">
             <h2>LISTA DE PRECIOS</h2>
           </div>
@@ -14,8 +13,6 @@
             data-toolbar="#toolbar2"
             data-toggle="table">
           </table>
-          </div>
-          
       </div>
       <!-- /.box-body -->
     </div>

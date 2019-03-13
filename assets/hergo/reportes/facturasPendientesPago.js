@@ -83,6 +83,7 @@ $(document).on("click", "#pendientes", function () {
 function tituloReporte() {
     almText = $('#almacen_filtro').find(":selected").text();
     $('#tituloReporte').text(almText);
+    $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
 }
 $(document).on("click", "#excel", function () {
     let alm = $("#almacen_filtro").val()

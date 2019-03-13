@@ -62,6 +62,7 @@ $(document).on("change", "#clientes_filtro", function () {
 })
 
 function retornarKardexCliente() {
+    tituloReporte()
     let ini = iniciofecha.format('YYYY-MM-DD')
     let fin = finfecha.format('YYYY-MM-DD')
     let almacen = $("#almacen_filtro").val()
@@ -193,6 +194,7 @@ function operateFormatter3(value, row, index) {
 function tituloReporte() {
     almText = $('#almacen_filtro').find(":selected").text();
     nomCliente = $('#clientes_filtro').find(':selected').text();
+    $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
     $('#tituloReporte').text(almText);
     $('#nombreCliente').text(nomCliente);
 }

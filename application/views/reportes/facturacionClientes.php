@@ -18,7 +18,6 @@
               <option value="">TODOS</option>
             </select>
           </div>
-          <div class="container">
             <div class="text-center">
               <h2>FACTURACION CLIENTES - <span id="tituloAlmacen"></span></h2>
               <h4 id="ragoFecha"></h4>
@@ -28,9 +27,6 @@
               data-toolbar="#toolbar2"
               data-toggle="table">
             </table>
-          </div>
-          
-
       </div>
       <!-- /.box-body -->
     </div>

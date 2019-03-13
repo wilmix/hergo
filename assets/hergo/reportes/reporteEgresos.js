@@ -68,10 +68,11 @@ $(document).on("click", "#refresh", function () {
 
 
 function retornarReporteEgresos() {
-    var ini = iniciofecha.format('YYYY-MM-DD')
-    var fin = finfecha.format('YYYY-MM-DD')
-    var alm = $("#almacen_filtro").val()
-    var tipoingreso = $("#tipo_filtro").val()
+    tituloReporte();
+    let ini = iniciofecha.format('YYYY-MM-DD')
+    let fin = finfecha.format('YYYY-MM-DD')
+    let alm = $("#almacen_filtro").val()
+    let tipoingreso = $("#tipo_filtro").val()
     agregarcargando();
     $.ajax({
         type: "POST",

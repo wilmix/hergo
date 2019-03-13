@@ -30,6 +30,7 @@
           <div class="text-center">
             <h2>FACTURAS PENDIENTES DE PAGO</h2>
             <h3 id="tituloReporte"></h3>
+            <h4 id="ragoFecha"></h4>
           </div>
           <table 
             id="tablaFacturasPendientes" 

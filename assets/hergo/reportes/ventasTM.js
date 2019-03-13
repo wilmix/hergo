@@ -77,6 +77,7 @@ function tituloReporte() {
 }
 
 function returnVentasTM() {
+    tituloReporte();
     ini = iniciofecha.format('YYYY-MM-DD')
     fin = finfecha.format('YYYY-MM-DD')
     alm = $("#almacen_filtro").val();
