@@ -5,13 +5,13 @@ let fechaHoySystem
 
 $(document).ready(function () 
 {
-  $("input").on("keypress", function () {
+  /*$("input").on("keypress", function () {
     $input = $(this);
     setTimeout(function () {
       $input.val($input.val().toUpperCase());
     }, 50);
 
-  })
+  })*/
   glob_tipoCambio = parseFloat($("#mostrarTipoCambio").text())
   fechaHoySystem = moment().endOf('day')
   fechaHoySystem = moment(fechaHoySystem).format("YYYY-MM-DD");
