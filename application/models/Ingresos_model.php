@@ -254,7 +254,7 @@ class Ingresos_model extends CI_Model
         INNER JOIN unidad u ON a.idUnidad=u.idUnidad
         LEFT JOIN saldoarticulos sa ON sa.`idArticulo` = a.`idArticulos` AND sa.`idAlmacen` = '$a'
         WHERE a.CodigoArticulo LIKE '$b%' OR a.Descripcion LIKE '$b%'
-        ORDER BY CodigoArticulo ASC LIMIT 10";
+        ORDER BY CodigoArticulo ASC LIMIT 25";
 		$query=$this->db->query($sql);
 		return $query;
     }
