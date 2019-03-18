@@ -68,65 +68,73 @@ function retornarestadoVentasCosto()
                         field: 'codigo',
                         title: 'Código',
                         align: 'center',
-                        visible: true
+                        visible: true,
+                        formatter: totalVacio
                     },
                     {
                         field: 'descrip',
                         title: 'Descripción',
                         align: 'left',
-                        visible: true
+                        visible: true,
+                        formatter: subTotal
                     },
                     {
-                        field: 'unidad',
+                        field: 'uni',
                         title: 'Uni.',
                         align: 'center',
                         visible: true,
                         searchable: false,
+                        formatter: totalVacio
                     },
                     {
-                        field: 'costo',
+                        field: 'cpp',
                         title: 'C/U BOB.',
                         align: 'right',
                         width:'80px',
                         visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
+                        formatter: totalVacio
                     },
                     {
-                        field: 'costo',
+                        field: 'cpp',
                         title: 'C/U $U$.',
                         align: 'right',
                         width:'80px',
                         visible: mon==1 ? true  : false,
                         searchable: false,
                         formatter: formatoDecimalDolares,
+                        formatter: totalVacio
                     },
                     {
-                        field: 'ppVenta',
+                        field: 'precioVenta',
                         title: 'P.P. Venta',
                         align: 'right',
                         width:'80px',
                         visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
+                        formatter: totalVacio
                     },
                     {
-                        field: 'ppVenta',
+                        field: 'precioVenta',
                         title: 'P.P. Venta',
                         align: 'right',
                         width:'80px',
                         visible: mon==1 ? true  : false,
                         searchable: false,
                         formatter: formatoDecimalDolares,
+                        formatter: totalVacio
                     },
                     {
-                        field: 'saldo',
+                        field: 'saldoCantidad',
                         title: 'Saldo',
                         align: 'right',
                         width:'80px',
                         visible: true,
                         searchable: false,
                         formatter: formatoDecimal,
+                        formatter: totalVacio
                     },
                     {
                         field: 'saldoValorado',
@@ -149,13 +157,14 @@ function retornarestadoVentasCosto()
                         footerFormatter: sumaColumna
                     },
                     {
-                        field: 'cantidadVendida',
+                        field: 'cantVendida',
                         title: 'Cant. Vendida',
                         align: 'right',
                         width:'80px',
                         visible: true,
                         searchable: false,
                         formatter: formatoDecimal,
+                        formatter: totalVacio
                     },
                     {
                         field: 'totalCosto',
@@ -178,7 +187,7 @@ function retornarestadoVentasCosto()
                         footerFormatter: sumaColumna
                     },
                     {
-                        field: 'totalVentas',
+                        field: 'totalVenta',
                         title: 'Total Ventas',
                         align: 'right',
                         width:'80px',
@@ -188,7 +197,7 @@ function retornarestadoVentasCosto()
                         footerFormatter: sumaColumna
                     },
                     {
-                        field: 'totalVentas',
+                        field: 'totalVenta',
                         title: 'Total Ventas',
                         align: 'right',
                         width:'80px',
@@ -230,6 +239,21 @@ function retornarestadoVentasCosto()
     num=num.toFixed(2);
     return (formatNumber.new(num));
 }
+function totalVacio(value, row, index) {
+    if (row.codigo == null) {
+        value = ''
+    }
+    return (value);
+}
+function subTotal(value, row, index) {
+    if (row.codigo == null && row.siglaLinea == null) {
+        value = 'TOTAL GENERAL'
+    }
+    else if (row.codigo == null) {
+        value = 'TOTAL ' + row.linea
+    }
+    return (value);
+}
  function formatoDecimalDolares(value, row, index) {
     num=Math.round(value * 100) / 100
     num = num / glob_tipoCambio
@@ -257,7 +281,7 @@ function footerStyle(value, row, index) {
     };
 }
 function rowStyle(row, index) {
-    if (row.descrip=='') {
+    if (row.codigo==null) {
         return {
             css: {
                 //"font-weight": "bold",

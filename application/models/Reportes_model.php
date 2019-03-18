@@ -407,6 +407,48 @@ class Reportes_model extends CI_Model
 	}
 	public function mostrarEstadoVentasCosto($alm="")
 	{ 
+		$sql="SELECT id,linea, siglaLinea, codigo, descrip, uni, cpp, precioVenta, saldoCantidad,
+		SUM(saldoValorado) saldoValorado,
+		cantVendida,
+		SUM(totalCosto) totalCosto, SUM(totalVenta) totalVenta, SUM(utilidad) utilidad
+		FROM
+		(
+			SELECT l.`Linea` linea, l.`Sigla` siglaLinea, a.`idArticulos` id, a.`CodigoArticulo` codigo,a.`Descripcion` descrip, u.`Unidad` uni, 
+			IFNULL(ROUND(a.`costoPromedioPonderado`,4),0) cpp, IFNULL(ROUND((IFNULL(ROUND(artVen.totalVenta,2),0) / IFNULL(artVen.cant,0)),2),0) precioVenta,
+			ROUND((sa.`saldo`+sa.`notaEntrega`),2) saldoCantidad,  ROUND((ROUND((sa.`saldo`+sa.`notaEntrega`),2) * IFNULL(ROUND(a.`costoPromedioPonderado`,4),0)),2) saldoValorado,
+			IFNULL(ROUND(artVen.cant,2),0) cantVendida, 
+			ROUND((IFNULL(ROUND(a.`costoPromedioPonderado`,4),0)*IFNULL(ROUND(artVen.cant,2),0)),2) totalCosto,
+			IFNULL(ROUND(artVen.totalVenta,2),0) totalVenta,
+			IFNULL((ROUND(artVen.totalVenta,2) - ROUND((IFNULL(ROUND(a.`costoPromedioPonderado`,4),0)*IFNULL(ROUND(artVen.cant,2),0)),2)),0) utilidad
+			FROM saldoarticulos sa
+			INNER JOIN articulos a  ON sa.`idArticulo` = a.`idArticulos`
+			INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
+			INNER JOIN linea l ON l.`idLinea` = a.`idLinea`
+			LEFT JOIN
+			(
+				SELECT  a.`idArticulos` id, SUM(fd.`facturaCantidad`) cant, SUM(fd.`facturaPUnitario`* fd.`facturaCantidad`) totalVenta
+				FROM facturadetalle fd
+				INNER JOIN factura f ON f.`idFactura` = fd.`idFactura`
+				INNER JOIN articulos a ON a.`idArticulos` = fd.`articulo`
+				INNER JOIN linea l ON l.`idLinea` = a.`idLinea`
+		
+				WHERE YEAR(f.`fechaFac`) = (select gestionActual from config)
+				AND f.`almacen` = $alm
+				AND f.`anulada` = 0
+				GROUP BY fd.`articulo`
+			) artVen ON artVen.id = sa.`idArticulo`
+			WHERE 
+			sa.`idAlmacen` = $alm
+			ORDER BY codigo 
+		)tblg
+		 GROUP BY siglaLinea, codigo WITH ROLLUP
+		-- select gestionActual from config 		
+		";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+	/*public function mostrarEstadoVentasCosto($alm="")
+	{ 
 		$sql="SELECT 
 		sigla, linea, idArticulo,  
 		IF(codigo IS NULL, '', descrip) descrip, 
@@ -457,7 +499,7 @@ class Reportes_model extends CI_Model
 		";
 		$query=$this->db->query($sql);		
 		return $query;
-	}
+	}*/
 	public function mostrarEstadoVentasCostoXLS($alm="")
 	{ 
 		$sql="SELECT sigla, linea, 
