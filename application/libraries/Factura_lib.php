@@ -1,6 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     // Incluimos el archivo fpdf
     require_once APPPATH."/third_party/fpdf/fpdf.php";
+    require_once APPPATH."/third_party/phpqrcode/qrlib.php";
     
     //Extendemos la clase Pdf de la clase fpdf para que herede todas sus variables y funciones
     class Factura_lib extends FPDF {
@@ -43,12 +44,19 @@
             $qr = $nit.'|'.$nFactura.'|'.$autorizacion.'|'.$fechaFacQR.'|'.number_format($total, 2, ".","")
             .'|'.number_format($total, 2, ".","").'|'.$codigoControl.'|'.$ClienteNit.'|'.'0'.'|'.'0'.'|'.'0'.'|'.'0';
 
+            QRcode::png($qr,"qr.png",QR_ECLEVEL_L,3,2);
+
             //var_dump($manual);
-            if ($manual==='0') {
+             if ($manual==='0') {
+                $this->SetY(-136);
+                $this->SetX(177);
+                $this->Image('qr.png');
+            }
+           /* if ($manual==='0') {
                 $this->SetY(-136);
                 $this->SetX(177);
                 $this->Image('https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl='.$qr.'&.png',NULL,NULL,35,35,'PNG');
-            }
+            }*/
 
             //TITULO
             $this->SetXY(10,9);
