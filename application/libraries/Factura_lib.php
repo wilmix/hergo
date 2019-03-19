@@ -47,16 +47,16 @@
             QRcode::png($qr,"qr.png",QR_ECLEVEL_L,3,2);
 
             //var_dump($manual);
-             if ($manual==='0') {
+            /* if ($manual==='0') {
                 $this->SetY(-136);
                 $this->SetX(177);
                 $this->Image('qr.png');
-            }
-           /* if ($manual==='0') {
+            }*/
+            if ($manual==='0') {
                 $this->SetY(-136);
                 $this->SetX(177);
-                $this->Image('https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl='.$qr.'&.png',NULL,NULL,35,35,'PNG');
-            }*/
+                $this->Image('http://api.qrserver.com/v1/create-qr-code/?data='.$qr.'!&size=100x100'.'.png', 178, 143, 30);
+            }
 
             //TITULO
             $this->SetXY(10,9);
