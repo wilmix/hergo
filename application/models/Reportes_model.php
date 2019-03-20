@@ -402,8 +402,7 @@ class Reportes_model extends CI_Model
 					AND p.almacen LIKE '%$almacen'
 					AND c.`idCliente` = '$cliente'
 		) kardexClientes
-		where fecha is not null
-		ORDER BY fecha";
+		ORDER BY fecha, numDocumento";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
