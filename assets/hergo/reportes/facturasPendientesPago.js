@@ -111,6 +111,7 @@ function retornarFacturasPendientes()
         }, 
     }).done(function (res) {
         quitarcargando();
+        let aux = 0
         for (let index = 0; index < res.length; index++) {
             if (res[index].id == null && res[index].cliente == null) {
                 res[index].cliente = `TOTAL GENERAL`
@@ -123,14 +124,11 @@ function retornarFacturasPendientes()
                 res[index].nFactura = ''
                 res[index].fechaFac = ''
                 res[index].saldo = (Number(res[index].total) - Number(res[index].montoPagado))
-
             } else  {
-
-                res[index].saldo = (Number(res[index].total) - Number(res[index].montoPagado))
-
+                res[index].saldo = (aux + Number(res[index].total) - Number(res[index].montoPagado))
             }
+            aux = (res[index].id == null) ? 0 : (aux + Number(res[index].total) - Number(res[index].montoPagado))
         }
-        //console.log(res);
         datosselect = restornardatosSelect(res);
         $("#tablaFacturasPendientes").bootstrapTable('destroy');
         $("#tablaFacturasPendientes").bootstrapTable({ 
