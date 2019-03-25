@@ -8,13 +8,13 @@ $(document).ready(function() {
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
-          tipo_doc: {
+          /*tipo_doc: {
                 validators: {
                     notEmpty: {
                         message: 'Selecciona NIT o CI'
                     }
                 }
-            },
+            },*/
             nombre: {
                 validators: {
                         stringLength: {
@@ -33,18 +33,7 @@ $(document).ready(function() {
                 }
             },
           
-          
-        
-          
-          phone: {
-                    validators: {
-                         between: {
-                            min: 1111,
-                            max: 9999999999999999999,
-                            message: 'Igrese número de telefono valido'
-                        }
-                    }
-                },
+
           website: {
                 validators: {
                         stringLength: {

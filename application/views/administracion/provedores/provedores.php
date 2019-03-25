@@ -60,7 +60,7 @@
                     <div class="col-md-9 col-lg-9 inputGroupContainer">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
-                        <input  name="carnet"  id="carnet" placeholder="00000000" class="form-control"  type="number">
+                        <input  name="carnet"  id="carnet" placeholder="00000000" class="form-control">
                       </div>
                     </div>
                   </div>
@@ -100,7 +100,7 @@
                     <div class="col-md-9 col-lg-9 inputGroupContainer">
                       <div class="input-group">
                          <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-                        <input name="phone" id="phone" placeholder="Telefono de Proovedor" class="form-control" type="number">
+                        <input name="phone" id="phone" placeholder="Telefono de Proovedor" class="form-control">
                       </div>
                     </div>
                   </div>
@@ -110,7 +110,7 @@
                       <div class="col-md-9 col-lg-9 inputGroupContainer">
                       <div class="input-group">
                          <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-                        <input name="fax" id="fax" placeholder="Telefono Fax" class="form-control" type="number">
+                        <input name="fax" id="fax" placeholder="Telefono Fax" class="form-control">
                       </div>
                     </div>
                   </div>
