@@ -118,10 +118,12 @@ function retornarFacturasPendientes()
                 res[index].lote = ''
                 res[index].nFactura = ''
                 res[index].fechaFac = ''
+                res[index].vendedor = ''
                 res[index].saldo = (Number(res[index].total) - Number(res[index].montoPagado))
             } else if (res[index].id == null) {
                 res[index].lote = ''
                 res[index].nFactura = ''
+                res[index].vendedor = ''
                 res[index].fechaFac = ''
                 res[index].saldo = (Number(res[index].total) - Number(res[index].montoPagado))
             } else  {
@@ -146,20 +148,20 @@ function retornarFacturasPendientes()
                     field: 'almacen',
                     title: 'Almacen',
                     width:'150px',
-                    sortable: true,
+                    //sortable: true,
                     visible: almacen==''?true:false
                 },
                 {
                     field: 'lote',
                     title: 'Lote',
                     width:'50px',
-                    sortable: true,
+                    //sortable: true,
                     align: 'center'
                 },
                 {
                     field: 'nFactura',
                     title: 'N° Factura',
-                    sortable: true,
+                    //sortable: true,
                     width:'80px',
                     align: 'center',
                 },
@@ -167,7 +169,7 @@ function retornarFacturasPendientes()
                     field: 'fechaFac',
                     title: 'Fecha',
                     width:'100px',
-                    sortable: true,
+                    //sortable: true,
                     align: 'center',
                     formatter: formato_fecha_corta_sub
                 },
@@ -184,7 +186,7 @@ function retornarFacturasPendientes()
                 {
                     field: 'total',
                     title: 'Crédito',
-                    sortable: true,
+                    //sortable: true,
                     align: 'right',
                     width:'100px',
                     formatter: operateFormatter3,
@@ -192,7 +194,7 @@ function retornarFacturasPendientes()
                 {
                     field: 'montoPagado',
                     title: 'Abono',
-                    sortable: true,
+                    //sortable: true,
                     align: 'right',
                     width:'100px',
                     formatter: operateFormatter3,
@@ -200,7 +202,7 @@ function retornarFacturasPendientes()
                 {
                     field: 'saldo',
                     title: 'Saldo',
-                    sortable: true,
+                    //sortable: true,
                     align: 'right',
                     width:'100px',
                     formatter: operateFormatter3,
