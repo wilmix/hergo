@@ -817,52 +817,62 @@ class Reportes_model extends CI_Model
 	}
 	public function showVentasTM ($ini, $fin, $alm="") 
 	{ 
-		$sql="SELECT 
-		SUBSTRING(fd.`ArticuloCodigo`,1,17) codigo, 
-		SUBSTRING(fd.`ArticuloNombre`,1,40) descripcion, 
-		SUBSTRING(f.`ClienteNit`,1,13) nit, 
-		SUBSTRING(f.`ClienteFactura`,1,99) razon, 
-		round(fd.`facturaCantidad`,2) cantidad,
-		SUBSTRING(u.`Unidad`,1,5) unidad,  
-		round(fd.`facturaPUnitario`,2) pu, 
-		round((round(fd.`facturaCantidad`,2) * round(fd.`facturaPUnitario`,2)),2) total,
-		'BOB' moneda, 
-		f.`fechaFac` 
-		fecha, 
-		'' ubigeo,  
-		f.`nFactura` 
-		numDoc, 
-		'FA' tipo,
-		'NO DEFINIDO' nodef, 
-		'NO DEFINIDO' vend, 
-		'NO DEFINIDO' zona,
-		al.`ciudad`,  
-		'NO DEFINIDO', 
-		'' regalo , 
-		f.`almacen`
-		FROM facturadetalle fd
-		inner join factura f on f.`idFactura` = fd.`idFactura`
-		inner join articulos a on a.`idArticulos` = fd.`articulo`
-		inner join marca m on m.`idMarca` = a.`idMarca`
-		INNER JOIN unidad u ON a.`idUnidad` = u.`idUnidad`
-		INNER JOIN almacenes al on al.`idalmacen` = f.`almacen`
-		WHERE f.`anulada` = 0 AND m.`idMarca` = 30 AND  f.`almacen` LIKE '%$alm' AND
-		f.`fechaFac` BETWEEN '$ini' AND '$fin' 
-		ORDER BY f.`almacen`, f.`fechaFac`, fd.`ArticuloCodigo`, f.`ClienteFactura`
+		$sql="SELECT * 
+		FROM
+		(
+			SELECT 
+			SUBSTRING(fd.`ArticuloCodigo`,1,17) codigo, 
+			SUBSTRING(fd.`ArticuloNombre`,1,40) descripcion, 
+			SUBSTRING(f.`ClienteNit`,1,13) nit, 
+			SUBSTRING(f.`ClienteFactura`,1,99) razon, 
+			round(fd.`facturaCantidad`,2) cantidad,
+			SUBSTRING(u.`Unidad`,1,5) unidad,  
+			round(fd.`facturaPUnitario`,2) pu, 
+			round((round(fd.`facturaCantidad`,2) * round(fd.`facturaPUnitario`,2)),2) total,
+			'BOB' moneda, 
+			f.`fechaFac` 
+			fecha, 
+			'' ubigeo,  
+			f.`nFactura` 
+			numDoc, 
+			'FA' tipo,
+			'NO DEFINIDO' nodef, 
+			'NO DEFINIDO' vend, 
+			'NO DEFINIDO' zona,
+			al.`ciudad`,  
+			'NO DEFINIDO', 
+			'' regalo , 
+			f.`almacen`
+			FROM facturadetalle fd
+			inner join factura f on f.`idFactura` = fd.`idFactura`
+			inner join articulos a on a.`idArticulos` = fd.`articulo`
+			inner join marca m on m.`idMarca` = a.`idMarca`
+			INNER JOIN unidad u ON a.`idUnidad` = u.`idUnidad`
+			INNER JOIN almacenes al on al.`idalmacen` = f.`almacen`
+			WHERE f.`anulada` = 0 AND m.`idMarca` = 30 AND  f.`almacen` LIKE '%$alm' AND
+			f.`fechaFac` BETWEEN '$ini' AND '$fin' 
+			ORDER BY f.`almacen`, f.`fechaFac`, fd.`ArticuloCodigo`, f.`ClienteFactura`
+		) tbl
+		WHERE SUBSTRING(codigo,1,2) = 'TM' OR SUBSTRING(codigo,1,2) = 'TS' 
 		";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
 	public function showInventarioTM () 
 	{ 
-		$sql="SELECT SUBSTRING(a.`CodigoArticulo`,1,16) codigo, SUBSTRING(a.`Descripcion`,1,39) descripcion, ROUND(sa.`saldo`,2) cantidad, SUBSTRING(u.`Unidad`,1,5) Unidad, DATE_FORMAT(NOW(), '%Y-%m-%d') fecha, alm.`almacen`
-		FROM saldoarticulos sa
-		INNER JOIN articulos a ON a.`idArticulos` = sa.`idArticulo`
-		INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
-		INNER JOIN marca m ON m.`idMarca` = a.`idMarca`
-		INNER JOIN almacenes alm ON alm.`idalmacen` = sa.`idAlmacen`
-		WHERE m.`idMarca` = 30 AND sa.`saldo`<> 0
+		$sql="SELECT * 
+		FROM
+		(
+			SELECT SUBSTRING(a.`CodigoArticulo`,1,16) codigo, SUBSTRING(a.`Descripcion`,1,39) descripcion, ROUND(sa.`saldo`,2) cantidad, SUBSTRING(u.`Unidad`,1,5) Unidad, DATE_FORMAT(NOW(), '%Y-%m-%d') fecha, alm.`almacen`
+			FROM saldoarticulos sa
+			INNER JOIN articulos a ON a.`idArticulos` = sa.`idArticulo`
+			INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
+			INNER JOIN marca m ON m.`idMarca` = a.`idMarca`
+			INNER JOIN almacenes alm ON alm.`idalmacen` = sa.`idAlmacen`
+			WHERE m.`idMarca` = 30 AND sa.`saldo`<> 0
 		ORDER BY a.`CodigoArticulo`
+		) tbl
+		WHERE SUBSTRING(codigo,1,2) = 'TM' OR SUBSTRING(codigo,1,2) = 'TS' 
 		";
 		$query=$this->db->query($sql);		
 		return $query;
