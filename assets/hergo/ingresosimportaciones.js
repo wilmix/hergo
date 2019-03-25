@@ -5,8 +5,10 @@ var loc_almacen;
 let hoy
 let checkTipoCambio = false
 let articulos = []
+let moneda
 
 $(document).ready(function(){
+    moneda = $("#moneda_imp").val()
     fechaMod = $('#fechamov_imp').val()
     if (fechaMod) {
         hoy = moment(fechaMod).format('DD-MM-YYYY')
@@ -100,6 +102,17 @@ $(document).on("click",".eliminarArticulo",function(){
 $(document).on("change","#almacen_imp",function(){
     loc_almacen = $("#almacen_imp").val()
     swal("Atencion!", "Usted esta cambiado de Almacen")
+}); 
+$(document).on("change","#moneda_imp",function(){
+    moneda = $("#moneda_imp").val()
+    limpiarArticulo()
+    moneda == 1 ? $("#labelCPP").html("CPP Bs.") : $("#labelCPP").html("CPP $U$")
+    if ($("#tipomov_imp2").val() == 2) {
+        moneda == 1 ? $("#labelTotal").html("Total Bs.") : $("#labelTotal").html("Total $U$")
+    } else {
+        moneda == 1 ? $("#labelTotal").html("Costo Unitario Bs.") : $("#labelTotal").html("Costo Unitario $U$")
+    }
+
 }); 
 $(document).ready(function(){ 
 
@@ -705,7 +718,6 @@ $(document).on("change","#almacen_imp",function(){
 
 /*******************CLIENTE*****************/
 $( function() {
-    console.log(alm);
     $("#articulo_impTest").autocomplete(
     {      
         minLength: 2,
@@ -734,8 +746,8 @@ $( function() {
             $("#Descripcion_imp").val( ui.item.descripcion);
             $("#unidad_imp").val( ui.item.unidad);
             $("#saldo_imp").val( ui.item.saldo);
-            $("#costo_imp").val( ui.item.cpp);
-            console.log(ui)
+            let costoPromedio = moneda == '2' ? (ui.item.cpp /glob_tipoCambio).toFixed(2) : ui.item.cpp
+            $("#costo_imp").val(costoPromedio)
             glob_guardar=true;
             return false;
         }

@@ -8,7 +8,9 @@ let hoy
 let idEgreso 
 let $table
 let checkTipoCambio = false
+let moneda
 $(document).ready(function () {
+    moneda = $("#moneda_ne").val()
     glob_guardar = false;
     //calcularTotalEgresoMod()
     fechaModEgreso = $('#fechamov_ne').val()
@@ -130,6 +132,8 @@ $(document).on("click", "#agregar_articulo", function () {
     }
 })
 $(document).on("change", "#moneda_ne", function () {
+    moneda = $("#moneda_ne").val()
+    limpiarArticulo()
     calcularTotalEgresoMod()
     cambiarMoneda()
 })
@@ -237,8 +241,13 @@ $( function() {
             $("#Descripcion_ne").val( ui.item.descripcion);
             $("#unidad_imp").val( ui.item.unidad);
             $("#saldo_ne").val( ui.item.saldo);
-            $("#precio").val(($("#tipomov_ne2").val()=='9') ? formatoCosto(ui.item.cpp) : ui.item.precio);
-            $("#punitario_ne").val(($("#tipomov_ne2").val()=='9') ? formatoCosto(ui.item.cpp) : '');
+            if (moneda == 2) {
+                $("#precio").val(($("#tipomov_ne2").val()=='9') ? formatoCosto((ui.item.cpp/glob_tipoCambio).toFixed(2)) : (ui.item.precio/glob_tipoCambio).toFixed(2));
+                $("#punitario_ne").val(($("#tipomov_ne2").val()=='9') ? formatoCosto((ui.item.cpp/glob_tipoCambio).toFixed(2)) : '');
+            } else {
+                $("#precio").val(($("#tipomov_ne2").val()=='9') ? formatoCosto(ui.item.cpp) : ui.item.precio);
+                $("#punitario_ne").val(($("#tipomov_ne2").val()=='9') ? formatoCosto(ui.item.cpp) : '');
+            }
             glob_guardar=true;
             return false;
         }
@@ -422,22 +431,16 @@ function recuperarMovimiento() // X
 }
 function cambiarMoneda() {
     if ($("#tipomov_ne2").val()=='9') {
-        if ($("#moneda_ne").val() == 1) {
+        if (moneda == 1) {
             $(".costo_ne_label").html("Costo Bs")
-            //$(".punitario_ne_class").val(glob_precio_egreso)   
-    
         } else {
             $(".costo_ne_label").html("Costo Dolares")
-            //$(".punitario_ne_class").val(glob_precio_egreso/glob_tipoCambio)
         }
     } else {
-        if ($("#moneda_ne").val() == 1) {
+        if (moneda == 1) {
             $(".costo_ne_label").html("Precio Bs")
-            //$(".punitario_ne_class").val(glob_precio_egreso)   
-    
         } else {
-            $(".costo_ne_label").html("Precio Dolares")
-            //$(".punitario_ne_class").val(glob_precio_egreso/glob_tipoCambio)
+            $(".costo_ne_label").html("Precio $U$")
         }
     }
     

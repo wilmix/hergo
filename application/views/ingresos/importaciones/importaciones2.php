@@ -200,7 +200,7 @@
                   </div>
               </div>
                   <div class="col-xs-12 col-md-4">
-                     <label for="descripcion_imp">Descripcion:</label>
+                     <label for="descripcion_imp">Descripción:</label>
                      <input type="text" 
                             class="form-control form-control-sm" 
                             id="Descripcion_imp" 
@@ -215,7 +215,7 @@
                             disabled/>
                   </div>
                   <div class="col-xs-4 col-md-2 ">
-                     <label for="costo_imp">CostoPromedio:
+                     <label id="labelCPP">CPP Bs.:
                         <span style="margin-left: 10px; display: none;" 
                               class="cargandoCostoSaldo">
                         <i class="fa fa-spinner fa-pulse fa-fw"></i>
@@ -254,7 +254,7 @@
                               name="cantidad_imp" />
                   </div>
                   <div class="col-xs-4 col-md-2">
-                      <label><?= $idingresocompraslocales==2? "Total:":"Costo Unitario:" ?></label>
+                      <label id="labelTotal"><?= $idingresocompraslocales==2? "Total Bs:":"Costo Unitario Bs:" ?></label>
                       <input  type="text" 
                               style="text-align:right;" 
                               class="form-control form-control-sm" 
