@@ -259,7 +259,9 @@ function agregarArticulo() {
 
     cant = parseFloat((cant == '') ? 0 : cant)
     cant = cant.toFixed(2)
-    costo = parseFloat((costo == '') ? 0 : costo)
+    costo = (costo == '') ? 0 : costo
+    costo = costo.replace(",","")
+    costo = parseFloat(costo)
     costo = costo.toFixed(2)
     dcto = parseFloat(dcto == '' ? 0 : dcto)
     saldoAlmacen = parseFloat((saldoAlmacen == '') ? 0 : saldoAlmacen)
@@ -552,7 +554,7 @@ function addArticulo() {
     let precioUnitario = $("#punitario_ne").inputmask('unmaskedvalue')
     let descuento = $("#descuento_ne").inputmask('unmaskedvalue')
     let total
-    
+    precioUnitario = precioUnitario.replace(",","")
     cant = parseFloat((cant == '') ? 0 : cant).toFixed(2)
     cant = parseFloat(cant)
     precioUnitario = parseFloat((precioUnitario == '') ? 0 : precioUnitario).toFixed(2)
