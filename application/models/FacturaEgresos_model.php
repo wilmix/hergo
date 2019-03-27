@@ -70,18 +70,18 @@ class FacturaEgresos_model extends CI_Model
         
         
 	}
-	public function obtenerPorFactura($idFactura)
+	public function obtenerEgresosPorFactura($idFactura)
 	{
 		$sql="SELECT *
             FROM factura_egresos
             WHERE idFactura=$idFactura
-            limit 1 
+            GROUP BY idegresos
             ";
         $query=$this->db->query($sql);
         if($query->num_rows()>0)
         {                   
-             $fila=$query->row();
-            return ($fila); 
+            $res=$query->result();
+            return ($res); 
         }
         else
         {

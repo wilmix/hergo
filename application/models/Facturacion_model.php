@@ -227,9 +227,7 @@ class Facturacion_model extends CI_Model
 			$autor = $this->session->userdata('user_id');
         	$fecha = date('Y-m-d H:i:s'); 
 			
-			$facturaEgresos=$this->FacturaEgresos_model->obtenerPorFactura($idFactura);
-			$idEgreso = $facturaEgreso->idegresos;
-
+			
 			$msj = strval($msj);
 			$sql="UPDATE factura set anulada=1,glosa='$msj',autor='$autor',update_at=NOW() where idFactura=$idFactura;";
 			$this->db->query($sql);
@@ -239,14 +237,17 @@ class Facturacion_model extends CI_Model
 			{
 				
 				if($fila["idEgresoDetalle"]!=null)
-					$this->Egresos_model->actualizarRestarCantFact($fila["idEgresoDetalle"],$fila["facturaCantidad"]);		
+				$this->Egresos_model->actualizarRestarCantFact($fila["idEgresoDetalle"],$fila["facturaCantidad"]);		
 			}
-
-			$this->FacturaEgresos_model->actualizarFparcial_noFacturado($idFactura,$facturaEgresos->idegresos);
-			$this->db->query("CALL actualizarTablaSaldoFactura($idFactura, $idAlmacen)");
-			//$this->db->query("UPDATE egresos e SET e.estado = 0 WHERE ");
 			
-			$this->db->trans_complete();
+			$facturaEgresos=$this->FacturaEgresos_model->obtenerEgresosPorFactura($idFactura);
+			foreach ($facturaEgresos as $egre) {
+				$this->FacturaEgresos_model->actualizarFparcial_noFacturado($idFactura,$egre->idegresos);
+			}
+			
+			$this->db->query("CALL actualizarTablaSaldoFactura($idFactura, $idAlmacen)");
+			
+		$this->db->trans_complete();
 		if ($this->db->trans_status() === FALSE)
 		{
 			return false;
