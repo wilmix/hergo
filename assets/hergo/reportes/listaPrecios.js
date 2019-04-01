@@ -1,4 +1,11 @@
 $(document).ready(function(){
+    $('#export').click(function () {
+        $('#tablaListaPrecios').tableExport({
+        type:'excel',
+        fileName: 'Lista de Precios',
+        numbers: {output : false}
+        })
+    });
     retornarListaPrecios();
 }) 
 
