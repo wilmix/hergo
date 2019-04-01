@@ -2,6 +2,13 @@ var iniciofecha = moment().subtract(0, 'year').startOf('year')
 var finfecha = moment().subtract(0, 'year').endOf('year')
 
 $(document).ready(function () {
+    $('#export').click(function () {
+        $('#tablaDiarioIngresos').tableExport({
+        type:'excel',
+        fileName: 'Diario Ingresos',
+        numbers: {output : false}
+        })
+      });
     $(".tiponumerico").inputmask({
         alias: "decimal",
         digits: 2,
@@ -10,12 +17,8 @@ $(document).ready(function () {
         autoUnmask: true
     });
 
-    var start = moment().subtract(0, 'year').startOf('year')
-    var end = moment().subtract(0, 'year').endOf('year')
-    var actual = moment().subtract(0, 'year').startOf('year')
-    var unanterior = moment().subtract(1, 'year').startOf('year')
-    var dosanterior = moment().subtract(2, 'year').startOf('year')
-    var tresanterior = moment().subtract(3, 'year').startOf('year')
+    let start = moment().subtract(1, 'month').startOf('month')
+    let end = moment().subtract(1, 'month').endOf('month')
 
     $(function () {
         moment.locale('es');
@@ -38,10 +41,13 @@ $(document).ready(function () {
             endDate: end,
             //ranges:jsonrango
             ranges: {
+                'Hoy': [moment(), moment()],
+                'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Mes Actual': [moment().subtract(0, 'month').startOf('month'), moment().subtract(0, 'month').endOf('month')],
+                "Hace un Mes": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                'Hace dos Meses': [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
+                'Hace tres Meses': [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],
                 'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
-                "Hace un Año": [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
-                'Hace dos Años': [moment().subtract(2, 'year').startOf('year'), moment().subtract(2, 'year').endOf('year')],
-                'Hace tres Años': [moment().subtract(3, 'year').startOf('year'), moment().subtract(3, 'year').endOf('year')],
                 /*'Hoy': [moment(), moment()],
                 'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],               
                 'Este Mes': [moment().startOf('month'), moment().endOf('month')],*/
@@ -95,7 +101,7 @@ function retornarTablaIngresos() {
         $("#tablaDiarioIngresos").bootstrapTable({ ////********cambiar nombre tabla viata
             data: res,
             striped: true,
-            pagination: true,
+            pagination: false,
             pageSize: "100",
             search: true,
             showColumns: true,
@@ -109,7 +115,7 @@ function retornarTablaIngresos() {
                     field: 'almacen',
                     title: 'Almacen',
                     sortable: true,
-                    visible: false,
+                    visible: alm == '' ? true : false,
                     align: 'center'
                 },
                 {
