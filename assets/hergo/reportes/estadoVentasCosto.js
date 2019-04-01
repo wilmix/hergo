@@ -38,22 +38,36 @@ function retornarestadoVentasCosto()
             alm: alm,
         },
     }).done(function(res){
+        res.forEach(e => {
+            if (e.codigo == null) {
+                e.cpp = null
+                e.precioVenta = null
+                e.saldoCantidad = null 
+                e.cantVendida = null
+            }
+        })
+        console.log(res);
         quitarcargando();
         datosselect = restornardatosSelect(res)
         $("#estadoVentasCostos").bootstrapTable('destroy');
         $("#estadoVentasCostos").bootstrapTable({       
-
                 data:res,    
                     striped:true,
                     search:true,
                     filter:true,
+                    showColumns: true,
                     stickyHeader: true,
                     stickyHeaderOffsetY: '50px',
-                    //showFooter: true,
                     footerStyle: footerStyle,
                     rowStyle:rowStyle,
                 columns:
                 [
+                    {
+                        field: 'siglaLinea',
+                        title: 'Sigla',
+                        align: 'center',
+                        visible: true,
+                    },
                     {
                         field: 'linea',
                         title: 'Linea',
@@ -69,7 +83,6 @@ function retornarestadoVentasCosto()
                         title: 'Código',
                         align: 'center',
                         visible: true,
-                        formatter: totalVacio
                     },
                     {
                         field: 'descrip',
@@ -94,7 +107,6 @@ function retornarestadoVentasCosto()
                         visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
-                        formatter: totalVacio
                     },
                     {
                         field: 'cpp',
@@ -104,7 +116,6 @@ function retornarestadoVentasCosto()
                         visible: mon==1 ? true  : false,
                         searchable: false,
                         formatter: formatoDecimalDolares,
-                        formatter: totalVacio
                     },
                     {
                         field: 'precioVenta',
@@ -114,7 +125,6 @@ function retornarestadoVentasCosto()
                         visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
-                        formatter: totalVacio
                     },
                     {
                         field: 'precioVenta',
@@ -124,7 +134,7 @@ function retornarestadoVentasCosto()
                         visible: mon==1 ? true  : false,
                         searchable: false,
                         formatter: formatoDecimalDolares,
-                        formatter: totalVacio
+                        //formatter: totalVacio
                     },
                     {
                         field: 'saldoCantidad',
@@ -134,7 +144,7 @@ function retornarestadoVentasCosto()
                         visible: true,
                         searchable: false,
                         formatter: formatoDecimal,
-                        formatter: totalVacio
+                        //formatter: totalVacio
                     },
                     {
                         field: 'saldoValorado',
@@ -144,7 +154,6 @@ function retornarestadoVentasCosto()
                         visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
-                        footerFormatter: sumaColumna
                     },
                     {
                         field: 'saldoValorado',
@@ -154,7 +163,7 @@ function retornarestadoVentasCosto()
                         visible: mon==1 ? true  : false,
                         searchable: false,
                         formatter: formatoDecimalDolares,
-                        footerFormatter: sumaColumna
+                        //footerFormatter: sumaColumna
                     },
                     {
                         field: 'cantVendida',
@@ -164,7 +173,7 @@ function retornarestadoVentasCosto()
                         visible: true,
                         searchable: false,
                         formatter: formatoDecimal,
-                        formatter: totalVacio
+                        //formatter: totalVacio
                     },
                     {
                         field: 'totalCosto',
@@ -174,7 +183,7 @@ function retornarestadoVentasCosto()
                         visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
-                        footerFormatter: sumaColumna
+                        //footerFormatter: sumaColumna
                     },
                     {
                         field: 'totalCosto',
@@ -184,7 +193,7 @@ function retornarestadoVentasCosto()
                         visible: mon==1 ? true  : false,
                         searchable: false,
                         formatter: formatoDecimalDolares,
-                        footerFormatter: sumaColumna
+                        //footerFormatter: sumaColumna
                     },
                     {
                         field: 'totalVenta',
@@ -194,7 +203,7 @@ function retornarestadoVentasCosto()
                         visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
-                        footerFormatter: sumaColumna
+                        //footerFormatter: sumaColumna
                     },
                     {
                         field: 'totalVenta',
@@ -204,7 +213,7 @@ function retornarestadoVentasCosto()
                         visible: mon==1 ? true  : false,
                         searchable: false,
                         formatter: formatoDecimalDolares,
-                        footerFormatter: sumaColumna
+                        //footerFormatter: sumaColumna
                     },
                     {
                         field: 'utilidad',
@@ -214,7 +223,7 @@ function retornarestadoVentasCosto()
                         visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
-                        footerFormatter: sumaColumna
+                        //footerFormatter: sumaColumna
                     },
                     {
                         field: 'utilidad',
@@ -224,7 +233,7 @@ function retornarestadoVentasCosto()
                         visible: mon==1 ? true  : false,
                         searchable: false,
                         formatter: formatoDecimalDolares,
-                        footerFormatter: sumaColumna
+                        //footerFormatter: sumaColumna
                     },
 
                 ]
@@ -235,9 +244,23 @@ function retornarestadoVentasCosto()
     });
  }
  function formatoDecimal(value, row, index) {
-    num=Math.round(value * 100) / 100
-    num=num.toFixed(2);
-    return (formatNumber.new(num));
+     if (value == null) {
+         return ''
+     } else {
+         num=Math.round(value * 100) / 100
+         num=num.toFixed(2);
+         return (formatNumber.new(num));
+     }
+}
+function formatoDecimalDolares(value, row, index) {
+    if (value == null) {
+        return ''
+    } else {
+        num=Math.round(value * 100) / 100
+        num = num / glob_tipoCambio
+        num=num.toFixed(2);
+        return (formatNumber.new(num));
+    }
 }
 function totalVacio(value, row, index) {
     if (row.codigo == null) {
@@ -254,19 +277,7 @@ function subTotal(value, row, index) {
     }
     return (value);
 }
- function formatoDecimalDolares(value, row, index) {
-    num=Math.round(value * 100) / 100
-    num = num / glob_tipoCambio
-    num=num.toFixed(2);
-    return (formatNumber.new(num));
-}
-function sumaColumna(data) {
-    field = this.field;
-    let totalSum = data.reduce(function (sum, row) {
-      return sum + (+row[field]);
-    }, 0);
-    return (formatNumber.new(totalSum.toFixed(2)));
-}
+
 function footerStyle(value, row, index) {
     return {
         css: {
