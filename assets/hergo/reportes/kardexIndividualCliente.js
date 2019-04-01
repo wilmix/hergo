@@ -2,6 +2,15 @@
 var iniciofecha = moment().subtract(5, 'year').startOf('year')
 var finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function () {
+    nomCliente = $('#clientes_filtro').find(':selected').text();
+    $('#export').click(function () {
+        $('#tablaKardex').tableExport({
+        type:'excel',
+        fileName: 'KARDEX INDIVIDUAL '+ nomCliente,
+        numbers: {output : false}
+        })
+    });
+    console.log(nomCliente);
     $('#clientes_filtro').select2();
 
     let start = moment().subtract(0, 'year').startOf('year')

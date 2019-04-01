@@ -2,6 +2,7 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-body">
+            <button class="btn btn-success pull-right" id="export" data-toggle="tooltip" title="Excel"><i class="far fa-file-excel"> </i> Excel </button>
                 <div id="toolbar2" class="form-inline">
                     <button  type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
                         <span>
