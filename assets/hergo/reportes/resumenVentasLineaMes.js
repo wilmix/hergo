@@ -108,25 +108,26 @@ function retornarVentasLineaMes()
             stickyHeaderOffsetY: '50px',
             columns: [
                 {
-                    field: 'Linea',
-                    title: 'Linea',
-                    align: 'center',
-                    sortable: true,
-                    // formatter: formTotal,
-                },
-                {
                     field: 'Sigla',
                     title: 'Sigla',
                     align: 'center',
-                    sortable: true,
-                    visible:false
+                    visible:true
 
                 },
+                {
+                    field: 'Linea',
+                    title: 'Linea',
+                    align: 'left',
+                    formatter: formVacio,
+                    //sortable: true,
+                    //formatter: formVacio,
+                },
+                
                 {
                     field: mon == 1 ? 'eneD' : 'ene',
                     title: 'Enero',
                     align: 'right',
-                    sortable: true,
+                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -134,7 +135,7 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'febD' : 'feb',
                     title: 'Febrero',
                     align: 'right',
-                    sortable: true,
+                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -142,7 +143,7 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'marD' : 'mar',
                     title: 'Marzo',
                     align: 'right',
-                    sortable: true,
+                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -150,7 +151,7 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'abrD' : 'abr',
                     title: 'Abril',
                     align: 'right',
-                    sortable: true,
+                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -158,7 +159,7 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'marD' : 'may',
                     title: 'Mayo',
                     align: 'right',
-                    sortable: true,
+                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -166,7 +167,7 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'junD' : 'jun',
                     title: 'Junio',
                     align: 'right',
-                    sortable: true,
+                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -174,7 +175,7 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'julD' : 'jul',
                     title: 'Julio',
                     align: 'right',
-                    sortable: true,
+                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -182,7 +183,7 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'agoD' : 'ago',
                     title: 'Agosto',
                     align: 'right',
-                    sortable: true,
+                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -190,7 +191,7 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'sepD' : 'sep',
                     title: 'Septiembre',
                     align: 'right',
-                    sortable: true,
+                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -198,7 +199,7 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'ocbD' : 'ocb',
                     title: 'Octubre',
                     align: 'right',
-                    sortable: true,
+                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -206,7 +207,7 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'novD' : 'nov',
                     title: 'Noviembre',
                     align: 'right',
-                    sortable: true,
+                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -214,7 +215,7 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'dicD' : 'dic',
                     title: 'Diciembre',
                     align: 'right',
-                    sortable: true,
+                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -222,7 +223,7 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'totalD' : 'total',
                     title: 'Total',
                     align: 'right',
-                    sortable: true,
+                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -235,7 +236,7 @@ function retornarVentasLineaMes()
     });
 }
 function rowStyle(row, index) {
-    if (row.Linea==null) {
+    if (row.Sigla==null) {
         return {
             css: {
                 //"font-weight": "bold",
@@ -256,11 +257,11 @@ function operateFormatter3(value, row, index) {
     num = num.toFixed(2);
     return (formatNumber.new(num));
 }
-function formTotal(value, row, index) {
-    let total = (row.Linea == null ) ? 'TOTAL': row.Linea
-    return (total);
-}
 
+function formVacio(value, row, index) {
+    let ret = (row.Sigla == null ) ? 'TOTAL': row.Linea
+    return (ret);
+}
 function footerStyle(value, row, index) {
     return {
         css: {

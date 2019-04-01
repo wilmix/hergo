@@ -191,7 +191,7 @@ class Reportes_model extends CI_Model
 		FROM detalleLinea
 		WHERE fechaFac BETWEEN '$ini' AND '$fin'
 		AND almacen LIKE '%$alm'
-		GROUP BY Linea WITH ROLLUP
+		GROUP BY Sigla WITH ROLLUP
 		";
 		$query=$this->db->query($sql);		
 		return $query;
