@@ -2,6 +2,13 @@ var iniciofecha = moment().subtract(0, 'month').startOf('month')
 var finfecha = moment().subtract(0, 'month').endOf('month')
 
 $(document).ready(function () {
+    $('#export').click(function () {
+        $('#tablaReporteEgresos').tableExport({
+        type:'excel',
+        fileName: 'Reporte Egresos',
+        numbers: {output : false}
+        })
+      });
     $(".tiponumerico").inputmask({
         alias: "decimal",
         digits: 2,

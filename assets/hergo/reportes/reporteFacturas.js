@@ -2,6 +2,13 @@ let iniciofecha = moment().subtract(0, 'month').startOf('month')
 let finfecha = moment().subtract(0, 'month').endOf('month')
 
 $(document).ready(function () {
+    $('#export').click(function () {
+        $('#tablaReporteFacturas').tableExport({
+        type:'excel',
+        fileName: 'Reporte Facturas',
+        numbers: {output : false}
+        })
+      });
     $(".tiponumerico").inputmask({
         alias: "decimal",
         digits: 2,

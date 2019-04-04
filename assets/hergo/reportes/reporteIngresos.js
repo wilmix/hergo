@@ -2,6 +2,13 @@ var iniciofecha = moment().subtract(0, 'month').startOf('month')
 var finfecha = moment().subtract(0, 'month').endOf('month')
 
 $(document).ready(function () {
+    $('#export').click(function () {
+        $('#tablaReporteIngresos').tableExport({
+        type:'excel',
+        fileName: 'Reporte Ingresos',
+        numbers: {output : false}
+        })
+      });
     $(".tiponumerico").inputmask({
         alias: "decimal",
         digits: 2,
@@ -35,9 +42,11 @@ $(document).ready(function () {
             //ranges:jsonrango
             ranges: {
                 'Hoy': [moment(), moment()],
-                "Hace un mes": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                'Hace dos meses': [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
-                'Hace tres meses': [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],
+                'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Mes Actual': [moment().subtract(0, 'month').startOf('month'), moment().subtract(0, 'month').endOf('month')],
+                "Hace un Mes": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                'Hace dos Meses': [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
+                'Hace tres Meses': [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],
                 'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
             }
         }, cb);
