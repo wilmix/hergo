@@ -281,7 +281,8 @@ class Reportes_model extends CI_Model
 	}
 	public function mostrarDiarioIngresos($ini=null,$fin=null,$alm="",$tin="") 
 	{ //cambiar la consulta
-		$sql="SELECT alm.almacen, i.fechamov, i.tipomov,t.sigla, i.nmov, i.ordcomp, p.nombreproveedor, 
+		$sql="SELECT alm.almacen, i.fechamov, i.tipomov,t.sigla, i.nmov, i.ordcomp, 
+		IF(i.`tipomov` = 3,alt.`ciudad`,p.nombreproveedor) nombreproveedor,
 		a.CodigoArticulo, a.Descripcion, u.Unidad,  id.cantidad, id.punitario, id.total, i.obs
 		from ingresos i
 		inner join provedores p
@@ -296,9 +297,12 @@ class Reportes_model extends CI_Model
 		on t.id= i.tipomov
 		inner join almacenes alm
 		on alm.idalmacen = i.almacen
+		LEFT JOIN traspasos tr ON tr.`idIngreso` = i.`idIngresos`
+		LEFT JOIN egresos etr ON etr.`idegresos` =tr.`idEgreso`
+		LEFT JOIN almacenes alt ON alt.`idalmacen` = etr.`almacen`
 		where i.fechamov BETWEEN '$ini' AND '$fin'
 		and i.tipomov like '%$tin' AND i.almacen LIKE '%$alm'
-		order by alm.almacen, i.nmov, id.articulo";
+		order by alm.almacen, i.nmov, a.CodigoArticulo";
 		
 		$query=$this->db->query($sql);		
 		return $query;
@@ -712,7 +716,9 @@ class Reportes_model extends CI_Model
 		nombreAlmacen
 		FROM
 		(
-			SELECT 	ed.`idingdetalle` id, e.`almacen`,e.`tipomov`, tm.`tipomov` siglaMov, c.`nombreCliente` cliente, e.`fechamov`, e.`nmov`, 
+			SELECT 	ed.`idingdetalle` id, e.`almacen`,e.`tipomov`, tm.`tipomov` siglaMov, 
+			IF ( e.`tipomov` = 8,alt.`ciudad`,c.`nombreCliente` ) cliente, 
+				e.`fechamov`, e.`nmov`, 
 				a.`CodigoArticulo` codigo, a.`Descripcion` descripcion, 
 				u.`Sigla` uni, m.`sigla` mon, ed.`cantidad` , ed.`punitario`,
 				ROUND((ed.`punitario` * ed.`cantidad`),2) total, 
@@ -727,6 +733,9 @@ class Reportes_model extends CI_Model
 				INNER JOIN clientes c ON c.`idCliente` = e.`cliente`
 				INNER JOIN tipocambio tc ON tc.`fecha` = e.`fechamov`
 				INNER JOIN almacenes al ON al.`idalmacen` = e.`almacen`
+				LEFT JOIN traspasos tr ON tr.`idEgreso` = e.`idegresos`
+				LEFT JOIN ingresos itr ON itr.`idIngresos` = tr.`idIngreso`
+				LEFT JOIN almacenes alt ON alt.`idalmacen` = itr.`almacen`
 				WHERE  e.`fechamov` BETWEEN '$ini' AND '$fin'
 					AND e.`tipomov` LIKE '%$tin' 
 					AND e.`almacen` LIKE '%$alm' 

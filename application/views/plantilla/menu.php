@@ -78,7 +78,7 @@
               <small class="label pull-right bg-red"> construc</small></a></li>-->
               <li class="Compraslocales"><a href="<?php echo base_url("Ingresos/Compraslocales") ?>"><i class="fa fa-plus-circle"></i> Compras Locales</a></li>
               <li class="Importaciones"><a href="<?php echo base_url("Ingresos/Importaciones") ?>"><i class="fa fa-plus-circle"></i> Ingreso Importaciones</a></li>
-              <li class="anulacionEgresos"><a href="<?php echo base_url("Ingresos/anulacionEgresos") ?>"><i class="fa fa-plus-circle"></i> Anulacion Egresos</a></li>
+              <li class="anulacionEgresos"><a href="<?php echo base_url("Ingresos/anulacionEgresos") ?>"><i class="fa fa-plus-circle"></i> Reingreso</a></li>
             </ul>
           </li>
 

@@ -159,7 +159,7 @@
                        <?php endforeach ?>
                       </select>
                    </div>
-                   
+                <div id="tipoNumFactura" >
                   <div class="col-xs-4 col-sm-4 col-md-2">
                     <label >Tipo:</label>
                     <select class="form-control form-control-sm" id="tipoDoc" name="tipoDoc">
@@ -177,6 +177,7 @@
                           placeholder="# Factura" 
                           value="<?= ($cont)?$dcab->nfact:""?>">
                   </div>
+                </div>  
                 </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
 
 

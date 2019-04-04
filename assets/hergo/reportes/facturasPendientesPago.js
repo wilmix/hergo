@@ -186,7 +186,7 @@ function retornarFacturasPendientes()
                 {
                     field: 'total',
                     title: 'Crédito',
-                    //sortable: true,
+                    sortable: true,
                     align: 'right',
                     width:'100px',
                     formatter: operateFormatter3,

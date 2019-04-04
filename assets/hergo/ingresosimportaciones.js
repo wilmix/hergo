@@ -1,13 +1,18 @@
-var glob_factorIVA=0.87;
-var glob_factorRET=0.087;
+let glob_factorIVA=0.87;
+let glob_factorRET=0.087;
 let glob_guardar = false
-var loc_almacen;
+let loc_almacen;
 let hoy
 let checkTipoCambio = false
 let articulos = []
 let moneda
+let tipomov 
 
 $(document).ready(function(){
+    tipomov = $("#tipomov_imp2").val()
+    if (tipomov == 5) {
+        $("#tipoNumFactura").addClass("hidden")
+    }
     moneda = $("#moneda_imp").val()
     fechaMod = $('#fechamov_imp').val()
     if (fechaMod) {

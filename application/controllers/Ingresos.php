@@ -247,7 +247,7 @@ class Ingresos extends CI_Controller
 
 			$this->datos['menu']="Ingresos";
 			//$this->datos['opcion']="Compras Locales";
-			$this->datos['titulo']="Anulacion Egresos";
+			$this->datos['titulo']="Reingreso";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
@@ -275,7 +275,7 @@ class Ingresos extends CI_Controller
 		  	$this->datos['proveedor']=$this->Ingresos_model->retornar_tabla("provedores");
 		  	$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
 			
-			$this->datos['opcion']="Anulacion egresos";
+			$this->datos['opcion']="Reingreso";
 			$this->datos['idingreso']=5;;
 
 			$this->load->view('plantilla/head.php',$this->datos);

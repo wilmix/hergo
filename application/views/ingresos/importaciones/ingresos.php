@@ -11,7 +11,7 @@
 
             <a class="btn btn-primary btn-sm hidden-xs" href="<?php echo base_url("Ingresos/Importaciones") ?>" target="_blank"><i class="fa fa-plus-circle fa-lg"></i>  IngresoImportaciones</a>
 
-            <a class="btn btn-primary btn-sm hidden-xs" href="<?php echo base_url("Ingresos/anulacionEgresos") ?>") target="_blank"><i class="fa fa-plus-circle fa-lg"></i>  Anulacion Egresos</a>
+            <a class="btn btn-primary btn-sm hidden-xs" href="<?php echo base_url("Ingresos/anulacionEgresos") ?>") target="_blank"><i class="fa fa-plus-circle fa-lg"></i>  Reingreso</a>
           </div>  
 
           <div  id="toolbar2" class="form-inline">

@@ -109,6 +109,7 @@ function retornarTablaIngresos() {
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',
             showFooter: true,
+            strictSearch: true,
             footerStyle: footerStyle,
             columns: [
                 {
@@ -116,39 +117,35 @@ function retornarTablaIngresos() {
                     title: 'Almacen',
                     sortable: true,
                     visible: alm == '' ? true : false,
-                    align: 'center'
+                    align: 'center',
+                    searchable: false,
                 },
                 {
                     field: 'nmov',
                     title: 'N° Mov',
                     sortable: true,
                     align: 'center,',
-                    filter: {
-                        type: "input"
-                    }
+                    //filter: { type: "input" }
                 },
                 {
                     field: 'fechamov',
                     title: 'Fecha',
                     sortable: true,
+                    searchable: false,
                     formatter: formato_fecha_corta
-                },
-                {
-                    field: 'nmov',
-                    title: 'N° Mov',
-                    sortable: true,
-                    align: 'center'
                 },
                 {
                     field: 'ordcomp',
                     title: 'N° Pedido',
                     sortable: true,
+                    searchable: false,
                     align: 'center'
                 },
                 {
                     field: 'nombreproveedor',
-                    title: 'Proveedor',
+                    title: tipoingreso == 3 ? 'Origen' : 'Proveedor',
                     sortable: true,
+                    width:'100px',
                     filter: {
                         type: "select",
                         data: datosselect[0]
@@ -168,25 +165,29 @@ function retornarTablaIngresos() {
                     field: 'Descripcion',
                     title: 'Descripción',
                     sortable: true,
+                    searchable: false,
                 },
                 {
                     field: 'Unidad',
                     title: 'Unidad',
                     sortable: true,
+                    searchable: false,
                 },
                 {
                     field: 'cantidad',
                     title: 'Cantidad',
                     sortable: true,
+                    searchable: false,
                     formatter: operateFormatter3,
-                    filter: {
+                    /*filter: {
                         type: "input"
-                    }
+                    }*/
                 },
                 {
                     field: 'punitario',
                     title: 'Precio Unit.',
                     sortable: true,
+                    searchable: false,
                     formatter: operateFormatter3
 
                 },
@@ -194,11 +195,14 @@ function retornarTablaIngresos() {
                     field: 'total',
                     title: 'Total',
                     sortable: true,
+                    searchable: false,
                     formatter: operateFormatter3,
                     footerFormatter: sumaColumna
                 },
                 {
                     field: 'obs',
+                    searchable: false,
+                    visible:false,
                     title: 'Observaciones',
                     sortable: true,
                 }

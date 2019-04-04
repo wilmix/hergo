@@ -10,8 +10,8 @@ $(document).ready(function () {
         autoUnmask: true
     });
 
-    var start = moment().subtract(0, 'month').startOf('month')
-    var end = moment().subtract(0, 'month').endOf('month')
+    let start = moment().subtract(1, 'month').startOf('month')
+    let end = moment().subtract(1, 'month').endOf('month')
 
     $(function () {
         moment.locale('es');
@@ -35,9 +35,11 @@ $(document).ready(function () {
             //ranges:jsonrango
             ranges: {
                 'Hoy': [moment(), moment()],
-                "Hace un mes": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                'Hace dos meses': [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
-                'Hace tres meses': [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],
+                'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Mes Actual': [moment().subtract(0, 'month').startOf('month'), moment().subtract(0, 'month').endOf('month')],
+                "Hace un Mes": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                'Hace dos Meses': [moment().subtract(2, 'month').startOf('month'), moment().subtract(2, 'month').endOf('month')],
+                'Hace tres Meses': [moment().subtract(3, 'month').startOf('month'), moment().subtract(3, 'month').endOf('month')],
                 'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
             }
         }, cb);
@@ -144,6 +146,7 @@ function retornarReporteEgresos() {
             filter: true,
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',
+            strictSearch: true,
             //showFooter: true,
             //footerStyle: footerStyle,
             rowStyle:rowStyle,
@@ -152,14 +155,16 @@ function retornarReporteEgresos() {
                     field: 'almacen',
                     title: 'Almacen',
                     sortable: true,
+                    searchable: false,
                     visible: (alm == '')? true: false,
                     align: 'center'
                 },
 
                 {
                     field: 'cliente',
-                    title: 'Cliente',
+                    title: tipoingreso == 8 ? 'Destino' : 'Cliente' ,
                     sortable: true,
+                    searchable: false,
                     visible: true,
                     /*filter: {
                         type: "select",
@@ -169,6 +174,7 @@ function retornarReporteEgresos() {
                 {
                     field: 'fechamov',
                     title: 'Fecha',
+                    searchable: false,
                     sortable: true,
                     formatter: formato_fecha_corta_sub
                 },
@@ -183,6 +189,7 @@ function retornarReporteEgresos() {
                     field: 'codigo',
                     title: 'Código',
                     sortable: true,
+                    searchable: false,
                     /*filter: {
                         type: "select",
                         data: datosselect[1]
@@ -193,21 +200,25 @@ function retornarReporteEgresos() {
                     field: 'descripcion',
                     title: 'Descripción',
                     sortable: true,
+                    searchable: false,
                 },
                 {
                     field: 'uni',
                     title: 'Unidad',
                     sortable: true,
+                    searchable: false,
                 },
                 {
                     field: 'mon',
                     title: 'Moneda',
                     sortable: true,
+                    searchable: false,
                 },
                 {
                     field: 'cantidad',
                     title: 'Cantidad',
                     sortable: true,
+                    searchable: false,
                     formatter: operateFormatter3,
                     align: 'right',
                 },
@@ -216,6 +227,7 @@ function retornarReporteEgresos() {
                     title: 'Precio Unit.',
                     sortable: true,
                     align: 'right',
+                    searchable: false,
                     formatter: precioUnitarioFormatter
 
                 },
@@ -223,6 +235,7 @@ function retornarReporteEgresos() {
                     field: 'total',
                     title: 'Total BOB',
                     sortable: true,
+                    searchable: false,
                     formatter: operateFormatter3,
                     align: 'right',
                 },
@@ -231,6 +244,7 @@ function retornarReporteEgresos() {
                     title: 'Total $u$',
                     sortable: true,
                     visible: false,
+                    searchable: false,
                     formatter: operateFormatter3,
                     align: 'right',
                 },
