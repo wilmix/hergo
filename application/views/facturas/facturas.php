@@ -1,6 +1,8 @@
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
+    <button id="export" class="btn btn-success pull-right"><i class="far fa-file-excel"> </i> Excel</button>
+    <hr>
       <div class="box-body">
           <div id="toolbar2" class="form-inline">
               <button  type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">

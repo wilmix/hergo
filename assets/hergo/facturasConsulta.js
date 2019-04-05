@@ -2,6 +2,14 @@ var iniciofecha=moment().subtract(0, 'year').startOf('year')
 var finfecha=moment().subtract(0, 'year').endOf('year')
 
 $(document).ready(function(){ 
+    $('#export').click(function () {
+        let mes = iniciofecha.format('MMMM').toUpperCase()
+        $('#facturasConsulta').tableExport({
+        type:'excel',
+        fileName: 'Facturas',
+        numbers: {output : false}
+        })
+      });
     
      $(".tiponumerico").inputmask({
         alias:"decimal",
@@ -91,6 +99,8 @@ function retornarTablaFacturacion()
             showColumns:true,
             strictSearch: true,
             showToggle:true,
+            showFooter: true,
+            footerStyle: footerStyle,
             columns: [            
             {
                 field: 'lote',                
@@ -164,6 +174,7 @@ function retornarTablaFacturacion()
                 searchable: false,
                 width:'100px',
                 formatter:operateFormatter3,
+                footerFormatter: sumaColumna
             },
             {
                 field:'vendedor',
@@ -216,7 +227,26 @@ function retornarTablaFacturacion()
     console.log( "Request Failed: " + err );
     });
 }
-
+function footerStyle(value, row, index) {
+    return {
+      css: {
+        "font-weight": "bold",
+        "border-top": "3px solid white",
+        "border-bottom": "3px solid white",
+        "text-align": "right",
+        "padding": "15px",
+        "background-color": "#3c8dbc",
+        "color": "white"
+      }
+    };
+}
+function sumaColumna(data) {
+    field = this.field;
+    let totalSum = data.reduce(function (sum, row) {
+      return sum + (+row[field]);
+    }, 0);
+    return (formatNumber.new(totalSum.toFixed(2)));
+}
 function cellStyle(value, row, index) {
     if (row.anulada ==1) {
         return { 
