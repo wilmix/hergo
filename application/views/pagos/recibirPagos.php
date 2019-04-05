@@ -181,7 +181,11 @@
                     <label >Cheque N°: </label>
                     <input type="text" class="form-control" v-model="cheque" id="cheque" name="cheque">
                   </div>
-                </div> 
+                  <div class="form-row align-items-center col-md-2">
+                  <label>Vaucher: </label>
+                  <input type="text" class="form-control" v-model="transferencia" id="vaucher" name="vaucher">
+                </div>
+              </div> 
             <div class="table">
               <table class="table table-hover table-striped table-bordered" id="paraPagar_table">
                 <thead>

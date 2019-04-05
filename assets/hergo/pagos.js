@@ -81,7 +81,7 @@ function retornarTablaPagos()
                     showColumns: true,
                     stickyHeader: true,
                     stickyHeaderOffsetY: '50px',
-                    strictSearch: true,
+                    strictSearch: false,
                     showToggle:true,
                 columns:
                 [
@@ -96,9 +96,10 @@ function retornarTablaPagos()
                     {   
                         field: 'almacen',            
                         title: 'Almacen',
-                        visible:false,
+                        visible:alm == '' ? true : false,
                         sortable:true,
                         searchable: false,
+
                     },
                     {   
                         field: 'numPago',            
@@ -107,6 +108,12 @@ function retornarTablaPagos()
                         sortable:true,
                         searchable: true,
                         align: 'center',
+                        filter: 
+                            {
+                                type: "select",
+                                data: datosselect[2]
+                            },
+                        
                     },
                     {   
                         field: 'fechaPago',            
@@ -143,7 +150,7 @@ function retornarTablaPagos()
                         align: 'right',
                         formatter: operateFormatter3,
                         searchable: false,
-                    },                   
+                    },  
                     {   
                         field: 'anulado',            
                         title: 'Anulado',
@@ -159,6 +166,14 @@ function retornarTablaPagos()
                         searchable: false,
                         align: 'center',
                         formatter: tipoPago,
+                    },
+                    {   
+                        field: 'transferencia',            
+                        title: '# Transacción',
+                        visible:true,
+                        sortable:true,
+                        searchable: true,
+                        align: 'center',
                     },
                     {   
                         field: 'pagada',            
@@ -194,7 +209,15 @@ function retornarTablaPagos()
                         searchable: false,
                         events: operateEvents,
                         formatter: operateFormatter
-                    }
+                    },
+                    {   
+                        field: 'rTotalPago',            
+                        title: '',
+                        visible:false,
+                        sortable:true,
+                        align: 'right',
+                        searchable: true,
+                    },  
                 ]
             });
     }).fail(function( jqxhr, textStatus, error ) {
@@ -269,17 +292,20 @@ function retornarTablaPagos()
 
     var autor = new Array()
     var cliente = new Array()
+    let numPago = new Array()
     var datos =new Array()
     $.each(res, function(index, value){
 
         autor.push(value.autor)
         cliente.push(value.nombreCliente)
+        numPago.push(value.numPago)
     })
 
     autor.sort();
     cliente.sort();
     datos.push(autor.unique());
     datos.push(cliente.unique());
+    datos.push(numPago.unique())
     return(datos);
     }
 Array.prototype.unique=function(a){
