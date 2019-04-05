@@ -886,4 +886,159 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function showKardexAll () 
+	{ 
+		$almacen = 1;
+		$gestion = 2019;
+		$sql="SELECT 
+			idArticulo, id, almacen, nombreproveedor, fecha fechakardex, tipo, numMov, punitario, 
+			SUM(ingreso) ing,
+			SUM(factura) fac,
+			SUM(ne) ne,
+			SUM(traspaso) tr
+			 FROM
+			(
+			  /** ingresos **/
+				  SELECT 	
+				id.`articulo` idArticulo,
+				i.idIngresos id,
+					i.`almacen`,
+					   IF(i.`tipomov`= 3, CONCAT('DE: ',a.`almacen`), p.`nombreproveedor`) nombreproveedor,
+					   IF(i.`tipomov`=1,0,i.`fechamov`) AS fecha,
+					   tm.`sigla` tipo,
+					   i.`nmov` AS numMov,
+					   id.`punitario`,
+					   id.`cantidad` ingreso,
+					   '' factura,
+					   '' ne,
+					   '' traspaso,
+					   tm.`operacion`,
+					 i.fecha AS FechaSis
+				  FROM ingdetalle id
+					  INNER JOIN ingresos i
+						  ON i.`idIngresos`=id.`idIngreso`
+						AND i.`almacen`=$almacen
+							AND i.`anulado`=0
+							AND i.`estado`=1
+						AND YEAR(i.`fechamov`)=$gestion
+					  INNER JOIN tmovimiento tm
+						  ON tm.`id`=i.`tipomov`
+					  INNER JOIN provedores p
+						  ON p.`idproveedor`=i.`proveedor`
+					LEFT JOIN traspasos t 
+						ON t.`idIngreso` = i.`idIngresos`
+					 LEFT JOIN egresos e 
+						ON t.`idEgreso` = e.`idegresos`
+					 LEFT JOIN almacenes a
+					ON a.`idalmacen` = e.`almacen`
+
+				  
+				  
+				  
+			  UNION ALL 
+			  /** FACTURA **/
+				  SELECT 
+				  fd.articulo,
+					f.idFactura,
+					f.almacen,
+					  c.nombreCliente,
+					  fechaFac,
+					  'FAC' ,
+					  f.nFactura,
+					  fd.facturaPUnitario,
+					  
+					  '' ingreso,
+					   fd.facturaCantidad factura,
+					   '' ne,
+					   '' traspaso,
+					  
+					  '-',
+					f.fecha
+				  FROM    facturadetalle fd
+				  INNER JOIN articulos ar ON ar.`idArticulos` = fd.articulo
+					  INNER JOIN factura f
+						  ON f.`idFactura`=fd.`idFactura`
+						AND f.`almacen`=$almacen
+							AND f.`anulada`=0
+						AND YEAR(f.`fechaFac`)=$gestion
+					  INNER JOIN clientes c
+						  ON c.idCliente=f.cliente
+					  
+					  
+					  
+			  UNION ALL 
+			  /** NOTA ENTREGA **/
+				  SELECT 	 
+				  ed.articulo,
+					e.idegresos,
+					e.almacen,
+					   c.nombreCliente,
+					   `fechamov`,
+					   tm.`sigla`,
+					   e.`nmov`,
+					   ed.`punitario`,
+					   
+					   '' ingreso,
+					   '' factura,
+					   ed.`cantidad`-ed.`cantFact` ne,
+					   '' traspaso,
+					   
+					   tm.`operacion`,
+					 e.fecha
+				  FROM 	egredetalle ed
+					  INNER JOIN egresos e
+						  ON e.`idegresos`=ed.`idegreso`
+					  AND e.`anulado`=0
+						  AND e.`tipomov`= 7
+						  AND e.`estado`<>1
+					  AND e.`almacen`=$almacen
+					  INNER JOIN tmovimiento tm
+						  ON tm.`id`=e.tipomov
+					  INNER JOIN clientes c
+						  ON c.idCliente=e.cliente
+				  
+				  
+				  
+			  UNION ALL 
+			  /** TRASPASO Y OTROS **/
+				  SELECT 	 
+				  ed.articulo,
+					 e.idegresos,
+					 e.almacen,
+					   IF(tm.`sigla` = 'EB', c.nombreCliente, CONCAT('A: ',a.`almacen`)) nombreCliente,
+					   e.`fechamov`,
+					   tm.`sigla`,
+					   e.`nmov`,
+					   ed.`punitario`,
+					   
+					   '' ingreso,
+					   '' factura,
+					   '' ne,
+					   ed.`cantidad` traspaso,
+		
+					   tm.`operacion`,
+					 e.fecha
+				  FROM egredetalle ed
+					  INNER JOIN egresos e
+						  ON e.`idegresos`=ed.`idegreso`
+					  AND e.`almacen`=$almacen
+						  AND e.`anulado`=0
+						  AND e.`tipomov` BETWEEN 8 AND 9
+					  AND YEAR(e.`fechamov`)=$gestion
+					  INNER JOIN tmovimiento tm
+						  ON tm.`id`=e.tipomov
+					  INNER JOIN clientes c
+						  ON c.idCliente=e.cliente
+					LEFT JOIN traspasos t 
+						ON t.`idEgreso` = e.`idegresos`
+					LEFT JOIN ingresos i 
+						ON i.`idIngresos`=t.`idIngreso`
+					LEFT JOIN almacenes a
+					ON a.`idalmacen` = i.`almacen`
+			) AS tmp
+			GROUP BY  idArticulo, id  WITH ROLLUP;
+		";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 }

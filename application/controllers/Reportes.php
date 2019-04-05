@@ -702,6 +702,28 @@ class Reportes extends CI_Controller
 		}
 		
 	}
+	public function showKardexAll()  
+	{
+
+			$res=$this->Reportes_model->showKardexAll(); 
+			$res=$res->result();
+			$aux = 0;
+			$cost = 0;
+			foreach ($res as $line) {
+				if ($line->id == NULL) {
+					$line->saldo = $line->ing - $line->fac - $line->ne - $line->tr;
+					$line->nombreproveedor = 'TOTAL';
+					$aux = 0;
+				} else {
+					$line->cost = $line->ing * $line->punitario;
+					$line->saldo = $line->ing - $line->fac - $line->ne - $line->tr + $aux;
+					$aux = $line->saldo;
+				}
+				
+			}
+			echo json_encode($res);
+		
+	}
 	public function showKardexIndividual()  
 	{
 		ini_set('max_execution_time', 0); 
