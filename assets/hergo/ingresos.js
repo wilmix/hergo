@@ -505,10 +505,10 @@ function operateFormatter3(value, row, index) {
     return (formatNumber.new(num));
 }
 function verdetalle(fila) {
-    console.log(fila)
     id = fila.idIngresos
     tipomov = fila.tipomov
-
+    idTipoMov = fila.idTipoMov
+    console.log(idTipoMov);
     datos = {
         id: id,
         mon: fila.moneda
@@ -577,7 +577,8 @@ function verdetalle(fila) {
             $("#totaldocdetalle").val(totaldoc);
             $("#totalsisdetalle").val(totalsis);
             $("#titulo_modalIgresoDetalle").html(fila.tipomov);
-            $("#tituloDetalleFac").html(csFact);
+
+            idTipoMov == 5 ? $("#tituloDetalleFac").html('') : $("#tituloDetalleFac").html(csFact);
             $("#modalIgresoDetalle").modal("show");
         }
     })

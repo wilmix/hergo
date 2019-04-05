@@ -53,7 +53,7 @@ class Ingresos_model extends CI_Model
                     WHEN i.tipoDoc = 1 THEN i.nfact
                     WHEN i.tipoDoc = 2 THEN 'SIN FACTURA'
                     WHEN i.tipoDoc = 3 THEN 'EN TRANSITO'
-            END tipoDoc
+            END tipoDoc , i.tipomov idTipoMov
             FROM ingresos i
                     INNER JOIN ingdetalle id
                     ON i.idingresos=id.idingreso
