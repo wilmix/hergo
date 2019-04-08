@@ -70,6 +70,31 @@ class FacturaEgresos_model extends CI_Model
         
         
 	}
+	public function showFacturasManuales($alm,$lote)
+	{
+		$sql="SELECT f.`idFactura`, f.`lote`, f.`nFactura`, f.`fechaFac`, f.`ClienteFactura`, f.`ClienteNit`,  f.`moneda`, f.`pagada`, f.`total`, f.`autor`,f.`fecha`,
+		f.`almacen`, df.`fechaLimite`, df.`desde`, df.`hasta`
+		FROM factura f
+		INNER JOIN datosfactura df ON df.`idDatosFactura` = f.`lote`
+		WHERE df.`manual` = 1
+		AND f.`almacen` = $alm
+		AND df.`idDatosFactura` = $lote
+		ORDER BY f.`nFactura` DESC";
+       
+		$query=$this->db->query($sql);
+        
+        return ($query->result_array());
+	}
+	public function showLotes()
+	{
+		$sql="SELECT df.`idDatosFactura` idLote
+		FROM datosfactura df
+		WHERE df.`manual` = 1
+		ORDER BY df.`idDatosFactura` DESC";
+		
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 	public function obtenerEgresosPorFactura($idFactura)
 	{
 		$sql="SELECT *
@@ -114,5 +139,10 @@ class FacturaEgresos_model extends CI_Model
     	//estado = 2 facturado Parcial
     	$sql="UPDATE egresos set estado=$estado WHERE idegresos=$idegresos";
         $query=$this->db->query($sql);
+	}
+	public function updateFacturaManual($id, $data)
+    {
+		$this->db->where('idFactura', $id);
+		$this->db->update('factura', $data);
     }
 }
