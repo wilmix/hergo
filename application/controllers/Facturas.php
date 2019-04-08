@@ -1025,7 +1025,7 @@ class Facturas extends CI_Controller
 			);
 			$res=$this->FacturaEgresos_model->updateFacturaManual($id, $data);
 			
-			echo json_encode(TRUE);
+			echo json_encode($res);
 		}
 		else
 		{

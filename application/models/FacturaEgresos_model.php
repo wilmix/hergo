@@ -144,5 +144,6 @@ class FacturaEgresos_model extends CI_Model
     {
 		$this->db->where('idFactura', $id);
 		$this->db->update('factura', $data);
+		return TRUE;
     }
 }

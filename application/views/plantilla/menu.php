@@ -54,6 +54,7 @@
             <li class="CodigoControl"><a href="<?php echo base_url("index.php/CodigoControl") ?>"><i class="fa fa-qrcode"></i> CodigoControl QR</a></li>
             <li class="datosFactura"><a href="<?php echo base_url("index.php/configuracion/datosFactura") ?>"><i class="fa fa-cog"></i> Datos Factura</a></li>
             <li class="tipoCambio"><a href="<?php echo base_url("index.php/configuracion/tipoCambio") ?>"><i class="fas fa-dollar-sign"></i> Tipo de Cambio</a></li>
+            <li class="modificarFacturaManual"><a href="<?php echo base_url("facturas/modificarFacturaManual") ?>"><i class="fa fa-pencil-square-o"></i> Modificar Factura Manual </a> </li>
             <li class="cierre"><a href="<?php echo base_url("index.php/cierre") ?>"><i class="fa fa-server"></i> Cierre </a> </li>
             
             <!--<li><a href="<?php echo base_url("index.php/usuarios") ?>"> FormFuncionarios</a></li>

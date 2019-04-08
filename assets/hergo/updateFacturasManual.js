@@ -41,12 +41,12 @@ $(document).ready(function() {
                 contentType: false,
                 processData: false,
                 success: function (returndata) {
-                    console.log(returndata);
-                    if (returndata == true) {
+                    console.log(formData);
+                    if (returndata == 'true') {
                         limpiarModal()
                         resetForm('#form_FacturaManual')
                         swal({
-                            title: 'Se establecio el tipo de cambio Correctamente',
+                            title: 'Se corrigió la factura exitosamente',
                             type: 'success',
                             showCancelButton: false,
                             allowOutsideClick: false,
@@ -65,7 +65,7 @@ $(document).ready(function() {
                 error : function (returndata) {
                     swal(
                         'Error',
-                        'El numero de Factura ya existe, corrobore los datos',
+                        'El numero de Factura ya existe o no se tiene tipo de cambio para la fecha, corrobore los datos',
                         'error'
                     )
                     //limpiarModal()
@@ -109,13 +109,13 @@ function retFacturasManuales()
             {
                 field: 'idFactura',                
                 title: 'ID',                            
-                visible:true,
+                visible:false,
                 searchable: false,
             },
             {
                 field: 'lote',                
                 title: 'Lote',                            
-                visible:true,
+                visible:false,
                 searchable: false,
             },
             {
