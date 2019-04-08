@@ -1,5 +1,12 @@
 
 $(document).ready(function(){
+    $('#export').click(function () {
+        $('#estadoVentasCostos').tableExport({
+        type:'excel',
+        fileName: 'Estado de Ventas y Costos',
+        numbers: {output : false}
+        })
+      });
     tituloReporte() 
     retornarestadoVentasCosto();
 }) 
