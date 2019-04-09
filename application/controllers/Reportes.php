@@ -702,22 +702,84 @@ class Reportes extends CI_Controller
 		}
 		
 	}
+	public function kardexAll()
+	{
+		//$this->libacceso->acceso(32);
+		if(!$this->session->userdata('logeado'))
+			redirect('auth', 'refresh');
+
+			$this->datos['menu']="Reportes";
+			$this->datos['opcion']="Kardex All";
+			$this->datos['titulo']="Kardex All";
+
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
+
+	        /*************DATERANGEPICKER**********/
+	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
+			/**************FUNCION***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			 $this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/showAll.js');
+
+			/**************INPUT MASK***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+			//$this->datos['tingreso']=$this->Reportes_model->retornar_tablaMovimiento("+");
+			$this->datos['tipoingreso']=$this->Reportes_model->retornar_tablaMovimiento("+");
+
+			$this->load->view('plantilla/head.php',$this->datos);
+			$this->load->view('plantilla/header.php',$this->datos);
+			$this->load->view('plantilla/menu.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('reportes/showKardexAll.php',$this->datos);
+			$this->load->view('plantilla/footcontainer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
+	}
 	public function showKardexAll()  
 	{
 
 			$res=$this->Reportes_model->showKardexAll(); 
 			$res=$res->result();
+			//unset($res[0]);
+			$saldoTotal = 0;
 			$aux = 0;
 			$cost = 0;
+			$idArticulo = 0;
+			$items = array();
+			$titulo = new stdClass();
+			$titulo->titulo = 'titulo';
+			$cpp = 0;
 			foreach ($res as $line) {
-				if ($line->id == NULL) {
+				if ($line->id == null) {
+					$idArticulo = $line->idArticulo;
 					$line->saldo = $line->ing - $line->fac - $line->ne - $line->tr;
 					$line->nombreproveedor = 'TOTAL';
+					$line->saldoTotal = 0;
+					$saldoTotal = 0;
 					$aux = 0;
+					$cpp = 0;
 				} else {
-					$line->cost = $line->ing * $line->punitario;
+					$idArticulo = $line->idArticulo;
 					$line->saldo = $line->ing - $line->fac - $line->ne - $line->tr + $aux;
+					$line->out = $line->fac + $line->ne + $line->tr;
 					$aux = $line->saldo;
+					if ($line->ing > 0) {
+						$line->saldoTotal = $saldoTotal + ($line->punitario * $line->ing);
+						$saldoTotal = $line->saldoTotal;
+						$cpp = $aux == 0 ? 0: $saldoTotal / $aux;
+						$line->cpp = $cpp;
+					} else {
+						$line->saldoTotal = $saldoTotal - ($cpp * $line->out);
+						$saldoTotal = $line->saldoTotal;
+						$cpp = $aux == 0 ? 0: $saldoTotal / $aux;
+						$line->cpp = $cpp;
+					}
+
+
 				}
 				
 			}

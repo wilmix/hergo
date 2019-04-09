@@ -87,6 +87,7 @@ function retornarLibroVentas() {
       a: alm
     }, //**** variables para filtro
   }).done(function (res) {
+    console.log(res);
     quitarcargando();
     datosselect = restornardatosSelect(res);
     $("#tablaLibroVentas").bootstrapTable('destroy');
