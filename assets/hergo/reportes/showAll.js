@@ -39,44 +39,64 @@ function retornarKardexAll() {
             sortable: true,
           },
           {
+            field: 'codigo',
+            title: 'codigo',
+            visible: true,
+            sortable: true,
+          },
+          {
+            field: 'descp',
+            title: 'Descripción',
+            visible: true,
+            sortable: true,
+          },
+          
+          {
             field: 'nombreproveedor',
             title: 'Nombre | Razón Social',
             sortable: true,
+            searchable: false,
           },
           {
             field: 'numMov',
             title: 'N°',
             align: 'center',
             sortable: true,
+            searchable: false,
           },
           {
             field: 'fechakardex',
             title: 'Fecha',
             sortable: true,
+            searchable: false,
             formatter: formato_fecha_corta
           },
           {
             field: 'ing',
             title: 'ing',
             sortable: true,
+            searchable: false,
             align: 'right',
           },
           {
             field: 'fac',
             title: 'fac',
             sortable: true,
+            searchable: false,
             align: 'right',
           },
           {
             field: 'ne',
             title: 'nota',
             sortable: true,
+            searchable: false,
             align: 'right',
           },
           {
             field: 'tr',
             title: 'traspaso',
             sortable: true,
+            searchable: false,
             align: 'right',
           },
           {
@@ -84,18 +104,24 @@ function retornarKardexAll() {
             title: 'Saldo',
             sortable: true,
             align: 'right',
+            searchable: false,
+            
           },
           {
             field: 'saldoTotal',
             title: 'saldoTotal',
             sortable: true,
+            searchable: false,
             align: 'right',
+            formatter:operateFormatter3,
           },
           {
             field: 'cpp',
             title: 'cpp',
             sortable: true,
             align: 'right',
+            searchable: false,
+            formatter:operateFormatter3,
           },
 
           
@@ -106,3 +132,10 @@ function retornarKardexAll() {
       console.log("Request Failed: " + err);
     });
   }
+
+   function operateFormatter3(value, row, index)
+    {       
+        num=Math.round(value * 100) / 100
+        num=num.toFixed(2);
+        return (formatNumber.new(num));
+    }

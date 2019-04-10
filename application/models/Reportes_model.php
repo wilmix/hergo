@@ -895,7 +895,8 @@ class Reportes_model extends CI_Model
 		FROM
 		(
 		SELECT 
-					idArticulo, id, almacen, nombreproveedor, 
+					idArticulo, 
+					codigo, id, descp, almacen, nombreproveedor, 
 					fecha fechakardex, tipo, numMov, punitario, 
 					SUM(ingreso) ing,
 					SUM(factura) fac,
@@ -906,45 +907,41 @@ class Reportes_model extends CI_Model
 					(
 						/** ingresos **/
 							SELECT 	
-						id.`articulo` idArticulo,
-						i.idIngresos id,
+							id.`articulo` idArticulo,
+							art.CodigoArticulo codigo,
+							art.Descripcion descp,
+							i.idIngresos id,
 							i.`almacen`,
-								 IF(i.`tipomov`= 3, CONCAT('DE: ',a.`almacen`), p.`nombreproveedor`) nombreproveedor,
-								 IF(i.`tipomov`=1,0,i.`fechamov`) AS fecha,
-								 tm.`sigla` tipo,
-								 i.`nmov` AS numMov,
-								 id.`punitario`,
-								 id.`cantidad` ingreso,
-								 '' factura,
-								 '' ne,
-								 '' traspaso,
-								 tm.`operacion`,
-							 i.fecha AS FechaSis
+							IF(i.`tipomov`= 3, CONCAT('DE: ',a.`almacen`), p.`nombreproveedor`) nombreproveedor,
+							IF(i.`tipomov`=1,0,i.`fechamov`) AS fecha,
+							tm.`sigla` tipo,
+							i.`nmov` AS numMov,
+							id.`punitario`,
+							id.`cantidad` ingreso,
+							'' factura,
+							'' ne,
+							'' traspaso,
+							tm.`operacion`,
+							i.fecha AS FechaSis
 							FROM ingdetalle id
-								INNER JOIN ingresos i
-									ON i.`idIngresos`=id.`idIngreso`
-								AND i.`almacen`=$almacen
-									AND i.`anulado`=0
-									AND i.`estado`=1
-								AND YEAR(i.`fechamov`)=$gestion
-								INNER JOIN tmovimiento tm
-									ON tm.`id`=i.`tipomov`
-								INNER JOIN provedores p
-									ON p.`idproveedor`=i.`proveedor`
-							LEFT JOIN traspasos t 
-								ON t.`idIngreso` = i.`idIngresos`
-							 LEFT JOIN egresos e 
-								ON t.`idEgreso` = e.`idegresos`
-							 LEFT JOIN almacenes a
-							ON a.`idalmacen` = e.`almacen`
+								INNER JOIN articulos art on art.idArticulos = id.articulo
+								INNER JOIN ingresos i	ON i.`idIngresos`=id.`idIngreso` 
+										AND i.`almacen`=$almacen
+										AND i.`anulado`=0
+										AND i.`estado`=1
+										AND YEAR(i.`fechamov`)=$gestion
+								INNER JOIN tmovimiento tm ON tm.`id`=i.`tipomov`
+								INNER JOIN provedores p ON p.`idproveedor`=i.`proveedor`
+								LEFT JOIN traspasos t  ON t.`idIngreso` = i.`idIngresos`
+							 	LEFT JOIN egresos e  ON t.`idEgreso` = e.`idegresos`
+							 	LEFT JOIN almacenes a ON a.`idalmacen` = e.`almacen`
 		
-							
-							
-							
 						UNION ALL 
 						/** FACTURA **/
 							SELECT 
 							fd.articulo,
+							ar.CodigoArticulo,
+							ar.Descripcion descp,
 							f.idFactura,
 							f.almacen,
 								c.nombreCliente,
@@ -952,23 +949,19 @@ class Reportes_model extends CI_Model
 								'FAC' ,
 								f.nFactura,
 								fd.facturaPUnitario,
-								
 								'' ingreso,
 								 fd.facturaCantidad factura,
 								 '' ne,
 								 '' traspaso,
-								
 								'-',
 							f.fecha
 							FROM    facturadetalle fd
 							INNER JOIN articulos ar ON ar.`idArticulos` = fd.articulo
-								INNER JOIN factura f
-									ON f.`idFactura`=fd.`idFactura`
+							INNER JOIN factura f ON f.`idFactura`=fd.`idFactura`
 								AND f.`almacen`=$almacen
-									AND f.`anulada`=0
+								AND f.`anulada`=0
 								AND YEAR(f.`fechaFac`)=$gestion
-								INNER JOIN clientes c
-									ON c.idCliente=f.cliente
+							INNER JOIN clientes c ON c.idCliente=f.cliente
 								
 								
 								
@@ -976,6 +969,8 @@ class Reportes_model extends CI_Model
 						/** NOTA ENTREGA **/
 							SELECT 	 
 							ed.articulo,
+							art.CodigoArticulo,
+							art.Descripcion descp,
 							e.idegresos,
 							e.almacen,
 								 c.nombreCliente,
@@ -992,16 +987,14 @@ class Reportes_model extends CI_Model
 								 tm.`operacion`,
 							 e.fecha
 							FROM 	egredetalle ed
-								INNER JOIN egresos e
-									ON e.`idegresos`=ed.`idegreso`
-								AND e.`anulado`=0
+								INNER JOIN articulos art on art.idArticulos = ed.articulo
+								INNER JOIN egresos e ON e.`idegresos`=ed.`idegreso`
+									AND e.`anulado`=0
 									AND e.`tipomov`= 7
 									AND e.`estado`<>1
-								AND e.`almacen`=$almacen
-								INNER JOIN tmovimiento tm
-									ON tm.`id`=e.tipomov
-								INNER JOIN clientes c
-									ON c.idCliente=e.cliente
+									AND e.`almacen`=$almacen
+								INNER JOIN tmovimiento tm ON tm.`id`=e.tipomov
+								INNER JOIN clientes c ON c.idCliente=e.cliente
 								WHERE  ed.`cantidad`-ed.`cantFact` <> 0
 							
 							
@@ -1010,6 +1003,8 @@ class Reportes_model extends CI_Model
 						/** TRASPASO Y OTROS **/
 							SELECT 	 
 							ed.articulo,
+							art.CodigoArticulo,
+							art.Descripcion descp,
 							 e.idegresos,
 							 e.almacen,
 								 IF(tm.`sigla` = 'EB', c.nombreCliente, CONCAT('A: ',a.`almacen`)) nombreCliente,
@@ -1017,7 +1012,6 @@ class Reportes_model extends CI_Model
 								 tm.`sigla`,
 								 e.`nmov`,
 								 ed.`punitario`,
-								 
 								 '' ingreso,
 								 '' factura,
 								 '' ne,
@@ -1026,28 +1020,23 @@ class Reportes_model extends CI_Model
 								 tm.`operacion`,
 							 e.fecha
 							FROM egredetalle ed
-								INNER JOIN egresos e
-									ON e.`idegresos`=ed.`idegreso`
-								AND e.`almacen`=$almacen
+								INNER JOIN articulos art on art.idArticulos = ed.articulo
+								INNER JOIN egresos e ON e.`idegresos`=ed.`idegreso`
+									AND e.`almacen`=$almacen
 									AND e.`anulado`=0
 									AND e.`tipomov` BETWEEN 8 AND 9
-								AND YEAR(e.`fechamov`)=$gestion
-								INNER JOIN tmovimiento tm
-									ON tm.`id`=e.tipomov
-								INNER JOIN clientes c
-									ON c.idCliente=e.cliente
-							LEFT JOIN traspasos t 
-								ON t.`idEgreso` = e.`idegresos`
-							LEFT JOIN ingresos i 
-								ON i.`idIngresos`=t.`idIngreso`
-							LEFT JOIN almacenes a
-							ON a.`idalmacen` = i.`almacen`
+									AND YEAR(e.`fechamov`)=$gestion
+								INNER JOIN tmovimiento tm ON tm.`id`=e.tipomov
+								INNER JOIN clientes c ON c.idCliente=e.cliente
+								LEFT JOIN traspasos t  ON t.`idEgreso` = e.`idegresos`
+								LEFT JOIN ingresos i ON i.`idIngresos`=t.`idIngreso`
+								LEFT JOIN almacenes a ON a.`idalmacen` = i.`almacen`
 					) AS tmp
 				  -- where idArticulo between 51 and 61
 					GROUP BY idArticulo, id WITH ROLLUP
 					-- order by idArticulo, fechakardex
 		)tttt
-		ORDER BY idArticulo, auxOrd;
+		ORDER BY codigo, auxOrd, id;
 			-- GROUP BY  idArticulo, fechakardex  WITH ROLLUP;
 		";
 		$query=$this->db->query($sql);		
