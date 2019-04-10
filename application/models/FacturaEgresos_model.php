@@ -32,7 +32,7 @@ class FacturaEgresos_model extends CI_Model
 	{
 		$sql="SELECT f.`idFactura`, f.`lote`, df.`manual`, f.`nFactura`, f.`fechaFac`, f.`ClienteNit`, f.`ClienteFactura`,  t.`sigla`, 
 		f.`total`, CONCAT(u.first_name,' ', u.last_name) AS vendedor, f.`anulada`, f.fecha,
-		GROUP_CONCAT(DISTINCT e.nmov ORDER BY e.nmov ASC SEPARATOR ' - ') AS movimientos, f.glosa,
+		GROUP_CONCAT(DISTINCT e.nmov ORDER BY e.nmov ASC SEPARATOR ' - ') AS movimientos, f.glosa,p.idPago, p.`numPago`,
 		f.`pagada`, f.almacen idAlmacen,
 		CASE
 			WHEN f.moneda = 1 THEN 'BOB'
@@ -47,6 +47,8 @@ class FacturaEgresos_model extends CI_Model
 		FROM factura_egresos fe 
 		INNER JOIN egresos e on e.idegresos=fe.idegresos
 		INNER JOIN factura f on f.idFactura=fe.idFactura
+		LEFT JOIN pago_factura pf ON f.idFactura = pf.idFactura
+		LEFT JOIN pago p ON p.idPago = pf.idPago
 		INNER JOIN tmovimiento t on e.tipomov=t.id
 		INNER JOIN datosfactura df on df.idDatosFactura = f.lote
 		INNER JOIN users u on u.id = e.vendedor
