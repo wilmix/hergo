@@ -886,16 +886,14 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function showKardexAll () 
+	public function showKardexAll ($almacen) 
 	{ 
-		$almacen = 1;
-		$gestion = 2019;
-		$sql="SELECT *, IF(id IS NULL,9999999,fechakardex) auxOrd
+		$sql="SELECT *, IF(id IS NULL,9999999,fechakardex) auxOrd, alm.almacen alm, u.Unidad uni
 
 		FROM
 		(
 		SELECT 
-					idArticulo, 
+					idArticulo, idUnidad,
 					codigo, id, descp, almacen, nombreproveedor, 
 					fecha fechakardex, tipo, numMov, punitario, 
 					SUM(ingreso) ing,
@@ -907,6 +905,7 @@ class Reportes_model extends CI_Model
 					(
 						/** ingresos **/
 							SELECT 	
+							art.idUnidad,
 							id.`articulo` idArticulo,
 							art.CodigoArticulo codigo,
 							art.Descripcion descp,
@@ -929,7 +928,7 @@ class Reportes_model extends CI_Model
 										AND i.`almacen`=$almacen
 										AND i.`anulado`=0
 										AND i.`estado`=1
-										AND YEAR(i.`fechamov`)=$gestion
+										AND YEAR(i.`fechamov`)=(select gestionActual from config)
 								INNER JOIN tmovimiento tm ON tm.`id`=i.`tipomov`
 								INNER JOIN provedores p ON p.`idproveedor`=i.`proveedor`
 								LEFT JOIN traspasos t  ON t.`idIngreso` = i.`idIngresos`
@@ -939,6 +938,7 @@ class Reportes_model extends CI_Model
 						UNION ALL 
 						/** FACTURA **/
 							SELECT 
+							ar.idUnidad,
 							fd.articulo,
 							ar.CodigoArticulo,
 							ar.Descripcion descp,
@@ -960,7 +960,7 @@ class Reportes_model extends CI_Model
 							INNER JOIN factura f ON f.`idFactura`=fd.`idFactura`
 								AND f.`almacen`=$almacen
 								AND f.`anulada`=0
-								AND YEAR(f.`fechaFac`)=$gestion
+								AND YEAR(f.`fechaFac`)=(select gestionActual from config)
 							INNER JOIN clientes c ON c.idCliente=f.cliente
 								
 								
@@ -968,6 +968,7 @@ class Reportes_model extends CI_Model
 						UNION ALL 
 						/** NOTA ENTREGA **/
 							SELECT 	 
+							art.idUnidad,
 							ed.articulo,
 							art.CodigoArticulo,
 							art.Descripcion descp,
@@ -1002,6 +1003,7 @@ class Reportes_model extends CI_Model
 						UNION ALL 
 						/** TRASPASO Y OTROS **/
 							SELECT 	 
+							art.idUnidad,
 							ed.articulo,
 							art.CodigoArticulo,
 							art.Descripcion descp,
@@ -1025,7 +1027,7 @@ class Reportes_model extends CI_Model
 									AND e.`almacen`=$almacen
 									AND e.`anulado`=0
 									AND e.`tipomov` BETWEEN 8 AND 9
-									AND YEAR(e.`fechamov`)=$gestion
+									AND YEAR(e.`fechamov`)=(select gestionActual from config)
 								INNER JOIN tmovimiento tm ON tm.`id`=e.tipomov
 								INNER JOIN clientes c ON c.idCliente=e.cliente
 								LEFT JOIN traspasos t  ON t.`idEgreso` = e.`idegresos`
@@ -1036,8 +1038,67 @@ class Reportes_model extends CI_Model
 					GROUP BY idArticulo, id WITH ROLLUP
 					-- order by idArticulo, fechakardex
 		)tttt
+		INNER JOIN almacenes alm ON alm.idalmacen = tttt.almacen
+	  INNER JOIN unidad u ON u.idUnidad = tttt.idUnidad
 		ORDER BY codigo, auxOrd, id;
+
 			-- GROUP BY  idArticulo, fechakardex  WITH ROLLUP;
+		";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+	public function showKardexAllModel($almacen)  
+	{
+			$res=$this->Reportes_model->showKardexAll($almacen); 
+			$res=$res->result();
+
+			//unset($res[0]);
+			$saldoTotal = 0;
+			$aux = 0;
+			$cost = 0;
+			$idArticulo = 0;
+			$items = array();
+			$titulo = new stdClass();
+			$titulo->titulo = 'titulo';
+			$cpp = 0;
+			foreach ($res as $line) {
+				if ($line->id == null) {
+					$idArticulo = $line->idArticulo;
+					$line->saldo = $line->ing - $line->fac - $line->ne - $line->tr;
+					$line->nombreproveedor = 'TOTAL:';
+					$line->numMov = '';
+				
+					$line->saldoTotal = 0;
+					$saldoTotal = 0;
+					$aux = 0;
+					$cpp = 0;
+				} else {
+					$idArticulo = $line->idArticulo;
+					$line->saldo = $line->ing - $line->fac - $line->ne - $line->tr + $aux;
+					$line->out = $line->fac + $line->ne + $line->tr;
+					$aux = $line->saldo;
+					if ($line->ing > 0) {
+						$line->saldoTotal = $saldoTotal + ($line->punitario * $line->ing);
+						$saldoTotal = $line->saldoTotal;
+						$cpp = $aux == 0 ? 0: $saldoTotal / $aux;
+						$line->cpp = $cpp;
+					} else {
+						$line->saldoTotal = $saldoTotal - ($cpp * $line->out);
+						$saldoTotal = $line->saldoTotal;
+						$cpp = $aux == 0 ? 0: $saldoTotal / $aux;
+						$line->cpp = $cpp;
+					}
+
+
+				}
+				
+			}
+			return $res;
+		
+	}
+	public function gestionActual(){
+		$sql="SELECT c.`gestionActual`
+		FROM config c
 		";
 		$query=$this->db->query($sql);		
 		return $query;
