@@ -889,7 +889,7 @@ class Reportes_model extends CI_Model
 	public function showKardexAll ($almacen) 
 	{ 
 		$sql="SELECT *, IF(id IS NULL,9999999,fechakardex) auxOrd, alm.almacen alm, u.Unidad uni
-
+		
 		FROM
 		(
 		SELECT 
@@ -1040,13 +1040,11 @@ class Reportes_model extends CI_Model
 		)tttt
 		INNER JOIN almacenes alm ON alm.idalmacen = tttt.almacen
 	  INNER JOIN unidad u ON u.idUnidad = tttt.idUnidad
-		ORDER BY codigo, auxOrd, id;
-
-			-- GROUP BY  idArticulo, fechakardex  WITH ROLLUP;
-		";
+		ORDER BY codigo, auxOrd, id;";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	
 	public function showKardexAllModel($almacen)  
 	{
 			$res=$this->Reportes_model->showKardexAll($almacen); 
@@ -1096,11 +1094,184 @@ class Reportes_model extends CI_Model
 			return $res;
 		
 	}
-	public function gestionActual(){
+	public function showKardexAllSN ($almacen) 
+	{ 
+		$sql="SELECT *, IF(id IS NULL,9999999,fechakardex) auxOrd, alm.almacen alm, u.Unidad uni
+		
+		FROM
+		(
+		SELECT 
+					idArticulo, idUnidad,
+					codigo, id, descp, almacen, nombreproveedor, 
+					fecha fechakardex, tipo, numMov, punitario, 
+					SUM(ingreso) ing,
+					SUM(factura) fac,
+					SUM(ne) ne,
+					SUM(traspaso) tr,
+					FechaSis
+					 FROM
+					(
+						/** ingresos **/
+							SELECT 	
+							art.idUnidad,
+							id.`articulo` idArticulo,
+							art.CodigoArticulo codigo,
+							art.Descripcion descp,
+							i.idIngresos id,
+							i.`almacen`,
+							IF(i.`tipomov`= 3, CONCAT('DE: ',a.`almacen`), p.`nombreproveedor`) nombreproveedor,
+							IF(i.`tipomov`=1,0,i.`fechamov`) AS fecha,
+							tm.`sigla` tipo,
+							i.`nmov` AS numMov,
+							id.`punitario`,
+							id.`cantidad` ingreso,
+							'' factura,
+							'' ne,
+							'' traspaso,
+							tm.`operacion`,
+							i.fecha AS FechaSis
+							FROM ingdetalle id
+								INNER JOIN articulos art on art.idArticulos = id.articulo
+								INNER JOIN ingresos i	ON i.`idIngresos`=id.`idIngreso` 
+										AND i.`almacen`=$almacen
+										AND i.`anulado`=0
+										AND i.`estado`=1
+										AND YEAR(i.`fechamov`)=(select gestionActual from config)
+								INNER JOIN tmovimiento tm ON tm.`id`=i.`tipomov`
+								INNER JOIN provedores p ON p.`idproveedor`=i.`proveedor`
+								LEFT JOIN traspasos t  ON t.`idIngreso` = i.`idIngresos`
+							 	LEFT JOIN egresos e  ON t.`idEgreso` = e.`idegresos`
+							 	LEFT JOIN almacenes a ON a.`idalmacen` = e.`almacen`
+		
+						UNION ALL 
+						/** FACTURA **/
+							SELECT 
+							ar.idUnidad,
+							fd.articulo,
+							ar.CodigoArticulo,
+							ar.Descripcion descp,
+							f.idFactura,
+							f.almacen,
+								c.nombreCliente,
+								fechaFac,
+								'FAC' ,
+								f.nFactura,
+								fd.facturaPUnitario,
+								'' ingreso,
+								 fd.facturaCantidad factura,
+								 '' ne,
+								 '' traspaso,
+								'-',
+							f.fecha
+							FROM    facturadetalle fd
+							INNER JOIN articulos ar ON ar.`idArticulos` = fd.articulo
+							INNER JOIN factura f ON f.`idFactura`=fd.`idFactura`
+								AND f.`almacen`=$almacen
+								AND f.`anulada`=0
+								AND YEAR(f.`fechaFac`)=(select gestionActual from config)
+							INNER JOIN clientes c ON c.idCliente=f.cliente
+							
+						UNION ALL 
+						/** TRASPASO Y OTROS **/
+							SELECT 	 
+							art.idUnidad,
+							ed.articulo,
+							art.CodigoArticulo,
+							art.Descripcion descp,
+							 e.idegresos,
+							 e.almacen,
+								 IF(tm.`sigla` = 'EB', c.nombreCliente, CONCAT('A: ',a.`almacen`)) nombreCliente,
+								 e.`fechamov`,
+								 tm.`sigla`,
+								 e.`nmov`,
+								 ed.`punitario`,
+								 '' ingreso,
+								 '' factura,
+								 '' ne,
+								 ed.`cantidad` traspaso,
+				
+								 tm.`operacion`,
+							 e.fecha
+							FROM egredetalle ed
+								INNER JOIN articulos art on art.idArticulos = ed.articulo
+								INNER JOIN egresos e ON e.`idegresos`=ed.`idegreso`
+									AND e.`almacen`=$almacen
+									AND e.`anulado`=0
+									AND e.`tipomov` BETWEEN 8 AND 9
+									AND YEAR(e.`fechamov`)=(select gestionActual from config)
+								INNER JOIN tmovimiento tm ON tm.`id`=e.tipomov
+								INNER JOIN clientes c ON c.idCliente=e.cliente
+								LEFT JOIN traspasos t  ON t.`idEgreso` = e.`idegresos`
+								LEFT JOIN ingresos i ON i.`idIngresos`=t.`idIngreso`
+								LEFT JOIN almacenes a ON a.`idalmacen` = i.`almacen`
+					) AS tmp
+				  -- where idArticulo between 51 and 61
+					GROUP BY idArticulo, id WITH ROLLUP
+					-- order by idArticulo, fechakardex
+		)tttt
+		INNER JOIN almacenes alm ON alm.idalmacen = tttt.almacen
+	  INNER JOIN unidad u ON u.idUnidad = tttt.idUnidad
+		ORDER BY codigo, auxOrd, id;";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+	public function showKardexAllModelSN($almacen)  
+	{
+			$res=$this->Reportes_model->showKardexAllSN($almacen); 
+			$res=$res->result();
+
+			//unset($res[0]);
+			$saldoTotal = 0;
+			$aux = 0;
+			$cost = 0;
+			$idArticulo = 0;
+			$items = array();
+			$titulo = new stdClass();
+			$titulo->titulo = 'titulo';
+			$cpp = 0;
+			foreach ($res as $line) {
+				if ($line->id == null) {
+					$idArticulo = $line->idArticulo;
+					$line->saldo = $line->ing - $line->fac - $line->tr;
+					$line->nombreproveedor = 'TOTAL:';
+					$line->numMov = '';
+				
+					$line->saldoTotal = 0;
+					$saldoTotal = 0;
+					$aux = 0;
+					$cpp = 0;
+				} else {
+					$idArticulo = $line->idArticulo;
+					$line->saldo = $line->ing - $line->fac - $line->tr + $aux;
+					$line->out = $line->fac + $line->ne + $line->tr;
+					$aux = $line->saldo;
+					if ($line->ing > 0) {
+						$line->saldoTotal = $saldoTotal + ($line->punitario * $line->ing);
+						$saldoTotal = $line->saldoTotal;
+						$cpp = $aux == 0 ? 0: $saldoTotal / $aux;
+						$line->cpp = $cpp;
+					} else {
+						$line->saldoTotal = $saldoTotal - ($cpp * $line->out);
+						$saldoTotal = $line->saldoTotal;
+						$cpp = $aux == 0 ? 0: $saldoTotal / $aux;
+						$line->cpp = $cpp;
+					}
+
+
+				}
+				
+			}
+			return $res;
+		
+	}
+	public function showGestionActual()
+	{
 		$sql="SELECT c.`gestionActual`
-		FROM config c
+FROM config c
 		";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+
+
 }

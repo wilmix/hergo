@@ -10,6 +10,16 @@ $(document).on("click", "#refresh", function () {
     $('#tablas').empty();
     retornarKardex();
 })
+$(document).on("click", "#pdfGeneral", function () {
+    let alm = $("#almacen_filtro").val()
+    let imprimir = base_url("pdf/KardexAll/index/") + alm;
+    window.open(imprimir);
+})
+$(document).on("click", "#pdfGeneralSN", function () {
+    let alm = $("#almacen_filtro").val()
+    let imprimir = base_url("pdf/KardexAllSN/index/") + alm;
+    window.open(imprimir);
+})
 $(document).on("change", "#articulos_filtro", function () {
     tituloReporte();
 })

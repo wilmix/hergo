@@ -3,11 +3,11 @@
     require_once APPPATH."/third_party/fpdf/fpdf.php";
     require_once APPPATH."/third_party/numerosLetras/NumeroALetras.php";
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
-class KardexAll extends CI_Controller {
+class KardexAllSN extends CI_Controller {
   public function index($id=1) {
     //CARGAR MODELO
     $this->load->model('Reportes_model');
-    $lineas = $this->Reportes_model->showKardexAllModel($id);
+    $lineas = $this->Reportes_model->showKardexAllModelSN($id);
     $gestion = $this->Reportes_model->showGestionActual()->row()->gestionActual;
 
     //PARAMETROS PARA LA LIBRERIA
@@ -15,15 +15,15 @@ class KardexAll extends CI_Controller {
       'alm' => $lineas[0]->alm,
       'gestion' => $gestion
     );
-    $this->load->library('KardexAll_lib', $params);
+    $this->load->library('KardexAllSN_lib', $params);
 
-      $this->pdf = new KardexAll_lib($params);
+      $this->pdf = new KardexAllSN_lib($params);
       $this->pdf->AddPage('P','Letter');
       //$this->pdf->SetX(10);
       $this->pdf->AliasNbPages();
       
       $this->pdf->SetTitle("Kardex Valorado");
-      $this->pdf->SetLeftMargin(10);
+      $this->pdf->SetLeftMargin(20);
       $this->pdf->SetRightMargin(10);
       $this->pdf->SetFont('Arial', '', 7);
       $aux = NULL;
@@ -44,7 +44,7 @@ class KardexAll extends CI_Controller {
 
         if ($aux == NULL) {
           $this->pdf->Ln(1);
-          $this->pdf->SetX(15);
+          $this->pdf->SetX(20);
           $this->pdf->SetFillColor(255,255,255);
           $this->pdf->SetFont('Arial', 'B' , 7);
           $this->pdf->Cell(1,6,utf8_decode("$linea->codigo      $linea->uni - $linea->descp"),$bor,0,'L',1);
@@ -58,14 +58,14 @@ class KardexAll extends CI_Controller {
               //$this->pdf->Cell(7,6,$linea->almacen,0,0,'C',1);
               $this->pdf->Cell(15,6,$this->formatoNumVacio($linea->ing, $id),$bor,0,'R',1);
               $this->pdf->Cell(15,6,$this->formatoNumVacio($linea->fac, $id),$bor,0,'R',1);
-              $this->pdf->Cell(15,6,$this->formatoNumVacio($linea->ne, $id),$bor,0,'R',1);
+              //$this->pdf->Cell(15,6,$this->formatoNumVacio($linea->ne, $id),$bor,0,'R',1);
               $this->pdf->Cell(15,6,$this->formatoNumVacio($linea->tr, $id),$bor,0,'R',1);
               $this->pdf->Cell(15,6,number_format($linea->saldo, 2, ".", ","),$bor,0,'R',1);
               $this->pdf->Cell(20,6,$valorado,$bor,0,'R',1);
               $this->pdf->Ln(5);
 
         } else {
-          $this->pdf->SetX(10);
+          $this->pdf->SetX(20);
           $this->pdf->SetFont('Arial', $neg, 7);
           $this->pdf->SetFillColor(255,255,255);
           //$fechaMov =  $linea->id ? date('d/m/Y',strtotime($linea->fechakardex)) : '';
@@ -76,7 +76,7 @@ class KardexAll extends CI_Controller {
               //$this->pdf->Cell(7,6,$linea->almacen,'B',0,'C',1);
               $this->pdf->Cell(15,6,$this->formatoNumVacio($linea->ing, $id),$bor,0,'R',1);
               $this->pdf->Cell(15,6,$this->formatoNumVacio($linea->fac, $id),$bor,0,'R',1);
-              $this->pdf->Cell(15,6,$this->formatoNumVacio($linea->ne, $id),$bor,0,'R',1);
+              //$this->pdf->Cell(15,6,$this->formatoNumVacio($linea->ne, $id),$bor,0,'R',1);
               $this->pdf->Cell(15,6,$this->formatoNumVacio($linea->tr, $id),$bor,0,'R',1);
               $this->pdf->Cell(15,6,number_format($linea->saldo, 2, ".", ","),$bor,0,'R',1);
               $this->pdf->Cell(20,6,$valorado,$bor,0,'R',1);
