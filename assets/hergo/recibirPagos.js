@@ -1,5 +1,6 @@
-var iniciofecha=moment().subtract(10, 'year').startOf('year')
-var finfecha=moment().subtract(0, 'year').endOf('year')
+
+let iniciofecha=moment().subtract(10, 'year').startOf('year')
+let finfecha=moment().subtract(0, 'year').endOf('year')
 let hoy = moment().format('DD-MM-YYYY');
 let almacen = $("#almacen_filtro").val();
 let fechaPagoHoy
@@ -77,8 +78,8 @@ $(document).ready(function(){
         autoGroup: true,
         autoUnmask:true
     });
-    var start = moment().subtract(10, 'year').startOf('year')
-    var end = moment().subtract(0, 'year').endOf('year')
+    let start = moment().subtract(10, 'year').startOf('year')
+    let end = moment().subtract(0, 'year').endOf('year')
 
     $(function() {
         moment.locale('es');
@@ -332,9 +333,9 @@ function retornarPagosPendientes() //*******************************
     function restornardatosSelect(res)
     {
 
-        var autor = new Array()
-        var cliente = new Array()
-        var datos =new Array()
+        let autor = new Array()
+        let cliente = new Array()
+        let datos =new Array()
         $.each(res, function(index, value){
 
             autor.push(value.autor)
@@ -417,7 +418,8 @@ function editarPago(idPago) {
                 options: [
                 { tipo: 'EFECTIVO', value: '1' },
                 { tipo: 'TRANSFERENCIA', value: '2' },
-                { tipo: 'CHEQUE', value: '3' }
+                { tipo: 'CHEQUE', value: '3' },
+                { tipo: 'OTROS', value: '4' }
                 ],
             totalPago:'',
             porPagar:res.detalle,
@@ -457,7 +459,8 @@ function datosEditar(idPago) {
                 options: [
                 { tipo: 'EFECTIVO', value: '1' },
                 { tipo: 'TRANSFERENCIA', value: '2' },
-                { tipo: 'CHEQUE', value: '3' }
+                { tipo: 'CHEQUE', value: '3' },
+                { tipo: 'OTROS', value: '4' }
                 ],
             totalPago:'',
             porPagar:[],
