@@ -28,6 +28,11 @@ $(document).on("change", "#almacen_filtro", function () {
     tituloReporte();
     retornarSaldos();
 })
+$(document).on("click", "#pdf", function () {
+    let alm = $("#almacen_filtro").val()
+    let imprimir = base_url("pdf/SaldosActuales/index/") + alm;
+    window.open(imprimir);
+})
 $(document).on("click", "#excel", function () {
     let alm = $("#almacen_filtro").val()
     let mon = $("#moneda").val()

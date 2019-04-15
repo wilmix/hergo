@@ -70,7 +70,7 @@ class EstadoVentasCosto extends CI_Controller {
      
 
       //guardar
-      $this->pdf->Output('$ingreso->sigla' . " - ". '$ingreso->n' . " - " . '$year', 'I');
+      $this->pdf->Output('EstadoVentasCosto.pdf', 'I');
   }
   public function filas($linea,$top){
           if ($linea->codigo == NULL) {
