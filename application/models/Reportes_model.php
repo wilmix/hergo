@@ -1275,7 +1275,7 @@ class Reportes_model extends CI_Model
 	public function reportPagos($ini, $end, $alm )
 	{
 		$sql="SELECT pf.`idPago`,pf.`idFactura`, pf.`monto` montoRaw,ap.`almacen` almPago,p.`fechaPago`,  p.`numPago`, c.`nombreCliente` clienteCab,
-					af.`almacen` almFac,  f.`nFactura`, f.`fechaFac`, f.`ClienteFactura`, f.`ClienteNit`, pf.`monto`, p.`anulado`, f.`anulada`
+					af.`siglAlm` almFac,  f.`nFactura`, f.`fechaFac`, f.`ClienteFactura`, f.`ClienteNit`, pf.`monto`, p.`anulado`, f.`anulada`
 				FROM pago_factura pf
 				INNER JOIN pago p ON p.`idPago` = pf.`idPago`
 				INNER JOIN factura f ON f.`idFactura` = pf.`idFactura`

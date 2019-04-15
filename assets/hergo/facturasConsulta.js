@@ -211,12 +211,12 @@ function retornarTablaFacturacion()
                     data: datosselect[2]
                 }
             },    
-            /*{
+            {
                 field:'numPago',
                 title:"Nº Pago",
                 sortable:true,
                 align: 'center',
-            },  */       
+            },       
             {
                 title: 'Acciones',
                 align: 'center',

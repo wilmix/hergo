@@ -161,6 +161,7 @@
               <li class="reporteIngresos"><a href="<?php echo base_url("reportes/reporteIngresos") ?>">Reporte Ingresos</a></li>
               <li class="reporteEgresos"><a href="<?php echo base_url("reportes/reporteEgresos") ?>">Reporte Egresos</a></li>
               <li class="reporteFacturas"><a href="<?php echo base_url("reportes/reporteFacturas") ?>">Reporte Facturas</a></li>
+              <li class="reportePagos"><a href="<?php echo base_url("reportes/reportePagos") ?>">Reporte Pagos</a></li>
 
 
           <!--

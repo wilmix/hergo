@@ -97,6 +97,8 @@ function returnReportePago() {
             stickyHeaderOffsetY: '50px',
             strictSearch: true,
             rowStyle:rowStyle,
+            showFooter: true,
+            footerStyle: footerStyle,
             columns: [
                 {
                     field: 'almPago',
@@ -111,6 +113,7 @@ function returnReportePago() {
                     sortable: true,
                     align: 'center',
                     searchable: false,
+                    formatter: formato_fecha_corta,
                 },
 
                 {
@@ -118,6 +121,10 @@ function returnReportePago() {
                     title: 'Nº Pago',
                     align: 'center',
                     sortable: true,
+                    filter: {
+                        type: "select",
+                        data: datosselect[2]
+                    }
                 },
                 {
                     field: 'clienteCab',
@@ -129,9 +136,9 @@ function returnReportePago() {
                 },
                 {
                     field: 'almFac',
-                    title: 'Alm Factura',
+                    title: 'Alm.Fac.',
                     searchable: false,
-                    visible:false
+                    align: 'center',
                 },
                 {
                     field: 'fechaFac',
@@ -167,6 +174,7 @@ function returnReportePago() {
                     formatter:operateFormatter3,
                     align: 'right',
                     searchable: false,
+                    footerFormatter: sumaColumna
                 },
                 {
                     field: 'montoRaw',
@@ -232,18 +240,20 @@ function restornardatosSelect(res) {
 
     let cliente = new Array()
     let nFac = new Array()
+    let nPago = new Array()
     let datos = new Array()
     $.each(res, function (index, value) {
 
         cliente.push(value.ClienteFactura)
-        nFac.push(value.nFactura)
+        nFac.push(Number(value.nFactura))
+        nPago.push(Number(value.numPago))
     })
 
     cliente.sort()
-    nFac.sort()
-    datos.push(cliente.unique());
-    datos.push(nFac.unique());
-
+    datos.push(cliente.unique())
+    datos.push(nFac.unique())
+    datos.push(nPago.unique())
+    console.log(datos);
     return (datos);
 }
 Array.prototype.unique = function (a) {
@@ -253,5 +263,25 @@ Array.prototype.unique = function (a) {
 }(function (a, b, c) {
     return c.indexOf(a, b + 1) < 0
 });
-
+function footerStyle(value, row, index) {
+    return {
+      css: {
+        "font-weight": "bold",
+        "border-top": "3px solid white",
+        "border-bottom": "3px solid white",
+        "text-align": "right",
+        "padding": "15px",
+        "background-color": "#3c8dbc",
+        "color": "white"
+      }
+    };
+  }
+  
+  function sumaColumna(data) {
+    field = this.field;
+    let totalSum = data.reduce(function (sum, row) {
+      return sum + (+row[field]);
+    }, 0);
+    return (formatNumber.new(totalSum.toFixed(2)));
+  }
   
