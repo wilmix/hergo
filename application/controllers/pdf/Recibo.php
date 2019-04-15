@@ -49,7 +49,7 @@ class Recibo extends CI_Controller {
                 $totalPago += $linea->pagar;
                 $this->pdf->SetFillColor(255,255,255);
                     $this->pdf->Cell(20,5,$n++,'',0,'C',0); ///NUMERO DE FILA
-                    $this->pdf->Cell(20,5,$linea->lote,'',0,'C',0);
+                    $this->pdf->Cell(20,5,$linea->siglAlm,'',0,'C',0);
                     $this->pdf->Cell(25,5,$linea->nFactura,'',0,'C',0);
                     $this->pdf->Cell(100,5,utf8_decode($linea->nombreCliente),0,0,'L',0);
                     $this->pdf->Cell(30,5,number_format($linea->pagar, 2, ".", ","),0,0,'R',1);

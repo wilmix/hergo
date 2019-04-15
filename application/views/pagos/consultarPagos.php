@@ -87,6 +87,7 @@
                 <thead>
                   <tr>
                     <th>Lote</th>
+                    <th>Suc.</th>
                     <th>N°Factura</th>
                     <th>Cliente</th>
                     <th>Estado</th>
@@ -97,6 +98,7 @@
                 <tbody>
                   <tr v-for="(fila,index) in tabla">
                     <td>{{fila.lote}}</td>
+                    <td>{{fila.siglAlm}}</td>
                     <td>{{fila.nFactura}}</td>
                     <td>{{fila.nombreCliente}}</td>
                     <td>{{fila.pagada | estado}}</td>
@@ -106,8 +108,8 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="4">{{retornarTotal() | literal}}</td>
-                    <td class="text-right">{{retornarTotal() | moneda}}</td>
+                    <td colspan="5"> <b> {{retornarTotal() | literal}} </b></td>
+                    <td class="text-right"> <b> {{retornarTotal() | moneda}} </b> </td>
                   </tr>
                 </tfoot>
             </table>

@@ -59,7 +59,7 @@
                     $this->SetFillColor(235,235,235);
                     $this->SetFont('Arial','B',8); 
                     $this->Cell(20,6,utf8_decode('Nº'),0,0,'C',1);
-                    $this->Cell(20,6,'LOTE',0,0,'C',1);
+                    $this->Cell(20,6,'SUC',0,0,'C',1);
                     $this->Cell(25,6,'Nro FACTURA',0,0,'C',1);
                  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
                     $this->Cell(100,6,'CLIENTE',0,0,'C',1);

@@ -64,6 +64,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function retornarEdicionDetalle($idPago) {
 		$sql="SELECT 
+		af.`siglAlm`,
 		f.`almacen`, 
 		f.`cliente`, 
 		f.`fechaFac`, 
@@ -79,6 +80,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		FROM pago_factura pf
 		INNER JOIN factura f ON f.`idFactura` =pf.`idFactura`
 		INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
+		INNER JOIN almacenes af ON af.`idalmacen` = f.`almacen`
 		WHERE pf.`idPago` = $idPago
 		GROUP BY f.`idFactura`";
 		//die($sql);
@@ -87,7 +89,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	}
 	public function retornarDetallePago($idPago)
 	{
-		$sql="SELECT f.`lote`, f.`fechaFac`,f.`nFactura`, c.`nombreCliente`, pf.`monto`, f.`pagada`, 
+		$sql="SELECT af.`siglAlm`, f.`lote`, f.`fechaFac`,f.`nFactura`, c.`nombreCliente`, pf.`monto`, f.`pagada`, 
 		a.`almacen`, cp.`nombreCliente` nombre, p.`glosa`, p.`fechaPago`, p.`numPago`, tp.`tipoPago`, 
 		b.`sigla` banco, p.`transferencia`, p.`cheque`, p.anulado
 		FROM pago_factura pf
@@ -99,6 +101,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		INNER JOIN moneda m ON m.`id` = p.`moneda`
 		INNER JOIN almacenes a ON a.`idalmacen` = p.`almacen`
 		INNER JOIN tipoPago tp ON tp.`id` = p.`tipoPago`
+		INNER JOIN almacenes af ON af.`idalmacen` = f.`almacen`
 		LEFT JOIN bancos b ON b.`id`=p.`banco`
 		WHERE p.idPago = $idPago
 		ORDER BY f.`nFactura`";
