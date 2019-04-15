@@ -14,6 +14,11 @@ $(document).on("change", "#almacen_filtro", function () {
     tituloReporte() 
     retornarestadoVentasCosto();
 })
+$(document).on("click", "#pdf", function () {
+    let alm = $("#almacen_filtro").val()
+    let imprimir = base_url("pdf/EstadoVentasCosto/index/") + alm;
+    window.open(imprimir);
+})
 $(document).on("change", "#moneda", function () {
     tituloReporte() 
     retornarestadoVentasCosto();

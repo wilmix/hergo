@@ -412,13 +412,13 @@ class Reportes_model extends CI_Model
 	}
 	public function mostrarEstadoVentasCosto($alm="")
 	{ 
-		$sql="SELECT id,linea, siglaLinea, codigo, descrip, uni, cpp, precioVenta, saldoCantidad,
+		$sql="SELECT alm.`almacen`,id,linea, siglaLinea, codigo, descrip, uni, cpp, precioVenta, saldoCantidad,
 		SUM(saldoValorado) saldoValorado,
 		cantVendida,
 		SUM(totalCosto) totalCosto, SUM(totalVenta) totalVenta, SUM(utilidad) utilidad
 		FROM
 		(
-			SELECT l.`Linea` linea, l.`Sigla` siglaLinea, a.`idArticulos` id, a.`CodigoArticulo` codigo,a.`Descripcion` descrip, u.`Unidad` uni, 
+			SELECT sa.`idAlmacen` idAlm, l.`Linea` linea, l.`Sigla` siglaLinea, a.`idArticulos` id, a.`CodigoArticulo` codigo,a.`Descripcion` descrip, u.`Unidad` uni, 
 			IFNULL(ROUND(a.`costoPromedioPonderado`,4),0) cpp, IFNULL(ROUND((IFNULL(ROUND(artVen.totalVenta,2),0) / IFNULL(artVen.cant,0)),2),0) precioVenta,
 			ROUND((sa.`saldo`+sa.`notaEntrega`),2) saldoCantidad,  ROUND((ROUND((sa.`saldo`+sa.`notaEntrega`),2) * IFNULL(ROUND(a.`costoPromedioPonderado`,4),0)),2) saldoValorado,
 			IFNULL(ROUND(artVen.cant,2),0) cantVendida, 
@@ -446,6 +446,7 @@ class Reportes_model extends CI_Model
 			sa.`idAlmacen` = $alm
 			ORDER BY codigo 
 		)tblg
+			INNER JOIN almacenes alm ON alm.`idalmacen` = idAlm
 		 GROUP BY siglaLinea, codigo WITH ROLLUP
 		-- select gestionActual from config 		
 		";
