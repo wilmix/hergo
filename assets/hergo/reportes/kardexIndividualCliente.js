@@ -2,6 +2,7 @@
 var iniciofecha = moment().subtract(5, 'year').startOf('year')
 var finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function () {
+    tituloReporte()
     nomCliente = $('#clientes_filtro').find(':selected').text();
     $('#export').click(function () {
         $('#tablaKardex').tableExport({
@@ -46,10 +47,7 @@ $(document).ready(function () {
     cb(start, end);
 
   });
-  $('#fechapersonalizada').on('apply.daterangepicker', function (ev, picker) {
-    tituloReporte()
-   });
-  tituloReporte()
+
 })
 
 
@@ -57,16 +55,15 @@ $(document).ready(function () {
 
 
 $(document).on("click", "#kardex", function () {
-    tituloReporte();
     retornarKardexCliente();
-    
+})
+$(document).on("change", "#moneda", function () {
+    retornarKardexCliente();
 })
 $(document).on("click", "#refresh", function () {
-    tituloReporte();
     retornarKardexCliente();
 })
 $(document).on("change", "#clientes_filtro", function () {
-    tituloReporte();
     retornarKardexCliente();
 })
 
@@ -76,7 +73,7 @@ function retornarKardexCliente() {
     let fin = finfecha.format('YYYY-MM-DD')
     let almacen = $("#almacen_filtro").val()
     let cliente = $("#clientes_filtro").val()
-
+    let mon = $("#moneda").val()
     agregarcargando();
     $.ajax({
         type: "POST",
@@ -87,9 +84,9 @@ function retornarKardexCliente() {
             cliente: cliente,
             ini:ini,
             fin:fin,
+            mon:mon
         },
     }).done(function (res) {
-        console.log('almacen:'+almacen+' cliente:'+cliente + ' ini:'+ini +' fin:'+fin);
         quitarcargando(); 
         if (res[0].fecha ==='') {
             res.shift()
@@ -201,11 +198,15 @@ function operateFormatter3(value, row, index) {
     return (formatNumber.new(num));
 }
 function tituloReporte() {
-    almText = $('#almacen_filtro').find(":selected").text();
-    nomCliente = $('#clientes_filtro').find(':selected').text();
-    $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
-    $('#tituloReporte').text(almText);
-    $('#nombreCliente').text(nomCliente);
+    let almText = $('#almacen_filtro').find(":selected").text()
+    let nomCliente = $('#clientes_filtro').find(':selected').text()
+    let mon = $("#moneda").val()
+    mon = mon == 0 ? 'BOLIVIANOS' : 'DOLARES'
+    $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'))
+    $('#tituloReporte').text(almText)
+    $('#nombreCliente').text(nomCliente)
+    $('#titleMoneda').text(mon)
+
 }
 function sumaColumna(data) {
     field = this.field;

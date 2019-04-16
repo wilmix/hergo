@@ -376,8 +376,9 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function kardexIndividualCliente($cliente,$almacen="",$ini,$fin) {
-		$sql="SELECT * FROM 
+	public function kardexIndividualCliente($cliente,$almacen="",$ini,$fin,$mon) {
+		if ($mon == 0) {
+			$sql="SELECT * FROM 
 		(	SELECT    c.`idCliente`, c.`nombreCliente`,'$ini' fecha, '-' numDocumento, '1' almacen,  'SALDO INICIAL' detalle,  
 					IFNULL((SELECT ROUND(SUM(`ed`.`total`), 2) `saldoTotalNE`
 					FROM`egresos` `e`
@@ -386,6 +387,7 @@ class Reportes_model extends CI_Model
 						`e`.`fechamov` < '$ini'
 						AND `e`.`estado` <> 1
 						AND `e`.`anulado` = 0
+						AND e.tipomov = 7
 						AND `e`.`almacen` LIKE '%$almacen'
 						AND `e`.`cliente` = '$cliente'
 					GROUP BY e.`cliente`),0) saldoNE, 
@@ -444,6 +446,86 @@ class Reportes_model extends CI_Model
 					AND c.`idCliente` = '$cliente'
 		) kardexClientes
 		ORDER BY fecha, numDocumento";
+		} elseif($mon == 1) {
+			$sql="SELECT * FROM 
+					(	SELECT    c.`idCliente`, c.`nombreCliente`,'$ini' fecha, '-' numDocumento, '1' almacen,  'SALDO INICIAL' detalle,  
+						IFNULL((SELECT ROUND(SUM(`ed`.`total`)/tc.tipocambio, 2) `saldoTotalNE`
+						FROM`egresos` `e`
+						INNER JOIN `egredetalle` `ed` ON `ed`.`idegreso` = `e`.`idegresos`
+						INNER JOIN tipocambio tc ON tc.fecha = e.fechamov
+						WHERE
+							`e`.`fechamov` < '$ini'
+							AND `e`.`estado` <> 1
+							AND `e`.`anulado` = 0
+							AND e.tipomov = 7
+							AND `e`.`almacen` LIKE '%$almacen'
+							AND `e`.`cliente` = '$cliente'
+						GROUP BY e.`cliente`),0) saldoNE, 
+			
+								IFNULL((SELECT ROUND(SUM(`f`.`total`)/tc.tipocambio, 2) `saldoTotalFactura`
+								FROM `factura` `f`
+								INNER JOIN tipocambio tc ON tc.fecha = f.fechaFac
+								WHERE
+									`f`.`fechaFac` < '$ini'
+									AND `f`.`anulada` = 0
+									AND `f`.`almacen` LIKE '%$almacen'
+									AND `f`.`cliente` = '$cliente'
+								GROUP BY f.`cliente`),0) saldoTotalFactura, 
+			
+								IFNULL((SELECT ROUND(SUM(`pf`.`monto`)/tc.tipocambio, 2) AS `saldoTotalPago`
+								FROM `pago_factura` `pf`
+									INNER JOIN `pago` `p` ON `p`.`idPago` = `pf`.`idPago` AND `p`.`anulado` = 0
+									INNER JOIN `factura` `f` ON `f`.`idFactura` = `pf`.`idFactura`	AND `f`.`anulada` = 0
+									 INNER JOIN tipocambio tc ON tc.fecha = f.fechaFac
+								WHERE
+									`p`.`fechaPago` < '$ini'
+									AND `p`.`almacen` LIKE '%$almacen'
+									AND f.cliente = '$cliente'
+								GROUP BY f.cliente),0) saldoTotalPago
+							FROM clientes c
+							WHERE c.`idCliente` = '$cliente'
+						UNION ALL
+							SELECT c.`idCliente`, c.`nombreCliente`, f.fechaFac, f.nFactura, f.almacen,     
+								IFNULL(f.glosa,'') detalle, 
+								0 , ROUND(f.`total`/tc.tipocambio,2) saldoTotalFactura, 0
+							FROM factura f  
+								INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
+								INNER JOIN tipocambio tc ON tc.fecha = f.fechaFac
+							WHERE  f.`fechaFac` BETWEEN '$ini' AND '$fin'
+								AND f.`anulada` = 0
+								AND f.almacen LIKE '%$almacen'
+								AND c.`idCliente` = '$cliente'
+						UNION ALL
+							SELECT c.`idCliente`, c.`nombreCliente`,  e.`fechamov`, e.`nmov`, e.`almacen`, e.`obs`, ROUND(SUM(ed.`total`) / tc.tipocambio,2) saldoTotalNE , 0 , 0 
+							FROM egresos e
+								INNER JOIN egredetalle ed ON ed.`idegreso` = e.`idegresos`
+								INNER JOIN clientes c ON c.`idCliente` = e.`cliente`
+								INNER JOIN tipocambio tc ON tc.fecha = e.fechamov
+							WHERE  e.`fechamov` BETWEEN '$ini' AND '$fin'
+								AND e.`estado` <> 1
+								AND e.`anulado` = 0
+								AND e.almacen LIKE '%$almacen'
+								AND e.`cliente` = '$cliente'
+								AND e.tipomov = 7
+			
+						UNION ALL 
+							SELECT c.`idCliente`, c.`nombreCliente`, p.`fechaPago`, p.`numPago`, p.`almacen`, 
+								CONCAT('Fac. ',f.`lote`,'-',f.nFactura,', ',p.`glosa`) glosa,
+								0 , 0, ROUND(pf.`monto` / tc.tipocambio,2) saldoTotalPago
+							FROM pago_factura pf
+								INNER JOIN pago p ON p.`idPago` = pf.`idPago` AND p.`anulado` = 0
+								INNER JOIN factura f ON f.`idFactura` = pf.`idFactura` AND f.`anulada` = 0
+								INNER JOIN tipocambio tc ON tc.fecha = f.fechaFac
+								INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
+								WHERE   p.`fechaPago` BETWEEN '$ini' AND '$fin'
+									AND p.almacen LIKE '%$almacen'
+									AND c.`idCliente` = '$cliente'
+					) kardexClientes
+					ORDER BY fecha, numDocumento;
+			";
+		}
+		
+		
 		$query=$this->db->query($sql);		
 		return $query;
 	}

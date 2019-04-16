@@ -18,6 +18,10 @@
                         <?php endforeach ?>
                         <option value="">TODOS</option>
                     </select>
+                    <select id="moneda" class="btn btn-primary btn-sm">
+                        <option value="0">BOB</option>
+                        <option value="1">$U$</option>
+                    </select>
 
                     <select class="form-control"  data-style="btn-primary" id="clientes_filtro" name="clientes_filtro">
                         <?php foreach ($clientes->result_array() as $fila): ?>
@@ -36,6 +40,7 @@
                         <span id="nombreCliente"></span>
                     </h2>
                     <h3 id="tituloReporte"></h3>
+                    <h4 id="titleMoneda"></h4>
                     <h4 id="ragoFecha"></h4>
                 </div>
                 <table id="tablaKardex" data-toolbar="#toolbar2" data-toggle="table">

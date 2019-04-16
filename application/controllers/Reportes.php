@@ -1056,10 +1056,10 @@ class Reportes extends CI_Controller
 			$cliente=$this->security->xss_clean($this->input->post("cliente"));
 			$ini=$this->security->xss_clean($this->input->post("ini"));
 			$fin=$this->security->xss_clean($this->input->post("fin"));
-			$res=$this->Reportes_model->kardexIndividualCliente($cliente,$almacen,$ini,$fin);
+			$mon=$this->security->xss_clean($this->input->post("mon"));
+			$res=$this->Reportes_model->kardexIndividualCliente($cliente,$almacen,$ini,$fin,$mon);
 			$res=$res->result();
-			//echo '<pre>';	print_r($almacen.'-'.$cliente.'-'.$ini.'-'.$fin); echo '</pre>';	
-			$aux = 0;
+				$aux = 0;
 			foreach ($res as $linea) {
 				$linea->total = $aux + floatval($linea->saldoNE) + floatval($linea->saldoTotalFactura) - floatval($linea->saldoTotalPago);
 				$aux = $linea->total;
