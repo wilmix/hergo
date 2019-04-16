@@ -12,7 +12,6 @@ let moneda
 $(document).ready(function () {
     moneda = $("#moneda_ne").val()
     glob_guardar = false;
-    //calcularTotalEgresoMod()
     fechaModEgreso = $('#fechamov_ne').val()
     if (fechaModEgreso) {
         hoy = moment(fechaModEgreso).format('DD-MM-YYYY')
@@ -33,7 +32,6 @@ $(document).ready(function () {
     idEgreso = $('#idegreso').val()
     if (idEgreso) {
         retornarTablaEgresoDetalle(idEgreso)
-        calcularTotalEgresoMod()
     } else {
         retornarTablaEgresoDetalle(idEgreso)
     }
@@ -596,6 +594,7 @@ function retornarTablaEgresoDetalle(idEgreso=null) {
         type: "POST",
         url: base_url('index.php/Egresos/mostrarDetalleEditarPost'),
         dataType: "json",
+        async: false,
         data: { id: idEgreso },
     }).done(function (res) {
         let idMoneda = $("#idMoneda").val();
@@ -704,13 +703,13 @@ function retornarTablaEgresoDetalle(idEgreso=null) {
                     total: total
                 }
             })
-            calcularTotalEgresoMod() 
+            
         })
     }).fail(function (jqxhr, textStatus, error) {
         var err = textStatus + ", " + error;
         console.log("Request Failed: " + err);
     })
-    
+    calcularTotalEgresoMod() 
 }
 $(document).on("click", ".editable-click", function () {
     $(".tiponumerico").inputmask({
@@ -763,6 +762,7 @@ function validatePUedit(value) {
     }
 }
 function calcularTotalEgresoMod() {
+    console.log('totales')
     let moneda = $("#moneda_ne").val()
     let tablaEgreso = $("#tablaEditarEgreso").bootstrapTable('getData');
     let total = 0;
