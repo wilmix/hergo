@@ -76,21 +76,26 @@ class Reportes_model extends CI_Model
 	{ 
 		$sql="SELECT id, almacen, cliente, lote, nFactura, fechaFac,
 		SUM(total) total,
-		SUM(montoPagado) montoPagado, vendedor, plazopago
+		SUM(montoPagado) montoPagado, vendedor, plazopago,
+		SUM(totalFacDol) totalFacDol,
+		SUM(montoPagoDol) montoPagoDol
 		FROM
 		(
-			SELECT f.`idFactura` id, a.`almacen`, f.`ClienteFactura` cliente, f.`lote`, f.`nFactura`, f.`fechaFac`, f.`total`, IFNULL(pr.monto,0) montoPagado, CONCAT(u.`first_name`, ' ', u.`last_name`) vendedor, e.`plazopago`
+		SELECT f.`idFactura` id, a.`almacen`, f.`ClienteFactura` cliente, f.`lote`, f.`nFactura`, f.`fechaFac`, f.`total`, 
+		IFNULL(pr.monto,0) montoPagado, CONCAT(u.`first_name`, ' ', u.`last_name`) vendedor, e.`plazopago`, ROUND(f.`total` /  tc.`tipocambio`,2) totalFacDol, IFNULL(ROUND(pr.montoDolares,2),0) montoPagoDol
 		FROM factura f
 		LEFT JOIN 
-		(SELECT pf.`idPago`, pf.`idFactura`, SUM(pf.`monto`) monto
+		(SELECT pf.`idPago`, pf.`idFactura`, SUM(pf.`monto`) monto,( SUM(pf.`monto`) / tcp.`tipocambio` ) montoDolares
 		FROM pago_factura pf 
 		INNER JOIN pago p ON pf.`idPago` = p.`idPago` AND p.`anulado` = 0
+		INNER JOIN tipocambio tcp ON tcp.`fecha` = p.`fechaPago`
 		GROUP BY pf.`idFactura`) pr
 		ON f.`idFactura` = pr.idFactura
 		INNER JOIN almacenes a ON a.`idalmacen` = f.`almacen`
 		INNER JOIN factura_egresos fe ON fe.`idFactura` = f.`idFactura`
 		INNER JOIN egresos e ON e.`idegresos` = fe.`idegresos`
 		INNER JOIN users u ON u.`id` = e.`vendedor`
+		INNER JOIN tipocambio tc ON tc.`fecha` = f.`fechaFac`
 		WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin' 
 		AND f.`anulada` = 0 
 		AND f.`pagada` <>1 
@@ -103,6 +108,38 @@ class Reportes_model extends CI_Model
 		
 		$query=$this->db->query($sql);		
 		return $query;
+	}
+	public function facturasPendientesPago($almacen, $ini, $fin){
+		$res = $this->mostrarFacturasPendientesPago($almacen, $ini, $fin)->result();
+		$aux = 0;
+		$auxD = 0;
+		foreach ($res as $line) {
+				if ($line->id == NULL && $line->cliente == NULL) {
+					$line->lote = '';
+					$line->nFactura = '';
+					$line->fechaFac = '';
+					$line->vendedor = '';
+					$line->almacen = '';
+					$line->cliente = 'TOTAL GENERAL';
+					$line->saldo = $line->total - $line->montoPagado;
+					$line->saldoDol = $line->totalFacDol - $line->montoPagoDol;
+				} elseif ($line->id == NULL) {
+					$line->lote = '';
+					$line->nFactura = '';
+					$line->fechaFac = '';
+					$line->vendedor = '';
+					$line->almacen = '';
+					$line->saldo = $line->total - $line->montoPagado;
+					$line->saldoDol = $line->totalFacDol - $line->montoPagoDol;
+				} else {
+					$line->cliente = $line->cliente;
+					$line->saldo = $aux + $line->total - $line->montoPagado;
+					$line->saldoDol = $auxD + $line->totalFacDol - $line->montoPagoDol;
+				}
+				$aux = $line->id == NULL ? 0 : $aux + $line->total - $line->montoPagado;
+				$auxD = $line->id == NULL ? 0 : $auxD + $line->totalFacDol - $line->montoPagoDol;
+		}
+		return $res;
 	}
 	public function mostrarListaPrecios() 
 	{ //cambiar la consulta

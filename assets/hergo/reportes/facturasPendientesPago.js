@@ -1,16 +1,13 @@
-var iniciofecha = moment().subtract(10, 'year').startOf('year')
-var finfecha = moment().subtract(0, 'year').endOf('year')
+let iniciofecha = moment().subtract(10, 'year').startOf('year')
+let finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function () {
     $('#export').click(function () {
-        let ppp = $("#select2-4rkh-container").val()
-        console.log(ppp);
         $('#tablaFacturasPendientes').tableExport({
         type:'excel',
         fileName: 'FacturasPendientesPago',
         numbers: {output : false}
         })
       });
-    tituloReporte()
     $(".tiponumerico").inputmask({
         alias: "decimal",
         digits: 2,
@@ -19,12 +16,8 @@ $(document).ready(function () {
         autoUnmask: true
     });
 
-    var start = moment().subtract(10, 'year').startOf('year')
-    var end = moment().subtract(0, 'year').endOf('year')
-    var actual = moment().subtract(0, 'year').startOf('year')
-    var unanterior = moment().subtract(1, 'year').startOf('year')
-    var dosanterior = moment().subtract(2, 'year').startOf('year')
-    var tresanterior = moment().subtract(3, 'year').startOf('year')
+    let start = moment().subtract(10, 'year').startOf('year')
+    let end = moment().subtract(0, 'year').endOf('year')
 
     $(function () {
         moment.locale('es');
@@ -57,26 +50,21 @@ $(document).ready(function () {
 
     });
     $('#fechapersonalizada').on('apply.daterangepicker', function (ev, picker) {
-        tituloReporte()
         retornarFacturasPendientes();
     });
-    tituloReporte()
     retornarFacturasPendientes();
 })
 $(document).on("change", "#almacen_filtro", function () {
     retornarFacturasPendientes();
-}) //para cambio filtro segun cada uno
+}) 
 
-/*$(document).ready(function() {
-    tituloReporte()
-    retornarFacturasPendientes();
-});*/
 $(document).on("change", "#almacen_filtro", function () {
-    tituloReporte()
+    retornarFacturasPendientes();
+}) 
+$(document).on("change", "#moneda", function () {
     retornarFacturasPendientes();
 }) 
 $(document).on("click", "#pendientes", function () {
-    tituloReporte();
     retornarFacturasPendientes();
 })
 
@@ -85,20 +73,14 @@ function tituloReporte() {
     $('#tituloReporte').text(almText);
     $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
 }
-$(document).on("click", "#excel", function () {
-    let alm = $("#almacen_filtro").val()
-    let mon = $("#moneda").val()
-    let tc = (mon == 1) ?  glob_tipoCambio : 'BOB'
-    alm = (alm == '') ?  'NN' : alm
-    let excel = base_url("ReportesExcel/facturasPendientesPago/"+alm);
-    console.log(excel);
-    location.href = (excel);
-})
+
 function retornarFacturasPendientes()
 {
-    ini = iniciofecha.format('YYYY-MM-DD')
-    fin = finfecha.format('YYYY-MM-DD')
-    almacen = $("#almacen_filtro").val();
+    tituloReporte()
+    let ini = iniciofecha.format('YYYY-MM-DD')
+    let fin = finfecha.format('YYYY-MM-DD')
+    let almacen = $("#almacen_filtro").val()
+    let tc = $("#moneda").val()
     agregarcargando();
     $.ajax({
         type: "POST",
@@ -111,33 +93,13 @@ function retornarFacturasPendientes()
         }, 
     }).done(function (res) {
         quitarcargando();
-        let aux = 0
-        for (let index = 0; index < res.length; index++) {
-            if (res[index].id == null && res[index].cliente == null) {
-                res[index].cliente = `TOTAL GENERAL`
-                res[index].lote = ''
-                res[index].nFactura = ''
-                res[index].fechaFac = ''
-                res[index].vendedor = ''
-                res[index].saldo = (Number(res[index].total) - Number(res[index].montoPagado))
-            } else if (res[index].id == null) {
-                res[index].lote = ''
-                res[index].nFactura = ''
-                res[index].vendedor = ''
-                res[index].fechaFac = ''
-                res[index].saldo = (Number(res[index].total) - Number(res[index].montoPagado))
-            } else  {
-                res[index].saldo = (aux + Number(res[index].total) - Number(res[index].montoPagado))
-            }
-            aux = (res[index].id == null) ? 0 : (aux + Number(res[index].total) - Number(res[index].montoPagado))
-        }
         datosselect = restornardatosSelect(res);
         $("#tablaFacturasPendientes").bootstrapTable('destroy');
         $("#tablaFacturasPendientes").bootstrapTable({ 
             data: res,
             striped: true,
-            searchOnEnterKey: true,
             showColumns: true,
+            search: true,
             filter: true,
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',
@@ -148,20 +110,17 @@ function retornarFacturasPendientes()
                     field: 'almacen',
                     title: 'Almacen',
                     width:'150px',
-                    //sortable: true,
                     visible: almacen==''?true:false
                 },
                 {
                     field: 'lote',
                     title: 'Lote',
                     width:'50px',
-                    //sortable: true,
                     align: 'center'
                 },
                 {
                     field: 'nFactura',
                     title: 'N° Factura',
-                    //sortable: true,
                     width:'80px',
                     align: 'center',
                 },
@@ -169,15 +128,12 @@ function retornarFacturasPendientes()
                     field: 'fechaFac',
                     title: 'Fecha',
                     width:'100px',
-                    //sortable: true,
                     align: 'center',
                     formatter: formato_fecha_corta_sub
                 },
                 {
                     field: 'cliente',
                     title: 'Cliente',
-                    sortable: true,
-                     //visible:false,
                     filter: {
                         type: "select",
                         data: datosselect[0]
@@ -187,6 +143,7 @@ function retornarFacturasPendientes()
                     field: 'total',
                     title: 'Crédito',
                     sortable: true,
+                    visible: tc ==1 ? false : true,
                     align: 'right',
                     width:'100px',
                     formatter: operateFormatter3,
@@ -194,7 +151,24 @@ function retornarFacturasPendientes()
                 {
                     field: 'montoPagado',
                     title: 'Abono',
-                    //sortable: true,
+                    visible: tc ==1 ? false : true,
+                    align: 'right',
+                    width:'100px',
+                    formatter: operateFormatter3,
+                },
+                {
+                    field: 'totalFacDol',
+                    title: 'Crédito $u$',
+                    sortable: true,
+                    visible: tc ==1 ? true : false,
+                    align: 'right',
+                    width:'100px',
+                    formatter: operateFormatter3,
+                },
+                {
+                    field: 'montoPagoDol',
+                    title: 'Abono $u$',
+                    visible: tc ==1 ? true : false,
                     align: 'right',
                     width:'100px',
                     formatter: operateFormatter3,
@@ -202,8 +176,17 @@ function retornarFacturasPendientes()
                 {
                     field: 'saldo',
                     title: 'Saldo',
+                    visible: tc ==1 ? false : true,
+                    align: 'right',
+                    width:'100px',
+                    formatter: operateFormatter3,
+                },
+                {
+                    field: 'saldoDol',
+                    title: 'Saldo $u$',
                     //sortable: true,
                     align: 'right',
+                    visible: tc ==1 ? true : false,
                     width:'100px',
                     formatter: operateFormatter3,
                 },
@@ -218,7 +201,7 @@ function retornarFacturasPendientes()
             ]
         });
     }).fail(function (jqxhr, textStatus, error) {
-        var err = textStatus + ", " + error;
+        let err = textStatus + ", " + error;
         console.log("Request Failed: " + err);
     });
 }
@@ -253,8 +236,8 @@ function sumaColumna(data) {
 }
 function restornardatosSelect(res) {
 
-    var cliente = new Array()
-    var datos = new Array()
+    let cliente = new Array()
+    let datos = new Array()
     $.each(res, function (index, value) {
 
         cliente.push(value.cliente)

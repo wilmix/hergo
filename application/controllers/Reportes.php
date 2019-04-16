@@ -471,8 +471,7 @@ class Reportes extends CI_Controller
 			$almacen=$this->security->xss_clean($this->input->post('almacen')); 
 			$ini=$this->security->xss_clean($this->input->post('ini')); 
 			$fin=$this->security->xss_clean($this->input->post('fin')); 
-			$res=$this->Reportes_model->mostrarFacturasPendientesPago($almacen, $ini, $fin); 
-			$res=$res->result_array();
+			$res=$this->Reportes_model->facturasPendientesPago($almacen, $ini, $fin); 
 			echo json_encode($res);
 		}
 		else
