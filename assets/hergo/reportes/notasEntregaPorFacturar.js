@@ -111,7 +111,7 @@ function retornarNEporFac() //*******************************
                 {
                     field: 'almacen',
                     title: 'Almacen',
-                    visible: true,
+                    visible: alm == '' ? true : false,
                     sortable: true,
                     filter: {
                         type: "select",
@@ -141,7 +141,16 @@ function retornarNEporFac() //*******************************
                 },
                 {
                     field: 'total',
-                    title: 'Importe',
+                    title: 'Importe Bs',
+                    visible: true,
+                    sortable: true,
+                    align: 'right',
+                    formatter: operateFormatter3,
+                    footerFormatter: sumaColumna
+                },
+                {
+                    field: 'totalDol',
+                    title: 'Importe $U$',
                     visible: true,
                     sortable: true,
                     align: 'right',
