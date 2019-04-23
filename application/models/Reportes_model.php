@@ -1403,7 +1403,7 @@ class Reportes_model extends CI_Model
 				INNER JOIN almacenes ap ON ap.`idalmacen` = p.`almacen`
 				INNER JOIN almacenes af ON af.`idalmacen` = f.`almacen`
 				WHERE p.`fechaPago` BETWEEN '$ini' AND '$end'
-				AND p.`almacen` = $alm
+				AND p.`almacen` LIKE '%$alm'
 				AND p.`anulado` = 0
 				ORDER BY p.`numPago`
 		";
