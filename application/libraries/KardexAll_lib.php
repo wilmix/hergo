@@ -54,7 +54,7 @@
 
         public function Footer(){
                 //NUMERO PIED PAGINA
-                $this->SetY(-14);
+                $this->SetY(-12);
                 $this->SetFont('Arial','I', 8);
                 $this->Cell(0,10, utf8_decode('Página ').$this->PageNo().'/{nb}',0,0,'C' );
         }

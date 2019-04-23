@@ -21,7 +21,7 @@ class KardexAllSN extends CI_Controller {
       $this->pdf->AddPage('P','Letter');
       //$this->pdf->SetX(10);
       $this->pdf->AliasNbPages();
-      
+      $this->pdf->SetAutoPageBreak(true,10); 
       $this->pdf->SetTitle("Kardex Valorado");
       $this->pdf->SetLeftMargin(20);
       $this->pdf->SetRightMargin(10);
