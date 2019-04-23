@@ -5,6 +5,8 @@
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
 class KardexAll extends CI_Controller {
   public function index($id=1) {
+    ini_set('max_execution_time', 0); 
+		ini_set('memory_limit','2048M');
     //CARGAR MODELO
     $this->load->model('Reportes_model');
     $lineas = $this->Reportes_model->showKardexAllModel($id);

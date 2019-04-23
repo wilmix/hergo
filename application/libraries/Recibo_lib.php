@@ -41,7 +41,7 @@
 
             $this->SetXY(10,32);
             $this->SetFont('Arial','',10);
-            $this->Cell(10,6, 'Recibimos de: '. $this->datos['nombreCliente'],0,0,'L');
+            $this->Cell(10,6, 'Recibimos de: '. utf8_decode($this->datos['nombreCliente']),0,0,'L');
             $this->SetXY(10,38);
             $entera = intval($this->datos['totalPago']);
             $ctvs = round(($this->datos['totalPago'] - $entera) * 100);
