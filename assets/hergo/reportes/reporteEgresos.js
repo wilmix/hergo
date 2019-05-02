@@ -1,5 +1,5 @@
-var iniciofecha = moment().subtract(0, 'month').startOf('month')
-var finfecha = moment().subtract(0, 'month').endOf('month')
+let iniciofecha = moment().subtract(0, 'month').startOf('month')
+let finfecha = moment().subtract(0, 'month').endOf('month')
 
 $(document).ready(function () {
     $('#export').click(function () {
@@ -73,7 +73,15 @@ $(document).on("change", "#tipo_filtro", function () {
 $(document).on("click", "#refresh", function () {
     retornarReporteEgresos();
 })
-
+$(document).on("click", "#pdf", function () {
+    let ini = iniciofecha.format('YYYY-MM-DD')
+    let fin = finfecha.format('YYYY-MM-DD')
+    let alm = $("#almacen_filtro").val() == '' ? '1' : $("#almacen_filtro").val()
+    let tin = $("#tipo_filtro").val() == '' ? '1' : $("#tipo_filtro").val()
+    let imprimir = base_url("pdf/ReportEgresos/index/") + ini + '/' + fin + '/' + alm + '/' + tin;
+    console.log(imprimir);
+    window.open(imprimir);
+})
 
 
 function retornarReporteEgresos() {
@@ -95,7 +103,7 @@ function retornarReporteEgresos() {
         },
     }).done(function (res) {
         for (let index = 0; index < res.length; index++) {
-            if (res[index].id == null && res[index].tipomov == null && res[index].almacen == null && res[index].cliente == null) {
+            /*if (res[index].id == null && res[index].tipomov == null && res[index].almacen == null && res[index].cliente == null) {
                 res[index].descripcion = `TOTAL GENERAL`
                 res[index].punitario = ''
                 res[index].almacen = ''
@@ -117,8 +125,9 @@ function retornarReporteEgresos() {
                 res[index].uni = ''
                 res[index].mon = ''
 
-            } else if (res[index].id == null   && res[index].cliente == null) {
-                res[index].descripcion = `TOTAL ${res[index].siglaMov}:`
+            } else*/
+            if (res[index].id == null   && res[index].nmov == null) {
+                res[index].descripcion = `TOTAL ${res[index].siglaMov.toUpperCase()}:`
                 res[index].punitario = ''
                 res[index].almacen = ''
                 res[index].cliente = ''
@@ -129,7 +138,7 @@ function retornarReporteEgresos() {
                 res[index].mon = ''
 
             } else if (res[index].id == null) {
-                res[index].descripcion = `TOTAL ${res[index].cliente}:`
+                res[index].descripcion = ''
                 res[index].punitario = ''
                 res[index].almacen = ''
                 res[index].cliente = ''

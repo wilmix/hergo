@@ -862,7 +862,8 @@ class Reportes_model extends CI_Model
 					AND e.`anulado` = 0 
 			ORDER BY e.`almacen`, e.`tipomov` , cliente, nmov
 		)egr
-		GROUP BY  almacen,tipomov, cliente, id  WITH ROLLUP";
+		-- GROUP BY  almacen,tipomov, cliente, id  WITH ROLLUP
+		GROUP BY  nmov, id  WITH ROLLUP";
 		
 		$query=$this->db->query($sql);		
 		return $query;

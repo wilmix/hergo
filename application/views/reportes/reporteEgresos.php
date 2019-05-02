@@ -3,6 +3,7 @@
         <div class="box">
             <div class="box-body">
             <button class="btn btn-success pull-right" id="export" data-toggle="tooltip" title="Excel"><i class="far fa-file-excel"> </i> Excel </button>
+            <button id="pdf" class="btn btn-danger pull-right" ><i class="far fa-file-pdf"> </i> PDF</button>
                 <div id="toolbar2" class="form-inline">
                     <button type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
                         <span>
@@ -15,10 +16,8 @@
                         <?php foreach ($almacen->result_array() as $fila): ?>
                             <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
                         <?php endforeach ?>
-                        <option value="">TODOS</option>
                     </select>
                     <select class="btn btn-primary btn-sm" name="tipo_filtro" id="tipo_filtro">
-                        <option value="">TODOS</option>
                         <?php foreach ($tipoingreso->result_array() as $fila): ?>
                         <option value="<?= $fila['id'] ?>" <?= $fila['id']==2?"selected":""  ?>><?= strtoupper($fila['tipomov']) ?></option>
                         <?php endforeach ?>
