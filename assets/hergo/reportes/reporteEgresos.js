@@ -1,5 +1,5 @@
-let iniciofecha = moment().subtract(0, 'month').startOf('month')
-let finfecha = moment().subtract(0, 'month').endOf('month')
+let iniciofecha = moment().subtract(1, 'month').startOf('month')
+let finfecha = moment().subtract(1, 'month').endOf('month')
 
 $(document).ready(function () {
     $('#export').click(function () {
@@ -17,8 +17,8 @@ $(document).ready(function () {
         autoUnmask: true
     });
 
-    let start = moment().subtract(1, 'month').startOf('month')
-    let end = moment().subtract(1, 'month').endOf('month')
+    let start = iniciofecha
+    let end = finfecha
 
     $(function () {
         moment.locale('es');
