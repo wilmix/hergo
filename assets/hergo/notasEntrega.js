@@ -9,7 +9,13 @@ let idEgreso
 let $table
 let checkTipoCambio = false
 let moneda
+let tipoMovEgre 
 $(document).ready(function () {
+    tipoMovEgre = $("#_tipomov_ne").val()
+    if (tipoMovEgre == 9) {
+        $(".hiddenBaja").addClass("hidden");
+    }
+    console.log(tipoMovEgre);
     moneda = $("#moneda_ne").val()
     glob_guardar = false;
     fechaModEgreso = $('#fechamov_ne').val()
@@ -703,7 +709,7 @@ function retornarTablaEgresoDetalle(idEgreso=null) {
                     total: total
                 }
             })
-            
+            calcularTotalEgresoMod()
         })
     }).fail(function (jqxhr, textStatus, error) {
         var err = textStatus + ", " + error;

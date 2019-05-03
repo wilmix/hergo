@@ -157,7 +157,6 @@
               </div>
             </div> <!-- div class="form-group-sm row" PRIMERA FILA -->
 
-            <?php if ($auxIdTipoIngreso!=9): ?>
             <div class="row">
               <!--SEGUNDA FILA-->
               <div class="col-xs-12 col-lg-6 col-md-6">
@@ -171,16 +170,16 @@
                   <i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>
                 </div>
               </div>
-              <div class="col-xs-4 col-sm-4 col-md-2">
+              <div class="hiddenBaja col-xs-4 col-sm-4 col-md-2">
                 <label>Pedido Cliente:</label>
                 <input id="pedido_ne" type="text" class="form-control form-control-sm" name="pedido_ne" value="<?= ($cont)?$dcab->clientePedido:''  ?>">
               </div>
-              <div class="col-xs-4 col-sm-4 col-md-2">
+              <div class="hiddenBaja col-xs-4 col-sm-4 col-md-2">
                 <label>Fecha de Pago: </label>
                 <input id="fechapago_ne" name="fechapago_ne" type="text" class="form-control form-control-sm fecha_egreso"
                   value="<?= ($cont)?$dcab->plazopago: "" ?>">
               </div>
-              <div class="col-xs-4 col-md-2">
+              <div class="hiddenBaja col-xs-4 col-md-2">
                 <label></label>
                 <button tabindex="-1" type="button" data-toggle="modal" data-target="#modalcliente" class="form-control btn btn-success"
                   id="botonmodalcliente" style="margin-top: 4px;">
@@ -188,9 +187,6 @@
                 </button>
               </div>
             </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
-            <?php else : ?>
-            <input type="text" readonly="true" name="idCliente" id="idCliente" class="hidden" value="<?= $auxIdCliente ?>">
-            <?php endif ?>
             <hr>
             <div class="row filaarticulo">
             <div class="col-xs-12 col-md-2 has-feedback has-feedback-left">
