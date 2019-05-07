@@ -52,7 +52,7 @@
                 $this->SetFont('Arial','B',10);
                 $this->Cell(20,10, 'Proveedor: ',0,0,'');
                 $this->SetFont('Arial','',10);
-                $this->Cell(85, 10, $proveedor, 0,0,'L');
+                $this->Cell(85, 10, utf8_decode($proveedor), 0,0,'L');
                 //factura
                 $this->SetFont('Arial','B',10);
                 $this->Cell(20,10, 'Factura: ',0,0,'');
