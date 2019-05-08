@@ -445,7 +445,9 @@ class Reportes_model extends CI_Model
 					AND p.almacen LIKE '%$almacen'
 					AND c.`idCliente` = '$cliente'
 		) kardexClientes
-		ORDER BY fecha, numDocumento";
+		INNER JOIN (SELECT a.`idalmacen`, a.`almacen` FROM almacenes a) AS alm
+		ON alm.`idalmacen` = kardexClientes.almacen
+		ORDER BY kardexClientes.fecha, numDocumento";
 		} elseif($mon == 1) {
 			$sql="SELECT * FROM 
 					(	SELECT    c.`idCliente`, c.`nombreCliente`,'$ini' fecha, '-' numDocumento, '1' almacen,  'SALDO INICIAL' detalle,  
@@ -521,7 +523,9 @@ class Reportes_model extends CI_Model
 									AND p.almacen LIKE '%$almacen'
 									AND c.`idCliente` = '$cliente'
 					) kardexClientes
-					ORDER BY fecha, numDocumento;
+					INNER JOIN (SELECT a.`idalmacen`, a.`almacen` FROM almacenes a) AS alm
+					ON alm.`idalmacen` = kardexClientes.almacen
+					ORDER BY kardexClientes.fecha, numDocumento;
 			";
 		}
 		

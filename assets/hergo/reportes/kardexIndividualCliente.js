@@ -1,6 +1,6 @@
 
-var iniciofecha = moment().subtract(5, 'year').startOf('year')
-var finfecha = moment().subtract(0, 'year').endOf('year')
+let iniciofecha = moment().subtract(0, 'year').startOf('year')
+let finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function () {
     tituloReporte()
     nomCliente = $('#clientes_filtro').find(':selected').text();
@@ -14,8 +14,8 @@ $(document).ready(function () {
     console.log(nomCliente);
     $('#clientes_filtro').select2();
 
-    let start = moment().subtract(0, 'year').startOf('year')
-    let end = moment().subtract(0, 'year').endOf('year')
+    let start = iniciofecha
+    let end = finfecha
 
   $(function () {
     moment.locale('es');
@@ -47,11 +47,22 @@ $(document).ready(function () {
     cb(start, end);
 
   });
-
+    $('#fechapersonalizada').on('apply.daterangepicker', function (ev, picker) {
+        retornarKardexCliente();
+    }); 
 })
 
 
-
+$(document).on("click", "#pdf", function () {
+    let ini = iniciofecha.format('YYYY-MM-DD')
+    let fin = finfecha.format('YYYY-MM-DD')
+    let almacen = $("#almacen_filtro").val()
+    let cliente = $("#clientes_filtro").val()
+    let mon = $("#moneda").val()
+    let imprimir = base_url("pdf/ReportKardexCliente/index/") + cliente + '/' +  almacen + '/' + ini + '/' + fin +  '/' + mon;
+    console.log(imprimir);
+    window.open(imprimir);
+})
 
 
 $(document).on("click", "#kardex", function () {
@@ -66,6 +77,7 @@ $(document).on("click", "#refresh", function () {
 $(document).on("change", "#clientes_filtro", function () {
     retornarKardexCliente();
 })
+
 
 function retornarKardexCliente() {
     tituloReporte()
@@ -175,7 +187,7 @@ function retornarKardexCliente() {
             ]
           });
     }).fail(function (jqxhr, textStatus, error) {
-        var err = textStatus + ", " + error;
+        let err = textStatus + ", " + error;
         console.log("Request Failed: " + err);
     });
 }
