@@ -810,7 +810,8 @@ class Reportes_model extends CI_Model
 			AND i.`estado` = 1
 		ORDER BY i.`almacen`, i.`tipomov`, provedor, nmov
 		)ing
-		GROUP BY  almacen,tipomov, provedor, id  WITH ROLLUP";
+		-- GROUP BY  almacen,tipomov, provedor, id  WITH ROLLUP
+		GROUP BY  nmov, id  WITH ROLLUP";
 		
 		$query=$this->db->query($sql);		
 		return $query;

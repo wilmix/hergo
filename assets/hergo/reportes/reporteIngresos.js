@@ -1,5 +1,5 @@
-var iniciofecha = moment().subtract(0, 'month').startOf('month')
-var finfecha = moment().subtract(0, 'month').endOf('month')
+let iniciofecha = moment().subtract(1, 'month').startOf('month')
+let finfecha = moment().subtract(1, 'month').endOf('month')
 
 $(document).ready(function () {
     $('#export').click(function () {
@@ -17,8 +17,8 @@ $(document).ready(function () {
         autoUnmask: true
     });
 
-    var start = moment().subtract(0, 'month').startOf('month')
-    var end = moment().subtract(0, 'month').endOf('month')
+    let start = iniciofecha
+    let end = finfecha
 
     $(function () {
         moment.locale('es');
@@ -70,7 +70,14 @@ $(document).on("change", "#tipo_filtro", function () {
     tituloReporte();
     retornarReporteIngresos();
 })
-
+$(document).on("click", "#pdf", function () {
+    let ini = iniciofecha.format('YYYY-MM-DD')
+    let fin = finfecha.format('YYYY-MM-DD')
+    let alm = $("#almacen_filtro").val() == '' ? '1' : $("#almacen_filtro").val()
+    let tin = $("#tipo_filtro").val() == '' ? '1' : $("#tipo_filtro").val()
+    let imprimir = base_url("pdf/ReportIngreso/index/") + ini + '/' + fin + '/' + alm + '/' + tin;
+    window.open(imprimir);
+})
 
 
 function retornarReporteIngresos() {
@@ -92,30 +99,8 @@ function retornarReporteIngresos() {
         },
     }).done(function (res) {
         for (let index = 0; index < res.length; index++) {
-            if (res[index].id == null && res[index].tipomov == null && res[index].almacen == null && res[index].provedor == null) {
-                res[index].descripcion = `TOTAL GENERAL`
-                res[index].punitario = ''
-                res[index].almacen = ''
-                res[index].provedor = ''
-                res[index].fechamov = ''
-                res[index].nmov = ''
-                res[index].codigo = ''
-                res[index].uni = ''
-                res[index].mon = ''
-
-            } else if (res[index].id == null && res[index].tipomov == null  && res[index].provedor == null) {
-                res[index].descripcion = `TOTAL ALMACEN ${res[index].nombreAlmacen}:`
-                res[index].punitario = ''
-                res[index].almacen = ''
-                res[index].provedor = ''
-                res[index].fechamov = ''
-                res[index].nmov = ''
-                res[index].codigo = ''
-                res[index].uni = ''
-                res[index].mon = ''
-
-            } else if (res[index].id == null   && res[index].provedor == null) {
-                res[index].descripcion = `TOTAL ${res[index].siglaMov}:`
+             if (res[index].id == null   && res[index].nmov == null) {
+                res[index].descripcion = `${res[index].siglaMov}:`
                 res[index].punitario = ''
                 res[index].almacen = ''
                 res[index].provedor = ''
@@ -126,7 +111,7 @@ function retornarReporteIngresos() {
                 res[index].mon = ''
 
             } else if (res[index].id == null) {
-                res[index].descripcion = `TOTAL ${res[index].provedor}:`
+                res[index].descripcion = ``
                 res[index].punitario = ''
                 res[index].almacen = ''
                 res[index].provedor = ''
