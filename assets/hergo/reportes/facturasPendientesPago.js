@@ -57,7 +57,15 @@ $(document).ready(function () {
 $(document).on("change", "#almacen_filtro", function () {
     retornarFacturasPendientes();
 }) 
-
+$(document).on("click", "#pdf", function () {
+    let ini = iniciofecha.format('YYYY-MM-DD')
+    let fin = finfecha.format('YYYY-MM-DD')
+    let almacen = $("#almacen_filtro").val()
+    let tc = $("#moneda").val()
+    let imprimir = base_url("pdf/ReportFacPenPago/index/") + almacen + '/' +  ini + '/' + fin
+    console.log(imprimir);
+    window.open(imprimir);
+})
 $(document).on("change", "#almacen_filtro", function () {
     retornarFacturasPendientes();
 }) 
