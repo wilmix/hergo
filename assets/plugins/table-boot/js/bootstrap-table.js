@@ -305,14 +305,14 @@
         responseHandler: function (res) {
             return res;
         },
-        pagination: false,
+        pagination: true,
         onlyInfoPagination: false,
         paginationLoop: true,
         sidePagination: 'client', // client or server
         totalRows: 0, // server side need to set
         pageNumber: 1,
-        pageSize: 10,
-        pageList: [10, 25, 50, 100],
+        pageSize: 100,
+        pageList: [10, 25, 50, 100,'TODO'],
         paginationHAlign: 'right', //right, left
         paginationVAlign: 'bottom', //bottom, top, both
         paginationDetailHAlign: 'left', //right, left

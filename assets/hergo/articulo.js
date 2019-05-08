@@ -219,8 +219,8 @@ function retornarTabla()
             
             data:res,           
             striped:true,
-            pagination:false,
-            pageSize:1000,
+            //pagination:false,
+            //pageSize:1000,
             clickToSelect:true,
             search:true,
             height:700,

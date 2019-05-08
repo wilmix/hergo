@@ -172,7 +172,7 @@ function footerStyle(value, row, index) {
     if (row.id==null) {
         return {
             css: {
-                //"font-weight": "bold",
+                "font-weight": "bold",
                 //"border-top": "3px solid white",
                 //"border-bottom": "3px solid white",
                 "text-align": "right",

@@ -154,8 +154,8 @@ function retornarTablaClientes()
             
             data:res,           
             striped:true,
-            pagination:false,
-            pageSize:100,
+            //pagination:false,
+            //pageSize:100,
             clickToSelect:true,
             search:true,
             height:700,

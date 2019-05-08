@@ -88,11 +88,13 @@ function retornarVentasClienteItems() {
                 res[index].codigo = res[index].codigo == null ? '' : res[index].codigo
             } else if (res[index].nFactura == null) {
                 res[index].descripcion = res[index].descripcion
-                res[index].fechaFac = ' '
+                res[index].fechaFac = ''
                 res[index].almacen = ''
                 res[index].nombreCliente = ''
                 res[index].codigo = res[index].codigo == null ? '' : res[index].codigo
                 res[index].vendedor = ''
+            } else {
+                res[index].fechaFac = formato_fecha_corta(res[index].fechaFac)
             }
         }
         console.log(res);
@@ -138,7 +140,7 @@ function retornarVentasClienteItems() {
                     title: 'Fecha',
                     align: 'center',
                     width:'100px',
-                    formatter: formato_fecha_corta
+                   // formatter: formato_fecha_corta
 
                 },
                 {
@@ -201,7 +203,7 @@ function rowStyle(row, index) {
     if (row.nFactura==null) {
         return {
             css: {
-                //"font-weight": "bold",
+                "font-weight": "bold",
                 //"border-top": "3px solid white",
                 //"border-bottom": "3px solid white",
                 "text-align": "right",

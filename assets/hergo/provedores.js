@@ -113,7 +113,7 @@ function retornarTablaProveedor()
             
             data:res,           
             striped:true,
-            pagination:false,
+            //pagination:false,
             pageSize:25,
             clickToSelect:true,
             search:true,

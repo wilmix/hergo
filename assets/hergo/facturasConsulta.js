@@ -90,8 +90,6 @@ function retornarTablaFacturacion()
                    
             data:res,
             striped:true,
-            pagination:false,
-            pageSize:"100",    
             search:true,        
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',

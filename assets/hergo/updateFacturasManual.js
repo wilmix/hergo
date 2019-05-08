@@ -96,7 +96,7 @@ function retFacturasManuales()
                    
             data:res,
             striped:true,
-            pagination:false,
+            //pagination:false,
             pageSize:"100",    
             search:true,        
             stickyHeader: true,

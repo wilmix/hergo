@@ -27,6 +27,7 @@ function retornarListaPrecios() //*******************************
                     pagination:true,
                     pageSize:"100",
                     search:true,
+                    pageList: [50, 100, 'todo'],
                     //searchOnEnterKey:true,
                     //showColumns:true,
                     filter:true,
