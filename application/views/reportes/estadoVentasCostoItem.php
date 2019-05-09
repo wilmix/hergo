@@ -5,7 +5,9 @@
           <div class="btn-group pull-right">
             <button class="btn btn-success pull-right" id="export" data-toggle="tooltip" title="Excel"><i class="far fa-file-excel"> </i> Excel </button>
             <button id="pdf" class="btn btn-danger" ><i class="far fa-file-pdf"> </i> PDF</button>
+            <button onclick="window.print();" class="btn btn-primary pull-right" ><i class="fa fa-print"> </i> Imprimir</button>
           </div>
+          <hr>
           <div id="toolbar2" class="form-inline">
                 <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
                     <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>

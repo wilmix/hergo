@@ -66,8 +66,9 @@ class Reportes_model extends CI_Model
 					AND e.fechamov 
 					BETWEEN '$ini' AND '$fin'
 					AND e.almacen LIKE '%$alm'
-					GROUP BY e.idegresos
-					ORDER BY c.nombreCliente, n";
+					GROUP BY c.nombreCliente, e.idegresos WITH ROLLUP
+					-- ORDER BY c.nombreCliente, n
+					";
 		
 		$query=$this->db->query($sql);		
 		return $query;

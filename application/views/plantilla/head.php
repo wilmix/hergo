@@ -17,9 +17,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <?php 
     foreach ($cabeceras_css as $fila) {?>
     <link type="text/css" rel="stylesheet" href="<?php echo $fila; ?>" />
-  <?php 
+    <?php 
   }
   ?>
+    <link type="text/css" rel="stylesheet" href="<?php echo base_url("assets/hergo/print.css") ?>" media="print">
 
   <?php 
     foreach ($cabeceras_script as $fila)

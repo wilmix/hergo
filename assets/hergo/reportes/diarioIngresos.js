@@ -101,8 +101,8 @@ function retornarTablaIngresos() {
         $("#tablaDiarioIngresos").bootstrapTable({ ////********cambiar nombre tabla viata
             data: res,
             striped: true,
-            pagination: false,
-            pageSize: "100",
+            //pagination: false,
+            //pageSize: "100",
             search: true,
             showColumns: true,
             filter: true,

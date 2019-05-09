@@ -2,6 +2,13 @@
 var iniciofecha = moment().subtract(0, 'year').startOf('year')
 var finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function () {
+    $('#export').click(function () {
+        $('#tablaVentasClientesItems').tableExport({
+        type:'excel',
+        fileName: 'Item Cliente',
+        numbers: {output : false}
+        })
+    });
     $('#articulos_filtro').select2({
         theme: "classic",
     });

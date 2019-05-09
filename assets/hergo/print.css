@@ -1,0 +1,7 @@
+.fht-cell, .select2, .fixed-table-pagination, .btn, .form-control{
+    display: none;
+}
+
+.fixed-table-footer{
+    display: inline-block;
+}

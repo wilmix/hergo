@@ -109,13 +109,14 @@ function retornarKardexCliente() {
             striped: true,
             filter: true,
             stickyHeader: true,
+            showColumns: true,
             stickyHeaderOffsetY: '50px',
             showFooter: true,
             footerStyle: footerStyle,
             columns: [
                 {
                     field: 'idCliente',
-                    title: 'Almacen',
+                    title: 'id',
                     align: 'center',
                     visible: false
                 },
@@ -137,13 +138,14 @@ function retornarKardexCliente() {
                     field: 'numDocumento',
                     title: 'N° Doc.',
                     width:'80px',
-                    align: 'left'
+                    align: 'left',
+                    
                 },
                 {
                     field: 'almacen',
                     title: 'Alm.',
-                    width:'50px',
-                    align: 'center'
+                    align: 'center',
+                    visible: false
                 },
                 {
                     field: 'detalle',

@@ -100,19 +100,22 @@ function retornarNEporFac() //*******************************
             filter: true,
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',
-            showFooter: true,
-            footerStyle: footerStyle,
+            rowStyle:rowStyle,
+            //showFooter: true,
+            //footerStyle: footerStyle,
             columns: [{
                     field: 'fechamov',
                     title: 'Fecha',
                     sortable: true,
-                    formatter: formato_fecha_corta
+                    //formatter: cellEmpy,
+                    formatter: formato_fecha_corta_sub_ne
                 },
                 {
                     field: 'almacen',
                     title: 'Almacen',
                     visible: alm == '' ? true : false,
                     sortable: true,
+                    formatter: cellEmpy,
                     filter: {
                         type: "select",
                         data: datosselect[0]
@@ -137,7 +140,7 @@ function retornarNEporFac() //*******************************
                     filter: {
                         type: "input"
                     },
-                    footerFormatter: "Total:  "
+                    formatter: cellEmpy
                 },
                 {
                     field: 'total',
@@ -163,6 +166,7 @@ function retornarNEporFac() //*******************************
                     visible: true,
                     sortable: true,
                     align: 'center',
+                    formatter: cellEmpy,
                     filter: {
                         type: "select",
                         data: datosselect[2]
@@ -172,6 +176,7 @@ function retornarNEporFac() //*******************************
                     field: 'monedasigla',
                     title: 'Moneda',
                     align: 'Moneda',
+                    formatter: cellEmpy,
                     visible: false
                 }
             ]
@@ -182,6 +187,35 @@ function retornarNEporFac() //*******************************
     });
 }
 
+function rowStyle(row, index) {
+    if (row.idEgresos==null) {
+        return {
+            css: {
+                "font-weight": "bold",
+                //"border-top": "3px solid white",
+                //"border-bottom": "3px solid white",
+                "text-align": "right",
+                //"padding": "15px",
+                "background-color": "#3c8dbc",
+                "color": "white",
+               // "font-size":"120%",
+            }
+        };
+    }
+    return {};
+}
+function formato_fecha_corta_sub_ne(value, row, index) {
+    let fecha = ''
+    if (row.idEgresos==null) {
+      fecha = ''
+    } else {
+      if ((value == "0000-00-00 00:00:00") || (value == "") || (value == null))
+        fecha = "sin fecha de registro"
+      else
+        fecha = moment(value, "YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY")
+    }
+    return fecha
+}
 function tituloReporte() {
     almText = $('#almacen_filtro').find(":selected").text();
     $('#tituloReporte').text(almText);
@@ -194,18 +228,14 @@ function operateFormatter3(value, row, index) {
     return (formatNumber.new(num));
 }
 
-function footerStyle(value, row, index) {
-    return {
-        css: {
-            "font-weight": "bold",
-            "border-top": "3px solid white",
-            "border-bottom": "3px solid white",
-            "text-align": "right",
-            "padding": "15px",
-            "background-color": "#3c8dbc",
-            "color": "white"
-        }
-    };
+function cellEmpy(value, row, index){
+    let valor
+    if (row.idEgresos==null) {
+        valor = ''
+    } else {
+        valor = value
+    }
+    return valor
 }
 
 function sumaColumna(data) {

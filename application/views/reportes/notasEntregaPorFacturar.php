@@ -3,6 +3,8 @@
     <div class="box">
       <div class="box-body">
       <button id="export" class="btn btn-success pull-right"><i class="far fa-file-excel"> </i> Excel</button>
+      <button onclick="window.print();" class="btn btn-primary pull-right" ><i class="fa fa-print"> </i> Imprimir</button>
+        <hr>
           <div id="toolbar2" class="form-inline">
           <button  type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
              <span>

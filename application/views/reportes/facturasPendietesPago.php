@@ -5,7 +5,9 @@
       <div class="form-inline">
           <button class="btn btn-success pull-right" id="export" data-toggle="tooltip" title="Excel"><i class="far fa-file-excel"> </i> Excel </button>
           <button id="pdf" class="btn btn-danger pull-right" ><i class="far fa-file-pdf"> </i> PDF</button>
+          <button onclick="window.print();" class="btn btn-primary pull-right" ><i class="fa fa-print"> </i> Imprimir</button>
       </div>
+      <hr>
           <div id="toolbar2" class="form-inline">
             <button  type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
               <span>

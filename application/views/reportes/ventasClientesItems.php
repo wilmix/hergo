@@ -2,6 +2,9 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-body">
+            <button class="btn btn-success pull-right" id="export" data-toggle="tooltip" title="Excel"><i class="far fa-file-excel"> </i> Excel </button>
+            <button onclick="window.print();" class="btn btn-primary pull-right" ><i class="fa fa-print"> </i> Imprimir</button>
+            <hr>
                 <div id="toolbar2" class="form-inline">
                     <button  type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
                         <span>
@@ -26,7 +29,7 @@
                 </div>
 
                 <div class="text-center">
-                    <h2>Movimiento Clientes Items
+                    <h2>Movimiento  Items Clientes
                         <span id="item"></span>
                     </h2>
                     <h2 id="tituloReporte"></h2>
