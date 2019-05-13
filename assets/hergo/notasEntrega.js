@@ -604,12 +604,12 @@ function retornarTablaEgresoDetalle(idEgreso=null) {
         data: { id: idEgreso },
     }).done(function (res) {
         let idMoneda = $("#idMoneda").val();
-        if (idMoneda == 2) {
+        /*if (idMoneda == 2) {
             res.forEach(art => {
                 art.punitario = art.punitario / art.tipocambio
                 art.total = art.total / art.tipocambio
             });
-        }
+        }*/
         quitarcargando();
         $table = $("#tablaEditarEgreso").bootstrapTable('destroy');
         $('#tablaEditarEgreso').bootstrapTable({
@@ -709,7 +709,7 @@ function retornarTablaEgresoDetalle(idEgreso=null) {
                     total: total
                 }
             })
-            calcularTotalEgresoMod()
+        calcularTotalEgresoMod()
         })
     }).fail(function (jqxhr, textStatus, error) {
         var err = textStatus + ", " + error;
