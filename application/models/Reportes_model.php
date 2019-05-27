@@ -339,7 +339,7 @@ class Reportes_model extends CI_Model
 		LEFT JOIN egresos etr ON etr.`idegresos` =tr.`idEgreso`
 		LEFT JOIN almacenes alt ON alt.`idalmacen` = etr.`almacen`
 		where i.fechamov BETWEEN '$ini' AND '$fin'
-		and i.tipomov like '%$tin' AND i.almacen LIKE '%$alm'
+		and i.tipomov like '%$tin' AND i.almacen LIKE '%$alm'  AND i.anulado = 0
 		order by alm.almacen, i.nmov, a.CodigoArticulo";
 		
 		$query=$this->db->query($sql);		

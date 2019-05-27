@@ -83,7 +83,7 @@ class Egresos extends CI_Controller {
                 $this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
                 //$literal = NumeroALetras::convertir($totalEgreso,'BOLIVIANOS','CENTAVOS');
                 //$this->pdf->Cell(186,6,$literal,0,0,'l',1);
-                $literal = NumeroALetras::convertir($totalEgreso).$ctvs.'/100 '.'BOLIVIANOS';
+                $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';
                 $this->pdf->Cell(186,6,$literal,0,0,'l',1);
 
 
