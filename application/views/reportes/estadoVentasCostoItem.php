@@ -2,6 +2,9 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body">
+          <div> <!-- pull-left -->
+            <img src="<?php echo base_url("images/hergo.jpeg") ?>" alt="logoHergo" width="150" height="45" style="position: absolute;">
+          </div>
           <div class="btn-group pull-right">
             <button class="btn btn-success pull-right" id="export" data-toggle="tooltip" title="Excel"><i class="far fa-file-excel"> </i> Excel </button>
             <!-- <button id="pdf" class="btn btn-danger" ><i class="far fa-file-pdf"> </i> PDF</button> -->
