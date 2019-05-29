@@ -1,4 +1,5 @@
-
+let iniciofecha = moment().subtract(0, 'year').startOf('year')
+let finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function(){
     $('#export').click(function () {
         $('#estadoVentasCostos').tableExport({
@@ -7,8 +8,46 @@ $(document).ready(function(){
         numbers: {output : false}
         })
       });
-    tituloReporte() 
-    retornarestadoVentasCosto();
+
+        let start = moment().subtract(0, 'year').startOf('year')
+        let end = moment().subtract(0, 'year').endOf('year')
+
+        $(function () {
+            moment.locale('es');
+
+            function cb(start, end) {
+            $('#fechapersonalizada span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
+            iniciofecha = start
+            finfecha = end
+            }
+
+            $('#fechapersonalizada').daterangepicker({
+
+            locale: {
+                format: 'DD/MM/YYYY',
+                applyLabel: 'Aplicar',
+                cancelLabel: 'Cancelar',
+                customRangeLabel: 'Personalizado',
+            },
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Mes Actual': [moment().subtract(0, 'month').startOf('month'), moment().subtract(0, 'month').endOf('month')],
+                "Gestión Actual": [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
+                "Gestión Anterior": [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+
+            }
+            }, cb);
+
+            cb(start, end);
+
+        });
+        $('#fechapersonalizada').on('apply.daterangepicker', function (ev, picker) {
+            tituloReporte() 
+            retornarestadoVentasCosto();
+        });
+            tituloReporte() 
+            retornarestadoVentasCosto();
 }) 
 $(document).on("change", "#almacen_filtro", function () {
     tituloReporte() 
@@ -38,9 +77,10 @@ $(document).on("click", "#excel", function () {
 })
 
 function retornarestadoVentasCosto() 
-{   
+{   let ini = iniciofecha.format('YYYY-MM-DD')
+    let fin = finfecha.format('YYYY-MM-DD')
     let mon = $("#moneda").val()
-    alm = $("#almacen_filtro").val();
+    let alm = $("#almacen_filtro").val();
     agregarcargando();
     $.ajax({
         type:"POST",
@@ -48,17 +88,23 @@ function retornarestadoVentasCosto()
         dataType: "json",
         data: {
             alm: alm,
+            ini:ini,
+            fin:fin,
+            mon:mon
         },
     }).done(function(res){
         res.forEach(e => {
             if (e.codigo == null) {
                 e.cpp = null
-                e.precioVenta = null
+                e.cppDol = null
+                e.ppVentaDol = null
+                e.ppVenta = null
                 e.saldoCantidad = null 
                 e.cantVendida = null
-            }
+                e.saldo = null
+            } 
         })
-        console.log(res);
+
         quitarcargando();
         datosselect = restornardatosSelect(res)
         $("#estadoVentasCostos").bootstrapTable('destroy');
@@ -72,16 +118,21 @@ function retornarestadoVentasCosto()
                     stickyHeaderOffsetY: '50px',
                     footerStyle: footerStyle,
                     rowStyle:rowStyle,
+                    pagination: false,
                 columns:
                 [
                     {
-                        field: 'siglaLinea',
-                        title: 'Sigla',
+                        field: 'marca',
+                        title: 'Marca',
                         align: 'center',
-                        visible: true,
+                        filter: {
+                            type: "select",
+                            data: datosselect[1]
+                        },
+                        visible: false,
                     },
                     {
-                        field: 'linea',
+                        field: 'lineaD',
                         title: 'Linea',
                         align: 'center',
                         visible: true,
@@ -97,7 +148,7 @@ function retornarestadoVentasCosto()
                         visible: true,
                     },
                     {
-                        field: 'descrip',
+                        field: 'descp',
                         title: 'Descripción',
                         align: 'left',
                         visible: true,
@@ -112,44 +163,23 @@ function retornarestadoVentasCosto()
                         formatter: totalVacio
                     },
                     {
-                        field: 'cpp',
-                        title: 'C/U BOB.',
+                        field: mon==1 ? 'cppDol' : 'cpp',
+                        title: 'C.P.P.',
                         align: 'right',
                         width:'80px',
-                        visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
                     },
                     {
-                        field: 'cpp',
-                        title: 'C/U $U$.',
-                        align: 'right',
-                        width:'80px',
-                        visible: mon==1 ? true  : false,
-                        searchable: false,
-                        formatter: formatoDecimalDolares,
-                    },
-                    {
-                        field: 'precioVenta',
+                        field: mon==1 ? 'ppVentaDol' : 'ppVenta',
                         title: 'P.P. Venta',
                         align: 'right',
                         width:'80px',
-                        visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
                     },
                     {
-                        field: 'precioVenta',
-                        title: 'P.P. Venta',
-                        align: 'right',
-                        width:'80px',
-                        visible: mon==1 ? true  : false,
-                        searchable: false,
-                        formatter: formatoDecimalDolares,
-                        //formatter: totalVacio
-                    },
-                    {
-                        field: 'saldoCantidad',
+                        field: 'saldo',
                         title: 'Saldo',
                         align: 'right',
                         width:'80px',
@@ -159,23 +189,12 @@ function retornarestadoVentasCosto()
                         //formatter: totalVacio
                     },
                     {
-                        field: 'saldoValorado',
+                        field: mon==1 ? 'saldoValoradoDol':'saldoValorado',
                         title: 'Saldo Valorado',
                         align: 'right',
                         width:'80px',
-                        visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
-                    },
-                    {
-                        field: 'saldoValorado',
-                        title: 'Saldo Valorado',
-                        align: 'right',
-                        width:'80px',
-                        visible: mon==1 ? true  : false,
-                        searchable: false,
-                        formatter: formatoDecimalDolares,
-                        //footerFormatter: sumaColumna
                     },
                     {
                         field: 'cantVendida',
@@ -188,63 +207,31 @@ function retornarestadoVentasCosto()
                         //formatter: totalVacio
                     },
                     {
-                        field: 'totalCosto',
+                        field: mon==1 ? 'totalCostoDol' : 'totalCosto',
                         title: 'Total Costo',
                         align: 'right',
                         width:'80px',
-                        visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
                         //footerFormatter: sumaColumna
                     },
+
                     {
-                        field: 'totalCosto',
-                        title: 'Total Costo',
-                        align: 'right',
-                        width:'80px',
-                        visible: mon==1 ? true  : false,
-                        searchable: false,
-                        formatter: formatoDecimalDolares,
-                        //footerFormatter: sumaColumna
-                    },
-                    {
-                        field: 'totalVenta',
+                        field: mon==1 ? 'totalVentasDol' : 'totalVentas',
                         title: 'Total Ventas',
                         align: 'right',
                         width:'80px',
-                        visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
                         //footerFormatter: sumaColumna
                     },
                     {
-                        field: 'totalVenta',
-                        title: 'Total Ventas',
-                        align: 'right',
-                        width:'80px',
-                        visible: mon==1 ? true  : false,
-                        searchable: false,
-                        formatter: formatoDecimalDolares,
-                        //footerFormatter: sumaColumna
-                    },
-                    {
-                        field: 'utilidad',
+                        field: mon==1 ? 'utilDol' : 'util',
                         title: 'Utilidad',
                         align: 'right',
                         width:'80px',
-                        visible: mon==1 ? false  : true,
                         searchable: false,
                         formatter: formatoDecimal,
-                        //footerFormatter: sumaColumna
-                    },
-                    {
-                        field: 'utilidad',
-                        title: 'Utilidad',
-                        align: 'right',
-                        width:'80px',
-                        visible: mon==1 ? true  : false,
-                        searchable: false,
-                        formatter: formatoDecimalDolares,
                         //footerFormatter: sumaColumna
                     },
 
@@ -281,11 +268,11 @@ function totalVacio(value, row, index) {
     return (value);
 }
 function subTotal(value, row, index) {
-    if (row.codigo == null && row.siglaLinea == null) {
+    if (row.codigo == null && row.linea == null) {
         value = 'TOTAL GENERAL'
     }
     else if (row.codigo == null) {
-        value = 'TOTAL ' + row.linea
+        value = 'TOTAL ' + row.lineaD
     }
     return (value);
 }
@@ -321,9 +308,12 @@ function rowStyle(row, index) {
     return {};
 }
 function tituloReporte() {
+    ini = iniciofecha.format('YYYY-MM-DD')
+    fin = finfecha.format('YYYY-MM-DD')
     almText = $('#almacen_filtro').find(":selected").text();
     moneda = ($('#moneda').val() == 1) ? 'DOLARES' : 'BOLIVIANOS'
     
+    $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
     $('#tituloReporte').text(almText);
     $('#monedaTitulo').text(moneda);
 }
@@ -331,13 +321,18 @@ function restornardatosSelect(res) {
 
 
     let linea = new Array()
-    var datos = new Array()
+    let marca = new Array()
+    let datos = new Array()
+
     $.each(res, function (index, value) {
-        linea.push(value.linea)
+        linea.push(value.lineaD)
+        marca.push(value.marca)
     })
 
     linea.sort();
+    marca.sort()
     datos.push(linea.unique());
+    datos.push(marca.unique());
     return (datos);
 }
 Array.prototype.unique = function (a) {
@@ -347,3 +342,13 @@ Array.prototype.unique = function (a) {
 }(function (a, b, c) {
     return c.indexOf(a, b + 1) < 0
 });
+function GetSortOrder(prop) {  
+    return function(a, b) {  
+        if (a[prop] > b[prop]) {  
+            return 1;  
+        } else if (a[prop] < b[prop]) {  
+            return -1;  
+        }  
+        return 0;  
+    }  
+}  

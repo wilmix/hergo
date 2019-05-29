@@ -281,8 +281,11 @@ class Reportes extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-        	$alm=$this->security->xss_clean($this->input->post("alm")); 
-			$res=$this->Reportes_model->mostrarEstadoVentasCosto($alm); 
+			$alm=$this->security->xss_clean($this->input->post("alm"));
+        	$ini=$this->security->xss_clean($this->input->post("ini")); 
+			$fin=$this->security->xss_clean($this->input->post("fin")); 
+			$mon=$this->security->xss_clean($this->input->post("mon")); 
+			$res=$this->Reportes_model->mostrarEstadoVentasCosto($alm,$ini,$fin,$mon); 
 			$res=$res->result_array();
 			echo json_encode($res);
 		}

@@ -534,102 +534,102 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarEstadoVentasCosto($alm="")
+	public function mostrarEstadoVentasCosto($alm,$ini,$fin,$mon)
 	{ 
-		$sql="SELECT alm.`almacen`,id,linea, siglaLinea, codigo, descrip, uni, cpp, precioVenta, saldoCantidad,
-		SUM(saldoValorado) saldoValorado,
-		cantVendida,
-		SUM(totalCosto) totalCosto, SUM(totalVenta) totalVenta, SUM(utilidad) utilidad
-		FROM
+		$sql="SELECT id, 
+		marca, descp,uni, lineaD,
+		linea, codigo, cpp, ppVenta, saldo, SUM(saldoValorado) saldoValorado, cantVendida, SUM(totalCosto) totalCosto, SUM(totalVentas)totalVentas, SUM(utilidad)util, 
+		cppDol, SUM(ppVentaDol)ppVentaDol, SUM(saldoValoradoDol)saldoValoradoDol, 
+		SUM(totalCostoDol)totalCostoDol, SUM(totalVentasDol)totalVentasDol, SUM(utilDol)utilDol FROM
 		(
-			SELECT sa.`idAlmacen` idAlm, l.`Linea` linea, l.`Sigla` siglaLinea, a.`idArticulos` id, a.`CodigoArticulo` codigo,a.`Descripcion` descrip, u.`Unidad` uni, 
-			IFNULL(ROUND(a.`costoPromedioPonderado`,4),0) cpp, IFNULL(ROUND((IFNULL(ROUND(artVen.totalVenta,2),0) / IFNULL(artVen.cant,0)),2),0) precioVenta,
-			ROUND((sa.`saldo`+sa.`notaEntrega`),2) saldoCantidad,  ROUND((ROUND((sa.`saldo`+sa.`notaEntrega`),2) * IFNULL(ROUND(a.`costoPromedioPonderado`,4),0)),2) saldoValorado,
-			IFNULL(ROUND(artVen.cant,2),0) cantVendida, 
-			ROUND((IFNULL(ROUND(a.`costoPromedioPonderado`,4),0)*IFNULL(ROUND(artVen.cant,2),0)),2) totalCosto,
-			IFNULL(ROUND(artVen.totalVenta,2),0) totalVenta,
-			IFNULL((ROUND(artVen.totalVenta,2) - ROUND((IFNULL(ROUND(a.`costoPromedioPonderado`,4),0)*IFNULL(ROUND(artVen.cant,2),0)),2)),0) utilidad
-			FROM saldoarticulos sa
-			INNER JOIN articulos a  ON sa.`idArticulo` = a.`idArticulos`
-			INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
-			INNER JOIN linea l ON l.`idLinea` = a.`idLinea`
-			LEFT JOIN
-			(
-				SELECT  a.`idArticulos` id, SUM(fd.`facturaCantidad`) cant, SUM(fd.`facturaPUnitario`* fd.`facturaCantidad`) totalVenta
-				FROM facturadetalle fd
-				INNER JOIN factura f ON f.`idFactura` = fd.`idFactura`
-				INNER JOIN articulos a ON a.`idArticulos` = fd.`articulo`
-				INNER JOIN linea l ON l.`idLinea` = a.`idLinea`
+			SELECT art.`idArticulos` id, 
+				m.Marca marca,
+				l.Sigla linea,
+				l.Linea lineaD,
+				art.CodigoArticulo codigo, 
+				art.Descripcion descp,
+				u.Unidad uni,
+				
+				(cpp),
+				ROUND(IFNULL((ROUND(IFNULL(fact.totalVentas,0),2) / IFNULL(fact.cantVendida,0)),0),2) ppVenta,
+				ROUND((IFNULL(SUM(ingreso),0) - IFNULL(fact.cantVendida,0) - IFNULL(trasp.traspaso,0) ),2) saldo,
+				ROUND(ROUND((IFNULL(SUM(ingreso),0) - IFNULL(fact.cantVendida,0) -  IFNULL(trasp.traspaso,0) ),2) * (cpp),2) saldoValorado,
+				IFNULL(fact.cantVendida,0) cantVendida, 
+				ROUND((cpp) * ROUND(IFNULL(fact.cantVendida,0),2),2)totalCosto,
+				ROUND(IFNULL(fact.totalVentas,0),2) totalVentas,
+				ROUND(ROUND(IFNULL(fact.totalVentas,0),2)  - ((cpp) * ROUND(IFNULL(fact.cantVendida,0),2)),2) utilidad,
+				
+				/* dolares */ 
+				cppDol,
+				ROUND((IFNULL((ROUND(IFNULL(fact.totalVentasDol,0),2) / IFNULL(fact.cantVendida,0)),0)),2) ppVentaDol,
+				ROUND(ROUND((IFNULL(SUM(ingreso),0) - IFNULL(fact.cantVendida,0) -  IFNULL(trasp.traspaso,0) ),2) * (cppDol),4) saldoValoradoDol,
+				ROUND((ROUND(SUM(((cppDol))),4)) * ROUND(IFNULL(fact.cantVendida,0),2),2)totalCostoDol,
+				IFNULL(ROUND(fact.totalVentasDol,2),0) totalVentasDol,
+				((IFNULL(ROUND(fact.totalVentasDol,2),0)) - (ROUND((ROUND(SUM(((cppDol))),4)) * ROUND(IFNULL(fact.cantVendida,0),2),2))) utilDol
+				
+			FROM articulos art
+					LEFT JOIN (SELECT
+							id.`articulo` id, 
+							ROUND(SUM(id.`total`)/SUM(id.`cantidad`),4) cpp,
+							ROUND(SUM(((id.`cantidad` * id.`punitario`) / tc.tipocambio))/SUM(id.`cantidad`),4) cppDol,
+							IFNULL(SUM(id.`cantidad`),0) ingreso
 		
-				WHERE YEAR(f.`fechaFac`) = (select gestionActual from config)
-				AND f.`almacen` = $alm
-				AND f.`anulada` = 0
-				GROUP BY fd.`articulo`
-			) artVen ON artVen.id = sa.`idArticulo`
-			WHERE 
-			sa.`idAlmacen` = $alm
-			ORDER BY codigo 
-		)tblg
-			INNER JOIN almacenes alm ON alm.`idalmacen` = idAlm
-		 GROUP BY siglaLinea, codigo WITH ROLLUP
-		-- select gestionActual from config 		
+							FROM ingdetalle id
+								INNER JOIN ingresos i	ON i.`idIngresos`=id.`idIngreso` 
+										AND i.`almacen` LIKE CONCAT('%','$alm')
+										AND i.`anulado`=0
+										AND i.`estado`=1
+										AND i.`fechamov` BETWEEN '$ini'  AND '$fin'
+							 -- WHERE id.`articulo` = 2114
+								INNER JOIN tipocambio tc ON tc.fecha = i.`fechamov`
+		
+							GROUP BY id.`articulo`)ingr ON ingr.id = art.`idArticulos`
+					LEFT JOIN (SELECT  fd.`articulo`, SUM(fd.`facturaCantidad`) cantVendida, SUM(fd.`facturaCantidad`* fd.`facturaPUnitario`) totalVentas, SUM(fd.`facturaCantidad` * ((fd.`facturaPUnitario`) / (tc.tipocambio))) totalVentasDol
+							FROM facturadetalle fd
+							INNER JOIN factura f ON f.`idFactura` = fd.`idFactura`
+							INNER JOIN tipocambio tc ON tc.`fecha` = f.`fechaFac`
+							WHERE f.`fechaFac` BETWEEN '$ini'  AND '$fin'
+					 -- AND fd.`articulo` = 2114
+							AND f.anulada = 0
+							AND f.almacen LIKE CONCAT('%','$alm')
+							GROUP BY fd.`articulo`)fact ON fact.articulo = art.`idArticulos`
+					LEFT JOIN (SELECT ed.articulo, SUM(ed.`cantidad`-ed.`cantFact`) ne
+								FROM 	egredetalle ed
+									INNER JOIN articulos art ON art.idArticulos = ed.articulo
+									INNER JOIN egresos e ON e.`idegresos`=ed.`idegreso`
+										AND e.`anulado`=0
+										AND e.`tipomov`= 7
+										AND e.`estado`<>1
+										AND e.`almacen` LIKE CONCAT('%','$alm')
+										AND e.`fechamov` <= '$fin'
+									WHERE  ed.`cantidad`-ed.`cantFact` <> 0
+					-- and ed.articulo = 2114
+									GROUP BY ed.articulo) notaEnt ON notaEnt.articulo = art.`idArticulos`
+					LEFT JOIN(SELECT ed.articulo, SUM(ed.`cantidad`) traspaso
+							FROM egredetalle ed
+								INNER JOIN articulos art ON art.idArticulos = ed.articulo
+								INNER JOIN egresos e ON e.`idegresos`=ed.`idegreso`
+									AND e.`almacen` LIKE CONCAT('%','$alm')
+									AND e.`anulado`=0
+									AND e.`tipomov` BETWEEN 8 AND 9
+									AND e.`fechamov` BETWEEN '$ini'  AND '$fin'
+					-- where ed.articulo = 2114
+								GROUP BY ed.articulo)trasp ON trasp.articulo = art.`idArticulos`
+					INNER JOIN linea l ON l.idLinea = art.idLinea
+					INNER JOIN marca m ON m.idMarca = art.`idMarca`
+					INNER JOIN unidad u ON u.idUnidad = art.`idUnidad`
+			WHERE ingr.ingreso IS NOT NULL 
+			OR fact.cantVendida IS NOT NULL
+			OR notaEnt.ne IS NOT NULL
+			OR trasp.traspaso IS NOT NULL
+			GROUP BY codigo
+		)tbwr
+		GROUP BY linea, codigo WITH ROLLUP;
 		";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	/*public function mostrarEstadoVentasCosto($alm="")
-	{ 
-		$sql="SELECT 
-		sigla, linea, idArticulo,  
-		IF(codigo IS NULL, '', descrip) descrip, 
-		IF(codigo IS NULL, '', unidad) unidad, 
-		IF(codigo IS NULL, '', costo) costo, 
-		IF(codigo IS NULL, '', ppVenta) ppVenta, 
-		IF(codigo IS NULL, '', saldo) saldo,
-		IF(codigo IS NULL, '', cantidadVendida) cantidadVendida,
-		saldoValorado, totalCosto, totalVentas, utilidad, 
-		CASE
-			WHEN codigo IS NULL AND sigla IS NULL THEN 'TOTAL GENERAL'
-			WHEN codigo IS NULL THEN CONCAT('TOTAL ', linea)
-			ELSE codigo
-		END codigo
-		FROM(
-		SELECT sigla, linea, 
-		idArticulo idArticulo, codigo, descrip, unidad, costo, ppVenta, SUM(saldo) saldo,
-		SUM(saldoValorado) saldoValorado, cantidadVendida, SUM(totalCosto) totalCosto, SUM(totalVentas) totalVentas, SUM(utilidad) utilidad
-		FROM
-		(
-		SELECT l.`Sigla` sigla, l.`Linea` linea, idArticulo, a.`CodigoArticulo` codigo, a.`Descripcion` descrip, u.`Unidad` unidad, a.`costoPromedioPonderado` costo, IFNULL(ppVenta,0) ppVenta , saldo,
-		(a.`costoPromedioPonderado` * saldo) saldoValorado, cantidadVendida, (cantidadVendida * a.`costoPromedioPonderado`) totalCosto, (cantidadVendida * IFNULL(ppVenta,0)) totalVentas,
-		((cantidadVendida * IFNULL(ppVenta,0)) - (cantidadVendida * a.`costoPromedioPonderado`)) utilidad
-		FROM (
-		SELECT *
-		FROM
-		(
-		SELECT sa.idArticulo , (sa.saldo + sa.notaEntrega) saldo, sa.`facturado` cantidadVendida 
-		FROM saldoarticulos sa
-		WHERE sa.`idAlmacen` LIKE '%$alm'
-		) sal
-		LEFT JOIN ( SELECT * FROM (
-			SELECT fd.articulo , (SUM(fd.`facturaPUnitario` * fd.facturaCantidad) ) / SUM(fd.`facturaCantidad`)  ppVenta
-			FROM factura f
-			INNER JOIN facturadetalle fd ON fd.`idFactura` = f.`idFactura`
-			INNER JOIN articulos a ON a.idArticulos = fd.articulo
-			WHERE YEAR(f.`fechaFac`)=YEAR(NOW()) AND f.`anulada` = 0 AND f.`almacen` LIKE '%$alm'
-			GROUP BY fd.articulo
-			)tbl) ppv ON ppv.articulo = idArticulo
-		) todo
-		INNER JOIN articulos a ON a.`idArticulos` = idArticulo
-		INNER JOIN unidad u ON u.`idUnidad`= a.`idUnidad`
-		INNER JOIN linea l ON l.`idLinea` = a.`idLinea`
-		ORDER BY l.`Sigla`, a.`CodigoArticulo`
-		) tbl
-		GROUP BY sigla, codigo WITH ROLLUP
-		)roll		
-		";
-		$query=$this->db->query($sql);		
-		return $query;
-	}*/
+	
 	public function mostrarEstadoVentasCostoXLS($alm="")
 	{ 
 		$sql="SELECT sigla, linea, 
