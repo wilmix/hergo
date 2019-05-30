@@ -548,6 +548,7 @@ class Egresos extends CI_Controller
 			$egreso->obs = $this->security->xss_clean($this->input->post('obs_ne'));
 			$egreso->plazopago = $this->security->xss_clean($this->input->post('fechapago_ne'));
 			$egreso->plazopago = date('Y-m-d',strtotime($egreso->plazopago));
+			$egreso->plazopago = $egreso->plazopago == '' ? $egreso->fechamov : $egreso->plazopago;
 			$egreso->clientePedido = $this->security->xss_clean($this->input->post('pedido_ne'));       
 			$egreso->vendedor = $this->security->xss_clean($this->input->post('idUsuarioVendedor'));
 			

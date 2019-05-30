@@ -216,6 +216,8 @@ $(document).on("click", "#crearFactura", function () {
             tipoFacturacion: $("#tipoFacturacion").val(),
             fechaFactura: $("#fechaFactura").val(),
             numFacManual: $("#numFacManual").val(),
+            idCliente:$("#idCliente_factura").val(),
+            montoBs:$("#totalFacturaBs").val()
         }
         console.log(tabla3factura);
         $.ajax({
@@ -224,6 +226,7 @@ $(document).on("click", "#crearFactura", function () {
             dataType: "json",
             data: datos,
         }).done(function (res) {
+            console.log(res);
             if (res.response) {
                 vistaPreviaFactura();
                 agregarDatosFactura(res);
@@ -959,17 +962,22 @@ function calcularTotalFactura() {
 }
 function agregarDatosFactura(res) {
     vmVistaPrevia.guardar = true;
-    vmVistaPrevia.nit = res.detalle.nit;
+    vmVistaPrevia.nit = res.nit;
     vmVistaPrevia.numero = res.nfac
-    vmVistaPrevia.autorizacion = res.detalle.autorizacion;
-    vmVistaPrevia.fechaLimiteEmision = res.detalle.fechaLimite
-    vmVistaPrevia.llave = res.detalle.llaveDosificacion;
+    vmVistaPrevia.glosa01 = res.glosa01
+    vmVistaPrevia.glosa02 = res.glosa02
+    vmVistaPrevia.glosa03 = res.glosa03
+    vmVistaPrevia.autorizacion = res.autorizacion;
+    vmVistaPrevia.fechaLimiteEmision = res.fechaLimite
+    vmVistaPrevia.codigoControl = res.codigoControl
+
+    //vmVistaPrevia.llave = res.detalle.llaveDosificacion;
     vmVistaPrevia.manual = $("#tipoFacturacion").val();
     vmVistaPrevia.ClienteFactura = $("#cliente_factura").val();
     vmVistaPrevia.ClienteNit = $("#nit_factura").val();
     vmVistaPrevia.tipocambio = glob_tipoCambio;
     vmVistaPrevia.moneda = $("#moneda").val();
-    vmVistaPrevia.generarCodigoControl() //este dato se extrae de la base de datos, solo se usa para generar el codigo
+    //vmVistaPrevia.generarCodigoControl() //este dato se extrae de la base de datos, solo se usa para generar el codigo
     vmVistaPrevia.generarCodigoQr();
     $("#facPrev").modal("show");
 }

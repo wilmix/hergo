@@ -12,13 +12,17 @@
             ClienteNit:'',
             glosa:'',
             tipocambio:'',
-            llave:'',
+            //llave:'',
             almacen:'',         
             manual:'',   
             moneda:'',
             guardar:false,
             pedido:'',
             datosFactura:[],
+            glosa01:'',
+            glosa02:'',
+            glosa03:'',
+
 
         },
         
@@ -49,7 +53,7 @@
                 return value / parseFloat(this.tipocambio);
             },
            
-            generarCodigoControl:function()
+           /* generarCodigoControl:function()
             {                      
                 if(this.manual==1) return 0;    
                 var autor    = this.autorizacion;
@@ -82,7 +86,7 @@
                
                 this.codigoControl=codigo;          
                 return codigo      
-            },     
+            },  */   
             generarCodigoQr: function(){
                 $("#qrcodeimg").html("");
               

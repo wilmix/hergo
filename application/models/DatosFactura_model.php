@@ -33,6 +33,7 @@ class DatosFactura_model extends CI_Model
 			FROM datosfactura 
 			WHERE almacen = $idAlmacen
 			AND manual=$tipoFacturacion
+			AND enUso = 1
 			ORDER BY idDatosFactura desc Limit 1";
 		$query=$this->db->query($sql);
         if($query->num_rows()>0)

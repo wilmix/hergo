@@ -35,7 +35,7 @@
                 </div>
                     <div class="col-md-4">
                     <p class="text-center">NIT/CI:  <b><span>{{ClienteNit}}</span></b></p>
-                    <p id="direction" class="text-center">Actividad economica: VENTA AL POR MAYOR DE MAQUINARIA, EQUIPO Y MATERIALES</p>
+                    <p id="direction" class="text-center">Actividad economica: <span >{{glosa03}}</span></p>
                 </div>
                 </div>
                 <div>
@@ -96,8 +96,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <p align="center">"ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAÍS, EL USO ILÍCITO DE ÉSTA SERÁ SANCIONADO DE ACUERDO A LA LEY"</p>
-                <p align="center">Ley Nº 453: Está prohibido importar, distribuir  o comercializar productos expirados o prontos a expirar </p>
+                <p align="center">{{glosa01}}</p>
+                <p align="center">{{glosa02}}</p>
                 <button v-if="guardar" type="button" class="btn btn-primary" id="guardarFactura">Grabar Factura</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>

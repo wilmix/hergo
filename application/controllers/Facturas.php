@@ -799,24 +799,36 @@ class Facturas extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
+			$errores=array();
+			$obj=new stdclass();
+			$obj->response=true;
         	$idAlmacen = ($this->security->xss_clean($this->input->post('idAlmacen')));			
         	$tipoFacturacion = ($this->security->xss_clean($this->input->post('tipoFacturacion')));
 			$fechaFactura = ($this->security->xss_clean($this->input->post('fechaFactura')));
 			$numFacManual = ($this->security->xss_clean($this->input->post('numFacManual')));
+			$idCliente = ($this->security->xss_clean($this->input->post('idCliente')));
+			$montoBs = ($this->security->xss_clean($this->input->post('montoBs')));
+
 			$resultado=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
+			if(!$resultado)
+			{
+				$obj->response=false;
+				$obj->resultado=null;
+				array_push($errores, "No se tiene un dosificación activa para este almacen");
+				$obj->error=$errores;
+				echo json_encode($obj);
+				die();
+			}
 			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$resultado->idDatosFactura);
 			
-			$errores=array();
-			$obj=new stdclass();
-			$obj->detalle=$resultado;
-			$obj->response=true;
-
+			
 			if(!$resultado)
 			{
 				$obj->response=false;
 				$obj->resultado=null;
 				array_push($errores, "No se tiene un lote para este almacen");
 			}
+			//$obj->detalle=$resultado;
 			if(!$this->validarFechaLimite($resultado->fechaLimite, $fechaFactura))
 			{
 				$obj->response=false;
@@ -851,7 +863,17 @@ class Facturas extends CI_Controller
 				}
 				
 			}
-			
+			$cliente=$this->Cliente_model->obtenerCliente($idCliente);
+			$fechaFactura = date('Ymd',strtotime($fechaFactura));
+			$montoBs = round($montoBs,0);
+			$codigoControlGenerado = CodigoControlV7::generar($resultado->autorizacion, $obj->nfac, $cliente->documento, $fechaFactura, $montoBs,$resultado->llaveDosificacion);
+			$obj->codigoControl=$codigoControlGenerado;
+			$obj->nit=$cliente->documento;
+			$obj->glosa01 = $resultado->glosa01;
+			$obj->glosa02 = $resultado->glosa02;
+			$obj->glosa03 = $resultado->glosa03;
+			$obj->autorizacion = $resultado->autorizacion;
+			$obj->fechaLimite = $resultado->fechaLimite;
 			$obj->error=$errores;
 			/*$obj = new stdclass();
 			$obj->almacen = $idAlmacen;
