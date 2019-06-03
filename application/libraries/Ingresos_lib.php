@@ -49,21 +49,21 @@
                 //****ENCABEZADO****
                 $this->SetX(15);
                 //proveedor
-                $this->SetFont('Arial','B',10);
+                $this->SetFont('Arial','B',9);
                 $this->Cell(20,10, 'Proveedor: ',0,0,'');
-                $this->SetFont('Arial','',10);
-                $this->Cell(85, 10, utf8_decode($proveedor), 0,0,'L');
+                $this->SetFont('Arial','',9);
+                $this->Cell(65, 10, utf8_decode($proveedor), 0,0,'L');
                 //factura
-                $this->SetFont('Arial','B',10);
-                $this->Cell(20,10, 'Factura: ',0,0,'');
-                $this->SetFont('Arial','',10);
-                $this->Cell(20, 10, $nfact=='SF'?' - ':$nfact, 0,0,'L');
+                $this->SetFont('Arial','B',9);
+                $this->Cell(25,10, 'Orden Compra: ',0,0,'');
+                $this->SetFont('Arial','',9);
+                $this->Cell(40, 10, $ordenCompra, 0,0,'L');
 
                 // Orden de compra
-                $this->SetFont('Arial','B',10);
-                $this->Cell(30,10, 'Orden Compra: ',0,0,'');
-                $this->SetFont('Arial','',10);
-                $this->Cell(20, 10, $ordenCompra, 0,1,'L');
+                $this->SetFont('Arial','B',9);
+                $this->Cell(15,10, 'Factura: ',0,0,'');
+                $this->SetFont('Arial','',9);
+                $this->Cell(50, 10, $nfact=='SF'?' - ':$nfact, 0,1,'L');
                 $this->SetX(10);
                     //ENCABEZADO TABLA
                     $this->SetFillColor(255,255,255);
