@@ -587,10 +587,12 @@ var vmPago = new Vue({
     methods:{
         deleteRow:function(index){        
             this.porPagar.splice(index,1);
-            if (this.porPagar.length>0)
+            if (this.porPagar.length>0){
                 this.guardar=true;
-            else   
+            }
+            else   {
                 this.guardar=false;
+            }
         },
         agregarPago:function(row){
             //console.log(this.porPagar.map((el) => el.cliente));

@@ -27,9 +27,10 @@
             $this->SetXY(10,25);
 
             $this->SetXY(10,10);
-            $this->SetFont('Arial','BU',13);
+            $this->SetFont('Arial','BU',12);
             //$this->Cell(0,8, 'REPORTE DE EGRESOS',0,1,'C'); 
-            $this->Cell(0,8, utf8_decode("REPORTE $tipo"),0,1,'C');
+            $this->Cell(0,8, utf8_decode("REPORTE EGRESOS"),0,1,'C');
+            $this->Cell(0,8, utf8_decode("$tipo"),0,1,'C');
             $this->SetFont('Arial','BI',10);
             $this->Cell(0,8, utf8_decode("del $ini al $fin"),0,0,'C');
 
@@ -37,7 +38,7 @@
             $this->SetXY(180,10);
             $this->SetFont('Arial','',9);
             $this->Cell(0,8, utf8_decode($date),0,0,'C');
-            $this->Ln(15);
+            $this->Ln(17);
                     //ENCABEZADO TABLA
                     $this->SetFont('Arial','B',7); 
                     $this->SetFillColor(250,250,250);
