@@ -1,7 +1,8 @@
-var iniciofecha=moment().subtract(0, 'year').startOf('year')
-var finfecha=moment().subtract(0, 'year').endOf('year')
-
+let iniciofecha=moment().subtract(0, 'year').startOf('year')
+let finfecha=moment().subtract(0, 'year').endOf('year')
+let permisoAnular
 $(document).ready(function(){ 
+    permisoAnular = $("#permisoAnular").val()
     $('#export').click(function () {
         let mes = iniciofecha.format('MMMM').toUpperCase()
         $('#facturasConsulta').tableExport({
@@ -368,16 +369,26 @@ function formatoBotones(value, row, index)
         '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
         ].join('');    
     } 
-    else
+    else if(permisoAnular == true)
     {
         return [
         '<button type="button" class="btn btn-default verFactura"  aria-label="Right Align" data-toggle="tooltip" title="Ver">',
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',        
+        
         '<button type="button" class="btn btn-default anularFactura"  aria-label="Right Align" data-toggle="tooltip" title="Anular">',
         '<span class="fa fa-times " aria-hidden="true"></span></button>',
+
         '<button type="button" class="btn btn-default printFactura" aria-label="Right Align" data-toggle="tooltip" title="Imprimir">',
         '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
         ].join('');    
+    }
+    else{
+        return [
+            '<button type="button" class="btn btn-default verFactura"  aria-label="Right Align" data-toggle="tooltip" title="Ver">',
+            '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',        
+            '<button type="button" class="btn btn-default printFactura" aria-label="Right Align" data-toggle="tooltip" title="Imprimir">',
+            '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
+            ].join('');   
     }
     
 }
@@ -418,6 +429,7 @@ window.eventosBotones = {
     },
     'click .anularFactura': function (e, value, row, index) {    
         almForm = row.idAlmacen
+        console.log(row);
         almUser = $('#idAlmacenUsuario').val()
         isAdmin = $('#isAdmin').val()
         if (almForm != almUser && isAdmin == '') {
@@ -427,7 +439,7 @@ window.eventosBotones = {
         if (row.pagada == 0) {
              swal({
                     title: 'Esta seguro?',
-                    text: `Se anulara la factura ${row.nFactura} de ${row.ClienteFactura}`,      
+                    html: `Se anulara la factura <b>${row.nFactura}</b> de <b>${row.ClienteFactura}</b> por <b>${formato_moneda(row.total)}</b>`,      
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Aceptar',
@@ -436,7 +448,8 @@ window.eventosBotones = {
 
                         swal({
                             title: 'Anular movimiento',
-                            text: 'Cual es el motivo de anulacion?',
+                            html: `Cual es el motivo de anulacion? <br>
+                            De la factura <b>${row.nFactura}</b> de <b>${row.ClienteFactura}</b> por <b>${formato_moneda(row.total)}</b>`,
                             input: 'text',
                             type: 'info',
                             showCancelButton: true,

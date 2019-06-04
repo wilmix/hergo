@@ -68,7 +68,11 @@ class Facturas extends CI_Controller
 		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
-		
+
+		$this->libAcc = new LibAcceso();
+		$permisos = $this->libAcc->retornarSubMenus($_SESSION['accesoMenu']);
+		$this->datos['permisoAnular'] = in_array(45, $permisos) ? 'true' : 'false';
+
 		$hoy = date('Y-m-d');
 		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
 		if ($tipoCambio) {

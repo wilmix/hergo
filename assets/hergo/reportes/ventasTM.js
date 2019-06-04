@@ -167,7 +167,7 @@ function returnVentasTM() {
           {
             field: '',
             title: 'Ubigeo',
-            visible: false
+            //visible: false
           },
           {
             field: 'numDoc',
@@ -178,22 +178,22 @@ function returnVentasTM() {
           {
             field: 'tipo',
             title: 'Tipo',
-            visible: false
+            //visible: false
           },
           {
             field: 'nodef',
             title: 'Mercado',
-            visible: false
+            //visible: false
           },
           {
             field: 'nodef',
             title: 'Distribuidor',
-            visible: false
+            //visible: false
           },
           {
             field: 'nodef',
             title: 'Zona',
-            visible: false
+            //visible: false
           },
           {
             field: 'ciudad',
@@ -202,12 +202,12 @@ function returnVentasTM() {
           {
             field: 'nodef',
             title: 'Distrito',
-            visible: false
+            //visible: false
           },
           {
             field: '',
             title: 'Bonificación',
-            visible: false
+            //visible: false
           },
          
         ]

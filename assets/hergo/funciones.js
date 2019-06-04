@@ -179,6 +179,7 @@ function asignarselect(text1, select) {
 
 function formato_moneda(value, row, index) {
   num = Math.round(value * 100) / 100
+  num = num.toFixed(2);
   return (formatNumber.new(num));
 }
 /*******************formato de numeros***************/
