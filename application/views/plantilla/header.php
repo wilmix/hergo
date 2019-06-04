@@ -7,7 +7,7 @@
 </style>
 <body class="skin-blue sidebar-mini fixed">
 <input type="hidden" id="baseurl" value="<?php echo base_url() ?>">
-<input type="hidden" id="permisoAnular" value="<?= $permisoAnular ?>">
+
 <div class="wrapper">
 
   <!-- Main Header -->

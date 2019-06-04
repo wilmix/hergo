@@ -1,4 +1,5 @@
 <div class="row">
+<input type="hidden" id="permisoAnular" value="<?= $permisoAnular ?>">
   <div class="col-xs-12">
     <div class="box">
     <button id="export" class="btn btn-success pull-right"><i class="far fa-file-excel"> </i> Excel</button>
