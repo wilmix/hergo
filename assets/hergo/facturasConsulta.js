@@ -3,6 +3,7 @@ let finfecha=moment().subtract(0, 'year').endOf('year')
 let permisoAnular
 $(document).ready(function(){ 
     permisoAnular = $("#permisoAnular").val()
+    console.log(permisoAnular);
     $('#export').click(function () {
         let mes = iniciofecha.format('MMMM').toUpperCase()
         $('#facturasConsulta').tableExport({
@@ -82,7 +83,7 @@ function retornarTablaFacturacion()
         dataType: "json",
         data: {ini:ini,fin:fin,alm:alm,tipo:tipo},
     }).done(function(res){
-        console.log(res);
+        //console.log(res);
          quitarcargando();
         datosselect= restornardatosSelect(res)
 
@@ -363,13 +364,13 @@ function formatoBotones(value, row, index)
         return [
         '<button type="button" class="btn btn-default verFactura"  aria-label="Right Align" data-toggle="tooltip" title="Ver">',
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-        '<button type="button" class="btn btn-default "  disabled aria-label="Right Align">',
-        '<span class="fa fa-times " aria-hidden="true"></span></button>',
+       /*  '<button type="button" class="btn btn-default "  disabled aria-label="Right Align">',
+        '<span class="fa fa-times " aria-hidden="true"></span></button>', */
         '<button type="button" class="btn btn-default printFactura" aria-label="Right Align" data-toggle="tooltip" title="Imprimir">',
         '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
         ].join('');    
     } 
-    else if(permisoAnular == true)
+    else if(permisoAnular == 'true')
     {
         return [
         '<button type="button" class="btn btn-default verFactura"  aria-label="Right Align" data-toggle="tooltip" title="Ver">',
