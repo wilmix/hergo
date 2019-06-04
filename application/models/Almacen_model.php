@@ -15,19 +15,29 @@ class Almacen_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function agregarAlmacen_model($alm,$dir,$ciu,$enu)
+	public function agregarAlmacen_model($alm,$dir,$ciu,$telefonos,$enu,$sucursal)
 	{
 		
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
-		$sql="INSERT INTO almacenes (almacen, direccion, ciudad, uso, autor, fecha) VALUES('$alm','$dir','$ciu',$enu,'$autor','$fecha')";
+		$sql="INSERT INTO almacenes (almacen, direccion, ciudad, Telefonos, uso, autor, fecha, sucursal) 
+				   			  VALUES('$alm','$dir','$ciu','$telefonos','$enu','$autor','$fecha','$sucursal')";
 		$query=$this->db->query($sql);		
 	}
-	public function editarAlmacen_model($alm,$dir,$ciu,$enu,$cod)
+	public function editarAlmacen_model($alm,$dir,$ciu,$telefonos,$enu,$sucursal,$cod)
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
-		$sql="UPDATE almacenes SET almacen='$alm', direccion='$dir', ciudad='$ciu', uso=$enu, autor='$autor', fecha='$fecha' WHERE idalmacen=$cod";
+		$sql="UPDATE almacenes SET 
+					almacen='$alm', 
+					direccion='$dir', 
+					ciudad='$ciu', 
+					uso=$enu, 
+					autor='$autor',
+					fecha='$fecha',
+					Telefonos = '$telefonos',
+					sucursal = '$sucursal'
+		WHERE idalmacen=$cod";
 		$query=$this->db->query($sql);		
 	}
 }

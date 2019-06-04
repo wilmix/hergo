@@ -89,15 +89,17 @@ class Almacen extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-        	$alm = $this->security->xss_clean($this->input->post('almacen'));
-        	$dir = $this->security->xss_clean($this->input->post('direccion'));
-        	$ciu = $this->security->xss_clean($this->input->post('ciudad'));
+			$alm = strtoupper($this->security->xss_clean($this->input->post('almacen')));
+        	$sucursal = strtoupper($this->security->xss_clean($this->input->post('sucursal')));
+        	$dir = strtoupper($this->security->xss_clean($this->input->post('direccion')));
+			$ciu = strtoupper($this->security->xss_clean($this->input->post('ciudad')));
+        	$telefonos = $this->security->xss_clean($this->input->post('telefonos'));
         	$enu = $this->security->xss_clean($this->input->post('enuso'));
-        	$cod = $this->security->xss_clean($this->input->post('cod'));     
+			$cod = $this->security->xss_clean($this->input->post('cod')); 
         	if($cod=="")
-        		$this->Almacen_model->agregarAlmacen_model($alm,$dir,$ciu,$enu);
+        		$this->Almacen_model->agregarAlmacen_model($alm,$dir,$ciu,$telefonos,$enu,$sucursal);
         	else
-        		$this->Almacen_model->editarAlmacen_model($alm,$dir,$ciu,$enu,$cod);
+        		$this->Almacen_model->editarAlmacen_model($alm,$dir,$ciu,$telefonos,$enu,$sucursal,$cod);
         }
         echo "{}";       
 	}

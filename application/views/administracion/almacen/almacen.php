@@ -75,17 +75,28 @@
                 </div>
                 
               </div>
-                <!-- Direccion de almacen-->
+              <!-- Sucursal-->
               <div class="form-group">
-                <label class="col-md-3 control-label" for="modaldireccionalmacen">Dirección de Almacen</label>  
+                <label class="col-md-3 control-label" for="modaldireccionalmacen">Sucrusal</label>  
                 <div class="col-md-9 inputGroupContainer">
-                <div class="input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
-                <input  name="direccion" placeholder="Dirección de Almacen" class="form-control" id="modaldireccionalmacen" type="text"  style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
+                    <input  name="sucursal" placeholder="" class="form-control" id="modalSucursal" type="text"  style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase();">
                   </div>
                 </div>
-                
               </div>
+
+              <!-- Direccion-->
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="modaldireccionalmacen">Dirección</label>  
+                <div class="col-md-9 inputGroupContainer">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
+                    <input  name="direccion" placeholder="" class="form-control" id="modalDireccion" type="text"  style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  </div>
+                </div>
+              </div>
+              
                 <!-- Ciudad  -->
               <div class="form-group"> 
                 <label class="col-md-3 control-label">Ciudad</label>
@@ -97,11 +108,26 @@
                         <option>La Paz</option>
                         <option>Potosi</option>
                         <option >Santa Cruz</option>
+                        <option >Cochabamba</option>
+                        <option >Beni</option>
                         <option >Tarija</option>
+                        <option >Oruro</option>
+                        <option >Pando</option>
+                        <option >Sucre</option>
                       </select>
                    </div>
                 </div>
-                
+              </div>
+               <!-- Telefonos-->
+               <div class="form-group">
+                <label class="col-md-3 control-label" for="modaldireccionalmacen">Telefonos</label>  
+                <div class="col-md-9 inputGroupContainer">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
+                    <input  name="telefonos" placeholder="" class="form-control" id="modalTelefonos" type="text"  style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase();">
+                  </div>
+                </div>
+              </div>
               </div>
               <!-- Uso -->
               <div class="form-group">

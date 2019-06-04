@@ -22,22 +22,16 @@ $(document).ready(function(){
                         
                 }
             },
-            direccion: {
-                validators: {
-                }
-            },
-            
             ciudad: {
                 validators: {
-                     stringLength: {
-                        min: 3,
-                        message: 'Selecciona ciudad'
-                    },
-                                    notEmpty: {
-                        message: 'Campo obligatorio'
+                    notEmpty: {
+                        message: 'Seleccione ciudad'
                     }
+                        
                 }
-            },                
+            },
+
+               
            }
         })
         .on('success.form.bv', function(e) {
@@ -45,7 +39,7 @@ $(document).ready(function(){
             e.preventDefault();
             // Get the form instance
             var valuesToSubmit = $("#form_almacen").serialize();
-            console.log(valuesToSubmit)
+            //console.log(valuesToSubmit)
             $.ajax({
                 url: base_url("index.php/Almacen/agregarAlmacen"),
                 data: valuesToSubmit,              
@@ -53,7 +47,7 @@ $(document).ready(function(){
             })
             .done(function( data, textStatus, jqXHR ) {
                 if ( console && console.log ) {
-                    console.log( "La solicitud se ha completado correctamente." );                    
+                    console.log( "La solicitud se ha completado correctamente." );  
                     $('#contact-form-success').show().fadeOut(10000);
                     $('#modalalmacen').modal('hide');
                     document.location.href=""
@@ -89,15 +83,18 @@ function enivardatosmodalalmacen(id)
     cod=$(fila).attr("id");
     datos=$(fila).find("td")
     almacen=$(datos[0]).html();
-    direccion=$(datos[1]).html();
-    ciudad=$(datos[2]).html();
+    sucursal = $(datos[1]).html()
+    direccion=$(datos[2]).html();
+    ciudad=$(datos[3]).html();
+    telefonos = $(datos[4]).html();
     $("#cod_almacen").val(cod)
     $(".modalalmacentitulo").html("Editar Almacen")
     $("#modalnombrealmacen").val(almacen)
-    $("#modaldireccionalmacen").val(direccion)
+    $("#modalSucursal").val(sucursal)
+    $("#modalDireccion").val(direccion)
     $("#modalciudadalmacen").val(ciudad)
+    $("#modalTelefonos").val(telefonos)
     $("#bguardar_almacen").html("Editar")
     $('#modalalmacen').modal('show');
-    console.log(direccion)
 }
 
