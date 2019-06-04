@@ -23,7 +23,7 @@
                     <?php foreach ($almacen->result_array() as $fila): ?>
                       <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
                     <?php endforeach ?>
-                    <!-- <option value="">TODOS</option> -->
+                    <option value="">TODOS</option>
                 </select>
 
                 <select id="moneda" class="btn btn-primary btn-sm">
