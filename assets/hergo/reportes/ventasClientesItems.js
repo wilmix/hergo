@@ -49,8 +49,10 @@ $(document).ready(function () {
   });
   $('#fechapersonalizada').on('apply.daterangepicker', function (ev, picker) {
     tituloReporte()
+    retornarVentasClienteItems();
    });
   tituloReporte()
+  retornarVentasClienteItems();
 })
 
 $(document).on("click", "#refresh", function () {
@@ -257,9 +259,11 @@ function operateFormatter3(value, row, index) {
 }
 function tituloReporte() {
     almText = $('#almacen_filtro').find(":selected").text();
-    nomCliente = $('#clientes_filtro').find(':selected').text();
+    let ini = iniciofecha.format('DD/MM/YYYY')
+    let fin = finfecha.format('DD/MM/YYYY')
     $('#tituloReporte').text(almText);
-    $('#nombreCliente').text(nomCliente);
+    $('#ragoFecha').text("DEL " + ini + "  AL  " + fin);
+
 }
 
 function restornardatosSelect(res) {

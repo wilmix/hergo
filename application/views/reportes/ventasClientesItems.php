@@ -33,6 +33,7 @@
                         <span id="item"></span>
                     </h2>
                     <h2 id="tituloReporte"></h2>
+                    <h4 id="ragoFecha"></h4>
                 </div>
                 <table id="tablaVentasClientesItems" data-toolbar="#toolbar2" data-toggle="table">
                 </table>

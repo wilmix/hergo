@@ -59,7 +59,6 @@ $(document).ready(function () {
     retornarClienteItems();
 })
 $(document).on("change", "#almacen_filtro", function () {
-
     tituloReporte();
     retornarClienteItems();
 })
