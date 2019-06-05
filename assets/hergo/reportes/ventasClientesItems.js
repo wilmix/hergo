@@ -84,7 +84,7 @@ function retornarVentasClienteItems() {
         },
     }).done(function (res) {
         for (let index = 0; index < res.length; index++) {
-            if (res[index].nFactura == null && res[index].codigo == null) {
+           if (res[index].nFactura == null && res[index].codigo == null) {
                 res[index].nombreCliente = `TOTAL GENERAL:`
                 res[index].descripcion = ''
                 res[index].fechaFac = ' '
@@ -92,6 +92,8 @@ function retornarVentasClienteItems() {
                 res[index].vendedor = ''
                 res[index].pUni = ''
                 res[index].facCant = ''
+                res[index].linea = ''
+                res[index].siglaLinea = ''
                 res[index].codigo = res[index].codigo == null ? '' : res[index].codigo
             } else if (res[index].nFactura == null) {
                 res[index].descripcion = res[index].descripcion
@@ -118,14 +120,26 @@ function retornarVentasClienteItems() {
             showColumns: true,
             columns: [
                 {
+                    field: 'siglaLinea',
+                    title: 'Linea',
+                    align: 'center',
+                    width:'100px',
+                   filter: {
+                        type: "select",
+                        data: datosselect[1]
+                    }
+                },
+                {
+                    field: 'linea',
+                    title: 'Linea',
+                    align: 'center',
+                    width:'100px',
+                },
+                {
                     field: 'codigo',
                     title: 'Codigo',
                     align: 'center',
                     width:'100px',
-                    filter: {
-                        type: "select",
-                        data: datosselect[1]
-                    }
                 },
                 {
                     field: 'descripcion',
@@ -250,19 +264,19 @@ function tituloReporte() {
 
 function restornardatosSelect(res) {
 
-    var descripcion = new Array()
-    var codigo = new Array()
-    var datos = new Array()
+    let descripcion = new Array()
+    let linea = new Array()
+    let datos = new Array()
     $.each(res, function (index, value) {
         descripcion.push(value.descripcion)
-        codigo.push(value.codigo)
+        linea.push(value.siglaLinea)
     })
 
     descripcion.sort();
-    codigo.sort();
+    linea.sort();
   
     datos.push(descripcion.unique());
-    datos.push(codigo.unique());
+    datos.push(linea.unique());
     console.log(datos);
     return (datos);
 }

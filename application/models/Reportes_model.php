@@ -751,7 +751,7 @@ class Reportes_model extends CI_Model
 			SELECT  fd.`id`, fd.`articulo`, f.`almacen`, a.`idArticulos` idArt, a.`CodigoArticulo` codigo, a.`Descripcion` descripcion, f.`fechaFac`, f.`nFactura`, c.`documento`, c.`nombreCliente`, 
 			fd.`facturaPUnitario` precioUnitario, 
 			(fd.`facturaCantidad`) cantidadFactura,
-			(fd.`facturaPUnitario` * fd.`facturaCantidad`) total ,  
+			(fd.`facturaPUnitario` * fd.`facturaCantidad`) total , l.`Linea` linea, l.`Sigla` siglaLinea, 
 			CONCAT(uv.`first_name`, ' ', uv.`last_name`) vendedor
 						FROM
 						facturadetalle fd
@@ -761,6 +761,7 @@ class Reportes_model extends CI_Model
 						INNER JOIN factura_egresos fe ON fe.`idFactura`= f.`idFactura`
 						INNER JOIN egresos e ON e.`idegresos` = fe.`idegresos`
 						INNER JOIN users uv ON uv.`id` = e.`vendedor`
+						INNER JOIN linea l ON l.`idLinea` = a.`idLinea`
 						WHERE f.anulada = 0 
 						AND f.`fechaFac` BETWEEN '$ini' AND '$fin'
 						 AND f.`almacen` LIKE '%$alm'

@@ -1137,8 +1137,8 @@ class Reportes extends CI_Controller
 			redirect('auth', 'refresh');
 
 			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Ventas Clientes Items";
-			$this->datos['titulo']="Ventas Clientes Items";
+			$this->datos['opcion']="Reporte Ventas por Items Clientes";
+			$this->datos['titulo']="Reporte Ventas por Items Clientes";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
