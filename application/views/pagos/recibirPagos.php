@@ -187,14 +187,14 @@
                 </div>
               </div> 
             <div class="table">
-              <table class="table table-hover table-striped table-bordered" id="paraPagar_table">
+              <table class="table table-hover table-striped table-bordered table-responsive" id="paraPagar_table">
                 <thead>
                   <tr>
                     <th style="width:10%">N. Factura</th>
                     <th>Cliente</th>
                     <th class="text-right">Total</th>
-                    <th class="text-right">SaldoNuevo</th>
-                    <th style="width:20%;text-align: center">Pagar</th>
+                    <!-- <th class="text-right">SaldoNuevo</th> -->
+                    <th style="width:20%;text-align: right">Pagar</th>
                     <th style="width:5%"></th>
                   </tr>
                 </thead>  
@@ -204,7 +204,7 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan="4" class="text-right"><b>Total</b> </td>          
+                    <td colspan="3" class="text-right"><b>Total</b> </td>          
                     <td class="text-right"> {{ retornarTotal() | moneda}}</td>
                     <td></td>
                   </tr>
@@ -282,7 +282,7 @@
       <td>{{pagar.nFactura}}</td>
       <td>{{pagar.nombreCliente}}</td>
       <td class="text-right">{{pagar.total | moneda}}</td>
-      <td class="text-right">{{retornarSaldoNuevo() | moneda}}</td>          
+      <!-- <td class="text-right">{{retornarSaldoNuevo() | moneda}}</td>     -->      
       <td>
         <template v-if="!editing">
           <a @click="edit" style="cursor:pointer" class="montopagar"><span  class="description">{{pagar.pagar | moneda}}</span></a>
@@ -294,9 +294,9 @@
                 <a @click="update">
                   <span class="fa fa-check" aria-hidden="true"></span>                                
                 </a>
-                <a @click="discard">
+                <!-- <a @click="discard">
                   <span class="fa fa-times" aria-hidden="true"></span>                                   
-                </a>
+                </a> -->
                 <div class="clearfix"></div>
             </div>
             <label v-if="error != ''"  class="label label-danger">{{error}}</label>
