@@ -83,7 +83,7 @@ function retornarTablaPagos()
                     stickyHeaderOffsetY: '50px',
                     strictSearch: false,
                     showToggle:true,
-                    strictSearch: true,
+                    //strictSearch: true,
                 columns:
                 [
                     {   
