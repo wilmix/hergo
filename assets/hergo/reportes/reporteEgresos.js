@@ -205,7 +205,7 @@ function retornarReporteEgresos() {
                     field: 'codigo',
                     title: 'Código',
                     sortable: true,
-                    searchable: false,
+                    //searchable: false,
                     /*filter: {
                         type: "select",
                         data: datosselect[1]
