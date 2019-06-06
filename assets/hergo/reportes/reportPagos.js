@@ -95,7 +95,7 @@ function returnReportePago() {
             filter: true,
             stickyHeader: true,
             stickyHeaderOffsetY: '50px',
-            strictSearch: true,
+            //strictSearch: true,
             rowStyle:rowStyle,
             showFooter: true,
             footerStyle: footerStyle,
