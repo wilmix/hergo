@@ -1416,7 +1416,7 @@ class Reportes extends CI_Controller
 	}
 	public function ventasTM()
 	{
-		//$this->libacceso->acceso(33);
+		$this->libacceso->acceso(47);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -1450,7 +1450,7 @@ class Reportes extends CI_Controller
 	}
 	public function inventarioTM()
 	{
-		//$this->libacceso->acceso(33);
+		$this->libacceso->acceso(48);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
