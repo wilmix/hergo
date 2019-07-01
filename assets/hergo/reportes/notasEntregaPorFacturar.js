@@ -83,9 +83,7 @@ function retornarNEporFac() //*******************************
         }, //**** variables para filtro
     }).done(function (res) {
         quitarcargando();
-        //console.log(res);
-        //console.log(alm);
-        console.log(`Almacen ${alm} ini ${ini} fin ${fin}`);
+       console.log(`Almacen ${alm} ini ${ini} fin ${fin}`);
         datosselect = restornardatosSelect(res);
         $("#tablaNotasEntregaFacturar").bootstrapTable('destroy');
         $("#tablaNotasEntregaFacturar").bootstrapTable({ ////********cambiar nombre tabla viata
@@ -255,7 +253,9 @@ function restornardatosSelect(res) {
     $.each(res, function (index, value) {
 
         alm.push(value.almacen)
-        cliente.push(value.nombreCliente)
+        if (value.nombreCliente != null && value.idEgresos == null) {
+            cliente.push(value.nombreCliente)
+        }
         responsable.push(value.autor)
     })
 
