@@ -108,7 +108,7 @@ function retornarVentasClienteItems() {
                 res[index].fechaFac = formato_fecha_corta(res[index].fechaFac)
             }
         }
-        console.log(res);
+        //console.log(res);
         quitarcargando(); 
         datosselect = restornardatosSelect(res);
         $("#tablaVentasClientesItems").bootstrapTable('destroy');    
@@ -142,6 +142,10 @@ function retornarVentasClienteItems() {
                     title: 'Codigo',
                     align: 'center',
                     width:'100px',
+                    filter: {
+                        type: "select",
+                        data: datosselect[2]
+                    }
                 },
                 {
                     field: 'descripcion',
@@ -270,18 +274,24 @@ function restornardatosSelect(res) {
 
     let descripcion = new Array()
     let linea = new Array()
+    let codigo = new Array()
     let datos = new Array()
     $.each(res, function (index, value) {
         descripcion.push(value.descripcion)
         linea.push(value.siglaLinea)
+        codigo.push(value.codigo)
     })
 
     descripcion.sort();
     linea.sort();
+    codigo.sort()
   
     datos.push(descripcion.unique());
     datos.push(linea.unique());
-    console.log(datos);
+    datos.push(codigo.unique());
+
+
+    //console.log(datos);
     return (datos);
 }
 Array.prototype.unique = function (a) {
