@@ -132,6 +132,7 @@
         public function Footer(){
             $observaciones = $this->datos['observaciones'];
             $plazoPago = date('d/m/Y',strtotime($this->datos['plazoPago']));
+            $plazoPago = ($plazoPago == '01/01/1970') ? '' : $plazoPago;
             $userName = $this->datos['userName'];
             $autor = $this->datos['autor'];
             $vendedor = $this->datos['nVendedor'];
