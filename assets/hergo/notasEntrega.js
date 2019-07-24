@@ -522,7 +522,7 @@ function limpiarCabecera() {
     $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
     $("#totalacostosus").val("");
     $("#totalacostobs").val("");
-    $("#fechapago_ne").val("");
+    //$("#fechapago_ne").val("");
     $("#obs_ne").val("");
 }
 function limpiarTabla() {
