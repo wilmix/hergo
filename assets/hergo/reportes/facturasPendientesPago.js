@@ -116,6 +116,7 @@ function retornarFacturasPendientes()
             [
                 {
                     field: 'almacen',
+                    searchable: false,
                     title: 'Almacen',
                     width:'150px',
                     visible: almacen==''?true:false
@@ -124,6 +125,7 @@ function retornarFacturasPendientes()
                     field: 'lote',
                     title: 'Lote',
                     width:'50px',
+                    searchable: false,
                     align: 'center'
                 },
                 {
@@ -167,6 +169,7 @@ function retornarFacturasPendientes()
                 {
                     field: 'totalFacDol',
                     title: 'Crédito $u$',
+                    searchable:tc ==1 ? true : false,
                     sortable: true,
                     visible: tc ==1 ? true : false,
                     align: 'right',
@@ -177,6 +180,7 @@ function retornarFacturasPendientes()
                     field: 'montoPagoDol',
                     title: 'Abono $u$',
                     visible: tc ==1 ? true : false,
+                    searchable:tc ==1 ? true : false,
                     align: 'right',
                     width:'100px',
                     formatter: operateFormatter3,
@@ -192,9 +196,10 @@ function retornarFacturasPendientes()
                 {
                     field: 'saldoDol',
                     title: 'Saldo $u$',
-                    //sortable: true,
+                    searchable:tc ==1 ? true : false,
                     align: 'right',
                     visible: tc ==1 ? true : false,
+                    searchable: false,
                     width:'100px',
                     formatter: operateFormatter3,
                 },
@@ -203,7 +208,16 @@ function retornarFacturasPendientes()
                     title: 'Responsable',
                     sortable: true,
                     width:'200px',
+                    searchable: false,
                     align: 'center',
+                },
+                {
+                    field: 'total',
+                    title: '',
+                    sortable: true,
+                    visible: false,
+                    align: 'right',
+                    width:'100px',
                 },
                 
             ]
