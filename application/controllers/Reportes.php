@@ -1132,7 +1132,7 @@ class Reportes extends CI_Controller
 	}
 	public function ventasClientesItems()
 	{
-		//$this->libacceso->acceso(41);
+		$this->libacceso->acceso(49);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -1193,7 +1193,7 @@ class Reportes extends CI_Controller
 
 	public function reporteIngresos()
 	{
-		//$this->libacceso->acceso(41);
+		$this->libacceso->acceso(51);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -1253,7 +1253,7 @@ class Reportes extends CI_Controller
 	}
 	public function reporteEgresos()
 	{
-		//$this->libacceso->acceso(41);
+		$this->libacceso->acceso(52);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -1309,7 +1309,7 @@ class Reportes extends CI_Controller
 	}
 	public function reporteFacturas()
 	{
-		//$this->libacceso->acceso(41);
+		$this->libacceso->acceso(53);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -1363,7 +1363,7 @@ class Reportes extends CI_Controller
 
 	public function reporteClienteItems()
 	{
-		//$this->libacceso->acceso(41);
+		$this->libacceso->acceso(50);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -1535,7 +1535,7 @@ class Reportes extends CI_Controller
 	}
 	public function reportePagos()
 	{
-		//$this->libacceso->acceso(41);
+		$this->libacceso->acceso(54);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
