@@ -136,7 +136,7 @@ class Clientes extends CI_Controller
         		$result = $this->Cliente_model->editarCliente_model($id,$tipo_doc,trim($carnet),trim(strtoupper($nombre_cliente)),$clientetipo,strtoupper($direccion),$phone,$fax,$email,$website);
         	}
         }
-        echo $result;
+        echo json_encode($result);
 	}
 	
 

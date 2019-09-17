@@ -253,11 +253,22 @@ function retornarSaldosGeneral() {
                 },
                 {
                     field: 'costo',
-                    title: 'Costo.Uni.',
+                    title: 'C/U BOB',
                     align: 'right',
+                    visible: mon==1 ? false  : true,
                     width:'80px',
                     searchable: false,
                     formatter: operateFormatter3,
+                    
+                },
+                {
+                    field: 'costo',
+                    title: 'C/U $U$',
+                    align: 'right',
+                    width:'80px',
+                    searchable: false,
+                    visible: mon==1 ? true  : false,
+                    formatter: dolares,
                     
                 },
                 {

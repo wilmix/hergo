@@ -34,9 +34,17 @@ class Cliente_model extends CI_Model
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
-		$sql="INSERT INTO clientes (idDocumentoTipo, documento, nombreCliente, idClientetipo, direccion, telefono, fax, email, web, autor, fecha) 
-		VALUES('$tipo_doc','$carnet','$nombre_cliente','$clientetipo','$direccion','$phone','$fax','$email','$website' ,'$autor',NOW())";
-		$query=$this->db->query($sql);		
+		$nit = $carnet;
+
+		$prueba = $this->getClientByNIT($nit);
+		if ($prueba == false || $prueba == '99001') {
+			$sql="INSERT INTO clientes (idDocumentoTipo, documento, nombreCliente, idClientetipo, direccion, telefono, fax, email, web, autor, fecha) 
+			VALUES('$tipo_doc','$carnet','$nombre_cliente','$clientetipo','$direccion','$phone','$fax','$email','$website' ,'$autor',NOW())";
+			$query=$this->db->query($sql);
+			return true;
+		} else {
+			return $prueba;
+		}
 	}
 	public function editarCliente_model($id,$tipo_doc,$carnet,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website)
 	{
@@ -57,7 +65,29 @@ class Cliente_model extends CI_Model
 		if($query->num_rows()>0)
         {
             $fila=$query->row();
-            return $fila;
+            return true;
+        }
+        else
+        {
+            return false;
+        }			
+	}public function getClientByNIT($nit)
+	{	
+
+		$sql="select c.`idCliente`, c.`documento`, c.`nombreCliente`, c.`fecha`, concat(u.`first_name`, ' ' , u.`last_name`) autor
+		from clientes c
+		inner join users u on u.`id` = c.`autor`
+		where c.`documento` = $nit";
+		$query=$this->db->query($sql);	
+		
+		if($query->num_rows()>0)
+        {
+			if ($nit == 99001) {
+				return $nit;
+			} else {
+				$fila=$query->row();
+				return $fila;
+			}
         }
         else
         {

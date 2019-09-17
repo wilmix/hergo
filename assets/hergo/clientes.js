@@ -85,14 +85,28 @@
                 contentType: false,
                 processData: false,
                 success: function (returndata) {
-                    $('#modalcliente').modal('hide');
-                    resetForm('#form_clientes')
-                    retornarTablaClientes()
-                    swal(
-                        'Cliente Registrado',
-                        '',
-                        'success'
+                    if (returndata=='true') {
+                        $('#modalcliente').modal('hide');
+                        resetForm('#form_clientes')
+                        retornarTablaClientes()
+                        swal(
+                            'Cliente Registrado',
+                            '',
+                            'success'
+                            )
+                        console.log(returndata);
+                    } else {
+                        console.log(returndata);
+                        client = JSON.parse(returndata)
+                        console.log(client);
+                        swal({
+                            title: 'Atencion',
+                            html: "El NIT <b>" + client.documento + "</b> ya se encuentra registrado a nombre de <b>" + client.nombreCliente + "</b> en fecha  <b>" + formato_fecha_corta(client.fecha) + "</b> registrado por <b>" + client.autor + "</b>.",
+                            type: 'warning',
+                        }
                         )
+                    }
+
                 }, 
                 error : function (returndata) {
                     swal(
