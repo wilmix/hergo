@@ -65,7 +65,7 @@ class Cliente_model extends CI_Model
 		if($query->num_rows()>0)
         {
             $fila=$query->row();
-            return true;
+            return $fila;
         }
         else
         {
