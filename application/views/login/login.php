@@ -11,7 +11,7 @@
                             <div class="description hidden-xs">
                             	<p>
 	                            	Sistema Inventarios Web On-line<br>
-	                            	Inteligente Rapida Eficaz Responsivo
+	                            	Inteligente Rápida Eficaz Responsiva
                                 </p>
                             </div>
                             <?php 

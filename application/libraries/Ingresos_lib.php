@@ -90,7 +90,7 @@
             $this->SetFont('Arial','I', 10);
             $this->SetY(-20);
             $this->Cell(30,10, 'Observaciones: ',0,0,'L');
-            $this->Cell(210, 10, $observacion, 0,0,'L');
+            $this->Cell(210, 10, utf8_decode($observacion), 0,0,'L');
                 //NUMERO PIED PAGINA
                 $this->SetY(-12);
                 $this->SetFont('Arial','I', 8);
