@@ -337,6 +337,7 @@ function mostrarTablaIngresos(res) {
                 title: "Total Sus",
                 width:'100px',
                 align: 'right',
+                visible: false,
                 sortable: true,
                 searchable:false,
                 formatter: operateFormatter3,
@@ -348,6 +349,19 @@ function mostrarTablaIngresos(res) {
                 sortable: true,
                 searchable:false,
                 width:'100px',
+                formatter: operateFormatter3,
+                filter: {
+                    type: "input"
+                },
+            },
+            {
+                field: 'totalSis',
+                title: "Total Sis",
+                align: 'right',
+                sortable: true,
+                searchable:false,
+                width:'100px',
+                visible: false,
                 formatter: operateFormatter3,
                 filter: {
                     type: "input"
