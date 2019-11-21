@@ -77,8 +77,8 @@ $(document).on("click", "#excel", function () {
 })
 
 function retornarestadoVentasCosto() 
-{   let ini = '2018-01-01' // iniciofecha.format('YYYY-MM-DD')
-    let fin = '2018-12-31' // finfecha.format('YYYY-MM-DD')
+{   let ini =  iniciofecha.format('YYYY-MM-DD')
+    let fin =  finfecha.format('YYYY-MM-DD')
     let mon = $("#moneda").val()
     let alm = $("#almacen_filtro").val();
     agregarcargando();
