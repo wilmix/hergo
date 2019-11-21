@@ -630,6 +630,15 @@ class Reportes_model extends CI_Model
 		return $query;
 	}
 	
+	public function showEstadoVentasCostoNew($alm,$ini,$fin,$mon)
+	{ 
+		$sql="CALL newKardex('$alm','$mon','evc','$ini','$fin')
+		";
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+
+
 	public function mostrarEstadoVentasCostoXLS($alm="")
 	{ 
 		$sql="SELECT sigla, linea, 

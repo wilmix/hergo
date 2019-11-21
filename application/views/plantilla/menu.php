@@ -156,6 +156,10 @@
               <li class="kardexIndividualValorado"><a href="<?php echo base_url("reportes/kardexIndividualValorado") ?>">Kardex Individual Valorado</a></li>
               <li class="kardexIndividualCliente"><a href="<?php echo base_url("reportes/kardexIndividualCliente") ?>">Kardex Individual Clientes</a></li>
               <li class="estadoVentasCostoItem"><a href="<?php echo base_url("reportes/estadoVentasCostoItem") ?>">Estado de Ventas y Costos</a></li>
+
+
+              <li class="estadoVentasCostoItemNew"><a href="<?php echo base_url("reportes/estadoVentasCostoItemNew") ?>">Estado de Ventas y Costos<small class="label pull-right bg-green">new</small></a></li>
+
               <li class="ventasClientesItems"><a href="<?php echo base_url("reportes/ventasClientesItems") ?>">Movimientos Item Cliente</a></li>
               <li class="reporteClienteItems"><a href="<?php echo base_url("reportes/reporteClienteItems") ?>">Movimientos Cliente Item</a></li>
               <li class="reporteIngresos"><a href="<?php echo base_url("reportes/reporteIngresos") ?>">Reporte Ingresos</a></li>

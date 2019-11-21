@@ -38,13 +38,13 @@ class Reportes extends CI_Controller
 					base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
 					base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
 					base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
+					base_url('assets/plugins/table-boot/plugin/FileSaver.min.js'),
 					base_url('assets/plugins/table-boot/js/tableExport.js'),
 					base_url('assets/plugins/table-boot/js/xlsx.core.min.js'),
 					base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
 					base_url('assets/plugins/table-boot/plugin/select2.min.js'),
 					base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
 					base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.js'),
-					base_url('assets/plugins/table-boot/plugin/FileSaver.min.js'),
 					base_url('assets/plugins/table-boot/js/xlsx.full.min.js'),
 					base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
 					base_url('assets/plugins/daterangepicker/moment.min.js'),
@@ -295,6 +295,58 @@ class Reportes extends CI_Controller
 		}
 	}
 
+	public function estadoVentasCostoItemNew()
+	{
+		//$this->libacceso->acceso(42);
+		if(!$this->session->userdata('logeado'))
+			redirect('auth', 'refresh');
+
+			$this->datos['menu']="Reportes";
+			$this->datos['opcion']="Estado de Ventas y Costos por Item New";
+			$this->datos['titulo']="Estado de Ventas y Costos por Item New";
+
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
+
+	        /*************DATERANGEPICKER**********/
+	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
+			/**************FUNCION***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/estadoVentasCostoNew.js'); 				
+			/**************INPUT MASK***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+        	$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+
+			$this->load->view('plantilla/head.php',$this->datos);
+			$this->load->view('plantilla/header.php',$this->datos);
+			$this->load->view('plantilla/menu.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('reportes/estadoVentasCostoItemNew.php',$this->datos);
+			$this->load->view('plantilla/footcontainer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
+	}
+
+	public function mostrarEstadoVentasCostoNew()  
+	{
+		if($this->input->is_ajax_request())
+        {
+			$alm=$this->security->xss_clean($this->input->post("alm"));
+        	$ini=$this->security->xss_clean($this->input->post("ini")); 
+			$fin=$this->security->xss_clean($this->input->post("fin")); 
+			$mon=$this->security->xss_clean($this->input->post("mon")); 
+			$res=$this->Reportes_model->showEstadoVentasCostoNew($alm,$ini,$fin,$mon); 
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 
 	public function kardexIndividualValorado()
 	{
