@@ -329,7 +329,40 @@ class Reportes extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 	}
+	public function pruebaKardex()
+	{
+		//$this->libacceso->acceso(42);
+		if(!$this->session->userdata('logeado'))
+			redirect('auth', 'refresh');
 
+			$this->datos['menu']="Reportes";
+			$this->datos['opcion']="Prueba Kardex";
+			$this->datos['titulo']="Prueba Kardex";
+
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
+
+	        /*************DATERANGEPICKER**********/
+	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
+			/**************FUNCION***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/pruebaKardex.js'); 				
+			/**************INPUT MASK***************/
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+        	$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+
+			$this->load->view('plantilla/head.php',$this->datos);
+			$this->load->view('plantilla/header.php',$this->datos);
+			$this->load->view('plantilla/menu.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('reportes/pruebaKardex.php',$this->datos);
+			$this->load->view('plantilla/footcontainer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
+	}
 	public function mostrarEstadoVentasCostoNew()  
 	{
 		if($this->input->is_ajax_request())

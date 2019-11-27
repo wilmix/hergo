@@ -632,7 +632,7 @@ class Reportes_model extends CI_Model
 	
 	public function showEstadoVentasCostoNew($alm,$ini,$fin,$mon)
 	{ 
-		$sql="CALL newKardex('$alm','$mon','evc','$ini','$fin')
+		$sql="CALL newKardex('$alm','$mon','$ini','$fin')
 		";
 		$query=$this->db->query($sql);		
 		return $query;
@@ -1228,7 +1228,7 @@ class Reportes_model extends CI_Model
 				}
 				
 			}
-			return $res;
+				return $res;
 		
 	}
 	public function showKardexAllSN ($almacen) 
@@ -1342,7 +1342,7 @@ class Reportes_model extends CI_Model
 								LEFT JOIN ingresos i ON i.`idIngresos`=t.`idIngreso`
 								LEFT JOIN almacenes a ON a.`idalmacen` = i.`almacen`
 					) AS tmp
-				  -- where idArticulo between 51 and 61
+					-- where idArticulo between 51 and 61
 					GROUP BY idArticulo, id WITH ROLLUP
 					-- order by idArticulo, fechakardex
 		)tttt

@@ -159,6 +159,8 @@
 
 
               <li class="estadoVentasCostoItemNew"><a href="<?php echo base_url("reportes/estadoVentasCostoItemNew") ?>">Estado de Ventas y Costos<small class="label pull-right bg-green">new</small></a></li>
+              <li class="pruebaKardex"><a href="<?php echo base_url("reportes/pruebaKardex") ?>">Prueba Kardex<small class="label pull-right bg-green">new</small></a></li>
+
 
               <li class="ventasClientesItems"><a href="<?php echo base_url("reportes/ventasClientesItems") ?>">Movimientos Item Cliente</a></li>
               <li class="reporteClienteItems"><a href="<?php echo base_url("reportes/reporteClienteItems") ?>">Movimientos Cliente Item</a></li>

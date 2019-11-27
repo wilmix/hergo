@@ -95,8 +95,8 @@ function retornarestadoVentasCosto()
     }).done(function(res){
         quitarcargando();
         datosselect = restornardatosSelect(res)
-        $("#estadoVentasCostosNew").bootstrapTable('destroy');
-        $("#estadoVentasCostosNew").bootstrapTable({       
+        $("#pruebaKardex").bootstrapTable('destroy');
+        $("#pruebaKardex").bootstrapTable({       
                 data:res,    
                     striped:true,
                     search:true,
@@ -152,69 +152,35 @@ function retornarestadoVentasCosto()
                         formatter:totalVacio
                     },
                     {
-                        field: 'cpp',
-                        title: 'C.P.P.',
+                        field: 'invIni',
+                        title: 'Inventario Inicial',
                         align: 'right',
                         width:'80px',
                         searchable: false,
-                        formatter: formatoDecimalVacio
+                        formatter: formatoDecimal,
+                        //footerFormatter: sumaColumna
                     },
                     {
-                        field: '',
-                        title: 'P.P. Venta',
+                        field: 'comprasNetas',
+                        title: 'Compras Netas',
                         align: 'right',
                         width:'80px',
                         searchable: false,
-                        formatter: formatoPPVenta,
+                        formatter: formatoDecimal,
+                        //footerFormatter: sumaColumna
                     },
-                    {
-                        field: 'cantidadSaldo',
-                        title: 'Saldo',
-                        align: 'right',
-                        width:'80px',
-                        visible: true,
-                        searchable: false,
-                        formatter: formatoDecimalVacio,
-                    },
-                    {
+                   {
                         field: 'invFinal',
-                        title: 'Inv.Final',
+                        title: 'Inventario Final',
                         align: 'right',
                         width:'80px',
                         searchable: false,
                         formatter: formatoDecimal,
                     },
+                    
                     {
-                        field: 'fac',
-                        title: 'Cant. Vendida',
-                        align: 'right',
-                        width:'80px',
-                        visible: true,
-                        searchable: false,
-                        formatter: formatoDecimalVacio,
-                    },
-                    {
-                        field: 'cmv',
-                        title: 'C.M.V.',
-                        align: 'right',
-                        width:'80px',
-                        searchable: false,
-                        formatter: formatoDecimal,
-                        //footerFormatter: sumaColumna
-                    },
-
-                    {
-                        field: 'totalVentasAcum',
-                        title: 'Ventas',
-                        align: 'right',
-                        width:'80px',
-                        searchable: false,
-                        formatter: formatoDecimal,
-                        //footerFormatter: sumaColumna
-                    },
-                    {
-                        field: 'utilidad',
-                        title: 'Utilidad',
+                        field: 'prueba',
+                        title: 'Costo Mercaderia Vendida',
                         align: 'right',
                         width:'80px',
                         searchable: false,
