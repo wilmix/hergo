@@ -9,31 +9,56 @@ class Dashboard_model extends CI_Model
 		$this->load->helper('date');
 		$this->db->query("SET lc_time_names = 'es_BO'");
     }
-    public function mostrarVentasGestion($ini=null,$fin=null) ///********* nombre de la funcion mostrar
+    public function mostrarVentasGestion($ini=null,$fin=null)
 	{ 
-		$sql="SELECT LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3) mes,YEAR(f.`fechaFac`) gestion,ROUND(SUM(f.`total`),2) monto
-		FROM factura f
-		WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin' 
+		$sql="SELECT tbl.id, tbl.mes, tbl.gestion
+		, 
+		(ventasPotosi.montoPTS) montoPTS,
+		(ventasSantaCruz.montoSCZ) montoSCZ,
+		(ventasLaPaz.montoLP) montoLP,
+		((ventasPotosi.montoPTS) + (ventasSantaCruz.montoSCZ) + (ventasLaPaz.montoLP))totalMes
+		FROM
+		(
+			SELECT 
+				CONCAT((LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3)),(YEAR(f.`fechaFac`))) id, 
+				LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3) mes,
+				YEAR(f.`fechaFac`) gestion
+			FROM factura f
+			WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin' 
+			GROUP BY id
+			ORDER BY f.`fechaFac`
+		)tbl					
+			LEFT JOIN (
+					SELECT CONCAT((LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3)),(YEAR(f.`fechaFac`))) id, LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3) mes,YEAR(f.`fechaFac`) gestion, ROUND(SUM(f.`total`),2) montoPTS
+					FROM factura f
+					WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin'
+					AND f.`anulada`=0
+					AND f.`almacen` = 3
+					GROUP BY id
+					ORDER BY f.`fechaFac`
+			) ventasPotosi ON ventasPotosi.id = tbl.id
+			LEFT JOIN (
+					SELECT CONCAT((LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3)),(YEAR(f.`fechaFac`))) id, LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3) mes,YEAR(f.`fechaFac`) gestion, ROUND(SUM(f.`total`),2) montoSCZ
+					FROM factura f
+					WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin'
+					AND f.`anulada`=0
+					AND f.`almacen` = 4
+					GROUP BY id
+								ORDER BY f.`fechaFac`
+			) ventasSantaCruz ON ventasSantaCruz.id = tbl.id
+			LEFT JOIN (
+					SELECT CONCAT((LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3)),(YEAR(f.`fechaFac`))) id, LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3) mes,YEAR(f.`fechaFac`) gestion, ROUND(SUM(f.`total`),2) montoLP
+					FROM factura f
+					WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin'
 					AND f.`anulada`=0
 					AND f.`almacen` = 1
-					GROUP BY MONTH(f.`fechaFac`)
+					GROUP BY id
 					ORDER BY f.`fechaFac`
-					";
+			) ventasLaPaz ON ventasLaPaz.id = tbl.id";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	/*SELECT LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3) mes,YEAR(f.`fechaFac`) gestion, 
-						IFNULL(ROUND ((SUM(fd.facturaPUnitario*fd.facturaCantidad)),2),0) lp , 
-						IFNULL(ROUND ((SUM(fd3.facturaPUnitario*fd3.facturaCantidad)),2),0) pts,
-						IFNULL(ROUND ((SUM(fd4.facturaPUnitario*fd4.facturaCantidad)),2),0) scz
-			FROM factura AS f
-			LEFT JOIN facturadetalle AS fd ON fd.idFactura=f.idFactura  AND f.almacen=1
-			LEFT JOIN facturadetalle fd3 ON fd3.idFactura=f.idFactura AND f.almacen= 3
-			LEFT JOIN facturadetalle fd4 ON fd4.idFactura=f.idFactura AND f.almacen= 4
-			WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin' 
-			AND anulada=0
-			GROUP BY MONTH(f.`fechaFac`)
-			ORDER BY f.`fechaFac` */
+
 	public function mostrarVentasHoy($ini)
 	{ 
 		$sql="SELECT SUM(total) ventasHoy, sum(facturaCantidad) cantidadHoy

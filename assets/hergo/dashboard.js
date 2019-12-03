@@ -11,7 +11,7 @@ $(document).ready(function(){
 let today = moment().subtract(0, 'month').startOf('day').format('YYYY-MM-DD')
 let yearAgo = moment().subtract(11, 'month').startOf('month').format('YYYY-MM-DD')
 
-function ventasChart(meses, alm1, alm2, alm3) {
+function ventasChart(meses, alm1, alm2, alm3,totalMes) {
     var ctx = document.getElementById('ventas').getContext('2d');
     var chart = new Chart(ctx, {
         type: 'line',
@@ -28,8 +28,7 @@ function ventasChart(meses, alm1, alm2, alm3) {
             {
                 label: "POTOSI",
                 borderColor: "#ff0000",
-                //data: alm2, 
-                data: [332391.2 , 246947.7 , 721275.85 , 447259.5 , 123229.37 , 1027070.1 , 703953.9 , 290102.35 , 218533.7 , 195155.2 , 0 , 0],
+                data: alm2, 
                 fill: false,
                 pointStyle: 'rectRounded',
                 lineTension: 0,
@@ -37,12 +36,20 @@ function ventasChart(meses, alm1, alm2, alm3) {
             {
               label: "SANTA CRUZ",
               borderColor: "#009f00",
-              //data: alm2,
-              data:[690434.22 , 847221.72 , 598371.63 , 458979.74 , 717003.87 , 803260.22 , 373704.07 , 433670.264 , 996002.96 , 405019.7788 , 0 , 0],
+              data: alm3,
               fill: false,
               pointStyle: 'rectRounded',
               lineTension: 0,
-          }
+            },
+            {
+              label: "TOTAL",
+              borderColor: "#000000",
+              data: totalMes,
+              fill: true,
+              pointStyle: 'rectRounded',
+              lineTension: 0,
+
+            }
         ]},
         options: { 
           scales: { 
@@ -76,8 +83,6 @@ function getVentas() {
     today1 = moment().subtract(-1, 'day').startOf('day').format('YYYY-MM-DD')
     ini = yearAgo
     fin = today1
-    console.log(yearAgo);
-    console.log(today1);
     $.ajax({
       type: "POST",
       url: base_url('index.php/Principal/ventasGestion'),
@@ -87,12 +92,12 @@ function getVentas() {
         f: fin,
       }, 
     }).done(function (res) {
-      console.log(res)
-      let monto = res.map (ventas => ventas.monto)
-      //let potosi = res.map (ventas => ventas.pts)
-      //let santaCruz = res.map (ventas => ventas.scz)
+      let montoLP = res.map (ventas => ventas.montoLP)
+      let montoPTS = res.map (ventas => ventas.montoPTS)
+      let montoSCZ = res.map (ventas => ventas.montoSCZ)
+      let montoTotal = res.map (ventas => ventas.totalMes)
       let tiempo = res.map( ventas => ventas.mes + " " + ventas.gestion)
-      ventasChart(tiempo, monto)
+      ventasChart(tiempo, montoLP, montoPTS, montoSCZ, montoTotal)
     }).fail(function (jqxhr, textStatus, error) {
       var err = textStatus + ", " + error;
       console.log("Request Failed: " + err);
@@ -110,7 +115,7 @@ function getIngresosHoy() {
       i: ini,
     }, 
   }).done(function (res) {
-    console.log(res);
+    //console.log(res);
     if (res =='') {
       console.log('vacioIngresosHoy');
       $("#ingresosHoy").html('0 '+"<small> Bs</small>")

@@ -6,6 +6,7 @@ class Principal extends CI_Controller
 	public function __construct()
 	{	
 		parent::__construct();
+		$this->load->library('LibAcceso');
 		$this->load->helper('url');	
 		$this->load->model("Dashboard_model");
 		$this->load->model("Ingresos_model");
@@ -137,6 +138,7 @@ class Principal extends CI_Controller
 	}
 	public function ventasGestion()  //******cambiar a funcion del modelo
 	{
+		$this->libacceso->acceso(55);
 		if($this->input->is_ajax_request())
         {
         	$ini=$this->security->xss_clean($this->input->post("i"));//fecha inicio
