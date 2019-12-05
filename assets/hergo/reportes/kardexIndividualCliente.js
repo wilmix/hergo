@@ -53,7 +53,7 @@ $(document).ready(function () {
 $(document).on("click", "#pdf", function () {
     let ini = iniciofecha.format('YYYY-MM-DD')
     let fin = finfecha.format('YYYY-MM-DD')
-    let almacen = $("#almacen_filtro").val()
+    let almacen = ($("#almacen_filtro").val() == '') ? 0 :$("#almacen_filtro").val()
     let cliente = $("#idCliente").val()
     let mon = $("#moneda").val()
     let imprimir = base_url("pdf/ReportKardexCliente/index/") + cliente + '/' +  almacen + '/' + ini + '/' + fin +  '/' + mon;

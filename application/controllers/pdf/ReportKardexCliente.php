@@ -13,8 +13,7 @@ class ReportKardexCliente extends CI_Controller {
       $cliente = $lineas ? utf8_decode(strtoupper($lineas[0]->nombreCliente)) : '';
       $alm = $lineas ? utf8_decode(strtoupper($lineas[0]->almacen)) : '';
 
-
-      
+     
     //PARAMETROS PARA LA LIBRERIA
     $params = array(
       'alm' => $alm,
