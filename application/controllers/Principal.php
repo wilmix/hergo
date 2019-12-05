@@ -14,7 +14,8 @@ class Principal extends CI_Controller
 				base_url('assets/bootstrap/css/bootstrap.min.css'),
 				base_url("assets/fa/css/font-awesome.min.css"),
 				base_url("assets/dist/css/AdminLTE.min.css"),
-				base_url("assets/dist/css/skins/skin-blue.min.css"),
+				base_url("assets/dist/css/skins/skin-blue.min.css")
+				
 			);
 		$this->cabecera_script=array(
 				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
@@ -22,9 +23,8 @@ class Principal extends CI_Controller
 				base_url('assets/dist/js/app.min.js'),
 				base_url('assets/plugins/slimscroll/slimscroll.min.js'),
 				base_url('assets/plugins/daterangepicker/moment.min.js'),
-				base_url('assets/hergo/dashboard.js'),
-				
-			
+				base_url('assets/hergo/dashboard.js')
+	
 			);
 		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');

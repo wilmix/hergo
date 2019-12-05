@@ -121,7 +121,16 @@
                   </div>
                   <!-- /.description-block -->
                 </div>
+
+                <hr>
+                <br>
+                <hr>
+                
               </div>
+                  <div>
+                      <table id="table_id" class="table table-bordered table-hover" style="width:100%">
+                      </table>
+                  </div>
               <!-- /.row -->
             </div>
             <!-- /.box-footer -->

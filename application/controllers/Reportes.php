@@ -1113,6 +1113,9 @@ class Reportes extends CI_Controller
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
+			/*************AUTOCOMPLETE**********/
+            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
+            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
 
 	        /*************DATERANGEPICKER**********/
 	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
@@ -1126,7 +1129,7 @@ class Reportes extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
 			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-			$this->datos['clientes']=$this->Reportes_model->retornarClientes3();
+			//$this->datos['clientes']=$this->Reportes_model->retornarClientes3();
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);

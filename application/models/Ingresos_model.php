@@ -272,10 +272,10 @@ class Ingresos_model extends CI_Model
     }
      public function retornarClienteBusqueda($b)
     {
-        $sql="SELECT *
-        FROM clientes a        
-        where nombreCliente like '$b%' or documento like '$b%' ORDER By nombreCliente asc
-        LIMIT 20";
+        $sql="SELECT c.`idCliente`, c.`nombreCliente`, c.`documento`
+        FROM clientes c     
+        where nombreCliente like '%$b%' or documento like '%$b%' ORDER By nombreCliente asc
+        LIMIT 30";
         
         $query=$this->db->query($sql);
         return $query;

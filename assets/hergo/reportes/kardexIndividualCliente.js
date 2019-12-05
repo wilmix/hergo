@@ -3,17 +3,14 @@ let iniciofecha = moment().subtract(0, 'year').startOf('year')
 let finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function () {
     tituloReporte()
-    nomCliente = $('#clientes_filtro').find(':selected').text();
-    $('#export').click(function () {
+     $('#export').click(function () {
+        nameCliente = ($("#nameClient").val())
         $('#tablaKardex').tableExport({
         type:'excel',
-        fileName: 'KARDEX INDIVIDUAL '+ nomCliente,
+        fileName: 'KARDEX INDIVIDUAL ' + nameCliente,
         numbers: {output : false}
         })
     });
-    console.log(nomCliente);
-    $('#clientes_filtro').select2();
-
     let start = iniciofecha
     let end = finfecha
 
@@ -57,7 +54,7 @@ $(document).on("click", "#pdf", function () {
     let ini = iniciofecha.format('YYYY-MM-DD')
     let fin = finfecha.format('YYYY-MM-DD')
     let almacen = $("#almacen_filtro").val()
-    let cliente = $("#clientes_filtro").val()
+    let cliente = $("#idCliente").val()
     let mon = $("#moneda").val()
     let imprimir = base_url("pdf/ReportKardexCliente/index/") + cliente + '/' +  almacen + '/' + ini + '/' + fin +  '/' + mon;
     console.log(imprimir);
@@ -74,17 +71,13 @@ $(document).on("change", "#moneda", function () {
 $(document).on("click", "#refresh", function () {
     retornarKardexCliente();
 })
-$(document).on("change", "#clientes_filtro", function () {
-    retornarKardexCliente();
-})
-
 
 function retornarKardexCliente() {
     tituloReporte()
     let ini = iniciofecha.format('YYYY-MM-DD')
     let fin = finfecha.format('YYYY-MM-DD')
     let almacen = $("#almacen_filtro").val()
-    let cliente = $("#clientes_filtro").val()
+    let cliente = $("#idCliente").val()
     let mon = $("#moneda").val()
     agregarcargando();
     $.ajax({
@@ -103,6 +96,18 @@ function retornarKardexCliente() {
         if (res[0].fecha ==='') {
             res.shift()
         }
+        res.forEach(e => {
+            if (e.numDocumento=='-') {
+                e.tipo = '-'
+            } else if (e.saldoNE>0) {
+                e.tipo = 'NE'
+            } else if (e.saldoTotalFactura>0) {
+                e.tipo = 'FAC'
+            } else if (e.saldoTotalPago>0) {
+                e.tipo = 'REC'
+            }
+
+        });
         $("#tablaKardex").bootstrapTable('destroy');    
         $("#tablaKardex").bootstrapTable({ 
             data: res,
@@ -135,6 +140,13 @@ function retornarKardexCliente() {
 
                 },
                 {
+                    field: 'tipo',
+                    title: 'Tipo.',
+                    width:'80px',
+                    align: 'left',
+                    
+                },
+                {
                     field: 'numDocumento',
                     title: 'N° Doc.',
                     width:'80px',
@@ -145,7 +157,7 @@ function retornarKardexCliente() {
                     field: 'almacen',
                     title: 'Alm.',
                     align: 'center',
-                    visible: false
+                    width:'150px',
                 },
                 {
                     field: 'detalle',
@@ -211,9 +223,8 @@ function operateFormatter3(value, row, index) {
     num = num.toFixed(2);
     return (formatNumber.new(num));
 }
-function tituloReporte() {
+function tituloReporte(nomCliente) {
     let almText = $('#almacen_filtro').find(":selected").text()
-    let nomCliente = $('#clientes_filtro').find(':selected').text()
     let mon = $("#moneda").val()
     mon = mon == 0 ? 'BOLIVIANOS' : 'DOLARES'
     $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'))
@@ -229,3 +240,44 @@ function sumaColumna(data) {
     }, 0);
     return (formatNumber.new(totalSum.toFixed(2)));
   }
+/*******************CLIENTE*****************/
+$(function () {
+    $("#cliente_egreso").autocomplete({
+            minLength: 2,
+            autoFocus: true,
+            source: function (request, response) {
+                $("#cargandocliente").show(150)
+                $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+                glob_guardar_cliente = false;
+                $.ajax({
+                    url: base_url("index.php/Egresos/retornarClientes"),
+                    dataType: "json",
+                    data: {
+                        b: request.term.trim()
+                    },
+                    success: function (data) {
+                        response(data);
+                        $("#cargandocliente").hide(150)
+                    }
+                });
+
+            },
+            select: function (event, ui) {
+                tituloReporte(ui.item.nombreCliente)
+                $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
+                $("#cliente_egreso").val(ui.item.nombreCliente + " - " + ui.item.documento);
+                $("#idCliente").val(ui.item.idCliente);
+                $("#nameClient").val(ui.item.nombreCliente);
+                glob_guardar_cliente = true;
+                retornarKardexCliente()
+                return false;
+            }
+        })
+        .autocomplete("instance")._renderItem = function (ul, item) {
+
+            return $("<li>")
+                .append("<a><div>" + item.nombreCliente + " </div><div style='color:#615f5f; font-size:10px'>" + item.documento + "</div></a>")
+                .appendTo(ul);
+        };
+
+});

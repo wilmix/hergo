@@ -24,13 +24,10 @@
                         <option value="1">$U$</option>
                     </select>
 
-                    <select class="form-control"  data-style="btn-primary" id="clientes_filtro" name="clientes_filtro">
-                        <?php foreach ($clientes->result_array() as $fila): ?>
-                        <option value=<?= $fila['cliente'] ?> ><?= $fila['nombreCliente'].' | '.$fila['documento'] ?></option>
-                        <?php endforeach ?>
-                    </select>
 
-                    <button  type="button" class="btn btn-primary btn-sm" id="kardex">
+                    
+
+                   <button  type="button" class="btn btn-primary btn-sm" id="kardex">
                         <span>
                         <i class="fa fa-share-square"></i>
                         </span>
@@ -44,9 +41,24 @@
                     <h4 id="titleMoneda"></h4>
                     <h4 id="ragoFecha"></h4>
                 </div>
+                <hr>
+                    <div class="col-xs-12 col-lg-12 col-md-12">
+                        <span style="display: none;" id="cargandocliente">
+                        <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                        </span>
+                        <input class="form-control form-control-sm" type="text" id="cliente_egreso" name="cliente_egreso" ">
+                        <input type="text" readonly="true" name="idCliente" id="idCliente" class="hidden">
+                        <input type="text" readonly="true" name="nameClient" id="nameClient" class="hidden" >
+                        <div style="right: 22px;top:10px;position: absolute;" id="clientecorrecto">
+                        <i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                <hr>
                 <table id="tablaKardex" data-toolbar="#toolbar2" data-toggle="table">
                 </table>
              </div>
         </div>
     </div>
 </div>
+
+

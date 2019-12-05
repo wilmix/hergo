@@ -1,12 +1,21 @@
-$(document).ready(function(){
+  $(document).ready(function(){
+  
+  
     getVentasHoy()
     getIngresosHoy()
     getVentas()
     getInfoHoy()
     getNotaEntregaHoy()
     getVentaCajaHoy()
+    //newTable()
     //getCantidadHoy()
 })
+
+function numberCoin (data, type, row){
+  num = Math.round(data * 100) / 100
+  num = num.toFixed(2);
+  return (formatNumber.new(num));
+}
 
 let today = moment().subtract(0, 'month').startOf('day').format('YYYY-MM-DD')
 let yearAgo = moment().subtract(11, 'month').startOf('month').format('YYYY-MM-DD')
@@ -227,4 +236,149 @@ function getVentaCajaHoy() {
     var err = textStatus + ", " + error;
     console.log("Request Failed: " + err);
   });
+}
+
+function newTable() {
+  $.ajax({
+  
+    type: "POST",
+    url: base_url('index.php/Principal/ventasGestion'),
+    dataType: 'json',
+    data: {
+      i: '2017-01-01',
+      f: '2019-12-01',
+    }, 
+    success: function (obj, textstatus) {
+      $('#table_id thead tr').clone(true).appendTo( '#example thead' );
+      $('#table_id thead tr:eq(1) th').each( function (i) {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+  
+          $( 'input', this ).on( 'keyup change', function () {
+              if ( table.column(i).search() !== this.value ) {
+                  table
+                      .column(i)
+                      .search( this.value )
+                      .draw();
+              }
+          } );
+      } );
+  
+            $('#table_id').DataTable({
+              data: obj,
+              fixedHeader: {
+                      header: true,
+              },
+              order: [],
+              paging: false,
+              orderCellsTop: true,
+              responsive: true,
+              dom: 'Bfrtip',
+              buttons: [
+                        'colvis',
+                        {
+                          extend: 'copy',
+                          text: '<i class="fa fa-files-o" style="color:red;">Copy</i>',
+                          header : false,
+                          title : null,
+                          exportOptions: {
+                              columns: [':visible' ],
+                              title: null,
+                              modifier: {
+                                order: 'current',
+                              }
+                          }
+                        },
+
+                        'print'
+                        ],
+                columns: [
+                          { 
+                            data: 'id',
+                            title: 'id'
+                          }, 
+
+                            { 
+                              data: 'mes',
+                              title: 'Month'
+                            }, 
+                            { 
+                              data: 'gestion',
+                              title: 'Gestión', 
+                              //searchable:false,
+                              //visible: false
+                            },
+                            { 
+                              data: 'montoLP',
+                              title: 'La Paz', 
+                              className: 'text-right',
+                              render:numberCoin,
+                              
+                            }, 
+                            { 
+                              data: 'montoPTS',
+                              title: 'Potosì',  
+                              className: 'text-right',
+                              render:numberCoin,
+                            }, 
+                            { 
+                              data: 'montoSCZ',
+                              title: 'Santa Cruz', 
+                              className: 'text-right',
+                              render:numberCoin, 
+                            }, 
+                            { 
+                              data: 'totalMes',
+                              title: 'Total',
+                              className: 'text-right',
+                              render:numberCoin,  
+                            }
+                ],
+               /*initComplete: function () {
+                  var api = this.api();
+                  api.columns([1,3]).indexes().flatten().each(function (i) {
+                        var column = api.column(i);
+                        var select = $('<select><option value=""></option></select>')
+                          .appendTo( $(column.header()) )
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                  .search( val ? '^'+val+'$' : '', true, false )
+                                  .draw();
+                            });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                }*/
+                /*initComplete: function () {
+                  this.api().columns().every( function () {
+                      var column = this;
+                      var select = $('<select><option value=""></option></select>')
+                          .appendTo( $(column.header()) )
+                          .on( 'change', function () {
+                              var val = $.fn.dataTable.util.escapeRegex(
+                                  $(this).val()
+                              );
+       
+                              column
+                                  .search( val ? '^'+val+'$' : '', true, false )
+                                  .draw();
+                          } );
+       
+                      column.data().unique().sort().each( function ( d, j ) {
+                          select.append( '<option value="'+d+'">'+d+'</option>' )
+                      } );
+                  } );
+              }*/
+            });
+    },
+    error: function (obj, textstatus) {
+        alert(obj.msg);
+    }
+});
 }
