@@ -297,7 +297,7 @@ class Reportes extends CI_Controller
 
 	public function estadoVentasCostoItemNew()
 	{
-		//$this->libacceso->acceso(42);
+		$this->libacceso->acceso(42);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -331,7 +331,7 @@ class Reportes extends CI_Controller
 	}
 	public function pruebaKardex()
 	{
-		//$this->libacceso->acceso(42);
+		$this->libacceso->acceso(42);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
