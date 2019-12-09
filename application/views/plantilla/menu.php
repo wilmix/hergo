@@ -207,7 +207,7 @@
         </ul>
       </li>
 
-      <li class="timeline"><a href="<?php echo base_url("timeline") ?>">Timeline<small class="label pull-right bg-green">new</small></a></li>
+      <li class=""><a href="<?php echo base_url("timeline") ?>"> Novedades <small class="label pull-right bg-green"> new </small></a></li>
     </ul>
     <!-- /.sidebar-menu -->
   </section>

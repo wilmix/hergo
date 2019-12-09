@@ -4,18 +4,18 @@
       <div class="box-body">
           <div class="text-center">
           <div class="container">
-          <h2>Timeline </h2>
+          <h2>¿Qué hay de nuevo? </h2>
           </div>
-            <h4 class="text-center">A continuación se muestran el trabajo realizado en: <br>
+            <h4 class="text-center">
                 <dl>
                 <dt>
-                    <span class="fa fa-check-square" style="color:orange"></span>  Mejoras readtzadas 
+                    <span class="fa fa-plus" style="color:green"></span>   Nuevas características o módulos
                 </dt>
                 <dt>
-                    <span class="fa fa-wrench" style="color:blue"></span>  Correcciones o ajustes reportadas por los compañeros. 
+                    <span class="fa fa-check-square" style="color:orange"></span>  Mejoras realizadas 
                 </dt>
                 <dt>
-                    <span class="fa fa-plus" style="color:green"></span>  Nuevas características o módulos 
+                    <span class="fa fa-wrench" style="color:blue"></span>   Correcciones o ajustes reportadas por los compañeros.
                 </dt>
                 
                 </dl>
@@ -37,9 +37,9 @@
                                     <i class="fa fa-plus bg-green"></i>
 
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"><a href="#">Creación del módulo Timeline</a></h3>
+                                        <h3 class="timeline-header"><a href="#">Creación del módulo Novedades</a></h3>
                                         <div class="timeline-body">
-                                        Se creó el módulo Timeline donde se muestra el trabajo realizado por el area de sistemas visualizable amigablemente en una linea temporal para el conocimiento de toda la empresa.
+                                        Se creó el módulo Novedades donde se muestra el trabajo realizado por el área de sistemas visualizable amigablemente en una línea temporal para el conocimiento de toda la empresa.
                                         </div>
                                     </div>
                                 </li>
@@ -52,9 +52,9 @@
                                     <i class="fa fa-wrench bg-blue"></i>
 
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"><a href="#">Correcciòn en Kardex Cliente</a></h3>
+                                        <h3 class="timeline-header"><a href="#">Corrección en Kardex Cliente</a></h3>
                                         <div class="timeline-body">
-                                        Se corrigió y optimizo la búsqueda de clientes en el Kardex Individual Cliente. Ahora funciona mucho mas fluido. Teniendo en cuenta que tenemos casi 18.000 clientes a nivel nacional.
+                                        Se corrigió y optimizo la búsqueda de clientes en el Kardex Individual Cliente. Ahora funciona mucho más fluido. Teniendo en cuenta que tenemos casi 18.000 clientes a nivel nacional.
                                         </div>
                                     </div>
                                 </li>
@@ -74,9 +74,9 @@
                                     <i class="fa fa-plus bg-green"></i>
 
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"><a href="#">Creación Nuevo modulo Prueba Kardex</a></h3>
+                                        <h3 class="timeline-header"><a href="#">Creación Nuevo módulo Prueba Kardex</a></h3>
                                         <div class="timeline-body">
-                                        Se agrego un nuevo reporte Prueba Kardex para realizar la prueba y dar mayor información en el trabajo entre inventarios y sistema contable.
+                                            Se agrego un nuevo reporte Prueba Kardex para realizar la prueba y dar más información en el trabajo entre inventarios y sistema contable.
                                         </div>
                                     </div>
                                 </li>
@@ -113,7 +113,7 @@
                                     <div class="timeline-item">
                                         <h3 class="timeline-header"><a href="#">Corrigió glosa en ingresos</a></h3>
                                         <div class="timeline-body">
-                                        Se corrigió carácteres extraños en glosa de ingresos.
+                                        Se corrigió caracteres extraños en glosa de ingresos.
                                         </div>
                                     </div>
                                 </li>
@@ -127,7 +127,7 @@
                                     <div class="timeline-item">
                                         <h3 class="timeline-header"><a href="#">Añadió Validación Cliente</a></h3>
                                         <div class="timeline-body">
-                                        Se corrigió error encontrado a la posibilidad de crear clientes duplicados reportado por los compañeors.
+                                        Se corrigió error encontrado a la posibilidad de crear clientes duplicados reportado por los compañeros.
                                         </div>
                                     </div>
                                 </li>  
@@ -138,13 +138,13 @@
                                 <li>
                                     <i class="fa fa-plus bg-green"></i>
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"><a href="#">Creación Accesos a modulos Reportes</a></h3>
+                                        <h3 class="timeline-header"><a href="#">Creación Accesos a módulos Reportes</a></h3>
                                         <div class="timeline-body">
-                                        Se creo restriciones en accesos a los siguientes módulos: 
+                                        Se creo restricciones en accesos a los siguientes módulos:
                                         <blockquote>
                                             <ul class="list-group">
-                                                <li>Ventas Cliente Item</li>
-                                                <li>Cliente Ventas  Item</li>
+                                                <li>Ventas Cliente Ítem</li>
+                                                <li>Cliente Ventas Ítem</li>
                                                 <li>Reporte Ingresos</li>
                                                 <li>Reporte Egresos</li>
                                                 <li>Reporte Facturas</li>
@@ -163,9 +163,9 @@
                                 <li>
                                     <i class="fa fa-wrench bg-blue"></i>
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"><a href="#">Correción Busqueda Reporte Facturas Pendientes de Pago</a></h3>
+                                        <h3 class="timeline-header"><a href="#">Corrección Busqueda Reporte Facturas Pendientes de Pago</a></h3>
                                         <div class="timeline-body">
-                                        Se optimizó la manera de busqueda de fechas y visualización del reporte.
+                                        Se optimizó la manera de búsqueda de fechas y visualización del reporte.
                                         </div>
                                     </div>
                                 </li>                              
@@ -177,9 +177,9 @@
                                 <li>
                                     <i class="fa fa-wrench bg-blue"></i>
                                     <div class="timeline-item">
-                                        <h3 class="timeline-header"><a href="#">Correción PDF Egresos</a></h3>
+                                        <h3 class="timeline-header"><a href="#">Corrección PDF Egresos</a></h3>
                                         <div class="timeline-body">
-                                        Se corrigió la fecha de pago en generacion de Nota de Entrega o Ventas Caja en fecha de pago cuando se guardaba vacia.
+                                        Se corrigió la fecha de pago en generación de Nota de Entrega o Ventas Caja en fecha de pago cuando se guardaba vacía.
                                         </div>
                                     </div>
                                 </li>  

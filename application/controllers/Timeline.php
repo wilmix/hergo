@@ -73,9 +73,9 @@ class Timeline extends CI_Controller
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
-			$this->datos['menu']="Timeline";
-			$this->datos['opcion']="Timeline";
-			$this->datos['titulo']="Timeline";
+			$this->datos['menu']="Novedades";
+			$this->datos['opcion']="Novedades";
+			$this->datos['titulo']="Novedades";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
