@@ -40,9 +40,10 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
     }
-	public function mostrarNEporFac($ini=null,$fin=null,$alm="") 
-	{ //cambiar la consulta
-		$sql="SELECT e.`cliente`, e.nmov n,e.idEgresos,t.sigla, e.fechamov, c.nombreCliente, ROUND((SUM(d.`total`)) - (SUM(d.`cantFact` * d.`punitario`)),2) total,  e.estado,e.fecha, 
+	public function mostrarNEporFac($ini=null,$fin=null,$alm="",$idCliente) 
+	{ 
+		if ($idCliente == 'TODOS') {
+			$sql="SELECT e.`cliente`, e.nmov n,e.idEgresos,t.sigla, e.fechamov, c.nombreCliente, ROUND((SUM(d.`total`)) - (SUM(d.`cantFact` * d.`punitario`)),2) total,  e.estado,e.fecha, 
 		CONCAT(u.first_name,' ', u.last_name) autor, a.almacen, m.sigla monedasigla, ROUND(ROUND((SUM(d.`total`)) - (SUM(d.`cantFact` * d.`punitario`)),2) /tc.`tipocambio`,2) totalDol
 		FROM egresos e
 					INNER JOIN egredetalle d
@@ -66,10 +67,35 @@ class Reportes_model extends CI_Model
 					AND e.fechamov 
 					BETWEEN '$ini' AND '$fin'
 					AND e.almacen LIKE '%$alm'
-					GROUP BY c.nombreCliente, e.idegresos WITH ROLLUP
-					-- ORDER BY c.nombreCliente, n
-					";
-		
+					GROUP BY c.nombreCliente, e.idegresos WITH ROLLUP";
+		} else {
+			$sql="SELECT e.`cliente`, e.nmov n,e.idEgresos,t.sigla, e.fechamov, c.nombreCliente, ROUND((SUM(d.`total`)) - (SUM(d.`cantFact` * d.`punitario`)),2) total,  e.estado,e.fecha, 
+			CONCAT(u.first_name,' ', u.last_name) autor, a.almacen, m.sigla monedasigla, ROUND(ROUND((SUM(d.`total`)) - (SUM(d.`cantFact` * d.`punitario`)),2) /tc.`tipocambio`,2) totalDol
+			FROM egresos e
+					INNER JOIN egredetalle d
+					ON e.idegresos=d.idegreso
+					INNER JOIN tmovimiento t 
+					ON e.tipomov = t.id 
+					INNER JOIN clientes c 
+					ON e.cliente=c.idCliente
+					INNER JOIN users u 
+					ON u.id=e.autor 
+					INNER JOIN almacenes a 
+					ON a.idalmacen=e.almacen 
+					INNER JOIN moneda m 
+					ON e.moneda=m.id 
+					INNER JOIN tipocambio tc
+					ON e.`fechamov` = tc.`fecha`
+					WHERE
+					e.`estado`<>1
+					AND t.id = 7
+					AND e.anulado = 0
+					AND e.fechamov 
+					BETWEEN '$ini' AND '$fin'
+					AND e.almacen LIKE '%$alm'
+					AND e.`cliente` = '$idCliente'
+					GROUP BY e.idegresos WITH ROLLUP";
+		}
 		$query=$this->db->query($sql);		
 		return $query;
 	}

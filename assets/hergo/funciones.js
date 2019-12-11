@@ -378,3 +378,8 @@ function mantenerMenu() {
   var x = $("#masterMenu").find("." + menu).addClass("active").closest(".treeview").addClass("active");;
 
 }
+function numberDecimal(value, row, index) {
+  num = Math.round(value * 100) / 100
+  num = num.toFixed(2);
+  return (formatNumber.new(num));
+}

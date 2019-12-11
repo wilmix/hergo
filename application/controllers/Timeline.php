@@ -6,6 +6,8 @@ class Timeline extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		if(!$this->session->userdata('logeado'))
+		redirect('auth', 'refresh');
 		/*******/
 		$this->load->library('LibAcceso');
 	
@@ -49,6 +51,7 @@ class Timeline extends CI_Controller
         		
 
 		);
+		
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
@@ -70,9 +73,6 @@ class Timeline extends CI_Controller
 	}
 
 	public function index(){
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
 			$this->datos['menu']="Novedades";
 			$this->datos['opcion']="Novedades";
 			$this->datos['titulo']="Novedades";
