@@ -468,10 +468,8 @@ function showNegatives() {
               },
           },
           {
+              extend: 'pdf',
               text: '<i class="fas fa-print" aria-hidden="true" style="font-size:18px;"></i>',
-              action: function ( e, dt, node, config ) {
-                  window.window.print()
-              }
           },
           {
               text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
