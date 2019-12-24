@@ -40,9 +40,9 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
     }
-	public function mostrarNEporFac($ini=null,$fin=null,$alm="",$idCliente) 
+	public function mostrarNEporFac($ini=null,$fin=null,$alm,$idCliente) 
 	{ 
-		if ($idCliente == 'TODOS') {
+		if ($idCliente == 'all') {
 			$sql="SELECT e.`cliente`, e.nmov n,e.idEgresos,t.sigla, e.fechamov, c.nombreCliente, ROUND((SUM(d.`total`)) - (SUM(d.`cantFact` * d.`punitario`)),2) total,  e.estado,e.fecha, 
 		CONCAT(u.first_name,' ', u.last_name) autor, a.almacen, m.sigla monedasigla, ROUND(ROUND((SUM(d.`total`)) - (SUM(d.`cantFact` * d.`punitario`)),2) /tc.`tipocambio`,2) totalDol
 		FROM egresos e

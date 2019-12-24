@@ -154,4 +154,10 @@ class Dashboard_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function negatives($alm,$ges) 
+	{ 
+		$sql="CALL negatives_sp('$alm','$ges')";
+		$query=$this->db->query($sql);	
+		return $query;
+	}
 }

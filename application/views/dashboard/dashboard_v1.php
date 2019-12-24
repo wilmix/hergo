@@ -141,6 +141,46 @@
       </div>
 
 
+      <div class="row">
+        <div class="col-md-6">
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Negativos</h3>
+
+              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-12 hidden-xs">
+                  <div class="chart hidden-xs">
+                    <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
+                        <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
+                        <?php foreach ($almacen->result_array() as $fila): ?>
+                        <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
+                        <?php endforeach ?>
+                        <option value="" >TODOS</option>
+                    </select>
+
+                    <table id="negatives" class="table table-hover table-striped " style="width:100%"></table>  
+                  </div>
+                  <!-- /.chart-responsive -->
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+            </div>
+            <!-- ./box-body -->
+            <!-- /.box-footer -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+
+      
+
+
 
 
 

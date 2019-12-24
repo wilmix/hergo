@@ -1,10 +1,21 @@
 let iniciofecha = moment().subtract(5, 'year').startOf('year')
 let finfecha = moment().subtract(0, 'year').endOf('year')
 var val
+var table
+
+
+
+
+
 $(document).ready(function () {
     
+    $.fn.dataTable.ext.errMode = 'none';
+     
+
+
+
    
-    tituloReporte()
+    
     $(".tiponumerico").inputmask({
         alias: "decimal",
         digits: 2,
@@ -49,25 +60,26 @@ $(document).ready(function () {
     $('#fechapersonalizada').on('apply.daterangepicker', function (ev, picker) {
         retornarNEporFac();
     });
-    retornarNEporFac();
+    showNE()
+    //retornarNEporFac();
 })
 $(document).on("change", "#almacen_filtro", function () {
-
-    retornarNEporFac();
+    showNE()
+    //retornarNEporFac();
 })
 $(document).on("change", "#cliente_egreso", function () {
-
-    retornarNEporFac();
+    showNE()
+    //retornarNEporFac();
 })
 
 
 
 $(document).on("click", "#refresh", function () {
-    
-    retornarNEporFac()
+    showNE()
+    //retornarNEporFac()
 
 })
-    var table
+
 function retornarNEporFac()
 {
 
@@ -76,10 +88,10 @@ function retornarNEporFac()
     tituloReporte()
     ini = iniciofecha.format('YYYY-MM-DD')
     fin = finfecha.format('YYYY-MM-DD')
-    alm = $("#almacen_filtro").val();
+    alm = $("#almacen_filtro").val() == '' ? 'all' : $("#almacen_filtro").val()
     nameCliente = $("#cliente_egreso").val();
     almText = $('#almacen_filtro').find(":selected").text();
-    idCliente = nameCliente == '' || nameCliente == '' ? 'TODOS' : $("#idCliente").val();
+    idCliente = nameCliente == '' || nameCliente == 'TODOS' ? 'all' : $("#idCliente").val();
 
     agregarcargando();
     $.ajax({
@@ -90,157 +102,25 @@ function retornarNEporFac()
             i: ini,
             f: fin,
             a: alm,
-            c: idCliente
+            c: idCliente,
         },
 
     }).done(function (res)
-     {
+     { 
             quitarcargando();
-            //$("#tablaNotasEntregaFacturar").DataTable('destroy');    
-            //console.log($("#tablaNotasEntregaFacturar"));        
             table = $('#tablaNotasEntregaFacturar').DataTable({
             data: res,
             destroy: true,
             dom: 'Bfrtip',
+            lengthMenu: [
+                [ 10, 25, 50, -1 ],
+                [ '10 filas', '25 filas', '50 filas', 'Todo' ]
+            ],
+            pageLength: 10,
             createdRow: function( row, res, dataIndex){
                 if (res.idEgresos == null ) {
                     $(row).addClass('subtitle')
                 }
-            },
-            //orderCellsTop: true,
-            //filter:true,
-            info:false,
-            //stateSave: true,
-            stateSaveParams: function (settings, data) {
-                //delete data.order;
-                data.order = [];
-            },
-            buttons: [
-                {
-                    extend: 'colvis',
-                    text: '<i class="fa fa-eye" aria-hidden="true" style="font-size:18px;"> </i>',
-                    //collectionLayout: 'fixed two-column',
-                    className: 'btn btn-secondary',
-                    postfixButtons: [ 'colvisRestore' ]
-                },
-                
-                {
-                  extend: 'copy',
-                  text: 'Copiar',
-                  className: 'btn btn-primary',
-                  header : false,
-                  title : null,
-                  exportOptions: {
-                      columns: [':visible' ],
-                      title: null,
-                      modifier: {
-                        order: 'current',
-                      }
-                  }
-                },
-                {
-                    extend: 'excel',
-                    className: 'btn btn-success',
-                    autoFilter: true,
-                    //messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
-                    title: 'Notas de Entrega Pendientes de Pago ',
-                    exportOptions: {
-                        columns: ':visible'
-                    },
-                    /*customize: function( xlsx ) {
-                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
-         
-                        $('row c[r^="C"]', sheet).attr( 's', '2' );
-                    }*/
-
-                },
-                /*{
-                    extend: 'pdf',
-                    className: 'btn btn-danger',
-                    //messageTop: 'PDF created by PDFMake with Buttons for DataTables.',
-                    pageSize: 'LETTER',
-                    title: 'Notas de Entrega Pendientes de Pago\n'+ nameCliente + '\n' + almText ,
-                    customize: function(doc) {
-                       console.dir(doc.content[1])
-                        doc.content[1].table.widths = [ '15%', '40%', '5%', '10%', '10%','20%']
-                        console.dir(doc.content[1])
-
-                        //doc.content[1].table.widths[0] = 200
-                        let countRow = doc.content[1].table.body.length
-                        console.log(countRow);
-                        for (i = 1; i < countRow; i++) {
-                            doc.content[1].table.body[i][2].alignment = 'center';
-                            doc.content[1].table.body[i][3].alignment = 'right';
-                            doc.content[1].table.body[i][4].alignment = 'right';
-                            //doc.content[1].table.body[i][5].alignment = 'right';
-                        }
-                        return false
-                        
-                        doc.content[1].margin = [ 10, 0, 10, 0 ]
-                        //doc.content[1].width = '*'
-                        /*if (idCliente =='TODOS') {
-                            doc.content[1].margin = [ 0, 0, 0, 0 ] //left, top, right, bottom
-                        } else {
-                            doc.content[1].margin = [ 100, 0, 100, 0 ]
-                        }
-
-                    },
-                    exportOptions: {
-                        columns: ':visible',
-                        stripNewlines: false
-                    },
-                },*/
-                {
-                    text: '<i class="fa fa-print" aria-hidden="true" style="font-size:18px;"></i>',
-                    className: 'btn btn-danger',
-                    action: function ( e, dt, node, config ) {
-                        window.window.print()
-                    }
-                },
-                {
-                    text: '<i class="fa fa-refresh" aria-hidden="true" style="font-size:18px;"></i>',
-                    className: 'btn btn-info',
-                    action: function ( e, dt, node, config ) {
-                        table.state.clear()
-                        window.location.reload()
-                    }
-                },
-            ],
-            order: [],
-            fixedHeader: {
-                header: true,
-                footer: true
-            },
-            paging: false,
-            responsive: true,
-            sorting:false,
-            language: {
-                buttons: {
-                    colvisRestore: "Restaurar",
-                    copyTitle: 'Información copiada',
-                    copySuccess: {
-                        _: '%d lineas copiadas',
-                        1: '1 linea copiada'
-                    },
-                },
-                "decimal": "",
-                    "emptyTable": "No hay información",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ Registros",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "zeroRecords": "Sin resultados encontrados",
-                    "paginate": {
-                        "first": "Primero",
-                        "last": "Ultimo",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
-                    },
             },
             columns: [
                 { 
@@ -254,23 +134,24 @@ function retornarNEporFac()
                     data: 'almacen',
                     title: 'ALMACEN',
                     render:cellEmpy,
-                    visible: alm == '' ? true : false
+                    visible: alm == 'all' ? true : false
                 },
                 { 
                     data: 'nombreCliente',
                     title: 'CLIENTE',
-                    sorting: false
+                    sorting: nameCliente == '' || nameCliente == 'TODOS' ? true : false
                 },
                 { 
                     data: 'n',
                     title: 'Nº',
-                    sorting: false,
+                    sorting:false,
                     className: 'text-center',
                     render:cellEmpy
                 }, 
                 { 
                     data: 'total',
                     title: 'TOTAL BOB',
+                    sorting:false,
                     className: 'text-right',
                     render:numberDecimal
                 }, 
@@ -278,19 +159,135 @@ function retornarNEporFac()
                     data: 'totalDol',
                     title: 'TOTAL $U$',
                     className: 'text-right',
+                    sorting:false,
                     render:numberDecimal
                 },
                 { 
                     data: 'autor',
                     title: 'RESPONSABLE',
                     className: 'text-right',
+                    sorting:false,
                     render:cellEmpy
                 }
 
             ],
-        });
-        //$("#tablaNotasEntregaFacturar").append('<tfoot><tr><th>fecha</th><th></th></tr></tfoot>');
+            stateSave: true,
+            stateSaveParams: function (settings, data) {
+                data.order = []
+                alm == 'all' ? data.columns[1].visible=true : false
+            },
+            buttons: [
+                
+                
+                {
+                  extend: 'copy',
+                  text: '<i class="fas fa-copy" style="font-size:18px;"> </i>',
+                  titleAttr: 'Configuracion',
+                  header : false,
+                  title : null,
+                  exportOptions: {
+                      columns: [':visible' ],
+                      title: null,
+                      modifier: {
+                        order: 'current',
+                      }
+                  }
+                },
+                {
+                    extend: 'excel',
+                    text: '<i class="fas fa-file-excel" aria-hidden="true" style="font-size:18px;"> </i>',
+                    titleAttr: 'ExportExcel',
+                    autoFilter: true,
+                    //messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
+                    title: 'Notas de Entrega Pendientes de Pago ',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                },
+                {
+                    text: '<i class="fas fa-print" aria-hidden="true" style="font-size:18px;"></i>',
+                    action: function ( e, dt, node, config ) {
+                        window.window.print()
+                    }
+                },
+                {
+                    text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
+                    action: function ( e, dt, node, config ) {
+                        retornarNEporFac()
+                    }
+                },
+                {
+                    extend: 'collection',
+                    text: '<i class="fa fa-cogs" aria-hidden="true" style="font-size:18px;"></i>',
+                    titleAttr: 'Configuracion',
+                    autoClose: true,
+                    buttons: [
+                        'pageLength',
+                        {
+                            extend: 'colvis',
+                            text: '<i class="fas fa-eye" aria-hidden="true"> Ver/Ocultar</i>',
+                            collectionLayout: 'fixed two-column',
+                            postfixButtons: [ 'colvisRestore' ]
+                        },
+                        {
+                            text: '<i class="fas fa-redo" aria-hidden="true"> Reestablecer</i>',
+                            className: 'btn btn-link',
+                            action: function ( e, dt, node, config ) {
+                                table.state.clear()
+                                retornarNEporFac()
+                            }
+                        },
 
+                    ]
+                },
+                
+                
+            ],
+            order: [],
+            fixedHeader: {
+                header: true,
+                footer: true
+            },
+            //paging: false,
+            responsive: true,
+            language: {
+                buttons: {
+
+                    colvisRestore: "Restaurar",
+                    copyTitle: 'Información copiada',
+                    pageLength: {
+                                    _: "VER %d FILAS",
+                                    '-1': "VER TODO"
+                                },
+                    copySuccess: {
+                                    _: '%d lineas copiadas',
+                                    1: '1 linea copiada'
+                                },
+                },
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Registros",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+            },
+            
+        });
+        
+        
+        
  
     }).fail(function (jqxhr, textStatus, error) {
         var err = textStatus + ", " + error;
@@ -307,8 +304,10 @@ function prueba() {
 
 function tituloReporte() {
     
-    almText = $('#almacen_filtro').find(":selected").text();
-    $('#tituloReporte').text(almText);
+    almText = $('#almacen_filtro').find(":selected").text() == 'TODOS' ? 'NIVEL NACIONAL' : $('#almacen_filtro').find(":selected").text()
+    client = $('#cliente_egreso').val() == '' || $('#cliente_egreso').val() == 'TODOS' ? '' : $('#cliente_egreso').val()
+    $('#titleAlm').text(almText);
+    $('#titleClient').text(client);
     $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
 }
 function cellEmpy(data, type, row){
@@ -332,6 +331,175 @@ function formato_fecha_corta_sub_ne(data, type, row) {
     }
     return fecha
 }
+
+
+function showNE() {
+    ini = iniciofecha.format('YYYY-MM-DD')
+    fin = finfecha.format('YYYY-MM-DD')
+    alm = $("#almacen_filtro").val() == '' ? 'all' : $("#almacen_filtro").val()
+    nameCliente = $("#cliente_egreso").val();
+    almText = $('#almacen_filtro').find(":selected").text();
+    idCliente = nameCliente == '' || nameCliente == 'TODOS' ? 'all' : $("#idCliente").val();
+    tituloReporte()
+
+    $('#datatable').DataTable({
+       
+        "ajax":{
+                url :  base_url('index.php/Reportes/mostrarNEporFac'),
+                type : 'POST',
+                "dataSrc": "",
+                dataType: "json",
+                data: {
+                        i: ini,
+                        f: fin,
+                        a: alm,
+                        c: idCliente,
+                    },
+        },
+        //"serverSide": true,
+        responsive: true,
+        //destroy: true,
+        dom: 'Bfrtip',
+        pageLength: 10,
+        createdRow: function( row, res, dataIndex){
+            if (res.idEgresos == null ) {
+                $(row).addClass('subtitle')
+            }
+        },
+        stateSave: true,
+        stateSaveParams: function (settings, data) {
+            console.log(this)
+            data.order = []
+            alm == 'all' ? data.columns[1].visible=true : false
+        },
+        order: [],
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+            columns: [
+            { 
+                data: 'fechamov',
+                title: 'FECHA',
+                sorting: false,
+                className: 'text-center',
+                render:formato_fecha_corta_sub_ne,
+            }, 
+            { 
+                data: 'almacen',
+                title: 'ALMACEN',
+                render:cellEmpy,
+                visible: alm == 'all' ? true : false
+            },
+            { 
+                data: 'nombreCliente',
+                title: 'CLIENTE',
+                sorting: nameCliente == '' || nameCliente == 'TODOS' ? true : false
+            },
+            { 
+                data: 'n',
+                title: 'Nº',
+                sorting:false,
+                className: 'text-center',
+                render:cellEmpy
+            }, 
+            { 
+                data: 'total',
+                title: 'TOTAL BOB',
+                sorting:false,
+                className: 'text-right',
+                render:numberDecimal
+            }, 
+            { 
+                data: 'totalDol',
+                title: 'TOTAL $U$',
+                className: 'text-right',
+                sorting:false,
+                render:numberDecimal
+            },
+            { 
+                data: 'autor',
+                title: 'RESPONSABLE',
+                className: 'text-right',
+                sorting:false,
+                render:cellEmpy
+            }
+
+        ],
+        buttons: [
+            
+            
+            {
+                extend: 'copy',
+                text: '<i class="fas fa-copy" style="font-size:18px;"> </i>',
+                titleAttr: 'Configuracion',
+                header : false,
+                title : null,
+                exportOptions: {
+                    columns: [':visible' ],
+                    title: null,
+                    modifier: {
+                    order: 'current',
+                    }
+                }
+            },
+            {
+                extend: 'excel',
+                text: '<i class="fas fa-file-excel" aria-hidden="true" style="font-size:18px;"> </i>',
+                titleAttr: 'ExportExcel',
+                autoFilter: true,
+                //messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
+                title: 'Notas de Entrega Pendientes de Pago ',
+                exportOptions: {
+                    columns: ':visible'
+                },
+            },
+            {
+                text: '<i class="fas fa-print" aria-hidden="true" style="font-size:18px;"></i>',
+                action: function ( e, dt, node, config ) {
+                    window.window.print()
+                }
+            },
+            {
+                text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
+                action: function ( e, dt, node, config ) {
+                    retornarNEporFac()
+                }
+            },
+            {
+                extend: 'collection',
+                text: '<i class="fa fa-cogs" aria-hidden="true" style="font-size:18px;"></i>',
+                titleAttr: 'Configuracion',
+                autoClose: true,
+                buttons: [
+                    'pageLength',
+                    {
+                        extend: 'colvis',
+                        text: '<i class="fas fa-eye" aria-hidden="true"> Ver/Ocultar</i>',
+                        collectionLayout: 'fixed two-column',
+                        postfixButtons: [ 'colvisRestore' ]
+                    },
+                    {
+                        text: '<i class="fas fa-redo" aria-hidden="true"> Reestablecer</i>',
+                        className: 'btn btn-link',
+                        action: function ( e, dt, node, config ) {
+                            this.state.clear()
+                            retornarNEporFac()
+                        }
+                    },
+
+                ]
+            },
+            
+            
+        ],
+     }); 
+}
+
+
+
+
+
 
 
 
@@ -367,28 +535,10 @@ function newTable() {
                         header: true,
                 },
                 order: [],
-                paging: false,
-                orderCellsTop: true,
+                paging: true,
+                //orderCellsTop: true,
                 responsive: true,
                 dom: 'Bfrtip',
-                buttons: [
-                          'colvis',
-                          {
-                            extend: 'copy',
-                            text: '<i class="fa fa-files-o" style="color:red;">Copy</i>',
-                            header : false,
-                            title : null,
-                            exportOptions: {
-                                columns: [':visible' ],
-                                title: null,
-                                modifier: {
-                                  order: 'current',
-                                }
-                            }
-                          },
-  
-                          'print'
-                          ],
                   columns: [
                             { 
                               data: 'id',

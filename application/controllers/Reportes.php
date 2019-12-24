@@ -647,7 +647,67 @@ class Reportes extends CI_Controller
         	$ini=$this->security->xss_clean($this->input->post("i"));
         	$fin=$this->security->xss_clean($this->input->post("f"));
 			$alm=$this->security->xss_clean($this->input->post("a"));
+			$alm = $alm == 'all' ? '' : $alm;
 			$idCliente=$this->security->xss_clean($this->input->post("c"));
+			$res=$this->Reportes_model->mostrarNEporFac($ini,$fin,$alm,$idCliente); 
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function mostrarNEporFacServer()  
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$ini=$this->security->xss_clean($this->input->post("i"));
+        	$fin=$this->security->xss_clean($this->input->post("f"));
+			$alm=$this->security->xss_clean($this->input->post("a"));
+			$alm = $alm == 'all' ? '' : $alm;
+			$idCliente=$this->security->xss_clean($this->input->post("c"));
+
+			$draw = intval($this->input->post("draw"));
+			$start = intval($this->input->post("start"));
+			$length = intval($this->input->post("length"));
+			$order = $this->input->post("order");
+			$search= $this->input->post("search");
+			$search = $search['value'];
+
+			$col = 0;
+			$dir = "";
+			if(!empty($order))
+			{
+				foreach($order as $o)
+				{
+					$col = $o['column'];
+					$dir= $o['dir'];
+				}
+			}
+
+			if($dir != "asc" && $dir != "desc")
+			{
+			$dir = "desc";
+			}
+
+			$valid_columns = array(
+												0=>'cliente',
+												1=>'n',
+												2=>'idEgresos',
+												3=>'sigla',
+												4=>'fechamov',
+												5=>'nombreCliente',
+												6=>'total',
+												7=>'estado',
+												8=>'fecha',
+												9=>'autor',
+												11=>'almacen',
+												12=>'monedaSigla',
+												13=>'totalDol',
+									);
+
+		
 			$res=$this->Reportes_model->mostrarNEporFac($ini,$fin,$alm,$idCliente); 
 			$res=$res->result_array();
 			echo json_encode($res);

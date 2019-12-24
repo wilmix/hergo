@@ -7,6 +7,7 @@
     getInfoHoy()
     getNotaEntregaHoy()
     getVentaCajaHoy()
+    showNegatives()
     //newTable()
     //getCantidadHoy()
 })
@@ -382,3 +383,130 @@ function newTable() {
     }
 });
 }
+$(document).on("change", "#almacen_filtro", function () {
+  showNegatives()
+})
+function showNegatives() {
+  console.log('negatives');
+  ges = '2019'
+  alm = $("#almacen_filtro").val()
+
+  $('#negatives').DataTable({
+      "ajax":{
+              url :  base_url('index.php/Principal/negatives'),
+              type : 'POST',
+              "dataSrc": "",
+              dataType: "json",
+              data: {
+                      g:ges,
+                      a:alm
+                  },
+      },
+      
+      //"serverSide": true,
+      responsive: true,
+      destroy: true,
+      dom: 'Bfrtip',
+      pageLength: 5,
+      stateSave: true,
+      order: [],
+          columns: [
+          { 
+              data: 'lineaS',
+              title: 'Linea',
+              visible: false
+          }, 
+          { 
+              data: 'linea',
+              title: 'linea',
+          },
+          { 
+              data: 'codigo',
+              title: 'Codigo',
+
+          },
+          { 
+            data: 'descp',
+            title: 'Descripción',
+
+          },
+          { 
+            data: 'cantidadSaldo',
+            title: 'Saldo',
+
+          },
+
+
+
+      ],
+      buttons: [
+          
+          
+          {
+              extend: 'copy',
+              text: '<i class="fas fa-copy" style="font-size:18px;"> </i>',
+              titleAttr: 'Configuracion',
+              header : false,
+              title : null,
+              exportOptions: {
+                  columns: [':visible' ],
+                  title: null,
+                  modifier: {
+                  order: 'current',
+                  }
+              }
+          },
+          {
+              extend: 'excel',
+              text: '<i class="fas fa-file-excel" aria-hidden="true" style="font-size:18px;"> </i>',
+              titleAttr: 'ExportExcel',
+              autoFilter: true,
+              //messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
+              title: 'Notas de Entrega Pendientes de Pago ',
+              exportOptions: {
+                  columns: ':visible'
+              },
+          },
+          {
+              text: '<i class="fas fa-print" aria-hidden="true" style="font-size:18px;"></i>',
+              action: function ( e, dt, node, config ) {
+                  window.window.print()
+              }
+          },
+          {
+              text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
+              action: function ( e, dt, node, config ) {
+                showNegatives()
+              }
+          },
+          {
+              extend: 'collection',
+              text: '<i class="fa fa-cogs" aria-hidden="true" style="font-size:18px;"></i>',
+              titleAttr: 'Configuracion',
+              autoClose: true,
+              buttons: [
+                  'pageLength',
+                  {
+                      extend: 'colvis',
+                      text: '<i class="fas fa-eye" aria-hidden="true"> Ver/Ocultar</i>',
+                      collectionLayout: 'fixed two-column',
+                      postfixButtons: [ 'colvisRestore' ]
+                  },
+                  {
+                      text: '<i class="fas fa-redo" aria-hidden="true"> Reestablecer</i>',
+                      className: 'btn btn-link',
+                      action: function ( e, dt, node, config ) {
+                          this.state.clear()
+                          showNegatives()
+                      }
+                  },
+
+              ]
+          },
+          
+          
+      ],
+
+   }); 
+}
+

@@ -333,9 +333,28 @@ function rowStyle(row, index) {
                // "font-size":"120%",
             }
         };
+    } 
+    else if (row.saldo < 0) {
+        return {
+            css: {
+                
+                 "font-weight": "bold",
+                //"border-top": "3px solid white",
+                //"border-bottom": "3px solid white",
+                // "text-align": "right",
+                //"padding": "15px",
+                "background-color": "#ff9494",
+                // "color": "white",
+               // "font-size":"120%",
+            }
+        };
+        
     }
     return {};
 }
+
+
+
 function operateFormatter3(value, row, index) {
 
         num = Math.round(value * 100) / 100

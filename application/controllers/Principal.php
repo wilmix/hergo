@@ -8,6 +8,7 @@ class Principal extends CI_Controller
 		parent::__construct();
 		$this->load->library('LibAcceso');
 		$this->load->helper('url');	
+		$this->load->model("Reportes_model");
 		$this->load->model("Dashboard_model");
 		$this->load->model("Ingresos_model");
 		$this->cabeceras_css=array(
@@ -26,6 +27,8 @@ class Principal extends CI_Controller
 				base_url('assets/hergo/dashboard.js')
 	
 			);
+
+		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
@@ -57,6 +60,8 @@ class Principal extends CI_Controller
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
@@ -219,6 +224,18 @@ class Principal extends CI_Controller
 		if($this->input->is_ajax_request()) {
         	$ini=$this->security->xss_clean($this->input->post("i"));
 			$res=$this->Dashboard_model->cantidadHoy($ini);
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else {
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function negatives() {
+		if($this->input->is_ajax_request()) {
+			$ges=$this->security->xss_clean($this->input->post("g"));
+			$alm=$this->security->xss_clean($this->input->post("a"));
+			$res=$this->Dashboard_model->negatives($alm, $ges);
 			$res=$res->result_array();
 			echo json_encode($res);
 		}

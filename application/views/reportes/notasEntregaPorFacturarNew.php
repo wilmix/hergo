@@ -29,7 +29,7 @@
                   <div class="col-sm-10">
                     <input class="form-control form-control-sm" type="text" id="cliente_egreso" name="cliente_egreso" value="TODOS">
                   </div>  
-                  <input type="text" readonly="true" name="idCliente" id="idCliente" class="hidden" value="TODOS">
+                  <input type="text" readonly="true" name="idCliente" id="idCliente" class="hidden" value="">
                   <div class="col-sm-1">  
                     <button type="button" class="btn btn-primary btn-sm" id="refresh">
                       <span>
@@ -41,16 +41,30 @@
           </div>
 
           <div class="text-center">
-            <h2>NOTAS DE ENTREGA POR FACTURAR NEW - <span id="tituloReporte"></span></h2>
+            <h3>
+              <p>NOTAS DE ENTREGA POR FACTURAR <span class="badge badge-success"> NUEVO </span> </p>
+              <p id="titleAlm"></p>
+              <p id="titleClient"></p>
+            </h3>
+
             <h4 id="ragoFecha"></h4>
           </div>
         </div>
         <div class="box-body">
-          <table id="tablaNotasEntregaFacturar" class="table table-hover table-striped table-sm" style="width:100%">
+          <table id="tablaNotasEntregaFacturar111" class="table table-hover table-striped table-sm" style="width:100%">
           </table>
           </div>
       <!-- /.box-body -->
+        
+            <table id="datatable" class="table table-hover table-striped " style="width:100%"></table>                
+
+
+
+
+
+
         </section>
+
       
     </div>
     <!-- /.box -->

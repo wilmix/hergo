@@ -189,6 +189,7 @@
                     <!-- /.col -->
                 </div>
             </section>
+            <iframe src="https://calendar.google.com/calendar/embed?src=fg1j9hku40c8e3g3uonrngr9c8%40group.calendar.google.com&ctz=America%2FLa_Paz" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
       </div>
       <!-- /.box-body -->
     </div>
