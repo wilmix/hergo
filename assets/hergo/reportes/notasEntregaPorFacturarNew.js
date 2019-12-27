@@ -58,7 +58,7 @@ $(document).ready(function () {
 
     });
     $('#fechapersonalizada').on('apply.daterangepicker', function (ev, picker) {
-        retornarNEporFac();
+        showNE()
     });
     showNE()
     //retornarNEporFac();
@@ -358,7 +358,7 @@ function showNE() {
         },
         //"serverSide": true,
         responsive: true,
-        //destroy: true,
+        destroy: true,
         dom: 'Bfrtip',
         pageLength: 10,
         createdRow: function( row, res, dataIndex){

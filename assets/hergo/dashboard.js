@@ -445,7 +445,7 @@ function showNegatives() {
           {
               extend: 'copy',
               text: '<i class="fas fa-copy" style="font-size:18px;"> </i>',
-              titleAttr: 'Configuracion',
+              titleAttr: 'Copiar',
               header : false,
               title : null,
               exportOptions: {
@@ -459,20 +459,23 @@ function showNegatives() {
           {
               extend: 'excel',
               text: '<i class="fas fa-file-excel" aria-hidden="true" style="font-size:18px;"> </i>',
-              titleAttr: 'ExportExcel',
+              titleAttr: 'Exportar a Excel',
               autoFilter: true,
               //messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
-              title: 'Notas de Entrega Pendientes de Pago ',
+              title: 'Negativos',
               exportOptions: {
                   columns: ':visible'
               },
           },
           {
               extend: 'pdf',
+              titleAttr: 'Exportar PDF',
+              title: 'Negativos',
               text: '<i class="fas fa-print" aria-hidden="true" style="font-size:18px;"></i>',
           },
           {
               text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
+              titleAttr: 'Recargar',
               action: function ( e, dt, node, config ) {
                 showNegatives()
               }
@@ -504,6 +507,39 @@ function showNegatives() {
           
           
       ],
+      language: {
+        buttons: {
+
+            colvisRestore: "Restaurar",
+            copyTitle: 'Información copiada',
+            pageLength: {
+                            _: "VER %d FILAS",
+                            '-1': "VER TODO"
+                        },
+            copySuccess: {
+                            _: '%d lineas copiadas',
+                            1: '1 linea copiada'
+                        },
+        },
+        "decimal": "",
+        "emptyTable": "No existen Negativos",
+        "info": "Mostrando _START_ a _END_ de _TOTAL_ Negativos",
+        "infoEmpty": "No existen Negativos",
+        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+        "infoPostFix": "",
+        "thousands": ",",
+        "lengthMenu": "Mostrar _MENU_ Registros",
+        "loadingRecords": "Cargando...",
+        "processing": "Procesando...",
+        "search": "Buscar:",
+        "zeroRecords": "Sin resultados encontrados",
+        "paginate": {
+            "first": "Primero",
+            "last": "Ultimo",
+            "next": "Siguiente",
+            "previous": "Anterior"
+        },
+    },
 
    }); 
 }

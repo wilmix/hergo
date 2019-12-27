@@ -79,7 +79,8 @@ function retornarNEporFac() //*******************************
         data: {
             i: ini,
             f: fin,
-            a: alm
+            a: alm,
+            c:'all'
         }, //**** variables para filtro
     }).done(function (res) {
         quitarcargando();
