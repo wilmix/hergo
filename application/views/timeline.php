@@ -29,6 +29,22 @@
                     <div class="col-md-12">
                     <!-- The time line -->
                         <ul class="timeline">
+                        <!-- timeline time label -->
+                        <li class="time-label">
+                            <span class="bg-red">26 Dic. 2019</span>
+                        </li>
+                            <li>
+                                <i class="fa fa-plus bg-green"></i>
+
+                                <div class="timeline-item">
+                                    <h3 class="timeline-header"><a href="#">Añadio lista de negativos</a></h3>
+                                    <div class="timeline-body">
+                                    Se creó la lista de negativos sin contar con la linea de servicios para ayudar al control de inventarios que aparecera en el dashboard al inicio del sistema, se podra filtrar por almacen con un nuevo modelo de tabla con nuevas caracteristicas.
+                                    </div>
+                                </div>
+                            </li>
+
+
                             <!-- timeline time label -->
                             <li class="time-label">
                                 <span class="bg-red">06 Dic. 2019</span>
