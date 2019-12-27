@@ -1,5 +1,5 @@
  <!-- Content Header (Page header) -->
- <section class="content-header">
+    <section class="content-header">
       <h1>
         Dashboard
         <small>Version 1.0</small>
@@ -12,8 +12,8 @@
 
     <!-- Main content -->
     <section class="content">
-          <!-- Info boxes -->
-          <div class="row">
+      <!-- Info boxes -->
+      <div class="row">
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
             <span class="info-box-icon bg-aqua"><i class="fas fa-sign-in-alt"></i></span>
@@ -40,10 +40,8 @@
           <!-- /.info-box -->
         </div>
         <!-- /.col -->
-
         <!-- fix for small devices only -->
         <div class="clearfix visible-sm-block"></div>
-
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
             <span class="info-box-icon bg-green"><i class="fas fa-shopping-cart"></i></span>
@@ -72,7 +70,6 @@
         <!-- /.col -->
       </div>
       <!-- /.row -->
-
       <div class="row">
         <div class="col-md-12">
           <div class="box">
@@ -140,22 +137,17 @@
         <!-- /.col -->
       </div>
 
-
       <div class="row">
         <div class="col-md-6">
           <div class="box">
             <div class="box-header with-border">
               <h3 class="box-title">Negativos</h3>
-
-              
             </div>
             <!-- /.box-header -->
             <div class="box-body">
               <div class="row">
                 <div class="col-md-12 hidden-xs">
                   <div class="chart hidden-xs">
-                    
-
                     <table id="negatives" class="table table-hover table-striped " style="width:100%"></table>  
                   </div>
                   <!-- /.chart-responsive -->
@@ -166,14 +158,12 @@
             </div>
             <!-- ./box-body -->
             <div class="box-footer clearfix">
-                    <select   class="btn btn-sm btn-info btn-flat pull-left" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
-                        <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
-                        <?php foreach ($almacen->result_array() as $fila): ?>
-                        <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
-                        <?php endforeach ?>
-                        <option value="" >TODOS</option>
-                    </select>
-              
+              <select   class="btn btn-sm btn-info btn-flat pull-left" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
+                <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
+                <?php foreach ($almacen->result_array() as $fila): ?>
+                <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
+                <?php endforeach ?>
+              </select>
             </div>
             <!-- /.box-footer -->
           </div>
@@ -181,35 +171,6 @@
         </div>
         <!-- /.col -->
       </div>
-
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-      <!--
-
-      <div class="box-body">
-        <div class="row">
-          <div class="col-md-8">
-            <div class="chart-container">
-              <canvas id="ventas" style="height: 200px; width: 645px;" width="645" height="200" ></canvas>
-            </div>
-          </div>
-        </div>
-      </div> -->
-      
-        
-
     </section>
     <!-- /.content -->
   </div>
