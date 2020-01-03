@@ -6,6 +6,8 @@ class Principal extends CI_Controller
 	public function __construct()
 	{	
 		parent::__construct();
+		if(!$this->session->userdata('logeado'))
+		redirect('auth', 'refresh');
 		$this->load->library('LibAcceso');
 		$this->load->helper('url');	
 		$this->load->model("Reportes_model");
@@ -15,7 +17,8 @@ class Principal extends CI_Controller
 				base_url('assets/bootstrap/css/bootstrap.min.css'),
 				base_url("assets/fa/css/font-awesome.min.css"),
 				base_url("assets/dist/css/AdminLTE.min.css"),
-				base_url("assets/dist/css/skins/skin-blue.min.css")
+				base_url("assets/dist/css/skins/skin-blue.min.css"),
+				base_url("assets/hergo/estilos.css")
 				
 			);
 		$this->cabecera_script=array(

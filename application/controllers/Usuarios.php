@@ -6,6 +6,8 @@ class Usuarios extends CI_Controller
 	public function __construct()
 	{	
 		parent::__construct();
+		if(!$this->session->userdata('logeado'))
+		redirect('auth', 'refresh');
 		$this->load->helper('url');	
 		$this->cabeceras_css=array(
 				base_url('assets/bootstrap/css/bootstrap.min.css'),

@@ -29,6 +29,37 @@
                     <div class="col-md-12">
                     <!-- The time line -->
                         <ul class="timeline">
+                        <li class="time-label">
+                                <span class="bg-red">03 Ene. 2020</span>
+                            </li>
+                                <li>
+                                    <i class="fa fa-wrench bg-blue"></i>
+
+                                    <div class="timeline-item">
+                                        <h3 class="timeline-header"><a href="#">Corrección cierre de Sesión</a></h3>
+                                        <div class="timeline-body">
+                                        Se corrigió y optimizo el cierre de sesión por tiempo expirado. Ahora redireciona a login automaticamente y no muestra error de sesión.
+                                        </div>
+                                    </div>
+                                </li>
+
+
+                        <!-- timeline time label -->
+                        <li class="time-label">
+                            <span class="bg-red">03 Ene. 2020</span>
+                        </li>
+                            <li>
+                                <i class="fa fa-plus bg-green"></i>
+
+                                <div class="timeline-item">
+                                    <h3 class="timeline-header"><a href="#">Añadio Calendario</a></h3>
+                                    <div class="timeline-body">
+                                    Se creó Calendario que nos permitira agregar y visualizar eventos, reuniones para mejor comunicacion en la empresa.
+                                    </div>
+                                </div>
+                            </li>
+
+                        
                         <!-- timeline time label -->
                         <li class="time-label">
                             <span class="bg-red">26 Dic. 2019</span>
@@ -205,7 +236,6 @@
                     <!-- /.col -->
                 </div>
             </section>
-            <iframe src="https://calendar.google.com/calendar/embed?src=fg1j9hku40c8e3g3uonrngr9c8%40group.calendar.google.com&ctz=America%2FLa_Paz" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
       </div>
       <!-- /.box-body -->
     </div>
