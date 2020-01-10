@@ -60,6 +60,7 @@
               <input type="text" class="form-control" id="pedidoClienteT2" aria-describedby="sizing-addon2" disabled="">
               <span class="input-group-addon" id="sizing-addon2">Moneda:</span>
               <input type="text" class="form-control" id="monedaT2" aria-describedby="sizing-addon2" disabled="">
+              <input type="text" class="form-control hidden" id="idMonedaT2" aria-describedby="sizing-addon2" disabled="">
             </div>
         </div>
           <div class="col-md-6 col-xs-12">

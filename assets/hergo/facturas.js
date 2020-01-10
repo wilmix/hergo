@@ -120,7 +120,6 @@ $(document).on("change", "#fechaFactura", function () {
     if (hoy == fecha) {
         checkTipoCambio = true
     } else {
-        console.log('buscar');
         $.ajax({
             type: "POST",
             async: false,
@@ -160,7 +159,6 @@ $(document).on("click", "#setTipoCambio", function () {
             tipocambio: tc
         },
         success: function(data) {
-            console.log(data);
             checkTipoCambio = true
             glob_tipoCambio = data.TipoCambio
             console.log(glob_tipoCambio);
@@ -219,14 +217,12 @@ $(document).on("click", "#crearFactura", function () {
             idCliente:$("#idCliente_factura").val(),
             montoBs:$("#totalFacturaBs").val()
         }
-        console.log(tabla3factura);
         $.ajax({
             type: "POST",
             url: base_url('index.php/Facturas/consultarDatosFactura'),
             dataType: "json",
             data: datos,
         }).done(function (res) {
-            console.log(res);
             if (res.response) {
                 vistaPreviaFactura();
                 agregarDatosFactura(res);
@@ -283,7 +279,6 @@ $(document).on("click", "#guardarFactura", function () {
         tabla: tabla3factura,
         idCliente : idCliente,
     }
-    console.log(datos)
     $.ajax({
         type: "POST",
         url: base_url('index.php/Facturas/storeFactura'),
@@ -714,6 +709,7 @@ function mostrarDatosCliente(row) {
     $("#tipoNumEgreso").val(row.sigla + "-" + row.n);
     $("#pedidoClienteT2").val(row.clientePedido);
     $("#monedaT2").val(row.monedasigla);
+    $("#idMonedaT2").val(row.moneda);
     $("#idclienteHidden").val(row.idcliente);
 }
 function operateFormatter(value, row, index) {
@@ -846,6 +842,7 @@ function AgregarRegistroTabla3(row, index, btn) {
     }
 }
 function AgregarRegistroTabla3Cliente(row, index, btn) {
+    let monedaE = $("#idMonedaT2").val();
     if ($("#cliente_factura").val() == "" || $("#cliente_factura").val() == $("#nombreClienteTabla1").val()) {
         if (!existeId(row.idingdetalle)) {
             $.ajax({
@@ -854,7 +851,6 @@ function AgregarRegistroTabla3Cliente(row, index, btn) {
                 dataType: "json",
                 data: { idegreso: row.idegreso, idegresoDetalle: row.idingdetalle },
             }).done(function (res) {
-                console.log(res);
                 $("#cliente_factura").val(res.cliente);
                 $("#idCliente_factura").val(res.idCliente);
                 $("#nit_factura").val(res.clienteNit);
@@ -864,6 +860,7 @@ function AgregarRegistroTabla3Cliente(row, index, btn) {
                 $("#clienteFactura").html(res.cliente);
                 $("#clienteFacturaNit").html(res.clienteNit)
                 $("#clientePedido").html(res.clientePedido)
+                $("#moneda").val(monedaE)
             }).fail(function (jqxhr, textStatus, error) {
                 let err = textStatus + ", " + error;
                 console.log("Request Failed: " + err);
@@ -927,7 +924,6 @@ function agregarRegistrosTabla3(detalle) {
 }
 function agregarRegistrosTabla3Cliente(detalle) {
     if (!existeId(detalle.idingdetalle)) {
-        let moneda = $("#moneda").val();
             let rows = [];
             rows.push({
                 id:detalle.id,
@@ -1034,6 +1030,7 @@ function AgregarRegistroTabla3Array(row) {
     });
 }
 function AgregarRegistroTabla3ArrayCliente(row) {
+    let monedaE = $("#idMonedaT2").val();
     if (row.length > 0) {
         if ($("#cliente_factura").val() == "" || $("#cliente_factura").val() == $("#nombreClienteTabla1").val()) {
             $.ajax({
@@ -1042,7 +1039,7 @@ function AgregarRegistroTabla3ArrayCliente(row) {
                 dataType: "json",
                 data: { idegreso: row[0].idegreso, idegresoDetalle: row[0].idingdetalle },
             }).done(function (res) {
-                //console.log(res)
+            
                 $("#cliente_factura").val(res.cliente)
                 $("#idCliente_factura").val(res.idCliente)
                 $("#nit_factura").val(res.clienteNit)
@@ -1052,6 +1049,7 @@ function AgregarRegistroTabla3ArrayCliente(row) {
                 $("#clienteFactura").html(res.cliente)
                 $("#clienteFacturaNit").html(res.clienteNit)
                 $("#clientePedido").html(res.clientePedido)
+                $("#moneda").val(monedaE)
             }).fail(function (jqxhr, textStatus, error) {
                 let err = textStatus + ", " + error;
                 console.log("Request Failed: " + err);
