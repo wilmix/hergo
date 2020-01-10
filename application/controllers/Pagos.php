@@ -289,9 +289,8 @@ class Pagos extends CI_Controller  /////**********nombre controlador
         {
 			$data=$this->security->xss_clean($this->input->post('d'));
 			$data=json_decode($data);
-			$gestion = date('Y',strtotime($data->fechaPago));
+			$gestion = $this->Egresos_model->getGestionActual()->gestionActual;
 			$numPago=$this->retornarNumPago($data->almacen, $gestion);
-
 			$pago = new stdclass();
 			$pago->almacen=$data->almacen;
 			$pago->numPago=$numPago;
