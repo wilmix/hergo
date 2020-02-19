@@ -861,6 +861,7 @@ function AgregarRegistroTabla3Cliente(row, index, btn) {
                 $("#clienteFacturaNit").html(res.clienteNit)
                 $("#clientePedido").html(res.clientePedido)
                 $("#moneda").val(monedaE)
+                cambiarMonedaTabla3()
             }).fail(function (jqxhr, textStatus, error) {
                 let err = textStatus + ", " + error;
                 console.log("Request Failed: " + err);
@@ -1050,6 +1051,7 @@ function AgregarRegistroTabla3ArrayCliente(row) {
                 $("#clienteFacturaNit").html(res.clienteNit)
                 $("#clientePedido").html(res.clientePedido)
                 $("#moneda").val(monedaE)
+                cambiarMonedaTabla3()
             }).fail(function (jqxhr, textStatus, error) {
                 let err = textStatus + ", " + error;
                 console.log("Request Failed: " + err);
