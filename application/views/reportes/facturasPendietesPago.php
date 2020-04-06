@@ -9,26 +9,28 @@
       </div>
       <hr>
           <div id="toolbar2" class="form-inline">
-            <button  type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
+            <button type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
               <span>
                 <i class="fa fa-calendar"></i> Fecha
               </span>
                 <i class="fa fa-caret-down"></i>
             </button>
-            <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
-              <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
-                <?php foreach ($almacen->result_array() as $fila): ?>
-                  <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
-                <?php endforeach ?>
-              <option value="">TODOS</option>
-            </select>
-
+            <select class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
+                        <?php if ($grupsOfUser == 'Nacional') : ?>
+                            <?php foreach ($almacen->result_array() as $fila): ?>
+                            <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
+                            <?php endforeach ?>
+                            <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
+                            <option value="">TODOS</option>
+                        <?php else : ?>
+                            <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
+                        <?php endif; ?>
+                    </select>
             <select id="moneda" class="btn btn-primary btn-sm">
                 <option value="0">BOB</option>
                 <option value="1">$U$</option>
             </select>
-
-           <button  type="button" class="btn btn-primary btn-sm" id="pendientes">
+           <button type="button" class="btn btn-primary btn-sm" id="pendientes">
                 <span>
                 <i class="fa fa-share-square"></i>
                 </span>
