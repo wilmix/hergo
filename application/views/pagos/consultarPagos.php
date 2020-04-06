@@ -8,25 +8,29 @@
                <i class="fa fa-calendar"></i> Fecha
              </span>
               <i class="fa fa-caret-down"></i>
-           </button>
-            <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
-              <?php foreach ($almacen->result_array() as $fila): ?>
-              <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
-              <?php endforeach ?>
-              <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
-              <option value="">TODOS</option>
-            </select>       
-            <button  type="button" class="btn btn-primary btn-sm" id="refresh">
+          </button>
+           <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
+              <?php if ($grupsOfUser == 'Nacional') : ?>
+                  <?php foreach ($almacen->result_array() as $fila): ?>
+                    <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
+                  <?php endforeach ?>
+                    <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
+                    <option value="">TODOS</option>
+              <?php else : ?>
+                  <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
+              <?php endif; ?>
+          </select>  
+          <button  type="button" class="btn btn-primary btn-sm" id="refresh">
               <span>
                 <i class="fa fa-refresh"></i>
               </span>
-            </button>    
+          </button>    
           </div>
-          <table 
-            id="tpagos"
-            data-toolbar="#toolbar2"
-            data-toggle="table">
-          </table>
+        <table 
+          id="tpagos"
+          data-toolbar="#toolbar2"
+          data-toggle="table">
+        </table>
       </div>
       <!-- /.box-body -->
     </div>
