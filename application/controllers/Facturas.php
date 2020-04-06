@@ -70,7 +70,7 @@ class Facturas extends CI_Controller
 		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
-
+		$this->datos['grupsOfUser']=$this->ion_auth->get_users_groups($this->session->userdata['user_id'])->row_array(2)['name'];
 		$this->libAcc = new LibAcceso();
 		$permisos = $this->libAcc->retornarSubMenus($_SESSION['accesoMenu']);
 		$this->datos['permisoAnular'] = in_array(45, $permisos) ? 'true' : 'false';
@@ -122,8 +122,8 @@ class Facturas extends CI_Controller
 			/***********************************/
 			/*************CODIGO QR***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/qrcode.min.js');
-            
-            $this->datos['almacen']=$this->Almacen_model->retornar_tabla("almacenes");
+			
+			$this->datos['almacen']=$this->Almacen_model->retornar_tabla("almacenes");
             //$this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
 
 			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();
