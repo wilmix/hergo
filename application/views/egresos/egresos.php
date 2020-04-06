@@ -15,26 +15,24 @@
         </div>
 
         <div id="toolbar2" class="form-inline">
-          <button type="button" class="btn btn-primary btn-sm col-sm-5 col-xs-12" id="fechapersonalizada">
+          <button type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
             <span>
               <i class="fa fa-calendar"></i> Fecha
             </span>
             <i class="fa fa-caret-down"></i>
           </button>
-
-          <select class="btn btn-primary btn-sm col-sm-3 col-xs-12" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
-            <?php foreach ($almacen->result_array() as $fila): ?>
-            <option value=<?=$fila['idalmacen'] ?> >
-              <?= $fila['almacen'] ?>
-            </option>
-            <?php endforeach ?>
-            <option value=<?=$id_Almacen_actual ?> selected="selected">
-              <?= $almacen_actual ?>
-            </option>
-            <option value="">TODOS</option>
+          <select   class="btn btn-primary btn-sm" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
+                <?php if ($grupsOfUser == 'Nacional') : ?>
+                    <?php foreach ($almacen->result_array() as $fila): ?>
+                      <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
+                    <?php endforeach ?>
+                      <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
+                      <option value="">TODOS</option>
+                <?php else : ?>
+                    <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
+                <?php endif; ?>
           </select>
-
-          <select class="btn btn-primary btn-sm col-sm-3 col-xs-10" name="tipo_filtro" id="tipo_filtro">
+          <select class="btn btn-primary btn-sm" name="tipo_filtro" id="tipo_filtro">
             <?php foreach ($tipoingreso->result_array() as $fila): ?>
             <option value="<?= $fila['id'] ?>" <?=$fila['id']==7?"selected":"" ?>>
               <?= strtoupper($fila['tipomov']) ?>
@@ -42,8 +40,7 @@
             <?php endforeach ?>
             <option value="">TODOS</option>
           </select>
-
-          <button type="button" class="btn btn-primary btn-sm btn-sm col-sm-1 col-xs-2" id="refresh">
+          <button type="button" class="btn btn-primary btn-sm" id="refresh">
             <span>
               <i class="fa fa-refresh"></i>
             </span>
