@@ -91,12 +91,12 @@ class Ingresos extends CI_Controller
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-
-
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+			
             $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
             $this->datos['tipoingreso']=$this->Ingresos_model->retornar_tablaMovimiento("+");
-
+			$this->datos['tipoPrefer']="2";
+			
 
 			//$this->datos['ingresos']=$this->Ingresos_model->mostrarIngresos();
 

@@ -1,1 +1,0 @@
-<h1>diarioPagos</h1>

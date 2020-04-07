@@ -7,17 +7,10 @@
               class="fa fa-plus-circle fa-lg"></i> Traspasos</a>
         </div>
         <div id="toolbar2" class="form-inline">
-          <button type="button" class="btn btn-primary btn-sm" id="fechapersonalizada">
-            <span>
-              <i class="fa fa-calendar"></i> Fecha
-            </span>
-            <i class="fa fa-caret-down"></i>
-          </button>
-          <button type="button" class="btn btn-primary btn-sm " id="refresh">
-            <span>
-              <i class="fa fa-refresh"></i>
-            </span>
-          </button>
+          <?php
+            $this->load->view('reportHead/buttonDate');
+            $this->load->view('reportHead/buttonRefresh');
+          ?>
         </div>
         <table id="tTraspasos">
         </table>

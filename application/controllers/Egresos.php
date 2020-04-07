@@ -78,11 +78,9 @@ class Egresos extends CI_Controller
 		$this->libacceso->acceso(15);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
-			
 			$this->datos['menu']="Egresos";
 			$this->datos['opcion']="Consultas Egresos";
 			$this->datos['titulo']="Egresos";
-
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
 			/**************FUNCION***************/
@@ -92,7 +90,7 @@ class Egresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-
+			$this->datos['tipoPrefer']="7";
             
             $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
 			$this->datos['tipoingreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");

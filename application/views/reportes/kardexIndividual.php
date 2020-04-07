@@ -1,1 +1,0 @@
-<h1>kardexIndividual</h1>

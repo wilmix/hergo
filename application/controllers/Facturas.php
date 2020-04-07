@@ -124,8 +124,6 @@ class Facturas extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/qrcode.min.js');
 			
 			$this->datos['almacen']=$this->Almacen_model->retornar_tabla("almacenes");
-            //$this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
-
 			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();
 
 			$this->load->view('plantilla/head.php',$this->datos);
@@ -199,11 +197,13 @@ class Facturas extends CI_Controller
 	}
 	public function MostrarTablaConsultaFacturacion()
 	{
+		
 		if($this->input->is_ajax_request() && $this->input->post('ini')&& $this->input->post('fin'))
         {
         	$ini = addslashes($this->security->xss_clean($this->input->post('ini')));
         	$fin = addslashes($this->security->xss_clean($this->input->post('fin')));
-        	$alm = addslashes($this->security->xss_clean($this->input->post('alm')));
+			$alm = addslashes($this->security->xss_clean($this->input->post('alm')));
+			$alm = $this->datos['grupsOfUser'] == 'Nacional' ? $alm : $this->datos['id_Almacen_actual'];
         	$tipo = addslashes($this->security->xss_clean($this->input->post('tipo')));
 			
 			$tabla=$this->FacturaEgresos_model->Listar($ini,$fin,$alm,$tipo);
