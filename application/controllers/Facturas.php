@@ -70,7 +70,10 @@ class Facturas extends CI_Controller
 		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
-		$this->datos['grupsOfUser']=$this->ion_auth->get_users_groups($this->session->userdata['user_id'])->row_array(2)['name'];
+		$grupsOfUser=$this->ion_auth->get_users_groups($this->datos['user_id_actual'])->result_array();
+		foreach ($grupsOfUser as $value) {
+			$this->datos['grupsOfUser'] = $value['name'] == 'Nacional' ? 'Nacional' : false;
+		};
 		$this->libAcc = new LibAcceso();
 		$permisos = $this->libAcc->retornarSubMenus($_SESSION['accesoMenu']);
 		$this->datos['permisoAnular'] = in_array(45, $permisos) ? 'true' : 'false';
@@ -501,7 +504,7 @@ class Facturas extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	private function encriptar($cadena){
+	/* private function encriptar($cadena){
 	    $key='SistemaHergo';  // Una clave de codificacion, debe usarse la misma para encriptar y desencriptar
 	    $encrypted = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($key), $cadena, MCRYPT_MODE_CBC, md5(md5($key))));
 	    return $encrypted; //Devuelve el string encriptado
@@ -512,7 +515,7 @@ class Facturas extends CI_Controller
 	     $key='SistemaHergo';  // Una clave de codificacion, debe usarse la misma para encriptar y desencriptar
 	     $decrypted = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($key), base64_decode($cadena), MCRYPT_MODE_CBC, md5(md5($key))), "\0");
 	    return $decrypted;  //Devuelve el string desencriptado
-	}
+	} */
 	public function tipoCambio()
 	{
 		//$tipoCambio=$this->Egresos_model->retornarValorTipoCambio();

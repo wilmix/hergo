@@ -60,7 +60,10 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
-		$this->datos['grupsOfUser']=$this->ion_auth->get_users_groups($this->session->userdata['user_id'])->row_array(2)['name'];
+		$grupsOfUser=$this->ion_auth->get_users_groups($this->datos['user_id_actual'])->result_array();
+		foreach ($grupsOfUser as $value) {
+			$this->datos['grupsOfUser'] = $value['name'] == 'Nacional' ? 'Nacional' : false;
+		};
 
 		$hoy = date('Y-m-d');
 		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
