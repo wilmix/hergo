@@ -70,10 +70,7 @@ class Facturas extends CI_Controller
 		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
-		$grupsOfUser=$this->ion_auth->get_users_groups($this->datos['user_id_actual'])->result_array();
-		foreach ($grupsOfUser as $value) {
-			$this->datos['grupsOfUser'] = $value['name'] == 'Nacional' ? 'Nacional' : false;
-		};
+		$this->datos['grupsOfUser'] = $this->ion_auth->in_group('Nacional') ? 'Nacional' : false;
 		$this->libAcc = new LibAcceso();
 		$permisos = $this->libAcc->retornarSubMenus($_SESSION['accesoMenu']);
 		$this->datos['permisoAnular'] = in_array(45, $permisos) ? 'true' : 'false';

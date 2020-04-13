@@ -54,10 +54,7 @@ class Ingresos extends CI_Controller
 		$this->datos['nombre_actual']=$this->session->userdata['nombre'];
 		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
-		$grupsOfUser=$this->ion_auth->get_users_groups($this->datos['user_id_actual'])->result_array();
-		foreach ($grupsOfUser as $value) {
-			$this->datos['grupsOfUser'] = $value['name'] == 'Nacional' ? 'Nacional' : false;
-		};
+		$this->datos['grupsOfUser'] = $this->ion_auth->in_group('Nacional') ? 'Nacional' : false;
 		$hoy = date('Y-m-d');
 		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
 		if ($tipoCambio) {
