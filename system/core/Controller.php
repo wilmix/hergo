@@ -78,6 +78,54 @@ class CI_Controller {
 		$this->load =& load_class('Loader', 'core');
 		$this->load->initialize();
 		log_message('info', 'Controller Class Initialized');
+
+		$this->cabeceras_css=array(
+			base_url('assets/bootstrap/css/bootstrap.min.css'),
+			base_url("assets/fa/css/font-awesome.min.css"),
+			base_url("assets/dist/css/AdminLTE.min.css"),
+			base_url("assets/dist/css/skins/skin-blue.min.css"),
+			base_url("assets/hergo/estilos.css"),
+			base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
+			base_url('assets/plugins/table-boot/plugin/select2.min.css'),
+			base_url('assets/sweetalert/sweetalert2.min.css'),
+			base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),	
+			base_url('assets/plugins/daterangepicker/daterangepicker.css')	
+
+		);
+		$this->cabecera_script=array(
+			base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
+			base_url('assets/bootstrap/js/bootstrap.min.js'),
+			base_url('assets/dist/js/app.min.js'),
+			base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
+			base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
+			base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
+			base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
+			base_url('assets/plugins/table-boot/js/tableExport.js'),
+			base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
+			base_url('assets/plugins/table-boot/plugin/select2.min.js'),
+			base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
+			base_url('assets/plugins/daterangepicker/moment.min.js'),
+			base_url('assets/plugins/slimscroll/slimscroll.min.js'),
+			base_url('assets/sweetalert/sweetalert2.min.js'),
+			base_url('assets/plugins/numeral/numeral.min.js'),
+			base_url('assets/busqueda/underscore-min.js'),
+			base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
+			base_url('assets/plugins/daterangepicker/daterangepicker.js'),
+			base_url('assets/plugins/daterangepicker/locale/es.js'),
+			/**************INPUT MASK***************/
+			base_url('assets/plugins/inputmask/inputmask.js'),
+			base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js'),
+			base_url('assets/plugins/inputmask/jquery.inputmask.js'),
+
+			base_url('assets/hergo/funciones.js'),
+			base_url('assets/hergo/NumeroALetras.js'),
+
+		);
+		$this->foot_script=array(				
+			base_url('assets/vue/vue.js'),								
+			base_url('assets/vue/vue-resource.min.js'),
+			base_url('assets/hergo/vistaPreviaFacturacion/principal.js'),				
+		);
 	}
 
 	// --------------------------------------------------------------------

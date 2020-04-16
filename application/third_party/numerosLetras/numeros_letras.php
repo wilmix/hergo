@@ -229,6 +229,6 @@ function Parte($x)
 
 $total=1234; 
  $V=new EnLetras(); 
- $con_letra=strtoupper($V->ValorEnLetras($total,"pesos"); 
+ $con_letra=strtoupper($V->ValorEnLetras($total,"pesos")); 
  echo "<b>".$con."</b>";      
 ?> 
