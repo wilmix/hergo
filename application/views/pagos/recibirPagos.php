@@ -82,12 +82,12 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body">
-        
           <form id="formPagos">
-            <div class="form-row">
-              <div class="form-row align-items-center col-md-3">
-              <input type="text" value = "<?php echo $id_Almacen_actual ?>" id="idAlmacenActual" hidden> 
-                <label>Almacen: </label>
+            <div class="row">
+              <!-- almacen -->
+              <div class="form-group col-md-2">
+                <input type="text" value = "<?php echo $id_Almacen_actual ?>" id="idAlmacenActual" hidden> 
+                <label for="almacen">Almacen: </label>
                 <select class="form-control" 
                         v-model="almacen" 
                         id="almacen" 
@@ -98,7 +98,8 @@
                   </option>
                 </select>
               </div>
-              <div class="form-row align-items-center col-md-2">
+              <!-- fecha -->
+              <div class="form-group col-md-2">
                 <label>Fecha: </label>
                 <input 
                         class="form-control fecha_pago" 
@@ -106,29 +107,31 @@
                         id="fechaPago" 
                         name="fechaPago">
               </div>
-              <div class="form-row align-items-center col-md-5">
-                  <label>Cliente: 
-                    <span class="badge label-success hidden" 
-                          id="errorCliente">
-                      <i class="fa fa-check"></i>
-                    </span>
-                    <span style="margin-left: 10px;display: none;" 
-                          id="cargandocliente" >
-                      <i class="fa fa-times" style="color:#bf0707"></i>
-                    </span>
-                  </label>
-                  <input  class="form-control form-control-sm" 
-                          type="text" id="cliente_factura" 
-                          name="cliente_factura" 
-                          v-model="nombreCliente" 
-                          value="">
-                  <input  type="text" 
-                          v-model="cliente"  
-                          name="idCliente_Pago" 
-                          id="idCliente_Pago" 
-                          class="hidden"> 
-                </div>
-              <div class="form-row align-items-center col-md-2">
+              <!-- cliente -->
+              <div class="form-group col-md-6">
+                <label>Cliente: 
+                  <span class="badge label-success hidden" 
+                        id="errorCliente">
+                    <i class="fa fa-check"></i>
+                  </span>
+                  <span style="margin-left: 10px;display: none;" 
+                        id="cargandocliente" >
+                    <i class="fa fa-times" style="color:#bf0707"></i>
+                  </span>
+                </label>
+                <input  class="form-control form-control-sm" 
+                        type="text" id="cliente_factura" 
+                        name="cliente_factura" 
+                        v-model="nombreCliente" 
+                        value="">
+                <input  type="text" 
+                        v-model="cliente"  
+                        name="idCliente_Pago" 
+                        id="idCliente_Pago" 
+                        class="hidden"> 
+              </div>
+              <!-- tipo -->
+              <div class="form-group col-md-2">
                   <label>Tipo: </label>
                   <select class="form-control" 
                           v-model="tipoPago" 
@@ -140,8 +143,11 @@
                     </option>
                   </select>
               </div>
-              <div v-if="tipoPago == 1">
-                <div class="form-row align-items-center col-md-2">
+            </div>
+            <div class="row">
+              <div v-if="tipoPago != 4">
+                <!-- banco -->
+                <div class="form-group  col-md-2">
                   <label >Banco:</label>
                     <select class="form-control" 
                         v-model="banco" 
@@ -152,92 +158,79 @@
                       <?php endforeach ?>
                     </select>
                 </div>
-                <div class="form-row align-items-center col-md-2">
+                <!-- vaucher -->
+                <div class="form-group  col-md-2">
                   <label>Vaucher: </label>
                   <input type="text" class="form-control" v-model="transferencia" id="vaucher" name="vaucher">
                 </div>
-                
               </div>
-              <div v-if="tipoPago == 2">
-                <div class="form-row align-items-center col-md-2">
-                  <label >Banco:</label>
-                    <select class="form-control" 
-                        v-model="banco" 
-                        id="banco" 
-                        name="banco">
-                      <?php foreach ($bancos->result_array() as $fila): ?>
-                        <option value=<?= $fila['id'] ?>> <?= $fila['sigla'] ?> </option>
-                      <?php endforeach ?>
-                    </select>
+              <!-- Imagen -->
+              <div class="upload_image">
+                <div class="form-group col-md-6">
+                  <label for="imagenes">Imagen de Pago:</label>
+                  <input id="imagenes" @change="imagenes" name="imagenes" type="file" class="file-loading" accept="image/*">
                 </div>
-                <div class="form-row align-items-center col-md-2">
-                  <label>Vaucher: </label>
-                  <input type="text" class="form-control" v-model="transferencia" id="vaucher" name="vaucher">
-                </div>
-                
-              </div>
+              </div>  
+              <!-- Cheque -->
               <div v-if="tipoPago == 3">
-                  <div class="form-row align-items-center col-md-2">
-                    <label >Cheque N°: </label>
-                    <input type="text" class="form-control" v-model="cheque" id="cheque" name="cheque">
-                  </div>
-                  <div class="form-row align-items-center col-md-2">
-                  <label>Vaucher: </label>
-                  <input type="text" class="form-control" v-model="transferencia" id="vaucher" name="vaucher">
+                <div class="form-group col-md-2">
+                  <label >Cheque N°: </label>
+                  <input type="text" class="form-control" v-model="cheque" id="cheque" name="cheque">
                 </div>
               </div> 
-            <div class="table">
-              <table class="table table-hover table-striped table-bordered table-responsive" id="paraPagar_table">
-                <thead>
-                  <tr>
-                    <th style="width:10%">N. Factura</th>
-                    <th>Cliente</th>
-                    <th class="text-right">Total</th>
-                    <!-- <th class="text-right">SaldoNuevo</th> -->
-                    <th style="width:20%;text-align: right">Pagar</th>
-                    <th style="width:5%"></th>
-                  </tr>
-                </thead>  
-                <tbody>
-                  <tr is="app-row" v-for="(pagar,index) in porPagar" :index="index" :pagar="pagar" @removerfila="deleteRow" >
-                  </tr>
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="3" class="text-right"><b>Total</b> </td>          
-                    <td class="text-right"> {{ retornarTotal() | moneda}}</td>
-                    <td></td>
-                  </tr>
-                </tfoot>
-              </table>
             </div>
+            <!-- Tabla -->
+            <div class="table-responsive form-group">
+                <table id="paraPagar_table" class="table table-hover table-striped table-bordered table-responsive px-4" >
+                  <thead>
+                    <tr>
+                      <th style="width:10%">N. Factura</th>
+                      <th>Cliente</th>
+                      <th class="text-right">Total</th>
+                      <!-- <th class="text-right">SaldoNuevo</th> -->
+                      <th style="width:20%;text-align: right">Pagar</th>
+                      <th style="width:5%"></th>
+                    </tr>
+                  </thead>  
+                  <tbody>
+                    <tr is="app-row" v-for="(pagar,index) in porPagar" :index="index" :pagar="pagar" @removerfila="deleteRow" >
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="3" class="text-right"><b>Total</b> </td>          
+                      <td class="text-right"> {{ retornarTotal() | moneda}}</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+            </div>
+            <!-- Glosa -->
             <div class="row">
-              <div class="col-xs-12 col-md-12">                  
-                <label for="observaciones_ne">Glosa:</label>
-                <input type="text" class="form-control" id="glosa" name="glosa" value="" v-model="glosa">
+              <div class="form-group col-md-12">
+                <label for="glosa">Glosa:</label>
+                <input class="form-control" type="text" id="glosa" name="glosa" value="" v-model="glosa">
               </div>
             </div>
-            <hr>
+            <!-- Botones -->
             <div class="row">
-              <div class="col-xs-12">
-              <?php if (isset($idPago)): ?>
-                  <button type="button" class="btn btn-primary" id="editarPago" @click.once="editarPago">Modificar Pago</button>  
-                  <button type="button" class="btn btn-warning" id="anularPago" @click="anularPago">Anular Movimiento</button>
-                  <button type="button" class="btn btn-danger" id="cancelarPago" @click="cancelarPago">Cancelar Pago</button>
-                <?php else: ?>
-                  <button type="button" class="btn btn-primary" id="guardarPago" @click.once="guardarPago">Guardar Pago</button> 
-                  <button type="button" class="btn btn-danger" id="cancelarPago" @click.once="cancelarPago">Cancelar Pago</button>
-                <?php endif ?>
+              <div class="form-group col-md-12">
+                <div class="btn-group pull-right">
+                  <?php if (isset($idPago)): ?>
+                    <button type="button" class="btn btn-primary" id="editarPago" @click.once="editarPago">Modificar Pago</button>  
+                    <button type="button" class="btn btn-warning" id="anularPago" @click="anularPago">Anular Movimiento</button>
+                    <button type="button" class="btn btn-danger" id="cancelarPago" @click="cancelarPago">Cancelar Pago</button>
+                  <?php else: ?>
+                    <button type="button" class="btn btn-primary" id="guardarPago" @click="savePago">Guardar Pago</button> 
+                    <button type="button" class="btn btn-danger" id="cancelarPago" @click.once="cancelarPago">Cancelar Pago</button>
+                  <?php endif ?>
+                </div>
               </div>
             </div>
           </form>
-        
-      </div>
-      <!-- /.box-body -->
+        </div>
     </div>
-    <!-- /.box -->
   </div>
-  <!-- /.col -->
 </div>
 </main>
 <!-- Modal TIPO CAMBIO-->

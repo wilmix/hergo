@@ -50,6 +50,15 @@ $( function() {
     };
  });
 $(document).ready(function(){
+    $("#imagenes").fileinput({
+        language: "es",
+        showUpload: false,
+        previewFileType: "image",
+        maxFileSize: 1024,
+        showPreview: false,
+      
+    });
+
     console.log(idPago)
    
     if (idPago==0) {
@@ -892,6 +901,23 @@ var vmPago = new Vue({
                 function(result) {   
                     console.log(result)
                 });
+            });
+        },
+        savePago:function(e){
+            e.preventDefault();
+
+            let data = new FormData($('#formPagos')[0]);
+            data.append("pagos", JSON.stringify(this.porPagar))
+            console.log(data)
+            $.ajax({
+                url: base_url('index.php/Pagos/guardarPagos'),
+                type: "post",      
+                data: data,                                         
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,   // tell jQuery not to set contentType                                       
+                success: function (respuesta) {
+                  console.log(respuesta)
+                }
             });
         },
         selectClient:function (datosCliente) {

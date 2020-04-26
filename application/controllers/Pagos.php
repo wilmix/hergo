@@ -153,6 +153,11 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
 			/**************FUNCION***************/
 
+			/*********UPLOAD******************/
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
+
 			/*************AUTOCOMPLETE**********/
 			$this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
