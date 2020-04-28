@@ -221,6 +221,10 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			 $this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.css');
 			 $this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.js');
 			/***********************************/
+			/*********UPLOAD******************/
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
 			/*************AUTOCOMPLETE**********/
 			$this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
@@ -293,12 +297,29 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	{
 		if($this->input->is_ajax_request())
         {
-			$data=$this->security->xss_clean($this->input->post('d'));
-			$data=json_decode($data);
+			$data=($this->input->post());
+			$data=json_decode(json_encode($data), FALSE);
+			
+			$config = [
+				"upload_path" => "./assets/img_pagos/",
+				"allowed_types" => "png|jpg"
+			];
+			$this->load->library("upload",$config);
+			if ($this->upload->do_upload('img_route')) {
+				$img = array("upload_data" => $this->upload->data());
+				$img_name = $img['upload_data']['file_name'];
+			}
+			else{
+				//echo $this->upload->display_errors();
+				$img_name = '';
+			}
 			$gestion = $this->Egresos_model->getGestionActual()->gestionActual;
+			/* var_dump($data->almacen);
+			die(); */
 			$numPago=$this->retornarNumPago($data->almacen, $gestion);
 			$pago = new stdclass();
 			$pago->almacen=$data->almacen;
+			$pago->img_route = $img_name;
 			$pago->numPago=$numPago;
 			$pago->fechaPago=$data->fechaPago;
 			$pago->fechaPago = date('Y-m-d',strtotime($pago->fechaPago));
@@ -313,16 +334,19 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$tipocambio = $this->Ingresos_model->getTipoCambio($pago->fechaPago);
 			$pago->tipoCambio = $tipocambio->tipocambio;
 			$pago->tipoPago=$data->tipoPago;
-			$pago->cheque=$data->cheque;
+			$pago->cheque=isset($data->cheque) ? $data->cheque : '';
 			$pago->banco=$data->banco;
-			$pago->transferencia=$data->transferencia;
-			$pago->pagos=$data->porPagar;
+			$pago->transferencia=strtoupper($data->transferencia);
+			$pago->pagos=json_decode($data->porPagar);
 			
+			/* var_dump($pago);
+			die();  */
 			$idPago=$this->Pagos_model->storePago($pago);
 			if ($idPago == false) {
 				$return=new stdClass();
-				$return->status=false;
+				$return->status='error';
 				echo json_encode($return);
+
 			} else {
 				$return=new stdClass();
 				$return->status=200;
@@ -389,12 +413,29 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	{
 		if($this->input->is_ajax_request())
         {
-			$data=$this->security->xss_clean($this->input->post('datos'));
-			$data=json_decode($data);
+			$data=($this->input->post());
+			$data=json_decode(json_encode($data), FALSE);
+			
+			
+			$config = [
+				"upload_path" => "./assets/img_pagos/",
+				"allowed_types" => "png|jpg"
+			];
+			$this->load->library("upload",$config);
+			if ($this->upload->do_upload('img_route')) {
+				$img = array("upload_data" => $this->upload->data());
+				$img_name = $img['upload_data']['file_name'];
+			}
+			else{
+				//echo $this->upload->display_errors();
+				$img_name = isset($data->img_name) ? $data->img_name: '';
+			}
+
 			$idPago=$data->idPago;
 			$gestion = date('Y',strtotime($data->fechaPago));
-
+			
 			$pago = new stdclass();
+			$pago->img_route = $img_name; 
 			$pago->fechaPago=$data->fechaPago;
 			$pago->fechaPago = date('Y-m-d',strtotime($pago->fechaPago));
 			$pago->moneda=$data->moneda;
@@ -402,15 +443,16 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->totalPago=$data->totalPago;
 			$pago->glosa=strtoupper($data->glosa);
 			$pago->autor=$this->session->userdata('user_id');
-			//$pago->fecha=date('Y-m-d H:i:s');
 			$tipocambio = $this->Ingresos_model->getTipoCambio($pago->fechaPago);
 			$pago->tipoCambio = $tipocambio->tipocambio;
 			$pago->tipoPago=$data->tipoPago;
-			$pago->cheque=$data->cheque;
+			$pago->cheque=isset($data->cheque) ? $data->cheque : '';
 			$pago->banco=$data->banco;
-			$pago->transferencia = $data->transferencia;
+			$pago->transferencia = strtoupper($data->transferencia);
 			$pago->gestion = $gestion;
-			$editarPago = $this->Pagos_model->editarPago($idPago,$pago,$data->porPagar);
+
+			$editarPago = $this->Pagos_model->editarPago($idPago,$pago,json_decode($data->porPagar));
+
 			if ($editarPago) {
 				$return=new stdClass();
 				$return->status=200;

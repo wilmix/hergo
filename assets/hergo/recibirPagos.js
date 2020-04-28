@@ -50,25 +50,15 @@ $( function() {
     };
  });
 $(document).ready(function(){
-    $("#imagenes").fileinput({
-        language: "es",
-        showUpload: false,
-        previewFileType: "image",
-        maxFileSize: 1024,
-        showPreview: false,
-      
-    });
-
-    console.log(idPago)
-   
+    fileImg()
     if (idPago==0) {
+        console.log(idPago)
         hoy = hoy
         console.log(hoy)
     } else {
         fechaEditar = $("#fechaEditar").val();
         hoy  = moment(fechaEditar).format('DD-MM-YYYY')
         console.log(hoy)
-        
     }
     
     $('#fechaPago').daterangepicker({
@@ -124,7 +114,15 @@ $(document).ready(function(){
     });
     retornarPagosPendientes();
 })
-
+function fileImg() {
+    $("#img_route").fileinput({
+        language: "es",
+        showUpload: false,
+        previewFileType: "image",
+        maxFileSize: 1024,
+        showPreview: false,
+    });
+}
 $(document).on("change","#fechaPago",function(){
     fechaPagoHoy = $('#fechaPago').val()
     let fecha = $('#fechaPago').val()
@@ -399,7 +397,6 @@ function editarPago(idPago) {
             idPago:idPago
         },
     }).done(function(res){
-        console.log(res);
         for (let index = 0; index < res.detalle.length; index++) {
             
             saldoNuevo = Math.round(res.detalle[index].saldoNuevo*100)/100
@@ -439,9 +436,8 @@ function editarPago(idPago) {
             idPago:idPago,
             nombreCliente:res.cabecera.nombreCliente,
             numPago:res.cabecera.numPago,
-            nombreCliente:res.cabecera.nombreCliente
-
-            
+            nombreCliente:res.cabecera.nombreCliente,
+            img_route:res.cabecera.img_route,
         }
         console.log(data);
     })
@@ -450,38 +446,39 @@ function editarPago(idPago) {
 function datosEditar(idPago) {
     let idAlmacenActual = $('#idAlmacenActual').val()
     if (idPago == 0) {
-    data = {
-            almacen:idAlmacenActual,
-                almacenes: [
-                { alm: 'CENTRAL HERGO', value: '1' },
-                { alm: 'DEPOSITO EL ALTO', value: '2' },
-                { alm: 'POTOSI', value: '3' },
-                { alm: 'SANTA CRUZ', value: '4' },
-                ],
-            tipoPago:'',
-            fechaPago:hoy,
-            banco:'1',
-            transferencia:'',
-            cheque:'',
-            cliente:'',
-            tipoPago: '1',
-                options: [
-                { tipo: 'EFECTIVO', value: '1' },
-                { tipo: 'TRANSFERENCIA', value: '2' },
-                { tipo: 'CHEQUE', value: '3' },
-                { tipo: 'OTROS', value: '4' }
-                ],
-            totalPago:'',
-            porPagar:[],
-            anulado:0,
-            moneda:1,
-            glosa:'',
-            guardar:false,
-            nombreCliente:'',
-            numPago: ''
-    }
+        data = {
+                almacen:idAlmacenActual,
+                    almacenes: [
+                    { alm: 'CENTRAL HERGO', value: '1' },
+                    { alm: 'DEPOSITO EL ALTO', value: '2' },
+                    { alm: 'POTOSI', value: '3' },
+                    { alm: 'SANTA CRUZ', value: '4' },
+                    ],
+                tipoPago:'',
+                fechaPago:hoy,
+                banco:'1',
+                transferencia:'',
+                cheque:'',
+                cliente:'',
+                tipoPago: '1',
+                    options: [
+                    { tipo: 'EFECTIVO', value: '1' },
+                    { tipo: 'TRANSFERENCIA', value: '2' },
+                    { tipo: 'CHEQUE', value: '3' },
+                    { tipo: 'OTROS', value: '4' }
+                    ],
+                totalPago:'',
+                porPagar:[],
+                anulado:0,
+                moneda:1,
+                glosa:'',
+                guardar:false,
+                nombreCliente:'',
+                numPago: '',
+                img_route:''
+        }
     } else {
-    editarPago(idPago); 
+        editarPago(idPago); 
     }
     return data
 }
@@ -603,6 +600,12 @@ var vmPago = new Vue({
                 this.guardar=false;
             }
         },
+        getImagen:function(e){
+            let file = e.target.files[0]
+            //console.log(file)
+            this.img_route = file
+
+        },
         agregarPago:function(row){
             //console.log(this.porPagar.map((el) => el.cliente));
             
@@ -636,12 +639,13 @@ var vmPago = new Vue({
             this.totalPago=total
             return total;
         },
-        editarPago(){
+        editarPago:function(e){
+            e.preventDefault();
+            agregarcargando();  
             nombreCliente = $("#cliente_factura").val();
             fechaPagoHoy = $("#fechaPago").val();
             nombreCliente = $("#cliente_factura").val();
             cliente = $("#idCliente_Pago").val();
-            agregarcargando();
             let datos={
                 almacen: this.almacen,
                 fechaPago:fechaPagoHoy,
@@ -658,11 +662,10 @@ var vmPago = new Vue({
                 guardar:true,
                 idPago:idPago,
                 nombreCliente:nombreCliente,
+                img_route: this.img_route
             };
             let  numPago = this.numPago
-            quitarcargando()
-            //console.log(datos);
-            //let clientes = datos.porPagar.map(p=>p.cliente)
+
             if (datos.cliente =='' || datos.nombreCliente == '') {
                 quitarcargando();
                 swal({
@@ -680,14 +683,27 @@ var vmPago = new Vue({
                 swal("Atencion", "Confime ediciòn de monto de pago","info");
                 return false
             }
-            datosAjax=JSON.stringify(datos);
+            
+            let formPagos = new FormData($('#formPagos')[0]);
+                formPagos.append("porPagar", JSON.stringify(this.porPagar))
+                formPagos.append("moneda", JSON.stringify(this.moneda))
+                formPagos.append("anulado", JSON.stringify(this.anulado))
+                formPagos.append("totalPago", JSON.stringify(this.totalPago))
+                formPagos.append("img_name", (this.img_route))
+
+            for(let pair of formPagos.entries()) {
+                console.log(pair[0]+ ', '+ pair[1]); 
+            }
             $.ajax({
-                type:"POST",
                 url: base_url('index.php/Pagos/editarPagos'),
-                dataType: "json",
-                data: {datos:datosAjax},
+                type: "post",      
+                data: formPagos,                                        
+                processData: false,
+                contentType: false,
+                cache:false, 
             }).done(function(res){
-                if(res.status=200)
+                res = JSON.parse(res)
+                if(res.status ==200)
                 {
                     quitarcargando();
                     swal({
@@ -788,7 +804,9 @@ var vmPago = new Vue({
         cancelarPago:function(){
             window.location.href = base_url("Pagos")
         },
-        guardarPago:function(){
+        guardarPago:function(e){
+            e.preventDefault();
+            agregarcargando();   
             almForm = $('#almacen').val()
             almUser = $('#idAlmacenUsuario').val()
             isAdmin = $('#isAdmin').val()
@@ -814,9 +832,9 @@ var vmPago = new Vue({
                 transferencia:this.transferencia,
                 porPagar:this.porPagar,
                 nombreCliente:nombreCliente,
-                numPago: this.numPago
+                numPago: this.numPago,
+                img_route: this.img_route
             };
-           
           
            if (datos.cliente =='' || datos.nombreCliente == '') {
             quitarcargando();
@@ -843,22 +861,29 @@ var vmPago = new Vue({
             
             datos.cliente = cliente
 
-            ///la clave
             let clientes2 = datos.porPagar.map(p=>p.cliente)
-            //console.log(clientes2);
             cliRed = clientes2.reduce((a , b) => (a == b) ? a : false)
             cliRed = (cliRed == false) ? 'varios' : cliRed
-            //console.log(cliRed)
 
-            console.log(datos);
-            datosAjax=JSON.stringify(datos);
+            let formPagos = new FormData($('#formPagos')[0]);
+                formPagos.append("porPagar", JSON.stringify(this.porPagar))
+                formPagos.append("moneda", JSON.stringify(this.moneda))
+                formPagos.append("anulado", JSON.stringify(this.anulado))
+                formPagos.append("totalPago", JSON.stringify(this.totalPago))
+            for(let pair of formPagos.entries()) {
+                console.log(pair[0]+ ', '+ pair[1]); 
+            }
+
             $.ajax({
-                type:"POST",
                 url: base_url('index.php/Pagos/guardarPagos'),
-                dataType: "json",
-                data: {d:datosAjax},
+                type: "post",      
+                data: formPagos,                                        
+                processData: false,
+                contentType: false,
+                cache:false, 
             }).done(function(res){
-                if(res.status==200)
+                res = JSON.parse(res)
+                if(res.status == 200)
                 {
                     quitarcargando();
                     swal({
@@ -874,7 +899,7 @@ var vmPago = new Vue({
                         let imprimir = base_url("pdf/Recibo/index/") + res.id;
                         window.open(imprimir);
                     });
-                } else if (res.status == false){
+                } else {
                     quitarcargando();
                     swal({
                         title: 'Error',
@@ -901,23 +926,6 @@ var vmPago = new Vue({
                 function(result) {   
                     console.log(result)
                 });
-            });
-        },
-        savePago:function(e){
-            e.preventDefault();
-
-            let data = new FormData($('#formPagos')[0]);
-            data.append("pagos", JSON.stringify(this.porPagar))
-            console.log(data)
-            $.ajax({
-                url: base_url('index.php/Pagos/guardarPagos'),
-                type: "post",      
-                data: data,                                         
-                processData: false,  // tell jQuery not to process the data
-                contentType: false,   // tell jQuery not to set contentType                                       
-                success: function (respuesta) {
-                  console.log(respuesta)
-                }
             });
         },
         selectClient:function (datosCliente) {

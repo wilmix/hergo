@@ -203,6 +203,13 @@ function retornarTablaPagos()
                         sortable:true,
                         searchable: false,
                     },
+                    {   
+                        field: 'img_route',            
+                        title: 'Comprobante',
+                        align: 'center',
+                        searchable: false,
+                        formatter: mostrarimagen
+                    },   
                     {
                         title: 'Acciones',
                         align: 'center',
@@ -226,6 +233,29 @@ function retornarTablaPagos()
     console.log( "Request Failed: " + err );
     });
 }
+
+    function mostrarimagen(value, row, index)
+    {
+        let ruta=""
+        let imagen=""
+        if((value=="")||(value==null))
+        {
+            ruta=""
+            clase=""
+        }
+        else
+        {
+            clase="imagenminiatura"
+            ruta="assets/img_pagos/"+value
+            imagen = '<div class="contimg"><img src="'+base_url(ruta)+'" class="'+clase+'"></div>'
+            return [imagen].join('')
+        }
+
+    }
+    $(document).on("click",".imagenminiatura",function(){
+        rutaimagen=$(this).attr('src')
+        window.open(rutaimagen);
+    })
     function operateFormatter3(value, row, index)
     {       
         num=Math.round(value * 100) / 100
@@ -412,6 +442,7 @@ let vm=new Vue({
        transferencia:'',
        cheque:'',
        tabla:[],
+       img_route:'',
 
     },
     methods:{
@@ -428,13 +459,13 @@ let vm=new Vue({
             this.transferencia=res[0].transferencia
             this.banco=res[0].banco
             this.cheque=res[0].cheque
+            this.img_route =res[0].img_route
             
             $("#modalPagos").modal("show");
         },
         retornarTotal:function(){
             var total=0
             $.each(this.tabla,function(index,value){
-                console.log(value);
                 total+=parseFloat(value.monto);
             })
             return total;

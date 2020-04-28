@@ -12,7 +12,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	public function mostrarPagos($ini=null,$fin=null,$alm="") { 
 		$sql="SELECT p.`idPago`, a.`almacen`, p.`numPago`, p.`fechaPago`, c.`nombreCliente`, p.`totalPago`, p.almacen idAlmacenPago,
 		p.`anulado`, CONCAT(u.`first_name`, ' ' , u.`last_name`) autor, p.`fecha`, f.`pagada`, m.`sigla`, tp.`tipoPago`, p.`totalPago` rTotalPago,
-		p.`transferencia`
+		p.`transferencia`, p.`img_route`
 		FROM pago_factura pf
 		INNER JOIN pago p ON p.`idPago`= pf.`idPago`
 		INNER JOIN factura f ON f.`idFactura` = pf.`idFactura`
@@ -48,7 +48,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		return $query;
 	}
 	public function retornarEdicion($idPago) {
-		$sql="SELECT p.`idPago`, p.`almacen`, p.`numPago`, p.`moneda`, p.`cliente`, p.`totalPago` ,p.`anulado`, p.`glosa`, p.`fechaPago`,
+		$sql="SELECT p.`idPago`, p.`almacen`, p.`numPago`, p.`moneda`, p.`cliente`, p.`totalPago` ,p.`anulado`, p.`glosa`, p.`fechaPago`,p.`img_route`,
 		p.`autor`, p.fecha, p.`tipoCambio`, p.`tipoPago`, p.`cheque` , p.`banco`, p.`transferencia`, p.imagen, p.`gestion`, tp.`tipoPago`,p.`cheque`,
 		c.`idCliente`, c.`nombreCliente`, c.`documento`, a.`almacen` nomAlmacen, a.`sucursal`, a.direccion, a.Telefonos, concat(u.`first_name`, ' ',u.`last_name`) userName, p.`tipoPago` idTipoPago , b.`sigla` nomBanco
 			FROM pago p
@@ -90,7 +90,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 	public function retornarDetallePago($idPago)
 	{
 		$sql="SELECT af.`siglAlm`, f.`lote`, f.`fechaFac`,f.`nFactura`, c.`nombreCliente`, pf.`monto`, f.`pagada`, 
-		a.`almacen`, cp.`nombreCliente` nombre, p.`glosa`, p.`fechaPago`, p.`numPago`, tp.`tipoPago`, 
+		a.`almacen`, cp.`nombreCliente` nombre, p.`glosa`, p.`fechaPago`, p.`numPago`, tp.`tipoPago`, p.`img_route`,
 		b.`sigla` banco, p.`transferencia`, p.`cheque`, p.anulado
 		FROM pago_factura pf
 		INNER JOIN pago p ON p.`idPago`= pf.`idPago`

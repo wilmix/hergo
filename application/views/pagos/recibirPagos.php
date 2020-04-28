@@ -33,10 +33,6 @@
     <section class="content">
 
       <!-- Your Page Content Here -->
-<input type="text" id="idPago" value="<?= isset($idPago)?$idPago:0?>" class="hidden"> 
-<input type="text" id="fechaEditar" value="<?= isset($idPago)?$fechaEditar:''?>" class="hidden"> 
-
-
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
@@ -82,7 +78,9 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body">
-          <form id="formPagos">
+          <form id="formPagos" enctype="multipart/form-data" role="form" method="POST">
+            <input type="text" id="idPago" name="idPago" value="<?= isset($idPago)?$idPago:0?>" class="hidden"> 
+            <input type="text" id="fechaEditar" value="<?= isset($idPago)?$fechaEditar:''?>" class="hidden"> 
             <div class="row">
               <!-- almacen -->
               <div class="form-group col-md-2">
@@ -126,7 +124,7 @@
                         value="">
                 <input  type="text" 
                         v-model="cliente"  
-                        name="idCliente_Pago" 
+                        name="cliente" 
                         id="idCliente_Pago" 
                         class="hidden"> 
               </div>
@@ -161,14 +159,14 @@
                 <!-- vaucher -->
                 <div class="form-group  col-md-2">
                   <label>Vaucher: </label>
-                  <input type="text" class="form-control" v-model="transferencia" id="vaucher" name="vaucher">
+                  <input type="text" class="form-control" v-model="transferencia" id="vaucher" name="transferencia">
                 </div>
               </div>
               <!-- Imagen -->
               <div class="upload_image">
                 <div class="form-group col-md-6">
-                  <label for="imagenes">Imagen de Pago:</label>
-                  <input id="imagenes" @change="imagenes" name="imagenes" type="file" class="file-loading" accept="image/*">
+                  <label for="img_route">Imagen de Pago:</label>
+                  <input id="img_route" @change="getImagen" name="img_route" type="file" class="file-loading" accept="image/*">
                 </div>
               </div>  
               <!-- Cheque -->
@@ -217,11 +215,11 @@
               <div class="form-group col-md-12">
                 <div class="btn-group pull-right">
                   <?php if (isset($idPago)): ?>
-                    <button type="button" class="btn btn-primary" id="editarPago" @click.once="editarPago">Modificar Pago</button>  
+                    <button type="button" class="btn btn-primary" id="editarPago" @click="editarPago">Modificar Pago</button>  
                     <button type="button" class="btn btn-warning" id="anularPago" @click="anularPago">Anular Movimiento</button>
                     <button type="button" class="btn btn-danger" id="cancelarPago" @click="cancelarPago">Cancelar Pago</button>
                   <?php else: ?>
-                    <button type="button" class="btn btn-primary" id="guardarPago" @click="savePago">Guardar Pago</button> 
+                    <button type="button" class="btn btn-primary" id="guardarPago" @click="guardarPago">Guardar Pago</button> 
                     <button type="button" class="btn btn-danger" id="cancelarPago" @click.once="cancelarPago">Cancelar Pago</button>
                   <?php endif ?>
                 </div>
