@@ -151,12 +151,12 @@
                       <!-- <div class="card-header">
                         Email
                       </div> -->
-                      <a href="http://webmail.hergo.com.bo/">
-                        <img src="<?php echo base_url("assets/imagenes/correoelectronico.png") ?>"  width="100" height="120" class="card-img-top" alt="...">
+                      <a href="http://webmail.hergo.com.bo/" target="_blank">
+                        <img src="<?php echo base_url("assets/imagenes/correoelectronico.png") ?>" width="100" height="120" class="card-img-top">
                       </a>
                       <div class="card-body">
                         <h5 class="card-title">Para ingresar al correo electrónico</h5>
-                        <a href="http://webmail.hergo.com.bo/" class="btn btn-primary">Click aqui</a>
+                        <a href="http://webmail.hergo.com.bo/" class="btn btn-primary" target="_blank">Click aqui</a>
                       </div>
                       <!-- <div class="card-footer text-muted">
                         2 days ago
