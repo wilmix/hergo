@@ -139,6 +139,45 @@
 
       <div class="row">
         <div class="col-md-6">
+            <div class="box">
+              <div class="box-header with-border">
+                <h3 class="box-title">Correo Electrónico Hergo</h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="card text-center">
+                      <!-- <div class="card-header">
+                        Email
+                      </div> -->
+                      <a href="http://webmail.hergo.com.bo/">
+                        <img src="<?php echo base_url("assets/imagenes/correoelectronico.png") ?>"  width="100" height="120" class="card-img-top" alt="...">
+                      </a>
+                      <div class="card-body">
+                        <h5 class="card-title">Para ingresar al correo electrónico</h5>
+                        <a href="http://webmail.hergo.com.bo/" class="btn btn-primary">Click aqui</a>
+                      </div>
+                      <!-- <div class="card-footer text-muted">
+                        2 days ago
+                      </div> -->
+                    </div>
+                    <!-- /.chart-responsive -->
+                  </div>
+                  <!-- /.col -->
+                </div>
+                <!-- /.row -->
+              </div>
+              <!-- ./box-body -->
+              <div class="box-footer clearfix">
+
+              </div>
+              <!-- /.box-footer -->
+            </div>
+            <!-- /.box -->
+          </div>
+          <!-- /.col -->
+        <div class="col-md-6">
           <div class="box">
             <div class="box-header with-border">
               <h3 class="box-title">Negativos</h3>
