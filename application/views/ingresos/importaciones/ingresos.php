@@ -42,75 +42,84 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-        <h2 class="modal-title">
-          <span class="label label-primary" id="titulo_modalIgresoDetalle"></span>
-          <span class="label label-primary" id="nmovingre"></span>
-          <span class="label label-default" id="tituloDetalleFac"></span>
-        </h2>
-
+          <h2 class="modal-title">
+            <span class="label label-primary" id="titulo_modalIgresoDetalle"></span>
+            <span class="label label-primary" id="nmovingre"></span>
+            <span class="label label-default" id="tituloDetalleFac"></span>
+          </h2>
       </div>
-      <div class="modal-body">
-        <!-- formulario PRIMERA FILA-->
-        <div class="row">
-          <!--PRIMERA FILA-->
-          <div class=" col-xs-6 col-sm-6 col-md-3">
-            <label>Almacen:</label>
-            <input id="almacen_imp" type="text" class="form-control" name="almacen_imp" readonly="">
-          </div>
-          <div class=" col-xs-6 col-sm-6 col-md-3">
-            <label for="moneda_imp">Tipo de Ingreso:</label>
-            <input id="tipomov_imp" type="text" class="form-control" name="tipomov_imp" readonly="">
-          </div>
-          <div class="col-xs-6 col-sm-6 col-md-2">
-            <label for="fechamov_imp">Fecha:</label>
-            <input id="fechamov_imp" type="text" class="form-control" name="fechamov_imp" readonly="">
-          </div>
-          <div class="col-xs-6 col-sm-6 col-md-2">
-            <label for="moneda_imp">Moneda:</label>
-            <input id="moneda_imp" type="text" class="form-control" name="moneda_imp" readonly="">
+      <div id="carousel-img" class="carousel slide" data-ride="carousel" data-interval="false">
+        <div class="carousel-inner">
+          <div class="active item" id="itemDetalle">
+            <div class="modal-body">
+              <!-- formulario PRIMERA FILA-->
+              <div class="row">
+                <!--PRIMERA FILA-->
+                <div class=" col-xs-6 col-sm-6 col-md-3">
+                  <label>Almacen:</label>
+                  <input id="almacen_imp" type="text" class="form-control" name="almacen_imp" readonly="">
+                </div>
+                <div class=" col-xs-6 col-sm-6 col-md-3">
+                  <label for="moneda_imp">Tipo de Ingreso:</label>
+                  <input id="tipomov_imp" type="text" class="form-control" name="tipomov_imp" readonly="">
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-2">
+                  <label for="fechamov_imp">Fecha:</label>
+                  <input id="fechamov_imp" type="text" class="form-control" name="fechamov_imp" readonly="">
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-2">
+                  <label for="moneda_imp">Moneda:</label>
+                  <input id="moneda_imp" type="text" class="form-control" name="moneda_imp" readonly="">
 
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-2">
+                  <label for="fechamov_imp"># Movimiento:</label>
+                  <input id="nmov_imp" type="text" class="form-control" name="nmov_imp" readonly="">
+                </div>
+              </div>
+              <!-- div class="form-group-sm row" PRIMERA FILA -->
+              <div class="row">
+                <!--SEGUNDA FILA-->
+                <div class="col-xs-12 col-lg-6 col-md-6">
+                  <label>Proveedor:</label>
+                  <input id="proveedor_imp" type="text" class="form-control" name="proveedor_imp" readonly="">
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-2">
+                  <label>Orden de Compra:</label>
+                  <input id="ordcomp_imp" type="text" class="form-control" name="ordcomp_imp" readonly="">
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-2">
+                  <label>N° Factura:</label>
+                  <input id="nfact_imp" type="text" class="form-control" name="nfact_imp" readonly="">
+                </div>
+                <!--<div class="col-xs-4 col-sm-4 col-md-2">
+                  <label>N° Ingreso:</label>
+                  <input id="ningalm_imp" type="text" class="form-control" name="ningalm_imp" readonly="">
+                </div>-->
+              </div>
+              <!-- div class="form-group-sm row" SEGUNDA FILA-->
+              <hr>
+              <table class="table-striped" data-toggle="table" id="tingresosdetalle">
+              </table>
+
+              <div class="row">
+                <div class="col-xs-12 col-md-12">
+                  <!--insertar costo de articulo a ingresar-->
+                  <label for="observaciones_imp">Observaciones:</label>
+                  <input type="text" class="form-control" id="obs_imp" name="obs_imp" />
+                </div>
+
+              </div>
+              <div class="clearfix"></div>
+
+            </div>
           </div>
-          <div class="col-xs-12 col-sm-6 col-md-2">
-            <label for="fechamov_imp"># Movimiento:</label>
-            <input id="nmov_imp" type="text" class="form-control" name="nmov_imp" readonly="">
-          </div>
+            <div id="itemImage">
+            </div>
         </div>
-        <!-- div class="form-group-sm row" PRIMERA FILA -->
-        <div class="row">
-          <!--SEGUNDA FILA-->
-          <div class="col-xs-12 col-lg-6 col-md-6">
-            <label>Proveedor:</label>
-            <input id="proveedor_imp" type="text" class="form-control" name="proveedor_imp" readonly="">
-          </div>
-          <div class="col-xs-4 col-sm-4 col-md-2">
-            <label>Orden de Compra:</label>
-            <input id="ordcomp_imp" type="text" class="form-control" name="ordcomp_imp" readonly="">
-          </div>
-          <div class="col-xs-4 col-sm-4 col-md-2">
-            <label>N° Factura:</label>
-            <input id="nfact_imp" type="text" class="form-control" name="nfact_imp" readonly="">
-          </div>
-          <!--<div class="col-xs-4 col-sm-4 col-md-2">
-            <label>N° Ingreso:</label>
-            <input id="ningalm_imp" type="text" class="form-control" name="ningalm_imp" readonly="">
-          </div>-->
+        <!-- Controls -->
+        <div id="imgControls">
         </div>
-        <!-- div class="form-group-sm row" SEGUNDA FILA-->
-        <hr>
-        <table class="table-striped" data-toggle="table" id="tingresosdetalle">
-        </table>
-
-        <div class="row">
-          <div class="col-xs-12 col-md-12">
-            <!--insertar costo de articulo a ingresar-->
-            <label for="observaciones_imp">Observaciones:</label>
-            <input type="text" class="form-control" id="obs_imp" name="obs_imp" />
-          </div>
-
-        </div>
-        <div class="clearfix"></div>
-
       </div>
       <div class="modal-footer">
         <span id="pendienteaprobado"></span>
@@ -120,3 +129,4 @@
 
   </div>
 </div>
+  

@@ -197,7 +197,7 @@
             </div>
             <!-- ./box-body -->
             <div class="box-footer clearfix">
-              <select   class="btn btn-sm btn-info btn-flat pull-left" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
+              <select   class="btn btn-sm btn-primary btn-flat pull-left" data-style="btn-primary" id="almacen_filtro" name="almacen_filtro">
                 <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
                 <?php foreach ($almacen->result_array() as $fila): ?>
                 <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>

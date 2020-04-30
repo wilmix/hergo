@@ -514,9 +514,13 @@ function operateFormatter2(value, row, index) {
     return ($ret);
 }
 function operateFormatter3(value, row, index) {
-    num = Math.round(value * 100) / 100
-    num = num.toFixed(2);
-    return (formatNumber.new(num));
+    if (value) {
+        num = Math.round(value * 100) / 100
+        num = num.toFixed(2);
+        return (formatNumber.new(num));
+    } else {
+        return '-'
+    }
 }
 function verdetalle(fila) {
     id = fila.idIngresos
@@ -528,6 +532,8 @@ function verdetalle(fila) {
         mon: fila.moneda
     }
     retornarajax(base_url("index.php/Ingresos/mostrarDetalle"), datos, function (data) {
+        console.log( data.respuesta[0].img_route);
+        let url = data.respuesta[0].img_route
         estado = validarresultado_ajax(data);
         if (estado) {
             var totaldoc = 0;
@@ -591,13 +597,24 @@ function verdetalle(fila) {
             $("#totaldocdetalle").val(totaldoc);
             $("#totalsisdetalle").val(totalsis);
             $("#titulo_modalIgresoDetalle").html(fila.tipomov);
+            url ? itemImage(url) : cleanItemImage()
+
 
             idTipoMov == 5 ? $("#tituloDetalleFac").html('') : $("#tituloDetalleFac").html(csFact);
             $("#modalIgresoDetalle").modal("show");
+            
         }
     })
 }
 function mostrarDetalle(res) {
+    let flete =parseFloat(res[0].flete)
+    if (flete) {
+        res.push({
+            Descripcion: 'FLETE',
+            totaldoc : flete,
+            total : 0,
+        })
+    }
     $("#tingresosdetalle").bootstrapTable('destroy');
     $("#tingresosdetalle").bootstrapTable({
         data: res,
@@ -639,7 +656,7 @@ function mostrarDetalle(res) {
                 align: 'right',
                 width: '10%',
                 sortable: true,
-                formatter: punitariofac,
+                formatter: operateFormatter3,
             },
             
             {
@@ -716,7 +733,7 @@ function mostrarDetalleTraspaso(res) {
                 width: '10%',
                 sortable: true,
                 visible: false,
-                formatter: punitariofac,
+                formatter: operateFormatter3,
             },
             {
                 field: 'totaldoc',

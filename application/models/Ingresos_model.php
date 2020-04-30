@@ -77,7 +77,7 @@ class Ingresos_model extends CI_Model
         }
         else
         {
-            $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact,
+            $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact, i.flete, i.img_route,
 				SUM(id.total) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, 
                 a.idalmacen, m.sigla monedasigla, i.ordcomp, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, 
                 SUM(id.total)/tc.tipoCambio totalsus,i.tipoDoc
@@ -202,7 +202,7 @@ class Ingresos_model extends CI_Model
     }
 	public function mostrarDetalle($id)
 	{
-		$sql="SELECT a.idArticulos idArticulo, a.CodigoArticulo, a.Descripcion, id.cantidad,id.totaldoc, id.punitario punitario, 
+		$sql="SELECT a.idArticulos idArticulo, a.CodigoArticulo, a.Descripcion, id.cantidad,id.totaldoc, id.punitario punitario, i.flete, i.img_route,
         id.total total, u.Unidad, tc.`tipocambio`, ROUND(a.`costoPromedioPonderado`,2) cpp
 		FROM ingdetalle id
 		INNER JOIN articulos a

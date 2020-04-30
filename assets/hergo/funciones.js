@@ -383,3 +383,26 @@ function numberDecimal(value, row, index) {
   num = num.toFixed(2);
   return (formatNumber.new(num));
 }
+function itemImage(url) {
+  url = base_url("assets/img_ingresos/" + url)
+  let img = `<img class="img-responsive center-block" src=" ${url} ">`
+  let controls = `<a class="left carousel-control" href="#carousel-img" role="button" data-slide="prev">
+                      <span class="glyphicon glyphicon-chevron-left"></span>
+                  </a>
+                  <a class="right carousel-control" href="#carousel-img" role="button" data-slide="next">
+                      <span class="glyphicon glyphicon-chevron-right"></span>
+                  </a>`
+  $("#imgControls").html(controls);
+  $("#itemImage").html(img);
+  $( "#itemImage" ).addClass( "item" )
+  $( "#itemDetalle" ).addClass( "item" )
+  $( "#itemDetalle" ).addClass( "active" )
+}
+function cleanItemImage() {
+  $( "#itemDetalle" ).addClass( "item" )
+  $( "#itemDetalle" ).addClass( "active" )
+  $("#imgControls").empty();
+  $( "#itemImage" ).removeClass( "item" )
+  $( "#itemImage" ).removeClass( "active" )
+  $("#itemImage").html('');
+}

@@ -9,6 +9,7 @@ let moneda
 let tipomov 
 
 $(document).ready(function(){
+    fileImg()
     tipomov = $("#tipomov_imp2").val()
     if (tipomov == 5) {
         $("#tipoNumFactura").addClass("hidden")
@@ -38,7 +39,6 @@ $(document).on("change", "#fechamov_imp", function () {
     if (hoy == fecha) {
         checkTipoCambio = true
     } else {
-        console.log('buscar');
         $.ajax({
             type: "POST",
             async: false,
@@ -168,8 +168,8 @@ $(document).on("click","#guardarMovimiento",function(){
     isAdmin = $('#isAdmin').val()
     fechaIngreso = $('#fechamov_imp').val()
     ingresoYear = moment(fechaIngreso).format('YYYY')
-    var actualDate = new Date();
-    var actualYear = actualDate.getFullYear();
+    let actualDate = new Date();
+    let actualYear = actualDate.getFullYear();
     /*if (actualYear != ingresoYear) {
         swal("Error", "Fecha no se encuentra en la gestiòn actual", "error")
         return false
@@ -237,6 +237,15 @@ $(document).on("change","#tipoDoc",function(){
         $(".tipoDocumento").val('')
     }
 })
+function fileImg() {
+    $("#img_route").fileinput({
+        language: "es",
+        showUpload: false,
+        previewFileType: "image",
+        maxFileSize: 1024,
+        showPreview: false,
+    });
+}
 function cargandoSaldoCosto()
 {
     $(".cargandoCostoSaldo").css("display","");
@@ -274,20 +283,20 @@ function limpiarTabla()
 }
 function calcularTotal()
 {
-    var moneda=$("#moneda_imp").val()
-    
-    var totales=$(".totalCosto").toArray();
-    var totalDoc=$(".totalDoc").toArray();
+    let moneda=$("#moneda_imp").val()
+    let flete= parseFloat($("#flete").val())
+    let totales=$(".totalCosto").toArray();
+    let totalDoc=$(".totalDoc").toArray();
 
-    var total=0;
-    var dato=0;
+    let total=0;
+    let dato=0;
     $.each(totales,function(index, value){
         dato=$(value).inputmask('unmaskedvalue');        
         total+=(dato=="")?0:parseFloat(dato)
     })
-    var totald=0;
+    let totald=0;
     dato=0;
-    console.log(moneda)
+
     $.each(totalDoc,function(index, value){
         dato=$(value).inputmask('unmaskedvalue');        
         totald+=(dato=="")?0:parseFloat(dato)
@@ -302,8 +311,10 @@ function calcularTotal()
         $("#nombretotaldoc").html("Bs Doc");
         $("#nombretotalsis").html("Bs Sis");        
     }
+    totald += flete
     totald = (Math.round(totald * 100) / 100).toFixed(2);
     total = (Math.round(total * 100) / 100).toFixed(2);
+
     $("#totalacostodoc").val(totald)
     $("#totalacostobs").val(total)
 }
@@ -511,6 +522,7 @@ function actualizarMovimiento()
 }
 function updateIngreso()
 {     
+    agregarcargando()
     let formData = new FormData($('#form_ingresoImportaciones')[0]); 
     let tableIngresos=tablatoarray();
     let tabla=JSON.stringify(tableIngresos);
@@ -526,6 +538,7 @@ function updateIngreso()
             processData: false,
             success: function (returndata) {
                 if (returndata) {
+                    quitarcargando()
                     swal({
                         title: "Ingreso modificado!",
                         text: "El ingreso se modificó con éxito",
@@ -539,6 +552,7 @@ function updateIngreso()
                         })
                     return false
                 } else {
+                    quitarcargando()
                     swal(
                         'Error',
                         'Error al actualizar , revise los datos e intente nuevamente',
@@ -548,6 +562,7 @@ function updateIngreso()
                 }
             },
             error : function (returndata) {
+                quitarcargando()
                 swal(
                     'Error',
                     'Error',
@@ -672,7 +687,8 @@ function mostrarModal()
 
 
 function storeIngreso()
-{     
+{
+    agregarcargando()
     let formData = new FormData($('#form_ingresoImportaciones')[0]); 
     let tableIngresos=tablatoarray();
     let tabla=JSON.stringify(tableIngresos);
@@ -681,6 +697,10 @@ function storeIngreso()
         swal("Error", "No se tiene tipo de cambio para esta Fecha", "error")
         return false;
     }
+    for(let pair of formData.entries()) {
+        console.log(pair[0]+ ', '+ pair[1]); 
+    }
+    //return false
     if (tableIngresos.length>0) {
         $.ajax({
             url: base_url("index.php/Ingresos/storeIngreso"),
@@ -690,16 +710,27 @@ function storeIngreso()
             contentType: false,
             processData: false,
             success: function (returndata) {
-                swal({
-                    title: "Ingreso realizado!",
-                    text: "El ingreso se guardo con éxito",
-                    type: "success",        
-                    allowOutsideClick: false,                                                                        
-                    }).then(function(){
-                        location.reload();
-                        let imprimir = base_url("pdf/Ingresos/index/") + returndata;
-                        window.open(imprimir);
-                    })
+                res = JSON.parse(returndata)
+                if (returndata != 'false') {
+                    quitarcargando()
+                    swal({
+                        title: "Ingreso realizado!",
+                        text: "El ingreso se guardo con éxito",
+                        type: "success",        
+                        allowOutsideClick: false,                                                                        
+                        }).then(function(){
+                            location.reload();
+                            let imprimir = base_url("pdf/Ingresos/index/") + returndata;
+                            window.open(imprimir);
+                        })
+                } else {
+                    quitarcargando()
+                    swal(
+                        'Error',
+                        'Error al guardar el ingreso',
+                        'error'
+                    )
+                }
             },
             error : function (returndata) {
                 swal(

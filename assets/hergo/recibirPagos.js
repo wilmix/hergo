@@ -691,9 +691,9 @@ var vmPago = new Vue({
                 formPagos.append("totalPago", JSON.stringify(this.totalPago))
                 formPagos.append("img_name", (this.img_route))
 
-            for(let pair of formPagos.entries()) {
+            /* for(let pair of formPagos.entries()) {
                 console.log(pair[0]+ ', '+ pair[1]); 
-            }
+            } */
             $.ajax({
                 url: base_url('index.php/Pagos/editarPagos'),
                 type: "post",      

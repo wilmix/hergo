@@ -171,7 +171,10 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-
+			/*********UPLOAD******************/
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
 			
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
@@ -220,7 +223,10 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-
+			/*********UPLOAD******************/
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
 
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
@@ -267,7 +273,10 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-
+			/*********UPLOAD******************/
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
 
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
@@ -315,11 +324,15 @@ class Ingresos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+			/*********UPLOAD******************/
+			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
 
 
 			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
 			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
-            $this->datos['dcab']=$this->mostrarIngresosEdicion($id);//datos cabecera
+			$this->datos['dcab']=$this->mostrarIngresosEdicion($id);//datos cabecera
             $this->datos['detalle']=$this->mostrarDetalleEditar($id);
             if($this->datos['dcab']->idtipomov==3) redirect("error");//evita editar si el tipo de moviemiento es traspaso                  
 
@@ -624,6 +637,19 @@ class Ingresos extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
+			$config = [
+				"upload_path" => "./assets/img_ingresos/",
+				"allowed_types" => "png|jpg"
+			];
+			$this->load->library("upload",$config);
+			if ($this->upload->do_upload('img_route')) {
+				$img = array("upload_data" => $this->upload->data());
+				$img_name = $img['upload_data']['file_name'];
+			}
+			else{
+				//echo $this->upload->display_errors();
+				$img_name = '';
+			}
 			$ingreso = new stdclass();
 			$ingreso->almacen = $this->security->xss_clean($this->input->post('almacen_imp'));
         	$ingreso->tipomov = $this->security->xss_clean($this->input->post('tipomov_imp'));
@@ -634,7 +660,9 @@ class Ingresos extends CI_Controller
         	$ingreso->ordcomp = $this->security->xss_clean($this->input->post('ordcomp_imp'));
 			$ingreso->nfact = $this->security->xss_clean($this->input->post('nfact_imp'));
 			$ingreso->tipoDoc = $this->security->xss_clean($this->input->post('tipoDoc'));
-        	$ingreso->obs = $this->security->xss_clean($this->input->post('obs_imp'));
+			$ingreso->obs = $this->security->xss_clean($this->input->post('obs_imp'));
+			$ingreso->flete = $this->security->xss_clean($this->input->post('flete'));
+			$ingreso->img_route = $img_name;
 			$ingreso->articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
 			
 
@@ -698,16 +726,31 @@ class Ingresos extends CI_Controller
     {
 		if($this->input->is_ajax_request())
         {
+			$imgName = $this->input->post('img_name');
+			$config = [
+				"upload_path" => "./assets/img_ingresos/",
+				"allowed_types" => "png|jpg"
+			];
+			$this->load->library("upload",$config);
+			if ($this->upload->do_upload('img_route')) {
+				$img = array("upload_data" => $this->upload->data());
+				$img_name = $img['upload_data']['file_name'];
+			}
+			else{
+				//echo $this->upload->display_errors();
+				$img_name = isset($imgName) ? $imgName : '';
+			}
 			$ingreso = new stdclass();
 			$idIngresos = $this->security->xss_clean($this->input->post('idingresoimportacion'));
 			$ingreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_imp'));
+			$ingreso->img_route = $img_name;
 			$ingreso->fechamov = date('Y-m-d',strtotime($ingreso->fechamov));
 			$ingreso->moneda = $this->security->xss_clean($this->input->post('moneda_imp'));
         	$ingreso->ordcomp = $this->security->xss_clean($this->input->post('ordcomp_imp'));
 		    $ingreso->proveedor = $this->security->xss_clean($this->input->post('proveedor_imp'));
 			$ingreso->nfact = $this->security->xss_clean($this->input->post('nfact_imp'));
 			$ingreso->tipoDoc = $this->security->xss_clean($this->input->post('tipoDoc'));
-			$ingreso->obs = $this->security->xss_clean($this->input->post('obs_imp'));
+			$ingreso->obs = strtoupper($this->security->xss_clean($this->input->post('obs_imp')));
 			$ingreso->estado = 0;
 			$ingreso->articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
 			
