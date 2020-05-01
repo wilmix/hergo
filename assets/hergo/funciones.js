@@ -5,13 +5,6 @@ let fechaHoySystem
 
 $(document).ready(function () 
 {
-  /*$("input").on("keypress", function () {
-    $input = $(this);
-    setTimeout(function () {
-      $input.val($input.val().toUpperCase());
-    }, 50);
-
-  })*/
   glob_tipoCambio = parseFloat($("#mostrarTipoCambio").text())
   fechaHoySystem = moment().endOf('day')
   fechaHoySystem = moment(fechaHoySystem).format("YYYY-MM-DD");
@@ -43,7 +36,7 @@ function setTipoCambio(fechaActual) {
 
 function base_url(complemento) {
   complemento = (complemento) ? complemento : '';
-  var baseurl = $('#baseurl').val();
+  let baseurl = $('#baseurl').val();
   return baseurl + complemento;
 }
 
@@ -57,7 +50,7 @@ function quitarcargando() {
 /******************AJAX************************/
 /**********************************************/
 function retornarajax(url, datos, callback) {
-  var retornar = new Object();
+  let retornar = new Object();
   $("#cargando").css("display", "block")
 
   return $.ajax({
@@ -68,7 +61,7 @@ function retornarajax(url, datos, callback) {
     // processData: false, //UP
     //  contentType: false  //UP
   }).done(function (data) {
-    var retornar = new Object();
+    let retornar = new Object();
     datos_retornados = "retorno";
     retornar.estado = "ok";
     retornar.respuesta = data;
@@ -79,8 +72,8 @@ function retornarajax(url, datos, callback) {
 
   }).fail(function (jqxhr, textStatus, error) {
     quitarcargando()
-    var retornar = new Object();
-    var err = textStatus + ", " + error;
+    let retornar = new Object();
+    let err = textStatus + ", " + error;
     console.log("Request Failed: " + err);
     if (jqxhr.status === 0) {
       errorajax = "No existe conexion, veirique su red";
@@ -372,10 +365,10 @@ Array.prototype.fuzzy = function (search) {
 
 
 function mantenerMenu() {
-  var pathname = window.location.pathname;
-  var dir = pathname.split("/")
-  var menu = dir[dir.length - 1];
-  var x = $("#masterMenu").find("." + menu).addClass("active").closest(".treeview").addClass("active");;
+  let pathname = window.location.pathname;
+  let dir = pathname.split("/")
+  let menu = dir[dir.length - 1];
+  $("#masterMenu").find("." + menu).addClass("active").closest(".treeview").addClass("active");
 
 }
 function numberDecimal(value, row, index) {

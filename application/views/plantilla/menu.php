@@ -56,15 +56,20 @@
             <li class="tipoCambio"><a href="<?php echo base_url("index.php/configuracion/tipoCambio") ?>"><i class="fas fa-dollar-sign"></i> Tipo de Cambio</a></li>
             <li class="modificarFacturaManual"><a href="<?php echo base_url("facturas/modificarFacturaManual") ?>"><i class="fa fa-pencil-square-o"></i> Modificar Factura Manual </a> </li>
             <li class="cierre"><a href="<?php echo base_url("index.php/cierre") ?>"><i class="fa fa-server"></i> Cierre </a> </li>
-            
-            <!--<li><a href="<?php echo base_url("index.php/usuarios") ?>"> FormFuncionarios</a></li>
-            <li><a href="#">Modificar Precis Articulos</a></li>
-            <li><a href="#">Datos Factura</a></li>
-            <li><a href="#">Opciones</a></li>-->
-
           </ul>
         </li>
 
+        <li class="treeview">
+          <a href="#"><i class="fa fa fa-truck"></i> <span>Importaciones</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="crear"><a href="<?php echo base_url("importaciones/pedidos/crear") ?>"><i class="fa fa-list-ol "></i> Crear Pedidos</a></li>
+            <li class="pedidos"><a href="<?php echo base_url("importaciones/pedidos") ?>"><i class="fa fa-edit"></i> Consultar Pedido</a></li>
+          </ul>
+        </li>
 
         <li class="treeview">
           <a href="<?php echo base_url("ingresos") ?>"><i class="fa fa-plus-square"></i> <span>Ingresos</span>
