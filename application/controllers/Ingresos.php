@@ -618,6 +618,35 @@ class Ingresos extends CI_Controller
 		{
 			die("PAGINA NO ENCONTRADA");
 		}
+	}
+	public function searchArticulo()
+    {
+        if($this->input->is_ajax_request() && $this->input->post('articulo'))
+        {
+			$articulo = $this->security->xss_clean($this->input->post('articulo'));
+			$fin = $this->security->xss_clean($this->input->post('fin'));
+			$fin = date("Y-m-d",strtotime($fin));
+			$ini = date("Y-m-d",strtotime($fin."- 6 month")); 
+        	$dato=$this->Ingresos_model->searchArticulos($articulo,$ini,$fin);        	
+			echo json_encode($dato->result_array());
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function searchProveedor()
+    {
+        if($this->input->is_ajax_request() && $this->input->post('search'))
+        {
+			$search = $this->security->xss_clean($this->input->post('search'));
+        	$dato=$this->Ingresos_model->searchProveedores($search);        	
+			echo json_encode($dato->result_array());
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
     }
     public function retornarTodosArticulos()
     {

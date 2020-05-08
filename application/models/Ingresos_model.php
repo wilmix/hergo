@@ -258,6 +258,28 @@ class Ingresos_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
     }
+    public function searchArticulos($articulo, $ini, $fin)
+    {
+		$sql="SELECT ast.id, ast.codigo, ast.numParte, ast.descripcion,ast.descripFabrica, ast.unidad, ast.saldo, 
+        ast.precio, ast.cpp, ast.img, ast.posicionArancel,SUM(fd.`facturaCantidad`) rotacion, CONCAT(ast.codigo, ' | ', ast.descripcion) label
+        FROM facturadetalle fd
+        INNER JOIN factura f ON f.`idFactura` = fd.`idFactura` AND f.`anulada` = 0 AND f.`fechaFac` BETWEEN '$ini' AND '$fin'
+        RIGHT JOIN articulos_saldo_total ast ON ast.`id` = fd.`articulo`
+        WHERE ast.`codigo` LIKE '$articulo%' OR ast.descripcion LIKE '$articulo%'
+        GROUP BY ast.id
+        LIMIT 20";
+		$query=$this->db->query($sql);
+		return $query;
+    }
+    public function searchProveedores($search)
+    {
+		$sql="SELECT p.`idproveedor` id, p.`nombreproveedor` label
+        FROM provedores p
+        WHERE p.`nombreproveedor` LIKE '$search%'
+        LIMIT 20";
+		$query=$this->db->query($sql);
+		return $query;
+    }
     public function retornarArticulos()
     {
         $sql="SELECT a.CodigoArticulo, a.Descripcion, u.Unidad

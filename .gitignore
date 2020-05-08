@@ -30,3 +30,5 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 application/config/database.php
 test
 application/config/config.php
+/assets/img_articulos
+favicon.ico

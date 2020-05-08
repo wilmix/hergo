@@ -13,6 +13,7 @@ class Pedidos extends CI_Controller
 		$this->load->model("Ingresos_model");
 		$this->load->model("Egresos_model");
 		$this->load->model("Cliente_model");
+		$this->load->model("Pedidos_model");
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
 		$this->cabeceras_css=array(
@@ -27,9 +28,10 @@ class Pedidos extends CI_Controller
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),
 				base_url('assets/plugins/daterangepicker/daterangepicker.css'),
 				base_url('assets/plugins/jQueryUI/jquery-ui.min.css'),//autocomplete
-				base_url('assets/plugins/select/bootstrap-select.min.css'),//select
 				base_url('assets/plugins/table-boot/plugin/bootstrap-editable.css'),
 				base_url('assets/BootstrapToggle/bootstrap-toggle.min.css'),
+				base_url('assets/plugins/select/bootstrap-select.min.css'),//select
+				'https://unpkg.com/vue-select@3.10.3/dist/vue-select.css',//select
 
 
 
@@ -54,7 +56,6 @@ class Pedidos extends CI_Controller
 				base_url('assets/plugins/daterangepicker/daterangepicker.js'),
 				base_url('assets/plugins/daterangepicker/locale/es.js'),
 				base_url('assets/plugins/jQueryUI/jquery-ui.min.js'),//autocomplete
-				base_url('assets/plugins/select/bootstrap-select.min.js'),//select
 				/**************INPUT MASK***************/
 				base_url('assets/plugins/inputmask/inputmask.js'),
 				base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js'),
@@ -62,7 +63,16 @@ class Pedidos extends CI_Controller
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-editable.js'),
 				base_url('assets/plugins/table-boot/plugin/bootstrap-editable.js'),
 				base_url('assets/BootstrapToggle/bootstrap-toggle.min.js'),
-				base_url('assets/hergo/funciones.js'),
+				base_url('assets/plugins/select/bootstrap-select.min.js'),//select
+				base_url('assets/plugins/numeral/numeral.min.js'),
+				
+			);
+			$this->foot_script=array(				
+        		'https://cdn.jsdelivr.net/npm/vue/dist/vue.js',								
+				base_url('assets/vue/vue-resource.min.js'),	
+				'https://unpkg.com/vue-select@3.10.3/dist/vue-select.js',
+				'https://unpkg.com/vuejs-datepicker',
+				'https://unpkg.com/vuejs-datepicker/dist/locale/translations/es.js'
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
@@ -97,6 +107,7 @@ class Pedidos extends CI_Controller
 			$this->datos['titulo']="ConsultaPedidos";
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/importaciones/pedidos.js');
 
 
@@ -124,8 +135,14 @@ class Pedidos extends CI_Controller
 			
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
+			$this->datos['foot_script']= $this->foot_script;
+			
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/formPedido.js');
 
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/importaciones/formPedido.js');
+			$this->datos['proveedor']=$this->Ingresos_model->retornar_tabla("provedores")->result_array();
+			/* var_dump($this->datos['proveedor']);
+			die(); */
 
 
 			$this->load->view('plantilla/head.php',$this->datos);
@@ -134,6 +151,37 @@ class Pedidos extends CI_Controller
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('importaciones/formPedido.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+			//$this->load->view('plantilla/footer.php',$this->datos);
+			$this->load->view('plantilla/footerscript.php',$this->datos);
+	}
+	public function store()
+	{
+		if($this->input->is_ajax_request())
+		{
+			$pedido = new stdclass();
+			$pedido->fecha = $this->input->post('fecha');
+			$pedido->recepcion = $this->input->post('recepcion');
+			$pedido->proveedor = $this->input->post('proveedor');
+			$pedido->pedidoPor = strtoupper($this->input->post('pedidoPor'));
+			$pedido->cotizacion = strtoupper($this->input->post('cotizacion'));
+			$pedido->formaPago = $this->input->post('formaPago');
+			$pedido->glosa = strtoupper($this->input->post('glosa'));
+			$pedido->items = json_decode($this->input->post('items'));
+
+			$id = $this->Pedidos_model->storePedido($pedido);
+
+			if($id)
+			{
+				echo json_encode($id);
+			}
+			else
+			{				
+				echo json_encode(false);
+			}
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
 	}
 }

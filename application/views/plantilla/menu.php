@@ -66,8 +66,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="crear"><a href="<?php echo base_url("importaciones/pedidos/crear") ?>"><i class="fa fa-list-ol "></i> Crear Pedidos</a></li>
-            <li class="pedidos"><a href="<?php echo base_url("importaciones/pedidos") ?>"><i class="fa fa-edit"></i> Consultar Pedido</a></li>
+            <li class="crear"><a href="<?php echo base_url("importaciones/pedidos/crear") ?>"><i class="fa fa-edit"></i> Crear Pedidos</a></li>
+            <li class="pedidos"><a href="<?php echo base_url("importaciones/pedidos") ?>"><i class="fa fa-list-ol"></i> Consultar Pedido</a></li>
           </ul>
         </li>
 
