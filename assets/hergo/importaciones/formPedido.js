@@ -178,7 +178,7 @@ const app = new Vue({
             text: "Por favor llene correctamente el formulario",
             type: 'error', 
             showCancelButton: false,
-        })
+          })
           return
         }
         let form = new FormData();
@@ -199,16 +199,30 @@ const app = new Vue({
           contentType: false,
           cache:false, 
         }).done(function(res){
-          quitarcargando()
-          swal({
-            title: "Guardado!",
-            text: "El pedido se guardó con éxito",
-            type: "success",        
-            allowOutsideClick: false,                                                                        
-            }).then(function(){
-              agregarcargando()
-              location.reload()
+          res = JSON.parse(res)
+          if (res.status) {
+            console.log('ok');
+            quitarcargando()
+            swal({
+              title: "Guardado!",
+              text: "El pedido se guardó con éxito",
+              type: "success",        
+              allowOutsideClick: false,                                                                        
+              }).then(function(){
+                agregarcargando()
+                location.reload()
+              })
+          } else {
+            quitarcargando()
+            swal({
+              title: 'Error',
+              text: "Error al guardar la solicitud, verifique el tipo de cambio para la fecha.",
+              type: 'error', 
+              showCancelButton: false,
             })
+            return
+          }
+          
         }) 
 
       }

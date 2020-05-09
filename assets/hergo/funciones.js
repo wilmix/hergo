@@ -131,10 +131,10 @@ $(window).resize(function () {
 function formato_fecha(value, row, index) {
   var fecha = ""
   //console.log(value)
-  if ((value == "0000-00-00 00:00:00") || (value == "") || (value == null))
-    fecha = "sin fecha de registro"
+  if ((value == "0000-00-00") || (value == "0000-00-00 00:00:00") || (value == "") || (value == null))
+    fecha = "Sin fecha de registro"
   else
-    fecha = moment(value, "YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY HH:mm:ss")
+    fecha = moment(value, "YYYY/MM/DD").format("DD/MM/YYYY")
   return [fecha]
 }
 
@@ -144,7 +144,7 @@ function formato_fecha_corta(value, row, index) {
   if ((value == "0000-00-00 00:00:00") || (value == "") || (value == null))
     fecha = "sin fecha de registro"
   else
-    fecha = moment(value, "YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY")
+    fecha = moment(value, "YYYY/MM/DD HH:mm:ss").format("DD/MM/YYYY HH:mm:ss")
   return fecha
 }
 
@@ -398,4 +398,40 @@ function cleanItemImage() {
   $( "#itemImage" ).removeClass( "item" )
   $( "#itemImage" ).removeClass( "active" )
   $("#itemImage").html('');
+}
+function dataPicker() {
+	let start = moment().subtract(0, 'year').startOf('year')
+	let end = moment().subtract(0, 'year').endOf('year')
+	$(function() {
+
+		function cb(start, end) {
+				$('#reportrange span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
+				ini = start.format('YYYY-MM-DD')
+				fin = end .format('YYYY-MM-DD')
+		}
+		$('#reportrange').daterangepicker({
+				startDate: start,
+				endDate: end,
+				ranges: {
+					'Hoy': [moment(), moment()],
+					'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+					'Ultimos 7 dias': [moment().subtract(6, 'days'), moment()],
+					'Mes actual': [moment().startOf('month'), moment().endOf('month')],
+					'Mes Anterior': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+					'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
+					'Hace 1 Año': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+					'Hace 2 Años': [moment().subtract(2, 'year').startOf('year'), moment().subtract(2, 'year').endOf('year')],
+					'Hace 3 Años': [moment().subtract(3, 'year').startOf('year'), moment().subtract(3, 'year').endOf('year')],
+				},
+				locale: {
+					format: 'DD/MM/YYYY',
+					applyLabel: 'Aplicar',
+					cancelLabel: 'Cancelar',
+					customRangeLabel: 'Personalizado',
+				},
+		}, cb);
+
+		cb(start, end);
+
+	})
 }

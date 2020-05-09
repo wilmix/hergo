@@ -109,9 +109,10 @@ class Pedidos extends CI_Controller
 			$this->datos['cabeceras_script']= $this->cabecera_script;
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/importaciones/pedidos.js');
+			
+			//$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");		
 
-
-            //$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+            $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
 			//$this->datos['tipoingreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
 			
 			$this->load->view('plantilla/head.php',$this->datos);
@@ -122,6 +123,21 @@ class Pedidos extends CI_Controller
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 			
+	}
+	public function getPedidos()  
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$ini=$this->security->xss_clean($this->input->post("ini"));
+        	$fin=$this->security->xss_clean($this->input->post("fin"));
+			$res=$this->Pedidos_model->getPedidos($ini, $fin); 
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
 	}
 	public function crear()
 	{
@@ -158,13 +174,16 @@ class Pedidos extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
 		{
+			$gestion = date("Y", strtotime($this->input->post('fecha')));
 			$pedido = new stdclass();
+			$pedido->n =  $this->Pedidos_model->getNumMov($gestion);
 			$pedido->fecha = $this->input->post('fecha');
 			$pedido->recepcion = $this->input->post('recepcion');
 			$pedido->proveedor = $this->input->post('proveedor');
 			$pedido->pedidoPor = strtoupper($this->input->post('pedidoPor'));
 			$pedido->cotizacion = strtoupper($this->input->post('cotizacion'));
 			$pedido->formaPago = $this->input->post('formaPago');
+			$pedido->autor = $this->session->userdata('user_id');
 			$pedido->glosa = strtoupper($this->input->post('glosa'));
 			$pedido->items = json_decode($this->input->post('items'));
 
@@ -172,12 +191,14 @@ class Pedidos extends CI_Controller
 
 			if($id)
 			{
+				$res = new stdclass();
+				$res->status = true;
+				$res->pedido = $pedido;
+				echo json_encode($res);
+			} else {
 				echo json_encode($id);
 			}
-			else
-			{				
-				echo json_encode(false);
-			}
+
 		}
 		else
 		{
