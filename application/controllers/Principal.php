@@ -18,6 +18,7 @@ class Principal extends CI_Controller
 				base_url("assets/fa/css/font-awesome.min.css"),
 				base_url("assets/dist/css/AdminLTE.min.css"),
 				base_url("assets/dist/css/skins/skin-blue.min.css"),
+				base_url('assets/sweetalert/sweetalert2.min.css'),
 				base_url("assets/hergo/estilos.css")
 				
 			);
@@ -27,7 +28,8 @@ class Principal extends CI_Controller
 				base_url('assets/dist/js/app.min.js'),
 				base_url('assets/plugins/slimscroll/slimscroll.min.js'),
 				base_url('assets/plugins/daterangepicker/moment.min.js'),
-				base_url('assets/hergo/dashboard.js')
+				base_url('assets/hergo/dashboard.js'),
+				base_url('assets/sweetalert/sweetalert2.min.js'),
 	
 			);
 

@@ -1,12 +1,14 @@
 <!-- Your Page Content Here -->
 <div class="row">
   <div class="col-xs-12">
-    <div class="box">
+    <div id="app" class="box">
       <div class="box-header with-border">
-        <h3 class="box-title">Solicitud de Importación</h3>
+        <h3 class="box-title" v-text="title"></h3>
       </div>
-      <div id="app" class="box-body">
+      <div class="box-body">
         <form action="" method="post" id="form_pedidos">
+          <!-- 0 -->
+          <input type="text" id="idPedido" value="<?php echo isset($id) ? $id : '' ?>" hidden>
           <!-- 1 -->
           <div class="row">
             <!-- fecha -->
@@ -187,7 +189,7 @@
           <!-- botones -->
           <div class="row">
               <div class="col-xs-12 text-center">
-                  <button type="button" class="btn btn-primary" @click="store">Guardar</button>
+                  <button type="button" class="btn btn-primary" @click="store" v-text="btnGuardar"></button>
                 <button type="button" class="btn btn-default">Cancelar</button>
             </div>
           </div>

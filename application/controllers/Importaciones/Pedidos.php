@@ -174,6 +174,7 @@ class Pedidos extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
 		{
+			$id = $this->input->post('id');
 			$gestion = date("Y", strtotime($this->input->post('fecha')));
 			$pedido = new stdclass();
 			$pedido->n =  $this->Pedidos_model->getNumMov($gestion);
@@ -187,13 +188,13 @@ class Pedidos extends CI_Controller
 			$pedido->glosa = strtoupper($this->input->post('glosa'));
 			$pedido->items = json_decode($this->input->post('items'));
 
-			$id = $this->Pedidos_model->storePedido($pedido);
+			$id = $this->Pedidos_model->storePedido($id , $pedido);
 
 			if($id)
 			{
 				$res = new stdclass();
 				$res->status = true;
-				$res->pedido = $pedido;
+				$res->pedido = $id;
 				echo json_encode($res);
 			} else {
 				echo json_encode($id);
@@ -205,4 +206,53 @@ class Pedidos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	public function edit($id)
+	{
+		//$this->libacceso->acceso(17);
+		if(!$this->session->userdata('logeado'))
+			redirect('auth', 'refresh');
+
+			$this->datos['menu']="Editar Pedido";
+			$this->datos['opcion']="Importaciones";
+			$this->datos['titulo']="Editar Pedido";
+			
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
+			$this->datos['foot_script']= $this->foot_script;
+			
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/formPedido.js');
+
+			$this->datos['id']=$id;
+			/* var_dump($this->datos['proveedor']);
+			die(); */
+
+
+			$this->load->view('plantilla/head.php',$this->datos);
+			$this->load->view('plantilla/header.php',$this->datos);
+			$this->load->view('plantilla/menu.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('importaciones/formPedido.php',$this->datos);
+			$this->load->view('plantilla/footcontainer.php',$this->datos);
+			//$this->load->view('plantilla/footer.php',$this->datos);
+			$this->load->view('plantilla/footerscript.php',$this->datos);
+	}
+	public function getPedido()  
+	{
+		if($this->input->is_ajax_request())
+        {
+			$id=$this->security->xss_clean($this->input->post("id"));
+			$pedido = new stdclass();
+			$pedido->pedido = $this->Pedidos_model->getPedido($id); 
+			$pedido->items = $this->Pedidos_model->getPedidoItems($id);
+			//$res=$res->result_array();
+			echo json_encode($pedido);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	
+
 }

@@ -12,6 +12,7 @@ const app = new Vue({
       vuejsDatepicker
   },
     data: {
+        id:'',
         es: vdp_translation_es.js,
         articulosList: [],
         proveList:[],
@@ -34,6 +35,7 @@ const app = new Vue({
         cantidad:0.00,
         precioFabrica:0.00,
         /* documento */
+        title:'Solicitud de Importación',
         fecha: moment().format('MM-DD-YYYY'),
         formaPago:null,
         selectedProv:null,
@@ -44,13 +46,17 @@ const app = new Vue({
         cliente:'',
         glosa:'',
         totalDoc:0,
-        tipoCambio: 0,
+        tipoCambio: parseFloat(document.getElementById("mostrarTipoCambio").textContent),
         items:[],
+        btnGuardar:'Guardar'
        
     },
   created: function () {
-    let tc = parseFloat(document.getElementById("mostrarTipoCambio").textContent)
-    this.tipoCambio = tc
+    let id = document.getElementById("idPedido").value
+    if (id) {
+      console.log(id);
+      this.editPedido(id)
+    }
   },
     methods: {
       addDetalle(){
@@ -73,7 +79,7 @@ const app = new Vue({
       },
       total(){
         if (this.items.length>0) {
-          this.totalDoc = this.items.map((item, index, array) => item.total).reduce( (a,b)=> a+b)
+          this.totalDoc = this.items.map((item, index, array) => parseFloat(item.total)).reduce( (a,b)=> a+b)
           return this.totalDoc
         }
       },
@@ -190,6 +196,7 @@ const app = new Vue({
         form.append('cotizacion', this.cotizacion)
         form.append('formaPago', this.formaPago.id)
         form.append('glosa', this.glosa)
+        form.append('id', this.id)
         /* for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); } */
         $.ajax({
           url: base_url('index.php/importaciones/pedidos/store'),
@@ -200,12 +207,11 @@ const app = new Vue({
           cache:false, 
         }).done(function(res){
           res = JSON.parse(res)
-          if (res.status) {
-            console.log('ok');
+          if (res.status == true) {
             quitarcargando()
             swal({
               title: "Guardado!",
-              text: "El pedido se guardó con éxito",
+              text: "El pedido se procesó con éxito",
               type: "success",        
               allowOutsideClick: false,                                                                        
               }).then(function(){
@@ -225,7 +231,38 @@ const app = new Vue({
           
         }) 
 
-      }
+      },
+      editPedido(id){
+        this.id = id
+        this.title = 'Editar Solicitud de Importación'
+        this.btnGuardar = 'Editar'
+        $.ajax({
+          type: "POST",
+          url: base_url('index.php/importaciones/pedidos/getPedido'),
+          dataType: "json",
+          data: {
+                  id:id,
+                },
+        }).done(function (res) {
+          console.log(res);
+          app.fecha = moment(res.pedido.fecha).format('MM-DD-YYYY')
+          app.recepcion = moment(res.pedido.recepcion).format('MM-DD-YYYY')
+          app.selectedProv = {
+            id: res.pedido.idProv,
+            label : res.pedido.proveedor
+          }
+          app.pedidoPor = res.pedido.pedidoPor
+          app.cotizacion = res.pedido.cotizacion
+          app.formaPago = {
+            id: res.pedido.idFP,
+            label: res.pedido.formaPago
+          }
+          app.glosa = res.pedido.glosa
+          app.items = res.items
+          app.total()
+        })
+      },
+
     },
     filters:{
       moneda:function(value){

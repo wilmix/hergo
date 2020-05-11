@@ -7,6 +7,7 @@ $(document).ready(function () {
 	$('#reportrange').on('apply.daterangepicker', function (ev, picker) {
 		getPedidos()
 	});
+
 })
 
 function getPedidos() {
@@ -84,6 +85,16 @@ function getPedidos() {
 					title: 'CREADO EN',
 					className: 'text-center',
 					render: formato_fecha_corta,
+				},
+				{
+					//targets : -1,
+					data: null,
+					title: '',
+					width: '100px',
+					className: 'text-center',
+					//: "<button class='ver'>Click!</button>"//'<button type="button" class="btn btn-default ver" aria-label="Right Align" data-toggle="tooltip" title="Ver"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
+					//formatter: operateFormatter,
+					render: buttons
 				},
 			],
 			stateSave: true,
@@ -201,4 +212,27 @@ function getPedidos() {
 	});
 }
 
+function buttons (data, type, row) {
+return `
+	<button type="button" class="btn btn-default see">
+		<span class="fa fa-search" aria-hidden="true">
+		</span>
+	</button>
+	<button type="button" class="btn btn-default edit">
+		<span class="fa fa-pencil" aria-hidden="true">
+		</span>
+	</button>
+`
+}
 
+$(document).on("click", "button.see", function () {
+    let data = table.row( $(this).parents('tr') ).data();
+	alert(data.id);
+})
+
+$(document).on("click", "button.edit", function () {
+    let row = table.row( $(this).parents('tr') ).data();
+	console.log( row.id );
+	let editar = base_url("importaciones/pedidos/edit/") + row.id;
+        window.location.href = editar;
+})
