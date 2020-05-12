@@ -61,13 +61,6 @@ function getPedidos() {
 					title: 'PEDIDO POR',
 				},
 				{
-					data: 'totalBOB',
-					title: 'TOTAL BOB',
-					sorting: false,
-					className: 'text-right',
-					render: numberDecimal
-				},
-				{
 					data: 'total$',
 					title: 'TOTAL $U$',
 					className: 'text-right',
@@ -75,25 +68,31 @@ function getPedidos() {
 					render: numberDecimal
 				},
 				{
+					data: 'totalBOB',
+					title: 'TOTAL BOB',
+					sorting: false,
+					className: 'text-right',
+					render: numberDecimal
+				},
+				{
 					data: 'autor',
 					title: 'CREADO POR',
 					className: 'text-right',
 					sorting: false,
+					visible: false
 				},
 				{
 					data: 'created_at',
 					title: 'CREADO EN',
 					className: 'text-center',
 					render: formato_fecha_corta,
+					visible: false
 				},
 				{
-					//targets : -1,
 					data: null,
 					title: '',
 					width: '100px',
 					className: 'text-center',
-					//: "<button class='ver'>Click!</button>"//'<button type="button" class="btn btn-default ver" aria-label="Right Align" data-toggle="tooltip" title="Ver"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',
-					//formatter: operateFormatter,
 					render: buttons
 				},
 			],
@@ -227,7 +226,7 @@ return `
 
 $(document).on("click", "button.see", function () {
     let data = table.row( $(this).parents('tr') ).data();
-	alert(data.id);
+	$("#pedidoModal").modal("show");
 })
 
 $(document).on("click", "button.edit", function () {

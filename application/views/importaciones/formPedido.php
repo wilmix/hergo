@@ -83,8 +83,8 @@
                       <blockquote>
                         <p class="card-text text-center"> 
                           <span class="font-weight-bold" v-text="">Saldo: </span> {{saldo | moneda }} <br>
-                          <span class="font-weight-bold">Precio:</span>  {{precio | moneda }} <br>
-                          <span class="font-weight-bold">CPP:</span>  {{cpp | moneda }} <br>
+                          <span class="font-weight-bold">Precio $u$:</span>  {{(precio / tipoCambio) | moneda }} <br>
+                          <span class="font-weight-bold">CPP $u$:</span>  {{ (cpp / tipoCambio) | moneda }} <br>
                           <span class="font-weight-bold">Rotaciòn:</span>  {{rotacion| moneda }}
                       </p>
                       </blockquote>
@@ -106,7 +106,7 @@
             </div>
             <!-- precio -->
             <div class="form-group col-sm-4 col-md-2">
-              <label for="precio">Precio de Fabrica:</label>
+              <label for="precio">Precio de Fabrica $u$:</label>
               <input type="number" style="text-align:right;" class="form-control" v-model.number="precioFabrica">
             </div>
             <!-- addButton -->
@@ -132,10 +132,10 @@
                   <th>Existencia</th>
                   <th>Rotacíon</th>
                   <th>Precio</th>
-                  <th class="bg-primary text-center">Cantidad Solicitada</th>
-                  <th class="bg-primary text-center">Precio Fabrica</th>
-                  <th class="bg-primary text-center">Total</th>
-                  <th class="bg-primary text-center" colspan="2">&nbsp;</th>
+                  <th class="bg-info text-center">Cantidad Solicitada</th>
+                  <th class="bg-info text-center">Precio Fabrica</th>
+                  <th class="bg-info text-center">Total</th>
+                  <th class="bg-info text-center" colspan="2">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -160,17 +160,17 @@
                 </tr>
               </tbody>
               <tfoot v-if="items.length>0">
-                <tr class="active">
-                  <td class="text-right" colspan="11" >Total $u$</td>
-                  <td class="text-right" >{{ totalDoc | moneda }}</td>
-                </tr>
                 <tr>
+                  <td class="text-right" colspan="11" ><strong> Total $u$ </strong></td>
+                  <td class="text-right bg-primary"><strong> {{ totalDoc | moneda }} </strong></td>
+                </tr>
+                <!-- <tr>
                   <td class="text-right" colspan="11">T/C</td>
                   <td class="text-right"> {{ tipoCambio | moneda }} </td>
-                </tr>
+                </tr> -->
                 <tr>
-                  <td class="text-right" colspan="11">Total BOB</td>
-                  <td class="text-right">{{ (totalDoc * tipoCambio) | moneda }}</td>
+                  <td class="text-right" colspan="11"><strong>Total BOB</strong> </td>
+                  <td class="text-right bg-primary"><strong> {{ (totalDoc * tipoCambio) | moneda }} </strong></td>
                 </tr>
               </tfoot>
             </table>
@@ -190,7 +190,7 @@
           <div class="row">
               <div class="col-xs-12 text-center">
                   <button type="button" class="btn btn-primary" @click="store" v-text="btnGuardar"></button>
-                <button type="button" class="btn btn-default">Cancelar</button>
+                <button type="button" class="btn btn-default" @click="cancel">Cancelar</button>
             </div>
           </div>
         </form>

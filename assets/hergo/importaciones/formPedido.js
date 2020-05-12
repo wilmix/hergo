@@ -64,6 +64,7 @@ const app = new Vue({
           this.selectedArticulo.cantidad = this.cantidad
           this.selectedArticulo.precioFabrica = this.precioFabrica
           this.selectedArticulo.total = this.cantidad * this.precioFabrica
+          this.selectedArticulo.precio = this.precio / this.tipoCambio
           this.items.push(this.selectedArticulo)
           app.cleanCard()
           app.total() 
@@ -174,6 +175,10 @@ const app = new Vue({
           })
           loading(false);
       }, 100),
+      cancel(e){
+        e.preventDefault()
+        window.location.href=base_url("index.php/importaciones/pedidos");
+      },
       store(e){
         agregarcargando()
         e.preventDefault()
@@ -209,15 +214,28 @@ const app = new Vue({
           res = JSON.parse(res)
           if (res.status == true) {
             quitarcargando()
-            swal({
-              title: "Guardado!",
-              text: "El pedido se procesó con éxito",
-              type: "success",        
-              allowOutsideClick: false,                                                                        
-              }).then(function(){
-                agregarcargando()
-                location.reload()
-              })
+            if (app.id) {
+              console.log(this.id);
+              swal({
+                title: "Editado!",
+                text: "El pedido se modificó con éxito",
+                type: "success",        
+                allowOutsideClick: false,                                                                        
+                }).then(function(){
+                  agregarcargando()
+                  window.location.href=base_url("index.php/importaciones/pedidos");
+                })
+            } else {
+              swal({
+                title: "Guardado!",
+                text: "El pedido se guardó con éxito",
+                type: "success",        
+                allowOutsideClick: false,                                                                        
+                }).then(function(){
+                  agregarcargando()
+                  location.reload()
+                })
+            }
           } else {
             quitarcargando()
             swal({

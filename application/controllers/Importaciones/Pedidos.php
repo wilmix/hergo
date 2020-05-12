@@ -107,14 +107,11 @@ class Pedidos extends CI_Controller
 			$this->datos['titulo']="ConsultaPedidos";
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
+			$this->datos['foot_script']= $this->foot_script;
+			
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/importaciones/pedidos.js');
-			
-			//$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");		
-
-            $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-			//$this->datos['tipoingreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
-			
+			$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/pedidos.js');
+		
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
@@ -122,6 +119,7 @@ class Pedidos extends CI_Controller
 			$this->load->view('importaciones/consultaPedidos.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
+			$this->load->view('plantilla/footerscript.php',$this->datos);
 			
 	}
 	public function getPedidos()  
@@ -156,7 +154,6 @@ class Pedidos extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/formPedido.js');
 
-			$this->datos['proveedor']=$this->Ingresos_model->retornar_tabla("provedores")->result_array();
 			/* var_dump($this->datos['proveedor']);
 			die(); */
 
@@ -224,9 +221,6 @@ class Pedidos extends CI_Controller
 			$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/formPedido.js');
 
 			$this->datos['id']=$id;
-			/* var_dump($this->datos['proveedor']);
-			die(); */
-
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
@@ -245,7 +239,6 @@ class Pedidos extends CI_Controller
 			$pedido = new stdclass();
 			$pedido->pedido = $this->Pedidos_model->getPedido($id); 
 			$pedido->items = $this->Pedidos_model->getPedidoItems($id);
-			//$res=$res->result_array();
 			echo json_encode($pedido);
 		}
 		else
