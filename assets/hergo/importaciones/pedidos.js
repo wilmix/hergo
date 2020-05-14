@@ -169,7 +169,7 @@ function getPedidos() {
 				footer: true
 			},
 			//paging: false,
-			responsive: true,
+			//responsive: true,
 			language: {
 				buttons: {
 					colvisRestore: "Restaurar",
@@ -225,8 +225,9 @@ return `
 }
 
 $(document).on("click", "button.see", function () {
-    let data = table.row( $(this).parents('tr') ).data();
-	$("#pedidoModal").modal("show");
+	let row = table.row( $(this).parents('tr') ).data();
+	modal.getPedido(row.id)
+	
 })
 
 $(document).on("click", "button.edit", function () {
@@ -235,3 +236,64 @@ $(document).on("click", "button.edit", function () {
 	let editar = base_url("importaciones/pedidos/edit/") + row.id;
         window.location.href = editar;
 })
+
+const modal = new Vue({
+	el: '#app',
+	data: {
+		numYear:'',
+        fecha: '',
+        formaPago:'',
+        proveedor:'',
+        pedidoPor:'',
+        cotizacion:'',
+        recepcion:'',
+        glosa:'',
+        totalDoc:0,
+		tipoCambio: parseFloat(document.getElementById("mostrarTipoCambio").textContent),
+		totalDoc:0,
+        items:[],
+	},
+	methods:{
+		getPedido(id){
+			$.ajax({
+				type: "POST",
+				url: base_url('index.php/importaciones/pedidos/getPedido'),
+				dataType: "json",
+				data: {
+						id:id,
+					  },
+			  }).done(function (res) {
+				console.log(res);
+				let num = '000'.substring(0, '000'.length - res.pedido.n.length) + res.pedido.n
+				let year = moment(res.pedido.fecha).format('YY')
+				modal.numYear = `${num}/${year}`
+				modal.fecha = moment(res.pedido.fecha).format('DD/MM/YYYY')
+				modal.formaPago = res.pedido.formaPago
+				modal.pedidoPor = res.pedido.pedidoPor
+				modal.cotizacion = res.pedido.cotizacion
+				modal.recepcion = moment(res.pedido.recepcion).format('DD/MM/YYYY')
+				modal.proveedor = res.pedido.proveedor
+				modal.formaPago = res.pedido.formaPago
+				modal.glosa = res.pedido.glosa
+				modal.items = res.items
+				modal.total()
+				$("#pedidoModal").modal("show");
+			  })
+		},
+		total(){
+			if (this.items.length>0) {
+			  this.totalDoc = this.items.map((item, index, array) => parseFloat(item.total)).reduce( (a,b)=> a+b)
+			  console.log(this.totalDoc);
+			  return this.totalDoc
+			}
+		  },
+	},
+	filters:{
+		moneda:function(value){
+			num=Math.round(value * 100) / 100
+			num=num.toFixed(2);
+			//return(num);
+			return numeral(num).format('0,0.00');            
+		}, 
+	}
+  })

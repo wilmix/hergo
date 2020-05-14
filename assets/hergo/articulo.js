@@ -46,6 +46,15 @@ $(document).ready(function(){
                         
                 }
             },
+            descripcionFabrica: {
+                validators: {
+                        stringLength: {
+                        min: 2,
+                        message: 'Ingrese descrición válida'
+                        
+                    },
+                }
+            },
             unidad: {
                 validators: {
                     notEmpty: {
@@ -120,9 +129,10 @@ $(document).ready(function(){
         })
         .on('success.form.bv', function(e) {
             e.preventDefault();
-            var valuesToSubmit = $("#form_articulo").serialize();  
-            var formData = new FormData($('#form_articulo')[0]);  
-            //console.log(formData)      
+            let valuesToSubmit = $("#form_articulo").serialize();  
+            let formData = new FormData($('#form_articulo')[0]);  
+            /* for(let pair of formData.entries()) { console.log(pair[0]+ ', '+ pair[1]); }
+            return */
             $.ajax({
                 url: base_url("index.php/Articulos/agregarArticulo"),
                 type: 'POST',
@@ -188,6 +198,7 @@ function mostrarModal(fila)
     $("#id_articulo").val(fila.idArticulos)
     $("#codigoarticulo").val(fila.CodigoArticulo)
     $("#descrpcionarticulo").val(fila.Descripcion)
+    $("#descripcionFabrica").val(fila.detalleLargo)
     asignarselect(fila.Unidad,$("#unidadarticulo"))
     asignarselect(fila.Marca,$("#marcaarticulo"))
     asignarselect(fila.Linea,$("#lineaarticulo"))
@@ -196,7 +207,6 @@ function mostrarModal(fila)
     $("#arancelariaarticulo").val(fila.PosicionArancelaria)
     asignarselect(fila.Requisito,$("#autorizaarticulo"))
     $("#uso").val(fila.EnUso)
-
     $("#productoarticulo").val(fila.ProductoServicio)
     $(".modal-title").html("Modificar articulo")
     $("#bguardar_articulo").html("Modificar")
@@ -343,7 +353,6 @@ function retornarTabla()
 }
 function mostrarimagen(value, row, index)
 {
-    console.log(value);
     let ruta=""
     let imagen=""
     if((value=="")||(value==null))

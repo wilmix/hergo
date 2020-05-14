@@ -17,7 +17,7 @@ class Articulo_model extends CI_Model
 	}
 	public function mostrarArticulos()
 	{
-		$sql="SELECT a.idArticulos, a.CodigoArticulo, a.Descripcion, a.NumParte, u.Unidad, m.Marca, l.Linea, a.PosicionArancelaria, 
+		$sql="SELECT a.idArticulos, a.CodigoArticulo, a.Descripcion,a.detalleLargo, a.NumParte, u.Unidad, m.Marca, l.Linea, a.PosicionArancelaria, 
 		r.Requisito, a.ProductoServicio, a.detalleLargo, a.EnUso,a.Imagen, a.Fecha , Concat(us.first_name,' ',us.last_name) as autor, precio
 			FROM articulos a
 			INNER JOIN unidad u
@@ -35,7 +35,7 @@ class Articulo_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function agregarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen,$precio)
+	public function agregarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen,$precio,$descripcionFabrica)
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
@@ -45,22 +45,22 @@ class Articulo_model extends CI_Model
 		detalleLargo, Autor, Imagen,precio) 
 		VALUES('$codigo','$descripcion','$parte','$unidad','$marca',
 		'$linea','$posicion','$autoriza','$proser','$uso',
-		'','$autor','$nom_imagen', '$precio')";
+		'$descripcionFabrica','$autor','$nom_imagen', '$precio')";
 		$query=$this->db->query($sql);
 	}
-	public function editarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen,$precio)
+	public function editarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen,$precio,$descripcionFabrica)
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
 		if($nom_imagen=="") {
 			$sql="UPDATE articulos SET CodigoArticulo='$codigo', Descripcion='$descripcion', NumParte='$parte', idUnidad='$unidad', 
 			idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito='$autoriza', ProductoServicio='$proser', 
-			EnUso='$uso', detalleLargo='???', Autor='$autor',  precio='$precio' WHERE idArticulos=$id";
+			EnUso='$uso', detalleLargo='$descripcionFabrica', Autor='$autor',  precio='$precio' WHERE idArticulos=$id";
 		}	
 		else {
 			$sql="UPDATE articulos SET CodigoArticulo='$codigo', Descripcion='$descripcion', NumParte='$parte', idUnidad='$unidad', 
 			idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito='$autoriza', ProductoServicio='$proser', 
-			EnUso='$uso', detalleLargo='???', Autor='$autor', Imagen='$nom_imagen', precio='$precio' WHERE idArticulos=$id";
+			EnUso='$uso', detalleLargo='$descripcionFabrica', Autor='$autor', Imagen='$nom_imagen', precio='$precio' WHERE idArticulos=$id";
 		}
 		$query=$this->db->query($sql);		
 	}

@@ -99,7 +99,8 @@ class Articulos extends CI_Controller
         {
         	$id = addslashes($this->security->xss_clean($this->input->post('id_articulo')));
         	$codigo = addslashes($this->security->xss_clean($this->input->post('codigo')));
-        	$descripcion = addslashes($this->security->xss_clean($this->input->post('descripcion')));
+			$descripcion = addslashes($this->security->xss_clean($this->input->post('descripcion')));
+			$descripcionFabrica = addslashes($this->security->xss_clean($this->input->post('descripcionFabrica')));
         	$unidad = addslashes($this->security->xss_clean($this->input->post('unidad')));
         	$marca = addslashes($this->security->xss_clean($this->input->post('marca')));           	
         	$linea = addslashes($this->security->xss_clean($this->input->post('linea')));
@@ -113,14 +114,14 @@ class Articulos extends CI_Controller
         	if($id=="")
         	{
         		$nom_imagen=$this->subir_imagen($id,$_FILES);
-				$this->Articulo_model->agregarArticulo_model($id,strtoupper($codigo) ,strtoupper($descripcion),$unidad,$marca,$linea,$parte,
-				$posicion,$autoriza,$proser,$uso,$nom_imagen,$precio);
+				$this->Articulo_model->agregarArticulo_model($id,strtoupper($codigo) ,strtoupper($descripcion),$unidad,$marca,$linea,strtoupper($parte),
+				strtoupper($posicion),$autoriza,$proser,$uso,$nom_imagen,$precio,strtoupper($descripcionFabrica));
         	}
         	else
         	{
         		$nom_imagen=$this->subir_imagen($id,$_FILES);
-				$this->Articulo_model->editarArticulo_model($id,strtoupper($codigo),strtoupper($descripcion),$unidad,$marca,$linea,$parte,
-				$posicion,$autoriza,$proser,$uso,$nom_imagen,$precio);
+				$this->Articulo_model->editarArticulo_model($id,strtoupper($codigo),strtoupper($descripcion),$unidad,$marca,$linea,strtoupper($parte),
+				strtoupper($posicion),$autoriza,$proser,$uso,$nom_imagen,$precio,strtoupper($descripcionFabrica));
         	}
         }
         echo "{}";       

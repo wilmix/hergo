@@ -174,7 +174,7 @@ class Pedidos extends CI_Controller
 			$id = $this->input->post('id');
 			$gestion = date("Y", strtotime($this->input->post('fecha')));
 			$pedido = new stdclass();
-			$pedido->n =  $this->Pedidos_model->getNumMov($gestion);
+			$pedido->n = $id ? $this->input->post('n') : $this->Pedidos_model->getNumMov($gestion);
 			$pedido->fecha = $this->input->post('fecha');
 			$pedido->recepcion = $this->input->post('recepcion');
 			$pedido->proveedor = $this->input->post('proveedor');

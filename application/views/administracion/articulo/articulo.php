@@ -81,7 +81,16 @@ th:hover .filterControl {
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
                     <input  name="descripcion" placeholder="Descripción de artículo" class="form-control" id="descrpcionarticulo"  type="text">
-                    <!--<input  name="descripcion" placeholder="Descripción de artículo" class="form-control" id="descrpcionarticulo"  type="text" style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();">-->
+                  </div>
+                </div>
+              </div>
+              <!-- DescripcionFabrica-->
+              <div class="form-group">
+                <label class="col-md-3 col-lg-3 control-label" for="descripcionFabrica">Descripción Fábrica</label>  
+                <div class="col-md-9 col-lg-9 inputGroupContainer">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-align-justify"></i></span>
+                    <input  name="descripcionFabrica" placeholder="Descripción de Fábrica" class="form-control" id="descripcionFabrica"  type="text">
                   </div>
                 </div>
               </div>

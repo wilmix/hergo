@@ -36,6 +36,7 @@ const app = new Vue({
         precioFabrica:0.00,
         /* documento */
         title:'Solicitud de Importación',
+        n:0,
         fecha: moment().format('MM-DD-YYYY'),
         formaPago:null,
         selectedProv:null,
@@ -202,6 +203,8 @@ const app = new Vue({
         form.append('formaPago', this.formaPago.id)
         form.append('glosa', this.glosa)
         form.append('id', this.id)
+        form.append('n', this.n)
+
         /* for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); } */
         $.ajax({
           url: base_url('index.php/importaciones/pedidos/store'),
@@ -263,6 +266,7 @@ const app = new Vue({
                 },
         }).done(function (res) {
           console.log(res);
+          app.n = res.pedido.n
           app.fecha = moment(res.pedido.fecha).format('MM-DD-YYYY')
           app.recepcion = moment(res.pedido.recepcion).format('MM-DD-YYYY')
           app.selectedProv = {
