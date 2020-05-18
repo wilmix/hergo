@@ -99,7 +99,7 @@ class Pedidos extends CI_Controller
 	
 	public function index()
 	{
-		$this->libacceso->acceso(15);
+		$this->libacceso->acceso(57);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 			$this->datos['menu']="Consulta Pedidos";
@@ -129,7 +129,6 @@ class Pedidos extends CI_Controller
         	$ini=$this->security->xss_clean($this->input->post("ini"));
         	$fin=$this->security->xss_clean($this->input->post("fin"));
 			$res=$this->Pedidos_model->getPedidos($ini, $fin); 
-			$res=$res->result_array();
 			echo json_encode($res);
 		}
 		else
@@ -139,7 +138,7 @@ class Pedidos extends CI_Controller
 	}
 	public function crear()
 	{
-		$this->libacceso->acceso(17);
+		$this->libacceso->acceso(58);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -183,6 +182,7 @@ class Pedidos extends CI_Controller
 			$pedido->formaPago = $this->input->post('formaPago');
 			$pedido->autor = $this->session->userdata('user_id');
 			$pedido->glosa = strtoupper($this->input->post('glosa'));
+			$pedido->updated_at = $id ? date('Y-m-d H:i:s') : 0;
 			$pedido->items = json_decode($this->input->post('items'));
 
 			$id = $this->Pedidos_model->storePedido($id , $pedido);
@@ -203,9 +203,36 @@ class Pedidos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	public function aprobar()
+	{
+		$this->libacceso->acceso(56);
+		if($this->input->is_ajax_request())
+		{
+			$id = $this->input->post('id');
+			$aprobar = new stdclass();
+			$aprobar->id_user = $this->session->userdata('user_id');
+			$aprobar->id_pedido = $id;
+			$id = $this->Pedidos_model->aprobar($aprobar);
+
+			if($id)
+			{
+				$res = new stdclass();
+				$res->status = true;
+				$res->aprobado = $id;
+				echo json_encode($res);
+			} else {
+				echo json_encode($id);
+			}
+
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 	public function edit($id)
 	{
-		//$this->libacceso->acceso(17);
+		$this->libacceso->acceso(59);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
@@ -236,10 +263,26 @@ class Pedidos extends CI_Controller
 		if($this->input->is_ajax_request())
         {
 			$id=$this->security->xss_clean($this->input->post("id"));
+			$user =$this->session->userdata('user_id');
 			$pedido = new stdclass();
 			$pedido->pedido = $this->Pedidos_model->getPedido($id); 
 			$pedido->items = $this->Pedidos_model->getPedidoItems($id);
+			$pedido->aprobadoPor = $this->Pedidos_model->getAprobadoPor($id);
+			$pedido->aprobadoUser = $this->Pedidos_model->getAprobadoUser($id,$user);
 			echo json_encode($pedido);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function permisos()  
+	{
+		if($this->input->is_ajax_request())
+        {
+			$user =$this->session->userdata('user_id');
+			$permisos = $this->Pedidos_model->getPermisos($user);
+			echo json_encode($permisos);
 		}
 		else
 		{

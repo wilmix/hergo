@@ -119,12 +119,27 @@
           </table>
         </div>
         <div class="modal-footer">
+
           <div class="col-md-12">
             <blockquote class="text-left">
               <p><strong>JUSTIFICACIÓN: </strong> <span v-text="glosa"></span></p>
             </blockquote>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
           </div>
+          <div class="row" v-if="aprobadoPor">
+            <div class="col-sm-2" v-for="user in aprobadoPor">
+              <div class="card">
+                <div class="card-body" >
+                  <p class="card-text">Aprobado por:</p>
+                  <h4 class="card-title">{{ user.aprobado_por}}</h4>
+                  <h6 class="card-subtitle mb-2 text-muted">{{ user.created_at}}</h6>
+                </div>
+              </div>
+            </div>
+          </div><!-- !aprobadoUser &&  -->
+          <template v-if="!aprobadoUser && permisoAprobar">
+            <button type="button" class="btn btn-success" @click="aprobar">Aprobar</button>
+          </template>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>

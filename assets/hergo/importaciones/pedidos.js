@@ -30,7 +30,13 @@ function getPedidos() {
 				['10 filas', '25 filas', '50 filas', 'Todo']
 			],
 			pageLength: 10,
-			columns: [{
+			columns: [
+				/* {
+					data: 'id',
+					title: 'id',
+					className: 'text-center',
+				}, */
+				{
 					data: 'n',
 					title: 'Nº',
 					className: 'text-center',
@@ -73,6 +79,12 @@ function getPedidos() {
 					sorting: false,
 					className: 'text-right',
 					render: numberDecimal
+				},
+				{
+					data: 'nAprobados',
+					title: 'ESTADO',
+					className: 'text-center',
+					render:aprobados
 				},
 				{
 					data: 'autor',
@@ -223,6 +235,15 @@ return `
 	</button>
 `
 }
+function aprobados (data, type, row) {
+	//console.log(row.nAprobados>);
+	if (row.nAprobados>2) {
+		//console.log(`id ${row.id} npedidos ${row.n}`);
+		return `<span class="label label-success">APROBADO</span>`
+	} else {
+		return `<span class="label label-danger">PENDIENTE</span>`
+	}
+}
 
 $(document).on("click", "button.see", function () {
 	let row = table.row( $(this).parents('tr') ).data();
@@ -240,6 +261,8 @@ $(document).on("click", "button.edit", function () {
 const modal = new Vue({
 	el: '#app',
 	data: {
+		permisoAprobar:false,
+		id:0,
 		numYear:'',
         fecha: '',
         formaPago:'',
@@ -251,7 +274,10 @@ const modal = new Vue({
         totalDoc:0,
 		tipoCambio: parseFloat(document.getElementById("mostrarTipoCambio").textContent),
 		totalDoc:0,
-        items:[],
+		items:[],
+		aprobadoPor:[],
+		aprobadoUser:null,
+		permisosUser: PermisosUser,
 	},
 	methods:{
 		getPedido(id){
@@ -266,6 +292,7 @@ const modal = new Vue({
 				console.log(res);
 				let num = '000'.substring(0, '000'.length - res.pedido.n.length) + res.pedido.n
 				let year = moment(res.pedido.fecha).format('YY')
+				modal.id = res.pedido.id
 				modal.numYear = `${num}/${year}`
 				modal.fecha = moment(res.pedido.fecha).format('DD/MM/YYYY')
 				modal.formaPago = res.pedido.formaPago
@@ -276,6 +303,11 @@ const modal = new Vue({
 				modal.formaPago = res.pedido.formaPago
 				modal.glosa = res.pedido.glosa
 				modal.items = res.items
+				modal.aprobadoPor = res.aprobadoPor
+				modal.aprobadoUser = res.aprobadoUser
+				modal.permisosUser = PermisosUser
+				let permisoAprobar = PermisosUser.filter(item => item.id_sub == 56); //56=Aprobar Solicitud Importación
+				modal.permisoAprobar = permisoAprobar.length>0 ? true : false
 				modal.total()
 				$("#pedidoModal").modal("show");
 			  })
@@ -283,10 +315,43 @@ const modal = new Vue({
 		total(){
 			if (this.items.length>0) {
 			  this.totalDoc = this.items.map((item, index, array) => parseFloat(item.total)).reduce( (a,b)=> a+b)
-			  console.log(this.totalDoc);
 			  return this.totalDoc
 			}
-		  },
+		},
+		aprobar(e){
+			e.preventDefault()
+			let data = new FormData();
+			data.append('id', this.id)
+			$.ajax({
+				url: base_url('index.php/importaciones/pedidos/aprobar'),
+				type: "post",      
+				data: data,                                    
+				processData: false,
+				contentType: false,
+				cache:false, 
+			  }).done(function(res){
+					console.log(res);
+				res = JSON.parse(res)
+				if (res.status == true) {
+				  quitarcargando()
+				  if (app.id) {
+					console.log(this.id);
+					swal({
+					  title: "Aprobado!",
+					  text: "Usted aprobó el pedido exitosamente",
+					  type: "success",        
+					  allowOutsideClick: false,                                                                        
+					  }).then(function(){
+						agregarcargando()
+						window.location.href=base_url("index.php/importaciones/pedidos");
+					  })
+				  } else {
+					console.log('error');
+				  }
+				}
+				
+			  })
+		},
 	},
 	filters:{
 		moneda:function(value){

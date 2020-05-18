@@ -1,7 +1,8 @@
-let glob_tipoCambio = 0;
-let glob_art = [];
-let glob_alm_usu
-let fechaHoySystem 
+var glob_tipoCambio = 0;
+var glob_art = [];
+var glob_alm_usu
+var fechaHoySystem 
+var PermisosUser = []
 
 $(document).ready(function () 
 {
@@ -10,7 +11,19 @@ $(document).ready(function ()
   fechaHoySystem = moment(fechaHoySystem).format("YYYY-MM-DD");
   setTipoCambio(fechaHoySystem);
   mantenerMenu();
+  permisos();
 })
+
+function permisos() {
+  $.ajax({
+    type: "POST",
+    url: base_url('index.php/importaciones/pedidos/permisos'),
+    dataType: "json",
+  }).done(function (res) {
+    PermisosUser = res
+    //console.table(res);
+  });
+}
 
 function setTipoCambio(fechaActual) {
   $.ajax({

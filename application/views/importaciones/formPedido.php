@@ -189,7 +189,7 @@
           <!-- botones -->
           <div class="row">
               <div class="col-xs-12 text-center">
-                  <button type="button" class="btn btn-primary" @click="store" v-text="btnGuardar"></button>
+                <button type="button" class="btn btn-primary" @click="store" v-text="btnGuardar"></button>
                 <button type="button" class="btn btn-default" @click="cancel">Cancelar</button>
             </div>
           </div>

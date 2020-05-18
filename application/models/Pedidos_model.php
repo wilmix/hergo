@@ -49,24 +49,37 @@ class Pedidos_model extends CI_Model
         }
         $this->db->insert_batch("pedidos_items", $itemsArray);
     }
-
+    public function aprobar($aprobar)
+	{	
+        $this->db->trans_start();
+            $this->db->insert("pedidos_aprobado", $aprobar);
+            $id=$this->db->insert_id();
+        $this->db->trans_complete();
+        return ( $this->db->trans_status() === FALSE ) ? false : $id;
+    }
     public function getPedidos($ini, $fin)
 	{ 
-    	$sql="SELECT p.id, p.`n`, p.`fecha`, p.`recepcion`, pro.`nombreproveedor` proveedor, p.`pedidoPor`, IF(p.`formaPago`,'CREDITO','EFECTIVO') formaPago, p.`created_at`,
-        SUM(pit.`cantidad` * pit.`precioFabrica`) total$, SUM(pit.`cantidad` * pit.`precioFabrica` *tc.`tipocambio`) totalBOB,
-            CONCAT(u.`first_name`,' ',U.`last_name`) autor
-            FROM pedidos p
-            INNER JOIN provedores pro ON pro.`idproveedor` = p.`proveedor`
-            INNER JOIN users u ON u.`id` = p.`autor`
-            INNER JOIN pedidos_items pit ON pit.`idPedido` = p.`id`
-            INNER JOIN tipocambio tc ON tc.`fecha` = p.`fecha`
-            WHERE p.`fecha` BETWEEN '$ini' AND '$fin'
-            GROUP BY p.`id`
-            ORDER BY P.`n` DESC
+    	$sql="SELECT ped.id, ped.`n`, ped.`fecha`, ped.`recepcion`, ped.proveedor, ped.formaPago, ped.pedidoPor, ped.created_at, ped.total$, ped.totalBOB, ped.autor, COUNT(pa.`id_user`) nAprobados 
+                FROM
+                (
+                    SELECT p.id, p.`n`, p.`fecha`, p.`recepcion`, pro.`nombreproveedor` proveedor, p.`pedidoPor`, IF(p.`formaPago`,'CREDITO','EFECTIVO') formaPago, p.`created_at`,
+                    SUM(pit.`cantidad` * pit.`precioFabrica`) total$, SUM(pit.`cantidad` * pit.`precioFabrica` *tc.`tipocambio`) totalBOB,
+                    CONCAT(u.`first_name`,' ',u.`last_name`) autor
+                    FROM pedidos p
+                        INNER JOIN provedores pro ON pro.`idproveedor` = p.`proveedor`
+                        INNER JOIN users u ON u.`id` = p.`autor`
+                        INNER JOIN pedidos_items pit ON pit.`idPedido` = p.`id`
+                        INNER JOIN tipocambio tc ON tc.`fecha` = p.`fecha`
+                    WHERE p.`fecha` BETWEEN '$ini' AND '$fin'
+                    GROUP BY p.`id`
+                )ped
+                    LEFT JOIN pedidos_aprobado pa ON pa.`id_pedido` = ped.id
+                    GROUP BY ped.id
+                    ORDER BY  ped.n DESC
             ";
 
-        $query=$this->db->query($sql);		
-		return $query;
+        $query=$this->db->query($sql);	
+		return $query->result_array();
     }
     public function getPedido($id)
 	{ 
@@ -91,6 +104,27 @@ class Pedidos_model extends CI_Model
         $query=$this->db->query($sql)->result_array();		
 		return $query;
     }
+    public function getAprobadoPor($id)
+	{ 
+    	$sql="SELECT  pa.`id_pedido`, pa.`id_user`, CONCAT(upa.`first_name`, ' ',upa.`last_name`) aprobado_por, pa.`created_at`
+        FROM pedidos_aprobado pa
+        INNER JOIN users upa ON upa.`id` = pa.`id_user`
+        INNER JOIN pedidos ppa	ON ppa.`id` = pa.`id_pedido`
+        WHERE pa.`id_pedido` = '$id'";
+
+        $query=$this->db->query($sql)->result_array();		
+		return $query;
+    }
+    public function getAprobadoUser($id, $user)
+    {
+        $sql="SELECT *
+        FROM pedidos_aprobado pa
+        WHERE pa.`id_pedido` = '$id'
+        AND pa.`id_user` = '$user' ";
+
+        $query=$this->db->query($sql)->row();		
+		return $query;
+    }
     public function getNumMov($gestion)
     {
         $sql="SELECT p.`n`+1 AS numDoc
@@ -101,6 +135,18 @@ class Pedidos_model extends CI_Model
 		$numDoc=$this->db->query($sql);
 		
 		return $numDoc->row() ? $numDoc->row()->numDoc : 1;
+    }
+    public function getPermisos($user)
+	{ 
+    	$sql="SELECT au.`subMenu` id_sub, sub.`subMenu`
+        FROM acceso_usuario au
+        INNER JOIN acceso_submenu sub ON sub.`id` = au.`subMenu`
+        INNER JOIN acceso_menu menu ON menu.`id` = sub.`idMenu`
+        WHERE au.`idUsuario` = $user
+        ORDER BY au.`subMenu`";
+
+        $query=$this->db->query($sql)->result_array();		
+		return $query;
     }
     
 }

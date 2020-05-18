@@ -668,7 +668,7 @@ class Ingresos extends CI_Controller
         {
 			$config = [
 				"upload_path" => "./assets/img_ingresos/",
-				"allowed_types" => "png|jpg"
+				"allowed_types" => "png|jpg|jpeg"
 			];
 			$this->load->library("upload",$config);
 			if ($this->upload->do_upload('img_route')) {
@@ -758,7 +758,7 @@ class Ingresos extends CI_Controller
 			$imgName = $this->input->post('img_name');
 			$config = [
 				"upload_path" => "./assets/img_ingresos/",
-				"allowed_types" => "png|jpg"
+				"allowed_types" => "png|jpg|jpeg"
 			];
 			$this->load->library("upload",$config);
 			if ($this->upload->do_upload('img_route')) {
