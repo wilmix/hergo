@@ -18,7 +18,8 @@ function getPedidos() {
 		dataType: "json",
 		data: {
 						ini:ini,
-						fin:fin
+						fin:fin,
+						condicion:'todos'
 					},
 	}).done(function (res) {
 		table = $('#table').DataTable({
@@ -31,13 +32,13 @@ function getPedidos() {
 			],
 			pageLength: 10,
 			columns: [
-				/* {
-					data: 'id',
+				{
+					data: 'id_pedido',
 					title: 'id',
 					className: 'text-center',
-				}, */
+				},
 				{
-					data: 'n',
+					data: 'nPedido',
 					title: 'Nº',
 					className: 'text-center',
 				},
@@ -247,14 +248,12 @@ function aprobados (data, type, row) {
 
 $(document).on("click", "button.see", function () {
 	let row = table.row( $(this).parents('tr') ).data();
-	modal.getPedido(row.id)
-	
+	modal.getPedido(row.id_pedido)
 })
 
 $(document).on("click", "button.edit", function () {
     let row = table.row( $(this).parents('tr') ).data();
-	console.log( row.id );
-	let editar = base_url("importaciones/pedidos/edit/") + row.id;
+	let editar = base_url("importaciones/pedidos/edit/") + row.id_pedido;
         window.location.href = editar;
 })
 
@@ -287,9 +286,8 @@ const modal = new Vue({
 				dataType: "json",
 				data: {
 						id:id,
-					  },
-			  }).done(function (res) {
-				console.log(res);
+				},
+			}).done(function (res) {
 				let num = '000'.substring(0, '000'.length - res.pedido.n.length) + res.pedido.n
 				let year = moment(res.pedido.fecha).format('YY')
 				modal.id = res.pedido.id

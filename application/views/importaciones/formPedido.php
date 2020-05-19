@@ -47,7 +47,7 @@
             <!-- formaPago -->
             <div class="form-group col-sm-6 col-md-2">
               <label for="formaPago">Forma de Pago:</label>
-              <v-select :options="formaPagoList" v-model="formaPago"></v-select>
+              <v-select :options="['EFECTIVO','CRÉDITO']" v-model="formaPago"></v-select>
             </div>
           </div>
           <!-- 2 -->

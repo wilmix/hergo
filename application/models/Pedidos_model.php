@@ -33,6 +33,22 @@ class Pedidos_model extends CI_Model
             return ( $this->db->trans_status() === FALSE ) ? false : $id;
         }
     }
+    public function storeOrden($id, $orden)
+	{	
+        if ($id) {
+            $this->db->trans_start();
+                $this->db->where('id', $id);
+                $this->db->update('ordenescompra', $orden);
+            $this->db->trans_complete();
+            return ( $this->db->trans_status() === FALSE ) ? false : $id;
+        } else {
+            $this->db->trans_start();
+                $this->db->insert("ordenescompra", $orden);
+                $id=$this->db->insert_id();
+            $this->db->trans_complete();
+            return ( $this->db->trans_status() === FALSE ) ? false : $id;
+        }
+    }
     public function storeItems($id, $pedido)
     {
         $itemsArray = array();
@@ -57,25 +73,32 @@ class Pedidos_model extends CI_Model
         $this->db->trans_complete();
         return ( $this->db->trans_status() === FALSE ) ? false : $id;
     }
-    public function getPedidos($ini, $fin)
+    public function getPedidos($ini, $fin, $condicion)
 	{ 
-    	$sql="SELECT ped.id, ped.`n`, ped.`fecha`, ped.`recepcion`, ped.proveedor, ped.formaPago, ped.pedidoPor, ped.created_at, ped.total$, ped.totalBOB, ped.autor, COUNT(pa.`id_user`) nAprobados 
-                FROM
-                (
-                    SELECT p.id, p.`n`, p.`fecha`, p.`recepcion`, pro.`nombreproveedor` proveedor, p.`pedidoPor`, IF(p.`formaPago`,'CREDITO','EFECTIVO') formaPago, p.`created_at`,
-                    SUM(pit.`cantidad` * pit.`precioFabrica`) total$, SUM(pit.`cantidad` * pit.`precioFabrica` *tc.`tipocambio`) totalBOB,
-                    CONCAT(u.`first_name`,' ',u.`last_name`) autor
-                    FROM pedidos p
-                        INNER JOIN provedores pro ON pro.`idproveedor` = p.`proveedor`
-                        INNER JOIN users u ON u.`id` = p.`autor`
-                        INNER JOIN pedidos_items pit ON pit.`idPedido` = p.`id`
-                        INNER JOIN tipocambio tc ON tc.`fecha` = p.`fecha`
-                    WHERE p.`fecha` BETWEEN '$ini' AND '$fin'
-                    GROUP BY p.`id`
-                )ped
-                    LEFT JOIN pedidos_aprobado pa ON pa.`id_pedido` = ped.id
-                    GROUP BY ped.id
-                    ORDER BY  ped.n DESC
+    	$sql=" SELECT p.`id` id_pedido, p.`n` nPedido, p.`fecha`, p.`recepcion`, p.`formaPago`, p.`pedidoPor`,pro.`nombreproveedor` proveedor, CONCAT(u.`first_name`, ' ', u.`last_name`) autor, oc.`id` id_ordenCompra, items.total$, items.totalBOB,
+                COUNT(*) nAprobados, p.`created_at` created_at_pedido,
+                oc.`id`id_ordenCompra, oc.`n` nOrden,  oc.`fecha` fechaOC, pro.`direccion`, pro.`telefono` fono, pro.`fax` fax, oc.created_at created_at_orden,
+		        oc.`atencion`, oc.`referencia`, oc.`condicion`, oc.`formaEnvio`, p.`formaPago`, CONCAT(u.`first_name`, ' ', u.`last_name`) autorOC
+            FROM pedidos_aprobado pa
+            RIGHT JOIN pedidos p ON p.`id` = pa.`id_pedido`
+                LEFT JOIN ordenescompra oc ON oc.`id_pedido` = p.`id`
+                INNER JOIN provedores pro ON pro.`idproveedor` = p.`proveedor`
+                INNER JOIN users u ON u.`id` = p.`autor`
+                INNER JOIN (SELECT pit.`idPedido`, SUM(pit.`cantidad` * pit.`precioFabrica`) total$, SUM(pit.`cantidad` * pit.`precioFabrica` * tc.`tipocambio`) totalBOB
+                        FROM pedidos_items pit
+                        INNER JOIN pedidos p ON p.`id` = pit.`idPedido`
+                        INNER JOIN `tipocambio` tc ON tc.`fecha` = p.`fecha`
+                        GROUP BY pit.`idPedido`
+                        )items 
+                ON items.idPedido = p.`id`
+            GROUP BY p.`id`
+            HAVING  
+                CASE
+                    WHEN '$condicion' = 'todos' THEN p.`fecha` BETWEEN '$ini' AND '$fin' 
+                    WHEN '$condicion' = 'aprobadosNoOrden' THEN p.`fecha` BETWEEN '$ini' AND '$fin' AND COUNT(*) > 2  AND oc.`id` IS  NULL
+                    WHEN '$condicion' = 'ordenProcess' THEN p.`fecha` BETWEEN '$ini' AND '$fin' AND COUNT(*) > 2  AND oc.`id` IS NOT NULL
+                END                
+            ORDER BY  p.`n` DESC
             ";
 
         $query=$this->db->query($sql);	
@@ -83,7 +106,8 @@ class Pedidos_model extends CI_Model
     }
     public function getPedido($id)
 	{ 
-    	$sql="SELECT p.id, p.`n`, p.`fecha`, p.`recepcion`,pro.`idproveedor` idProv,  pro.`nombreproveedor` proveedor, p.`pedidoPor`, p.`cotizacion`, p.`formaPago` idFP,  IF(p.`formaPago`,'CREDITO','EFECTIVO') formaPago, p.`glosa`
+    	$sql="SELECT p.id, p.`n`, p.`fecha`, p.`recepcion`,pro.`idproveedor` idProv,  pro.`nombreproveedor` proveedor, p.`pedidoPor`, p.`cotizacion`, p.`formaPago` idFP,  p.`formaPago`, p.`glosa`,
+        pro.`direccion`, pro.`telefono`, pro.`fax`
         FROM pedidos p
         INNER JOIN provedores pro ON pro.`idproveedor` = p.`proveedor`
         WHERE p.`id` = '$id'";
@@ -147,6 +171,17 @@ class Pedidos_model extends CI_Model
 
         $query=$this->db->query($sql)->result_array();		
 		return $query;
+    }
+    public function getNumMovOrden($gestion)
+    {
+        $sql="SELECT oc.`n`+1 AS numDoc
+		FROM ordenescompra oc
+		WHERE YEAR(oc.fecha) = '$gestion'
+		ORDER BY oc.n DESC LIMIT 1";
+        
+		$numDoc=$this->db->query($sql);
+		
+		return $numDoc->row() ? $numDoc->row()->numDoc : 1;
     }
     
 }

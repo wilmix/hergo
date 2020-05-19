@@ -1,6 +1,7 @@
+
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Pedidos extends CI_Controller
+class OrdenesCompra extends CI_Controller
 {
 	private $datos;
 	public function __construct()
@@ -72,7 +73,8 @@ class Pedidos extends CI_Controller
 				base_url('assets/vue/vue-resource.min.js'),	
 				'https://unpkg.com/vue-select@3.10.3/dist/vue-select.js',
 				'https://unpkg.com/vuejs-datepicker',
-				'https://unpkg.com/vuejs-datepicker/dist/locale/translations/es.js'
+				'https://unpkg.com/vuejs-datepicker/dist/locale/translations/es.js',
+				'https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.20/af-2.3.4/b-1.6.1/b-colvis-1.6.1/b-flash-1.6.1/b-html5-1.6.1/b-print-1.6.1/cr-1.5.2/fc-3.3.0/fh-3.1.6/kt-2.5.1/r-2.2.3/rg-1.1.1/rr-1.2.6/sc-2.0.1/sl-1.3.1/datatables.min.js'
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
@@ -99,24 +101,24 @@ class Pedidos extends CI_Controller
 	
 	public function index()
 	{
-		$this->libacceso->acceso(57);
+		//$this->libacceso->acceso(57);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
-			$this->datos['menu']="Consulta Pedidos";
+			$this->datos['menu']="Consulta Orden de Compra";
 			$this->datos['opcion']="Importaciones";
-			$this->datos['titulo']="ConsultaPedidos";
+			$this->datos['titulo']="OrdenesCompra";
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
 			$this->datos['foot_script']= $this->foot_script;
 			
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/pedidos.js');
+			$this->datos['foot_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/ordenesCompra.js');
 		
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('importaciones/consultaPedidos.php',$this->datos);
+			$this->load->view('importaciones/ordenesCompra.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 			$this->load->view('plantilla/footerscript.php',$this->datos);
@@ -128,8 +130,7 @@ class Pedidos extends CI_Controller
         {
         	$ini=$this->security->xss_clean($this->input->post("ini"));
         	$fin=$this->security->xss_clean($this->input->post("fin"));
-			$condicion= $this->input->post("condicion");
-			$res=$this->Pedidos_model->getPedidos($ini, $fin, $condicion); 
+			$res=$this->Pedidos_model->getPedidos($ini, $fin); 
 			echo json_encode($res);
 		}
 		else
@@ -137,22 +138,23 @@ class Pedidos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	public function crearPedido()
+	public function crearOrden()
 	{
-		$this->libacceso->acceso(58);
+		//$this->libacceso->acceso(58);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 
-			$this->datos['menu']="Formulario Pedido";
+			$this->datos['menu']="Formulario Orden de Compra";
 			$this->datos['opcion']="Importaciones";
-			$this->datos['titulo']="Form Pedido";
+			$this->datos['titulo']="FormOrdenCompra";
 			
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
 			$this->datos['foot_script']= $this->foot_script;
+			//$this->datos['https://cdn.datatables.net']= $this->foot_script;
 			
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/formPedido.js');
+			$this->datos['foot_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/formOrden.js');
 
 			/* var_dump($this->datos['proveedor']);
 			die(); */
@@ -162,9 +164,9 @@ class Pedidos extends CI_Controller
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('importaciones/formPedido.php',$this->datos);
+			$this->load->view('importaciones/formOrden.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			//$this->load->view('plantilla/footer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
 			$this->load->view('plantilla/footerscript.php',$this->datos);
 	}
 	public function store()
@@ -173,26 +175,26 @@ class Pedidos extends CI_Controller
 		{
 			$id = $this->input->post('id');
 			$gestion = date("Y", strtotime($this->input->post('fecha')));
-			$pedido = new stdclass();
-			$pedido->n = $id ? $this->input->post('n') : $this->Pedidos_model->getNumMov($gestion);
-			$pedido->fecha = $this->input->post('fecha');
-			$pedido->recepcion = $this->input->post('recepcion');
-			$pedido->proveedor = $this->input->post('proveedor');
-			$pedido->pedidoPor = strtoupper($this->input->post('pedidoPor'));
-			$pedido->cotizacion = strtoupper($this->input->post('cotizacion'));
-			$pedido->formaPago = $this->input->post('formaPago');
-			$pedido->autor = $this->session->userdata('user_id');
-			$pedido->glosa = strtoupper($this->input->post('glosa'));
-			$pedido->updated_at = $id ? date('Y-m-d H:i:s') : 0;
-			$pedido->items = json_decode($this->input->post('items'));
-
-			$id = $this->Pedidos_model->storePedido($id , $pedido);
+			$orden = new stdclass();
+			$orden->id_pedido = $this->input->post('id_pedido');
+			$orden->n = $id ? $this->input->post('n') : $this->Pedidos_model->getNumMovOrden($gestion);
+			$orden->fecha = $this->input->post('fecha');
+			$orden->atencion = strtoupper($this->input->post('atencion'));
+			$orden->referencia = strtoupper($this->input->post('referencia'));
+			$orden->condicion = strtoupper($this->input->post('condicion'));
+			$orden->formaEnvio = strtoupper($this->input->post('formaEnvio'));
+			$orden->glosa = strtoupper($this->input->post('glosa'));
+			$orden->created_by = $this->session->userdata('user_id');
+			/* echo json_encode($orden);
+			die(); */
+			$id = $this->Pedidos_model->storeOrden($id , $orden);
 
 			if($id)
 			{
 				$res = new stdclass();
 				$res->status = true;
-				$res->pedido = $id;
+				$res->id = $id;
+				$res->orden = $orden;
 				echo json_encode($res);
 			} else {
 				echo json_encode($id);
@@ -204,92 +206,4 @@ class Pedidos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	public function aprobar()
-	{
-		$this->libacceso->acceso(56);
-		if($this->input->is_ajax_request())
-		{
-			$id = $this->input->post('id');
-			$aprobar = new stdclass();
-			$aprobar->id_user = $this->session->userdata('user_id');
-			$aprobar->id_pedido = $id;
-			$id = $this->Pedidos_model->aprobar($aprobar);
-
-			if($id)
-			{
-				$res = new stdclass();
-				$res->status = true;
-				$res->aprobado = $id;
-				echo json_encode($res);
-			} else {
-				echo json_encode($id);
-			}
-
-		}
-		else
-		{
-			die("PAGINA NO ENCONTRADA");
-		}
-	}
-	public function edit($id)
-	{
-		$this->libacceso->acceso(59);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Editar Pedido";
-			$this->datos['opcion']="Importaciones";
-			$this->datos['titulo']="Editar Pedido";
-			
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			$this->datos['foot_script']= $this->foot_script;
-			
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/formPedido.js');
-
-			$this->datos['id']=$id;
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('importaciones/formPedido.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			//$this->load->view('plantilla/footer.php',$this->datos);
-			$this->load->view('plantilla/footerscript.php',$this->datos);
-	}
-	public function getPedido()  
-	{
-		if($this->input->is_ajax_request())
-        {
-			$id=$this->security->xss_clean($this->input->post("id"));
-			$user =$this->session->userdata('user_id');
-			$pedido = new stdclass();
-			$pedido->pedido = $this->Pedidos_model->getPedido($id); 
-			$pedido->items = $this->Pedidos_model->getPedidoItems($id);
-			$pedido->aprobadoPor = $this->Pedidos_model->getAprobadoPor($id);
-			$pedido->aprobadoUser = $this->Pedidos_model->getAprobadoUser($id,$user);
-			echo json_encode($pedido);
-		}
-		else
-		{
-			die("PAGINA NO ENCONTRADA");
-		}
-	}
-	public function permisos()  
-	{
-		if($this->input->is_ajax_request())
-        {
-			$user =$this->session->userdata('user_id');
-			$permisos = $this->Pedidos_model->getPermisos($user);
-			echo json_encode($permisos);
-		}
-		else
-		{
-			die("PAGINA NO ENCONTRADA");
-		}
-	}
-	
-
 }

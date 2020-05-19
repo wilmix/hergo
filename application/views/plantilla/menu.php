@@ -66,9 +66,10 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="crear"><a href="<?php echo base_url("importaciones/pedidos/crear") ?>"><i class="fa fa-edit"></i> Crear Solicitud</a></li>
+            <li class="crearPedido"><a href="<?php echo base_url("importaciones/pedidos/crearPedido") ?>"><i class="fa fa-edit"></i> Crear Solicitud</a></li>
             <li class="pedidos"><a href="<?php echo base_url("importaciones/pedidos") ?>"><i class="fa fa-list-ol"></i> Solicitudes</a></li>
-            <li class=""><a href="<?php echo base_url("importaciones/ordenCompra") ?>"><i class="fa fa-list-ol"></i>Crear Orden Compra</a></li>
+            <li class="crearOrden"><a href="<?php echo base_url("importaciones/OrdenesCompra/crearOrden") ?>"><i class="fa fa-edit"></i> Crear Orden Compra</a></li>
+            <li class="OrdenesCompra"><a href="<?php echo base_url("importaciones/OrdenesCompra") ?>"><i class="fa fa-list-ol"></i>Ordenes de Compra</a></li>
           </ul>
         </li>
 

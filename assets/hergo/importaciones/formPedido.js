@@ -16,7 +16,6 @@ const app = new Vue({
         es: vdp_translation_es.js,
         articulosList: [],
         proveList:[],
-        formaPagoList:[{label: 'EFECTIVO', id: '0'},{label: 'CRÉDITO', id: '1'}],
         /* articulo */
         selectedArticulo:null,
         idCodigo:'',
@@ -200,7 +199,7 @@ const app = new Vue({
         form.append('proveedor', this.selectedProv.id)
         form.append('pedidoPor', this.pedidoPor)
         form.append('cotizacion', this.cotizacion)
-        form.append('formaPago', this.formaPago.id)
+        form.append('formaPago', this.formaPago)
         form.append('glosa', this.glosa)
         form.append('id', this.id)
         form.append('n', this.n)
@@ -255,7 +254,6 @@ const app = new Vue({
       },
       editPedido(id){
         this.id = id
-        this.title = 'Editar Solicitud de Importación'
         this.btnGuardar = 'Editar'
         $.ajax({
           type: "POST",
@@ -267,6 +265,7 @@ const app = new Vue({
         }).done(function (res) {
           console.log(res);
           app.n = res.pedido.n
+          app.title = 'Editar Solicitud de Importación Nº ' + res.pedido.n
           app.fecha = moment(res.pedido.fecha).format('MM-DD-YYYY')
           app.recepcion = moment(res.pedido.recepcion).format('MM-DD-YYYY')
           app.selectedProv = {
@@ -275,10 +274,8 @@ const app = new Vue({
           }
           app.pedidoPor = res.pedido.pedidoPor
           app.cotizacion = res.pedido.cotizacion
-          app.formaPago = {
-            id: res.pedido.idFP,
-            label: res.pedido.formaPago
-          }
+          app.formaPago = res.pedido.formaPago
+
           app.glosa = res.pedido.glosa
           app.items = res.items
           app.total()
