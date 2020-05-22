@@ -126,7 +126,7 @@ class Configuracion extends CI_Controller
 				$hasta = addslashes($this->security->xss_clean($this->input->post('hasta')));
 				$fechaLimite = addslashes($this->security->xss_clean($this->input->post('fechaLimite')));
 				$tipo = addslashes($this->security->xss_clean($this->input->post('tipo')));
-				$llave = addslashes($this->security->xss_clean($this->input->post('llave')));
+				$llave = addslashes($this->input->post('llave'));
 				$leyenda1 = addslashes($this->security->xss_clean($this->input->post('leyenda1')));
 				$leyenda2 = addslashes($this->security->xss_clean($this->input->post('leyenda2')));
 				$leyenda3 = addslashes($this->security->xss_clean($this->input->post('leyenda3')));
