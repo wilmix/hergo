@@ -38,7 +38,7 @@ class Ingresos_model extends CI_Model
 		if($id==null)
         {
 		    $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor,
-           (SUM(id.totaldoc) + i.flete) total,SUM(id.total) totalSis, i.fecha, UPPER(CONCAT(u.first_name,' ', u.last_name,'')) autor, 
+           (SUM(id.totaldoc) + IFNULL(i.flete,0)) total,SUM(id.total) totalSis, i.fecha, UPPER(CONCAT(u.first_name,' ', u.last_name,'')) autor, 
             i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp, i.obs, i.anulado,
             i.tipocambio, 
             tc.tipocambio valorTipoCambio, 
