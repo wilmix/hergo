@@ -118,7 +118,7 @@ class OrdenesCompra extends CI_Controller
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('importaciones/ordenesCompra.php',$this->datos);
+			$this->load->view('importaciones/OrdenesCompra.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
 			$this->load->view('plantilla/footerscript.php',$this->datos);
