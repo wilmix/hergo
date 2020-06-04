@@ -17,7 +17,7 @@ $(document).ready(function ()
 function permisos() {
   $.ajax({
     type: "POST",
-    url: base_url('index.php/importaciones/pedidos/permisos'),
+    url: base_url('index.php/Importaciones/pedidos/permisos'),
     dataType: "json",
   }).done(function (res) {
     PermisosUser = res

@@ -163,9 +163,9 @@ class Pedidos_model extends CI_Model
     public function getPermisos($user)
 	{ 
     	$sql="SELECT au.`subMenu` id_sub, sub.`subMenu`
-        FROM acceso_usuario au
-        INNER JOIN acceso_submenu sub ON sub.`id` = au.`subMenu`
-        INNER JOIN acceso_menu menu ON menu.`id` = sub.`idMenu`
+        FROM ACCESO_USUARIO au
+        INNER JOIN ACCESO_SUBMENU sub ON sub.`id` = au.`subMenu`
+        INNER JOIN ACCESO_MENU menu ON menu.`id` = sub.`idMenu`
         WHERE au.`idUsuario` = $user
         ORDER BY au.`subMenu`";
 
