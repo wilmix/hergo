@@ -177,7 +177,7 @@ const app = new Vue({
       }, 100),
       cancel(e){
         e.preventDefault()
-        window.location.href=base_url("index.php/importaciones/pedidos");
+        window.location.href=base_url("index.php/Importaciones/Pedidos");
       },
       store(e){
         agregarcargando()
@@ -206,7 +206,7 @@ const app = new Vue({
 
         /* for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); } */
         $.ajax({
-          url: base_url('index.php/importaciones/pedidos/store'),
+          url: base_url('index.php/Importaciones/Pedidos/store'),
           type: "post",      
           data: form,                                    
           processData: false,
@@ -225,7 +225,7 @@ const app = new Vue({
                 allowOutsideClick: false,                                                                        
                 }).then(function(){
                   agregarcargando()
-                  window.location.href=base_url("index.php/importaciones/pedidos");
+                  window.location.href=base_url("index.php/Importaciones/Pedidos");
                 })
             } else {
               swal({
@@ -257,7 +257,7 @@ const app = new Vue({
         this.btnGuardar = 'Editar'
         $.ajax({
           type: "POST",
-          url: base_url('index.php/importaciones/pedidos/getPedido'),
+          url: base_url('index.php/Importaciones/Pedidos/getPedido'),
           dataType: "json",
           data: {
                   id:id,

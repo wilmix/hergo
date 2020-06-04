@@ -14,7 +14,7 @@ function getPedidos() {
 	agregarcargando()
 	$.ajax({
 		type: "POST",
-		url: base_url('index.php/importaciones/pedidos/getPedidos'),
+		url: base_url('index.php/Importaciones/Pedidos/getPedidos'),
 		dataType: "json",
 		data: {
 						ini:ini,
@@ -282,7 +282,7 @@ const modal = new Vue({
 		getPedido(id){
 			$.ajax({
 				type: "POST",
-				url: base_url('index.php/importaciones/pedidos/getPedido'),
+				url: base_url('index.php/Importaciones/Pedidos/getPedido'),
 				dataType: "json",
 				data: {
 						id:id,
@@ -321,7 +321,7 @@ const modal = new Vue({
 			let data = new FormData();
 			data.append('id', this.id)
 			$.ajax({
-				url: base_url('index.php/importaciones/pedidos/aprobar'),
+				url: base_url('index.php/Importaciones/Pedidos/aprobar'),
 				type: "post",      
 				data: data,                                    
 				processData: false,
@@ -341,7 +341,7 @@ const modal = new Vue({
 					  allowOutsideClick: false,                                                                        
 					  }).then(function(){
 						agregarcargando()
-						window.location.href=base_url("index.php/importaciones/pedidos");
+						window.location.href=base_url("index.php/Importaciones/Pedidos");
 					  })
 				  } else {
 					console.log('error');

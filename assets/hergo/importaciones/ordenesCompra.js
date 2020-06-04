@@ -13,7 +13,7 @@ function getPedidos() {
 	agregarcargando()
 	$.ajax({
 		type: "POST",
-		url: base_url('index.php/importaciones/pedidos/getPedidos'),
+		url: base_url('index.php/Importaciones/Pedidos/getPedidos'),
 		dataType: "json",
 		data: {
 						ini:ini,
