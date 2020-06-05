@@ -94,7 +94,7 @@ class Egresos_model extends CI_Model
             ON tr.`idEgreso` = e.`idegresos` 
             LEFT JOIN ingresos ing
             ON ing.`idIngresos` = tr.`idIngreso`
-            INNER JOIN almacenes ades 
+            LEFT JOIN almacenes ades 
             ON ades.idalmacen=ing.`almacen`           
             WHERE idEgresos=$id
             ORDER BY e.idEgresos DESC
@@ -773,7 +773,6 @@ class Egresos_model extends CI_Model
                  WHERE f.`anulada` = 0 
                  AND f.`pagada` <>1 
                  AND f.`cliente` = $idCliente
-                 -- AND f.`almacen` LIKE '%1'
                  AND  f.`nFactura` > 0
                  GROUP BY f.`idFactura` 
                  ORDER BY f.`fechaFac`
