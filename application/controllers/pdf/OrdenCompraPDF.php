@@ -60,12 +60,30 @@ class OrdenCompraPDF extends FPDF {
         $this->Ln(5);
         $this->Ln(5);
     }
+    public function items($id)
+    {
+        //$this->pdf->Cell(0,10,'id de orden '.$id,0,0,1);
+        $this->pdf->SetXY(10,65);
+        $this->pdf->Ln(1);
+        $this->pdf->SetFillColor(235,235,235);
+        $this->pdf->SetFont('Arial','B',8); 
+        $this->pdf->Cell(5,6,'N',0,0,'C',1);
+        $this->pdf->Cell(10,6,utf8_decode('Código.'),0,0,'C',1);
+        $this->pdf->Cell(10,6,utf8_decode('Cant.'),0,0,'C',1);
+        $this->pdf->Cell(15,6,utf8_decode('Unid.'),0,0,'C',1);  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
+        $this->pdf->Cell(110,6,utf8_decode('Descripción'),0,0,'C',1);
+        $this->pdf->Cell(20,6,utf8_decode('Nº Parte'),0,0,'R',1);
+        $this->pdf->Cell(20,6,utf8_decode('Valor Unitario'),0,0,'R',1);
+        $this->pdf->Cell(20,6,utf8_decode('Valor Total USD'),0,0,'R',1);
+        $this->pdf->Ln(6);
+        
+    }
     public function index($id=null)
     {
         $this->pdf = new OrdenCompraPDF();
         $this->pdf->AddPage('P','Letter');
         $this->pdf->SetFont('Arial', '', 18);
-        $this->pdf->Cell(0,10,'id de orden '.$id,0,0,1);
+        $this->items($id);
         $this->pdf->Output();
     }
 
