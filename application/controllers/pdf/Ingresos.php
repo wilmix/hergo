@@ -20,7 +20,8 @@ class Ingresos extends CI_Controller {
                     'tipoDoc' =>$ingreso->tipoDoc,
                     'nfact' =>$ingreso->nfact,
                     'ordenCompra' =>$ingreso->ordcomp, 
-                    'observacion' =>$ingreso->obs);
+                    'observacion' =>$ingreso->obs,
+                    'flete'=> $ingreso->flete);
     $this->load->library('Ingresos_lib', $params);
 
       $this->pdf = new Ingresos_lib($params);
@@ -68,6 +69,11 @@ class Ingresos extends CI_Controller {
         $this->pdf->Ln(5);
         $this->pdf->SetX(10);
       }
+            if ($ingreso->flete) {
+              $this->pdf->Cell(64,5,utf8_decode('FLETE'),0,0,'R',0);
+              $this->pdf->Cell(149,5,number_format($linea->flete, 2, ".", ","),'',0,'R',1);
+              $this->pdf->Ln(5);
+            }
       $this->pdf->Ln(2);
      
       // TOTALES
@@ -85,7 +91,7 @@ class Ingresos extends CI_Controller {
       }
       $this->pdf->Cell(160,7,$literal,'1',0,'l',1);
       $this->pdf->SetFont('Arial','B',9);
-      $this->pdf->Cell(40,7,number_format($totalDocumento, 2, ".", ","),'1',0,'R',1); //TOTAL DOCUMENTO
+      $this->pdf->Cell(40,7,number_format(($totalDocumento+$ingreso->flete), 2, ".", ","),'1',0,'R',1); //TOTAL DOCUMENTO
       $this->pdf->Cell(40,7,number_format($totalInventario, 2, ".", ","),'1',0,'R',1); //TOTAL INVENTARIO
       //guardar
       $this->pdf->Output($ingreso->sigla . " - ". $ingreso->n . " - " . $year, 'I');
