@@ -203,7 +203,7 @@ class Ingresos_model extends CI_Model
 	public function mostrarDetalle($id)
 	{
 		$sql="SELECT a.idArticulos idArticulo, a.CodigoArticulo, a.Descripcion, id.cantidad,id.totaldoc, id.punitario punitario, i.flete, i.img_route,
-        id.total total, u.Unidad, tc.`tipocambio`, ROUND(a.`costoPromedioPonderado`,2) cpp
+        id.total total, u.Unidad, tc.`tipocambio`, ROUND(a.`costoPromedioPonderado`,2) cpp, (id.totaldoc/id.cantidad) cuDoc
 		FROM ingdetalle id
 		INNER JOIN articulos a
 		ON id.articulo = a.idArticulos
