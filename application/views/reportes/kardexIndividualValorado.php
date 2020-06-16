@@ -6,6 +6,7 @@
                     <button id="pdfGeneral" class="btn btn-danger" ><i class="far fa-file-pdf"> </i> PDF</button>
                     <button id="pdfGeneralSN" class="btn btn-danger"><i class="far fa-file-pdf"> </i> PDF SN</button>
                     <button onclick="window.print();" class="btn btn-primary pull-right" ><i class="fa fa-print"> </i> Imprimir</button>
+                    <button class="btn btn-success pull-right" id="export" data-toggle="tooltip" title="Excel"><i class="far fa-file-excel"> </i> Excel </button>
                 </div>
                 <hr>
                 <div id="" class="form-inline">

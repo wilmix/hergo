@@ -1,5 +1,13 @@
 $(document).ready(function() {
+
     tituloReporte()
+    $('#export').click(function () {
+        $('.table').tableExport({
+        type:'excel',
+        fileName: 'KardexValorado',
+        numbers: {output : false}
+        })
+    });
     $('#articulos_filtro').select2({
         theme: "classic",
        // maximumSelectionLength: 2
