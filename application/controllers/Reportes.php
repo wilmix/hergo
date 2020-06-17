@@ -1410,6 +1410,7 @@ class Reportes extends CI_Controller
 			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 			//$this->datos['linea']=$this->Reportes_model->retornar_tabla("linea");
 			$this->datos['tipoingreso']=$this->Reportes_model->retornar_tablaMovimiento("+");
+			$this->datos['tipoPrefer']="2";
 			/*echo '<pre>';
 			print_r($this->Reportes_model->retornarArticulos()->result());
 			echo '</pre>';*/
@@ -1470,6 +1471,7 @@ class Reportes extends CI_Controller
 			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 
 			$this->datos['tipoingreso']=$this->Reportes_model->retornar_tablaMovimiento("-");
+			$this->datos['tipoPrefer']="7";
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
