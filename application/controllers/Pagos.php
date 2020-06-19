@@ -302,7 +302,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			
 			$config = [
 				"upload_path" => "./assets/img_pagos/",
-				"allowed_types" => "png|jpg"
+				"allowed_types" => "png|jpg|jpeg"
 			];
 			$this->load->library("upload",$config);
 			if ($this->upload->do_upload('img_route')) {
