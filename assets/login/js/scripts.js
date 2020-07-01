@@ -4,7 +4,7 @@ jQuery(document).ready(function() {
     /*
         Fullscreen background
     */
-    $.backstretch("/hergo/assets/login/img/backgrounds/1.jpg");
+    $.backstretch("/assets/login/img/backgrounds/1.jpg");
     
     /*
         Form validation
