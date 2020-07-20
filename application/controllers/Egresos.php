@@ -327,7 +327,7 @@ class Egresos extends CI_Controller
 			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/notasentrega.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/notasEntrega.js');
             /**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
