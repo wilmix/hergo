@@ -734,7 +734,7 @@ class Reportes_model extends CI_Model
 			INNER JOIN linea l ON l.idLinea = a.idLinea
 			INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
 			WHERE sa.`idAlmacen` = '$alm'
-			GROUP BY    l.`Sigla` ASC, a.`CodigoArticulo` ASC WITH ROLLUP
+			GROUP BY    l.`Sigla`, a.`CodigoArticulo` WITH ROLLUP
 			) tbl";
 		} else {
 		$sql="SELECT 	
