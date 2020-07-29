@@ -44,7 +44,7 @@
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
                         <select name="tipo_doc" id="tipo_doc" class="form-control selectpicker" >
-                        <option value="" selected disabled hidden>Elige Tipo Documento</option>
+                        <option value="2" selected="selected">NIT</option>
                           <?php foreach ($tipodocumento->result_array() as $fila):  ?>
                             <option value="<?= $fila['idDocumentoTipo'] ?>"><?= $fila['documentotipo']?></option>
                           <?php endforeach ?>
@@ -79,8 +79,8 @@
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
                         <select name="clientetipo" id="clientetipo" class="form-control selectpicker" >
+                          <option value="1" selected>Cliente</option>
                           <?php foreach ($tipocliente->result_array() as $fila):  ?>
-                            <option value="" selected disabled hidden>Elige Tipo Cliente</option>
                             <option value="<?= $fila['idClientetipo'] ?>"><?= $fila['clientetipo']?></option>
                           <?php endforeach ?>
                         </select>
