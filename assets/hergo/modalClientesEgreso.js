@@ -7,13 +7,6 @@ $(document).ready(function () {
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
-                tipo_doc: {
-                      validators: {
-                          notEmpty: {
-                              message: 'Selecciona NIT o CI'
-                          }
-                      }
-                  },
                 carnet: {
                           validators: {
                             notEmpty: {
@@ -34,13 +27,6 @@ $(document).ready(function () {
                           },
                               notEmpty: {
                               message: 'Campo obligatorio'
-                          }
-                      }
-                  },
-                  clientetipo: {
-                      validators: {
-                          notEmpty: {
-                              message: 'Selecciona NIT o CI'
                           }
                       }
                   },
