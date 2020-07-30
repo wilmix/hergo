@@ -139,11 +139,17 @@ class Reportes extends CI_Controller
 		$filename = 'saldosArticulos';
 		$fecha = date('d-m-Y');
  
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="'. $filename . ' ' . $fecha .'.xlsx"'); 
+        /* header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'. $filename . ' ' . $fecha .'.xls"'); 
         header('Cache-Control: max-age=0');
         
-        $writer->save('php://output'); // download file 
+		$writer->save('php://output'); */ // download file 
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="myfile.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+		$writer->save('php://output');
  
     }
 
