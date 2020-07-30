@@ -471,8 +471,9 @@ class ReportesExcel extends CI_Controller
 		$spreadsheet->getActiveSheet()->setAutoFilter('A4:L4');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="'. $filename . ' ' . $alm .'.xlsx"'); 
-        //header('Cache-Control: max-age=0');
-        //$writer->save('reporte.xlsx');
+		header('Cache-Control: max-age=0');
+		$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
  
 	}
 	public function facturasPendientesPago($alm)
