@@ -383,8 +383,6 @@ class ReportesExcel extends CI_Controller
 
 		$res=$this->Reportes_model->mostrarSaldosActualesItems($alm);
 		$res=$res->result_array();
-		print_r($res);
-		die();
 		$dataExcel = [];
         foreach ($res as $linea) {
             $x = [];
@@ -417,8 +415,8 @@ class ReportesExcel extends CI_Controller
         }
 		
 		
-        //echo '<pre>'; print_r($dataExcel); echo '</pre>';
-		//return false;
+        echo '<pre>'; print_r($dataExcel); echo '</pre>';
+		return false;
 		
 		$spreadsheet->getActiveSheet()
 		->fromArray(
