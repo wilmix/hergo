@@ -469,10 +469,10 @@ class ReportesExcel extends CI_Controller
         $spreadsheet->getActiveSheet()->getStyle('A1');
         $spreadsheet->getActiveSheet()->freezePane('B5');
 		$spreadsheet->getActiveSheet()->setAutoFilter('A4:L4');
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		header('Content-Disposition: attachment;filename="'. $filename . ' ' . $alm .'.xlsx"'); 
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'. $filename . ' ' . $alm .'.xls"'); 
 		header('Cache-Control: max-age=0');
-		$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+		$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xls');
         $writer->save('php://output');
  
 	}
