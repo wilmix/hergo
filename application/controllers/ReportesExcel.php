@@ -338,6 +338,8 @@ class ReportesExcel extends CI_Controller
 	}
 	public function saldoActualesItem($alm, $tc)
     {
+		echo $alm . " - " . $tc;
+		die();
 		$alm = ($alm == 'NN') ? '' : $alm;
 		$spreadsheet = new Spreadsheet();
 		$sheet = $spreadsheet->getActiveSheet();
