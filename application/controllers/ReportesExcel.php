@@ -144,7 +144,7 @@ class ReportesExcel extends CI_Controller
 		$fecha = date('d-m-Y');
  
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="'. $filename . ' ' . $fecha .'.xlsx"'); 
+        header('Content-Disposition: attachment;filename="'. $filename . ' ' . $fecha .'.xls"'); 
         header('Cache-Control: max-age=0');
         
         $writer->save('php://output'); // download file 
