@@ -771,7 +771,7 @@ class Reportes_model extends CI_Model
 			INNER JOIN almacenes alm ON alm.idalmacen = sa.idAlmacen
 			INNER JOIN linea l ON l.idLinea = a.idLinea
 			INNER JOIN unidad u ON u.idUnidad = a.idUnidad
-			GROUP BY  l.`Sigla`, a.`CodigoArticulo` ASC, alm.almacen ASC WITH ROLLUP
+			GROUP BY  l.`Sigla`, a.`CodigoArticulo`, alm.almacen WITH ROLLUP
 		)tbl";
 		}		
 		
