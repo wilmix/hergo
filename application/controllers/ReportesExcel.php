@@ -415,8 +415,8 @@ class ReportesExcel extends CI_Controller
         }
 		
 		
-        echo '<pre>'; print_r($dataExcel); echo '</pre>';
-		return false;
+        //echo '<pre>'; print_r($dataExcel); echo '</pre>';
+		//return false;
 		
 		$spreadsheet->getActiveSheet()
 		->fromArray(
@@ -469,7 +469,7 @@ class ReportesExcel extends CI_Controller
         $spreadsheet->getActiveSheet()->freezePane('B5');
 		$spreadsheet->getActiveSheet()->setAutoFilter('A4:L4');
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="'. $filename . ' ' . $alm .'.xlsx"'); 
+        header('Content-Disposition: attachment;filename="a.xlsx"'); 
         header('Cache-Control: max-age=0');
         $writer->save('php://output');
  
