@@ -338,8 +338,6 @@ class ReportesExcel extends CI_Controller
 	}
 	public function saldoActualesItem($alm, $tc)
     {
-		echo $alm . " - " . $tc;
-		die();
 		$alm = ($alm == 'NN') ? '' : $alm;
 		$spreadsheet = new Spreadsheet();
 		$sheet = $spreadsheet->getActiveSheet();
@@ -385,6 +383,8 @@ class ReportesExcel extends CI_Controller
 
 		$res=$this->Reportes_model->mostrarSaldosActualesItems($alm);
 		$res=$res->result_array();
+		print_r($res);
+		die();
 		$dataExcel = [];
         foreach ($res as $linea) {
             $x = [];
