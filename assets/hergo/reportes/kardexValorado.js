@@ -212,7 +212,7 @@ function tituloReporte() {
 function ingresos(value, row, index) {
     $ret = ''
     let suma =[]
-    if (row.tipo=='II'||row.tipo=='IT'||row.tipo=='CL'||row.tipo=='ID'||row.tipo=='IMP'||row.tipo=='IA') {
+    if (row.tipo=='II'||row.tipo=='IT'||row.tipo=='CL'||row.tipo=='ID'||row.tipo=='IMP'||row.tipo=='RI') {
         $ret = row.cantidad
         $ret = Math.round( $ret * 100) / 100
         $ret = $ret.toFixed(2);
@@ -280,7 +280,7 @@ function sumaNE(data) {
 }
 
 function sumaIngresos(data) {
-    let ingresos = data.filter(dato=>dato.tipo=='II'||dato.tipo=='IA'||dato.tipo=='IT'||dato.tipo=='CL'||dato.tipo=='ID'||dato.tipo=='IMP')
+    let ingresos = data.filter(dato=>dato.tipo=='II'||dato.tipo=='RI'||dato.tipo=='IT'||dato.tipo=='CL'||dato.tipo=='ID'||dato.tipo=='IMP')
     field = this.field;
     let totalSum = ingresos.reduce(function (sum, row) {
         return sum + (+row[field]);

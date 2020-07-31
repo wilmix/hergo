@@ -266,6 +266,12 @@ function retornarTabla()
                 align: 'left',
             },
             {
+                field:'descripcionFabrica',
+                title:"Descripcion Fabrica",
+                sortable:true,
+                align: 'left',
+            },
+            {
                 field:'Unidad',
                 title:"Unidad",
                 sortable:true,

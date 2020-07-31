@@ -17,7 +17,7 @@ class Articulo_model extends CI_Model
 	}
 	public function mostrarArticulos()
 	{
-		$sql="SELECT a.idArticulos, a.CodigoArticulo, a.Descripcion,a.detalleLargo, a.NumParte, u.Unidad, m.Marca, l.Linea, a.PosicionArancelaria, 
+		$sql="SELECT a.idArticulos, a.CodigoArticulo, a.Descripcion,a.detalleLargo descripcionFabrica, a.NumParte, u.Unidad, m.Marca, l.Linea, a.PosicionArancelaria, 
 		r.Requisito, a.ProductoServicio, a.detalleLargo, a.EnUso,a.Imagen, a.Fecha , Concat(us.first_name,' ',us.last_name) as autor, precio
 			FROM articulos a
 			INNER JOIN unidad u
