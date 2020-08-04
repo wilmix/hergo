@@ -865,6 +865,7 @@ class Reportes extends CI_Controller
 			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 			//$this->datos['tingreso']=$this->Reportes_model->retornar_tablaMovimiento("+");
 			$this->datos['tipoingreso']=$this->Reportes_model->retornar_tablaMovimiento("+");
+			$this->datos['tipoPrefer']="2";
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
