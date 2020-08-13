@@ -99,8 +99,8 @@
                   <td v-text="item.unidad"></td>
                   <td class="text-right"> {{ item.saldo | moneda }} </td>
                   <td class="text-right"> {{ item.rotacion | moneda }}</td>
-                  <td class="text-right"> {{ item.cantidad | moneda }}</td>
                   <td class="text-right"> {{ item.precio | moneda }}</td>
+                  <td class="text-right"> {{ item.cantidad | moneda }}</td>
                   <td class="text-right"> {{ item.precioFabrica | moneda }}</td>
                   <td class="text-right"> {{ (item.cantidad * item.precioFabrica) | moneda }}</td>
                 </tr>

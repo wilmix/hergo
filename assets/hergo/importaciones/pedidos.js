@@ -253,7 +253,7 @@ $(document).on("click", "button.see", function () {
 
 $(document).on("click", "button.edit", function () {
     let row = table.row( $(this).parents('tr') ).data();
-	let editar = base_url("importaciones/pedidos/edit/") + row.id_pedido;
+	let editar = base_url("importaciones/Pedidos/edit/") + row.id_pedido;
         window.location.href = editar;
 })
 
