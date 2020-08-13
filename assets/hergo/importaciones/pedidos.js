@@ -253,8 +253,8 @@ $(document).on("click", "button.see", function () {
 
 $(document).on("click", "button.edit", function () {
     let row = table.row( $(this).parents('tr') ).data();
-	let editar = base_url("importaciones/Pedidos/edit/") + row.id_pedido;
-        window.location.href = editar;
+	let editar = base_url("Importaciones/Pedidos/edit/") + row.id_pedido;
+    window.location.href = editar;
 })
 
 const modal = new Vue({
