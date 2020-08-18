@@ -82,8 +82,9 @@
                   <th>Descripción Hergo</th>
                   <th>Unidad</th>
                   <th>Existencia</th>
-                  <th>Rotacíon</th>
-                  <th>Precio</th>
+                  <th>Rotacíon 6 MESES</th>
+                  <th>Precio de Venta</th>
+                  <!-- <th>CPP actual </th> -->
                   <th class="bg-info text-center">Cantidad Solicitada</th>
                   <th class="bg-info text-center">Precio Fabrica</th>
                   <th class="bg-info text-center">Total</th>

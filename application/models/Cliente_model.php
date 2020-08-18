@@ -12,11 +12,11 @@ class Cliente_model extends CI_Model
 	{
 		$sql="SELECT c.idCliente, d.documentotipo, c.documento, c.nombreCliente, cl.clientetipo, c.direccion, c.email, c.web, c.telefono, c.fax, c.fecha, Concat(u.first_name,' ',u.last_name) as autor
 		FROM clientes c
-		INNER JOIN documentotipo d
+		LEFT JOIN documentotipo d
 		ON c.idDocumentoTipo=d.idDocumentoTipo
-		INNER JOIN clientetipo cl
+		LEFT JOIN clientetipo cl
 		ON cl.idClienteTipo=c.idClientetipo
-		INNER JOIN users u
+		LEFT JOIN users u
 		ON u.id=c.autor
 		ORDER BY c.idCliente DESC ";
 		
