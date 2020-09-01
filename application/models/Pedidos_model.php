@@ -115,6 +115,19 @@ class Pedidos_model extends CI_Model
         $query=$this->db->query($sql)->row();		
 		return $query;
     }
+    public function getOrden($id)
+	{ 
+    	$sql="SELECT oc.`id`, oc.`n`, oc.`fecha`, pro.`nombreproveedor`, pro.`telefono`, pro.`fax`, oc.`atencion`, pro.`direccion`, oc.`referencia`, 
+        oc.`condicion`, oc.`formaEnvio`, p.`formaPago`,oc.`glosa`, CONCAT(u.`first_name`, ' ',u.`last_name`) autor
+        FROM ordenescompra oc 
+        INNER JOIN pedidos p ON p.`id` = oc.`id_pedido`
+        INNER JOIN provedores pro ON pro.`idproveedor` = p.`proveedor`
+        INNER JOIN users u ON u.`id` = oc.`created_by`
+        WHERE oc.`id` ='$id'";
+
+        $query=$this->db->query($sql)->row();		
+		return $query;
+    }
     public function getPedidoItems($id)
 	{ 
     	$sql="SELECT a.`idArticulos` id, a.`CodigoArticulo` codigo, a.`NumParte` numParte, a.`detalleLargo` descripFabrica, a.`Descripcion` descripcion,
@@ -126,6 +139,20 @@ class Pedidos_model extends CI_Model
         WHERE pit.`idPedido` = '$id'";
 
         $query=$this->db->query($sql)->result_array();		
+		return $query;
+    }
+    public function getOrdenItems($id)
+	{ 
+    	$sql="SELECT a.`idArticulos` id, a.`CodigoArticulo` codigo, a.`NumParte` numParte, a.`detalleLargo` descripFabrica, a.`Descripcion` descripcion,
+        u.`Unidad` unidad, pit.`saldo`, pit.`rotacion`, pit.`precio`, pit.`cantidad`, pit.`precioFabrica`,
+        (pit.`cantidad`* pit.`precioFabrica`) total
+        FROM pedidos_items pit
+        INNER JOIN articulos a ON a.`idArticulos` = pit.`articulo`
+        INNER JOIN unidad u ON a.`idUnidad` = u.`idUnidad`
+        INNER JOIN ordenescompra oc ON oc.`id_pedido` = pit.`idPedido`
+        WHERE oc.`id` = '$id'";
+
+        $query=$this->db->query($sql)->result();		
 		return $query;
     }
     public function getAprobadoPor($id)
