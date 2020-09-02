@@ -106,7 +106,7 @@ class Pedidos_model extends CI_Model
     }
     public function getPedido($id)
 	{ 
-    	$sql="SELECT p.id, p.`n`, p.`fecha`, p.`recepcion`,pro.`idproveedor` idProv,  pro.`nombreproveedor` proveedor, p.`pedidoPor`, p.`cotizacion`, p.`formaPago` idFP,  p.`formaPago`, p.`glosa`,
+    	$sql="SELECT p.id, p.`n`, p.`fecha`, p.`recepcion`,pro.`idproveedor` idProv,  pro.`nombreproveedor` proveedor, p.`pedidoPor`, p.`cotizacion`, p.`diasCredito`,  p.`formaPago`, p.`glosa`,
         pro.`direccion`, pro.`telefono`, pro.`fax`
         FROM pedidos p
         INNER JOIN provedores pro ON pro.`idproveedor` = p.`proveedor`

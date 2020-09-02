@@ -181,6 +181,7 @@ class Pedidos extends CI_Controller
 			$pedido->pedidoPor = strtoupper($this->input->post('pedidoPor'));
 			$pedido->cotizacion = strtoupper($this->input->post('cotizacion'));
 			$pedido->formaPago = $this->input->post('formaPago');
+			$pedido->diasCredito = $this->input->post('diasCredito');
 			$pedido->autor = $this->session->userdata('user_id');
 			$pedido->glosa = strtoupper($this->input->post('glosa'));
 			$pedido->updated_at = $id ? date('Y-m-d H:i:s') : 0;

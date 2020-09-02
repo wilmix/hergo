@@ -50,6 +50,13 @@
               <v-select :options="['EFECTIVO','CRÉDITO']" v-model="formaPago"></v-select>
             </div>
           </div>
+
+          <div class="row" v-if="formaPago=='CRÉDITO'">
+            <div class="form-group col-sm-6 col-md-2" >
+              <label for="formaPago">Dias Credito: </label>
+              <input type="number" class="form-control" id="diasCredito" name="diasCredito" v-model="diasCredito">
+            </div>
+          </div>
           <!-- 2 -->
           <div class="row">
             <div class="form-group col-sm-12 col-md-4">

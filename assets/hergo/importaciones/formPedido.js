@@ -45,6 +45,7 @@ const app = new Vue({
         recepcion:'',
         cliente:'',
         glosa:'',
+        diasCredito:'',
         totalDoc:0,
         tipoCambio: parseFloat(document.getElementById("mostrarTipoCambio").textContent),
         items:[],
@@ -203,8 +204,10 @@ const app = new Vue({
         form.append('glosa', this.glosa)
         form.append('id', this.id)
         form.append('n', this.n)
+        form.append('diasCredito', this.diasCredito)
 
-        /* for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); } */
+        //for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); } return 
+        
         $.ajax({
           url: base_url('index.php/Importaciones/Pedidos/store'),
           type: "post",      
@@ -275,6 +278,7 @@ const app = new Vue({
           app.pedidoPor = res.pedido.pedidoPor
           app.cotizacion = res.pedido.cotizacion
           app.formaPago = res.pedido.formaPago
+          app.diasCredito = res.pedido.diasCredito
 
           app.glosa = res.pedido.glosa
           app.items = res.items
