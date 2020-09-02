@@ -72,7 +72,7 @@ class OrdenCompraPDF extends CI_Controller {
                 $this->pdf->Cell(15,5,$item->codigo,'',0,'L',1); 
                 $this->pdf->Cell(10,5,number_format($item->cantidad, 2, ".", ","),'',0,'R',1); 
                 $this->pdf->Cell(10,5,$item->unidad,'',0,'C',1); 
-                $this->pdf->Cell(100,5,utf8_decode($item->descripcion),'',0,'l',0); 
+                $this->pdf->Cell(100,5,utf8_decode($item->descripFabrica),'',0,'l',0); 
                 $this->pdf->Cell(20,5,utf8_decode($item->numParte),'',0,'R',1); 
                 $this->pdf->Cell(20,5,number_format($item->precioFabrica, 2, ".", ","),'',0,'R',1); 
                 $this->pdf->Cell(20,5,number_format($item->total, 2, ".", ","),'',0,'R',1); 

@@ -25,6 +25,7 @@
             $atencion =$this->datos['atencion'];
             $direccion =$this->datos['direccion'];
             $referencia =$this->datos['referencia'];
+            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 
             $this->SetFont('Arial','B',15);
             $this->SetXY(0,35);
@@ -34,7 +35,7 @@
             $this->Cell(0,8, utf8_decode('Nº de NIT: 1000991026'),0,0,'C');
             $this->Ln(5);
             $this->SetFont('Arial','B',12);
-            $this->Cell(0,8, strftime("La Paz, %d de %B de %Y", $fecha),0,0,'C');
+            $this->Cell(0,8, utf8_decode('La Paz' . ', ' . date('d',$fecha) . ' de '. $meses[(date('n',$fecha))-1] . ' del '. date('Y',$fecha)),0,0,'C');
             $this->Ln(10);
             $this->SetFont('Arial','B',10);
             $this->Cell(200,8, utf8_decode("Señor(es): $provedor"),'TRL',0,'L');
