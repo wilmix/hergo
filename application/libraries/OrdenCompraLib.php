@@ -65,30 +65,30 @@
             $autor =$this->datos['autor'];
 
             // Position at 1.5 cm from bottom
-            $this->SetXY(135,-51);
-            $this->SetFont('Arial','B',10);
+            $this->SetXY(135,-54);
+            $this->SetFont('Arial','B',8);
             $this->Cell(0,0, utf8_decode("$autor"),'0',0,'C',1);
-            $this->SetXY(135,-48);
+            $this->SetXY(135,-53);
             $this->Cell(0,5, utf8_decode("Hergo Ltda."),'0',0,'C',1);
-            $this->SetXY(135,-43);
+            $this->SetXY(135,-49);
             $this->Cell(0,5, utf8_decode("AUTORIZADO"),'0',0,'C',1);
 
 
-            $this->SetY(-70);
-            $this->SetFont('Arial','B',10);
-            $this->Cell(120,8, utf8_decode("Condiciones de compra: $condicion"),'TL',0,'L');
-            $this->Cell(80,8, utf8_decode(""),'LRT',0,'L');
+            $this->SetY(-73);
+            $this->SetFont('Arial','B',8);
+            $this->Cell(120,7, utf8_decode("Condiciones de compra: $condicion"),'TL',0,'L');
+            $this->Cell(80,7, utf8_decode(""),'LRT',0,'L');
+            $this->Ln(7);
+            $this->Cell(120,7, utf8_decode("Forma de Envio: $formaEnvio"),'L',0,'L');
+            $this->Cell(80,7, utf8_decode(""),'LR',0,'C');
+            $this->Ln(7);
+            $this->Cell(120,7, utf8_decode("Termino de pago: $formaPago"),'L',0,'L');
+            $this->Cell(80,7, utf8_decode(""),'LR',0,'C');
+            $this->Ln(7);
+            $this->Cell(120,7, utf8_decode("Observaciones: "),'L',0,'L');
+            $this->Cell(80,7, utf8_decode(""),'LR',0,'C');
             $this->Ln(8);
-            $this->Cell(120,8, utf8_decode("Forma de Envio: $formaEnvio"),'L',0,'L');
-            $this->Cell(80,8, utf8_decode(""),'LR',0,'C');
-            $this->Ln(8);
-            $this->Cell(120,8, utf8_decode("Termino de pago: $formaPago"),'L',0,'L');
-            $this->Cell(80,8, utf8_decode(""),'LR',0,'C');
-            $this->Ln(8);
-            $this->Cell(120,8, utf8_decode("Observaciones: "),'L',0,'L');
-            $this->Cell(80,8, utf8_decode(""),'LR',0,'C');
-            $this->Ln(8);
-            $this->SetFont('Times','BI',9);
+            $this->SetFont('Times','BI',7);
             $this->Cell(200,10, utf8_decode("$glosa"),1,0,'L');
             //$this->Cell(0,8, utf8_decode("$autor"),0,0,'L');
 
