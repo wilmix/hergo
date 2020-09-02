@@ -218,7 +218,6 @@ function button (data, type, row) {
 }
 $(document).on("click", "button.print", function () {
 	let row = table.row( $(this).parents('tr') ).data();
-	console.log(row);
-	let editar = base_url("pdf/OrdenCompraPDF/index/") + row.id_pedido;
-        window.location.href = editar;
+	let print = base_url("pdf/OrdenCompraPDF/index/") + row.id_pedido;
+    window.open(print);
 })
