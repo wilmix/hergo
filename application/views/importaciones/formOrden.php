@@ -3,21 +3,21 @@
   <div class="col-xs-12">
     <div id="ordenForm" class="box">
       <div class="box-header with-border">
-        <h3 class="box-title" v-text="title"></h3>
-        <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+        <!-- <h3 class="box-title" v-text="title"></h3> -->
+        <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%" v-if="!idOrden">
             <i class="fa fa-calendar"></i>&nbsp;
             <span></span> <i class="fa fa-caret-down"></i>
         </div>
       </div>
       <div class="box-body">
-        <table id="table" class="table table-hover display compact" style="width:100%">
+        <table id="table" class="table table-hover display compact" style="width:100%" v-if="!idOrden">
         </table>
-        <hr>
+        <hr v-if="!idOrden">
         <form method="post" >
-            <input type="text" id="idPedido" value="<?php echo isset($id) ? $id : '' ?>" hidden>
+            <input type="text" id="idOrden" value="<?php echo isset($id) ? $id : '' ?>" hidden>
             <div class="row">
                 <div class="form-group col-sm-12 col-md-12 text-center">
-                    <h3>ORDEN DE COMPRA</h1>
+                    <h3 v-text="title"></h1>
                     <vuejs-datepicker  v-model="fecha" :language="es" :format="customFormatter" name="fecha" input-class="form-control">
                     </vuejs-datepicker>
                 </div>
@@ -61,6 +61,10 @@
                     <p>
                         <strong>Forma  de Envio: </strong>
                         <v-select :options="['AEREO','MARITIMO','TERRESTRE']" v-model="formaEnvio"></v-select>
+                    </p>
+                    <p v-if="formaPago=='CRÉDITO'">
+                        <strong>Días de crédito: </strong>
+                        <input type="number" class="form-control" v-model="diasCredito">
                     </p>
                 </div>
             </div>
@@ -107,7 +111,7 @@
             <!-- botones -->
             <div class="row">
                 <div class="col-xs-12 text-center">
-                    <button type="button" class="btn btn-primary" @click="store">Guardar</button>
+                    <button type="button" class="btn btn-primary" @click="store" v-text="btnGuardar">Guardar</button>
                     <button type="button" class="btn btn-default" @click="cancel">Cancelar</button>
                 </div>
             </div>

@@ -24,6 +24,7 @@ class OrdenCompraPDF extends CI_Controller {
         'condicion' => $orden->condicion,
         'formaEnvio' => $orden->formaEnvio,
         'formaPago' => $orden->formaPago,
+        'diasCredito' => $orden->diasCreditoOC,
         'glosa' => $orden->glosa,
         'autor' => $orden->autor,       
         );

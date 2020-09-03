@@ -169,6 +169,38 @@ class OrdenesCompra extends CI_Controller
 			$this->load->view('plantilla/footer.php',$this->datos);
 			$this->load->view('plantilla/footerscript.php',$this->datos);
 	}
+	public function editOrden($id)
+	{
+		//$this->libacceso->acceso(58);
+		if(!$this->session->userdata('logeado'))
+			redirect('auth', 'refresh');
+
+			$this->datos['menu']="Editar Orden de Compra";
+			$this->datos['opcion']="Importaciones";
+			$this->datos['titulo']="EditarOrdenCompra";
+			
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
+			$this->datos['foot_script']= $this->foot_script;
+
+			//$this->datos['https://cdn.datatables.net']= $this->foot_script;
+			
+			$this->datos['foot_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/formOrden.js');
+			$this->datos['id']=$id;
+
+			//var_dump($id);//die();
+
+
+			$this->load->view('plantilla/head.php',$this->datos);
+			$this->load->view('plantilla/header.php',$this->datos);
+			$this->load->view('plantilla/menu.php',$this->datos);
+			$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('importaciones/formOrden.php',$this->datos);
+			$this->load->view('plantilla/footcontainer.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
+			$this->load->view('plantilla/footerscript.php',$this->datos);
+	}
 	public function store()
 	{
 		if($this->input->is_ajax_request())
@@ -180,12 +212,13 @@ class OrdenesCompra extends CI_Controller
 			$orden->n = $id ? $this->input->post('n') : $this->Pedidos_model->getNumMovOrden($gestion);
 			$orden->fecha = $this->input->post('fecha');
 			$orden->atencion = strtoupper($this->input->post('atencion'));
+			$orden->diasCredito = strtoupper($this->input->post('diasCredito'));
 			$orden->referencia = strtoupper($this->input->post('referencia'));
 			$orden->condicion = strtoupper($this->input->post('condicion'));
 			$orden->formaEnvio = strtoupper($this->input->post('formaEnvio'));
 			$orden->glosa = strtoupper($this->input->post('glosa'));
 			$orden->created_by = $this->session->userdata('user_id');
-			/* echo json_encode($orden);
+			/* echo json_encode($id);
 			die(); */
 			$id = $this->Pedidos_model->storeOrden($id , $orden);
 
@@ -200,6 +233,21 @@ class OrdenesCompra extends CI_Controller
 				echo json_encode($id);
 			}
 
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function getOrden()  
+	{
+		if($this->input->is_ajax_request())
+        {
+			$id=$this->security->xss_clean($this->input->post("id"));
+			$orden = new stdclass();
+			$orden->orden = $this->Pedidos_model->getOrden($id); 
+			$orden->items = $this->Pedidos_model->getOrdenItems($id);
+			echo json_encode($orden);
 		}
 		else
 		{

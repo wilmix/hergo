@@ -213,6 +213,10 @@ function button (data, type, row) {
         <button type="button" class="btn btn-default print">
             <span class="fa fa-print" aria-hidden="true">
             </span>
+		</button>
+		<button type="button" class="btn btn-default edit">
+            <span class="fa fa-pencil" aria-hidden="true">
+            </span>
         </button>
     `
 }
@@ -220,4 +224,9 @@ $(document).on("click", "button.print", function () {
 	let row = table.row( $(this).parents('tr') ).data();
 	let print = base_url("pdf/OrdenCompraPDF/index/") + row.id_pedido;
     window.open(print);
+})
+$(document).on("click", "button.edit", function () {
+	let row = table.row( $(this).parents('tr') ).data();
+	let edit = base_url("Importaciones/OrdenesCompra/editOrden/") + row.id_pedido;
+    window.open(edit);
 })

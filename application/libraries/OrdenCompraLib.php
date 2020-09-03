@@ -63,6 +63,8 @@
             $formaPago =$this->datos['formaPago'];
             $glosa =$this->datos['glosa'];
             $autor =$this->datos['autor'];
+            $diasCredito = $this->datos['diasCredito'];
+            $formaPago = $formaPago == 'EFECTIVO' ? $formaPago : "$formaPago $diasCredito DÌAS";
 
             // Position at 1.5 cm from bottom
             $this->SetXY(135,-54);

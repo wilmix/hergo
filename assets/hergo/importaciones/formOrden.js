@@ -242,7 +242,7 @@ const ordenForm = new Vue({
         vuejsDatepicker
     },
     data:{
-        title: 'Crear Orden de Compra',
+        title: 'ORDEN DE COMPRA',
         fecha:'',
         proveedor:'',
         direccion:'',
@@ -250,19 +250,25 @@ const ordenForm = new Vue({
         fax:'',
         formaEnvio:'',
         condicionCompra:'',
-        atencion:'esta es la persona que ateinde',
+        atencion:'',
         referencia:'',
         glosa:'',
         idPedido:'',
-        formaPago:'',
+		formaPago:'',
+		diasCredito:'',
         items:'',
         totalDoc:0,
-        n:'',
-		id:'',
+		n:'',
+		idOrden:'',
 		es: vdp_translation_es.js,
+		btnGuardar:'Guardar',
     },
     created: function() {
-
+		let id = document.getElementById("idOrden").value
+		if (id) {
+		  console.log(id);
+		  this.editOrden(id)
+		}
     },
     methods:{
         getPedido(id){
@@ -285,6 +291,7 @@ const ordenForm = new Vue({
 				ordenForm.direccion = res.pedido.direccion
 				ordenForm.fono = res.pedido.telefono
 				ordenForm.fax = res.pedido.fax
+				ordenForm.diasCredito = res.pedido.diasCredito
 				ordenForm.items = res.items
 				ordenForm.total()
 			  })
@@ -309,15 +316,17 @@ const ordenForm = new Vue({
             return
             } */
             let form = new FormData();
-            form.append('id_', this.id)
-            form.append('fecha', moment(this.fecha).format('YYYY-MM-DD'))
-            form.append('id_pedido', this.idPedido)
+            form.append('id', this.idOrden)
+			form.append('fecha', moment(this.fecha).format('YYYY-MM-DD'))
+			form.append('id_pedido', this.idPedido)
             form.append('n', this.n)
             form.append('atencion', this.atencion)
             form.append('referencia', this.referencia)
             form.append('condicion', this.condicionCompra)
-            form.append('formaEnvio', this.formaEnvio)
-            form.append('glosa', this.glosa)
+			form.append('formaEnvio', this.formaEnvio)
+            form.append('diasCredito', this.diasCredito)
+			form.append('glosa', this.glosa)
+		
 
             /* for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); }; 
             quitarcargando()
@@ -334,16 +343,16 @@ const ordenForm = new Vue({
             console.table(res);
             if (res.status == true) {
                 quitarcargando()
-                if (ordenForm.id) {
+                if (ordenForm.idOrden) {
                 console.log(this.id);
                 swal({
                     title: "Editado!",
-                    text: "El pedido se modificó con éxito",
+                    text: "La orden se modificó con éxito",
                     type: "success",        
                     allowOutsideClick: false,                                                                        
                     }).then(function(){
                     agregarcargando()
-                    window.location.href=base_url("index.php/Importaciones/Pedidos");
+                    window.location.href=base_url("index.php/Importaciones/OrdenesCompra");
                     })
                 } else {
                 swal({
@@ -375,6 +384,37 @@ const ordenForm = new Vue({
 		customFormatter(date) {
 			return moment(date).format('D MMMM  YYYY');
 		},
+		editOrden(id){
+			this.idOrden = id
+			this.btnGuardar = 'Editar'
+			$.ajax({
+			  type: "POST",
+			  url: base_url('index.php/Importaciones/OrdenesCompra/getOrden'),
+			  dataType: "json",
+			  data: {
+					  id:id,
+					},
+			}).done(function (res) {
+			  console.log(res);
+			  ordenForm.n = res.orden.n
+			  ordenForm.idPedido = res.orden.id_pedido
+			  ordenForm.title = 'ORDEN DE COMPRA N° ' + res.orden.n
+			  ordenForm.fecha = moment(res.orden.fecha).format('MM-DD-YYYY')
+			  ordenForm.proveedor = res.orden.nombreproveedor
+			  ordenForm.atencion = res.orden.atencion
+			  ordenForm.condicionCompra = res.orden.condicion
+			  ordenForm.direccion = res.orden.direccion
+			  ordenForm.fax = res.orden.fax
+			  ordenForm.fono = res.orden.telefono
+			  ordenForm.referencia = res.orden.referencia
+			  ordenForm.formaEnvio = res.orden.formaEnvio
+			  ordenForm.formaPago = res.orden.formaPago
+			  ordenForm.glosa = res.orden.glosa
+			  ordenForm.diasCredito = res.orden.diasCredito
+			  ordenForm.items = res.items
+			  ordenForm.total()
+			})
+		  },
 
 
     },
