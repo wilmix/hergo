@@ -89,7 +89,7 @@ function getPedidos() {
 				{
 					data: null,
 					title: '',
-					width: '100px',
+					width: '120px',
 					className: 'text-center',
 					render: button
 				},
@@ -217,7 +217,11 @@ function button (data, type, row) {
 		<button type="button" class="btn btn-default edit">
             <span class="fa fa-pencil" aria-hidden="true">
             </span>
-        </button>
+		</button>
+		<button type="button" class="btn btn-default asociarFac">
+            <span class="fa fa-file-text-o" aria-hidden="true">
+            </span>
+		</button>
     `
 }
 $(document).on("click", "button.print", function () {
@@ -230,3 +234,50 @@ $(document).on("click", "button.edit", function () {
 	let edit = base_url("Importaciones/OrdenesCompra/editOrden/") + row.id_pedido;
     window.open(edit);
 })
+$(document).on("click", "button.asociarFac", function () {
+	let row = table.row( $(this).parents('tr') ).data();
+	modal.asociarFactura(row.id_pedido)
+})
+
+const modal = new Vue({
+	el: '#app',
+	data: {
+		permisoAprobar:false,
+		id:0,
+		numYear:'',
+        fecha: '',
+        formaPago:'',
+        proveedor:'',
+        pedidoPor:'',
+        cotizacion:'',
+        recepcion:'',
+        glosa:'',
+        totalDoc:0,
+		tipoCambio: parseFloat(document.getElementById("mostrarTipoCambio").textContent),
+		totalDoc:0,
+		items:[],
+		aprobadoPor:[],
+		aprobadoUser:null,
+		permisosUser: PermisosUser,
+	},
+	methods:{
+		asociarFactura(id){
+			console.log(id);
+			$("#asociarFacturaModal").modal("show");
+			return
+			
+		},
+		saveFactura(){
+			console.log('guardarfactura');
+		},
+
+	},
+	filters:{
+		moneda:function(value){
+			num=Math.round(value * 100) / 100
+			num=num.toFixed(2);
+			//return(num);
+			return numeral(num).format('0,0.00');            
+		}, 
+	}
+  })
