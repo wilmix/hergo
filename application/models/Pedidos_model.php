@@ -49,6 +49,22 @@ class Pedidos_model extends CI_Model
             return ( $this->db->trans_status() === FALSE ) ? false : $id;
         }
     }
+    public function storeAsociarFactura($id, $asoFac)
+	{	
+        if ($id) {
+            $this->db->trans_start();
+                $this->db->where('id', $id);
+                $this->db->update('fact_prov', $asoFac);
+            $this->db->trans_complete();
+            return ( $this->db->trans_status() === FALSE ) ? false : $id;
+        } else {
+            $this->db->trans_start();
+                $this->db->insert("fact_prov", $asoFac);
+                $id=$this->db->insert_id();
+            $this->db->trans_complete();
+            return ( $this->db->trans_status() === FALSE ) ? false : $id;
+        }
+    }
     public function storeItems($id, $pedido)
     {
         $itemsArray = array();
@@ -76,14 +92,26 @@ class Pedidos_model extends CI_Model
     public function getPedidos($ini, $fin, $condicion)
 	{ 
     	$sql=" SELECT p.`id` id_pedido, p.`n` nPedido, p.`fecha`, p.`recepcion`, p.`formaPago`, p.`pedidoPor`,pro.`nombreproveedor` proveedor, CONCAT(u.`first_name`, ' ', u.`last_name`) autor, oc.`id` id_ordenCompra, items.total$, items.totalBOB,
-                COUNT(*) nAprobados, p.`created_at` created_at_pedido,
-                oc.`id`id_ordenCompra, oc.`n` nOrden,  oc.`fecha` fechaOC, pro.`direccion`, pro.`telefono` fono, pro.`fax` fax, oc.created_at created_at_orden,
-		        oc.`atencion`, oc.`referencia`, oc.`condicion`, oc.`formaEnvio`, p.`formaPago`, CONCAT(u.`first_name`, ' ', u.`last_name`) autorOC
+            COUNT(*) nAprobados, p.`created_at` created_at_pedido,
+            oc.`id`id_ordenCompra, oc.`n` nOrden,  oc.`fecha` fechaOC, pro.`direccion`, pro.`telefono` fono, pro.`fax` fax, oc.created_at created_at_orden,
+            oc.`atencion`, oc.`referencia`, oc.`condicion`, oc.`formaEnvio`, p.`formaPago`, CONCAT(u.`first_name`, ' ', u.`last_name`) autorOC, oc.`diasCredito`, p.`proveedor` id_proveedor,
+            (items.total$ - IFNULL(saldoFac.totalFacCom,0))saldoAsoFac,
+                CASE
+                    WHEN saldoFac.totalFacCom IS NULL THEN 'NO FACTURA'
+                    WHEN saldoFac.totalFacCom<items.total$ THEN 'PARCIAL'
+                    ELSE 'FACTURADA'
+                END estadoOrden
             FROM pedidos_aprobado pa
             RIGHT JOIN pedidos p ON p.`id` = pa.`id_pedido`
                 LEFT JOIN ordenescompra oc ON oc.`id_pedido` = p.`id`
                 INNER JOIN provedores pro ON pro.`idproveedor` = p.`proveedor`
                 INNER JOIN users u ON u.`id` = p.`autor`
+                LEFT JOIN 
+                (
+                    SELECT fp.`id_orden`, SUM(fp.`monto`) totalFacCom
+                    FROM fact_prov fp
+                    GROUP BY fp.`id_orden`
+                )saldoFac ON saldoFac.`id_orden` = oc.`id`
                 INNER JOIN (SELECT pit.`idPedido`, SUM(pit.`cantidad` * pit.`precioFabrica`) total$, SUM(pit.`cantidad` * pit.`precioFabrica` * tc.`tipocambio`) totalBOB
                         FROM pedidos_items pit
                         INNER JOIN pedidos p ON p.`id` = pit.`idPedido`
@@ -210,5 +238,6 @@ class Pedidos_model extends CI_Model
 		
 		return $numDoc->row() ? $numDoc->row()->numDoc : 1;
     }
+
     
 }

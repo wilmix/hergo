@@ -73,6 +73,12 @@ function getPedidos() {
 					render: numberDecimal
 				},
 				{
+					data: 'estadoOrden',
+					title: 'ESTADO',
+					className: 'text-center',
+					//sorting: false,
+				},
+				{
 					data: 'autor',
 					title: 'CREADO POR',
 					className: 'text-right',
@@ -209,7 +215,23 @@ function getPedidos() {
 	});
 }
 function button (data, type, row) {
-    return `
+	if (row.estadoOrden == 'FACTURADA') {
+		return `
+        <button type="button" class="btn btn-default print ">
+            <span class="fa fa-print" aria-hidden="true">
+            </span>
+		</button>
+		<button type="button" class="btn btn-default edit">
+            <span class="fa fa-pencil" aria-hidden="true">
+            </span>
+		</button>
+		<button type="button" class="btn btn-default asociarFac" disabled>
+            <span class="fa fa-file-text-o" aria-hidden="true">
+            </span>
+		</button>
+    	`
+	} else {
+		return `
         <button type="button" class="btn btn-default print">
             <span class="fa fa-print" aria-hidden="true">
             </span>
@@ -223,6 +245,8 @@ function button (data, type, row) {
             </span>
 		</button>
     `
+	}
+   
 }
 $(document).on("click", "button.print", function () {
 	let row = table.row( $(this).parents('tr') ).data();
@@ -236,39 +260,106 @@ $(document).on("click", "button.edit", function () {
 })
 $(document).on("click", "button.asociarFac", function () {
 	let row = table.row( $(this).parents('tr') ).data();
-	modal.asociarFactura(row.id_pedido)
+	//console.log(row);
+	modal.asociarFactura(row.id_pedido, row)
 })
 
 const modal = new Vue({
 	el: '#app',
+	components: {
+        vuejsDatepicker
+    },
 	data: {
-		permisoAprobar:false,
 		id:0,
-		numYear:'',
-        fecha: '',
-        formaPago:'',
+		id_orden:'',
+		n:'',
+		fecha: '',
+		id_proveedor:'',
         proveedor:'',
-        pedidoPor:'',
-        cotizacion:'',
-        recepcion:'',
-        glosa:'',
-        totalDoc:0,
-		tipoCambio: parseFloat(document.getElementById("mostrarTipoCambio").textContent),
-		totalDoc:0,
-		items:[],
-		aprobadoPor:[],
-		aprobadoUser:null,
-		permisosUser: PermisosUser,
+		montoOrden:'',
+		totalFacturaC:0,
+		tiempo_credito:'',
+		condicion:'',
+		formaEnvio:'',
+		url:'',
+		n_ordenCompra:'',
+		es: vdp_translation_es.js,
 	},
 	methods:{
-		asociarFactura(id){
-			console.log(id);
+		asociarFactura(id, row){
+			modal.id_orden = row.id_ordenCompra
+			modal.montoOrden = row.saldoAsoFac
+			modal.tiempo_credito = row.diasCredito
+			modal.proveedor = row.proveedor
+			modal.n_ordenCompra = row.nOrden
+			modal.condicion = row.condicion
+			modal.formaEnvio = row.formaEnvio
+			modal.id_proveedor = row.id_proveedor
 			$("#asociarFacturaModal").modal("show");
-			return
-			
 		},
-		saveFactura(){
-			console.log('guardarfactura');
+		saveFactura(e){
+			agregarcargando()
+			e.preventDefault()
+			if ((this.montoOrden - this.totalFacturaC) < 0 || this.totalFacturaC<=0 || !this.fecha ) {
+				quitarcargando()
+				console.log((this.montoOrden - this.totalFacturaC));
+				swal(
+					'Error',
+					'Revise el formulario',
+					'error'
+				)
+				return
+			} 
+
+			let formData = new FormData($('#modalAsociarFactura')[0]); 
+			formData.append('id_orden',modal.id_orden)
+			formData.append('id_proveedor',modal.id_proveedor)
+			formData.append('fecha', moment(modal.fecha).format('YYYY-MM-DD'))
+
+			/* for(let pair of formData.entries()) {
+				console.log(pair[0]+ ', '+ pair[1]); 
+			} */
+			$.ajax({
+				url: base_url("index.php/Importaciones/OrdenesCompra/storeAsociarFactura"),
+				type: 'POST',
+				data: formData,
+				cache: false,
+				contentType: false,
+				processData: false,
+				success: function (returndata) {
+					res = JSON.parse(returndata)
+					if (returndata != 'false') {
+						quitarcargando()
+						swal({
+							title: "Registrado!",
+							text: "El factura se asoció con éxito",
+							type: "success",        
+							allowOutsideClick: false,                                                                        
+							}).then(function(){
+								$('#modalAsociarFactura').hide();
+								//$('#modalAsociarFactura')[0].reset();
+								location.reload();
+							})
+					} else {
+						quitarcargando()
+						swal(
+							'Error',
+							'Error al guardar el Factura Comercial',
+							'error'
+						)
+					}
+				},
+				error : function (returndata) {
+					swal(
+						'Error',
+						'Error',
+						'error'
+					)
+				},
+			});
+		},
+		customFormatter(date) {
+			return moment(date).format('D MMMM  YYYY');
 		},
 
 	},

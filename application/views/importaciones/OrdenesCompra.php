@@ -23,22 +23,75 @@
         <div class="modal-header">
             <div class="col-md-12" class="text-center">
               <h2 class="modal-title text-center">
-                <span>Asociar Factura</span>
+                <span>Asociar Factura a Orden de Compra HG-{{ n_ordenCompra }}</span>
               </h2>
             </div>
             <div class="col-md-4">
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
         </div>
-        <div class="modal-body">
-          <div class="row">
+        <div class="modal-body"> 
+          <form method="post"  id="modalAsociarFactura">
+            <div class="row">
+              <div class="form-group col-sm-3 col-md-6">
+                <strong>Proveedor: {{ proveedor }}</strong>
+              </div>
+              <div class="form-group col-sm-2 col-md-2">
+                <strong>Condición de Compra:  {{ condicion }}</strong>
+              </div>
+              <div class="form-group col-sm-2 col-md-2">
+                <strong>Forma de envio: {{ formaEnvio }} </strong>
+              </div>
+              <div class="form-group col-sm-2 col-md-2">
+                <strong>Saldo Orden: {{ montoOrden | moneda }}</strong>
+              </div>
+            </div>
 
-          </div>
+            <hr>
+
+            <div class="row">
+              <div class="form-group col-sm-3 col-md-3">
+                <strong>Fecha Factura: </strong>
+                <vuejs-datepicker  v-model="fecha" :language="es" :format="customFormatter" input-class="form-control">
+                </vuejs-datepicker>
+              </div>
+
+              <div class="form-group col-sm-3 col-md-3">
+                <strong>N° Factura: </strong>
+                <input type="text" name="n" class="form-control" v-model="n">
+              </div>
+              
+              <div class="form-group col-sm-2 col-md-2">
+                <strong>Tiempo Credito: </strong>
+                <input type="number" name="tiempo_credito" class="form-control" v-model="tiempo_credito">
+              </div>
+              
+              <div class="form-group col-sm-2 col-md-2">
+                <strong>Total Factura: </strong>
+                <input type="number" name="monto" class="form-control" v-model="totalFacturaC">
+              </div>
+
+              <div class="form-group col-sm-2 col-md-2">
+                <strong>Saldo: <br>{{montoOrden - totalFacturaC | moneda }} </strong>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group col-sm-3 col-md-3">
+                <div class="upload_image">
+                  <div class="form-group">
+                    <label for="img_route">Comprobante:</label>
+                    <input id="url" name="url" type="file" accept="application/pdf">
+                  </div>
+                </div> 
+              </div>
+            </div>
+          </form>
         </div>
 
         <div class="modal-footer">
             <button type="button" class="btn btn-success" @click="saveFactura">Guardar</button>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" >Cerrar</button>
         </div>
       </div>
     </div>

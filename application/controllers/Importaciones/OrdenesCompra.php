@@ -254,4 +254,50 @@ class OrdenesCompra extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+
+	public function storeAsociarFactura()
+	{
+		if($this->input->is_ajax_request())
+        {
+			$config = [
+				"upload_path" => "./assets/facComProv/",
+				"allowed_types" => "pdf"
+			];
+			$this->load->library("upload",$config);
+				if ($this->upload->do_upload('url')) {
+					$pdf = array("upload_data" => $this->upload->data());
+					$url = $pdf['upload_data']['file_name'];
+				}
+				else{
+					//echo $this->upload->display_errors();
+					$url = '';
+				}
+				$id = '';
+			$asoFac = new stdclass();
+			$asoFac->id_orden = $this->security->xss_clean($this->input->post('id_orden'));
+			$asoFac->n = $this->security->xss_clean($this->input->post('n'));
+			$asoFac->fecha = $this->security->xss_clean($this->input->post('fecha'));
+			$asoFac->proveedor = $this->security->xss_clean($this->input->post('id_proveedor'));
+			$asoFac->monto = $this->security->xss_clean($this->input->post('monto'));
+			$asoFac->tiempo_credito = $this->security->xss_clean($this->input->post('tiempo_credito'));
+			$asoFac->url = $url;
+			$asoFac->created_by = $this->session->userdata('user_id');
+			
+			
+			$id = $this->Pedidos_model->storeAsociarFactura($id, $asoFac);
+
+			if($id)
+        	{
+				echo json_encode($id);
+        	}
+			else
+			{				
+				echo json_encode(false);
+			}
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 }
