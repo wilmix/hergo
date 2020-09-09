@@ -3,101 +3,85 @@ let fin = moment().subtract(0, 'year').endOf('year').format('YYYY-MM-DD')
 $(document).ready(function () {
 	$.fn.dataTable.ext.errMode = 'none';
 	dataPicker()
-	getPedidos()
+	getFacturaProveedores()
 	$('#reportrange').on('apply.daterangepicker', function (ev, picker) {
-		getPedidos()
+		getFacturaProveedores()
 	});
+
 })
 
-function getPedidos() {
-	agregarcargando()
+function getFacturaProveedores() {
+    //agregarcargando()
+    console.log(ini + ' -  ' + fin);
 	$.ajax({
 		type: "POST",
-		url: base_url('index.php/Importaciones/Pedidos/getPedidos'),
+		url: base_url('index.php/Importaciones/FacturaProveedores/getFacturaProveedores'),
 		dataType: "json",
 		data: {
 						ini:ini,
 						fin:fin,
-						condicion:'ordenProcess'
-
 					},
 	}).done(function (res) {
-		table = $('#tableOC').DataTable({
+        console.log(res);
+		table = $('#tableFP').DataTable({
 			data: res,
 			destroy: true,
 			dom: 'Bfrtip',
 			lengthMenu: [
-				[5, 10, -1],
-				['5 filas','10 filas', 'Todo']
+				[10, 25, 50, -1],
+				['10 filas', '25 filas', '50 filas', 'Todo']
 			],
-			pageLength: 5,
+			pageLength: 10,
 			columns: [
-				/* {
-					data: 'id',
-					title: 'id',
-					className: 'text-center',
-				}, */
 				{
-					data: 'nOrden',
-					title: 'Nº',
+					data: 'orden',
+					title: 'PEDIDO',
 					className: 'text-center',
-				},
-				{
-					data: 'fechaOC',
-					title: 'FECHA',
-					className: 'text-center',
-					render: formato_fecha,
-				},
-				{
+                },
+                {
 					data: 'proveedor',
 					title: 'PROVEEDOR',
-				},
+					//sorting: nameCliente == '' || nameCliente == 'TODOS' ? true : false
+                },
+                {
+					data: 'fecha',
+					title: 'FECHA EMISIÓN',
+					className: 'text-center',
+					render: formato_fecha,
+                },
 				{
-					data: 'condicion',
-					title: 'CONDICION',
+					data: 'facN',
+					title: 'Nº FACTURA',
 					className: 'text-center',
 				},
-				{
-					data: 'formaPago',
-					title: 'FORMA DE PAGO',
+                {
+					data: 'tiempo_credito',
+					title: 'CRÉDITO',
+					//sorting: nameCliente == '' || nameCliente == 'TODOS' ? true : false
 				},
 				{
-					data: 'formaEnvio',
-					title: 'FORMA ENVIO',
+					data: 'vencimiento',
+					title: 'VENCIMIENTO',
+					className: 'text-center',
+					render: formato_fecha,
+                },
+				{
+					data: 'estado',
+					title: 'ESTADO',
 				},
 				{
-					data: 'total$',
-					title: 'TOTAL $U$',
+					data: 'monto',
+					title: 'MONTO',
 					className: 'text-right',
 					sorting: false,
 					render: numberDecimal
 				},
 				{
-					data: 'estadoOrden',
-					title: 'ESTADO',
-					className: 'text-center',
-					//sorting: false,
-				},
-				{
-					data: 'autor',
-					title: 'CREADO POR',
-					className: 'text-right',
-					sorting: false,
-					visible: false
-				},
-				{
-					data: 'created_at_orden',
-					title: 'CREADO EN',
-					className: 'text-center',
-					render: formato_fecha_corta,
-					visible: false
-				},
-				{
 					data: null,
 					title: '',
-					width: '120px',
+					width: '100px',
 					className: 'text-center',
-					render: button
+					render: buttons
 				},
 			],
 			stateSave: true,
@@ -214,54 +198,40 @@ function getPedidos() {
 		console.log("Request Failed: " + err);
 	});
 }
-function button (data, type, row) {
-	if (row.estadoOrden == 'FACTURADA') {
-		return `
-        <button type="button" class="btn btn-default print ">
-            <span class="fa fa-print" aria-hidden="true">
-            </span>
-		</button>
-		<button type="button" class="btn btn-default edit">
-            <span class="fa fa-pencil" aria-hidden="true">
-            </span>
-		</button>
-		<button type="button" class="btn btn-default asociarFac" disabled>
-            <span class="fa fa-file-text-o" aria-hidden="true">
-            </span>
-		</button>
-    	`
-	} else {
-		return `
-        <button type="button" class="btn btn-default print">
-            <span class="fa fa-print" aria-hidden="true">
-            </span>
-		</button>
-		<button type="button" class="btn btn-default edit">
-            <span class="fa fa-pencil" aria-hidden="true">
-            </span>
-		</button>
-		<button type="button" class="btn btn-default asociarFac">
-            <span class="fa fa-file-text-o" aria-hidden="true">
-            </span>
-		</button>
-    `
-	}
-   
+
+function buttons (data, type, row) {
+return `
+    <button type="button" class="btn btn-default see">
+		<span class="fa fa-search" aria-hidden="true">
+		</span>
+	</button>
+	<button type="button" class="btn btn-default pago">
+		<span class="fa fa-credit-card" aria-hidden="true">
+		</span>
+	</button>
+`
 }
-$(document).on("click", "button.print", function () {
+function aprobados (data, type, row) {
+	//console.log(row.nAprobados>);
+	if (row.nAprobados>2) {
+		//console.log(`id ${row.id} npedidos ${row.n}`);
+		return `<span class="label label-success">APROBADO</span>`
+	} else {
+		return `<span class="label label-danger">PENDIENTE</span>`
+	}
+}
+
+$(document).on("click", "button.see", function () {
 	let row = table.row( $(this).parents('tr') ).data();
-	let print = base_url("pdf/OrdenCompraPDF/index/") + row.id_pedido;
-    window.open(print);
+    console.log(row.url == true);
+    let pdf = base_url("assets/facComProv/") + row.url;
+    window.open(pdf)
 })
-$(document).on("click", "button.edit", function () {
+
+$(document).on("click", "button.pago", function () {
 	let row = table.row( $(this).parents('tr') ).data();
-	let edit = base_url("Importaciones/OrdenesCompra/editOrden/") + row.id_pedido;
-    window.open(edit);
-})
-$(document).on("click", "button.asociarFac", function () {
-	let row = table.row( $(this).parents('tr') ).data();
-	//console.log(row);
-	modal.asociarFactura(row.id_pedido, row)
+	console.log(row);
+	modal.formPago(row)
 })
 
 const modal = new Vue({
@@ -271,35 +241,36 @@ const modal = new Vue({
     },
 	data: {
 		id:0,
-		id_orden:'',
-		n:'',
+		nPago:'',
 		fecha: '',
 		id_proveedor:'',
         proveedor:'',
-		montoOrden:'',
-		totalFacturaC:0,
-		tiempo_credito:'',
-		condicion:'',
-		formaEnvio:'',
+        glosa:'',
 		url:'',
+		montoPago:'',
+		totalFacProv:0,
+        tiempo_credito:'',
+        fechaEmision:'',
+        nFacProv:'',
+        montoFactPro:'',
+		formaEnvio:'',
 		n_ordenCompra:'',
 		es: vdp_translation_es.js,
 	},
 	methods:{
-		asociarFactura(id, row){
-			modal.id_orden = row.id_ordenCompra
-			modal.montoOrden = row.saldoAsoFac
-			modal.tiempo_credito = row.diasCredito
-			modal.proveedor = row.proveedor
-			modal.n_ordenCompra = row.nOrden
-			modal.condicion = row.condicion
-			modal.formaEnvio = row.formaEnvio
-			modal.id_proveedor = row.id_proveedor
-			$("#asociarFacturaModal").modal("show");
+		formPago(row){
+            modal.id = row.id
+            modal.nFacProv = row.facN
+            modal.proveedor = row.proveedor
+            modal.fechaEmision = row.fecha
+            modal.tiempo_credito = row.tiempo_credito
+            modal.montoFactPro = row.monto
+			$("#pagoModal").modal("show");
 		},
 		saveFactura(e){
 			agregarcargando()
-			e.preventDefault()
+            e.preventDefault()
+            return
 			if (this.totalFacturaC<=0 || !this.fecha ) {
 				quitarcargando()
 

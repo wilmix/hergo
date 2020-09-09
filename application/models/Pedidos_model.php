@@ -132,6 +132,32 @@ class Pedidos_model extends CI_Model
         $query=$this->db->query($sql);	
 		return $query->result_array();
     }
+    public function getFacturaProveedores($ini, $fin)
+	{ 
+    	$sql="  SELECT
+                    fp.`id`,
+                    CONCAT('HG-',oc.`n`,'/',DATE_FORMAT (oc.`fecha`, '%y')) orden,
+                    pro.`nombreproveedor` proveedor,
+                    CONCAT(fp.`tiempo_credito`, ' días') tiempo_credito,
+                    fp.`fecha`,
+                    fp.`n` facN,
+                    fp.`monto`,  
+                    DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY) vencimiento,
+                    IF (CURDATE() < DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'VIGENTE','VENCIDA') estado,
+                    fp.`url`
+                FROM
+                    fact_prov fp
+                    INNER JOIN provedores pro
+                    ON pro.`idproveedor` = fp.`proveedor`
+                    INNER JOIN ordenescompra oc
+                    ON oc.`id` = fp.`id_orden`
+                WHERE fp.`fecha` BETWEEN '$ini' AND '$fin'
+                ORDER BY fp.`fecha` DESC
+            ";
+
+        $query=$this->db->query($sql);	
+		return $query->result_array();
+    }
     public function getPedido($id)
 	{ 
     	$sql="SELECT p.id, p.`n`, p.`fecha`, p.`recepcion`,pro.`idproveedor` idProv,  pro.`nombreproveedor` proveedor, p.`pedidoPor`, p.`cotizacion`, p.`diasCredito`,  p.`formaPago`, p.`glosa`,
