@@ -205,8 +205,8 @@ return `
 		<span class="fa fa-search" aria-hidden="true">
 		</span>
 	</button>
-	<button type="button" class="btn btn-default pago">
-		<span class="fa fa-credit-card" aria-hidden="true">
+	<button type="button" class="btn btn-default addPago">
+		<span class="fa fa-plus" aria-hidden="true">
 		</span>
 	</button>
 `
@@ -228,21 +228,91 @@ $(document).on("click", "button.see", function () {
     window.open(pdf)
 })
 
-$(document).on("click", "button.pago", function () {
+$(document).on("click", "button.addPago", function () {
 	let row = table.row( $(this).parents('tr') ).data();
-	console.log(row);
-	modal.formPago(row)
+	//console.log(row);
+	pago.addPago(row)
 })
+Vue.component('app-row',{
+    
+    template:'#row-template',
+    props:['pagar','index'],
 
-const modal = new Vue({
+    data: function(){
+        return{
+            montopagar:0, 
+            editing:false,            
+        }
+    },
+    created:function(){   
+        this.montopagar=this.pagar.monto;
+    
+    },
+    methods:{     
+        remove:function(){
+            //console.log(vmPago.porPagar);
+            //vm.tasks.splice(this.index,1);
+            this.$emit('removerfila',this.index);
+            //vmPago.selectClient(vmPago.porPagar)
+        },
+        update:function(){
+            /* if(this.montopagar>this.pagar.saldoPago)
+            {
+                this.error="El monto a pagar es mayor al saldo";
+                vmPago.guardar=false;
+                return false;
+            } */
+            this.pagar.pagar=this.montopagar;
+			this.editing=false;
+			
+           
+            //this.pagar.saldoNuevo=this.pagar.saldoPago-this.montopagar;
+            //vmPago.guardar=true;
+        },
+        edit:function(){    
+            this.editing=true;
+			this.montopagar=this.pagar.pagar;
+			pago.getTotalPago()
+            //vmPago.guardar=false;        
+        },
+    },
+    filters:{
+        moneda:function(value){
+            num=Math.round(value * 100) / 100
+            num=num.toFixed(2);
+            //return(num);
+            return numeral(num).format('0,0.00');            
+        },                 
+    },   
+    directives: {
+        inputmask: {
+          bind: function(el, binding, vnode) {
+            $(el).inputmask({
+                alias:"decimal",
+                digits:2,
+                groupSeparator: ',',
+                autoGroup: true,
+                autoUnmask:true
+            }, {
+              isComplete: function (buffer, opts) {
+                vnode.context.value = buffer.join('');
+              }
+            });
+          },
+        }
+      },
+    
+});
+
+const pago = new Vue({
 	el: '#app',
 	components: {
         vuejsDatepicker
     },
 	data: {
-		id:0,
+		id_fact_prov:0,
 		nPago:'',
-		fecha: '',
+		fechaPago: '',
 		id_proveedor:'',
         proveedor:'',
         glosa:'',
@@ -251,27 +321,32 @@ const modal = new Vue({
 		totalFacProv:0,
         tiempo_credito:'',
         fechaEmision:'',
-        nFacProv:'',
+		nFacProv:'',
+		orden:'',
         montoFactPro:'',
 		formaEnvio:'',
 		n_ordenCompra:'',
+		pagoslist:[],
+		totalPago:0,
 		es: vdp_translation_es.js,
 	},
 	methods:{
-		formPago(row){
-            modal.id = row.id
-            modal.nFacProv = row.facN
-            modal.proveedor = row.proveedor
-            modal.fechaEmision = row.fecha
-            modal.tiempo_credito = row.tiempo_credito
-            modal.montoFactPro = row.monto
-			$("#pagoModal").modal("show");
+		addPago(row){
+			/* if(this.pagoslist.map((el) => el.id).indexOf(row.id)>=0)
+			{
+				swal("Atencion", "Esta factura ya fue agregada","info")
+				return
+			} */
+			
+			pago.pagoslist.push(row)
 		},
-		saveFactura(e){
+		deleteRow:function(index){        
+            this.pagoslist.splice(index,1);
+        },
+		savePago(e){
 			agregarcargando()
             e.preventDefault()
-            return
-			if (this.totalFacturaC<=0 || !this.fecha ) {
+			if (this.montoPago<=0 || !this.fechaPago ) {
 				quitarcargando()
 
 				swal(
@@ -281,17 +356,17 @@ const modal = new Vue({
 				)
 				return
 			} 
-
-			let formData = new FormData($('#modalAsociarFactura')[0]); 
-			formData.append('id_orden',modal.id_orden)
+			return
+			let formData = new FormData($('#modalPago')[0]); 
+			formData.append('id_fact_prov',modal.id_fact_prov)
 			formData.append('id_proveedor',modal.id_proveedor)
-			formData.append('fecha', moment(modal.fecha).format('YYYY-MM-DD'))
+			formData.append('fechaPago', moment(modal.fechaPago).format('YYYY-MM-DD'))
 
-			/* for(let pair of formData.entries()) {
+			for(let pair of formData.entries()) {
 				console.log(pair[0]+ ', '+ pair[1]); 
-			} */
+			}
 			$.ajax({
-				url: base_url("index.php/Importaciones/OrdenesCompra/storeAsociarFactura"),
+				url: base_url("index.php/Importaciones/FacturaProveedores/storePago"),
 				type: 'POST',
 				data: formData,
 				cache: false,
@@ -299,6 +374,8 @@ const modal = new Vue({
 				processData: false,
 				success: function (returndata) {
 					res = JSON.parse(returndata)
+					console.log(res);
+					return
 					if (returndata != 'false') {
 						quitarcargando()
 						swal({
@@ -332,6 +409,16 @@ const modal = new Vue({
 		customFormatter(date) {
 			return moment(date).format('D MMMM  YYYY');
 		},
+		getTotalPago:function(){
+            let total=0
+            $.each(this.pagoslist,function(index,value){
+                total+=parseFloat(value.monto);
+            })
+			this.totalPago=total
+			console.log(total);
+			return total;
+			
+        },
 
 	},
 	filters:{

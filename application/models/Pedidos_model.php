@@ -137,6 +137,7 @@ class Pedidos_model extends CI_Model
     	$sql="  SELECT
                     fp.`id`,
                     CONCAT('HG-',oc.`n`,'/',DATE_FORMAT (oc.`fecha`, '%y')) orden,
+                    pro.`idproveedor` id_proveedor,
                     pro.`nombreproveedor` proveedor,
                     CONCAT(fp.`tiempo_credito`, ' días') tiempo_credito,
                     fp.`fecha`,

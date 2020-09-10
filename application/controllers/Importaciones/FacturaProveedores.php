@@ -140,5 +140,50 @@ class FacturaProveedores extends CI_Controller
 	}
 
 
+	public function storePago()
+	{
+		if($this->input->is_ajax_request())
+		{
+			$config = [
+				"upload_path" => "./assets/pagoProveedores/",
+				"allowed_types" => "pdf"
+			];
+			$this->load->library("upload",$config);
+				if ($this->upload->do_upload('url')) {
+					$pdf = array("upload_data" => $this->upload->data());
+					$url = $pdf['upload_data']['file_name'];
+				}
+				else{
+					//echo $this->upload->display_errors();
+					$url = '';
+				}
+			$pago = new stdclass();
+			$pago->n = $this->input->post('fechaPago');
+			$pago->fecha = $this->input->post('fechaPago');
+			$pago->proveedor = $this->input->post('id_proveedor');
+			$pago->monto = $this->input->post('monto');
+			$pago->url = $url;
+			$pago->created_by = $this->session->userdata('user_id');
+			echo json_encode($pago);
+			die();
+			//$id = $this->Pedidos_model->storeOrden($id , $orden);
+
+			/* if($id)
+			{
+				$res = new stdclass();
+				$res->status = true;
+				$res->id = $id;
+				$res->orden = $orden;
+				echo json_encode($res);
+			} else {
+				echo json_encode($id);
+			}
+ */
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 
 }

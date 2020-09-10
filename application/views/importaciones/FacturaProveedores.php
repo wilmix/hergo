@@ -12,93 +12,102 @@
       <div class="box-body">
         <table id="tableFP" class="table table-hover display compact" style="width:100%">
         </table>
+      <hr>
+        <form method="post"  id="modalPago">
+          <div class="row">
+            <div class="form-group col-sm-3 col-md-3">
+              <strong>Fecha Pago: </strong>
+              <vuejs-datepicker  v-model="fechaPago" :language="es" :format="customFormatter" input-class="form-control">
+              </vuejs-datepicker>
+            </div>
+            <div class="form-group col-sm-3 col-md-3">
+              <strong>N° Pago: </strong>
+              <input type="text" name="nPago" class="form-control" v-model="nPago">
+            </div>
+            <div class="form-group col-sm-2 col-md-2">
+              <strong>Total Pago: </strong>
+              <input type="number" name="montoPago" class="form-control" v-model="montoPago">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-3 col-md-3">
+              <div class="upload_image">
+                <div class="form-group">
+                  <label for="img_route">Comprobante:</label>
+                  <input id="url" name="url" type="file" accept="application/pdf">
+                </div>
+              </div> 
+            </div>
+          </div>
+            <div class="table-responsive form-group">
+                <table id="pagos" class="table table-hover table-striped table-bordered table-responsive px-4" >
+                  <thead>
+                    <tr>
+                      <th>Pedido</th>
+                      <th>Proveedor</th>
+                      <th>Fecha Emisión</th>
+                      <th>N° Factura</th>
+                      <th style="width:20%;text-align: right">Total</th>
+                      <th style="width:20%;text-align: right">Pagar</th>
+                      <th style="width:5%"></th>
+                    </tr>
+                  </thead>  
+                  <tbody>
+                    <tr is="app-row" v-for="(pagar, index) in pagoslist" :key="pagar.id" :index="index" :pagar="pagar" @removerfila="deleteRow">
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="5" class="text-right"><b>Total</b> </td>          
+                      <td class="text-right"> {{ getTotalPago() | moneda}}</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+            </div>
+        </form>
       </div> <!-- /.box-body -->
     </div> <!-- /.class="box" -->
   </div> <!-- /.class="col-xs-12" -->
-
-
-    <!-- Modal -->
-    <div id="pagoModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-95">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-            <div class="col-md-12" class="text-center">
-              <h2 class="modal-title text-center">
-                <span>Asociar Pago a Factura {{ nFacProv }}</span>
-              </h2>
-            </div>
-            <div class="col-md-4">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-        </div>
-        <div class="modal-body"> 
-          <form method="post"  id="modalAsociarFactura">
-            <div class="row">
-              <div class="form-group col-sm-3 col-md-6">
-                <strong>Proveedor: {{ proveedor }}</strong>
-              </div>
-              <div class="form-group col-sm-2 col-md-2">
-                <strong>Fecha de Emisión:  {{ fechaEmision }}</strong>
-              </div>
-              <div class="form-group col-sm-2 col-md-2">
-                <strong>Crédito: {{ tiempo_credito }} </strong>
-              </div>
-              <div class="form-group col-sm-2 col-md-2">
-                <strong>Total Factura: {{ montoFactPro | moneda }}</strong>
-              </div>
-            </div>
-
-            <hr>
-
-           <!--  <div class="row">
-              <div class="form-group col-sm-3 col-md-3">
-                <strong>Fecha Factura: </strong>
-                <vuejs-datepicker  v-model="fecha" :language="es" :format="customFormatter" input-class="form-control">
-                </vuejs-datepicker>
-              </div>
-
-              <div class="form-group col-sm-3 col-md-3">
-                <strong>N° Factura: </strong>
-                <input type="text" name="n" class="form-control" v-model="">
-              </div>
-              
-              <div class="form-group col-sm-2 col-md-2">
-                <strong>Tiempo Credito: </strong>
-                <input type="number" name="tiempo_credito" class="form-control" v-model="tiempo_credito">
-              </div>
-              
-              <div class="form-group col-sm-2 col-md-2">
-                <strong>Total Factura: </strong>
-                <input type="number" name="monto" class="form-control" v-model="totalFacturaC">
-              </div>
-
-              <div class="form-group col-sm-2 col-md-2">
-                <strong>Saldo: <br>{{montoOrden - totalFacturaC | moneda }} </strong>
-              </div>
-            </div> -->
-
-            <div class="row">
-              <div class="form-group col-sm-3 col-md-3">
-                <div class="upload_image">
-                  <div class="form-group">
-                    <label for="img_route">Comprobante:</label>
-                    <input id="url" name="url" type="file" accept="application/pdf">
-                  </div>
-                </div> 
-              </div>
-            </div>
-          </form>
-        </div>
-
-        <div class="modal-footer">
-            <button type="button" class="btn btn-success" @click="saveFactura">Guardar</button>
-          <button type="button" class="btn btn-default" data-dismiss="modal" >Cerrar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
 </div> <!-- /.class="row" -->
+
+<script type="text/x-template" id="row-template">
+  <tr>
+      <td>{{pagar.orden}}</td>
+      <td>{{pagar.proveedor}}</td>
+      <td>{{pagar.fecha}}</td>
+      <td>{{pagar.facN}}</td>
+      <td style="width:20%;text-align: right">{{pagar.monto | moneda}}</td>
+      <td style="width:20%;text-align: right">
+        <template v-if="!editing">
+          <a @click="edit" style="cursor:pointer" class="montopagar">
+            <span >{{montopagar | moneda}}
+            </span>
+          </a>
+        </template>
+        <template v-else>
+            <input type="text" class="inputnumeric montopagar" v-model="montopagar" @keyup.enter="update">
+            <div id="botonesinput">                
+                <a @click="update">
+                  <span class="fa fa-check" aria-hidden="true"></span>                                
+                </a>
+            </div>
+            <!-- <label v-if="error != ''"  class="label label-danger">{{error}}</label> -->
+        </template>
+      </td>
+      <td>
+        <button type="button" class="btn btn-default" aria-label="Right Align" @click="remove">
+          <span class="fa fa-times" aria-hidden="true"></span>
+        </button>
+      </td>
+  </tr>
+
+</script>
+<style>
+ .montopagar
+  {
+    float:left;
+    width:80%;
+    text-align: right;
+  }
+</style>
