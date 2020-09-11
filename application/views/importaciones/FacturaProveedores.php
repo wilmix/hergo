@@ -13,20 +13,12 @@
         <table id="tableFP" class="table table-hover display compact" style="width:100%">
         </table>
       <hr>
-        <form method="post"  id="modalPago">
+        <form method="post"  id="formPago">
           <div class="row">
             <div class="form-group col-sm-3 col-md-3">
               <strong>Fecha Pago: </strong>
               <vuejs-datepicker  v-model="fechaPago" :language="es" :format="customFormatter" input-class="form-control">
               </vuejs-datepicker>
-            </div>
-            <div class="form-group col-sm-3 col-md-3">
-              <strong>N° Pago: </strong>
-              <input type="text" name="nPago" class="form-control" v-model="nPago">
-            </div>
-            <div class="form-group col-sm-2 col-md-2">
-              <strong>Total Pago: </strong>
-              <input type="number" name="montoPago" class="form-control" v-model="montoPago">
             </div>
           </div>
           <div class="row">
@@ -65,6 +57,12 @@
                   </tfoot>
                 </table>
             </div>
+            <div class="row">
+              <div class="col-xs-12 text-center">
+                <button type="button" class="btn btn-primary" @click="savePago">Guardar</button>
+                <button type="button" class="btn btn-default" @click="cancel">Cancelar</button>
+            </div>
+          </div>
         </form>
       </div> <!-- /.box-body -->
     </div> <!-- /.class="box" -->
@@ -77,8 +75,8 @@
       <td>{{pagar.proveedor}}</td>
       <td>{{pagar.fecha}}</td>
       <td>{{pagar.facN}}</td>
-      <td style="width:20%;text-align: right">{{pagar.monto | moneda}}</td>
-      <td style="width:20%;text-align: right">
+      <td style="width:20%;text-align: right;">{{pagar.montoFactPro | moneda}}</td>
+      <td style="width:20%;text-align: right;">
         <template v-if="!editing">
           <a @click="edit" style="cursor:pointer" class="montopagar">
             <span >{{montopagar | moneda}}
@@ -106,7 +104,7 @@
 <style>
  .montopagar
   {
-    float:left;
+    float:right;
     width:80%;
     text-align: right;
   }

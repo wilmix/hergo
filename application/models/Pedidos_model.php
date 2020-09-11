@@ -135,13 +135,14 @@ class Pedidos_model extends CI_Model
     public function getFacturaProveedores($ini, $fin)
 	{ 
     	$sql="  SELECT
-                    fp.`id`,
+                    fp.`id` id_fact_prov,
                     CONCAT('HG-',oc.`n`,'/',DATE_FORMAT (oc.`fecha`, '%y')) orden,
                     pro.`idproveedor` id_proveedor,
                     pro.`nombreproveedor` proveedor,
                     CONCAT(fp.`tiempo_credito`, ' días') tiempo_credito,
                     fp.`fecha`,
                     fp.`n` facN,
+                    fp.`monto` montoFactPro,
                     fp.`monto`,  
                     DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY) vencimiento,
                     IF (CURDATE() < DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'VIGENTE','VENCIDA') estado,
@@ -265,6 +266,37 @@ class Pedidos_model extends CI_Model
 		
 		return $numDoc->row() ? $numDoc->row()->numDoc : 1;
     }
+    public function storePago($pago)
+	{		
+		$this->db->trans_start();
+			$this->db->insert("pago_prov", $pago);
+            $id=$this->db->insert_id();
+            if($id>0)
+        	{
+				$pagosProv = array();
+				foreach ($pago->pagos as $fila) {
+				$pagos=new stdclass();
+				$pagos->id_pago_prov= $id;
+				$pagos->id_fact_prov=$fila->id_fact_prov;
+				$pagos->monto=$fila->monto;		
+				array_push($pagosProv,$pagos);	
+				}
+			$this->db->insert_batch("fact_pago_prov", $pagosProv);	
+            }
+        	else
+        	{
+        		echo false;
+        	}
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+			return false;
+			
+        } else {
+            
+            return $id;
+        }	
+	}
 
     
 }

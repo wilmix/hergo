@@ -104,9 +104,9 @@ class FacturaProveedores extends CI_Controller
 		//$this->libacceso->acceso(57);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
-			$this->datos['menu']="Consulta Factura Proveedores";
+			$this->datos['menu']="Pago Proveedores";
 			$this->datos['opcion']="Importaciones";
-			$this->datos['titulo']="FacturaProveedores";
+			$this->datos['titulo']="PagoProveedores";
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
 			$this->datos['foot_script']= $this->foot_script;
@@ -158,27 +158,24 @@ class FacturaProveedores extends CI_Controller
 					$url = '';
 				}
 			$pago = new stdclass();
-			$pago->n = $this->input->post('fechaPago');
 			$pago->fecha = $this->input->post('fechaPago');
-			$pago->proveedor = $this->input->post('id_proveedor');
-			$pago->monto = $this->input->post('monto');
 			$pago->url = $url;
+			$pago->total = $this->input->post('total');
 			$pago->created_by = $this->session->userdata('user_id');
-			echo json_encode($pago);
-			die();
-			//$id = $this->Pedidos_model->storeOrden($id , $orden);
-
-			/* if($id)
+			$pago->pagos = json_decode($this->input->post('pagos'));
+			//echo json_encode($pago);die();
+			$id = $this->Pedidos_model->storePago($pago);
+			if($id)
 			{
 				$res = new stdclass();
 				$res->status = true;
 				$res->id = $id;
-				$res->orden = $orden;
+				$res->orden = $pago;
 				echo json_encode($res);
 			} else {
 				echo json_encode($id);
 			}
- */
+
 		}
 		else
 		{

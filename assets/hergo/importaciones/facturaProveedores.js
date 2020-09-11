@@ -230,7 +230,7 @@ $(document).on("click", "button.see", function () {
 
 $(document).on("click", "button.addPago", function () {
 	let row = table.row( $(this).parents('tr') ).data();
-	//console.log(row);
+	console.log(row);
 	pago.addPago(row)
 })
 Vue.component('app-row',{
@@ -245,35 +245,22 @@ Vue.component('app-row',{
         }
     },
     created:function(){   
-        this.montopagar=this.pagar.monto;
+        this.montopagar=parseFloat(this.pagar.monto).toFixed(2);
     
     },
     methods:{     
         remove:function(){
-            //console.log(vmPago.porPagar);
-            //vm.tasks.splice(this.index,1);
             this.$emit('removerfila',this.index);
-            //vmPago.selectClient(vmPago.porPagar)
         },
         update:function(){
-            /* if(this.montopagar>this.pagar.saldoPago)
-            {
-                this.error="El monto a pagar es mayor al saldo";
-                vmPago.guardar=false;
-                return false;
-            } */
-            this.pagar.pagar=this.montopagar;
+			console.log('updating');
+            this.pagar.monto=parseFloat(this.montopagar).toFixed(2);
 			this.editing=false;
-			
-           
-            //this.pagar.saldoNuevo=this.pagar.saldoPago-this.montopagar;
-            //vmPago.guardar=true;
         },
         edit:function(){    
-            this.editing=true;
-			this.montopagar=this.pagar.pagar;
+			this.editing=true;
+			this.montopagar=parseFloat(this.pagar.monto).toFixed(2);
 			pago.getTotalPago()
-            //vmPago.guardar=false;        
         },
     },
     filters:{
@@ -310,33 +297,21 @@ const pago = new Vue({
         vuejsDatepicker
     },
 	data: {
-		id_fact_prov:0,
-		nPago:'',
 		fechaPago: '',
 		id_proveedor:'',
         proveedor:'',
-        glosa:'',
 		url:'',
-		montoPago:'',
-		totalFacProv:0,
-        tiempo_credito:'',
-        fechaEmision:'',
-		nFacProv:'',
-		orden:'',
-        montoFactPro:'',
-		formaEnvio:'',
-		n_ordenCompra:'',
 		pagoslist:[],
 		totalPago:0,
 		es: vdp_translation_es.js,
 	},
 	methods:{
 		addPago(row){
-			/* if(this.pagoslist.map((el) => el.id).indexOf(row.id)>=0)
+			if(this.pagoslist.map((el) => el.id_fact_prov).indexOf(row.id_fact_prov)>=0)
 			{
 				swal("Atencion", "Esta factura ya fue agregada","info")
 				return
-			} */
+			}
 			
 			pago.pagoslist.push(row)
 		},
@@ -346,7 +321,7 @@ const pago = new Vue({
 		savePago(e){
 			agregarcargando()
             e.preventDefault()
-			if (this.montoPago<=0 || !this.fechaPago ) {
+			if (this.totalPago<=0 || !this.fechaPago ) {
 				quitarcargando()
 
 				swal(
@@ -356,15 +331,16 @@ const pago = new Vue({
 				)
 				return
 			} 
-			return
-			let formData = new FormData($('#modalPago')[0]); 
-			formData.append('id_fact_prov',modal.id_fact_prov)
-			formData.append('id_proveedor',modal.id_proveedor)
-			formData.append('fechaPago', moment(modal.fechaPago).format('YYYY-MM-DD'))
+			let formData = new FormData($('#formPago')[0]); 
+			formData.append('fechaPago', moment(pago.fechaPago).format('YYYY-MM-DD'))
+			formData.append('total', pago.totalPago)
+			formData.append('pagos', JSON.stringify(this.pagoslist))
+
 
 			for(let pair of formData.entries()) {
 				console.log(pair[0]+ ', '+ pair[1]); 
-			}
+			} 
+			quitarcargando()
 			$.ajax({
 				url: base_url("index.php/Importaciones/FacturaProveedores/storePago"),
 				type: 'POST',
@@ -375,24 +351,22 @@ const pago = new Vue({
 				success: function (returndata) {
 					res = JSON.parse(returndata)
 					console.log(res);
-					return
-					if (returndata != 'false') {
+					if (res.status == true) {
 						quitarcargando()
 						swal({
 							title: "Registrado!",
-							text: "El factura se asoció con éxito",
+							text: "El pago se asoció con éxito",
 							type: "success",        
 							allowOutsideClick: false,                                                                        
 							}).then(function(){
-								$('#modalAsociarFactura').hide();
-								//$('#modalAsociarFactura')[0].reset();
-								location.reload();
+								console.log('listo');
+								//location.reload();
 							})
 					} else {
 						quitarcargando()
 						swal(
 							'Error',
-							'Error al guardar el Factura Comercial',
+							'Error al guardar el Pago',
 							'error'
 						)
 					}
@@ -406,6 +380,11 @@ const pago = new Vue({
 				},
 			});
 		},
+		cancel(e){
+			e.preventDefault()
+			console.log('cancelar'); return 
+			window.location.href=base_url("index.php/Importaciones/Pedidos");
+		},
 		customFormatter(date) {
 			return moment(date).format('D MMMM  YYYY');
 		},
@@ -414,9 +393,9 @@ const pago = new Vue({
             $.each(this.pagoslist,function(index,value){
                 total+=parseFloat(value.monto);
             })
-			this.totalPago=total
-			console.log(total);
-			return total;
+			this.totalPago=total.toFixed(2)
+			console.log(this.totalPago);
+			return this.totalPago;
 			
         },
 
