@@ -146,14 +146,23 @@ class Pedidos_model extends CI_Model
                     fp.`monto`,  
                     DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY) vencimiento,
                     IF (CURDATE() < DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'VIGENTE','VENCIDA') estado,
-                    fp.`url`
+                    fp.`url`, 
+                    tpp.totalPago, 
+                    (fp.`monto` - tpp.totalPago) saldo
                 FROM
                     fact_prov fp
                     INNER JOIN provedores pro
                     ON pro.`idproveedor` = fp.`proveedor`
                     INNER JOIN ordenescompra oc
                     ON oc.`id` = fp.`id_orden`
+                    LEFT JOIN (
+                        SELECT fpp.`id_fact_prov`, SUM(fpp.`monto`) totalPago
+                        FROM fact_pago_prov fpp
+                        GROUP BY fpp.`id_fact_prov`
+                    )tpp
+                    ON tpp.id_fact_prov = fp.`id`
                 WHERE fp.`fecha` BETWEEN '$ini' AND '$fin'
+                AND (fp.`monto` - tpp.totalPago) > 0
                 ORDER BY fp.`fecha` DESC
             ";
 

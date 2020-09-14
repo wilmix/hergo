@@ -66,15 +66,22 @@ function getFacturaProveedores() {
 					render: formato_fecha,
                 },
 				{
-					data: 'estado',
-					title: 'ESTADO',
-				},
-				{
 					data: 'monto',
 					title: 'MONTO',
 					className: 'text-right',
 					sorting: false,
 					render: numberDecimal
+				},
+				{
+					data: 'saldo',
+					title: 'SALDO',
+					className: 'text-right',
+					sorting: false,
+					render: numberDecimal
+				},
+				{
+					data: 'estado',
+					title: 'ESTADO',
 				},
 				{
 					data: null,
@@ -123,7 +130,7 @@ function getFacturaProveedores() {
 				{
 					text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
 					action: function (e, dt, node, config) {
-						getPedidos()
+						getFacturaProveedores()
 					}
 				},
 				{
@@ -144,7 +151,7 @@ function getFacturaProveedores() {
 							className: 'btn btn-link',
 							action: function (e, dt, node, config) {
 								table.state.clear()
-								getPedidos()
+								getFacturaProveedores()
 							}
 						},
 
