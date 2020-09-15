@@ -162,7 +162,7 @@ class Pedidos_model extends CI_Model
                     )tpp
                     ON tpp.id_fact_prov = fp.`id`
                 WHERE fp.`fecha` BETWEEN '$ini' AND '$fin'
-                AND (fp.`monto` - tpp.totalPago) > 0
+                AND (fp.`monto` - IFNULL(tpp.totalPago,0)) > 0
                 ORDER BY fp.`fecha` DESC
             ";
 
