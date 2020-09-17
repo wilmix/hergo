@@ -112,7 +112,7 @@ class Pedidos_model extends CI_Model
                     FROM fact_prov fp
                     GROUP BY fp.`id_orden`
                 )saldoFac ON saldoFac.`id_orden` = oc.`id`
-                INNER JOIN (SELECT pit.`idPedido`, SUM(pit.`cantidad` * pit.`precioFabrica`) total$, SUM(pit.`cantidad` * pit.`precioFabrica` * tc.`tipocambio`) totalBOB
+                INNER JOIN (SELECT pit.`idPedido`, SUM(ROUND(pit.`cantidad` * pit.`precioFabrica`,2)) total$, SUM(ROUND(pit.`cantidad` * pit.`precioFabrica` * tc.`tipocambio`,2)) totalBOB
                         FROM pedidos_items pit
                         INNER JOIN pedidos p ON p.`id` = pit.`idPedido`
                         INNER JOIN `tipocambio` tc ON tc.`fecha` = p.`fecha`
