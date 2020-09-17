@@ -252,7 +252,8 @@ const ordenForm = new Vue({
         condicionCompra:'',
         atencion:'',
         referencia:'',
-        glosa:'',
+		glosa:'',
+		flete:0,
         idPedido:'',
 		formaPago:'',
 		diasCredito:'',
@@ -298,7 +299,7 @@ const ordenForm = new Vue({
         },
         total(){
             if (this.items.length>0) {
-                this.totalDoc = this.items.map((item, index, array) => parseFloat(item.total)).reduce( (a,b)=> a+b)
+                this.totalDoc = this.items.map((item, index, array) => parseFloat(item.total)).reduce( (a,b)=> a+b) + this.flete
                 return this.totalDoc
             }
         },
@@ -402,6 +403,7 @@ const ordenForm = new Vue({
 			  ordenForm.fecha = moment(res.orden.fecha).format('MM-DD-YYYY')
 			  ordenForm.proveedor = res.orden.nombreproveedor
 			  ordenForm.atencion = res.orden.atencion
+			  ordenForm.flete = parseFloat(res.orden.flete) 
 			  ordenForm.condicionCompra = res.orden.condicion
 			  ordenForm.direccion = res.orden.direccion
 			  ordenForm.fax = res.orden.fax

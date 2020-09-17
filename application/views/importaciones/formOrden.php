@@ -94,6 +94,11 @@
                     </tr>
                 </tbody>
                 <tfoot>
+                <tr>
+                  <td class="text-right" colspan="7" ><strong> Flete </strong></td>
+                  <td class="text-right bg-primary"><strong>{{ flete | moneda }}</strong></td>
+                  <!-- <td class="text-right bg-primary"><strong> {{ 0 | moneda }} </strong></td> -->
+                </tr>
                     <tr>
                         <td class="text-right" colspan="7"><strong>Total $u$</strong></td>
                         <td class="text-right bg-primary"><strong>{{ totalDoc | moneda }}</strong></td>

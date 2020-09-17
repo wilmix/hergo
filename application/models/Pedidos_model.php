@@ -188,13 +188,38 @@ class Pedidos_model extends CI_Model
     }
     public function getOrden($id)
 	{ 
-    	$sql="SELECT oc.`id`,p.`id`id_pedido, oc.`n`, oc.`fecha`, pro.`nombreproveedor`, pro.`telefono`, pro.`fax`, oc.`atencion`, pro.`direccion`, oc.`referencia`, 
-        oc.`condicion`, oc.`formaEnvio`, p.`formaPago`, p.`diasCredito`, oc.`glosa`, CONCAT(u.`first_name`, ' ',u.`last_name`) autor, oc.`diasCredito` diasCreditoOC
-        FROM ordenescompra oc 
-        INNER JOIN pedidos p ON p.`id` = oc.`id_pedido`
-        INNER JOIN provedores pro ON pro.`idproveedor` = p.`proveedor`
-        INNER JOIN users u ON u.`id` = oc.`created_by`
-        WHERE oc.`id` ='$id'";
+    	$sql="  SELECT
+                    oc.`id`,
+                    p.`id` id_pedido,
+                    oc.`n`,
+                    oc.`fecha`,
+                    pro.`nombreproveedor`,
+                    pro.`telefono`,
+                    pro.`fax`,
+                    oc.`atencion`,
+                    pro.`direccion`,
+                    oc.`referencia`,
+                    oc.`condicion`,
+                    oc.`formaEnvio`,
+                    p.`formaPago`,
+                    p.`diasCredito`,
+                    oc.`glosa`,
+                    CONCAT(
+                        u.`first_name`,
+                        ' ',
+                        u.`last_name`
+                        ) autor,
+                    oc.`diasCredito` diasCreditoOC,
+                    p.`flete`
+                FROM
+                    ordenescompra oc
+                    INNER JOIN pedidos p
+                    ON p.`id` = oc.`id_pedido`
+                    INNER JOIN provedores pro
+                    ON pro.`idproveedor` = p.`proveedor`
+                    INNER JOIN users u
+                    ON u.`id` = oc.`created_by`
+                WHERE oc.`id` = '$id'";
 
         $query=$this->db->query($sql)->row();		
 		return $query;
