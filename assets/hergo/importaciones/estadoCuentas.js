@@ -59,6 +59,7 @@ function getEstadoCuentas() {
 					data: 'fechaEmision',
 					title: 'FECHA EMISIÓN',
 					className: 'text-center',
+					sorting: false,
                 },
                 {
 					data: 'monto',
@@ -70,6 +71,7 @@ function getEstadoCuentas() {
 					data: 'fechaVencimiento',
 					title: 'VENCIMIENTO',
 					className: 'text-center',
+					sorting: false,
                 },
                 {
 					data: 'pagoCuenta',

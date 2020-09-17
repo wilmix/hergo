@@ -315,9 +315,9 @@ class Pedidos_model extends CI_Model
             pro.`nombreproveedor`, 
             IF(fp.`id`,fp.`tiempo_credito`,oc.`diasCredito`) credito,
             IF(fp.`id`,fp.`n`,'PENDIENTE') nFactProv,
-            IF(fp.`id`,fp.`fecha`,'PENDIENTE') fechaEmision,
+            IF(fp.`id`,DATE_FORMAT(fp.`fecha`, '%d/%m/%Y'),'PENDIENTE') fechaEmision,
             IF(fp.`id`,fp.`monto`,pit.totalOrden) monto,
-            IF(fp.`id`, DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'PENDIENTE') fechaVencimiento,
+            IF(fp.`id`,DATE_FORMAT( DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY), '%d/%m/%Y'),'PENDIENTE') fechaVencimiento,
             tpp.totalPago pagoCuenta,
             (fp.`monto` - tpp.totalPago) saldo,
             CASE
