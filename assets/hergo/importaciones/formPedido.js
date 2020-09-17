@@ -45,6 +45,7 @@ const app = new Vue({
         recepcion:'',
         cliente:'',
         glosa:'',
+        flete:0,
         diasCredito:'',
         totalDoc:0,
         tipoCambio: parseFloat(document.getElementById("mostrarTipoCambio").textContent),
@@ -81,8 +82,8 @@ const app = new Vue({
       },
       total(){
         if (this.items.length>0) {
-          this.totalDoc = this.items.map((item, index, array) => parseFloat(item.total)).reduce( (a,b)=> a+b)
-          return this.totalDoc
+          this.totalDoc = this.items.map((item, index, array) => parseFloat(item.total)).reduce( (a,b)=> a+b) + this.flete 
+          return this.totalDoc 
         }
       },
       customFormatter(date) {
@@ -205,6 +206,7 @@ const app = new Vue({
         form.append('id', this.id)
         form.append('n', this.n)
         form.append('diasCredito', this.diasCredito)
+        form.append('flete', this.flete)
 
         //for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); } return 
         
@@ -279,6 +281,7 @@ const app = new Vue({
           app.cotizacion = res.pedido.cotizacion
           app.formaPago = res.pedido.formaPago
           app.diasCredito = res.pedido.diasCredito
+          app.flete = parseFloat(res.pedido.flete)
 
           app.glosa = res.pedido.glosa
           app.items = res.items

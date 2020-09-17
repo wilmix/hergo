@@ -184,6 +184,7 @@ class Pedidos extends CI_Controller
 			$pedido->diasCredito = $this->input->post('diasCredito');
 			$pedido->autor = $this->session->userdata('user_id');
 			$pedido->glosa = strtoupper($this->input->post('glosa'));
+			$pedido->flete = round($this->input->post('flete'),2);
 			$pedido->updated_at = $id ? date('Y-m-d H:i:s') : 0;
 			$pedido->items = json_decode($this->input->post('items'));
 

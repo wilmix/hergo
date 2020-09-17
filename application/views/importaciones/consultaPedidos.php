@@ -108,10 +108,13 @@
               </tbody>
               <tfoot>
                 <tr>
+                  <td class="text-right" colspan="11"><strong>Flete</strong></td>
+                  <td class="text-right bg-primary"><strong>{{ flete | moneda }}</strong></td>
+                </tr>
+                <tr>
                   <td class="text-right" colspan="11"><strong>Total $u$</strong></td>
                   <td class="text-right bg-primary"><strong>{{ totalDoc | moneda }}</strong></td>
                 </tr>
-
                 <tr>
                   <td class="text-right" colspan="11"><strong>Total BOB</strong></td>
                   <td class="text-right bg-primary"><strong> {{ (totalDoc * tipoCambio) | moneda }} </strong></td>

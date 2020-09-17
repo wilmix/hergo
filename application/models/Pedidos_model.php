@@ -92,7 +92,7 @@ class Pedidos_model extends CI_Model
     public function getPedidos($ini, $fin, $condicion)
 	{ 
     	$sql=" SELECT p.`id` id_pedido, p.`n` nPedido, p.`fecha`, p.`recepcion`, p.`formaPago`, p.`pedidoPor`,pro.`nombreproveedor` proveedor, CONCAT(u.`first_name`, ' ', u.`last_name`) autor, oc.`id` id_ordenCompra, items.total$, items.totalBOB,
-            COUNT(*) nAprobados, p.`created_at` created_at_pedido,
+            COUNT(*) nAprobados, p.`created_at` created_at_pedido,IFNULL(p.flete,0) flete,
             oc.`id`id_ordenCompra, oc.`n` nOrden,  oc.`fecha` fechaOC, pro.`direccion`, pro.`telefono` fono, pro.`fax` fax, oc.created_at created_at_orden,
             oc.`atencion`, oc.`referencia`, oc.`condicion`, oc.`formaEnvio`, p.`formaPago`, CONCAT(u.`first_name`, ' ', u.`last_name`) autorOC, oc.`diasCredito`, p.`proveedor` id_proveedor,
             (items.total$ - IFNULL(saldoFac.totalFacCom,0))saldoAsoFac,
@@ -112,11 +112,17 @@ class Pedidos_model extends CI_Model
                     FROM fact_prov fp
                     GROUP BY fp.`id_orden`
                 )saldoFac ON saldoFac.`id_orden` = oc.`id`
-                INNER JOIN (SELECT pit.`idPedido`, SUM(ROUND(pit.`cantidad` * pit.`precioFabrica`,2)) total$, SUM(ROUND(pit.`cantidad` * pit.`precioFabrica` * tc.`tipocambio`,2)) totalBOB
-                        FROM pedidos_items pit
-                        INNER JOIN pedidos p ON p.`id` = pit.`idPedido`
-                        INNER JOIN `tipocambio` tc ON tc.`fecha` = p.`fecha`
-                        GROUP BY pit.`idPedido`
+                INNER JOIN (SELECT
+                            pit.`idPedido`,
+                            (SUM(ROUND(pit.`cantidad` * pit.`precioFabrica`,2))+ IFNULL(p.flete,0)) total$,
+                            SUM(ROUND(pit.`cantidad` * pit.`precioFabrica` * tc.`tipocambio`,2)) + ROUND(IFNULL(p.flete * tc.`tipocambio`,0),2) totalBOB
+                            FROM
+                            pedidos_items pit
+                            INNER JOIN pedidos p
+                                ON p.`id` = pit.`idPedido`
+                            INNER JOIN `tipocambio` tc
+                                ON tc.`fecha` = p.`fecha`
+                            GROUP BY pit.`idPedido`
                         )items 
                 ON items.idPedido = p.`id`
             GROUP BY p.`id`
@@ -172,7 +178,7 @@ class Pedidos_model extends CI_Model
     public function getPedido($id)
 	{ 
     	$sql="SELECT p.id, p.`n`, p.`fecha`, p.`recepcion`,pro.`idproveedor` idProv,  pro.`nombreproveedor` proveedor, p.`pedidoPor`, p.`cotizacion`, p.`diasCredito`,  p.`formaPago`, p.`glosa`,
-        pro.`direccion`, pro.`telefono`, pro.`fax`
+        pro.`direccion`, pro.`telefono`, pro.`fax`, IFNULL(p.flete,0) flete
         FROM pedidos p
         INNER JOIN provedores pro ON pro.`idproveedor` = p.`proveedor`
         WHERE p.`id` = '$id'";
@@ -315,9 +321,9 @@ class Pedidos_model extends CI_Model
             pro.`nombreproveedor`, 
             IF(fp.`id`,fp.`tiempo_credito`,oc.`diasCredito`) credito,
             IF(fp.`id`,fp.`n`,'PENDIENTE') nFactProv,
-            IF(fp.`id`,DATE_FORMAT(fp.`fecha`, '%d/%m/%Y'),'PENDIENTE') fechaEmision,
+            IF(fp.`id`,fp.`fecha`,'PENDIENTE') fechaEmision,
             IF(fp.`id`,fp.`monto`,pit.totalOrden) monto,
-            IF(fp.`id`,DATE_FORMAT( DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY), '%d/%m/%Y'),'PENDIENTE') fechaVencimiento,
+            IF(fp.`id`,DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'PENDIENTE') fechaVencimiento,
             tpp.totalPago pagoCuenta,
             (fp.`monto` - tpp.totalPago) saldo,
             CASE

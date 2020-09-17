@@ -269,7 +269,8 @@ const modal = new Vue({
         pedidoPor:'',
         cotizacion:'',
         recepcion:'',
-        glosa:'',
+		glosa:'',
+		flete:0,
         totalDoc:0,
 		tipoCambio: parseFloat(document.getElementById("mostrarTipoCambio").textContent),
 		totalDoc:0,
@@ -300,6 +301,7 @@ const modal = new Vue({
 				modal.proveedor = res.pedido.proveedor
 				modal.formaPago = res.pedido.formaPago
 				modal.glosa = res.pedido.glosa
+				modal.flete = parseFloat( res.pedido.flete )
 				modal.items = res.items
 				modal.aprobadoPor = res.aprobadoPor
 				modal.aprobadoUser = res.aprobadoUser
@@ -312,7 +314,7 @@ const modal = new Vue({
 		},
 		total(){
 			if (this.items.length>0) {
-			  this.totalDoc = this.items.map((item, index, array) => parseFloat(item.total)).reduce( (a,b)=> a+b)
+			  this.totalDoc = this.items.map((item, index, array) => parseFloat(item.total)).reduce( (a,b)=> a+b) + this.flete
 			  return this.totalDoc
 			}
 		},

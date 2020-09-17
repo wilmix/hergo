@@ -146,9 +146,12 @@ function formato_fecha(value, row, index) {
   //console.log(value)
   if ((value == "0000-00-00") || (value == "0000-00-00 00:00:00") || (value == "") || (value == null))
     fecha = "Sin fecha de registro"
+  else if (value == 'PENDIENTE') {
+    fecha = value
+  }
   else
     fecha = moment(value, "YYYY/MM/DD").format("DD/MM/YYYY")
-  return [fecha]
+    return [fecha]
 }
 
 function formato_fecha_corta(value, row, index) {
