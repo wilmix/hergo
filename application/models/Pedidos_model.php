@@ -342,6 +342,7 @@ class Pedidos_model extends CI_Model
     	$sql="  SELECT  
                     oc.id idOC,
                     fp.id idFP,
+                    tpp.id_fact_prov,
                     CONCAT('HG-',oc.`n`,'/',DATE_FORMAT (oc.`fecha`, '%y')) orden, 
                     pro.`nombreproveedor`, 
                     IF(fp.`id`,fp.`tiempo_credito`,oc.`diasCredito`) credito,

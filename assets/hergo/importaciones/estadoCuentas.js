@@ -14,17 +14,14 @@ $(document).on("change", "#estadoFiltro", function () {
 
 function getEstadoCuentas() {
     let estado = $("#estadoFiltro").val()
-    console.log( estado);
 	agregarcargando()
 	$.ajax({
 		type: "POST",
 		url: base_url('index.php/Importaciones/EstadoCuentas/getEstadoCuentas'),
 		dataType: "json",
-		data: { condicion: estado
-
-					},
+		data: { condicion: estado },
 	}).done(function (res) {
-        res.forEach(element => element.idFP ? element.estado = element.estadoFac : element.estado = element.estadoOrden);
+        res.forEach(element => element.id_fact_prov ? element.estado = element.estadoFac : element.estado = element.estadoOrden);
         console.log(res);
 		table = $('#table').DataTable({
 			data: res,
@@ -34,6 +31,15 @@ function getEstadoCuentas() {
 				[5, 10, -1],
 				['5 filas','10 filas', 'Todo']
 			],
+			createdRow: function( row, res, dataIndex ) {
+				if ( res.estado == 'PAGADA') {
+				  	$(row).addClass( 'styleGreen' );
+				} else if (res.estado == 'VENCIDA') {
+					$(row).addClass( 'styleRed' );
+				} else {
+					
+				}
+			},
 			pageLength: 15,
 			columns: [
 				{
@@ -256,6 +262,7 @@ $(document).on("click", "button.asociarFac", function () {
 	//console.log(row);
 	modal.asociarFactura(row.id_pedido, row)
 })
+
 
 const modal = new Vue({
 	el: '#app',

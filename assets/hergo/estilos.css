@@ -127,3 +127,13 @@ thead input {
     width: 100%;
     height: 100%;
   }
+  .styleGreen
+  {
+
+    background-color:LightGreen !important;
+  }
+  .styleRed
+  {
+
+    background-color:LightCoral !important;
+  }
