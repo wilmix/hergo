@@ -339,53 +339,54 @@ class Pedidos_model extends CI_Model
     }
     public function getEstadoCuentas($condicion)
 	{ 
-    	$sql="SELECT  
-            oc.id idOC,
-            fp.id idFP,
-            CONCAT('HG-',oc.`n`,'/',DATE_FORMAT (oc.`fecha`, '%y')) orden, 
-            pro.`nombreproveedor`, 
-            IF(fp.`id`,fp.`tiempo_credito`,oc.`diasCredito`) credito,
-            IF(fp.`id`,fp.`n`,'PENDIENTE') nFactProv,
-            IF(fp.`id`,fp.`fecha`,'PENDIENTE') fechaEmision,
-            IF(fp.`id`,fp.`monto`,pit.totalOrden) monto,
-            IF(fp.`id`,DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'PENDIENTE') fechaVencimiento,
-            tpp.totalPago pagoCuenta,
-            (fp.`monto` - tpp.totalPago) saldo,
-            CASE
-                WHEN (fp.`monto` - tpp.totalPago) <= 0 THEN 'PAGADA'
-                WHEN (fp.`monto` - tpp.totalPago) > 0 THEN 'PARCIAL'
-                ELSE ''
-            END estadoFac,
-            IF (CURDATE() < DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'VIGENTE','VENCIDA') estadoOrden
-            
-        FROM ordenescompra oc
-            INNER JOIN pedidos p 
-                ON p.`id` = oc.`id_pedido`
-            INNER JOIN (
-            SELECT pit.`idPedido`, SUM(ROUND(pit.`cantidad` * pit.`precioFabrica`,2)) totalOrden
-            FROM pedidos_items pit
-            GROUP BY pit.`idPedido`
-            )pit
-                ON pit.idPedido = p.`id`
-            
-            INNER JOIN provedores pro
-                ON pro.`idproveedor` = p.`proveedor`
-            LEFT JOIN fact_prov fp
-                ON fp.`id_orden` = oc.`id`
-            LEFT JOIN (
-            SELECT fpp.`id_fact_prov`, SUM(fpp.`monto`) totalPago
-            FROM fact_pago_prov fpp
-            GROUP BY fpp.`id_fact_prov`
-            )tpp
-                 ON tpp.id_fact_prov = fp.`id`
-        HAVING
-                CASE
-                    WHEN '$condicion' = 'historico' THEN saldo>=0 OR saldo IS NULL
-                    WHEN '$condicion' = 'pendiente' THEN saldo>0 OR saldo IS NULL
-                    WHEN '$condicion' = 'pagada' THEN estadoFac='PAGADA'
-                END  
-        
-        ORDER BY  pro.nombreproveedor, oc.id";
+    	$sql="  SELECT  
+                    oc.id idOC,
+                    fp.id idFP,
+                    CONCAT('HG-',oc.`n`,'/',DATE_FORMAT (oc.`fecha`, '%y')) orden, 
+                    pro.`nombreproveedor`, 
+                    IF(fp.`id`,fp.`tiempo_credito`,oc.`diasCredito`) credito,
+                    IF(fp.`id`,fp.`n`,'PENDIENTE') nFactProv,
+                    IF(fp.`id`,fp.`fecha`,'PENDIENTE') fechaEmision,
+                    IF(fp.`id`,fp.`monto`,pit.totalOrden) monto,
+                    IF(fp.`id`,DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'PENDIENTE') fechaVencimiento,
+                    tpp.totalPago pagoCuenta,
+                    (fp.`monto` - tpp.totalPago) saldo,
+                    CASE
+                        WHEN tpp.totalPago IS NULL THEN 'PENDIENTE'
+                        WHEN (IFNULL(fp.`monto`,0) - IFNULL(tpp.totalPago,0)) <= 0 THEN 'PAGADA'
+                        WHEN (IFNULL(fp.`monto`,0) - IFNULL(tpp.totalPago,0)) > 0 THEN 'PARCIAL'
+                        ELSE ''
+                    END estadoFac,
+                    IF (CURDATE() < DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'VIGENTE','VENCIDA') estadoOrden
+                    
+                FROM ordenescompra oc
+                    INNER JOIN pedidos p 
+                        ON p.`id` = oc.`id_pedido`
+                    INNER JOIN (
+                    SELECT pit.`idPedido`, SUM(ROUND(pit.`cantidad` * pit.`precioFabrica`,2)) totalOrden
+                    FROM pedidos_items pit
+                    GROUP BY pit.`idPedido`
+                    )pit
+                        ON pit.idPedido = p.`id`
+                    
+                    INNER JOIN provedores pro
+                        ON pro.`idproveedor` = p.`proveedor`
+                    LEFT JOIN fact_prov fp
+                        ON fp.`id_orden` = oc.`id`
+                    LEFT JOIN (
+                    SELECT fpp.`id_fact_prov`, SUM(fpp.`monto`) totalPago
+                    FROM fact_pago_prov fpp
+                    GROUP BY fpp.`id_fact_prov`
+                    )tpp
+                        ON tpp.id_fact_prov = fp.`id`
+                HAVING
+                        CASE
+                            WHEN '$condicion' = 'historico' THEN saldo>=0 OR saldo IS NULL
+                            WHEN '$condicion' = 'pendiente' THEN saldo>0 OR saldo IS NULL
+                            WHEN '$condicion' = 'pagada' THEN estadoFac='PAGADA'
+                        END  
+                
+                ORDER BY  pro.nombreproveedor, oc.id";
 
         $query=$this->db->query($sql);	
 		return $query->result_array();

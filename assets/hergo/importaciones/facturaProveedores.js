@@ -366,8 +366,7 @@ const pago = new Vue({
 							type: "success",        
 							allowOutsideClick: false,                                                                        
 							}).then(function(){
-								console.log('listo');
-								//location.reload();
+								location.reload();
 							})
 					} else {
 						quitarcargando()
