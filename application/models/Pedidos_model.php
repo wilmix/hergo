@@ -353,7 +353,7 @@ class Pedidos_model extends CI_Model
                     IF(fp.`id`,fp.`monto`,pit.totalOrden) monto,
                     IF(fp.`id`,DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'PENDIENTE') fechaVencimiento,
                     tpp.totalPago pagoCuenta,
-                    (fp.`monto` - tpp.totalPago) saldo,
+                    (IFNULL(fp.`monto`,0) - IFNULL(tpp.totalPago,0)) saldo,
                     CASE
                         WHEN tpp.totalPago IS NULL THEN 'PENDIENTE'
                         WHEN (IFNULL(fp.`monto`,0) - IFNULL(tpp.totalPago,0)) <= 0 THEN 'PAGADA'
@@ -390,7 +390,7 @@ class Pedidos_model extends CI_Model
                             WHEN '$condicion' = 'pagada' THEN estadoFac='PAGADA'
                         END  
                 
-                ORDER BY  pro.nombreproveedor, oc.id";
+                ORDER BY  oc.id";
 
         $query=$this->db->query($sql);	
 		return $query->result_array();
