@@ -145,7 +145,7 @@ function formato_fecha(value, row, index) {
   var fecha = ""
   //console.log(value)
   if ((value == "0000-00-00") || (value == "0000-00-00 00:00:00") || (value == "") || (value == null))
-    fecha = "Sin fecha de registro"
+    fecha = "-"
   else if (value == 'PENDIENTE') {
     fecha = value
   }

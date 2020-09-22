@@ -342,11 +342,13 @@ class Pedidos_model extends CI_Model
     	$sql="  SELECT  
                     oc.id idOC,
                     fp.id idFP,
+                    pp.id,
                     tpp.id_fact_prov,
                     CONCAT('HG-',oc.`n`,'/',DATE_FORMAT (oc.`fecha`, '%y')) orden, 
                     pro.`nombreproveedor`, 
                     IF(fp.`id`,fp.`tiempo_credito`,oc.`diasCredito`) credito,
                     IF(fp.`id`,fp.`n`,'PENDIENTE') nFactProv,
+                    pp.fecha fechaPago,
                     IF(fp.`id`,fp.`fecha`,'PENDIENTE') fechaEmision,
                     IF(fp.`id`,fp.`monto`,pit.totalOrden) monto,
                     IF(fp.`id`,DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'PENDIENTE') fechaVencimiento,
@@ -375,11 +377,12 @@ class Pedidos_model extends CI_Model
                     LEFT JOIN fact_prov fp
                         ON fp.`id_orden` = oc.`id`
                     LEFT JOIN (
-                    SELECT fpp.`id_fact_prov`, SUM(fpp.`monto`) totalPago
+                    SELECT fpp.`id_fact_prov`, fpp.`id_pago_prov`, SUM(fpp.`monto`) totalPago
                     FROM fact_pago_prov fpp
                     GROUP BY fpp.`id_fact_prov`
                     )tpp
                         ON tpp.id_fact_prov = fp.`id`
+                    LEFT JOIN pago_prov pp ON pp.id = tpp.id_pago_prov
                 HAVING
                         CASE
                             WHEN '$condicion' = 'historico' THEN saldo>=0 OR saldo IS NULL

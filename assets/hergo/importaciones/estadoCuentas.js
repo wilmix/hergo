@@ -78,6 +78,13 @@ function getEstadoCuentas() {
 					title: 'VENCIMIENTO',
 					className: 'text-center',
 					render: formato_fecha,
+				},
+				{
+					data: 'fechaPago',
+					title: 'FECHA PAGO',
+					className: 'text-center',
+					render: formato_fecha,
+					visible:false
                 },
                 {
 					data: 'pagoCuenta',
