@@ -360,7 +360,12 @@ class Pedidos_model extends CI_Model
                         WHEN (IFNULL(fp.`monto`,0) - IFNULL(tpp.totalPago,0)) > 0 THEN 'PARCIAL'
                         ELSE ''
                     END estadoFac,
-                    IF (CURDATE() < DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'VIGENTE','VENCIDA') estadoOrden
+                    -- IF (CURDATE() < DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'VIGENTE','VENCIDA') estadoOrden
+                    CASE
+                        WHEN fp.id IS NULL THEN 'VIGENTE'
+                        WHEN (CURDATE() < DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY)) THEN 'VIGENTE'
+                        ELSE 'VENCIDA'
+                    END estadoOrden
                     
                 FROM ordenescompra oc
                     INNER JOIN pedidos p 
@@ -390,7 +395,7 @@ class Pedidos_model extends CI_Model
                             WHEN '$condicion' = 'pagada' THEN estadoFac='PAGADA'
                         END  
                 
-                ORDER BY  oc.id";
+                ORDER BY  oc.id DESC";
 
         $query=$this->db->query($sql);	
 		return $query->result_array();
