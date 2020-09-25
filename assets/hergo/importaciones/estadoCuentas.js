@@ -36,8 +36,8 @@ function getEstadoCuentas() {
 				  	$(row).addClass( 'styleGreen' );
 				} else if (res.estado == 'VENCIDA') {
 					$(row).addClass( 'styleRed' );
-				} else {
-					
+				} else if (res.estado == 'PARCIAL' &&  moment(res.fechaVencimiento).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD')) {
+					$(row).addClass( 'styleRed' );
 				}
 			},
 			pageLength: 15,
