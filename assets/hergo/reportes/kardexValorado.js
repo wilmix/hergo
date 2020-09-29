@@ -87,7 +87,7 @@ function agregarTabla(res , nombre) {
         //pagination: true,
         //pageSize: "100",
         //search: true,
-        //showColumns: true,
+        showColumns: true,
         filter: true,
         stickyHeader: true,
         stickyHeaderOffsetY: '50px',
@@ -104,7 +104,7 @@ function agregarTabla(res , nombre) {
                 field: 'fecha',
                 title: 'Fecha',
                 align: 'center',
-                formatter: formato_fecha_corta
+                formatter: formato_fecha
 
             },
             {
@@ -120,7 +120,15 @@ function agregarTabla(res , nombre) {
             {
                 field: 'nombreproveedor',
                 title: 'Cliente | Proveedor',
-                align: 'left'
+                align: 'left',
+                
+            },
+            {
+                field: 'p',
+                title: 'Pedido | OC',
+                align: 'left',
+                visible:false,
+                
             },
             
             {
@@ -130,14 +138,14 @@ function agregarTabla(res , nombre) {
                 formatter: operateFormatter3,
             },
             
-            {
+            /* {
                 field: 'cantidad',
                 title: 'Cantidad',
                 align: 'right',
                 visible: false,
                 formatter: operateFormatter3,
                 //footerFormatter: sumaColumna
-            },
+            }, */
             {
                 field: 'cantidad',
                 title: 'Ingresos',
@@ -188,6 +196,7 @@ function agregarTabla(res , nombre) {
                 title: 'CPP',
                 align: 'right',
                 formatter: costoPromedio4,
+                visible:false,
                 //footerFormatter: cpp
             },
         ]

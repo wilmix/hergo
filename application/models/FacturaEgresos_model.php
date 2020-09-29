@@ -33,7 +33,7 @@ class FacturaEgresos_model extends CI_Model
 		$sql="SELECT f.`idFactura`, f.`lote`, df.`manual`, f.`nFactura`, f.`fechaFac`, f.`ClienteNit`, f.`ClienteFactura`,  t.`sigla`, 
 		f.`total`, CONCAT(u.first_name,' ', u.last_name) AS vendedor, f.`anulada`, f.fecha,
 		GROUP_CONCAT(DISTINCT e.nmov ORDER BY e.nmov ASC SEPARATOR ' - ') AS movimientos, f.glosa,p.idPago, p.`numPago`,
-		f.`pagada`, f.almacen idAlmacen,
+		f.`pagada`, f.almacen idAlmacen, e.clientePedido pedido,
 		CASE
 			WHEN f.moneda = 1 THEN 'BOB'
 			WHEN f.moneda = 2 THEN CONCAT('$','U$')

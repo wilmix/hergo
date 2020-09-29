@@ -130,7 +130,7 @@ function retornarTablaFacturacion()
                 title:"Fecha",
                 align:'center',
                 sortable:true,
-                formatter: formato_fecha_corta,
+                formatter: formato_fecha,
                 searchable: false,
             },
             {
@@ -177,6 +177,12 @@ function retornarTablaFacturacion()
                 footerFormatter: sumaColumna
             },
             {
+                field:'pedido',
+                title:"Pedido",                
+                sortable:true,
+                align: 'center',
+            },
+            {
                 field:'vendedor',
                 title:"Vendedor",
                 sortable:true,
@@ -201,6 +207,13 @@ function retornarTablaFacturacion()
                 searchable: false,
             },
             {
+                field:'numPago',
+                title:"Nº Pago",
+                sortable:true,
+                align: 'center',
+                visible:false,
+            },   
+            {
                 field:'pagadaF',
                 title:"Pagado",
                 sortable:true,
@@ -211,12 +224,6 @@ function retornarTablaFacturacion()
                     data: datosselect[2]
                 }
             },    
-            /*{
-                field:'numPago',
-                title:"Nº Pago",
-                sortable:true,
-                align: 'center',
-            }, */      
             {
                 title: 'Acciones',
                 align: 'center',
