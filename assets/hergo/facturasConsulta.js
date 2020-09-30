@@ -150,11 +150,11 @@ function retornarTablaFacturacion()
                 }
             },
             {
-                field:'sigla',
+                field:'',
                 title:"Movimiento",
                 align: 'center',
                 searchable: false,
-                formatter: tipoNumeroMovimiento
+                formatter: printEgreso
                 
             },
             {
@@ -207,11 +207,12 @@ function retornarTablaFacturacion()
                 searchable: false,
             },
             {
-                field:'numPago',
+                field:'',
                 title:"Nº Pago",
                 sortable:true,
                 align: 'center',
-                visible:false,
+                //visible:false,
+                formatter:printPago
             },   
             {
                 field:'pagadaF',
@@ -252,6 +253,29 @@ function footerStyle(value, row, index) {
         "color": "white"
       }
     };
+}
+function printPago(value, row, index) {
+    if (row.pagos == null) {
+        return '-'
+    } else {
+        link=''
+        pagos = JSON.parse(row.pagos)
+        pagos.forEach(pago => {
+            let imprimir = base_url("pdf/Recibo/index/") + pago.id;
+            link = link + ' '+ `<a href=${imprimir} target="_blank">${pago.n}</a>`
+        });
+        return link
+    }
+
+}
+function printEgreso(value, row, index) {
+        link=''
+        movEgresos = JSON.parse(row.movEgreso)
+        movEgresos.forEach(egre => {
+            let imprimir = base_url("pdf/Egresos/index/") + egre.id;
+            link = link + ' '+ `<a href=${imprimir} target="_blank">${egre.n}</a>`
+        });
+        return link
 }
 function sumaColumna(data) {
     field = this.field;

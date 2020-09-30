@@ -32,7 +32,10 @@ class FacturaEgresos_model extends CI_Model
 	{
 		$sql="SELECT f.`idFactura`, f.`lote`, df.`manual`, f.`nFactura`, f.`fechaFac`, f.`ClienteNit`, f.`ClienteFactura`,  t.`sigla`, 
 		f.`total`, CONCAT(u.first_name,' ', u.last_name) AS vendedor, f.`anulada`, f.fecha,
-		GROUP_CONCAT(DISTINCT e.nmov ORDER BY e.nmov ASC SEPARATOR ' - ') AS movimientos, f.glosa,p.idPago, p.`numPago`,
+		-- GROUP_CONCAT(DISTINCT e.nmov ORDER BY e.nmov ASC SEPARATOR ' - ') AS movimientos, 
+		f.glosa,p.idPago, p.`numPago`,
+		CONCAT('[',GROUP_CONCAT(DISTINCT '{','\"id\":', e.`idegresos`,',', '\"n\":','\"',t.`sigla`,'-',e.nmov,'\"','}' ORDER BY e.nmov ASC SEPARATOR ','),']') AS movEgreso,  
+		CONCAT('[',GROUP_CONCAT(DISTINCT '{','\"id\":',p.idPago,',', '\"n\":',p.`numPago`,'}' ORDER BY p.`numPago` ASC SEPARATOR ','),']') AS pagos, 
 		f.`pagada`, f.almacen idAlmacen, e.clientePedido pedido,
 		CASE
 			WHEN f.moneda = 1 THEN 'BOB'
@@ -54,7 +57,8 @@ class FacturaEgresos_model extends CI_Model
 		INNER JOIN users u on u.id = e.vendedor
 		INNER JOIN users ua ON ua.id = f.autor
 		WHERE f.fechaFac
-		BETWEEN '$ini' AND '$fin'";        
+		BETWEEN '$ini' AND '$fin'
+		";        
         if($alm>0)         
             $sql.=" and f.`almacen`=$alm";    
         if($tipo>0)         
