@@ -228,13 +228,15 @@ class Pedidos_model extends CI_Model
 	{ 
     	$sql="SELECT a.`idArticulos` id, a.`CodigoArticulo` codigo, a.`NumParte` numParte, a.`detalleLargo` descripFabrica, a.`Descripcion` descripcion,
         u.`Unidad` unidad, pit.`saldo`, pit.`rotacion`, pit.`precio`, pit.`cantidad`, pit.`precioFabrica`,
-        (pit.`cantidad`* pit.`precioFabrica`) total
+        (pit.`cantidad`* pit.`precioFabrica`) total, p.`flete`, tc.`tipocambio` tc
         FROM pedidos_items pit
+        INNER JOIN pedidos p ON p.`id` = pit.`idPedido`
+        INNER JOIN tipocambio tc ON tc.`fecha` = p.`fecha`
         INNER JOIN articulos a ON a.`idArticulos` = pit.`articulo`
         INNER JOIN unidad u ON a.`idUnidad` = u.`idUnidad`
         WHERE pit.`idPedido` = '$id'";
 
-        $query=$this->db->query($sql)->result_array();		
+        $query=$this->db->query($sql)->result();		
 		return $query;
     }
     public function getOrdenItems($id)

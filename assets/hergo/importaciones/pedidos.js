@@ -26,6 +26,7 @@ function getPedidos() {
 			data: res,
 			destroy: true,
 			dom: 'Bfrtip',
+			responsive: true,
 			lengthMenu: [
 				[10, 25, 50, -1],
 				['10 filas', '25 filas', '50 filas', 'Todo']
@@ -104,7 +105,7 @@ function getPedidos() {
 				{
 					data: null,
 					title: '',
-					width: '100px',
+					width: '120px',
 					className: 'text-center',
 					render: buttons
 				},
@@ -234,6 +235,10 @@ return `
 		<span class="fa fa-pencil" aria-hidden="true">
 		</span>
 	</button>
+	<button type="button" class="btn btn-default print">
+		<span class="fa fa-print" aria-hidden="true">
+		</span>
+	</button>
 `
 }
 function aprobados (data, type, row) {
@@ -255,6 +260,11 @@ $(document).on("click", "button.edit", function () {
     let row = table.row( $(this).parents('tr') ).data();
 	let editar = base_url("Importaciones/Pedidos/edit/") + row.id_pedido;
     window.location.href = editar;
+})
+$(document).on("click", "button.print", function () {
+	let row = table.row( $(this).parents('tr') ).data();
+	let print = base_url("pdf/SolicitudPDF/index/") + row.id_pedido;
+    window.open(print);
 })
 
 const modal = new Vue({

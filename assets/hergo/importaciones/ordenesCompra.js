@@ -26,6 +26,7 @@ function getPedidos() {
 			data: res,
 			destroy: true,
 			dom: 'Bfrtip',
+			responsive: true,			
 			lengthMenu: [
 				[5, 10, -1],
 				['5 filas','10 filas', 'Todo']
