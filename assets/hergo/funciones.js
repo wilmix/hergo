@@ -451,3 +451,11 @@ function dataPicker() {
 
 	})
 }
+function getRow(tbl, th) {
+	let current_row = $(th).parents('tr')
+    if (current_row.hasClass('child')) {
+		current_row = current_row.prev()
+    }
+	let row = tbl.row(current_row).data()
+	return row
+}

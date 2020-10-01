@@ -252,19 +252,20 @@ function aprobados (data, type, row) {
 }
 
 $(document).on("click", "button.see", function () {
-	let row = table.row( $(this).parents('tr') ).data();
+	let row = getRow(table, this)
 	modal.getPedido(row.id_pedido)
 })
 
 $(document).on("click", "button.edit", function () {
-    let row = table.row( $(this).parents('tr') ).data();
+    let row = getRow(table, this)
 	let editar = base_url("Importaciones/Pedidos/edit/") + row.id_pedido;
     window.location.href = editar;
 })
 $(document).on("click", "button.print", function () {
-	let row = table.row( $(this).parents('tr') ).data();
+
+    let row = getRow(table, this)
 	let print = base_url("pdf/SolicitudPDF/index/") + row.id_pedido;
-    window.open(print);
+	window.open(print);
 })
 
 const modal = new Vue({

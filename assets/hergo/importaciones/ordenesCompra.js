@@ -250,17 +250,17 @@ function button (data, type, row) {
    
 }
 $(document).on("click", "button.print", function () {
-	let row = table.row( $(this).parents('tr') ).data();
+	let row = getRow(table, this)
 	let print = base_url("pdf/OrdenCompraPDF/index/") + row.id_pedido;
     window.open(print);
 })
 $(document).on("click", "button.edit", function () {
-	let row = table.row( $(this).parents('tr') ).data();
+	let row = getRow(table, this)
 	let edit = base_url("Importaciones/OrdenesCompra/editOrden/") + row.id_pedido;
     window.open(edit);
 })
 $(document).on("click", "button.asociarFac", function () {
-	let row = table.row( $(this).parents('tr') ).data();
+	let row = getRow(table, this)
 	//console.log(row);
 	modal.asociarFactura(row.id_pedido, row)
 })
