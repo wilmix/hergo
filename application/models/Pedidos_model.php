@@ -393,7 +393,7 @@ class Pedidos_model extends CI_Model
                 HAVING
                         CASE
                             WHEN '$condicion' = 'historico' THEN saldo>=0 OR saldo IS NULL
-                            WHEN '$condicion' = 'pendiente' THEN saldo>0 OR saldo IS NULL
+                            WHEN '$condicion' = 'pendiente' THEN saldo>=0 AND estadoFac <> 'PAGADA'
                             WHEN '$condicion' = 'pagada' THEN estadoFac='PAGADA'
                         END  
                 
