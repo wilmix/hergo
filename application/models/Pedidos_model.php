@@ -138,13 +138,16 @@ class Pedidos_model extends CI_Model
         $query=$this->db->query($sql);	
 		return $query->result_array();
     }
-    public function getFacturaProveedores($ini, $fin)
+    public function getFacturaProveedores($ini, $fin, $filtro)
 	{ 
     	$sql="  SELECT
+                    oc.id,
                     fp.`id` id_fact_prov,
-                    CONCAT('HG-',oc.`n`,'/',DATE_FORMAT (oc.`fecha`, '%y')) orden,
+                    IF(oc.id = 0 , 'SERV' , CONCAT('HG-',oc.`n`,'/',DATE_FORMAT (oc.`fecha`, '%y'))) orden,
                     pro.`idproveedor` id_proveedor,
                     pro.`nombreproveedor` proveedor,
+                    fp.`glosa`,
+                    fp.`transporte`,
                     CONCAT(fp.`tiempo_credito`, ' días') tiempo_credito,
                     fp.`fecha`,
                     fp.`n` facN,
@@ -154,7 +157,7 @@ class Pedidos_model extends CI_Model
                     IF (CURDATE() < DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'VIGENTE','VENCIDA') estado,
                     fp.`url`, 
                     tpp.totalPago, 
-                    (fp.`monto` - tpp.totalPago) saldo
+                    (IFNULL(fp.`monto`,0) - IFNULL(tpp.totalPago,0)) saldo
                 FROM
                     fact_prov fp
                     INNER JOIN provedores pro
@@ -167,8 +170,11 @@ class Pedidos_model extends CI_Model
                         GROUP BY fpp.`id_fact_prov`
                     )tpp
                     ON tpp.id_fact_prov = fp.`id`
-                WHERE fp.`fecha` BETWEEN '$ini' AND '$fin'
-                AND (fp.`monto` - IFNULL(tpp.totalPago,0)) > 0
+                HAVING  
+                    CASE
+                        WHEN '$filtro' = 'servicios' THEN fp.`fecha` BETWEEN '$ini' AND '$fin' AND (fp.`monto` - IFNULL(tpp.totalPago,0)) > 0 AND oc.id = 0
+                        WHEN '$filtro' = 'pedidos' THEN fp.`fecha` BETWEEN '$ini' AND '$fin' AND (fp.`monto` - IFNULL(tpp.totalPago,0)) > 0 AND oc.id > 0
+                    END  
                 ORDER BY fp.`fecha` DESC
             ";
 
@@ -339,14 +345,31 @@ class Pedidos_model extends CI_Model
             return $id;
         }	
     }
-    public function getEstadoCuentas($condicion)
+    public function storeFactServ($factServ)
+	{		
+		$this->db->trans_start();
+			$this->db->insert("fact_serv", $factServ);
+            $id=$this->db->insert_id();
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+			return false;
+			
+        } else {
+            
+            return $id;
+        }	
+    }
+    public function getEstadoCuentas($condicion,$signo)
 	{ 
     	$sql="  SELECT  
                     oc.id idOC,
                     fp.id idFP,
                     pp.id,
                     tpp.id_fact_prov,
-                    CONCAT('HG-',oc.`n`,'/',DATE_FORMAT (oc.`fecha`, '%y')) orden, 
+                    IF(oc.id = 0 , 'SERV' , CONCAT('HG-',oc.`n`,'/',DATE_FORMAT (oc.`fecha`, '%y'))) orden,
+                    fp.glosa,
+                    fp.transporte,
                     pro.`nombreproveedor`, 
                     IF(fp.`id`,fp.`tiempo_credito`,oc.`diasCredito`) credito,
                     IF(fp.`id`,fp.`n`,'PENDIENTE') nFactProv,
@@ -362,7 +385,6 @@ class Pedidos_model extends CI_Model
                         WHEN (IFNULL(fp.`monto`,0) - IFNULL(tpp.totalPago,0)) > 0 THEN 'PARCIAL'
                         ELSE ''
                     END estadoFac,
-                    -- IF (CURDATE() < DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'VIGENTE','VENCIDA') estadoOrden
                     CASE
                         WHEN fp.id IS NULL THEN 'VIGENTE'
                         WHEN (CURDATE() < DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY)) THEN 'VIGENTE'
@@ -372,7 +394,7 @@ class Pedidos_model extends CI_Model
                 FROM ordenescompra oc
                     INNER JOIN pedidos p 
                         ON p.`id` = oc.`id_pedido`
-                    INNER JOIN (
+                    LEFT JOIN (
                     SELECT pit.`idPedido`, SUM(ROUND(pit.`cantidad` * pit.`precioFabrica`,2)) totalOrden
                     FROM pedidos_items pit
                     GROUP BY pit.`idPedido`
@@ -390,6 +412,7 @@ class Pedidos_model extends CI_Model
                     )tpp
                         ON tpp.id_fact_prov = fp.`id`
                     LEFT JOIN pago_prov pp ON pp.id = tpp.id_pago_prov
+                    WHERE oc.id $signo 0
                 HAVING
                         CASE
                             WHEN '$condicion' = 'historico' THEN saldo>=0 OR saldo IS NULL

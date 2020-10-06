@@ -129,8 +129,9 @@ class FacturaProveedores extends CI_Controller
 		if($this->input->is_ajax_request())
         {
         	$ini=$this->security->xss_clean($this->input->post("ini"));
-        	$fin=$this->security->xss_clean($this->input->post("fin"));
-			$res=$this->Pedidos_model->getFacturaProveedores($ini, $fin); 
+			$fin=$this->security->xss_clean($this->input->post("fin"));
+			$filtro=$this->security->xss_clean($this->input->post("filtro"));			
+			$res=$this->Pedidos_model->getFacturaProveedores($ini, $fin,$filtro); 
 			echo json_encode($res);
 		}
 		else
@@ -149,7 +150,7 @@ class FacturaProveedores extends CI_Controller
 				"allowed_types" => "pdf"
 			];
 			$this->load->library("upload",$config);
-				if ($this->upload->do_upload('url')) {
+				if ($this->upload->do_upload('url_pago')) {
 					$pdf = array("upload_data" => $this->upload->data());
 					$url = $pdf['upload_data']['file_name'];
 				}

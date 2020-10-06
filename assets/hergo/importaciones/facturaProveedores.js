@@ -9,10 +9,14 @@ $(document).ready(function () {
 	});
 
 })
+$(document).on("change", "#estadoFiltro", function () {
+    getFacturaProveedores()
+})
 
 function getFacturaProveedores() {
-    //agregarcargando()
-    console.log(ini + ' -  ' + fin);
+	agregarcargando()
+	let filtro =  $("#estadoFiltro").val()
+    //console.log(ini + ' -  ' + fin);
 	$.ajax({
 		type: "POST",
 		url: base_url('index.php/Importaciones/FacturaProveedores/getFacturaProveedores'),
@@ -20,6 +24,7 @@ function getFacturaProveedores() {
 		data: {
 						ini:ini,
 						fin:fin,
+						filtro: filtro
 					},
 	}).done(function (res) {
         console.log(res);
@@ -39,9 +44,15 @@ function getFacturaProveedores() {
 					className: 'text-center',
                 },
                 {
-					data: 'proveedor',
-					title: 'PROVEEDOR',
+					data: filtro == 'pedidos' ? 'proveedor' : 'glosa',
+					title: filtro == 'pedidos' ? 'PROVEEDOR' : 'PEDIDOS',
+					
 					//sorting: nameCliente == '' || nameCliente == 'TODOS' ? true : false
+				},
+				{
+					data: filtro == 'pedidos' ? '' : 'transporte',
+					title: filtro == 'pedidos' ? '' : 'TRASNPORTE',
+					visible:filtro == 'pedidos' ? false : true,
                 },
                 {
 					data: 'fecha',
@@ -207,7 +218,8 @@ function getFacturaProveedores() {
 }
 
 function buttons (data, type, row) {
-return `
+if (row.url) {
+	return `
     <button type="button" class="btn btn-default see">
 		<span class="fa fa-search" aria-hidden="true">
 		</span>
@@ -216,7 +228,16 @@ return `
 		<span class="fa fa-plus" aria-hidden="true">
 		</span>
 	</button>
+	`
+} else {
+	return `
+	<button type="button" class="btn btn-default addPago">
+		<span class="fa fa-plus" aria-hidden="true">
+		</span>
+	</button>
 `
+}
+
 }
 function aprobados (data, type, row) {
 	//console.log(row.nAprobados>);
@@ -240,19 +261,107 @@ $(document).on("click", "button.addPago", function () {
 	console.log(row);
 	pago.addPago(row)
 })
+
+Vue.component('modal', {
+	template: '#modal-template',
+	components: {
+        vuejsDatepicker
+	},
+	data: function(){
+        return{
+			es: vdp_translation_es.js, 
+			fecha:'',
+			n:'',
+			credito:0,
+			monto:0,
+			transporte:'',
+			glosa:'',
+			showModal: false,
+			errors:''             
+        }
+	},
+	methods:{     
+		customFormatter(date) {
+			return moment(date).format('D MMMM  YYYY');
+		},
+		close() {
+			 pago.showModal = false
+		},
+		saveFactServ(){
+			agregarcargando()
+			if (this.monto<=0 || !this.fecha || !this.transporte|| !this.n) {
+				quitarcargando()
+				this.errors = 'Revise el Formulario'
+				return
+			}else{
+				this.errors = ''
+			} 
+			let formData = new FormData($('#formFactServ')[0]); 
+			formData.append('fecha', moment(this.fecha).format('YYYY-MM-DD'))
+			formData.append('id_orden', '0')
+			formData.append('id_proveedor', '55')
+
+			for(let pair of formData.entries()) {
+				console.log(pair[0]+ ', '+ pair[1]); 
+			} 
+			this.close()
+			/* quitarcargando()
+			return */
+			$.ajax({
+				url: base_url("index.php/Importaciones/OrdenesCompra/storeAsociarFactura"),
+				type: 'POST',
+				data: formData,
+				cache: false,
+				contentType: false,
+				processData: false,
+				success: function (returndata) {
+					res = JSON.parse(returndata)
+					console.log(res);
+					if (res != false) {
+						quitarcargando()
+						swal({
+							title: "Registrado!",
+							text: "Factura de Servicios agregada!",
+							type: "success",        
+							allowOutsideClick: false,                                                                        
+							}).then(function(){
+								getFacturaProveedores()
+								console.log('toto ok');
+							})
+					} else {
+						quitarcargando()
+						swal(
+							'Error',
+							'Error al guardar el Pago',
+							'error'
+						)
+					}
+				},
+				error : function (returndata) {
+					swal(
+						'Error',
+						'Error',
+						'error'
+					)
+				},
+			});
+		
+		},
+    },
+})
 Vue.component('app-row',{
-    
     template:'#row-template',
     props:['pagar','index'],
 
     data: function(){
         return{
             montopagar:0, 
-            editing:false,            
+			editing:false,  
+			error:''          
         }
     },
     created:function(){   
-        this.montopagar=parseFloat(this.pagar.monto).toFixed(2);
+        this.montopagar=parseFloat(this.pagar.saldo).toFixed(2);
     
     },
     methods:{     
@@ -260,13 +369,19 @@ Vue.component('app-row',{
             this.$emit('removerfila',this.index);
         },
         update:function(){
-			console.log('updating');
+			if(parseFloat(this.montopagar) > parseFloat(this.pagar.saldo))
+            {
+                this.error="El monto a pagar es mayor al saldo";
+				return
+            }
             this.pagar.monto=parseFloat(this.montopagar).toFixed(2);
 			this.editing=false;
+			pago.save = true
         },
         edit:function(){    
 			this.editing=true;
-			this.montopagar=parseFloat(this.pagar.monto).toFixed(2);
+			pago.save = false
+			this.montopagar=parseFloat(this.pagar.saldo).toFixed(2);
 			pago.getTotalPago()
         },
     },
@@ -311,8 +426,13 @@ const pago = new Vue({
 		pagoslist:[],
 		totalPago:0,
 		es: vdp_translation_es.js,
+		showModal: false,
+		save:true
 	},
 	methods:{
+		facturaServicios(){
+			$("#facturaServicios").modal("show");
+		},
 		addPago(row){
 			if(this.pagoslist.map((el) => el.id_fact_prov).indexOf(row.id_fact_prov)>=0)
 			{
@@ -327,27 +447,25 @@ const pago = new Vue({
         },
 		savePago(e){
 			agregarcargando()
-            e.preventDefault()
-			if (this.totalPago<=0 || !this.fechaPago ) {
+			e.preventDefault()
+			if (parseFloat(this.totalPago) <=0 || !this.fechaPago || !this.save) {
 				quitarcargando()
-
 				swal(
 					'Error',
 					'Revise el formulario',
 					'error'
 				)
 				return
-			} 
+			}
 			let formData = new FormData($('#formPago')[0]); 
 			formData.append('fechaPago', moment(pago.fechaPago).format('YYYY-MM-DD'))
 			formData.append('total', pago.totalPago)
 			formData.append('pagos', JSON.stringify(this.pagoslist))
 
 
-			for(let pair of formData.entries()) {
+			/* for(let pair of formData.entries()) {
 				console.log(pair[0]+ ', '+ pair[1]); 
-			} 
-			quitarcargando()
+			}  */
 			$.ajax({
 				url: base_url("index.php/Importaciones/FacturaProveedores/storePago"),
 				type: 'POST',
@@ -366,6 +484,7 @@ const pago = new Vue({
 							type: "success",        
 							allowOutsideClick: false,                                                                        
 							}).then(function(){
+								agregarcargando()
 								location.reload();
 							})
 					} else {

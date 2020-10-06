@@ -11,15 +11,21 @@ $(document).ready(function () {
 $(document).on("change", "#estadoFiltro", function () {
     getEstadoCuentas();
 })
-
+$(document).on("change", "#pedServFilter", function () {
+    getEstadoCuentas()
+})
 function getEstadoCuentas() {
-    let estado = $("#estadoFiltro").val()
+	let pedServ = alm = $("#pedServFilter").val()
+	let estado = $("#estadoFiltro").val()
+	let titulo  = pedServ == 'servicios' ? 'ESTADO DE CUENTAS SERVICIOS': 'ESTADO DE CUENTAS'
+	$("#titulo").text(titulo)
 	agregarcargando()
 	$.ajax({
 		type: "POST",
 		url: base_url('index.php/Importaciones/EstadoCuentas/getEstadoCuentas'),
 		dataType: "json",
-		data: { condicion: estado },
+		data: { condicion: estado,
+				pedServ : pedServ },
 	}).done(function (res) {
         res.forEach(element => element.id_fact_prov ? element.estado = element.estadoFac : element.estado = element.estadoOrden);
         console.log(res);
@@ -48,9 +54,15 @@ function getEstadoCuentas() {
 					className: 'text-center',
 				},
 				{
-					data: 'nombreproveedor',
-					title: 'PROVEEDOR',
+					data: pedServ == 'pedidos' ? 'nombreproveedor' : 'glosa',
+					title: pedServ == 'pedidos' ? 'PROVEEDOR' : 'PEDIDOS',
+					
 				},
+				{
+					data: pedServ == 'pedidos' ? '' : 'transporte',
+					title: pedServ == 'pedidos' ? '' : 'TRASNPORTE',
+					visible:pedServ == 'pedidos' ? false : true,
+                },
 				{
 					data: 'credito',
 					title: 'CRÉDITO',
@@ -271,7 +283,7 @@ $(document).on("click", "button.asociarFac", function () {
 })
 
 
-const modal = new Vue({
+/*const modal = new Vue({
 	el: '#app',
 	components: {
         vuejsDatepicker
@@ -326,7 +338,7 @@ const modal = new Vue({
 			/* for(let pair of formData.entries()) {
 				console.log(pair[0]+ ', '+ pair[1]); 
 			} */
-			$.ajax({
+			/*$.ajax({
 				url: base_url("index.php/Importaciones/OrdenesCompra/storeAsociarFactura"),
 				type: 'POST',
 				data: formData,
@@ -378,4 +390,4 @@ const modal = new Vue({
 			return numeral(num).format('0,0.00');            
 		}, 
 	}
-})
+})*/

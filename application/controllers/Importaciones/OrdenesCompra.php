@@ -275,13 +275,17 @@ class OrdenesCompra extends CI_Controller
 				$id = '';
 			$asoFac = new stdclass();
 			$asoFac->id_orden = $this->security->xss_clean($this->input->post('id_orden'));
-			$asoFac->n = $this->security->xss_clean($this->input->post('n'));
+			$asoFac->n = strtoupper($this->security->xss_clean($this->input->post('n')));
 			$asoFac->fecha = $this->security->xss_clean($this->input->post('fecha'));
 			$asoFac->proveedor = $this->security->xss_clean($this->input->post('id_proveedor'));
 			$asoFac->monto = $this->security->xss_clean($this->input->post('monto'));
 			$asoFac->tiempo_credito = $this->security->xss_clean($this->input->post('tiempo_credito'));
+			$asoFac->monto = $this->security->xss_clean($this->input->post('monto'));
 			$asoFac->url = $url;
+			$asoFac->transporte = strtoupper($this->security->xss_clean($this->input->post('transporte')));
+			$asoFac->glosa = strtoupper($this->security->xss_clean($this->input->post('glosa')));
 			$asoFac->created_by = $this->session->userdata('user_id');
+
 			
 			
 			$id = $this->Pedidos_model->storeAsociarFactura($id, $asoFac);

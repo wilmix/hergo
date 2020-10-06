@@ -128,8 +128,12 @@ class EstadoCuentas extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-        	$condicion=$this->security->xss_clean($this->input->post("condicion"));
-			$res=$this->Pedidos_model->getEstadoCuentas($condicion); 
+			$pedServ=$this->security->xss_clean($this->input->post("pedServ"));
+			$signo = $pedServ == 'servicios' ? '=' : '>';
+			$condicion=$this->security->xss_clean($this->input->post("condicion"));
+
+			$res=$this->Pedidos_model->getEstadoCuentas($condicion, $signo); 
+			//$res = $condicion . ' - ' . $signo;
 			echo json_encode($res);
 		}
 		else
