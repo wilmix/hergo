@@ -78,8 +78,15 @@ class OrdenCompraPDF extends CI_Controller {
             $this->pdf->SetX(10);
             
         }
+        $totalOrden += $item->flete;
+        if ($item->flete > 0 ) {
+            $this->pdf->SetFont('Arial','B',7);
+            $this->pdf->Cell(180,5,'FLETE:','0',0,'R',1); 
+            $this->pdf->Cell(20,5,number_format($item->flete, 2, ".", ","),'T',0,'R',1);
+            $this->pdf->Ln(5);
+        }
         $this->pdf->SetFont('Arial','B',7);
-        $this->pdf->Cell(180,5,'TOTAL $U$:','T',0,'R',1); 
+        $this->pdf->Cell(180,5,'TOTAL $U$:','0',0,'R',1); 
         $this->pdf->Cell(20,5,number_format($totalOrden, 2, ".", ","),'T',0,'R',1); 
         $this->pdf->Ln(5);
         $this->pdf->SetX(10);
