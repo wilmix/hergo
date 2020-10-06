@@ -290,6 +290,7 @@ const ordenForm = new Vue({
 				ordenForm.formaPago = res.pedido.formaPago
 				ordenForm.proveedor = res.pedido.proveedor
 				ordenForm.direccion = res.pedido.direccion
+				ordenForm.flete = res.pedido.flete
 				ordenForm.fono = res.pedido.telefono
 				ordenForm.fax = res.pedido.fax
 				ordenForm.diasCredito = res.pedido.diasCredito
