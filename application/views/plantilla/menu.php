@@ -72,6 +72,7 @@
             <li class="OrdenesCompra"><a href="<?php echo base_url("Importaciones/OrdenesCompra") ?>"><i class="fa fa-list-ol"></i>Ordenes de Compra</a></li>
             <li class="FacturaProveedores"><a href="<?php echo base_url("Importaciones/FacturaProveedores") ?>"><i class="fa Example of credit-card fa-credit-card"></i>Pago Proveedores</a></li>
             <li class="EstadoCuentas"><a href="<?php echo base_url("Importaciones/EstadoCuentas") ?>"><i class="fa fa-money"></i>Estado de Cuentas</a></li>
+            <li class="BackOrder"><a href="<?php echo base_url("Importaciones/BackOrder") ?>"><i class="fa fa-bold"></i>BackOrder</a></li>
 
           </ul>
         </li>
