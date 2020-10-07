@@ -426,6 +426,40 @@ class Pedidos_model extends CI_Model
         $query=$this->db->query($sql);	
 		return $query->result_array();
     }
+    public function getBackOrderList()
+	{ 
+    	$sql="SELECT 
+        pit.`id`,
+        pit.`idPedido`,
+        IF(oc.id = 0 , 'SERV' , CONCAT('HG-',oc.`n`,'/',DATE_FORMAT (oc.`fecha`, '%y'))) orden,
+        pro.`nombreproveedor` proveedor,
+        a.`CodigoArticulo` codigo,
+        a.`Descripcion` descripcion,
+        oc.`formaEnvio`,
+        oc.`fecha` fechaOrden,
+        p.`recepcion` estimada,
+        pid.totalOrden,
+        pit.`estado`,
+        pit.`recepcion`, 
+        pit.`embarque`,
+        pit.`status`
+        FROM pedidos_items pit
+        INNER JOIN articulos a ON a.`idArticulos` = pit.`articulo`
+        INNER JOIN pedidos p ON p.`id` = pit.`idPedido`
+        INNER JOIN ordenescompra oc ON oc.`id_pedido` = p.`id`
+        INNER JOIN provedores pro ON pro.`idproveedor` = p.`proveedor`
+        LEFT JOIN (
+                      SELECT pit.`idPedido`, SUM(ROUND(pit.`cantidad` * pit.`precioFabrica`,2)) totalOrden
+                      FROM pedidos_items pit
+                       GROUP BY pit.`idPedido`
+                   )pid
+          ON pid.idPedido = p.`id`
+          LEFT JOIN estado_importacion ei ON 
+          pit.`id` = ei.`id_pedido_items`
+          ";
 
+        $query=$this->db->query($sql);	
+		return $query->result_array();
+    }
     
 }

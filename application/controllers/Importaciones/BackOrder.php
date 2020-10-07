@@ -124,7 +124,7 @@ class BackOrder extends CI_Controller
 			$this->load->view('plantilla/footerscript.php',$this->datos);
 			
 	}
-	public function getE()  
+	public function getBackOrderList()  
 	{
 		if($this->input->is_ajax_request())
         {
@@ -132,8 +132,7 @@ class BackOrder extends CI_Controller
 			$signo = $pedServ == 'servicios' ? '=' : '>';
 			$condicion=$this->security->xss_clean($this->input->post("condicion"));
 
-			$res=$this->Pedidos_model->getEstadoCuentas($condicion, $signo); 
-			//$res = $condicion . ' - ' . $signo;
+			$res=$this->Pedidos_model->getBackOrderList(); 
 			echo json_encode($res);
 		}
 		else
