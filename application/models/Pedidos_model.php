@@ -426,7 +426,7 @@ class Pedidos_model extends CI_Model
         $query=$this->db->query($sql);	
 		return $query->result_array();
     }
-    public function getBackOrderList()
+    public function getBackOrderList($filter, $ini, $fin)
 	{ 
     	$sql="SELECT 
         pit.`id`,
@@ -439,7 +439,7 @@ class Pedidos_model extends CI_Model
         oc.`fecha` fechaOrden,
         p.`recepcion` estimada,
         pid.totalOrden,
-        pit.`estado`,
+        IF( pit.status = 1 , 'INGRESADO', pit.`estado`) estado,
         pit.`recepcion`, 
         pit.`embarque`,
         pit.`status`
@@ -454,12 +454,48 @@ class Pedidos_model extends CI_Model
                        GROUP BY pit.`idPedido`
                    )pid
           ON pid.idPedido = p.`id`
-          LEFT JOIN estado_importacion ei ON 
-          pit.`id` = ei.`id_pedido_items`
+        WHERE oc.`fecha` BETWEEN '$ini' AND '$fin'
+        HAVING
+            CASE
+                WHEN '$filter' = 'pendientes' THEN pit.`status` = 0
+                WHEN '$filter' = 'ingresados' THEN pit.`status` = 1
+                WHEN '$filter' = 'todos' THEN pit.status = 0 OR pit.`status` = 1
+            END
           ";
 
         $query=$this->db->query($sql);	
 		return $query->result_array();
     }
-    
+    public function updateStatusPedido($idPedido, $status)
+	{	
+        $this->db->trans_start();
+
+            $this->db->where('idPedido', $idPedido);
+            $this->db->update('pedidos_items', $status);
+
+            $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        } else {
+            
+            return true;
+        }
+    }
+    public function updateStatusPedidoItem($id, $status)
+	{	
+        $this->db->trans_start();
+
+            $this->db->where('id', $id);
+            $this->db->update('pedidos_items', $status);
+
+            $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        } else {
+            
+            return true;
+        }
+    }
 }

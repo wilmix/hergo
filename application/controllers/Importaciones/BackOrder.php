@@ -128,11 +128,10 @@ class BackOrder extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-			$pedServ=$this->security->xss_clean($this->input->post("pedServ"));
-			$signo = $pedServ == 'servicios' ? '=' : '>';
-			$condicion=$this->security->xss_clean($this->input->post("condicion"));
-
-			$res=$this->Pedidos_model->getBackOrderList(); 
+			$ini=$this->security->xss_clean($this->input->post("ini"));
+        	$fin=$this->security->xss_clean($this->input->post("fin"));
+			$filter=$this->security->xss_clean($this->input->post("filtro"));
+			$res=$this->Pedidos_model->getBackOrderList($filter, $ini, $fin); 
 			echo json_encode($res);
 		}
 		else
@@ -140,7 +139,35 @@ class BackOrder extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	public function saveStatus()
+	{
+		if($this->input->is_ajax_request())
+		{
+			$id = $this->input->post('id');
+			$idPedido = $this->input->post('idPedido');
+			$pedidoItem = $this->input->post('pedidoItem');
+			$status = new stdclass();
+			$status->estado = strtoupper($this->input->post('estado'));
+			$status->recepcion = $this->input->post('fecha');
+			$status->embarque = strtoupper($this->input->post('embarque'));
+			$status->status = $this->input->post('status');
 
+			if ($pedidoItem == 'pedido') {
+				$trans = $this->Pedidos_model->updateStatusPedido($idPedido, $status);
+				$status->trans = $trans;
+				echo json_encode($status);
+				
+			} else if ($pedidoItem == 'item') {
+				$trans = $this->Pedidos_model->updateStatusPedidoItem($id, $status);
+				$status->trans = $trans;
+				echo json_encode($status);
+			} 
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 
 
 

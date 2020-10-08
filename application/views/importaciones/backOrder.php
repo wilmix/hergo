@@ -9,11 +9,11 @@
           <span></span> <i class="fa fa-caret-down"></i>
         </div>
       </div>
-      <select class="btn btn-primary btn-sm" id="estadoFiltro" name="almacen_filtro">
-        <option value="pendientes">PENDIENTES</option>
+      <select class="btn btn-primary btn-sm" id="filter" name="filter">
+        <option value="pendientes">EN TRANSITO</option>
+        <option value="ingresados">INGRESADOS</option>
         <option value="todos">TODOS</option>
       </select>
-      <button  id="show-modal" @click="showModal = true" class="btn btn-default">FacturaServicios</button>
     </div>
       <div class="box-body">
         <table id="table" class="table table-hover display compact" style="width:100%">
@@ -76,17 +76,17 @@
                         <input type="text" name="embarque" class="form-control" v-model="embarque">
                     </div>
                     <div class="col-sm-3 col-md-3">
-                        <label >Tipo:</label>
-                        <select class="form-control" v-model="pedidoItem" name="pedidoItem">
-                            <option value="pedido">PEDIDO</option>
-                            <option value="item">ITEM</option>
+                        <label >Status:</label>
+                        <select class="form-control" v-model="status" name="status">
+                            <option value="0">EN TRANSITO</option>
+                            <option value="1">INGRESADO</option>
                         </select>
                     </div>
                     <div class="col-sm-3 col-md-3">
-                        <label >Status:</label>
-                        <select class="form-control" v-model="status" name="status">
-                            <option value="false">PENDIENTE</option>
-                            <option value="true">INGRESADO</option>
+                        <label >Nivel:</label>
+                        <select class="form-control" v-model="pedidoItem" name="pedidoItem">
+                            <option value="pedido">PEDIDO</option>
+                            <option value="item">ITEM</option>
                         </select>
                     </div>
                 </div>

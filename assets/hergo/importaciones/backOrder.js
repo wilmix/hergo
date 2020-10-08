@@ -3,19 +3,19 @@ let fin = moment().subtract(0, 'year').endOf('year').format('YYYY-MM-DD')
 $(document).ready(function () {
 	$.fn.dataTable.ext.errMode = 'none';
 	dataPicker()
-	getFacturaProveedores()
+	getBackOrders()
 	$('#reportrange').on('apply.daterangepicker', function (ev, picker) {
-		getFacturaProveedores()
+		getBackOrders()
 	});
 
 })
-$(document).on("change", "#estadoFiltro", function () {
-    getFacturaProveedores()
+$(document).on("change", "#filter", function () {
+    getBackOrders()
 })
 
-function getFacturaProveedores() {
+function getBackOrders() {
 	agregarcargando()
-	let filtro =  $("#estadoFiltro").val()
+	let filter =  $("#filter").val()
     //console.log(ini + ' -  ' + fin);
 	$.ajax({
 		type: "POST",
@@ -24,10 +24,9 @@ function getFacturaProveedores() {
 		data: {
 						ini:ini,
 						fin:fin,
-						filtro: filtro
+						filtro: filter
 					},
 	}).done(function (res) {
-        console.log(res);
 		table = $('#table').DataTable({
 			data: res,
 			destroy: true,
@@ -37,6 +36,11 @@ function getFacturaProveedores() {
 				[10, 25, 50, -1],
 				['10 filas', '25 filas', '50 filas', 'Todo']
 			],
+			createdRow: function( row, res, dataIndex ) {
+				if ( res.status == 1) {
+				  	$(row).addClass( 'styleGreen' );
+				}
+			},
 			pageLength: 10,
 			columns: [
 				{
@@ -148,7 +152,7 @@ function getFacturaProveedores() {
 				{
 					text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
 					action: function (e, dt, node, config) {
-						getFacturaProveedores()
+						getBackOrders()
 					}
 				},
 				{
@@ -169,7 +173,7 @@ function getFacturaProveedores() {
 							className: 'btn btn-link',
 							action: function (e, dt, node, config) {
 								table.state.clear()
-								getFacturaProveedores()
+								getBackOrders()
 							}
 						},
 
@@ -233,7 +237,8 @@ function buttons (data, type, row) {
 `
 }
 $(document).on("click", "button.edit", function () {
-    let row = getRow(table, this)
+	let row = getRow(table, this)
+	console.log(row);
     back.row = row
     back.modal()
 })
@@ -250,13 +255,13 @@ Vue.component('modal', {
             id:back.row.id,
             idPedido:back.row.idPedido,
             pedidoItem: 'pedido',
-            status: 'false',
+            status: back.row.status,
             pedido:back.row.orden,
             proveedor:back.row.proveedor,
             codigo:back.row.codigo,
             descripcion:back.row.descripcion,
-            estimada:moment(back.row.estimada).format('DD-MM-YY'),
-            recepcion:back.row.recepcion,
+            estimada:moment(back.row.estimada).format('DD MMMM YYYY'),
+            recepcion:moment(back.row.recepcion).format('DD MMMM YYYY'),
             embarque:back.row.embarque,
 			estado:back.row.estado,
 			errors:''             
@@ -274,17 +279,17 @@ Vue.component('modal', {
 
             let formData = new FormData($('#form')[0]); 
             formData.append('id', this.id)
-            formData.append('id', this.idPedido)
+            formData.append('idPedido', this.idPedido)
 			formData.append('fecha', moment(this.recepcion).format('YYYY-MM-DD'))
 
 			for(let pair of formData.entries()) {
 				console.log(pair[0]+ ', '+ pair[1]); 
 			} 
 			this.close()
-			quitarcargando()
-			return
+			/* quitarcargando()
+			return */
 			$.ajax({
-				url: base_url("index.php/Importaciones/OrdenesCompra/storeAsociarFactura"),
+				url: base_url("index.php/Importaciones/BackOrder/saveStatus"),
 				type: 'POST',
 				data: formData,
 				cache: false,
@@ -297,12 +302,11 @@ Vue.component('modal', {
 						quitarcargando()
 						swal({
 							title: "Registrado!",
-							text: "Factura de Servicios agregada!",
+							text: "El estado se registro con èxito",
 							type: "success",        
 							allowOutsideClick: false,                                                                        
 							}).then(function(){
-								getFacturaProveedores()
-								console.log('toto ok');
+								getBackOrders()
 							})
 					} else {
 						quitarcargando()
