@@ -7,8 +7,15 @@ $(document).on("click", "#excel", function () {
     let excel = base_url("reportes/saldosExcel");
     location.href = (excel);
 })
+$(document).on("click",".imagenminiatura",function(){    
+    rutaimagen=$(this).attr('src')
+    console.table(rutaimagen);
+    var imagen='<img class="maximizada" src="'+rutaimagen+'">'
+    $("#imagen_max").html(imagen)
+    $("#prev_imagen").modal("show");
+})
 
-function retornarSaldosActuales() //*******************************
+function retornarSaldosActuales()
 {   
     agregarcargando();
     $.ajax({
@@ -24,33 +31,39 @@ function retornarSaldosActuales() //*******************************
                     striped:true,
                     search:true,
                     filter:true,
-                    //strictSearch: true,
+                    //showColumns: true,
                     showToggle:true,
                     stickyHeader: true,
                     stickyHeaderOffsetY: '50px',
                 columns:
                 [
                     {   
-                        field: 'idArticulos',            
+                        field: 'id',            
                         title: 'ID',
                         sortable:true,
                         align: 'center',
                         visible:false,
                     },
                    {   
-                        field: 'CodigoArticulo',            
+                        field: 'codigo',            
                         title: 'Codigo',
                         sortable:true,
                         align: 'center',
                     },
                     {   
-                        field: 'Descripcion',            
+                        field: 'url',            
+                        title: 'Imagen',
+                        searchable: false,
+                        formatter: mostrarimagen
+                    },
+                    {   
+                        field: 'descripcion',            
                         title: 'Descripción',
                         sortable:true,
                         searchable: true,
                     },
                     {   
-                        field: 'Sigla',            
+                        field: 'uni',            
                         title: 'Unidad',
                         sortable:true,
                         searchable: false,
@@ -95,8 +108,31 @@ function retornarSaldosActuales() //*******************************
                         formatter: total,
                         searchable: false,
                         align: 'right',
+                    },
+                    {   
+                        field: 'backOrder',            
+                        title: 'BackOrder',
+                        align: 'right',
+                        sortable:true,
+                        searchable: false,
+                        visible: false,
+                        formatter: operateFormatter3
+                    },
+                    {   
+                        field: 'recepcion',            
+                        title: 'LLega el:',
+                        sortable:true,
+                        align: 'center',
+                        formatter: formato_fecha,
+                        visible: false
+                    },
+                    {   
+                        field: 'estado',            
+                        title: 'Estado',
+                        align: 'right',
+                        visible: false
                     }
-
+                    
                 ]
             });
     }).fail(function( jqxhr, textStatus, error ) {
@@ -123,3 +159,21 @@ function total(value, row, index) {
     $ret = $ret.toFixed(2)
     return ($ret)
   }
+function mostrarimagen(value, row, index)
+{
+    let ruta=""
+    let imagen=""
+    if((value=="")||(value==null))
+    {
+        ruta="/assets/img_articulos/hergo.jpg"
+        clase=""
+    }
+    else
+    {
+        clase="imagenminiatura"
+        ruta="/assets/img_articulos/"+value
+    }
+
+    imagen = '<div class="contimg"><img src="'+base_url(ruta)+'" class="'+clase+'"></div>'
+    return [imagen].join('')
+}

@@ -180,8 +180,35 @@ class Reportes_model extends CI_Model
 	}
 	public function mostrarSaldos() 
 	{ //cambiar la consulta
-		$sql="SELECT *, (aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz`) total
- 		FROM articulos_activos aa
+		$sql="SELECT 	aa.`idArticulos` id,
+						aa.`CodigoArticulo` codigo,
+						aa.`Descripcion` descripcion,
+						aa.`Sigla` uni,
+						aa.`laPaz`,
+						aa.`elAlto`,
+						aa.`potosi`,
+						aa.`potosi`,
+						aa.`santacruz`,
+						IFNULL(back.cantidad,0) backOrder,
+						back.recepcion,
+						back.estado,
+						aa.`url`
+					FROM articulos_activos aa
+					LEFT JOIN
+						(SELECT 
+							pit.`articulo`, 
+							a.`CodigoArticulo`, 
+							a.`Descripcion`,
+							u.`Sigla`,
+							pit.`cantidad`,
+							pit.`estado`,
+							pit.`recepcion`
+							FROM pedidos_items pit
+							INNER JOIN articulos a ON a.`idArticulos` = pit.`articulo`
+							INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
+							WHERE pit.`status` = FALSE
+						)back 
+					ON back.articulo = aa.`idArticulos`
 		-- WHERE SUBSTRING(CodigoArticulo,1,2)<>'SR'
 		";
 		$query=$this->db->query($sql);		
