@@ -101,7 +101,7 @@ class FacturaProveedores extends CI_Controller
 	
 	public function index()
 	{
-		//$this->libacceso->acceso(57);
+		$this->libacceso->acceso(62);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 			$this->datos['menu']="Pago Proveedores";

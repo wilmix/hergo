@@ -101,7 +101,7 @@ class EstadoCuentas extends CI_Controller
 	
 	public function index()
 	{
-		//$this->libacceso->acceso(57);
+		$this->libacceso->acceso(63);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 			$this->datos['menu']="Estado de Cuentas";

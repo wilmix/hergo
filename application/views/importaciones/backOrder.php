@@ -4,6 +4,7 @@
     <div id="ordenForm" class="box">
     <div class="box-header with-border">
       <div class="forPrint col-md-3">
+      <input type="text" value="<?= $editarBack ?>" id="editBack" hidden>
         <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
           <i class="fa fa-calendar"></i>&nbsp;
           <span></span> <i class="fa fa-caret-down"></i>

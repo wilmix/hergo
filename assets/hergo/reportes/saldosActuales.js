@@ -31,7 +31,7 @@ function retornarSaldosActuales()
                     striped:true,
                     search:true,
                     filter:true,
-                    //showColumns: true,
+                    showColumns: true,
                     showToggle:true,
                     stickyHeader: true,
                     stickyHeaderOffsetY: '50px',
@@ -115,7 +115,7 @@ function retornarSaldosActuales()
                         align: 'right',
                         sortable:true,
                         searchable: false,
-                        visible: false,
+                        //visible: false,
                         formatter: operateFormatter3
                     },
                     {   

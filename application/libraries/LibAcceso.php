@@ -17,6 +17,21 @@ class LibAcceso {
 			return false;		
 
 		}
+	}
+	public function accesoSubMenu($SubMenu)
+    {
+     
+	    $aux=$this->retornarSubMenus($_SESSION['accesoMenu']);
+	    if(in_array($SubMenu, $aux))
+	    {
+	 
+			return true;
+	    }	    	
+		else	
+		{			
+			return false;		
+
+		}
     }
 
    public function retornarSubMenus($submenues)

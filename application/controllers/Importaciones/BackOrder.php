@@ -101,7 +101,7 @@ class BackOrder extends CI_Controller
 	
 	public function index()
 	{
-		//$this->libacceso->acceso(57);
+		$this->libacceso->acceso(64);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 			$this->datos['menu']="BackOrders";
@@ -110,9 +110,13 @@ class BackOrder extends CI_Controller
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
 			$this->datos['foot_script']= $this->foot_script;
+			$this->datos['editarBack']= $this->libacceso->accesoSubMenu(65);
+
+			
 			
 			$this->datos['foot_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/backOrder.js');
+
 		
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);

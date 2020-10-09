@@ -1,5 +1,6 @@
 let ini = moment().subtract(0, 'year').startOf('year').format('YYYY-MM-DD')
 let fin = moment().subtract(0, 'year').endOf('year').format('YYYY-MM-DD')
+let editBack = $("#editBack").val()
 $(document).ready(function () {
 	$.fn.dataTable.ext.errMode = 'none';
 	dataPicker()
@@ -104,13 +105,16 @@ function getBackOrders() {
 					data: 'embarque',
 					title: 'EMBARQUE',
 					className: 'text-right',
-                },
+				},
 				{
 					data: null,
 					title: '',
-					width: '100px',
+					width: editBack ? '100px' : '0px',
 					className: 'text-center',
-					render: buttons
+					render: buttons,
+					sorting: false,
+					visible: editBack ? true : false
+					
 				},
 			],
 			stateSave: true,
@@ -227,18 +231,19 @@ function getBackOrders() {
 		console.log("Request Failed: " + err);
 	});
 }
-
 function buttons (data, type, row) {
-	return `
-	<button type="button" class="btn btn-default edit">
-		<span class="fa fa-pencil" aria-hidden="true">
-		</span>
-	</button>
-`
+	if (editBack) {
+		return `
+		<button type="button" class="btn btn-default edit">
+			<span class="fa fa-pencil" aria-hidden="true">
+			</span>
+		</button>
+	`
+	}
 }
 $(document).on("click", "button.edit", function () {
 	let row = getRow(table, this)
-	console.log(row);
+	//console.log(row);
     back.row = row
     back.modal()
 })
@@ -338,7 +343,7 @@ const back = new Vue({
 	data: {
 		es: vdp_translation_es.js,
         showModal: false,
-        row: {},
+		row: {},
 
 	},
 	methods:{

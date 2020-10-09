@@ -101,7 +101,7 @@ class OrdenesCompra extends CI_Controller
 	
 	public function index()
 	{
-		//$this->libacceso->acceso(57);
+		$this->libacceso->acceso(61);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 			$this->datos['menu']="Consulta Orden de Compra";
@@ -140,7 +140,7 @@ class OrdenesCompra extends CI_Controller
 	}
 	public function crearOrden()
 	{
-		//$this->libacceso->acceso(58);
+		$this->libacceso->acceso(60);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 

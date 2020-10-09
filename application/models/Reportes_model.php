@@ -209,6 +209,7 @@ class Reportes_model extends CI_Model
 							WHERE pit.`status` = FALSE
 						)back 
 					ON back.articulo = aa.`idArticulos`
+					ORDER BY aa.`CodigoArticulo`
 		-- WHERE SUBSTRING(CodigoArticulo,1,2)<>'SR'
 		";
 		$query=$this->db->query($sql);		
