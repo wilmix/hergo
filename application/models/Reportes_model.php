@@ -184,16 +184,17 @@ class Reportes_model extends CI_Model
 						aa.`CodigoArticulo` codigo,
 						aa.`Descripcion` descripcion,
 						aa.`Sigla` uni,
+						aa.costoPromedioPonderado cpp,
 						aa.`laPaz`,
 						aa.`elAlto`,
 						aa.`potosi`,
-						aa.`potosi`,
 						aa.`santacruz`,
+						(aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz`) total,
 						IFNULL(back.cantidad,0) backOrder,
 						back.recepcion,
 						back.estado,
-						aa.`url`,
-						aa.costoPromedioPonderado cpp
+						aa.`url`
+						
 					FROM articulos_activos aa
 					LEFT JOIN
 						(SELECT 

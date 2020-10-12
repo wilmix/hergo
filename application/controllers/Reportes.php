@@ -103,16 +103,21 @@ class Reportes extends CI_Controller
 			],
 		];
 		
-		$spreadsheet->getActiveSheet()->getStyle('A1:I1')->applyFromArray($styleArray);
+		$spreadsheet->getActiveSheet()->getStyle('A1:K1')->applyFromArray($styleArray);
 		$sheet->setCellValue('A1', 'ID');
 		$sheet->setCellValue('B1', 'CODIGO');
 		$sheet->setCellValue('C1', 'DESCRIPCIÓN');
 		$sheet->setCellValue('D1', 'UNIDAD');
-		$sheet->setCellValue('E1', 'LA PAZ');
-		$sheet->setCellValue('F1', 'EL ALTO');
-		$sheet->setCellValue('G1', 'POTOSI');
-		$sheet->setCellValue('H1', 'SANTA CRUZ');
-		$sheet->setCellValue('I1', 'TOTAL');
+		$sheet->setCellValue('E1', 'CPP');
+		$sheet->setCellValue('F1', 'LA PAZ');
+		$sheet->setCellValue('G1', 'EL ALTO');
+		$sheet->setCellValue('H1', 'POTOSI');
+		$sheet->setCellValue('I1', 'SANTA CRUZ');
+		$sheet->setCellValue('J1', 'TOTAL');
+		$sheet->setCellValue('K1', 'BACKORDER');
+		$sheet->setCellValue('L1', 'RECEPCION');
+		$sheet->setCellValue('M1', 'ESTADO');
+		$sheet->setCellValue('N1', 'IMAGEN');
 
 		$res=$this->Reportes_model->mostrarSaldos(); 
 		$res=$res->result_array();
@@ -127,6 +132,9 @@ class Reportes extends CI_Controller
         
 		$writer = new Xlsx($spreadsheet);
 		$spreadsheet->getActiveSheet()->getColumnDimension('A')->setVisible(false);
+		$spreadsheet->getActiveSheet()->getColumnDimension('L')->setVisible(false);
+		$spreadsheet->getActiveSheet()->getColumnDimension('M')->setVisible(false);
+		$spreadsheet->getActiveSheet()->getColumnDimension('N')->setVisible(false);
 		$spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(50);
 		$spreadsheet->getActiveSheet()->getStyle('E1:I3000')->getNumberFormat()->setFormatCode('#,##0.00');
 		$spreadsheet->getActiveSheet()->getStyle('A1');
