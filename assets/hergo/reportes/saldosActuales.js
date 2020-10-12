@@ -70,6 +70,15 @@ function retornarSaldosActuales()
                         align: 'center'
                     },
                     {   
+                        field: 'cpp',            
+                        title: 'CPP',
+                        sortable:true,
+                        align: 'right',
+                        searchable: false,
+                        visible: false,
+                        formatter: operateFormatter3
+                    },
+                    {   
                         field: 'laPaz',            
                         title: 'La Paz',
                         sortable:true,

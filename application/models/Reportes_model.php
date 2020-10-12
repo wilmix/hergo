@@ -192,7 +192,8 @@ class Reportes_model extends CI_Model
 						IFNULL(back.cantidad,0) backOrder,
 						back.recepcion,
 						back.estado,
-						aa.`url`
+						aa.`url`,
+						aa.costoPromedioPonderado cpp
 					FROM articulos_activos aa
 					LEFT JOIN
 						(SELECT 
