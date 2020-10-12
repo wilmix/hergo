@@ -1,4 +1,4 @@
-.fht-cell, .select2, .fixed-table-pagination, .btn, .form-control, .forPrint, .dataTables_filter{
+.fht-cell, .select2, .fixed-table-pagination, .btn, .form-control, .forPrint, .dataTables_filter, .dt-buttons, .dataTables_info, .dataTables_paginate{
     display: none;
 }
 

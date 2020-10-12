@@ -2,10 +2,10 @@
   <footer class="main-footer">
     <!-- To the right -->
     <div class="pull-right hidden-xs">
-      <strong>Sistema Diseñado por Willy Salas</strong> 
+      <strong>Sistema diseñado y desarrollado por Willy Salas</strong> 
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2019 <a href="https://hergo.com.bo/">Hergo Ltda.</a></strong> 
+    <strong>Copyright &copy; 2020 <a href="https://hergo.com.bo/">Hergo Ltda.</a></strong> 
   </footer>
 </div>
 <!-- ./wrapper -->
