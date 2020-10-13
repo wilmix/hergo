@@ -285,8 +285,8 @@ $(document).on("click", "#guardarFactura", function () {
         dataType: "json",
         data: datos,
     }).done(function (res) {
-        if (res) {
-            console.log(res);
+        console.log(res);
+        if (res.status == 'ok') {
             quitarcargando();
             $("#tabla3Factura").bootstrapTable('removeAll');
             swal({
@@ -297,19 +297,35 @@ $(document).on("click", "#guardarFactura", function () {
                 allowOutsideClick: false,
             }).then(
                 function (result) {
-                    agregarcargando();
-                    location.reload();
-                    let imprimir = base_url("pdf/Factura/index/") + res;
+                    //agregarcargando();
+                    let imprimir = base_url("pdf/Factura/index/") + res.idFactura;
                     window.open(imprimir);
+                    location.reload();
                 });
 
         }
-        else {
-            swal("Error", res.mensaje, "error")
+        else if (res.status == 'error') {
+            quitarcargando();
+            console.log(res.errors);
+            swal({
+                title: 'Error',
+                text: res.errors,
+                type: 'error',
+                showCancelButton: false,
+                allowOutsideClick: false,
+            })
         }
     }).fail(function (jqxhr, textStatus, error) {
         let err = textStatus + ", " + error;
         console.log("Request Failed: " + err);
+        quitarcargando();
+        swal({
+            title: 'Error',
+            text: "Error al guardar en el servidor - " + err,
+            type: 'error',
+            showCancelButton: false,
+            allowOutsideClick: false,
+        })
     });
 
 })
