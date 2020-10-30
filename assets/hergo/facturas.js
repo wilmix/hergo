@@ -207,6 +207,10 @@ $(document).on("click", "#crearFactura", function () {
         swal("Error", "No se tiene tipo de cambio para esta Fecha", "error")
         return false;
     }
+    if ($("#tipoPago").val() == '') {
+        swal("Error", "Seleccione metodo de pago", "error")
+        return false;
+    }
     let tabla3factura = $("#tabla3Factura").bootstrapTable('getData');
     if (tabla3factura.length > 0) {
         let datos = {
@@ -995,6 +999,8 @@ function agregarDatosFactura(res) {
     $("#facPrev").modal("show");
 }
 function vistaPreviaFactura() {
+    let selectText = $('#tipoPago').find(":selected").text();
+    let msjPago = $("#tipoPago").val() == 0 ? 'ESTA FACTURA ESTA POR FACTURAR' :'ESTA FACTURA SE PAGARÁ CON :  '  + selectText
     let tabla3factura = $("#tabla3Factura").bootstrapTable('getData');
     if (tabla3factura.length > 0) {
         let arreglo = tabla3factura.map(item => {
@@ -1009,6 +1015,7 @@ function vistaPreviaFactura() {
         vmVistaPrevia.datosFactura = arreglo;
         vmVistaPrevia.fecha = $("#fechaFactura").val();
         vmVistaPrevia.glosa = $("#observacionesFactura").val()
+        vmVistaPrevia.msjPrueba = msjPago
     }
 }
 function AgregarRegistroTabla3Array(row) {

@@ -69,6 +69,17 @@
                   <span class="fa fa-calendar"></span>
               </span>
                 <input type="text" class="form-control" value="" id="fechaFactura" aria-describedby="sizing-addon2" disabled="disabled"><!--disabled-->
+                <span class="input-group-addon">
+                  <span class="fa fa-credit-card"></span>
+              </span>
+                <select class="form-control" id="tipoPago">
+                  <option value="">Tipo Pago...</option>
+                  <option value="0">POR PAGAR</option>
+                  <option value="1">EFECTIVO</option>
+                  <option value="2">TRANSFERENCIA</option>
+                  <option value="3">CHEQUE</option>
+                  <option value="4">OTROS</option>
+                </select>
               <span class="input-group-addon">
                   <span class="fa fa-qrcode"></span>
               </span>
