@@ -55,8 +55,8 @@
             if ($manual==='0') {
                 $this->SetY(-136);
                 $this->SetX(177);
-                //$this->Image('http://api.qrserver.com/v1/create-qr-code/?data='.$qr.'&size=100x100'.'.png', 178, 143, 30);
-                $this->Image('https://www.qrcoder.co.uk/api/v1/?text='.$qr, 178, 143, 30,0,'PNG');
+                $this->Image('http://api.qrserver.com/v1/create-qr-code/?data='.$qr.'&size=100x100'.'.png', 178, 143, 30);
+                //$this->Image('https://www.qrcoder.co.uk/api/v1/?text='.$qr, 178, 143, 30,0,'PNG');
             }
 
             //TITULO
