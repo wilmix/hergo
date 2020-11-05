@@ -33,5 +33,6 @@ application/config/config.php
 /assets/img_articulos
 /assets/img_pagos
 /assets/img_ingresos
+/qr
 .htaccess
 
