@@ -33,6 +33,9 @@ application/config/config.php
 /assets/img_articulos
 /assets/img_pagos
 /assets/img_ingresos
+/assets/imagenes
+/assets/facComProv
+assets/pagoProveedores
 /qr
 .htaccess
 
