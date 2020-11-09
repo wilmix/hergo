@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     // Incluimos el archivo fpdf
     require_once APPPATH."/third_party/fpdf/fpdf.php";
-    //require_once APPPATH."/third_party/phpqrcode/qrlib.php";
+    require_once APPPATH."/third_party/phpqrcode/qrlib.php";
     
     //Extendemos la clase Pdf de la clase fpdf para que herede todas sus variables y funciones
     class Factura_lib extends FPDF {
@@ -43,21 +43,23 @@
 
             $qr = $nit.'|'.$nFactura.'|'.$autorizacion.'|'.$fechaFacQR.'|'.number_format($total, 2, ".","")
             .'|'.number_format($total, 2, ".","").'|'.$codigoControl.'|'.$ClienteNit.'|'.'0'.'|'.'0'.'|'.'0'.'|'.'0';
-
+            $qrName ="qr/" . $idAlmacen . "-" . $nFactura . "-" . $dia . "-" . $mes . "-" . $year . ".png";
             //QRcode::png($qr,"qr.png",QR_ECLEVEL_L,3,2);
+            QRcode::png("$qr", "$qrName" );
+            //var_dump("$qr");die();
 
             //var_dump($manual);
-            /* if ($manual==='0') {
-                $this->SetY(-136);
-                $this->SetX(177);
-                $this->Image('qr.png');
-            }*/
             if ($manual==='0') {
                 $this->SetY(-136);
                 $this->SetX(177);
-                $this->Image('http://api.qrserver.com/v1/create-qr-code/?data='.$qr.'&size=100x100'.'.png', 178, 143, 30);
-                //$this->Image('https://www.qrcoder.co.uk/api/v1/?text='.$qr, 178, 143, 30,0,'PNG');
+                $this->Image("$qrName", 178, 143, 30,0, "png");
             }
+            /*if ($manual==='0') {
+                $this->SetY(-136);
+                $this->SetX(177);
+               // $this->Image('http://api.qrserver.com/v1/create-qr-code/?data='.$qr.'&size=100x100'.'.png', 178, 143, 30);
+                //$this->Image('https://www.qrcoder.co.uk/api/v1/?text='.$qr, 178, 143, 30,0,'PNG');
+            }*/
 
             //TITULO
             $this->SetXY(10,9);
