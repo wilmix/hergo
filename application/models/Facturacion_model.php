@@ -289,4 +289,13 @@ class Facturacion_model extends CI_Model
 		$query=$this->db->query($sql)->row();        
         return $query;
 	}
+	public function validarFacturada($idEgresoDetalle)
+	{
+		$sql="SELECT ed.`idingdetalle`, (SUM(ed.`cantidad`) - SUM(ed.`cantFact`)) porFacturar
+		FROM egresos e
+		INNER JOIN egredetalle ed ON ed.`idegreso` = e.`idegresos`
+		WHERE ed.`idingdetalle` = $idEgresoDetalle";
+		$query=$this->db->query($sql)->row();        
+        return $query;
+	}
 }

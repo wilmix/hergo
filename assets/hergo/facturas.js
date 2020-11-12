@@ -207,6 +207,10 @@ $(document).on("click", "#crearFactura", function () {
         swal("Error", "No se tiene tipo de cambio para esta Fecha", "error")
         return false;
     }
+    if ($("#tipoPago").val() == '') {
+        swal("Error", "Seleccione metodo de pago", "error")
+        return false;
+    }
     let tabla3factura = $("#tabla3Factura").bootstrapTable('getData');
     if (tabla3factura.length > 0) {
         let datos = {
@@ -285,8 +289,8 @@ $(document).on("click", "#guardarFactura", function () {
         dataType: "json",
         data: datos,
     }).done(function (res) {
-        if (res) {
-            console.log(res);
+        console.log(res);
+        if (res.status == 'ok') {
             quitarcargando();
             $("#tabla3Factura").bootstrapTable('removeAll');
             swal({
@@ -297,19 +301,35 @@ $(document).on("click", "#guardarFactura", function () {
                 allowOutsideClick: false,
             }).then(
                 function (result) {
-                    agregarcargando();
-                    location.reload();
-                    let imprimir = base_url("pdf/Factura/index/") + res;
+                    //agregarcargando();
+                    let imprimir = base_url("pdf/Factura/index/") + res.idFactura;
                     window.open(imprimir);
+                    location.reload();
                 });
 
         }
-        else {
-            swal("Error", res.mensaje, "error")
+        else if (res.status == 'error') {
+            quitarcargando();
+            console.log(res.errors);
+            swal({
+                title: 'Error',
+                text: res.errors,
+                type: 'error',
+                showCancelButton: false,
+                allowOutsideClick: false,
+            })
         }
     }).fail(function (jqxhr, textStatus, error) {
         let err = textStatus + ", " + error;
         console.log("Request Failed: " + err);
+        quitarcargando();
+        swal({
+            title: 'Error',
+            text: "Error al guardar en el servidor - " + err,
+            type: 'error',
+            showCancelButton: false,
+            allowOutsideClick: false,
+        })
     });
 
 })
@@ -979,6 +999,8 @@ function agregarDatosFactura(res) {
     $("#facPrev").modal("show");
 }
 function vistaPreviaFactura() {
+    let selectText = $('#tipoPago').find(":selected").text();
+    let msjPago = $("#tipoPago").val() == 0 ? 'ESTA FACTURA ESTA POR FACTURAR' :'ESTA FACTURA SE PAGARÁ CON :  '  + selectText
     let tabla3factura = $("#tabla3Factura").bootstrapTable('getData');
     if (tabla3factura.length > 0) {
         let arreglo = tabla3factura.map(item => {
@@ -993,6 +1015,7 @@ function vistaPreviaFactura() {
         vmVistaPrevia.datosFactura = arreglo;
         vmVistaPrevia.fecha = $("#fechaFactura").val();
         vmVistaPrevia.glosa = $("#observacionesFactura").val()
+        vmVistaPrevia.msjPrueba = msjPago
     }
 }
 function AgregarRegistroTabla3Array(row) {

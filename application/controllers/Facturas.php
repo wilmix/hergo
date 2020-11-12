@@ -663,7 +663,8 @@ class Facturas extends CI_Controller
 			$observaciones = ($this->security->xss_clean($this->input->post('observaciones')));
 			$codigoControl = ($this->security->xss_clean($this->input->post('codigoControl')));
 			$articulos = ($this->security->xss_clean($this->input->post('tabla')));
-
+			$articulos = (json_decode($articulos));
+			$errores=[];
 			$datosFactura=$this->DatosFactura_model->obtenerUltimoLote2($idAlmacen, $tipoFacturacion);
 			$numero_autorizacion = $datosFactura->autorizacion;
 			$clave = $datosFactura->llaveDosificacion;
@@ -671,21 +672,24 @@ class Facturas extends CI_Controller
 			$ultimaFactura=$this->Facturacion_model->obtenerUltimoRegistro($idAlmacen,$datosFactura->idDatosFactura);
 			$cliente=$this->Cliente_model->obtenerCliente($idCliente);
 
+			foreach ($articulos as $item) {
+				$porFacturar = $this->Facturacion_model->validarFacturada($item->idEgreDetalle);
+				if ($porFacturar->porFacturar == 0 ) {
+					array_push($errores, 'Ya se facturó');
+				}
+			}
 			if(!$this->validarFechaLimite($datosFactura->fechaLimite, $fechaFactura))
 			{
-				echo 'Error Limite emision';
-				die();
+				array_push($errores, 'Error Limite emision');
 			}
 			if(!$this->validarLimiteFactura($datosFactura->hasta, $ultimaFactura))
 			{
-				echo 0;
-				die();
+				array_push($errores, 'Error limite de la factura');
 			}
 			if ($datosFactura->manual == 1) {
 				if(!$this->validarNumFacManual($datosFactura->desde,$datosFactura->hasta, $numFacManual))
 				{
-					echo 0;
-					die();
+					array_push($errores, 'Error número de factura manual');
 				}
 				$numeroFactura = $numFacManual;
 			} else {
@@ -717,10 +721,20 @@ class Facturas extends CI_Controller
 			$factura->tipoCambio=$this->Egresos_model->retornarTipoCambio();
 			$factura->ClienteFactura=$cliente->nombreCliente;
 			$factura->ClienteNit=$cliente->documento;
-			$factura->articulos = json_decode($articulos);
-			$idFactura = $this->Facturacion_model->storeFactura($factura);
-
-			echo json_encode($idFactura); 
+			$factura->articulos = $articulos;
+			
+			if ($errores == []) {
+				$idFactura = $this->Facturacion_model->storeFactura($factura);
+				$res = new stdclass();
+				$res->status = 'ok';
+				$res->idFactura = $idFactura;
+				echo json_encode($res); 
+			} else {
+				$res = new stdclass();
+				$res->status = 'error';
+				$res->errors = $errores;
+				echo json_encode($res); 
+			}
         }
 		else
 		{

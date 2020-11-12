@@ -22,6 +22,7 @@
             glosa01:'',
             glosa02:'',
             glosa03:'',
+            msjPrueba:''
 
 
         },
