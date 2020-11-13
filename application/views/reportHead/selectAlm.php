@@ -1,4 +1,4 @@
-<select   class="btn btn-primary btn-sm" id="almacen_filtro" name="almacen_filtro">
+<select   class="btn btn-primary" id="almacen_filtro" name="almacen_filtro">
     <?php if ($grupsOfUser == 'Nacional') : ?>
         <?php foreach ($almacen->result_array() as $fila): ?>
             <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>

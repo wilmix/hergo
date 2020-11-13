@@ -180,6 +180,8 @@
               <li class="reporteFacturas"><a href="<?php echo base_url("reportes/reporteFacturas") ?>">Reporte Facturas</a></li>
               <li class="reportePagos"><a href="<?php echo base_url("reportes/reportePagos") ?>">Reporte Pagos</a></li>
 
+              <li class="FacturaTipoPago"><a href="<?php echo base_url("reports/FacturaTipoPago") ?>">FacturaTipoPago</a></li>
+
 
           <!--
             <li><a href="<?php echo base_url("reportes/movimientosClientes") ?>">Movimientos Item Clientes</a></li>
