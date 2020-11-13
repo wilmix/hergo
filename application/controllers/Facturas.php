@@ -661,7 +661,7 @@ class Facturas extends CI_Controller
 			$moneda = ($this->security->xss_clean($this->input->post('moneda')));
 			$total = ($this->security->xss_clean($this->input->post('total')));
 			$observaciones = ($this->security->xss_clean($this->input->post('observaciones')));
-			$codigoControl = ($this->security->xss_clean($this->input->post('codigoControl')));
+			$tipoPago = ($this->security->xss_clean($this->input->post('tipoPago')));
 			$articulos = ($this->security->xss_clean($this->input->post('tabla')));
 			$articulos = (json_decode($articulos));
 			$errores=[];
@@ -715,6 +715,7 @@ class Facturas extends CI_Controller
 			$factura->moneda = $moneda;
 			$factura->total = $total;
 			$factura->glosa = $observaciones;
+			$factura->tipoPago = $tipoPago;
 			$factura->codigoControl =  ($datosFactura->manual == 1) ? '' : $codigoControlGenerado;
 			$factura->autor=$this->session->userdata('user_id');
         	//$factura->fecha=date('Y-m-d H:i:s'); 

@@ -274,6 +274,7 @@ $(document).on("click", "#guardarFactura", function () {
     let datos = {
         almacen: $("#almacen_filtro").val(),
         tipoFacturacion: $("#tipoFacturacion").val(),
+        tipoPago: $("#tipoPago").val(),
         numFacManual: $("#numFacManual").val(),
         fechaFac: $("#fechaFactura").val(),
         moneda: $("#moneda").val(),
