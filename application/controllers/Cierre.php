@@ -104,7 +104,7 @@ class Cierre extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-			$gestion = 2019;
+			$gestion = $this->Cierre_model->gestionActual()->row()->gestionActual;
         	$res=$this->Cierre_model->showPendientes($gestion);
 			$res=$res->result_array();
 			echo json_encode($res);
@@ -118,7 +118,6 @@ class Cierre extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-			$gestion = 2019;
         	$res=$this->Cierre_model->showNegativos();
 			$res=$res->result_array();
 			echo json_encode($res);
