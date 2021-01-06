@@ -55,10 +55,10 @@ window.operateEvents = {
         console.log(actualYear);
         ingresoYear = moment(row.fechamov).format('YYYY')
         console.log(ingresoYear);
-        /*if (actualYear != ingresoYear) {
+        if (actualYear != ingresoYear) {
             swal("Error", "No se puede modificar. El movimiento no es de la gestiòn actual", "error")
             return false
-        }*/
+        }
         almForm = row.idAlmacen
         almUser = $('#idAlmacenUsuario').val()
         isAdmin = $('#isAdmin').val()
