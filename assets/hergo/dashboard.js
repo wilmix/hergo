@@ -388,7 +388,7 @@ $(document).on("change", "#almacen_filtro", function () {
 })
 function showNegatives() {
   console.log('negatives');
-  ges = '2020'
+  ges = '2021'
   alm = $("#almacen_filtro").val()
 
   $('#negatives').DataTable({
@@ -402,7 +402,7 @@ function showNegatives() {
                       a:alm
                   },
       },
-      
+
       //"serverSide": true,
       responsive: true,
       destroy: true,
