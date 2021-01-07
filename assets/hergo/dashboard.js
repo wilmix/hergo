@@ -384,7 +384,7 @@ $(document).on("change", "#almacen_filtro", function () {
 
 function showNegatives() {
   console.log('negatives2');
-  ges = '2020'
+  ges = '2021'
   alm = $("#almacen_filtro").val()
 	$.ajax({
       url :  base_url('index.php/Principal/negatives'),
