@@ -19,7 +19,7 @@ function numberCoin (data, type, row){
 }
 
 let today = moment().subtract(0, 'month').startOf('day').format('YYYY-MM-DD')
-let yearAgo = moment().subtract(11, 'month').startOf('month').format('YYYY-MM-DD')
+let yearAgo = moment().subtract(12, 'month').startOf('month').format('YYYY-MM-DD')
 
 function ventasChart(meses, alm1, alm2, alm3,totalMes) {
     var ctx = document.getElementById('ventas').getContext('2d');
@@ -178,14 +178,9 @@ function getInfoHoy() {
       i: ini,
     }, 
   }).done(function (res) {
-    //console.log(res)
-    let lpNeg = res[0].cant
-    let ptsNeg = res[1].cant
-    let sczNeg = res[2].cant
+
     let lpAct = res[3].cant
-    let ptsAct = res[4].cant
-    let sczAct = res[5].cant
-    $("#negativos").text(lpNeg)
+
     $("#activos").text(lpAct)
 
   }).fail(function (jqxhr, textStatus, error) {
@@ -386,128 +381,139 @@ function newTable() {
 $(document).on("change", "#almacen_filtro", function () {
   showNegatives()
 })
+
 function showNegatives() {
-  console.log('negatives');
-  ges = '2021'
+  console.log('negatives2');
+  ges = '2020'
   alm = $("#almacen_filtro").val()
-
-  $('#negatives').DataTable({
-      "ajax":{
-              url :  base_url('index.php/Principal/negatives'),
-              type : 'POST',
-              "dataSrc": "",
-              dataType: "json",
-              data: {
-                      g:ges,
-                      a:alm
-                  },
-      },
-
-      //"serverSide": true,
+	$.ajax({
+      url :  base_url('index.php/Principal/negatives'),
+      type : 'POST',
+      "dataSrc": "",
+      dataType: "json",
+      data: {
+              g:ges,
+              a:alm
+        },
+	}).done(function (res) {
+    $("#negativos").text(res.length)
+		table = $('#negatives').DataTable({
+			data: res,
       responsive: true,
       destroy: true,
       dom: 'Bfrtip',
       pageLength: 5,
       stateSave: true,
       order: [],
-          columns: [
-          { 
-              data: 'lineaS',
-              title: 'Linea',
-              visible: false
-          }, 
-          { 
-              data: 'linea',
-              title: 'linea',
-          },
-          { 
-              data: 'codigo',
-              title: 'Codigo',
+			columns: [
+        { 
+            data: 'lineaS',
+            title: 'Linea',
+            visible: false
+        }, 
+        { 
+            data: 'linea',
+            title: 'linea',
+        },
+        { 
+            data: 'codigo',
+            title: 'Codigo',
 
-          },
-          { 
-            data: 'descp',
-            title: 'Descripción',
+        },
+        { 
+          data: 'descp',
+          title: 'Descripción',
 
-          },
-          { 
-            data: 'cantidadSaldo',
-            title: 'Saldo',
+        },
+        { 
+          data: 'cantidadSaldo',
+          title: 'Saldo',
 
-          },
+        },
 
 
 
       ],
-      buttons: [
+			stateSave: true,
+			stateSaveParams: function (settings, data) {
+				data.order = []
+			},
+			buttons: [
           
           
-          {
-              extend: 'copy',
-              text: '<i class="fas fa-copy" style="font-size:18px;"> </i>',
-              titleAttr: 'Copiar',
-              header : false,
-              title : null,
-              exportOptions: {
-                  columns: [':visible' ],
-                  title: null,
-                  modifier: {
-                  order: 'current',
-                  }
-              }
-          },
-          {
-              extend: 'excel',
-              text: '<i class="fas fa-file-excel" aria-hidden="true" style="font-size:18px;"> </i>',
-              titleAttr: 'Exportar a Excel',
-              autoFilter: true,
-              //messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
-              title: 'Negativos',
-              exportOptions: {
-                  columns: ':visible'
-              },
-          },
-          {
-              extend: 'pdf',
-              titleAttr: 'Exportar PDF',
-              title: 'Negativos',
-              text: '<i class="fas fa-print" aria-hidden="true" style="font-size:18px;"></i>',
-          },
-          {
-              text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
-              titleAttr: 'Recargar',
-              action: function ( e, dt, node, config ) {
-                showNegatives()
-              }
-          },
-          {
-              extend: 'collection',
-              text: '<i class="fa fa-cogs" aria-hidden="true" style="font-size:18px;"></i>',
-              titleAttr: 'Configuracion',
-              autoClose: true,
-              buttons: [
-                  'pageLength',
-                  {
-                      extend: 'colvis',
-                      text: '<i class="fas fa-eye" aria-hidden="true"> Ver/Ocultar</i>',
-                      collectionLayout: 'fixed two-column',
-                      postfixButtons: [ 'colvisRestore' ]
-                  },
-                  {
-                      text: '<i class="fas fa-redo" aria-hidden="true"> Reestablecer</i>',
-                      className: 'btn btn-link',
-                      action: function ( e, dt, node, config ) {
-                          this.state.clear()
-                          showNegatives()
-                      }
-                  },
+        {
+            extend: 'copy',
+            text: '<i class="fas fa-copy" style="font-size:18px;"> </i>',
+            titleAttr: 'Copiar',
+            header : false,
+            title : null,
+            exportOptions: {
+                columns: [':visible' ],
+                title: null,
+                modifier: {
+                order: 'current',
+                }
+            }
+        },
+        {
+            extend: 'excel',
+            text: '<i class="fas fa-file-excel" aria-hidden="true" style="font-size:18px;"> </i>',
+            titleAttr: 'Exportar a Excel',
+            autoFilter: true,
+            //messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
+            title: 'Negativos',
+            exportOptions: {
+                columns: ':visible'
+            },
+        },
+        {
+            extend: 'pdf',
+            titleAttr: 'Exportar PDF',
+            title: 'Negativos',
+            text: '<i class="fas fa-print" aria-hidden="true" style="font-size:18px;"></i>',
+        },
+        {
+            text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
+            titleAttr: 'Recargar',
+            action: function ( e, dt, node, config ) {
+              showNegatives()
+            }
+        },
+        {
+            extend: 'collection',
+            text: '<i class="fa fa-cogs" aria-hidden="true" style="font-size:18px;"></i>',
+            titleAttr: 'Configuracion',
+            autoClose: true,
+            buttons: [
+                'pageLength',
+                {
+                    extend: 'colvis',
+                    text: '<i class="fas fa-eye" aria-hidden="true"> Ver/Ocultar</i>',
+                    collectionLayout: 'fixed two-column',
+                    postfixButtons: [ 'colvisRestore' ]
+                },
+                {
+                    text: '<i class="fas fa-redo" aria-hidden="true"> Reestablecer</i>',
+                    className: 'btn btn-link',
+                    action: function ( e, dt, node, config ) {
+                        this.state.clear()
+                        showNegatives()
+                    }
+                },
 
-              ]
-          },
-          
-          
+            ]
+        },
+        
+        
       ],
-      language: {
+			order: [],
+			fixedHeader: {
+				header: true,
+				footer: true
+			},
+			//paging: false,
+			//responsive: true,
+			language: {
         buttons: {
 
             colvisRestore: "Restaurar",
@@ -539,8 +545,11 @@ function showNegatives() {
             "next": "Siguiente",
             "previous": "Anterior"
         },
-    },
+      },
 
-   }); 
+		});
+	}).fail(function (jqxhr, textStatus, error) {
+		let err = textStatus + ", " + error;
+		console.log("Request Failed: " + err);
+	});
 }
-
