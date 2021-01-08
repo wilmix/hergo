@@ -33,26 +33,31 @@ class Cliente_model extends CI_Model
 	public function agregarcliente_model($id,$tipo_doc,$carnet,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website)
 	{
 		$autor=$this->session->userdata('user_id');
-		$fecha = date('Y-m-d H:i:s');
 		$nit = $carnet;
 
 		$prueba = $this->getClientByNIT($nit);
-		if ($prueba == false || $prueba == '99001') {
+		if ($prueba == '99001') {
 			$sql="INSERT INTO clientes (idDocumentoTipo, documento, nombreCliente, idClientetipo, direccion, telefono, fax, email, web, autor, fecha) 
 			VALUES('$tipo_doc','$carnet','$nombre_cliente','$clientetipo','$direccion','$phone','$fax','$email','$website' ,'$autor',NOW())";
 			$query=$this->db->query($sql);
-			return true;
+			return $query;
 		} else {
 			return $prueba;
 		}
 	}
 	public function editarCliente_model($id,$tipo_doc,$carnet,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website)
 	{
+		$prueba = $this->getClientByNIT($carnet);
+		if ($prueba == '99001') {
 		$autor=$this->session->userdata('user_id');
-		$fecha = date('Y-m-d H:i:s');
-		$sql="UPDATE clientes SET idDocumentoTipo='$tipo_doc', documento='$carnet', nombreCliente=UPPER('$nombre_cliente'), idClientetipo='$clientetipo', 
-		direccion='$direccion', telefono='$phone', fax='$fax', email='$email', web='$website', autor='$autor', fecha=NOW() WHERE idCliente=$id";
-		$query=$this->db->query($sql);		
+			$sql="UPDATE clientes SET idDocumentoTipo='$tipo_doc', documento='$carnet', nombreCliente=UPPER('$nombre_cliente'), idClientetipo='$clientetipo', 
+			direccion='$direccion', telefono='$phone', fax='$fax', email='$email', web='$website', autor='$autor', fecha=NOW() WHERE idCliente=$id";
+			$query=$this->db->query($sql);	
+			return $query;	
+		}else {
+			return $prueba;
+		}
+		
 	}
 	public function obtenerCliente($id)
 	{
