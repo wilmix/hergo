@@ -74,7 +74,7 @@ $(document).ready(function () {
                     if (returndata=='true') {
                         $('#modalcliente').modal('hide');
                         resetForm('#form_clientes')
-                        retornarTablaClientes()
+                        //retornarTablaClientes()
                         swal(
                             'Cliente Registrado',
                             '',
