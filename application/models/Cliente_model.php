@@ -36,7 +36,7 @@ class Cliente_model extends CI_Model
 		$nit = $carnet;
 
 		$prueba = $this->getClientByNIT($nit);
-		if ($prueba == '99001') {
+		if ($prueba == false) {
 			$sql="INSERT INTO clientes (idDocumentoTipo, documento, nombreCliente, idClientetipo, direccion, telefono, fax, email, web, autor, fecha) 
 			VALUES('$tipo_doc','$carnet','$nombre_cliente','$clientetipo','$direccion','$phone','$fax','$email','$website' ,'$autor',NOW())";
 			$query=$this->db->query($sql);
@@ -88,7 +88,7 @@ class Cliente_model extends CI_Model
 		if($query->num_rows()>0)
         {
 			if ($nit == 99001) {
-				return $nit;
+				return false;
 			} else {
 				$fila=$query->row();
 				return $fila;
