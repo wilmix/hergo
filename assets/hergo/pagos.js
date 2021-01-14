@@ -118,7 +118,7 @@ function retornarTablaPagos()
                     },
                     {   
                         field: 'fechaPago',            
-                        title: 'Fecha',
+                        title: 'Fecha Pago',
                         visible:true,
                         sortable:true,
                         formatter: formato_fecha_corta,
@@ -198,7 +198,7 @@ function retornarTablaPagos()
                     },
                     {   
                         field: 'fecha',            
-                        title: 'Fecha',
+                        title: 'Fecha Registro',
                         visible:false,
                         sortable:true,
                         searchable: false,

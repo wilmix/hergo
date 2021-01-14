@@ -124,9 +124,7 @@ class Clientes extends CI_Controller
         	$fax = addslashes($this->security->xss_clean($this->input->post('fax')));
         	$email = addslashes($this->security->xss_clean($this->input->post('email')));
         	$website = addslashes($this->security->xss_clean($this->input->post('website')));
-        
-        	      
-        	
+       	
         	if($id=="")//es nuevo, agregar
         	{
         		
@@ -135,7 +133,7 @@ class Clientes extends CI_Controller
         	else //existe, editar
         	{
         		
-        		$result = $this->Cliente_model->editarCliente_model($id,$tipo_doc,trim($carnet),trim(strtoupper($nombre_cliente)),$clientetipo,strtoupper($direccion),$phone,$fax,$email,$website);
+        		$result = $this->Cliente_model->editarCliente_model($id,$tipo_doc,trim(strtoupper($nombre_cliente)),$clientetipo,strtoupper($direccion),$phone,$fax,$email,$website);
         	}
         }
         echo json_encode($result);

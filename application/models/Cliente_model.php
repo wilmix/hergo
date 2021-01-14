@@ -45,19 +45,13 @@ class Cliente_model extends CI_Model
 			return $prueba;
 		}
 	}
-	public function editarCliente_model($id,$tipo_doc,$carnet,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website)
+	public function editarCliente_model($id,$tipo_doc,$nombre_cliente,$clientetipo,$direccion,$phone,$fax,$email,$website)
 	{
-		$prueba = $this->getClientByNIT($carnet);
-		if ($prueba == '99001') {
-		$autor=$this->session->userdata('user_id');
-			$sql="UPDATE clientes SET idDocumentoTipo='$tipo_doc', documento='$carnet', nombreCliente=UPPER('$nombre_cliente'), idClientetipo='$clientetipo', 
+			$autor=$this->session->userdata('user_id');
+			$sql="UPDATE clientes SET idDocumentoTipo='$tipo_doc',  nombreCliente=UPPER('$nombre_cliente'), idClientetipo='$clientetipo', 
 			direccion='$direccion', telefono='$phone', fax='$fax', email='$email', web='$website', autor='$autor', fecha=NOW() WHERE idCliente=$id";
 			$query=$this->db->query($sql);	
 			return $query;	
-		}else {
-			return $prueba;
-		}
-		
 	}
 	public function obtenerCliente($id)
 	{

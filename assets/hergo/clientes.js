@@ -107,6 +107,7 @@
         });
 });
 $(document).on("click","#botonmodalcliente",function(){
+    $("#carnet").prop('disabled', false);
     resetForm('#form_clientes')
     
     $(".modal-title").html("Agregar Cliente")
@@ -124,6 +125,7 @@ function mostrarModal(fila)
     $("#id_cliente").val(fila.idCliente)
     $(".modal-title").html("Editar Cliente")
     asignarselect(fila.documentotipo,"#tipo_doc")
+    $("#carnet").prop('disabled', true);
     $("#carnet").val(fila.documento)
     $("#nombre_cliente").val(fila.nombreCliente)
     asignarselect(fila.clientetipo,"#clientetipo")
