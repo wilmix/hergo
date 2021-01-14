@@ -454,7 +454,7 @@ class Pedidos_model extends CI_Model
                        GROUP BY pit.`idPedido`
                    )pid
           ON pid.idPedido = p.`id`
-        WHERE oc.`fecha` BETWEEN '$ini' AND '$fin'
+        WHERE p.`recepcion` BETWEEN '$ini' AND '$fin'
         HAVING
             CASE
                 WHEN '$filter' = 'pendientes' THEN pit.`status` = 0
@@ -497,5 +497,40 @@ class Pedidos_model extends CI_Model
             
             return true;
         }
+    }
+    public function getFacturaTipoPago($alm, $ini, $fin)
+	{ 
+    	$sql="SELECT id, fechaFac, 
+        -- pagada,
+        IF(id IS NULL ,'' ,nFactura) nFactura,
+        IF(id IS NULL ,'' ,cliente) cliente,
+        -- IF(id IS NULL ,'' ,total) total, 
+        SUM(porPagar) porPagar,
+        SUM(efectivo) efectivo,
+        SUM(transf) transf,
+        SUM(cheque) cheque,
+        SUM(otros) otros,
+        IF(id IS NULL ,'' ,CONCAT('[',GROUP_CONCAT(DISTINCT '{','\"id\":',id,',', '\"n\":',nFactura,'}' ORDER BY nFactura ASC SEPARATOR ','),']')) AS facturaJson 
+        FROM
+        (
+        SELECT 		f.`idFactura` id,f.`fechaFac`,  f.`nFactura`, f.`total`, f.pagada, c.`nombreCliente` cliente,
+                (CASE WHEN f.`tipoPago`=0 THEN f.`total` ELSE 0 END ) AS porPagar,
+                (CASE WHEN f.`tipoPago`=1 THEN f.`total` ELSE 0 END ) AS efectivo,
+                (CASE WHEN f.`tipoPago`=2 THEN f.`total` ELSE 0 END ) AS transf,
+                (CASE WHEN f.`tipoPago`=3 THEN f.`total` ELSE 0 END ) AS cheque,
+                (CASE WHEN f.`tipoPago`=4 THEN f.`total` ELSE 0 END ) AS otros
+        
+        FROM factura f
+        INNER JOIN clientes c ON c.`idCliente` = f.`cliente`
+        WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin'
+        AND f.`almacen` = $alm
+        GROUP BY f.`idFactura`
+        ORDER BY f.`idFactura` DESC
+        )tb
+        GROUP BY fechaFac, id WITH ROLLUP 
+        ";
+
+        $query=$this->db->query($sql);	
+		return $query->result_array();
     }
 }
