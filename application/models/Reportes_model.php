@@ -53,7 +53,7 @@ class Reportes_model extends CI_Model
 					INNER JOIN clientes c 
 					ON e.cliente=c.idCliente
 					INNER JOIN users u 
-					ON u.id=e.autor 
+					ON u.id=e.vendedor 
 					INNER JOIN almacenes a 
 					ON a.idalmacen=e.almacen 
 					INNER JOIN moneda m 
@@ -849,7 +849,7 @@ class Reportes_model extends CI_Model
 		fecha, 
 		fechamov, 
 		nmov,  
-		descripcion, 
+		descripcion,
 		uni, 
 		mon, 
 		SUM(cantidad) cantidad,
