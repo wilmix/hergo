@@ -449,7 +449,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->cheque=isset($data->cheque) ? $data->cheque : '';
 			$pago->banco=$data->banco;
 			$pago->transferencia = strtoupper($data->transferencia);
-			$pago->gestion = $gestion;
+			//$pago->gestion = $gestion;
 
 			$editarPago = $this->Pagos_model->editarPago($idPago,$pago,json_decode($data->porPagar));
 
