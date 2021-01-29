@@ -97,7 +97,7 @@ function retornarTablaFacturacion()
             stickyHeaderOffsetY: '50px',
             filter:true,
             showColumns:true,
-            strictSearch: true,
+            strictSearch: false,
             showToggle:true,
             showFooter: true,
             footerStyle: footerStyle,
@@ -113,6 +113,7 @@ function retornarTablaFacturacion()
                 title: 'Tipo',                            
                 visible:true,
                 align: 'center',
+                searchable: false,
                 formatter: tipoDosificacion
             },
 
@@ -161,6 +162,7 @@ function retornarTablaFacturacion()
                 field:'moneda',
                 title:'Moneda',                
                 visible:false,
+                searchable: false,
                 filter: {
                             type: 'select',
                             data: datosselect[3]
@@ -196,6 +198,7 @@ function retornarTablaFacturacion()
                 field:'emisor',
                 title:"Emitido por:",
                 align: 'center',
+                searchable: false,
                 visible:false,
             },
             {
@@ -211,6 +214,7 @@ function retornarTablaFacturacion()
                 title:"Nº Pago",
                 sortable:true,
                 align: 'center',
+                searchable: false,
                 //visible:false,
                 formatter:printPago
             },   
@@ -218,6 +222,7 @@ function retornarTablaFacturacion()
                 field:'pagadaF',
                 title:"Pagado",
                 sortable:true,
+                searchable: false,
                 align: 'center',
                 cellStyle:cellStyle,
                 filter: {
