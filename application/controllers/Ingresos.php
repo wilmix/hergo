@@ -15,7 +15,7 @@ class Ingresos extends CI_Controller
 		$this->load->model("Egresos_model");
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
-		$this->cabeceras_css=array(
+	 	$this->cabeceras_css=array(
 				base_url('assets/bootstrap/css/bootstrap.min.css'),
 				base_url("assets/fa/css/font-awesome.min.css"),
 				base_url("assets/dist/css/AdminLTE.min.css"),
@@ -47,7 +47,7 @@ class Ingresos extends CI_Controller
 				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
 				base_url('assets/plugins/daterangepicker/daterangepicker.js'),
 				base_url('assets/plugins/daterangepicker/locale/es.js')
-			);
+			); 
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
@@ -80,18 +80,18 @@ class Ingresos extends CI_Controller
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
-
+			
 	        /*************DATERANGEPICKER**********/
 	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
 	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
+	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js'); 
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresos.js');
 			/**************INPUT MASK***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js'); 
 			
             $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
             $this->datos['tipoingreso']=$this->Ingresos_model->retornar_tablaMovimiento("+");
@@ -781,6 +781,7 @@ class Ingresos extends CI_Controller
 			$ingreso->tipoDoc = $this->security->xss_clean($this->input->post('tipoDoc'));
 			$ingreso->obs = strtoupper($this->security->xss_clean($this->input->post('obs_imp')));
 			$ingreso->estado = 0;
+			$ingreso->flete = $this->security->xss_clean($this->input->post('flete'));
 			$ingreso->articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
 			
 			$gestionFechaIngreso = date("Y", strtotime($ingreso->fechamov)); 
