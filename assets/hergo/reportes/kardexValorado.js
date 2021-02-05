@@ -59,7 +59,7 @@ function retornarKardex() {
             let codigo = res[i][0]
             let descrip = res[i][1]
             let unidad = res[i][2]
-            let element = res[i][3]
+            let element = res[i][4]
             $("#tablas").append(`   
             <div class="box">
                 <div class="box-header">
