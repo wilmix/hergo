@@ -137,11 +137,12 @@ function retornarTablaPagos()
                             },
                     },
                     {   
-                        field: 'sigla',            
-                        title: 'Moneda',
-                        visible:false,
+                        field: 'banco',            
+                        title: 'Banco',
+                        visible:true,
                         sortable:true,
                         searchable: false,
+                        align: 'center',
                     },
                     {   
                         field: 'totalPago',            
