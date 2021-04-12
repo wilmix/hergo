@@ -195,7 +195,7 @@ $(document).on("click", "#refresh", function () {
 
 function retornarPagosPendientes() //*******************************
 {   
-    ini=iniciofecha.format('YYYY-MM-DD')
+    ini='2010-01-01'
     fin=finfecha.format('YYYY-MM-DD')
     alm=$("#almacen_filtro").val();
     agregarcargando();
