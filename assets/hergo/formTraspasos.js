@@ -242,7 +242,7 @@ function calculocompraslocales(cant, costo) {
 
 function agregarArticulo() //faltaria el id costo; si se guarda en la base primero
 {   
-    let articulo_impTest = $("#articulo_imp").val();
+    let articulo_impTest = $("#articulo_impTest").val();
     let cant = $("#cantidad_ne").inputmask('unmaskedvalue');
     let costo = $("#costo").inputmask('unmaskedvalue');
     let saldoAlmacen = $("#saldo").inputmask('unmaskedvalue');
@@ -257,6 +257,11 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
             addArticulo()
         } else {
             swal({
+                title: "Saldo Insuficiente",
+                html: "No tiene suficiente <b>" + articulo_impTest + "</b> en su almacen.<br>  <b>Ahora ya no se pueden crear negativos en traspasos. </b>",
+                type: 'error',
+              });
+            /* swal({
                 title: 'Saldo Insuficiente',
                 html: "No tiene suficiente <b>" + articulo_impTest + "</b> en su almacen.<br>" + "Desea generar <b>NEGATIVO</b>?",
                 type: 'warning',
@@ -267,8 +272,6 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
                 cancelButtonText: 'No, Cancelar'
             }).then(
                 function (result) {
-                    
-                    
                     swal({
                         type: 'error',
                         html: 'Usted generó un <b>NEGATIVO</b> en ' + articulo_impTest,
@@ -283,7 +286,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
                             'error'
                         )
                     }
-                });
+            }); */
         }
 
     } else {
