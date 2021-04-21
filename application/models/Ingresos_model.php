@@ -297,7 +297,7 @@ class Ingresos_model extends CI_Model
         $sql="SELECT c.`idCliente`, c.`nombreCliente`, c.`documento`
         FROM clientes c     
         where nombreCliente like '%$b%' or documento like '%$b%' ORDER By nombreCliente asc
-        LIMIT 30";
+        LIMIT 50";
         
         $query=$this->db->query($sql);
         return $query;
@@ -552,6 +552,7 @@ class Ingresos_model extends CI_Model
     }
     public function retornarValorTipoCambio($fecha=null)
     {
+        $id='';
         if($id==null)
             $sql="SELECT * from tipocambio ORDER BY id DESC LIMIT 1";
         else
