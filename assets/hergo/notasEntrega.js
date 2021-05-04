@@ -280,9 +280,16 @@ function agregarArticulo() {
     saldoAlmacen = parseFloat((saldoAlmacen == '') ? 0 : saldoAlmacen)
 
     if ((cant) > 0 && (costo) >= 0 && dcto >= 0) {
-        if ((cant) <= (saldoAlmacen) && parseFloat(saldoAlmacen) > 0 || iniCod == 'SR') {
+        if ((cant) <= (saldoAlmacen) && parseFloat(saldoAlmacen) > 0 || iniCod == 'SR' ) {
             addArticuloTable()
-        } else {
+        } else if (iniCod == 'CS') {
+            swal(
+                'Oops...',
+                'No puede generar <b>Negativo</b> en la línea de <b>Señalética</b>, realice el ingreso correspondiente por favor.',
+                'error'
+            )
+        }
+         else {
             swal({
                 title: 'Saldo Insuficiente',
                 html: "No tiene suficiente <b>" + codigoArticulo + "</b> en su almacen.<br>" + "Desea generar <b>NEGATIVO</b>?",
@@ -301,7 +308,7 @@ function agregarArticulo() {
             }, (dismiss) => {
                 swal({
                     type: 'success',
-                    title: 'Gracias por no generar negativos :)',
+                    title: ' no generar negativos :)',
                     showConfirmButton: false,
                     timer: 1500
                 })
