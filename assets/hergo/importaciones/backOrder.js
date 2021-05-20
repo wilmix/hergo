@@ -65,6 +65,11 @@ function getBackOrders() {
 					title: 'DESCRIPCION',
 					className: 'text-left',
                 },
+				{
+					data: 'cantidad',
+					title: 'CANTIDAD',
+					className: 'text-left',
+                },
                 {
 					data: 'formaEnvio',
 					title: 'TRANSP.',

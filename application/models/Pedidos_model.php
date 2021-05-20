@@ -435,6 +435,7 @@ class Pedidos_model extends CI_Model
         pro.`nombreproveedor` proveedor,
         a.`CodigoArticulo` codigo,
         a.`Descripcion` descripcion,
+        pit.cantidad,
         oc.`formaEnvio`,
         oc.`fecha` fechaOrden,
         p.`recepcion` estimada,
