@@ -19,10 +19,13 @@ class Admin_model extends CI_Model
                     a.precioDol,
                     ROUND(a.costo / (0.84 - (a.porcentaje/100)),2) sugerido,
                     a.costo,
-                    a.porcentaje
+                    a.porcentaje,
+                    concat(us.first_name, ' ' , us.last_name) autor,
+                    a.updatedPrecio_at 
                 FROM
                     articulos a
                     inner JOIN unidad u on u.idUnidad = a.idUnidad
+                    left join users us on us.id = a.updatedPrecio_by
                 WHERE
                     a.EnUso = 1
                 ORDER BY a.idArticulos";

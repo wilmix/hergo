@@ -107,6 +107,21 @@ function retornarSaldosActuales() {
                     render: numberDecimal
                 },
 				{
+					data: 'autor',
+					title: 'Autor',
+                    className: 'text-right',
+                    searchable: false,
+					visible:false
+                },
+				{
+					data: 'updatedPrecio_at',
+					title: 'Fecha',
+                    className: 'text-right',
+                    searchable: false,
+					visible:false,
+					render:formato_fecha_corta
+                },
+				{
 					data: null,
 					title: '',
 					width: '120px',

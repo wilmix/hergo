@@ -170,11 +170,19 @@ class Reportes_model extends CI_Model
 	}
 	public function mostrarListaPrecios() 
 	{ //cambiar la consulta
-		$sql="SELECT CodigoArticulo, Descripcion, unidad.Sigla, precio AS Bolivianos, precio/6.96 AS Dolares
-		FROM articulos
-		INNER JOIN unidad ON unidad.idUnidad=articulos.idUnidad
-		ORDER BY CodigoArticulo";
-		
+		$sql="SELECT
+				CodigoArticulo,
+				Descripcion,
+				unidad.Sigla,
+				precio AS Bolivianos,
+				precioDol AS Dolares
+			FROM
+				articulos
+				INNER JOIN unidad ON unidad.idUnidad = articulos.idUnidad
+			WHERE
+				EnUso = 1
+			ORDER BY
+				CodigoArticulo";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
