@@ -16,6 +16,7 @@ class PrecioArticulos extends CI_Controller
 		$this->load->model("Admin_model");
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
+		setlocale(LC_MONETARY, 'es_MX');
 		$this->cabeceras_css=array(
 				base_url('assets/bootstrap/css/bootstrap.min.css'),
 				base_url("assets/fa/css/font-awesome.min.css"),
@@ -137,12 +138,23 @@ class PrecioArticulos extends CI_Controller
 			//echo json_encode($item);die();
 			$id = $this->Admin_model->update($id , $item);
 
+			$info = new stdclass();
+			$info->codigo = $this->input->post('codigo');
+			$info->uni = $this->input->post('uni');
+			$info->descrip = $this->input->post('descrip');
+			$info->precioDol = number_format($this->input->post('precioDolares'));
+			$info->precio = number_format($this->input->post('precioBol'),2);
+			
+			//echo json_encode($info);die();
+			$mail = $this->sendEmail($info);
+
 			if($id)
 			{
 				$res = new stdclass();
 				$res->status = true;
 				$res->id = $id;
 				$res->item = $item;
+				$res->mail = $mail;
 				echo json_encode($res);
 			} else {
 				echo json_encode($id);
@@ -154,14 +166,15 @@ class PrecioArticulos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	public function sendEmail(){
+	public function sendEmail($info){
 		//SMTP & mail configuration
+		$group = array('wmx.seo@gmail.com');
 		$config = array(
 			'protocol'  => 'smtp',
 			'smtp_host' => 'hergo.com.bo',
-			'smtp_port' => 25,
+			'smtp_port' => 587,
 			'smtp_user' => 'willy@hergo.com.bo',
-			'smtp_pass' => 'hergoCWS1',
+			'smtp_pass' => '*hergoCWS1*',
 			'mailtype'  => 'html',
 			'charset'   => 'utf-8'
 		);
@@ -170,17 +183,20 @@ class PrecioArticulos extends CI_Controller
 		$this->email->set_newline("rn");
 
 		//Email content
-		$htmlContent = '<h1>Sending email via SMTP server</h1>';
-		$htmlContent .= '<p>This email has sent via SMTP server from application by Willy.</p>';
+		$htmlContent = "<h1>Cambio de precio {$info->codigo} </h1>";
+		$htmlContent .= "<p>El precio del artículo <b>{$info->codigo} | {$info->uni} | {$info->descrip}</b>
+						 cambió de precio a <b>{$info->precio}</b> bolivianos.</p>
+						 <p>Saludos...</p>";
 
-		$this->email->to('wmx.seo@gmail.com');
+		$this->email->to($group);
+		//$this->email->cc('willy.salas@hotmail.com'); 
 		$this->email->from('willy@hergo.com.bo','Willy Salas');
-		$this->email->subject('Email send via SMTP server by Willy');
+		$this->email->subject("CAMBIO DE PRECIO {$info->codigo}");
 		$this->email->message($htmlContent);
 
 		//Send email
-		$emailSend = ($this->email->send()) ? 'Correo Enviado' : 'No se pudo enviar el correo';
-		echo $emailSend;
+		$emailSend = ($this->email->send()) ? 'Correo Enviado' : $this->email->print_debugger();
+		return $emailSend;
 	}
 
 }
