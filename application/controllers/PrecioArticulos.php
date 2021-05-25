@@ -84,7 +84,7 @@ class PrecioArticulos extends CI_Controller
 	
 	public function index()
 	{
-		//$this->libacceso->acceso(15);
+		$this->libacceso->acceso(66);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 			$this->datos['menu']="Precio";
@@ -146,7 +146,7 @@ class PrecioArticulos extends CI_Controller
 			$info->precio = number_format($this->input->post('precioBol'),2);
 			
 			//echo json_encode($info);die();
-			$mail = $this->sendEmail($info);
+			//$mail = $this->sendEmail($info);
 
 			if($id)
 			{
@@ -154,7 +154,7 @@ class PrecioArticulos extends CI_Controller
 				$res->status = true;
 				$res->id = $id;
 				$res->item = $item;
-				$res->mail = $mail;
+				//$res->mail = $mail;
 				echo json_encode($res);
 			} else {
 				echo json_encode($id);
