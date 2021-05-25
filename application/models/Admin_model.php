@@ -47,5 +47,17 @@ class Admin_model extends CI_Model
             return $id;
         }
     }
+    public function smtpConfig()
+	{
+		$sql="  SELECT
+                    *
+                FROM
+                    smtp
+                ";
+		
+		$query=$this->db->query($sql);		
+		return $query;
+	}
+    
 
 }

@@ -167,22 +167,12 @@ class PrecioArticulos extends CI_Controller
 		}
 	}
 	public function sendEmail($info){
-		//SMTP & mail configuration
 		$group = array('wmx.seo@gmail.com');
-		$config = array(
-			'protocol'  => 'smtp',
-			'smtp_host' => 'hergo.com.bo',
-			'smtp_port' => 587,
-			'smtp_user' => 'willy@hergo.com.bo',
-			'smtp_pass' => '*hergoCWS1*',
-			'mailtype'  => 'html',
-			'charset'   => 'utf-8'
-		);
+		$config = $this->Admin_model->smtpConfig()->row_array();
 		$this->email->initialize($config);
 		$this->email->set_mailtype("html");
 		$this->email->set_newline("rn");
 
-		//Email content
 		$htmlContent = "<h1>Cambio de precio {$info->codigo} </h1>";
 		$htmlContent .= "<p>El precio del artículo <b>{$info->codigo} | {$info->uni} | {$info->descrip}</b>
 						 cambió de precio a <b>{$info->precio}</b> bolivianos.</p>
@@ -190,13 +180,39 @@ class PrecioArticulos extends CI_Controller
 
 		$this->email->to($group);
 		//$this->email->cc('willy.salas@hotmail.com'); 
-		$this->email->from('willy@hergo.com.bo','Willy Salas');
+		$this->email->from($config['smtp_user'],'Willy Salas');
 		$this->email->subject("CAMBIO DE PRECIO {$info->codigo}");
 		$this->email->message($htmlContent);
 
 		//Send email
 		$emailSend = ($this->email->send()) ? 'Correo Enviado' : $this->email->print_debugger();
 		return $emailSend;
+	}
+
+	public function sendEmailPrueba(){
+		//SMTP & mail configuration
+		$group = array('wmx.seo@gmail.com');
+		$config = $this->Admin_model->smtpConfig()->row_array();
+		//print_r($config['smtp_user']); die();
+		$this->email->initialize($config);
+		$this->email->set_mailtype("html");
+		$this->email->set_newline("rn");
+
+		//Email content
+		$htmlContent = "<h1>Cambio de precio  </h1>";
+		$htmlContent .= "<p>El precio del artículo <b></b>
+						 cambió de precio a <b></b> bolivianos.</p>
+						 <p>Saludos...</p>";
+
+		$this->email->to($group);
+		//$this->email->cc('willy.salas@hotmail.com'); 
+		$this->email->from($config['smtp_user'],'Willy Salas');
+		$this->email->subject("CAMBIO DE PRECIO");
+		$this->email->message($htmlContent);
+
+		//Send email
+		$emailSend = ($this->email->send()) ? 'Correo Enviado' : $this->email->print_debugger();
+		echo $emailSend;
 	}
 
 }
