@@ -76,6 +76,7 @@ const app = new Vue({
     methods: {
       store(e){
         agregarcargando()
+        this.editRow()
         e.preventDefault()
         if (!this.cliente || !this.items.length>0) {
           quitarcargando()

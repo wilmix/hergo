@@ -156,9 +156,9 @@
                   <th>Descripción</th>
                   <th class="text-left">Marca</th>
                   <th>Unidad</th>
-                  <th class="bg-info text-center">Cantidad</th>
-                  <th class="bg-info text-center">Precio</th>
-                  <th class="bg-info text-center">Total</th>
+                  <th class="bg-info text-right">Cantidad</th>
+                  <th class="bg-info text-right">Precio</th>
+                  <th class="bg-info text-right">Total</th>
                   <th class="bg-info text-center" colspan="2">
                     <button v-if="items.length>0" type="button" class="btn btn-default" aria-label="Right Align" @click="editRow()">
                       <span class="fa fa-pencil" aria-hidden="true"></span>
@@ -173,18 +173,20 @@
                     <img :src="item.url_img" class="card-img img-responsive center-block" width="50" height="50" style="background: #CEE6F5;border-radius: 10px;" >
                   </td>
                   <div>
-                    <td v-if="edit" class="text-left"> <input type="text" class="form-control input-sm" v-model="item.descrip"></td>
-                    <td v-else class="text-left">{{ item.descrip }}</td>
+                    <td v-if="edit" class="text-left"> 
+                      <textarea type="text" class="form-control input-sm" v-model="item.descrip" v-on:keyup.enter="editRow"></textarea>
+                    </td>
+                    <td v-else @dblclick="editRow()" class="text-left">{{ item.descrip }}</td>
                   </div>
                   <td class="text-left">{{ item.marca }}</td>
                   <td class="text-center">{{ item.uni }}</td>
                   <div>
-                    <td v-if="edit" class="text-right"> <input type="number" class="form-control input-sm text-right" v-model="item.cantidad"></td>
-                    <td v-else class="text-right">{{ item.cantidad | moneda}}</td>
+                    <td v-if="edit" class="text-right"> <input type="number" class="form-control input-sm text-right" v-model="item.cantidad" v-on:keyup.enter="editRow"></td>
+                    <td v-else @dblclick="editRow()" class="text-right">{{ item.cantidad | moneda}}</td>
                   </div>
                   <div>
-                  <td v-if="edit" class="text-right"> <input type="number" class="form-control input-sm text-right" v-model="item.precioLista"></td>
-                    <td v-else class="text-right">{{ item.precioLista | moneda}}</td>
+                  <td v-if="edit" class="text-right"> <input type="number" class="form-control input-sm text-right" v-model="item.precioLista" v-on:keyup.enter="editRow"></td>
+                    <td v-else @dblclick="editRow()" class="text-right">{{ item.precioLista | moneda}}</td>
                   </div>
                   <td class="text-right">{{ (item.cantidad * item.precioLista) | moneda}}</td>
                   <td>
