@@ -27,6 +27,7 @@ const app = new Vue({
             { moneda: 'BOLIVIANOS', value: '1' },
             { moneda: 'DOLARES', value: '2' },
         ],
+        edit:false,
         tipoCambio: parseFloat(document.getElementById("mostrarTipoCambio").textContent),
         /* articulo */
         selectedArticulo:null,
@@ -111,6 +112,7 @@ const app = new Vue({
           this.selectedArticulo.precioDOL = this.precioDol
           this.selectedArticulo.url_img = this.url_img
           this.selectedArticulo.marca = this.marca
+          this.selectedArticulo.linea = this.linea
           this.selectedArticulo.descrip = this.descripcion
           this.items.push(this.selectedArticulo)
           app.cleanCard()
@@ -127,10 +129,12 @@ const app = new Vue({
       },
       total(){
         if (this.items.length>0) {
+          this.items.map(function (item,index,array) {
+            item.total = item.cantidad * item.precioLista
+          })
           this.totalDoc = this.items.map((item, index, array) => parseFloat(item.total)).reduce( (a,b)=> a+b) 
           this.descuento = this.totalDoc * this.porcentajeDescuento /100
           this.totalFin = this.totalDoc - this.descuento
-          //return this.totalFin 
         }
       },
       customFormatter(date) {
@@ -165,6 +169,7 @@ const app = new Vue({
         this.descripcion = selected.descrip
         this.unidad = selected.uni
         this.marca = selected.marca
+        this.linea = selected.linea
         this.saldo = selected.saldo
         this.precio = selected.precio
         this.saldo = selected.saldo
@@ -201,6 +206,15 @@ const app = new Vue({
       deleteRow:function(item){
         this.items.splice(item,1);
         this.total()
+      },
+      editRow(){
+        if (this.edit === true) {
+          this.total()
+          this.edit = false
+        } else {
+          this.edit = true
+        }
+
       },
       onSearchCliente(search, loading) {
         loading(true)

@@ -98,10 +98,10 @@
                   <div class="col-md-6 col-sm-5 col-lg-7">
                     <div class="card-body" v-show="selectedArticulo">
                       <blockquote>
-                      <h4 class="font-weight-bold" v-text="codigo"></h4>
+                      <h4> <b>{{codigo}}</b> </h4>
                         <p class="card-text" v-html="descripcion + ' - ' + unidad 
-                                                    + '<br>' +'MARCA: ' + marca
-                                                    + '<br>' +'LINEA: ' + linea"> 
+                                                    + '<br> <b>' +'MARCA: ' + '</b>' + marca
+                                                    + '<br> <b>' +'LINEA: ' + '</b>' + linea"> 
                         </p>
                       </blockquote>
                     </div>
@@ -125,8 +125,6 @@
           <div class="row">
             <!-- vacio -->
             <div class="form-group col-sm-0 col-md-6">
-              <label for="cantidad">Descripción:</label>
-              <input type="text" style="text-align:right;" class="form-control" v-model="descripcion">
             </div>
             <!-- cantidad -->
             <div class="form-group col-sm-4 col-md-2">
@@ -156,12 +154,15 @@
                   <th>Código</th>
                   <th>Imagen</th>
                   <th>Descripción</th>
-                  <th>Marca</th>
+                  <th class="text-left">Marca</th>
                   <th>Unidad</th>
                   <th class="bg-info text-center">Cantidad</th>
                   <th class="bg-info text-center">Precio</th>
                   <th class="bg-info text-center">Total</th>
-                  <th class="bg-info text-center" colspan="2">&nbsp;</th>
+                  <th class="bg-info text-center" colspan="2">
+                    <button v-if="items.length>0" type="button" class="btn btn-default" aria-label="Right Align" @click="editRow()">
+                      <span class="fa fa-pencil" aria-hidden="true"></span>
+                    </button></th>
                 </tr>
               </thead>
               <tbody>
@@ -171,11 +172,20 @@
                   <td class="text-center">
                     <img :src="item.url_img" class="card-img img-responsive center-block" width="50" height="50" style="background: #CEE6F5;border-radius: 10px;" >
                   </td>
-                  <td> {{ item.descrip }} </td>
-                  <td class="text-center">{{ item.marca }}</td>
+                  <div>
+                    <td v-if="edit" class="text-left"> <input type="text" class="form-control input-sm" v-model="item.descrip"></td>
+                    <td v-else class="text-left">{{ item.descrip }}</td>
+                  </div>
+                  <td class="text-left">{{ item.marca }}</td>
                   <td class="text-center">{{ item.uni }}</td>
-                  <td class="text-right">{{ item.cantidad | moneda}}</td>
-                  <td class="text-right">{{ item.precioLista | moneda}}</td>
+                  <div>
+                    <td v-if="edit" class="text-right"> <input type="number" class="form-control input-sm text-right" v-model="item.cantidad"></td>
+                    <td v-else class="text-right">{{ item.cantidad | moneda}}</td>
+                  </div>
+                  <div>
+                  <td v-if="edit" class="text-right"> <input type="number" class="form-control input-sm text-right" v-model="item.precioLista"></td>
+                    <td v-else class="text-right">{{ item.precioLista | moneda}}</td>
+                  </div>
                   <td class="text-right">{{ (item.cantidad * item.precioLista) | moneda}}</td>
                   <td>
                     <button type="button" class="btn btn-default" aria-label="Right Align" @click="deleteRow(key)">
