@@ -8,6 +8,37 @@ class Proforma_model extends CI_Model
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
 	}
+    public function getProformas($ini, $fin, $alm)
+	{ 
+    	$sql="  SELECT
+                    p.id,
+                    a.almacen,
+                    p.fecha,
+                    p.num,
+                    c.nombreCliente,
+                    m.sigla,
+                    p.condicionesPago,
+                    p.validezOferta,
+                    p.lugarEntrega,
+                    p.total,
+                    p.porcentajeDescuento,
+                    concat(u.first_name, ' ', u.last_name) autor,
+                    u.email,
+                    p.created_at
+                FROM
+                    proforma p
+                    INNER JOIN almacenes a ON a.idalmacen = p.almacen
+                    INNER JOIN clientes c on c.idCliente = p.cliente
+                    inner join moneda m on m.id = p.moneda
+                    inner join users u on u.id = p.autor
+                WHERE
+                    p.fecha BETWEEN '$ini' and '$fin'
+                    and p.almacen = '$alm'
+            ";
+
+        $query=$this->db->query($sql);	
+		return $query->result_array();
+    }
 
 
     public function storeProforma($id, $proforma)
@@ -54,14 +85,15 @@ class Proforma_model extends CI_Model
     
 
 
-    public function getNumMov($gestion)
+    public function getNumMov($gestion,$alm)
     {
         $sql="  SELECT
                     p.num + 1 AS numDoc
                 FROM
                     proforma p
                 WHERE
-                    YEAR(p.fecha) = $gestion
+                    YEAR(p.fecha) = '$gestion'
+                    AND p.almacen = '$alm'
                 ORDER BY
                     p.num DESC
                 LIMIT 1";
@@ -70,17 +102,7 @@ class Proforma_model extends CI_Model
 		
 		return $numDoc->row() ? $numDoc->row()->numDoc : 1;
     }
-    public function getNumMovOrden($gestion)
-    {
-        $sql="SELECT oc.`n`+1 AS numDoc
-		FROM ordenescompra oc
-		WHERE YEAR(oc.fecha) = '$gestion'
-		ORDER BY oc.n DESC LIMIT 1";
-        
-		$numDoc=$this->db->query($sql);
-		
-		return $numDoc->row() ? $numDoc->row()->numDoc : 1;
-    }
+
     public function searchItem($item,$alm)
     {
 		$sql="  SELECT

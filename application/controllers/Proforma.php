@@ -98,34 +98,42 @@ class Proforma extends CI_Controller
 	
 	public function index()
 	{
-		$this->libacceso->acceso(15);
+		//$this->libacceso->acceso(57);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
-			$this->datos['menu']="Egresos";
-			$this->datos['opcion']="Consultas Egresos";
-			$this->datos['titulo']="Egresos";
+			$this->datos['menu']="ProFormas";
+			$this->datos['opcion']="Consultas";
+			$this->datos['titulo']="ConsultaProforma";
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/egresos.js');
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			$this->datos['tipoPrefer']="7";
-            
-            $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-			$this->datos['tipoingreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
+			$this->datos['foot_script']= $this->foot_script;
 			
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['foot_script'][]=base_url('assets/hergo/proforma/proformas.js');
+		
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('egresos/egresos.php',$this->datos);
+			$this->load->view('proforma/consultaProformas.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
 			$this->load->view('plantilla/footer.php',$this->datos);
-			
+			$this->load->view('plantilla/footerscript.php',$this->datos);
+	}
+	public function getProformas()  
+	{
+		if($this->input->is_ajax_request())
+        {
+        	$ini=$this->security->xss_clean($this->input->post("ini"));
+        	$fin=$this->security->xss_clean($this->input->post("fin"));
+			$alm= $this->input->post("alm");
+			$res=$this->Proforma_model->getProformas($ini, $fin, $alm); 
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
 	}
 	public function formProforma()
 	{
@@ -199,9 +207,9 @@ class Proforma extends CI_Controller
 			$id = $this->input->post('id');
 			$gestion = date("Y", strtotime($this->input->post('fecha')));
 			$proforma = new stdclass();
-			$proforma->num = $id ? $this->input->post('n') : $this->Proforma_model->getNumMov($gestion);
-			$proforma->fecha = $this->input->post('fecha');
 			$proforma->almacen = $this->input->post('almacen');
+			$proforma->num = $id ? $this->input->post('n') : $this->Proforma_model->getNumMov($gestion,$proforma->almacen);
+			$proforma->fecha = $this->input->post('fecha');
 			$proforma->cliente = $this->input->post('cliente');
 			$proforma->moneda = $this->input->post('moneda');
 			$proforma->condicionesPago = strtoupper($this->input->post('condicionesPago'));
