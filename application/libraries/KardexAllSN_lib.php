@@ -31,7 +31,7 @@
             $this->Ln(5);
             $this->SetXY(180,10);
             $this->SetFont('Arial','',9);
-            $this->Cell(0,8, utf8_decode($date),0,0,'C');
+            //$this->Cell(0,8, utf8_decode($date),0,0,'C');
 
             $this->Ln(15);
                     //ENCABEZADO TABLA
