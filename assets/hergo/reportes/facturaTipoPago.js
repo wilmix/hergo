@@ -1,8 +1,10 @@
-let ini = moment().subtract(0, 'year').startOf('year').format('YYYY-MM-DD')
-let fin = moment().subtract(0, 'year').endOf('year').format('YYYY-MM-DD')
+let ini = moment().subtract(0, 'week').format('YYYY-MM-DD')
+let fin = moment().format('YYYY-MM-DD')
 $(document).ready(function () {
 	$.fn.dataTable.ext.errMode = 'none';
-	dataPicker(ini, fin)
+	let start = moment().subtract(1, 'week').startOf('week')
+	let end = moment()
+	dataPicker(start, end)
 	getFacTipoPago()
 	$('#reportrange').on('apply.daterangepicker', function (ev, picker) {
 		getFacTipoPago()
@@ -13,10 +15,10 @@ function getFacTipoPago() {
     alm = $("#almacen_filtro").val()
     console.log(ini);
     console.log(fin);
-    return false
+    //return false
 	$.ajax({
 		type: "POST",
-		url: base_url('index.php/reports/getFacturaTipoPago'),
+		url: base_url('index.php/reports/FacturaTipoPago/getFacturaTipoPago'),
 		dataType: "json",
 		data: {
 						ini:ini,
@@ -24,9 +26,7 @@ function getFacTipoPago() {
 						alm:alm
 					},
 	}).done(function (res) {
-        console.log(res);
-        return
-		table = $('#tableOC').DataTable({
+		table = $('#table').DataTable({
 			data: res,
 			destroy: true,
 			dom: 'Bfrtip',
@@ -37,64 +37,59 @@ function getFacTipoPago() {
 			],
 			pageLength: 5,
 			columns: [
-				/* {
+				{
 					data: 'id',
 					title: 'id',
 					className: 'text-center',
-				}, */
-				{
-					data: 'nOrden',
-					title: 'Nº',
-					className: 'text-center',
 				},
 				{
-					data: 'fechaOC',
+					data: 'fechaFac',
 					title: 'FECHA',
 					className: 'text-center',
 					render: formato_fecha,
 				},
 				{
-					data: 'proveedor',
-					title: 'PROVEEDOR',
-				},
-				{
-					data: 'condicion',
-					title: 'CONDICION',
+					data: 'nFactura',
+					title: 'Nº FACTURA',
 					className: 'text-center',
 				},
 				{
-					data: 'formaPago',
-					title: 'FORMA DE PAGO',
+					data: 'cliente',
+					title: 'PROVEEDOR',
 				},
 				{
-					data: 'formaEnvio',
-					title: 'FORMA ENVIO',
-				},
-				{
-					data: 'total$',
-					title: 'TOTAL $U$',
+					data: 'efectivo',
+					title: 'EFECTIVO',
 					className: 'text-right',
 					sorting: false,
 					render: numberDecimal
 				},
 				{
-					data: 'estadoOrden',
-					title: 'ESTADO',
-					className: 'text-center',
-					//sorting: false,
+					data: 'transf',
+					title: 'TRANSFERENCIAS',
+					className: 'text-right',
+					sorting: false,
+					render: numberDecimal
+				},
+				{
+					data: 'cheque',
+					title: 'CHEQUE',
+					className: 'text-right',
+					sorting: false,
+					render: numberDecimal
+				},
+				{
+					data: 'otros',
+					title: 'OTROS',
+					className: 'text-right',
+					sorting: false,
+					render: numberDecimal
 				},
 				{
 					data: 'autor',
-					title: 'CREADO POR',
+					title: 'FACTURADO POR',
 					className: 'text-right',
 					sorting: false,
-					visible: false
-				},
-				{
-					data: 'created_at_orden',
-					title: 'CREADO EN',
-					className: 'text-center',
-					render: formato_fecha_corta,
 					visible: false
 				},
 				{
@@ -102,7 +97,7 @@ function getFacTipoPago() {
 					title: '',
 					width: '120px',
 					className: 'text-center',
-					render: button
+					//render: button
 				},
 			],
 			stateSave: true,
