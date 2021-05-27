@@ -76,7 +76,8 @@ const app = new Vue({
     methods: {
       store(e){
         agregarcargando()
-        this.editRow()
+        this.edit = false
+        this.total()
         e.preventDefault()
         if (!this.cliente || !this.items.length>0) {
           quitarcargando()
@@ -90,17 +91,64 @@ const app = new Vue({
         }
         let form = new FormData();
         form.append('fecha', moment(this.fecha).format('YYYY-MM-DD'))
-        form.append('alm', this.almacen)
+        form.append('almacen', this.almacen)
         form.append('cliente', this.cliente.id)
         form.append('moneda', this.moneda)
-        form.append('condicionPago', this.condicionPago)
+        form.append('condicionesPago', this.condicionPago)
         form.append('porcentajeDescuento', this.porcentajeDescuento)
+        form.append('descuento', this.descuento)
+        form.append('totalFin', this.totalFin)
         form.append('validez', this.validez)
         form.append('lugarEntrega', this.lugarEntrega)
         form.append('glosa', this.glosa)
         form.append('items', JSON.stringify(this.items))
-        quitarcargando()
-        for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); } return 
+        //for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); } return 
+        $.ajax({
+          url: base_url('index.php/Proforma/store'),
+          type: "post",      
+          data: form,                                    
+          processData: false,
+          contentType: false,
+          cache:false, 
+        }).done(function(res){
+          res = JSON.parse(res)
+          if (res.status == true) {
+            quitarcargando()
+            if (app.id) {
+              console.log(this.id);
+              swal({
+                title: "Editado!",
+                text: "La proforma se modificó con éxito",
+                type: "success",        
+                allowOutsideClick: false,                                                                        
+                }).then(function(){
+                  agregarcargando()
+                  window.location.href=base_url("index.php/Importaciones/Pedidos");
+                })
+            } else {
+              swal({
+                title: "Guardado!",
+                text: "La proforma se guardó con éxito",
+                type: "success",        
+                allowOutsideClick: false,                                                                        
+                }).then(function(){
+                  agregarcargando()
+                  location.reload()
+                })
+            }
+          } else {
+            quitarcargando()
+            swal({
+              title: 'Error',
+              text: "Error al guardar la proforma, verifique los datos.",
+              type: 'error', 
+              showCancelButton: false,
+            })
+            return
+          }
+          
+        }) 
+
       },
       addDetalle(){
         if (this.saldo <= 0) {
@@ -153,7 +201,7 @@ const app = new Vue({
       search: _.debounce((loading, search, vm) => {
           $.ajax({
               type:"POST",
-              url: base_url('index.php/Ingresos/searchItem'),
+              url: base_url('index.php/Proforma/searchItem'),
               dataType: "json",
               data: {
                   item:search,
@@ -224,7 +272,7 @@ const app = new Vue({
       searchCliente: _.debounce((loading, search, vm) => {
             $.ajax({
                 type:"POST",
-                url: base_url('index.php/Ingresos/searchCliente'),
+                url: base_url('index.php/Proforma/searchCliente'),
                 dataType: "json",
                 data: {
                 search:search,

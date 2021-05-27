@@ -13,6 +13,7 @@ class Proforma extends CI_Controller
 		$this->load->model("Ingresos_model");
 		$this->load->model("Egresos_model");
 		$this->load->model("Cliente_model");
+		$this->load->model("Proforma_model");
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
 		$this->cabeceras_css=array(
@@ -191,6 +192,49 @@ class Proforma extends CI_Controller
 			$this->load->view('plantilla/footer.php',$this->datos);
             $this->load->view('plantilla/footerscript.php',$this->datos);
 	}
+	public function store()
+	{
+		if($this->input->is_ajax_request())
+		{
+			$id = $this->input->post('id');
+			$gestion = date("Y", strtotime($this->input->post('fecha')));
+			$proforma = new stdclass();
+			$proforma->num = $id ? $this->input->post('n') : $this->Proforma_model->getNumMov($gestion);
+			$proforma->fecha = $this->input->post('fecha');
+			$proforma->almacen = $this->input->post('almacen');
+			$proforma->cliente = $this->input->post('cliente');
+			$proforma->moneda = $this->input->post('moneda');
+			$proforma->condicionesPago = strtoupper($this->input->post('condicionesPago'));
+			$proforma->porcentajeDescuento = $this->input->post('porcentajeDescuento');
+			$proforma->descuento = round($this->input->post('descuento'),2);
+			$proforma->total = round($this->input->post('totalFin'),2);
+			$proforma->validezOferta = strtoupper($this->input->post('validez'));
+			$proforma->lugarEntrega = strtoupper($this->input->post('lugarEntrega'));
+			$proforma->glosa = nl2br(strtoupper($this->input->post('glosa')));
+			$proforma->gestion = $gestion;
+			$proforma->autor = $this->session->userdata('user_id');
+			$proforma->updated_at = $id ? date('Y-m-d H:i:s') : 0;
+			$proforma->items = json_decode($this->input->post('items'));
+
+			$id = $this->Proforma_model->storeProforma($id , $proforma);
+
+			if($id)
+			{
+				$res = new stdclass();
+				$res->status = true;
+				$res->id = $id;
+				$res->proforma = $proforma;
+				echo json_encode($res);
+			} else {
+				echo json_encode($id);
+			}
+
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 	public function mostrarEgresos()
 	{
 		if($this->input->is_ajax_request())
@@ -215,5 +259,32 @@ class Proforma extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	public function searchItem()
+    {
+        if($this->input->is_ajax_request() && $this->input->post('item'))
+        {
+			$item = $this->security->xss_clean($this->input->post('item'));
+			$alm = $this->security->xss_clean($this->input->post('alm'));
+        	$dato=$this->Proforma_model->searchItem($item,$alm);        	
+			echo json_encode($dato->result_array());
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function searchCliente()
+    {
+        if($this->input->is_ajax_request() && $this->input->post('search'))
+        {
+			$search = $this->security->xss_clean($this->input->post('search'));
+        	$dato=$this->Proforma_model->searchClientes($search)->result_array();        	
+			echo json_encode($dato);
+		}
+        else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+    }
 
 }

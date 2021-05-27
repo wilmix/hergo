@@ -271,59 +271,12 @@ class Ingresos_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
     }
-    public function searchItem($item,$alm)
-    {
-		$sql="  SELECT
-                    a.idArticulos id,
-                    CONCAT(a.CodigoArticulo, ' | ' , a.Descripcion) label,
-                    a.CodigoArticulo codigo,
-                    a.Descripcion descrip,
-                    m.Marca marca,
-                    u.Unidad uni,
-                    a.precio,
-                    a.precioDol,
-                    sa.saldo,
-                    a.Imagen img,
-                    l.Linea linea 
-                FROM
-                    articulos a
-                INNER JOIN unidad u on u.idUnidad = a.idUnidad
-                inner join marca m on m.idMarca = a.idMarca
-                inner join linea l on l.idLinea = a.idLinea
-                left join saldoarticulos sa on sa.idArticulo = a.idArticulos and sa.idAlmacen = '$alm'
-                where
-                    a.CodigoArticulo like '%$item%'
-                    or a.Descripcion like '%$item%'
-                    AND a.EnUso = 1
-                ORDER By
-                    a.CodigoArticulo
-                LIMIT
-                    50";
-		$query=$this->db->query($sql);
-		return $query;
-    }
     public function searchProveedores($search)
     {
 		$sql="SELECT p.`idproveedor` id, p.`nombreproveedor` label
         FROM provedores p
         WHERE p.`nombreproveedor` LIKE '$search%'
         LIMIT 20";
-		$query=$this->db->query($sql);
-		return $query;
-    }
-    public function searchClientes($search)
-    {
-		$sql="  SELECT
-                    c.`idCliente` id ,
-                    CONCAT(c.`nombreCliente`, ' | ' , c.`documento`) label
-                    
-                FROM
-                    clientes c
-                where
-                    nombreCliente LIKE '%$search%'
-                    OR documento LIKE '%$search%'
-                ORDER By nombreCliente asc
-                LIMIT 50";
 		$query=$this->db->query($sql);
 		return $query;
     }

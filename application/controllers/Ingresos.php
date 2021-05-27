@@ -635,20 +635,7 @@ class Ingresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	public function searchItem()
-    {
-        if($this->input->is_ajax_request() && $this->input->post('item'))
-        {
-			$item = $this->security->xss_clean($this->input->post('item'));
-			$alm = $this->security->xss_clean($this->input->post('alm'));
-        	$dato=$this->Ingresos_model->searchItem($item,$alm);        	
-			echo json_encode($dato->result_array());
-		}
-        else
-		{
-			die("PAGINA NO ENCONTRADA");
-		}
-	}
+	
 	public function searchProveedor()
     {
         if($this->input->is_ajax_request() && $this->input->post('search'))
@@ -656,19 +643,6 @@ class Ingresos extends CI_Controller
 			$search = $this->security->xss_clean($this->input->post('search'));
         	$dato=$this->Ingresos_model->searchProveedores($search);        	
 			echo json_encode($dato->result_array());
-		}
-        else
-		{
-			die("PAGINA NO ENCONTRADA");
-		}
-    }
-	public function searchCliente()
-    {
-        if($this->input->is_ajax_request() && $this->input->post('search'))
-        {
-			$search = $this->security->xss_clean($this->input->post('search'));
-        	$dato=$this->Ingresos_model->searchClientes($search)->result_array();        	
-			echo json_encode($dato);
 		}
         else
 		{
