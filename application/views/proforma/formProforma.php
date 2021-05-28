@@ -75,6 +75,19 @@
               <label for="formaPago">Lugar de entrega: </label>
               <input type="text" class="form-control" id="lugarEntrega" name="lugarEntrega" @change="total" v-model="lugarEntrega">
             </div>
+            <!-- tipo -->
+            <div class="form-group col-sm-6 col-md-2">
+              <label for="tipo">Tipo:</label>
+                <select class="form-control" 
+                            v-model="tipo" 
+                            id="tipo" 
+                            name="tipo">
+                    <option v-for="option in tipos" 
+                            v-bind:value="option.value"
+                            v-text="option.tipo">
+                    </option>
+                </select>
+            </div>
 
           </div>
 

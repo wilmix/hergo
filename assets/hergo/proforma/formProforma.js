@@ -20,6 +20,13 @@ const app = new Vue({
             { alm: 'POTOSI', value: '3' },
             { alm: 'SANTA CRUZ', value: '4' },
         ],
+        tipo:1,
+        tipos: [
+            { tipo: 'EXTINTORES', value: '1' },
+            { tipo: 'EPPS', value: '2' },
+            { tipo: 'ALTURA', value: '3' },
+            { tipo: 'OTRA OPCION', value: '4' },
+        ],
         es: vdp_translation_es.js,
         articulosList: [],
         clienteList:[],
@@ -78,6 +85,7 @@ const app = new Vue({
         agregarcargando()
         this.edit = false
         this.total()
+        quitarcargando(); return;
         e.preventDefault()
         if (!this.cliente || !this.items.length>0) {
           quitarcargando()
