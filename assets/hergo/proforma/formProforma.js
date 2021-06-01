@@ -85,7 +85,7 @@ const app = new Vue({
         agregarcargando()
         this.edit = false
         this.total()
-        quitarcargando(); return;
+       
         e.preventDefault()
         if (!this.cliente || !this.items.length>0) {
           quitarcargando()
@@ -107,10 +107,11 @@ const app = new Vue({
         form.append('descuento', this.descuento)
         form.append('totalFin', this.totalFin)
         form.append('validez', this.validez)
+        form.append('tipo', this.tipo)
         form.append('lugarEntrega', this.lugarEntrega)
         form.append('glosa', this.glosa)
         form.append('items', JSON.stringify(this.items))
-        //for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); } return 
+        //for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); };  quitarcargando(); return 
         $.ajax({
           url: base_url('index.php/Proforma/store'),
           type: "post",      
@@ -243,7 +244,7 @@ const app = new Vue({
         this.saldo = ''
         this.precio = ''
         this.img = ''
-        this.url_img = url_img
+        this.url_img = base_url('assets/img_articulos/hergo.jpg')
         this.cantidad = ''
         this.precioLista= 0.00
         this.articulosList =[]

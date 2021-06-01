@@ -31,10 +31,10 @@
                 </select>
             </div>
             <!-- cliente -->
-            <div class="form-group col-sm-6 col-md-6">
+            <div class="form-group col-sm-12 col-md-4">
               <label for="cliente">Cliente:</label>
               <v-select label="label" :filterable="false" :options="clienteList"
-                  @search="onSearchCliente" v-model="cliente" :select-on-key-codes="[9, 13]">
+                  @search="onSearchCliente" v-model="cliente" :select-on-key-codes="[9, 13]" :required="!cliente">
                   <template slot="no-options">
                     Busca un cliente..
                   </template>
@@ -53,17 +53,11 @@
                 </select>
             </div>
             <!-- condicionPago -->
-            <div class="form-group col-sm-3 col-md-2">
+            <div class="form-group col-sm-6 col-md-2">
               <label for="condicionPago">Condicion de Pago:</label>
               <input type="text" class="form-control" name="condicionPago" v-model="condicionPago">
             </div>
             
-            <!-- descuento -->
-            <div class="form-group col-sm-6 col-md-2" >
-              <label for="formaPago">Descuento %: </label>
-              <input type="number" class="form-control" id="porcentajeDescuento" name="porcentajeDescuento" @change="total" v-model="porcentajeDescuento">
-            </div>
-
             <!-- validez -->
             <div class="form-group col-sm-6 col-md-2" >
               <label for="formaPago">Validez de Oferta: </label>
@@ -75,6 +69,13 @@
               <label for="formaPago">Lugar de entrega: </label>
               <input type="text" class="form-control" id="lugarEntrega" name="lugarEntrega" @change="total" v-model="lugarEntrega">
             </div>
+
+            <!-- descuento -->
+            <div class="form-group col-sm-6 col-md-2" >
+              <label for="formaPago">Descuento %: </label>
+              <input type="number" class="form-control" id="porcentajeDescuento" name="porcentajeDescuento" @change="total" v-model="porcentajeDescuento">
+            </div>
+            
             <!-- tipo -->
             <div class="form-group col-sm-6 col-md-2">
               <label for="tipo">Tipo:</label>
@@ -172,10 +173,11 @@
                   <th class="bg-info text-right">Cantidad</th>
                   <th class="bg-info text-right">Precio</th>
                   <th class="bg-info text-right">Total</th>
-                  <th class="bg-info text-center" colspan="2">
+                  <th class="bg-info text-center">
                     <button v-if="items.length>0" type="button" class="btn btn-default" aria-label="Right Align" @click="editRow()">
                       <span class="fa fa-pencil" aria-hidden="true"></span>
-                    </button></th>
+                    </button>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -186,24 +188,28 @@
                     <img :src="item.url_img" class="card-img img-responsive center-block" width="50" height="50" style="background: #CEE6F5;border-radius: 10px;" >
                   </td>
                   <div>
-                    <td v-if="edit" class="text-left"> 
-                      <textarea type="text" class="form-control input-sm" v-model="item.descrip" v-on:keyup.enter="editRow"></textarea>
+                    <td v-if="edit" class="text-left col-md-6"> 
+                      <input type="text" class="form-control input-sm" v-model="item.descrip" v-on:keyup.enter="editRow"></input>
                     </td>
                     <td v-else @dblclick="editRow()" class="text-left">{{ item.descrip }}</td>
                   </div>
                   <td class="text-left">{{ item.marca }}</td>
                   <td class="text-center">{{ item.uni }}</td>
                   <div>
-                    <td v-if="edit" class="text-right"> <input type="number" class="form-control input-sm text-right" v-model="item.cantidad" v-on:keyup.enter="editRow"></td>
+                    <td v-if="edit" class="text-right">
+                      <input type="number" class="form-control input-sm text-right col-md-2" v-model="item.cantidad" v-on:keyup.enter="editRow">
+                    </td>
                     <td v-else @dblclick="editRow()" class="text-right">{{ item.cantidad | moneda}}</td>
                   </div>
                   <div>
-                  <td v-if="edit" class="text-right"> <input type="number" class="form-control input-sm text-right" v-model="item.precioLista" v-on:keyup.enter="editRow"></td>
+                    <td v-if="edit" class="text-right">
+                      <input type="number" class="form-control input-sm text-right" v-model="item.precioLista" v-on:keyup.enter="editRow">
+                    </td>
                     <td v-else @dblclick="editRow()" class="text-right">{{ item.precioLista | moneda}}</td>
                   </div>
                   <td class="text-right">{{ (item.cantidad * item.precioLista) | moneda}}</td>
-                  <td>
-                    <button type="button" class="btn btn-default" aria-label="Right Align" @click="deleteRow(key)">
+                  <td class="text-center">
+                    <button type="button" class="btn btn-default"  @click="deleteRow(key)">
                       <span class="fa fa-times" aria-hidden="true"></span>
                     </button>
                   </td>

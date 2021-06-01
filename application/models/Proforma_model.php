@@ -10,28 +10,30 @@ class Proforma_model extends CI_Model
 	}
     public function getProformas($ini, $fin, $alm)
 	{ 
-    	$sql="  SELECT
-                    p.id,
-                    a.almacen,
-                    p.fecha,
-                    p.num,
-                    c.nombreCliente,
-                    m.sigla,
-                    p.condicionesPago,
-                    p.validezOferta,
-                    p.lugarEntrega,
-                    p.total,
-                    p.porcentajeDescuento,
-                    concat(u.first_name, ' ', u.last_name) autor,
-                    u.email,
-                    p.created_at
-                FROM
-                    proforma p
-                    INNER JOIN almacenes a ON a.idalmacen = p.almacen
-                    INNER JOIN clientes c on c.idCliente = p.cliente
-                    inner join moneda m on m.id = p.moneda
-                    inner join users u on u.id = p.autor
-                WHERE
+    	$sql="      SELECT
+                        p.id,
+                        a.almacen,
+                        p.fecha,
+                        p.num,
+                        c.nombreCliente,
+                        m.sigla,
+                        p.condicionesPago,
+                        p.validezOferta,
+                        p.lugarEntrega,
+                        p.total,
+                        pt.tipo,
+                        p.porcentajeDescuento,
+                        concat(u.first_name, ' ', u.last_name) autor,
+                        u.email,
+                        p.created_at
+                    FROM
+                        proforma p
+                        INNER JOIN almacenes a ON a.idalmacen = p.almacen
+                        INNER JOIN clientes c on c.idCliente = p.cliente
+                        inner join moneda m on m.id = p.moneda
+                        inner join users u on u.id = p.autor
+                        INNER JOIN 	proforma_tipo pt on pt.id = p.tipo
+                    WHERE
                     p.fecha BETWEEN '$ini' and '$fin'
                     and p.almacen = '$alm'
             ";

@@ -218,6 +218,7 @@ class Proforma extends CI_Controller
 			$proforma->total = round($this->input->post('totalFin'),2);
 			$proforma->validezOferta = strtoupper($this->input->post('validez'));
 			$proforma->lugarEntrega = strtoupper($this->input->post('lugarEntrega'));
+			$proforma->tipo = strtoupper($this->input->post('tipo'));
 			$proforma->glosa = nl2br(strtoupper($this->input->post('glosa')));
 			$proforma->gestion = $gestion;
 			$proforma->autor = $this->session->userdata('user_id');

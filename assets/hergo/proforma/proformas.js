@@ -53,7 +53,10 @@ function getProforma() {
 				{
 					data: 'nombreCliente',
 					title: 'CLIENTE',
-					//sorting: nameCliente == '' || nameCliente == 'TODOS' ? true : false
+				},
+				{
+					data: 'tipo',
+					title: 'TIPO',
 				},
 				{
 					data: 'total',
@@ -64,7 +67,7 @@ function getProforma() {
 				},
                 {
 					data: 'sigla',
-					title: 'Moneda',
+					title: 'MONEDA',
 					className: 'text-center',
 				},
 				{
