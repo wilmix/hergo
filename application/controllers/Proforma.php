@@ -71,7 +71,7 @@ class Proforma extends CI_Controller
 				base_url('assets/vue/vue-resource.min.js'),	
 				'https://unpkg.com/vue-select@3.10.3/dist/vue-select.js',
 				'https://unpkg.com/vuejs-datepicker',
-				'https://unpkg.com/vuejs-datepicker/dist/locale/translations/es.js'
+				'https://unpkg.com/vuejs-datepicker/dist/locale/translations/es.js',
 			);
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
@@ -218,6 +218,9 @@ class Proforma extends CI_Controller
 			$proforma->total = round($this->input->post('totalFin'),2);
 			$proforma->validezOferta = strtoupper($this->input->post('validez'));
 			$proforma->lugarEntrega = strtoupper($this->input->post('lugarEntrega'));
+			$proforma->tiempoEntrega = strtoupper($this->input->post('tiempoEntrega'));
+			$proforma->industria = strtoupper($this->input->post('industria'));
+			$proforma->marca = strtoupper($this->input->post('marca'));
 			$proforma->tipo = strtoupper($this->input->post('tipo'));
 			$proforma->glosa = nl2br(strtoupper($this->input->post('glosa')));
 			$proforma->gestion = $gestion;
@@ -295,5 +298,21 @@ class Proforma extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
     }
+	public function getInfoProformaForm()  
+	{
+		if($this->input->is_ajax_request())
+        {
+			$datosProforma = new stdclass();
+			$datosProforma->tipos = $this->Proforma_model->getTipos(); 
+			$datosProforma->almacenes = $this->Proforma_model->getAlmacenes(); 
+			$datosProforma->monedas = $this->Proforma_model->getMonedas(); 
+
+			echo json_encode($datosProforma);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 
 }

@@ -41,6 +41,62 @@ class Proforma_model extends CI_Model
         $query=$this->db->query($sql);	
 		return $query->result_array();
     }
+    public function getProforma($id)
+	{ 
+    	$sql="      SELECT
+                        p.id,
+                        a.almacen,
+                        p.fecha,
+                        p.num,
+                        c.nombreCliente,
+                        m.sigla,
+                        p.condicionesPago,
+                        p.validezOferta,
+                        p.lugarEntrega,
+                        p.total,
+                        pt.tipo,
+                        p.porcentajeDescuento,
+                        concat(u.first_name, ' ', u.last_name) autor,
+                        u.email,
+                        p.created_at
+                    FROM
+                        proforma p
+                        INNER JOIN almacenes a ON a.idalmacen = p.almacen
+                        INNER JOIN clientes c on c.idCliente = p.cliente
+                        inner join moneda m on m.id = p.moneda
+                        inner join users u on u.id = p.autor
+                        INNER JOIN 	proforma_tipo pt on pt.id = p.tipo
+                    WHERE
+                    p.id = '$id'
+            ";
+
+        $query=$this->db->query($sql);	
+		return $query->row();
+    }
+    public function getProformaItems($id)
+	{ 
+    	$sql="      SELECT
+                        a.CodigoArticulo codigo,
+                        u.Unidad uni,
+                        m.Marca marca,
+                        pit.descripcion,
+                        pit.cantidad,
+                        pit.precio,
+                        pit.total
+                        
+                    FROM
+                        proforma_items pit
+                        INNER join articulos a on a.idArticulos = pit.articulo_id
+                        inner join unidad u on u.idUnidad = a.idUnidad
+                        INNER join marca m on m.idMarca = a.idMarca
+                        
+                    WHERE
+                        pit.proforma_id = '$id'
+            ";
+
+        $query=$this->db->query($sql);	
+		return $query->result_array();
+    }
 
 
     public function storeProforma($id, $proforma)
@@ -152,4 +208,37 @@ class Proforma_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
     }
+
+    public function getTipos()
+	{ 
+    	$sql="      SELECT
+                        pt.id value,
+                        pt.tipo tipo 
+                    from
+                        proforma_tipo pt
+            ";
+        $query=$this->db->query($sql);	
+		return $query->result_array();
+    }
+    public function getAlmacenes()
+	{ 
+    	$sql="      SELECT
+                    a.idalmacen value,
+                    a.almacen alm 
+                    from almacenes a 
+                        ";
+        $query=$this->db->query($sql);	
+		return $query->result_array();
+    }
+    public function getMonedas()
+	{ 
+    	$sql="      SELECT
+                    m.id 'value',
+                    m.moneda 
+                    from moneda m";
+        $query=$this->db->query($sql);	
+		return $query->result_array();
+    }
+
+
 }

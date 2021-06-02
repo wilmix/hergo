@@ -1,9 +1,9 @@
 
 let url_img = base_url('assets/img_articulos/hergo.jpg')
 $(document).ready(function(){
-
+  
+  
 })
-
 Vue.component("v-select", VueSelect.VueSelect);
 
 const app = new Vue({
@@ -14,26 +14,13 @@ const app = new Vue({
     data: {
       /* datos */
         almacen:document.getElementById("idAlmacenUsuario").value,
-        almacenes: [
-            { alm: 'CENTRAL HERGO', value: '1' },
-            { alm: 'DEPOSITO EL ALTO', value: '2' },
-            { alm: 'POTOSI', value: '3' },
-            { alm: 'SANTA CRUZ', value: '4' },
-        ],
+        almacenes: [],
         tipo:1,
-        tipos: [
-            { tipo: 'EXTINTORES', value: '1' },
-            { tipo: 'EPPS', value: '2' },
-            { tipo: 'ALTURA', value: '3' },
-            { tipo: 'OTRA OPCION', value: '4' },
-        ],
+        tipos: [],
         es: vdp_translation_es.js,
         articulosList: [],
         clienteList:[],
-        monedas:[
-            { moneda: 'BOLIVIANOS', value: '1' },
-            { moneda: 'DOLARES', value: '2' },
-        ],
+        monedas:[],
         edit:false,
         tipoCambio: parseFloat(document.getElementById("mostrarTipoCambio").textContent),
         /* articulo */
@@ -52,6 +39,8 @@ const app = new Vue({
         cantidad:0.00,
         precioLista:0.00,
         saldo:0,
+        tiempoEntrega:'',
+        industria: '',
         /* documento */
         id:'',
         moneda:1,
@@ -74,6 +63,7 @@ const app = new Vue({
        
     },
   created: function () {
+    this.getTipos()
     let id = document.getElementById("idPedido").value
     if (id) {
       console.log(id);
@@ -110,6 +100,9 @@ const app = new Vue({
         form.append('tipo', this.tipo)
         form.append('lugarEntrega', this.lugarEntrega)
         form.append('glosa', this.glosa)
+        form.append('tiempoEntrega', this.tiempoEntrega)
+        form.append('industria', this.industria)
+        form.append('marca', this.marca)
         form.append('items', JSON.stringify(this.items))
         //for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); };  quitarcargando(); return 
         $.ajax({
@@ -159,6 +152,17 @@ const app = new Vue({
         }) 
 
       },
+      getTipos(){
+        $.ajax({
+          url: base_url('index.php/Proforma/getInfoProformaForm'),
+          type: "post",      
+        }).done(function(res){
+          info = JSON.parse(res)
+          app.tipos = info.tipos
+          app.almacenes = info.almacenes
+          app.monedas = info.monedas
+        }) 
+      },
       addDetalle(){
         if (this.saldo <= 0) {
           console.log('no hay stock');
@@ -172,6 +176,8 @@ const app = new Vue({
           this.selectedArticulo.marca = this.marca
           this.selectedArticulo.linea = this.linea
           this.selectedArticulo.descrip = this.descripcion
+          this.selectedArticulo.industria = this.industria
+          this.selectedArticulo.tiempoEntrega = this.tiempoEntrega
           this.items.push(this.selectedArticulo)
           app.cleanCard()
           app.total() 

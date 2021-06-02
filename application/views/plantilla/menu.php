@@ -96,6 +96,18 @@
           </li>
 
           <li class="treeview">
+            <a href="#"><i class="fa fa fa-truck"></i> <span>Proformas</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li class="formProforma"><a href="<?php echo base_url("Proforma/formProforma") ?>"><i class="fa fa-edit"></i> Crear Proforma</a></li>
+              <li class="Proformas"><a href="#"><i class="fa fa-list-ol"></i> Proformas</a></li>
+            </ul>
+          </li>
+
+          <li class="treeview">
             <a href="<?php echo base_url("egresos") ?>"><i class="fa fa-minus-square"></i> <span>Egresos</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
