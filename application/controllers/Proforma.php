@@ -306,10 +306,25 @@ class Proforma extends CI_Controller
 			$datosProforma->tipos = $this->Proforma_model->getTipos(); 
 			$datosProforma->almacenes = $this->Proforma_model->getAlmacenes(); 
 			$datosProforma->monedas = $this->Proforma_model->getMonedas(); 
+			$datosProforma->articulos = $this->Proforma_model->getArticulos(); 
 
 			echo json_encode($datosProforma);
 		}
 		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function getArticulo()
+    {
+        if($this->input->is_ajax_request() && $this->input->post('id'))
+        {
+			$id = $this->security->xss_clean($this->input->post('id'));
+			$alm = $this->security->xss_clean($this->input->post('alm'));
+        	$dato=$this->Proforma_model->getArticulo($id,$alm);        	
+			echo json_encode($dato);
+		}
+        else
 		{
 			die("PAGINA NO ENCONTRADA");
 		}

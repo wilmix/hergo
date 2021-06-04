@@ -90,49 +90,25 @@
                 </select>
             </div>
 
+           
+
           </div>
 
           <!-- 2 -->
           <div class="row">
             <div class="form-group col-sm-12 col-md-4">
-              <label for="codigo">Articulo:</label>
+              <!-- <label for="codigo">Articulo:</label>
               <v-select label="label" :filterable="false" :options="articulosList"
-                  @search="onSearch" v-model="selectedArticulo" id="codigoArt" :select-on-key-codes="[9, 13]">
+                  @search="onSearch" v-model="selectedart" id="codigoArt" :select-on-key-codes="[9, 13]">
                   <template slot="no-options">
                     Busca un artículo..
                   </template>
-              </v-select>
+              </v-select> -->
+              <label for="articulosArray">articulosArray:</label>
+              <v-select :options="articulosArray" label="label" id="value" :select-on-key-codes="[9, 13]" v-model="articulosArraySelected" />
             </div>
             <div class="form-group col-sm-12 col-md-8">
-              <div class="card mb-12" style="background: #CEE6F5;border: #B1D6ED 2px solid;border-radius: 10px;">
-                <div class="row no-gutters">
-                  <div class="col-md-2 col-sm-3 col-lg-2">
-                    <img :src="url_img" class="card-img img-responsive center-block" width="150" height="150" style="background: #CEE6F5;border-radius: 10px;" >
-                  </div>
-                  <div class="col-md-6 col-sm-5 col-lg-7">
-                    <div class="card-body" v-show="selectedArticulo">
-                      <blockquote>
-                      <h4> <b>{{codigo}}</b> </h4>
-                        <p class="card-text" v-html="descripcion + ' - ' + unidad 
-                                                    + '<br> <b>' +'MARCA: ' + '</b>' + marca
-                                                    + '<br> <b>' +'LINEA: ' + '</b>' + linea"> 
-                        </p>
-                      </blockquote>
-                    </div>
-                  </div>
-                  <div class="col-md-4 col-sm-4 col-lg-3">
-                    <div class="card-body" v-show="selectedArticulo">
-                      <blockquote>
-                        <p class="card-text text-center"> 
-                          <span class="font-weight-bold">Precio BOB:</span>  {{(precio) | moneda }} <br>
-                          <span class="font-weight-bold">Precio $u$:</span>  {{(precioDol) | moneda }} <br>
-                          <span class="font-weight-bold">Saldo:</span>  {{(saldo) | moneda }} <br>
-                      </p>
-                      </blockquote>
-                    </div>
-                  </div>
-                  </div>
-              </div>
+              <card-product :selectedart="selectedart" ></card-product>
             </div>
           </div>
           <!-- 3 -->
@@ -245,15 +221,15 @@
                 </tr>
               </tbody>
               <tfoot v-if="items.length>0">
-                <tr>
-                  <td class="text-right" colspan="10" ><strong> Total: </strong></td>
-                  <td class="text-right bg-primary"><strong> {{ (totalDoc) | moneda }} </strong></td>
-                </tr>
-                <tr>
-                  <td class="text-right" colspan="10" ><strong> Descuento: </strong></td>
-                  <td class="text-right bg-primary"><strong> {{ (descuento) | moneda }} </strong></td>
-                </tr>
-                <tr>
+                  <tr>
+                    <td class="text-right" colspan="10" ><strong> Total: </strong></td>
+                    <td class="text-right bg-primary"><strong> {{ (totalDoc) | moneda }} </strong></td>
+                  </tr>
+                  <tr v-if="porcentajeDescuento>0">
+                    <td class="text-right" colspan="10" ><strong> Descuento: </strong></td>
+                    <td class="text-right bg-primary"><strong> {{ (descuento) | moneda }} </strong></td>
+                  </tr>
+                <tr  v-if="porcentajeDescuento>0">
                   <td class="text-right" colspan="10"><strong>Total Final:</strong> </td>
                   <td class="text-right bg-primary"><strong> {{ (totalFin) | moneda }} </strong></td>
                 </tr>

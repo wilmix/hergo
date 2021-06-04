@@ -5,6 +5,61 @@ $(document).ready(function(){
   
 })
 Vue.component("v-select", VueSelect.VueSelect);
+Vue.component("card-product",{
+  template:`<div class="card mb-12" style="background: #CEE6F5;border: #B1D6ED 2px solid;border-radius: 10px;">
+              <div class="row no-gutters">
+                <div class="col-md-2 col-sm-3 col-lg-2">
+                  <img :src="url_art()" class="card-img img-responsive center-block" width="150" height="150" style="background: #CEE6F5;border-radius: 10px;" >
+                </div>
+                <div class="col-md-6 col-sm-5 col-lg-7">
+                  <div class="card-body" v-if="selectedart">
+                    <blockquote>
+                    <h4> <b>{{selectedart.codigo}}</b> </h4>
+                      <p class="card-text" v-html="selectedart.descrip + ' - ' + selectedart.uni
+                                                  + '<br> <b>' +'MARCA: ' + '</b>' + selectedart.marca
+                                                  + '<br> <b>' +'LINEA: ' + '</b>' + selectedart.linea"> 
+                      </p>
+                    </blockquote>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-lg-3">
+                  <div class="card-body" v-if="selectedart">
+                    <blockquote>
+                      <p class="card-text text-center"> 
+                        <span class="font-weight-bold">Precio BOB:</span>  {{(selectedart.precio) | moneda }} <br>
+                        <span class="font-weight-bold">Precio $u$:</span>  {{(selectedart.precioDol) | moneda }} <br>
+                        <span class="font-weight-bold">Saldo:</span>  {{(selectedart.saldo) | moneda }} <br>
+                    </p>
+                    </blockquote>
+                  </div>
+                </div>
+                </div>
+            </div>`,
+  props:{
+    url_img : String,
+    selectedart: Object
+  },
+  methods:{
+    url_art(){
+      if (this.selectedart) {
+        url = this.selectedart.img ?  base_url('assets/img_articulos/'+this.selectedart.img) : base_url('assets/img_articulos/hergo.jpg')
+        this.selectedart.url_img = url
+      } else {
+        url = base_url('assets/img_articulos/hergo.jpg')
+      }
+      return url
+    },
+
+  },
+  filters:{
+    moneda:function(value){
+        num=Math.round(value * 100) / 100
+        num=num.toFixed(2);
+        //return(num);
+        return numeral(num).format('0,0.00');            
+    },                 
+  },  
+})
 
 const app = new Vue({
     el: '#app',
@@ -13,6 +68,8 @@ const app = new Vue({
   },
     data: {
       /* datos */
+        articulosArray:[],
+        articulosArraySelected:null,
         almacen:document.getElementById("idAlmacenUsuario").value,
         almacenes: [],
         tipo:1,
@@ -24,21 +81,9 @@ const app = new Vue({
         edit:false,
         tipoCambio: parseFloat(document.getElementById("mostrarTipoCambio").textContent),
         /* articulo */
-        selectedArticulo:null,
-        idCodigo:'',
-        codigo:'',
-        marca:'',
-        linea:'',
-        descripcion:'',
-        unidad:'',
-        saldo:'0.00',
-        precio:'0.00',
-        precioDol:'0.00',
-        img:'',
-        url_img:base_url('assets/img_articulos/hergo.jpg'),
+        selectedart:null,
         cantidad:0.00,
         precioLista:0.00,
-        saldo:0,
         tiempoEntrega:'',
         industria: '',
         /* documento */
@@ -161,24 +206,19 @@ const app = new Vue({
           app.tipos = info.tipos
           app.almacenes = info.almacenes
           app.monedas = info.monedas
+          app.articulosArray = info.articulos 
         }) 
       },
       addDetalle(){
         if (this.saldo <= 0) {
           console.log('no hay stock');
         }
-        if (this.selectedArticulo && this.cantidad > 0 && this.precioLista > 0) {
-          this.selectedArticulo.cantidad = this.cantidad
-          this.selectedArticulo.precioLista = this.precioLista
-          this.selectedArticulo.total = this.cantidad * this.precioLista
-          this.selectedArticulo.precioDOL = this.precioDol
-          this.selectedArticulo.url_img = this.url_img
-          this.selectedArticulo.marca = this.marca
-          this.selectedArticulo.linea = this.linea
-          this.selectedArticulo.descrip = this.descripcion
-          this.selectedArticulo.industria = this.industria
-          this.selectedArticulo.tiempoEntrega = this.tiempoEntrega
-          this.items.push(this.selectedArticulo)
+        if (this.selectedart && this.cantidad > 0 && this.precioLista > 0) {
+          this.selectedart.cantidad = this.cantidad
+          this.selectedart.tiempoEntrega = this.tiempoEntrega
+          this.selectedart.industria = this.industria
+          this.selectedart.precioLista = this.precioLista
+          this.items.push(this.selectedart)
           app.cleanCard()
           app.total() 
         }
@@ -209,8 +249,8 @@ const app = new Vue({
             loading(true)
             this.search(loading, search, this)
           }
-          if (this.selectedArticulo) {
-            app.addCardInfo(this.selectedArticulo)
+          if (this.selectedart) {
+            this.precioLista = this.moneda == 1 ? this.selectedart.precio : this.selectedart.precioDol
           }
       },
       search: _.debounce((loading, search, vm) => {
@@ -226,31 +266,10 @@ const app = new Vue({
               vm.articulosList = res
           })
           loading(false);
-      }, 350),
-      addCardInfo(selected){
-        this.idCodigo = selected.id
-        this.codigo = selected.codigo
-        this.descripcion = selected.descrip
-        this.unidad = selected.uni
-        this.marca = selected.marca
-        this.linea = selected.linea
-        this.saldo = selected.saldo
-        this.precio = selected.precio
-        this.saldo = selected.saldo
-        this.precioDol = selected.precioDol
-        this.precioLista = this.moneda == 1 ? selected.precio : selected.precioDol
-        this.url_img = selected.img ?  base_url('assets/img_articulos/'+selected.img) :base_url('assets/img_articulos/hergo.jpg')
-      },
+      }, 350
+      ),
       cleanCard(){
-        this.selectedArticulo = null
-        this.idCodigo = ''
-        this.codigo = ''
-        this.descripcion = ''
-        this.unidad = ''
-        this.saldo = ''
-        this.precio = ''
-        this.img = ''
-        this.url_img = base_url('assets/img_articulos/hergo.jpg')
+        this.selectedart = null
         this.cantidad = ''
         this.precioLista= 0.00
         this.articulosList =[]
@@ -309,6 +328,25 @@ const app = new Vue({
           return numeral(num).format('0,0.00');            
       },                 
     },  
+    watch:{
+      articulosArraySelected: function (newArt, oldArt) {
+          if (newArt) {
+            $.ajax({
+              type:"POST",
+              url: base_url('index.php/Proforma/getArticulo'),
+              dataType: "json",
+              data: {
+                  id:newArt.value,
+                  alm:document.getElementById("almacen").value
+              },
+            }).done(function(res){
+                app.selectedart = res
+                app.precioLista = app.moneda == 1 ? app.selectedart.precio : app.selectedart.precioDol
+                app.articulosArraySelected = null
+            })
+          }
+      }
+    }
 
 })
 

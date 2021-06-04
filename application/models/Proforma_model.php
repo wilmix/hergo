@@ -239,6 +239,44 @@ class Proforma_model extends CI_Model
         $query=$this->db->query($sql);	
 		return $query->result_array();
     }
+    public function getArticulos()
+	{ 
+    	$sql="      SELECT
+                        a.idArticulos value,
+                        concat(a.CodigoArticulo, ' | ', a.Descripcion) label
+                    FROM
+                        articulos a
+                    WHERE
+                        a.EnUso = 1";
+        $query=$this->db->query($sql);	
+		return $query->result_array();
+    }
+    public function getArticulo($id, $alm)
+	{ 
+    	$sql="      SELECT
+                        a.idArticulos id,
+                        a.CodigoArticulo codigo,
+                        CONCAT(a.CodigoArticulo, ' | ' , a.Descripcion) label,
+                        a.Descripcion descrip,
+                        m.Marca marca,
+                        u.Unidad uni,
+                        a.precio,
+                        a.precioDol,
+                        sa.saldo,
+                        a.Imagen img,
+                        l.Linea linea
+                    FROM
+                        articulos a
+                        INNER JOIN unidad u on u.idUnidad = a.idUnidad
+                        inner join marca m on m.idMarca = a.idMarca
+                        inner join linea l on l.idLinea = a.idLinea
+                        left join saldoarticulos sa on sa.idArticulo = a.idArticulos
+                        and sa.idAlmacen = '$alm'
+                    where
+                        a.idArticulos = '$id'";
+        $query=$this->db->query($sql);	
+		return $query->row();
+    }
 
 
 }
