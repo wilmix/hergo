@@ -152,7 +152,7 @@ const app = new Vue({
         for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); };  quitarcargando(); 
         swal({
           title: "Guardar!",
-          text: "La proforma se Guardará",
+          text: "Si el formulario se aprueba se pasará al siguiente etapa que es guardar en Base de Datos",
           type: "success",        
           allowOutsideClick: false,                                                                        
           });return;
