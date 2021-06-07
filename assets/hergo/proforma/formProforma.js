@@ -204,6 +204,7 @@ const app = new Vue({
 
       },
       getTipos(){
+        agregarcargando()
         $.ajax({
           url: base_url('index.php/Proforma/getInfoProformaForm'),
           type: "post",      
@@ -213,6 +214,7 @@ const app = new Vue({
           app.almacenes = info.almacenes
           app.monedas = info.monedas
           app.articulosArray = info.articulos 
+          quitarcargando()
         }) 
       },
       addDetalle(){
@@ -227,6 +229,8 @@ const app = new Vue({
           this.items.push(this.selectedart)
           app.cleanCard()
           app.total() 
+          const codigo = document.getElementsByClassName('vs__search');
+          codigo[1].focus()
         }
         else{
           swal({

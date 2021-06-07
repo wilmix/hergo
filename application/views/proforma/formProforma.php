@@ -105,7 +105,7 @@
                   </template>
               </v-select> -->
               <label for="articulosArray">Artículo:</label>
-              <v-select :options="articulosArray" label="label" id="value" :select-on-key-codes="[9, 13]" v-model="articulosArraySelected" />
+              <v-select :options="articulosArray" id="codigo" label="label" id="value" :select-on-key-codes="[9, 13]" v-model="articulosArraySelected" />
             </div>
             <div class="form-group col-sm-12 col-md-8">
               <card-product :selectedart="selectedart" ></card-product>
