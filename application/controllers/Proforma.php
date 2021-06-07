@@ -98,7 +98,7 @@ class Proforma extends CI_Controller
 	
 	public function index()
 	{
-		//$this->libacceso->acceso(57);
+		$this->libacceso->acceso(67);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 			$this->datos['menu']="ProFormas";
@@ -137,7 +137,7 @@ class Proforma extends CI_Controller
 	}
 	public function formProforma()
 	{
-		//$this->libacceso->acceso(17);
+		$this->libacceso->acceso(67);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 

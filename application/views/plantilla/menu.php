@@ -96,7 +96,7 @@
           </li>
 
           <li class="treeview">
-            <a href="#"><i class="fa fa fa-truck"></i> <span>Proformas</span>
+            <a href="#"><i class="fa fa-product-hunt"></i> <span>Proformas</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
