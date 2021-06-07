@@ -104,7 +104,7 @@
                     Busca un artículo..
                   </template>
               </v-select> -->
-              <label for="articulosArray">articulosArray:</label>
+              <label for="articulosArray">Artículo:</label>
               <v-select :options="articulosArray" label="label" id="value" :select-on-key-codes="[9, 13]" v-model="articulosArraySelected" />
             </div>
             <div class="form-group col-sm-12 col-md-8">

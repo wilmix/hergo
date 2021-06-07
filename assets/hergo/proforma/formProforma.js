@@ -290,7 +290,10 @@ const app = new Vue({
         this.validez = ''
         this.lugarEntrega = ''
         this.glosa = ''
+        this.industria = ''
+        this.tiempoEntrega = ''
         this.items = []
+        this.selectedart = null
       },
       deleteRow:function(item){
         this.items.splice(item,1);
