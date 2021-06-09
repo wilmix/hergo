@@ -226,7 +226,7 @@
                     <td class="text-right bg-primary"><strong> {{ (totalDoc) | moneda }} </strong></td>
                   </tr>
                   <tr v-if="porcentajeDescuento>0">
-                    <td class="text-right" colspan="10" ><strong> Descuento: </strong></td>
+                    <td class="text-right" colspan="10" ><strong> Descuento {{ porcentajeDescuento }}% :</strong></td>
                     <td class="text-right bg-primary"><strong> {{ (descuento) | moneda }} </strong></td>
                   </tr>
                 <tr  v-if="porcentajeDescuento>0">
