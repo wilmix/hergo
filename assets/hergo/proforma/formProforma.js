@@ -149,13 +149,7 @@ const app = new Vue({
         form.append('industria', this.industria)
         form.append('marca', this.marca)
         form.append('items', JSON.stringify(this.items))
-        for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); };  quitarcargando(); 
-        swal({
-          title: "Guardar!",
-          text: "Si el formulario se aprueba se pasará al siguiente etapa que es guardar en Base de Datos",
-          type: "success",        
-          allowOutsideClick: false,                                                                        
-          });return;
+        /* for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); };  quitarcargando(); return; */
         $.ajax({
           url: base_url('index.php/Proforma/store'),
           type: "post",      

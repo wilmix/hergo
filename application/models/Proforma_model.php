@@ -132,6 +132,8 @@ class Proforma_model extends CI_Model
             $item->proforma_id = $id;
             $item->articulo_id = $fila->id;
             $item->descripcion = strtoupper($fila->descrip);
+            $item->tiempoEntrega = strtoupper($fila->tiempoEntrega);
+            $item->industria = strtoupper($fila->industria);
             $item->cantidad = round($fila->cantidad,2);
             $item->precio = round($fila->precioLista,2);
             $item->total = round($fila->total,2);
