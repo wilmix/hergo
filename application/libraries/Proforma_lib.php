@@ -21,7 +21,8 @@
             $this->Image('images/hergo.jpeg', 10, 8, 55 );
             $this->SetFont('Arial','B',20);
             $this->SetXY(143,10);
-            $this->Cell(70,5, utf8_decode('PROFORMA 001/21'),0,0,'');
+            $titulo = 'PROFORMA ' . str_pad($this->datos['num'], 3, '0', STR_PAD_LEFT) .'/' . date('y',strtotime( $this->datos['fecha'] )) ;
+            $this->Cell(70,5, utf8_decode($titulo),0,0,'');
 
             $this->SetFont('Arial','B',12);
             $this->SetXY(10,25);
@@ -65,51 +66,12 @@
             $this->Cell(70,5, utf8_decode(' RECOJO DE TODAS SUCURSALES'),0,0,'');
 
             
-            $this->SetTextColor(0,0,200);
+            
             $this->Cell(0,15, '',0,0,'C');
             $this->Ln(10);
             $this->SetFont('Arial','B',12);
             $this->Cell(0,10, '',0,0,'C');
             
-
-            //SUCURSAL
-            $this->SetXY(10,18);
-
-            //n FACTURA DERECHA
-            $this->SetXY(148,10);
-            $this->SetFont('Arial','B',14);
-            $this->SetTextColor(0,0,200);
-
-            
-                //****ENCABEZADO****
-                $this->SetXY(13,60);
-                //cliente
-                $this->SetFont('Arial','B',9);
-                $this->Cell(25,6, utf8_decode('Lugar y Fecha: '),0,0,'');
-                $this->SetFont('Arial','',9);
-
-                
-                
-
-                
-
-                
-
-                
-
-                    //ENCABEZADO TABLA
-                    $this->SetX(15);
-                    $this->Ln(1);
-                    $this->SetFillColor(235,235,235);
-                    $this->SetFont('Arial','B',8); 
-                    //$this->Cell(5,6,'N',1,0,'C',1);
-                    $this->Cell(15,6,'CANT',0,0,'C',1);
-                    $this->Cell(10,6,'UNID',0,0,'C',1);
-                    $this->Cell(15,6,'CODIGO',0,0,'C',1);  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
-                    $this->Cell(118,6,'ARTICULO',0,0,'C',1);
-                    $this->Cell(20,6,'P/U',0,0,'R',1);
-                    $this->Cell(20,6,'TOTAL',0,0,'R',1);
-                    $this->Ln(6);
         }
 
         public function Footer(){

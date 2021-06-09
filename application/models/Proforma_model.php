@@ -56,6 +56,7 @@ class Proforma_model extends CI_Model
                         p.total,
                         pt.tipo,
                         p.porcentajeDescuento,
+                        p.descuento,
                         concat(u.first_name, ' ', u.last_name) autor,
                         u.email,
                         p.created_at
@@ -81,8 +82,11 @@ class Proforma_model extends CI_Model
                         m.Marca marca,
                         pit.descripcion,
                         pit.cantidad,
+                        pit.tiempoEntrega,
+                        pit.industria,
                         pit.precio,
-                        pit.total
+                        pit.total,
+                        a.Imagen img
                         
                     FROM
                         proforma_items pit
@@ -95,7 +99,7 @@ class Proforma_model extends CI_Model
             ";
 
         $query=$this->db->query($sql);	
-		return $query->result_array();
+		return $query->result();
     }
 
 
