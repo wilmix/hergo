@@ -228,6 +228,12 @@ function aprobados (data, type, row) {
 $(document).on("click", "button.print", function () {
 
     let row = getRow(table, this)
+		swal({
+			title: "PDF Proforma!",
+			text: "Crear PDF de la proforma",
+			type: "success",        
+			allowOutsideClick: false,                                                                        
+		})
     console.log(row);return
 	let print = base_url("pdf/SolicitudPDF/index/") + row.id_pedido;
 	window.open(print);

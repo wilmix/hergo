@@ -103,7 +103,7 @@
             </a>
             <ul class="treeview-menu">
               <li class="formProforma"><a href="<?php echo base_url("Proforma/formProforma") ?>"><i class="fa fa-edit"></i> Crear Proforma</a></li>
-              <li class="Proformas"><a href="#"><i class="fa fa-list-ol"></i> Proformas</a></li>
+              <li class="Proformas"><a href="<?php echo base_url("Proforma") ?>"><i class="fa fa-list-ol"></i> Proformas</a></li>
             </ul>
           </li>
 
