@@ -219,7 +219,7 @@ class Proforma extends CI_Controller
 			$proforma->validezOferta = strtoupper($this->input->post('validez'));
 			$proforma->lugarEntrega = strtoupper($this->input->post('lugarEntrega'));
 			$proforma->tiempoEntrega = strtoupper($this->input->post('tiempoEntrega'));
-			$proforma->industria = strtoupper($this->input->post('industria'));
+			$proforma->garantia = strtoupper($this->input->post('garantia'));
 			$proforma->marca = strtoupper($this->input->post('marca'));
 			$proforma->tipo = strtoupper($this->input->post('tipo'));
 			$proforma->glosa = nl2br(strtoupper($this->input->post('glosa')));

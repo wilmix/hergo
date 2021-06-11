@@ -91,6 +91,7 @@ const app = new Vue({
         moneda:1,
         validez:'',
         lugarEntrega:'',
+        garantia:'',
         title:'ProForma',
         n:0,
         fecha: moment().format('MM-DD-YYYY'),
@@ -146,7 +147,7 @@ const app = new Vue({
         form.append('lugarEntrega', this.lugarEntrega)
         form.append('glosa', this.glosa)
         form.append('tiempoEntrega', this.tiempoEntrega)
-        form.append('industria', this.industria)
+        form.append('garantia', this.garantia)
         form.append('marca', this.marca)
         form.append('items', JSON.stringify(this.items))
         /* for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); };  quitarcargando(); return; */

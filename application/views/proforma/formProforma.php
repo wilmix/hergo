@@ -60,19 +60,19 @@
             
             <!-- validez -->
             <div class="form-group col-sm-6 col-md-2" >
-              <label for="formaPago">Validez de Oferta: </label>
+              <label for="validez">Validez de Oferta: </label>
               <input type="text" class="form-control" id="validez" name="validez" @change="total" v-model="validez">
             </div>
 
             <!-- lugarEntrega -->
             <div class="form-group col-sm-6 col-md-2" >
-              <label for="formaPago">Lugar de entrega: </label>
+              <label for="lugarEntrega">Lugar de entrega: </label>
               <input type="text" class="form-control" id="lugarEntrega" name="lugarEntrega" @change="total" v-model="lugarEntrega">
             </div>
 
             <!-- descuento -->
             <div class="form-group col-sm-6 col-md-2" >
-              <label for="formaPago">Descuento %: </label>
+              <label for="porcentajeDescuento">Descuento %: </label>
               <input type="number" class="form-control" id="porcentajeDescuento" name="porcentajeDescuento" @change="total" v-model="porcentajeDescuento">
             </div>
             
@@ -88,6 +88,12 @@
                             v-text="option.tipo">
                     </option>
                 </select>
+            </div>
+
+            <!-- garantia -->
+            <div class="form-group col-sm-6 col-md-2" >
+              <label for="garantia">Garantia: </label>
+              <input type="text" class="form-control" id="garantia" name="garantia" @change="total" v-model="garantia">
             </div>
 
            
