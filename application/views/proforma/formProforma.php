@@ -8,7 +8,7 @@
       <div class="box-body">
         <form action="" method="post" id="form_pedidos">
           <!-- 0 -->
-          <input type="text" id="idPedido" value="<?php echo isset($id) ? $id : '' ?>" hidden>
+          <input type="text" id="idProforma" value="<?php echo isset($id) ? $id : '' ?>" hidden>
           <!-- 1 -->
           <div class="row">
             <!-- fecha -->
@@ -127,7 +127,7 @@
             <label for="industria">Industria:</label>
               <input type="text" class="form-control" v-model="industria">
             </div>
-            <!-- industria -->
+            <!-- TiempoEntrega -->
             <div class="form-group col-sm-0 col-md-2">
             <label for="tiempoEntrega">TiempoEntrega:</label>
               <input type="text" class="form-control" v-model="tiempoEntrega">
@@ -392,7 +392,7 @@
           </fieldset>
           <div class="modal-footer">
             <button type="button" class="btn btn-default botoncerrarmodal" data-dismiss="modal">Cerrar</button>
-            <button type="submit" class="btn btn-primary bguardar">Guardar</button>
+            <button type="submit" class="btn btn-primary bguardar" v-text="btnGuardar"></button>
           </div>
         </div> <!-- /class="modal-body form form-horizontal"-->
       </div> <!-- /. class="modal-dialog" -->

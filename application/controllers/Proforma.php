@@ -135,12 +135,14 @@ class Proforma extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	public function formProforma()
+	public function formProforma($id)
 	{
 		$this->libacceso->acceso(67);
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
-
+			if ($id != 'crear') {
+				$this->datos['id']=$id;
+			}
 			$this->datos['menu']="Proforma";
 			$this->datos['opcion']="CrearProforma";
 			$this->datos['titulo']="Crear Proforma";
@@ -229,6 +231,12 @@ class Proforma extends CI_Controller
 			$proforma->items = json_decode($this->input->post('items'));
 
 			$id = $this->Proforma_model->storeProforma($id , $proforma);
+
+			/* if ($id == 0) {
+				$id = $this->Proforma_model->storeProforma($id , $proforma);
+			} else {
+				$id = $this->Proforma_model->updateProforma($id , $proforma);
+			} */
 
 			if($id)
 			{
@@ -325,6 +333,21 @@ class Proforma extends CI_Controller
 			echo json_encode($dato);
 		}
         else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function getProforma(){
+		if($this->input->is_ajax_request())
+        {
+			$id=$this->security->xss_clean($this->input->post("id"));
+			$user =$this->session->userdata('user_id');
+			$proforma = new stdclass();
+			$proforma->proforma = $this->Proforma_model->getProforma($id); 
+			$proforma->items = $this->Proforma_model->getProformaItems($id);
+			echo json_encode($proforma);
+		}
+		else
 		{
 			die("PAGINA NO ENCONTRADA");
 		}

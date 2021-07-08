@@ -87,7 +87,8 @@ const app = new Vue({
         tiempoEntrega:'',
         industria: '',
         /* documento */
-        id:'',
+        id:0,
+        btnGuardar:'Guardar',
         moneda:1,
         validez:'',
         lugarEntrega:'',
@@ -109,11 +110,12 @@ const app = new Vue({
        
     },
   created: function () {
+    agregarcargando()
     this.getTipos()
-    let id = document.getElementById("idPedido").value
+    let id = document.getElementById("idProforma").value
     if (id) {
       console.log(id);
-      this.editPedido(id)
+      this.editProforma(id)
     }
   },
     methods: {
@@ -134,9 +136,11 @@ const app = new Vue({
           return
         }
         let form = new FormData();
+        form.append('id', this.id)
         form.append('fecha', moment(this.fecha).format('YYYY-MM-DD'))
         form.append('almacen', this.almacen)
         form.append('cliente', this.cliente.id)
+        form.append('n', this.n)
         form.append('moneda', this.moneda)
         form.append('condicionesPago', this.condicionPago)
         form.append('porcentajeDescuento', this.porcentajeDescuento)
@@ -148,7 +152,6 @@ const app = new Vue({
         form.append('glosa', this.glosa)
         form.append('tiempoEntrega', this.tiempoEntrega)
         form.append('garantia', this.garantia)
-        form.append('marca', this.marca)
         form.append('items', JSON.stringify(this.items))
         /* for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); };  quitarcargando(); return; */
         $.ajax({
@@ -171,7 +174,7 @@ const app = new Vue({
                 allowOutsideClick: false,                                                                        
                 }).then(function(){
                   agregarcargando()
-                  window.location.href=base_url("index.php/Importaciones/Pedidos");
+                  window.location.href=base_url("index.php/Proforma");
                 })
             } else {
               swal({
@@ -310,7 +313,7 @@ const app = new Vue({
       onSearchCliente(search, loading) {
         loading(true)
         this.searchCliente(loading, search, this)
-        },
+      },
       searchCliente: _.debounce((loading, search, vm) => {
             $.ajax({
                 type:"POST",
@@ -326,7 +329,55 @@ const app = new Vue({
         }, 350),
         cancel(e){
         e.preventDefault()
-        },
+      },
+      editProforma(id){
+        agregarcargando()
+        this.id = id
+        this.btnGuardar = 'Editar'
+        
+        $.ajax({
+          type: "POST",
+          url: base_url('index.php/Proforma/getProforma'),
+          dataType: "json",
+          data: {
+                  id:id,
+                },
+        }).done(function (res) {
+          agregarcargando()
+          items = res.items
+          items.forEach(e => {
+            if (e.img == '' || e.img == null) {
+              e.url_img = url_img
+            } else {
+              e.url_img = base_url('assets/img_articulos/'+ e.img)
+            }
+          });
+          app.n = res.proforma.num
+          app.title = `Editar Proforma ${app.n}`
+          app.fecha = moment(res.proforma.fecha).format('MM-DD-YYYY')
+          app.almacen = res.proforma.idAlm
+          app.cliente = {
+            id: res.proforma.idCliente,
+            label: res.proforma.clienteNombre
+
+          }
+          app.moneda = res.proforma.idMoneda
+          app.condicionPago = res.proforma.condicionesPago
+          app.validez = res.proforma.validezOferta
+          app.lugarEntrega = res.proforma.lugarEntrega
+          app.porcentajeDescuento = res.proforma.porcentajeDescuento
+          app.tipo = res.proforma.idTipo
+          app.garantia = res.proforma.garantia
+          app.items = res.items
+          app.descuento = res.proforma.descuento
+          let regex = new RegExp('<br />', 'g')
+          glosa = res.proforma.glosa.toString()
+          glosa = glosa.replace(regex,'')
+          app.glosa = glosa
+          app.total()
+          quitarcargando()
+        })
+      },
     },
     filters:{
       moneda:function(value){

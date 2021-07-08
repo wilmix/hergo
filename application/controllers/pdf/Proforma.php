@@ -37,14 +37,14 @@ class Proforma extends CI_Controller {
             $url_img= $item->img ? 'assets/img_articulos/' . $item->img : 'assets/img_articulos/hergo.jpg';
             $this->pdf->Cell(25,5,$this->pdf->Image($url_img, $this->pdf->GetX() + 5, $this->pdf->GetY()+1, 12 ),$l,0,'C',0);
             $this->pdf->Cell(15,5,utf8_decode($item->codigo),$l,0,'C',0);  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
-            $this->pdf->MultiCell(45,5,iconv('UTF-8', 'windows-1252', ($item->descripcion)),$l,'L',0);
+            $this->pdf->MultiCell(45,5,iconv('UTF-8', 'windows-1252', ($item->descrip)),$l,'L',0);
             $this->pdf->SetXY(100,$this->pdf->GetY()-5);
             $this->pdf->Cell(15,5,$item->marca,$l,0,'C',1);
             $this->pdf->Cell(15,5,$item->industria,$l,0,'C',1);
             $this->pdf->Cell(15,5,$item->tiempoEntrega,$l,0,'C',1);
             $this->pdf->Cell(15,5,number_format($item->cantidad, 2, ".", ","),$l,0,'R',0);
             $this->pdf->Cell(10,5,$item->uni,$l,0,'R',1);
-            $this->pdf->Cell(20,5,number_format($item->precio, 2, ".", ","),$l,0,'R',0);
+            $this->pdf->Cell(20,5,number_format($item->precioLista, 2, ".", ","),$l,0,'R',0);
             $this->pdf->Cell(20,5,number_format($item->total, 2, ".", ","),$l,0,'R',0);
           $this->pdf->Ln(15);//DISTANCIA ENTRE LINEAS 
           $this->pdf->Line($this->pdf->GetX(),$this->pdf->GetY()-5,$this->pdf->GetX()+200,$this->pdf->GetY()-5);

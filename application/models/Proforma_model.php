@@ -46,11 +46,13 @@ class Proforma_model extends CI_Model
     	$sql="      SELECT
                         p.id,
                         a.almacen,
+                        a.idalmacen idAlm,
                         a.direccion almDirec,
                         a.Telefonos almTel,
                         a.ciudad ciudadAlm,
                         p.fecha,
                         p.num,
+                        c.idCliente,
                         c.nombreCliente clienteNombre,
                         c.direccion clienteDirec,
                         c.telefono clienteTelefono,
@@ -63,7 +65,9 @@ class Proforma_model extends CI_Model
                         p.garantia,
                         p.total,
                         m.moneda,
+                        m.id idMoneda,
                         pt.tipo,
+                        pt.id idTipo,
                         p.porcentajeDescuento,
                         p.descuento,
                         concat(u.first_name, ' ', u.last_name) autorNombre,
@@ -88,14 +92,16 @@ class Proforma_model extends CI_Model
     public function getProformaItems($id)
 	{ 
     	$sql="      SELECT
+                        a.idArticulos id,
                         a.CodigoArticulo codigo,
                         u.Unidad uni,
                         pit.marca marca,
-                        pit.descripcion,
+                        pit.descripcion descrip,
                         pit.cantidad,
+                        m.Marca marca,
                         pit.tiempoEntrega,
                         pit.industria,
-                        pit.precio,
+                        pit.precio precioLista,
                         pit.total,
                         a.Imagen img
                         
@@ -116,7 +122,7 @@ class Proforma_model extends CI_Model
 
     public function storeProforma($id, $proforma)
 	{	
-        if ($id) {
+        if ($id =! 0 ) {
             $this->db->trans_start();
                 $this->db->where('id', $id);
                 $this->db->update('proforma', $proforma);
@@ -137,7 +143,13 @@ class Proforma_model extends CI_Model
             return ( $this->db->trans_status() === FALSE ) ? false : $id;
         }
     }
-   
+    public function updateProforma($id, $proforma){
+        $this->db->trans_start();
+            $this->db->where('id', $id);
+            $this->db->update('proforma', $proforma);
+        $this->db->trans_complete();
+        return ( $this->db->trans_status() === FALSE ) ? false : $id;
+    }
   
     public function storeItems($id, $proforma)
     {
