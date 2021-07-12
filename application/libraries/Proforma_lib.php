@@ -151,10 +151,11 @@
                     $this->Cell(50,4, utf8_decode('Elaborado por:'),0,0,'C');
                     $this->Ln(3);
                     $this->SetX(140);
-                    $this->Cell(50,4, utf8_decode('Willy Salas'),0,0,'C');
+                    $this->Cell(50,4, utf8_decode($this->datos['autorNombre']),0,0,'C');
                     $this->Ln(3);
                     $this->SetX(140);
-                    $this->Cell(50,4, utf8_decode('willy@hergo.com.bo - 75288681'),0,0,'C');
+                    $autorPie = "{$this->datos['autorEmail']} - {$this->datos['autorPhone']}";
+                    $this->Cell(50,4, utf8_decode($autorPie),0,0,'C');
                 //NUMERO PIED PAGINA
                 $this->SetY(270);
                 $this->SetFont('Arial','I', 6);
