@@ -214,28 +214,12 @@ return `
 	</button>
 `
 }
-function aprobados (data, type, row) {
-	//console.log(row.nAprobados>);
-	if (row.nAprobados>2) {
-		//console.log(`id ${row.id} npedidos ${row.n}`);
-		return `<span class="label label-success">APROBADO</span>`
-	} else {
-		return `<span class="label label-danger">PENDIENTE</span>`
-	}
-}
 
 
 $(document).on("click", "button.print", function () {
 
     let row = getRow(table, this)
-		swal({
-			title: "PDF Proforma!",
-			text: "Crear PDF de la proforma",
-			type: "success",        
-			allowOutsideClick: false,                                                                        
-		})
-    console.log(row);return
-	let print = base_url("pdf/SolicitudPDF/index/") + row.id_pedido;
+	let print = base_url("pdf/Proforma/index/") + row.id;
 	window.open(print);
 })
 
