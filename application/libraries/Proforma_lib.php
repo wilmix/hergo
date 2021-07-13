@@ -118,13 +118,13 @@
                 $this->SetFont('Arial','',8);
                 $this->Cell(85,5, utf8_decode($this->datos['condicionesPago']),'R',0,'',1);
             }
-            /* if (isset($this->datos['validezOferta'])) {
+            if (isset($this->datos['validezOferta'])) {
                 $this->SetXY($xData,$this->GetY()+5);
                 $this->SetFont('Arial','B',8);
                 $this->Cell(25,5, utf8_decode('Validez de Oferta: '),$borde,0,'',1);
                 $this->SetFont('Arial','',8);
                 $this->Cell(85,5, utf8_decode($this->datos['validezOferta']),'R',0,'',1);
-            } */
+            }
             if (isset($this->datos['garantia'])) {
                 $this->SetXY($xData,$this->GetY()+5);
                 $this->SetFont('Arial','B',8);
@@ -132,13 +132,13 @@
                 $this->SetFont('Arial','',8);
                 $this->Cell(95,5, utf8_decode($this->datos['garantia']),'R',0,'',1);
             }
-            if (isset($this->datos['tiempoEntrega'])) {
+            /* if (isset($this->datos['tiempoEntrega'])) {
                 $this->SetXY($xData,$this->GetY()+5);
                 $this->SetFont('Arial','B',8);
                 $this->Cell(30,5, utf8_decode('Tiempo de Entrega: '),$borde,0,'',1);
                 $this->SetFont('Arial','',8);
                 $this->Cell(80,5, utf8_decode($this->datos['tiempoEntrega']),'R',0,'',1);
-            }
+            } */
             if (isset($this->datos['lugarEntrega'])) {
                 $this->SetXY($xData,$this->GetY()+5);
                 $this->SetFont('Arial','B',8);
