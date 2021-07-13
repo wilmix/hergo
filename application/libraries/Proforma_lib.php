@@ -46,7 +46,8 @@
             $xCliente = 65;
             $this->SetFont('Arial','B',12);
             $this->SetXY($xCliente,20);
-            $this->Cell(85,5, utf8_decode('Para: ' . $this->datos['clienteNombre']),$borde,0,'C');
+            //$this->Cell(85,5, utf8_decode('Para: ' . $this->datos['clienteNombre']),$borde,0,'C');
+            $this->MultiCell(85,5,iconv('UTF-8', 'windows-1252', ($this->datos['clienteNombre'])),$borde,'C',0);
             //if (($this->datos['clienteTelefono'])) {
                 $this->SetXY($xCliente,$this->GetY()+5);
                 $this->SetFont('Arial','B',8);
