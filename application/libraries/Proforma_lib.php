@@ -118,13 +118,13 @@
                 $this->SetFont('Arial','',8);
                 $this->Cell(85,5, utf8_decode($this->datos['condicionesPago']),'R',0,'',1);
             }
-            /* if (isset($this->datos['validezOferta']) && $this->datos['validezOferta'] ==! '') {
+            if (isset($this->datos['validezOferta']) && $this->datos['validezOferta'] ==! '') {
                 $this->SetXY($xData,$this->GetY()+5);
                 $this->SetFont('Arial','B',8);
                 $this->Cell(25,5, utf8_decode('Validez de Oferta: '),$borde,0,'',1);
                 $this->SetFont('Arial','',8);
                 $this->Cell(85,5, utf8_decode($this->datos['validezOferta']),'R',0,'',1);
-            } */
+            }
             if (isset($this->datos['garantia']) && $this->datos['garantia'] ==! '') {
                 $this->SetXY($xData,$this->GetY()+5);
                 $this->SetFont('Arial','B',8);
