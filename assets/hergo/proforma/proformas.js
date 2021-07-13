@@ -212,6 +212,10 @@ return `
 		<span class="fa fa-print" aria-hidden="true">
 		</span>
 	</button>
+	<button type="button" class="btn btn-default edit">
+		<span class="fa fa-pencil" aria-hidden="true">
+		</span>
+	</button>
 `
 }
 
@@ -220,6 +224,12 @@ $(document).on("click", "button.print", function () {
 
     let row = getRow(table, this)
 	let print = base_url("pdf/Proforma/index/") + row.id;
+	window.open(print);
+})
+$(document).on("click", "button.edit", function () {
+
+    let row = getRow(table, this)
+	let print = base_url("Proforma/formProforma/") + row.id;
 	window.open(print);
 })
 

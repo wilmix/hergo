@@ -122,7 +122,7 @@ class Proforma_model extends CI_Model
 
     public function storeProforma($id, $proforma)
 	{	
-        /* if ($id =! 0 ) {
+        if ($id > 0 ) {
             $this->db->trans_start();
                 $this->db->where('id', $id);
                 $this->db->update('proforma', $proforma);
@@ -133,7 +133,7 @@ class Proforma_model extends CI_Model
 
             $this->db->trans_complete();
             return ( $this->db->trans_status() === FALSE ) ? false : $id;
-        } else { */
+        } else {
             $this->db->trans_start();
                 $this->db->insert("proforma", $proforma);
                 $id=$this->db->insert_id();
@@ -141,7 +141,7 @@ class Proforma_model extends CI_Model
                 $this->storeItems($id, $proforma);
             $this->db->trans_complete();
             return ( $this->db->trans_status() === FALSE ) ? false : $id;
-        /* } */
+        }
     }
     public function updateProforma($id, $proforma){
         $this->db->trans_start();

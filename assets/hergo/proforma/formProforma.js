@@ -126,7 +126,7 @@ const app = new Vue({
        
         e.preventDefault()
         if (!this.cliente || !this.items.length>0) {
-          quitarcargando()
+          //quitarcargando()
           swal({
             title: 'Error',
             text: "Por favor llene correctamente el formulario",
@@ -166,7 +166,6 @@ const app = new Vue({
           if (res.status == true) {
             quitarcargando()
             if (app.id) {
-              console.log(this.id);
               swal({
                 title: "Editado!",
                 text: "La proforma se modificó con éxito",
@@ -174,6 +173,8 @@ const app = new Vue({
                 allowOutsideClick: false,                                                                        
                 }).then(function(){
                   agregarcargando()
+                  let print = base_url("pdf/Proforma/index/") + res.id;
+                  window.open(print);
                   window.location.href=base_url("index.php/Proforma");
                 })
             } else {
@@ -184,7 +185,9 @@ const app = new Vue({
                 allowOutsideClick: false,                                                                        
                 }).then(function(){
                   agregarcargando()
-                  location.reload()
+                  let print = base_url("pdf/Proforma/index/") + res.id;
+                  window.open(print);
+                  window.location.href=base_url("index.php/Proforma");
                 })
             }
           } else {
