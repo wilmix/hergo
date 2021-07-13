@@ -98,7 +98,7 @@ class Proforma_model extends CI_Model
                         pit.marca marca,
                         pit.descripcion descrip,
                         pit.cantidad,
-                        m.Marca marca,
+                        pit.marca marca,
                         pit.tiempoEntrega,
                         pit.industria,
                         pit.precio precioLista,
