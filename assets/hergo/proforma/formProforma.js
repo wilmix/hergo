@@ -93,6 +93,7 @@ const app = new Vue({
         validez:'',
         lugarEntrega:'',
         garantia:'',
+        tiempoEntregaC:'',
         title:'ProForma',
         n:0,
         fecha: moment().format('MM-DD-YYYY'),
@@ -150,7 +151,7 @@ const app = new Vue({
         form.append('tipo', this.tipo)
         form.append('lugarEntrega', this.lugarEntrega)
         form.append('glosa', this.glosa)
-        form.append('tiempoEntrega', this.tiempoEntrega)
+        form.append('tiempoEntregaC', this.tiempoEntregaC)
         form.append('garantia', this.garantia)
         form.append('items', JSON.stringify(this.items))
         /* for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); };  quitarcargando(); return; */
@@ -346,6 +347,7 @@ const app = new Vue({
                   id:id,
                 },
         }).done(function (res) {
+          console.log(res);
           agregarcargando()
           items = res.items
           items.forEach(e => {
@@ -371,6 +373,7 @@ const app = new Vue({
           app.porcentajeDescuento = res.proforma.porcentajeDescuento
           app.tipo = res.proforma.idTipo
           app.garantia = res.proforma.garantia
+          app.tiempoEntregaC = res.proforma.tiempoEntregaC
           app.items = res.items
           app.descuento = res.proforma.descuento
           let regex = new RegExp('<br />', 'g')

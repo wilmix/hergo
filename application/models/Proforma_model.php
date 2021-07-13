@@ -61,7 +61,7 @@ class Proforma_model extends CI_Model
                         p.condicionesPago,
                         p.validezOferta,
                         p.lugarEntrega,
-                        p.tiempoEntrega,
+                        p.tiempoEntrega tiempoEntregaC,
                         p.garantia,
                         p.total,
                         m.moneda,

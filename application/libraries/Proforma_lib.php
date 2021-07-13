@@ -47,7 +47,7 @@
             $this->SetFont('Arial','B',12);
             $this->SetXY($xCliente,20);
             //$this->Cell(85,5, utf8_decode('Para: ' . $this->datos['clienteNombre']),$borde,0,'C');
-            $this->MultiCell(85,5,iconv('UTF-8', 'windows-1252', ($this->datos['clienteNombre'])),$borde,'C',0);
+            $this->MultiCell(85,5,iconv('UTF-8', 'windows-1252', ('Para: ' . $this->datos['clienteNombre'])),$borde,'C',0);
             //if (($this->datos['clienteTelefono'])) {
                 $this->SetXY($xCliente,$this->GetY()+5);
                 $this->SetFont('Arial','B',8);
@@ -132,13 +132,13 @@
                 $this->SetFont('Arial','',8);
                 $this->Cell(95,5, utf8_decode($this->datos['garantia']),'R',0,'',1);
             }
-            /* if (isset($this->datos['tiempoEntrega'])) {
+            if (isset($this->datos['tiempoEntregaC']) && $this->datos['tiempoEntregaC'] ==! '') {
                 $this->SetXY($xData,$this->GetY()+5);
                 $this->SetFont('Arial','B',8);
                 $this->Cell(30,5, utf8_decode('Tiempo de Entrega: '),$borde,0,'',1);
                 $this->SetFont('Arial','',8);
-                $this->Cell(80,5, utf8_decode($this->datos['tiempoEntrega']),'R',0,'',1);
-            } */
+                $this->Cell(80,5, utf8_decode($this->datos['tiempoEntregaC']),'R',0,'',1);
+            }
             if (isset($this->datos['lugarEntrega']) && $this->datos['lugarEntrega'] ==! '') {
                 $this->SetXY($xData,$this->GetY()+5);
                 $this->SetFont('Arial','B',8);

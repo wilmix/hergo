@@ -39,7 +39,9 @@ class Proforma extends CI_Controller {
             $this->pdf->Cell(15,5,utf8_decode($item->codigo),$l,0,'C',0);  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
             $this->pdf->MultiCell(45,5,iconv('UTF-8', 'windows-1252', ($item->descrip)),$l,'L',0);
             $this->pdf->SetXY(100,$this->pdf->GetY()-5);
-            $this->pdf->Cell(15,5,$item->marca,$l,0,'C',1);
+            //$this->pdf->Cell(15,5,$item->marca,$l,0,'C',1);
+            $this->pdf->MultiCell(15,5,iconv('UTF-8', 'windows-1252', ($item->marca)),$l,'C',0);
+            $this->pdf->SetXY(115,$this->pdf->GetY()-5);
             $this->pdf->Cell(15,5,$item->industria,$l,0,'C',1);
             $this->pdf->Cell(15,5,$item->tiempoEntrega,$l,0,'C',1);
             $this->pdf->Cell(15,5,number_format($item->cantidad, 2, ".", ","),$l,0,'R',0);

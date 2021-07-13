@@ -93,7 +93,13 @@
             <!-- garantia -->
             <div class="form-group col-sm-6 col-md-2" >
               <label for="garantia">Garantia: </label>
-              <input type="text" class="form-control" id="garantia" name="garantia" @change="total" v-model="garantia">
+              <input type="text" class="form-control" id="garantia" name="garantia" v-model="garantia">
+            </div>
+
+            <!-- tiempoEntregaC -->
+            <div class="form-group col-sm-6 col-md-2" >
+              <label for="tiempoEntregaC">Tiempo de Entrega (opcional): </label>
+              <input type="text" class="form-control" id="tiempoEntregaC" name="tiempoEntregaC" v-model="tiempoEntregaC">
             </div>
 
            
