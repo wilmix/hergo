@@ -127,7 +127,7 @@ const app = new Vue({
        
         e.preventDefault()
         if (!this.cliente || !this.items.length>0) {
-          //quitarcargando()
+          quitarcargando()
           swal({
             title: 'Error',
             text: "Por favor llene correctamente el formulario",

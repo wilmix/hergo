@@ -131,12 +131,12 @@
             <!-- industria -->
             <div class="form-group col-sm-0 col-md-2">
             <label for="industria">Industria:</label>
-              <input type="text" class="form-control" v-model="industria">
+              <input type="text" class="form-control" v-model="industria" maxlength="6">
             </div>
             <!-- TiempoEntrega -->
             <div class="form-group col-sm-0 col-md-2">
             <label for="tiempoEntrega">TiempoEntrega:</label>
-              <input type="text" class="form-control" v-model="tiempoEntrega">
+              <input type="text" class="form-control" v-model="tiempoEntrega" maxlength="9">
             </div>
             <!-- cantidad -->
             <div class="form-group col-sm-4 col-md-2">
@@ -201,13 +201,13 @@
                   </div>
                   <div>
                     <td v-if="edit" class="text-right">
-                      <input type="text" class="form-control input-sm text-right col-md-2" v-model="item.industria" v-on:keyup.enter="editRow">
+                      <input type="text" class="form-control input-sm text-right col-md-2" v-model="item.industria" v-on:keyup.enter="editRow" maxlength="6">
                     </td>
                     <td v-else @dblclick="editRow()" class="text-left">{{ item.industria}}</td>
                   </div>
                   <div>
                     <td v-if="edit" class="text-right">
-                      <input type="text" class="form-control input-sm text-right col-md-2" v-model="item.tiempoEntrega" v-on:keyup.enter="editRow">
+                      <input type="text" class="form-control input-sm text-right col-md-2" v-model="item.tiempoEntrega" v-on:keyup.enter="editRow" maxlength="9">
                     </td>
                     <td v-else @dblclick="editRow()" class="text-left">{{ item.tiempoEntrega}}</td>
                   </div>

@@ -98,7 +98,7 @@ class Proforma_model extends CI_Model
                         pit.marca marca,
                         pit.descripcion descrip,
                         pit.cantidad,
-                        pit.marca marca,
+                        pit.marca marcaSigla,
                         pit.tiempoEntrega,
                         pit.industria,
                         pit.precio precioLista,
@@ -160,7 +160,7 @@ class Proforma_model extends CI_Model
             $item->articulo_id = $fila->id;
             $item->descripcion = strtoupper($fila->descrip);
             $item->tiempoEntrega = strtoupper($fila->tiempoEntrega);
-            $item->marca = strtoupper($fila->marca);
+            $item->marca = strtoupper($fila->marcaSigla);
             $item->industria = strtoupper($fila->industria);
             $item->cantidad = round($fila->cantidad,2);
             $item->precio = round($fila->precioLista,2);
