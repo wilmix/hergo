@@ -24,9 +24,11 @@
             $this->Cell(60,8, utf8_decode('Fecha : ' . date('d/m/Y',strtotime($this->datos['fecha'])) ),$borde,0,'C',0);
             $this->SetXY(150,28);
             $this->SetFont('Arial','B',10);
-            $this->Cell(60,8, utf8_decode('Validez: ' . $this->datos['validezOferta'] ),$borde,0,'C',0);
+            //$this->Cell(60,8, utf8_decode('Validez: ' . $this->datos['validezOferta'] ),$borde,0,'C',0);
+            $this->Cell(60,8, utf8_decode( 'Moneda: ' . $this->datos['moneda'] ),$borde,0,'C',0);
             $this->SetXY(150,36);
-            $this->Cell(60,8, utf8_decode( $this->datos['moneda'] ),$borde,0,'C',0);
+            $this->MultiCell(60,8,iconv('UTF-8', 'windows-1252', ('Validez: ' . $this->datos['validezOferta'])),$borde,'C',0);
+            
 
 
             $this->SetFont('Arial','B',12);

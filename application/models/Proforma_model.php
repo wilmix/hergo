@@ -289,6 +289,7 @@ class Proforma_model extends CI_Model
                         CONCAT(a.CodigoArticulo, ' | ' , a.Descripcion) label,
                         a.Descripcion descrip,
                         m.Marca marca,
+                        m.Sigla marcaSigla,
                         u.Unidad uni,
                         a.precio,
                         a.precioDol,

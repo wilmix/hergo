@@ -11,7 +11,8 @@ class Proforma extends CI_Controller {
     $items = $this->Proforma_model->getProformaItems($id);
     $params = get_object_vars($proforma);
     $year = date('y',strtotime($proforma->fecha));
-
+    $mes = date('n',strtotime($proforma->fecha));
+    $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
     
     $this->load->library('Proforma_lib', $params);
         $this->pdf = new Proforma_lib($params);
@@ -21,7 +22,7 @@ class Proforma extends CI_Controller {
         $this->pdf->SetTitle('PRO' . '-' .$proforma->num. '-' . $year);
         $this->items($items,$proforma);
 
-      $this->pdf->Output('I','PRO' . '-' .$proforma->num. '-' . $year.'.pdf',true);
+      $this->pdf->Output('I',$proforma->num . '-' . $year . ' | ' . $proforma->clienteNombre . ' | ' . $proforma->tipo . ' | ' . strtoupper($meses[($mes)-1]) . '.pdf',true);
   }
   public function items($items,$proforma)
   {
@@ -34,14 +35,20 @@ class Proforma extends CI_Controller {
           $this->pdf->SetTextColor(0,0,0);
           $this->pdf->SetFont('Arial','',8); 
             $this->pdf->Cell(5,5,$n++,$l,0,'C',0); 
-            $url_img= $item->img ? 'assets/img_articulos/' . $item->img : 'assets/img_articulos/hergo.jpg';
-            $this->pdf->Cell(25,5,$this->pdf->Image($url_img, $this->pdf->GetX() + 5, $this->pdf->GetY()+1, 12 ),$l,0,'C',0);
+            $url_img= $item->img ? 'assets/img_articulos/' . $item->img : 'assets/img_articulos/' . $item->img;
+            //$url_img= $item->img ? 'assets/img_articulos/' . $item->img : 'assets/img_articulos/hergo.jpg';
+            if (($item->img  != '')) {
+              $this->pdf->Cell(25,5,$this->pdf->Image($url_img, $this->pdf->GetX() + 5, $this->pdf->GetY()+1, 12 ),$l,0,'C',0);
+            } else {
+              $this->pdf->Cell(25,5,utf8_decode(''),$l,0,'C',0);
+            }
             $this->pdf->Cell(15,5,utf8_decode($item->codigo),$l,0,'C',0);  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
             $this->pdf->MultiCell(45,5,iconv('UTF-8', 'windows-1252', ($item->descrip)),$l,'L',0);
             $this->pdf->SetXY(100,$this->pdf->GetY()-5);
-            //$this->pdf->Cell(15,5,$item->marca,$l,0,'C',1);
+            $this->pdf->Cell(15,5,$item->marca,$l,0,'C',1);
+            /* $this->pdf->SetXY(100,$this->pdf->GetY()-5);
             $this->pdf->MultiCell(15,5,iconv('UTF-8', 'windows-1252', ($item->marca)),$l,'C',0);
-            $this->pdf->SetXY(115,$this->pdf->GetY()-5);
+            $this->pdf->SetXY(115,$this->pdf->GetY()-5); */
             $this->pdf->Cell(15,5,$item->industria,$l,0,'C',1);
             $this->pdf->Cell(15,5,$item->tiempoEntrega,$l,0,'C',1);
             $this->pdf->Cell(15,5,number_format($item->cantidad, 2, ".", ","),$l,0,'R',0);

@@ -72,7 +72,7 @@
 
             <!-- descuento -->
             <div class="form-group col-sm-6 col-md-2" >
-              <label for="porcentajeDescuento">Descuento %: </label>
+              <label for="porcentajeDescuento">Descuento % (opcional): </label>
               <input type="number" class="form-control" id="porcentajeDescuento" name="porcentajeDescuento" @change="total" v-model="porcentajeDescuento">
             </div>
             
@@ -195,9 +195,9 @@
                   </div>
                   <div>
                     <td v-if="edit" class="text-right">
-                      <input type="text" class="form-control input-sm text-right col-md-2" v-model="item.marca" v-on:keyup.enter="editRow">
+                      <input type="text" class="form-control input-sm text-right col-md-2" v-model="item.marcaSigla" v-on:keyup.enter="editRow">
                     </td>
-                    <td v-else @dblclick="editRow()" class="text-left">{{ item.marca}}</td>
+                    <td v-else @dblclick="editRow()" class="text-left">{{ item.marcaSigla}}</td>
                   </div>
                   <div>
                     <td v-if="edit" class="text-right">
