@@ -27,7 +27,7 @@
             //$this->Cell(60,8, utf8_decode('Validez: ' . $this->datos['validezOferta'] ),$borde,0,'C',0);
             $this->Cell(60,8, utf8_decode( 'Moneda: ' . $this->datos['moneda'] ),$borde,0,'C',0);
             $this->SetXY(150,36);
-            $this->MultiCell(60,8,iconv('UTF-8', 'windows-1252', ('Validez: ' . $this->datos['validezOferta'])),$borde,'C',0);
+            $this->MultiCell(60,5,iconv('UTF-8', 'windows-1252', ('Validez: ' . $this->datos['validezOferta'])),$borde,'C',0);
             
 
 
