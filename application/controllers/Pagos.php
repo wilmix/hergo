@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Pagos extends CI_Controller  /////**********nombre controlador
 {
-	private $datos;
+	
 	public function __construct()
 	{	
 		parent::__construct();

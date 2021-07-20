@@ -6,7 +6,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ReportesExcel extends CI_Controller
 {
-	private $datos;
+	
 	public function __construct()
 	{
 		parent::__construct();

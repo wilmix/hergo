@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH."/third_party/codigoControl/CodigoControlV7.php";
 class Facturas extends CI_Controller
 {
-	private $datos;
+	
 	public function __construct()
 	{
 		parent::__construct();

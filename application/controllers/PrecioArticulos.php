@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class PrecioArticulos extends CI_Controller
 {
-	private $datos;
+	
 	public function __construct()
 	{
 		parent::__construct();
@@ -146,7 +146,7 @@ class PrecioArticulos extends CI_Controller
 			$info->precio = number_format($this->input->post('precioBol'),2);
 			
 			//echo json_encode($info);die();
-			//$mail = $this->sendEmail($info);
+			$mail = $this->sendEmail($info);
 
 			if($id)
 			{

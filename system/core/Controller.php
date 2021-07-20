@@ -63,6 +63,7 @@ class CI_Controller {
 	 *
 	 * @return	void
 	 */
+	public $datos;
 	public function __construct()
 	{
 		self::$instance =& $this;
@@ -74,12 +75,13 @@ class CI_Controller {
 		{
 			$this->$var =& load_class($class);
 		}
-
+		$this->datos['skin']= ($this->config->item('skin')) ? $this->config->item('skin') : 'skin-blue';
+		
 		$this->load =& load_class('Loader', 'core');
 		$this->load->initialize();
 		log_message('info', 'Controller Class Initialized');
 
-		$this->cabeceras_css=array(
+		/* $this->cabeceras_css=array(
 			base_url('assets/bootstrap/css/bootstrap.min.css'),
 			base_url("assets/fa/css/font-awesome.min.css"),
 			base_url("assets/dist/css/AdminLTE.min.css"),
@@ -91,8 +93,8 @@ class CI_Controller {
 			base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),	
 			base_url('assets/plugins/daterangepicker/daterangepicker.css')	
 
-		);
-		$this->cabecera_script=array(
+		); */
+		/* $this->cabecera_script=array(
 			base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
 			base_url('assets/bootstrap/js/bootstrap.min.js'),
 			base_url('assets/dist/js/app.min.js'),
@@ -111,21 +113,20 @@ class CI_Controller {
 			base_url('assets/busqueda/underscore-min.js'),
 			base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
 			base_url('assets/plugins/daterangepicker/daterangepicker.js'),
-			base_url('assets/plugins/daterangepicker/locale/es.js'),
+			base_url('assets/plugins/daterangepicker/locale/es.js'), */
 			/**************INPUT MASK***************/
-			base_url('assets/plugins/inputmask/inputmask.js'),
+			/* base_url('assets/plugins/inputmask/inputmask.js'),
 			base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js'),
 			base_url('assets/plugins/inputmask/jquery.inputmask.js'),
-
-			base_url('assets/hergo/funciones.js'),
 			base_url('assets/hergo/NumeroALetras.js'),
+			base_url('assets/hergo/funciones.js'),
 
 		);
 		$this->foot_script=array(				
 			base_url('assets/vue/vue.js'),								
 			base_url('assets/vue/vue-resource.min.js'),
 			base_url('assets/hergo/vistaPreviaFacturacion/principal.js'),				
-		);
+		); */
 	}
 
 	// --------------------------------------------------------------------

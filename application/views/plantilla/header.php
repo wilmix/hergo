@@ -5,7 +5,8 @@
     font-size: 14px;
 }
 </style>
-<body class="skin-blue sidebar-mini fixed">
+<body class="<?= $skin ?> sidebar-mini fixed">
+
 <input type="hidden" id="baseurl" value="<?php echo base_url() ?>">
 
 <div class="wrapper">
