@@ -12,11 +12,9 @@
                       notEmpty: {
                         message: 'Campo obligatorio'
                     },
-                        between: {
-                            min: 1111,
-                            max: 999999999999999999,
-                            message: 'Igrese un CI o NIT válido'
-                        }
+                        notEmpty: {
+                            message: 'Campo obligatorio'
+                        },
                     }
                 },
             nombre_cliente: {

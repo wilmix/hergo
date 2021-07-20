@@ -76,12 +76,12 @@ class Cliente_model extends CI_Model
 		$sql="select c.`idCliente`, c.`documento`, c.`nombreCliente`, c.`fecha`, concat(u.`first_name`, ' ' , u.`last_name`) autor
 		from clientes c
 		inner join users u on u.`id` = c.`autor`
-		where c.`documento` = $nit";
+		where c.`documento` = '$nit'";
 		$query=$this->db->query($sql);	
 		
 		if($query->num_rows()>0)
         {
-			if ($nit == 99001) {
+			if ($nit == 99001 || $nit == 0) {
 				return false;
 			} else {
 				$fila=$query->row();
