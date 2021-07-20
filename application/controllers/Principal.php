@@ -28,7 +28,8 @@ class Principal extends CI_Controller
 				base_url('assets/dist/js/app.min.js'),
 				base_url('assets/plugins/slimscroll/slimscroll.min.js'),
 				base_url('assets/plugins/daterangepicker/moment.min.js'),
-				base_url('assets/hergo/dashboard.js'),
+				base_url('assets/hergo/funciones.js'),
+				//base_url('assets/hergo/dashboard.js'),
 				base_url('assets/sweetalert/sweetalert2.min.js'),
 	
 			);
@@ -64,7 +65,7 @@ class Principal extends CI_Controller
 				    
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/dashboard.js');
 			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 
 			$this->load->view('plantilla/head.php',$this->datos);
