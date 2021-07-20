@@ -78,12 +78,8 @@
                             '',
                             'success'
                             )
-                        console.log(returndata);
-                        console.log('hola');
                     } else {
-                        console.log(returndata);
                         client = JSON.parse(returndata)
-                        console.log(client);
                         swal({
                             title: 'Atencion',
                             html: "El NIT <b>" + client.documento + "</b> ya se encuentra registrado a nombre de <b>" + client.nombreCliente + "</b> en fecha  <b>" + formato_fecha_corta(client.fecha) + "</b> registrado por <b>" + client.autor + "</b>.",
@@ -123,7 +119,7 @@ function mostrarModal(fila)
     $("#id_cliente").val(fila.idCliente)
     $(".modal-title").html("Editar Cliente")
     asignarselect(fila.documentotipo,"#tipo_doc")
-    $("#carnet").prop('disabled', true);
+    $("#carnet").prop('disabled', false);
     $("#carnet").val(fila.documento)
     $("#nombre_cliente").val(fila.nombreCliente)
     asignarselect(fila.clientetipo,"#clientetipo")
