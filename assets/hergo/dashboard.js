@@ -127,7 +127,7 @@ function getIngresosHoy() {
   }).done(function (res) {
     //console.log(res);
     if (res =='') {
-      console.log('vacioIngresosHoy');
+      //console.log('vacioIngresosHoy');
       $("#ingresosHoy").html('0 '+"<small> Bs</small>")
     } else {
       let ingresosHoyLP = res[0].lp
@@ -150,16 +150,13 @@ function getVentasHoy() {
       i: ini,
     }, 
   }).done(function (res) {
-    console.log(res);
+    //console.log(res);
     if (res[0].ventasHoy == null) {
-      console.log('vacioVentasHoy');
       $("#ventasHoy").html('0 '+"<small> Bs</small>")
       $("#cantidad").html('0')
     } else {
       let hoy = res[0].ventasHoy
       let cantidad = res[0].cantidadHoy
-      console.log(formatNumber.new(Number(hoy).toFixed(2)));
-      console.log(formatNumber.new(Number(hoy)));
       $("#ventasHoy").html(formatNumber.new(Number(hoy).toFixed(2))+"<small> Bs</small>")
       $("#cantidad").html(formatNumber.new(Number(cantidad).toFixed(2)))
     }
@@ -191,7 +188,6 @@ function getInfoHoy() {
 
 function getNotaEntregaHoy() {
   ini = today
-  console.log(ini);
   $.ajax({
     type: "POST",
     url: base_url('index.php/Principal/notaEntregaHoy'),
@@ -383,7 +379,6 @@ $(document).on("change", "#almacen_filtro", function () {
 })
 
 function showNegatives() {
-  console.log('negatives2');
   ges = '2021'
   alm = $("#almacen_filtro").val()
 	$.ajax({
