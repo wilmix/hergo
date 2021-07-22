@@ -4,9 +4,11 @@
     require_once APPPATH."/third_party/numerosLetras/NumeroALetras.php";
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
 class Proforma extends CI_Controller {
-  public function index($id=null) {
+  public function index($id, $dist=14, $imgSize=12) {
 
     $this->load->model('Proforma_model');
+    $this->dist = $dist;
+    $this->imgSize = $imgSize;
     $proforma = $this->Proforma_model->getProforma($id);
     $items = $this->Proforma_model->getProformaItems($id);
     $params = get_object_vars($proforma);
@@ -33,34 +35,38 @@ class Proforma extends CI_Controller {
           $total += $item->total;
           $this->pdf->SetFillColor(255,255,255);
           $this->pdf->SetTextColor(0,0,0);
-          $this->pdf->SetFont('Arial','',8); 
+          //$this->pdf->SetFont('Arial','',8); 
+          $this->pdf->SetFont('Roboto','',8);
             $this->pdf->Cell(5,5,$n++,$l,0,'C',0); 
             $url_img= $item->img ? 'assets/img_articulos/' . $item->img : 'assets/img_articulos/' . $item->img;
-            //$url_img= $item->img ? 'assets/img_articulos/' . $item->img : 'assets/img_articulos/hergo.jpg';
+            $url_img_e = 'assets/img_articulos/' . $item->img;
+            /* $url_img= $item->img ? 'assets/img_articulos/' . $item->img : 'assets/img_articulos/check_blue.png';
+            $this->pdf->Cell(25,10,$this->pdf->Image($url_img, $this->pdf->GetX() + 5, $this->pdf->GetY()+1, 12 ),$l,0,'C',0); */
             if (($item->img  != '')) {
-              $this->pdf->Cell(25,5,$this->pdf->Image($url_img, $this->pdf->GetX() + 5, $this->pdf->GetY()+1, 12 ),$l,0,'C',0);
+              $this->pdf->Cell(25,10,$this->pdf->Image($url_img_e, $this->pdf->GetX() + 5, $this->pdf->GetY()+1, $this->imgSize ),$l,0,'C',0);
             } else {
-              $this->pdf->Cell(25,5,utf8_decode(''),$l,0,'C',0);
+              $this->pdf->Cell(25,10,$this->pdf->Image('assets/img_articulos/check_blue.png', $this->pdf->GetX() + 10, $this->pdf->GetY()+2, 5 ),$l,0,'R',0);
             }
             $this->pdf->Cell(15,5,utf8_decode($item->codigo),$l,0,'C',0);  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
             $this->pdf->MultiCell(45,5,iconv('UTF-8', 'windows-1252', ($item->descrip)),$l,'L',0);
             $this->pdf->SetXY(100,$this->pdf->GetY()-5);
-            $this->pdf->Cell(15,5,$item->marca,$l,0,'C',1);
+            $this->pdf->Cell(15,5,$item->marca,$l,0,'C',0);
             /* $this->pdf->SetXY(100,$this->pdf->GetY()-5);
             $this->pdf->MultiCell(15,5,iconv('UTF-8', 'windows-1252', ($item->marca)),$l,'C',0);
             $this->pdf->SetXY(115,$this->pdf->GetY()-5); */
-            $this->pdf->Cell(15,5,$item->industria,$l,0,'C',1);
-            $this->pdf->Cell(15,5,$item->tiempoEntrega,$l,0,'C',1);
+            $this->pdf->Cell(15,5,$item->industria,$l,0,'C',0);
+            $this->pdf->Cell(15,5,$item->tiempoEntrega,$l,0,'C',0);
             $this->pdf->Cell(15,5,number_format($item->cantidad, 2, ".", ","),$l,0,'R',0);
-            $this->pdf->Cell(10,5,$item->uni,$l,0,'R',1);
+            $this->pdf->Cell(10,5,$item->uni,$l,0,'R',0);
             $this->pdf->Cell(20,5,number_format($item->precioLista, 2, ".", ","),$l,0,'R',0);
             $this->pdf->Cell(20,5,number_format($item->total, 2, ".", ","),$l,0,'R',0);
-          $this->pdf->Ln(15);//DISTANCIA ENTRE LINEAS 
+          $this->pdf->Ln($this->dist);//DISTANCIA ENTRE LINEAS 
           $this->pdf->Line($this->pdf->GetX(),$this->pdf->GetY()-5,$this->pdf->GetX()+200,$this->pdf->GetY()-5);
           $this->pdf->SetY($this->pdf->GetY()-5);
         }
         $this->pdf->SetY($this->pdf->GetY()-5);
-        $this->pdf->SetFont('Arial','B',8);
+        //$this->pdf->SetFont('Arial','B',8);
+        $this->pdf->SetFont('Roboto','',8);
         $this->pdf->Cell(180,5,'Total:','T',0,'R',1); 
         $this->pdf->Cell(20,5,number_format($total, 2, ".", ","),'T',0,'R',1); 
         $this->pdf->Ln(5);
@@ -92,12 +98,14 @@ class Proforma extends CI_Controller {
     if ($glosas) {
       $this->pdf->Ln(6);
       $this->pdf->SetFillColor(20,60,190);
-      $this->pdf->SetFont('Arial','B',8); 
+     // $this->pdf->SetFont('Arial','B',8); 
+      $this->pdf->SetFont('Roboto','',8);
       $this->pdf->SetTextColor(255,255,255);
       $this->pdf->Cell(200,5, utf8_decode('OBSERVACIONES: '),1,0,'C',1);
       $this->pdf->Ln(5);
       $this->pdf->SetTextColor(0,0,0);
-      $this->pdf->SetFont('Arial','',8); 
+      //$this->pdf->SetFont('Arial','',8); 
+      $this->pdf->SetFont('Roboto','',8);
       $glosas = explode('<br />',$glosas);
       foreach ($glosas as $glosa) {
         $this->pdf->MultiCell(200,5,$glosa,0,'L',0);
