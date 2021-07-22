@@ -172,7 +172,6 @@ class CI_Controller {
 			base_url('assets/plugins/select/bootstrap-select.min.js'),//select
 			base_url('assets/plugins/numeral/numeral.min.js'),
 
-
 		);
 		$this->foot_script=array(				
 			'https://cdn.jsdelivr.net/npm/vue/dist/vue.js',								
@@ -181,6 +180,7 @@ class CI_Controller {
 			'https://unpkg.com/vuejs-datepicker',
 			'https://unpkg.com/vuejs-datepicker/dist/locale/translations/es.js',
 		);
+		
 	}
 
 }
