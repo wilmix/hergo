@@ -8,26 +8,12 @@ class Nuevo extends CI_Controller
 		parent::__construct();
 		$this->load->helper('url');	
 		$this->load->model("Nuevo_model");
-		$this->cabeceras_css=array(
-				base_url('assets/bootstrap/css/bootstrap.min.css'),
-				base_url("assets/fa/css/font-awesome.min.css"),
-				base_url("assets/dist/css/AdminLTE.min.css"),
-				base_url("assets/dist/css/skins/skin-blue.min.css"),
-				base_url("assets/hergo/estilos.css"),
-			);
-		$this->cabecera_script=array(
-				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
-				base_url('assets/bootstrap/js/bootstrap.min.js'),
-				base_url('assets/dist/js/app.min.js'),
-				base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
-				base_url('assets/plugins/slimscroll/slimscroll.min.js'),
-				
-			);
-		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
-			if($this->session->userdata('foto')==NULL)
-				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
-			else
-				$this->datos['foto']=base_url('assets/imagenes/').$this->session->userdata('foto');	
+		$this->load->model("Ingresos_model");
+		$this->getAssets();
+		$this->getDatos();
+		setlocale(LC_ALL,"es_ES");
+		echo strftime("%A %d de %B del %Y");
+		die();
 	}
 	public function index()
 	{
