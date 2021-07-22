@@ -77,11 +77,11 @@ class Factura extends CI_Controller {
                     $this->pdf->Ln(5);
                 }
 
-                $entera = intval(round($totalFactura,2));
-                $ctvs = round(($totalFactura - $entera) * 100);
+                $entera = intval(round($factura->total,2));
+                $ctvs = round((round($factura->total,2) - $entera) * 100);
                 $ctvs = sprintf('%02d',$ctvs);
                 $ctvs = ($ctvs == 0) ? '00' : $ctvs;
-
+                
                 $this->pdf->SetFont('Times','B',9);
                 $this->pdf->SetFillColor(255,255,255);
                 $this->pdf->Cell(179,5,'TOTAL Bs.','T',0,'R',1);
