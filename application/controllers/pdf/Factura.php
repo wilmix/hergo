@@ -76,7 +76,8 @@ class Factura extends CI_Controller {
                         $this->pdf->Cell(20,5,number_format(($linea->facturaCantidad*$linea->facturaPUnitario), 2, ".", ","),'',0,'R',1);
                     $this->pdf->Ln(5);
                 }
-                $entera = intval($totalFactura);
+
+                $entera = intval(round($totalFactura,2));
                 $ctvs = round(($totalFactura - $entera) * 100);
                 $ctvs = sprintf('%02d',$ctvs);
                 $ctvs = ($ctvs == 0) ? '00' : $ctvs;
