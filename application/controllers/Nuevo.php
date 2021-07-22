@@ -6,11 +6,14 @@ class Nuevo extends CI_Controller
 	public function __construct()
 	{	
 		parent::__construct();
+		if(!$this->session->userdata('logeado'))
+		redirect('auth', 'refresh');
 		$this->load->helper('url');	
 		$this->load->model("Nuevo_model");
 		$this->load->model("Ingresos_model");
 		$this->getAssets();
 		$this->getDatos();
+		echo locale_get_default();
 		setlocale(LC_ALL,"es_ES");
 		echo strftime("%A %d de %B del %Y");
 		die();
