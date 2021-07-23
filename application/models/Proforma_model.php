@@ -36,7 +36,8 @@ class Proforma_model extends CI_Model
                     WHERE
                     p.fecha BETWEEN '$ini' and '$fin'
                     and p.almacen = '$alm'
-            ";
+                    ORDER BY p.id DESC
+        ";
 
         $query=$this->db->query($sql);	
 		return $query->result_array();

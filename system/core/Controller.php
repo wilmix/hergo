@@ -75,11 +75,10 @@ class CI_Controller {
 		{
 			$this->$var =& load_class($class);
 		}
-		$this->datos['skin']= ($this->config->item('skin')) ? $this->config->item('skin') : 'skin-blue';
-		
 		$this->load =& load_class('Loader', 'core');
 		$this->load->initialize();
 		log_message('info', 'Controller Class Initialized');
+		$this->datos['skin']= ($this->config->item('skin')) ? $this->config->item('skin') : 'skin-blue';
 	}
 
 	// --------------------------------------------------------------------
@@ -97,6 +96,14 @@ class CI_Controller {
 
 	public function getDatos()
 	{
+		if(!$this->session->userdata('logeado'))
+		redirect('auth', 'refresh');
+		$this->load->model("General_model");
+		$this->load->library('LibAcceso');
+		//$this->datos['skin']= ($this->config->item('skin')) ? $this->config->item('skin') : 'skin-blue';
+		$this->datos['database']=$this->db->database;
+		date_default_timezone_set("America/La_Paz");
+
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
 
@@ -106,7 +113,7 @@ class CI_Controller {
 		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 		$this->datos['grupsOfUser'] = $this->ion_auth->in_group('Nacional') ? 'Nacional' : false;
 		$hoy = date('Y-m-d');
-		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
+		$tipoCambio = $this->General_model->getTipoCambio($hoy);
 		if ($tipoCambio) {
 			$tipoCambio = $tipoCambio->tipocambio;
 			$this->datos['tipoCambio'] = $tipoCambio;
@@ -179,8 +186,35 @@ class CI_Controller {
 			'https://unpkg.com/vue-select@3.10.3/dist/vue-select.js',
 			'https://unpkg.com/vuejs-datepicker',
 			'https://unpkg.com/vuejs-datepicker/dist/locale/translations/es.js',
+			base_url('assets/hergo/funciones.js'),
 		);
+
+		$this->datos['cabeceras_css']= $this->cabeceras_css;
+		$this->datos['cabeceras_script']= $this->cabecera_script;
+		$this->datos['foot_script']= $this->foot_script;
 		
 	}
-
+	public function setView($currentView)
+	{
+		$this->load->view('plantilla/head',$this->datos);
+		$this->load->view('plantilla/header',$this->datos);
+		$this->load->view('plantilla/menu',$this->datos);
+		$this->load->view('plantilla/headercontainer',$this->datos);
+		$this->load->view( $currentView,$this->datos);
+		$this->load->view('plantilla/footcontainer',$this->datos);
+		$this->load->view('plantilla/footer',$this->datos);
+		$this->load->view('plantilla/footerscript',$this->datos);
+	}
+	public function titles($titulo,$menu,$opcion)
+	{
+		$this->datos['titulo']=$titulo;
+		$this->datos['menu']=$menu;
+		$this->datos['opcion']=$opcion;
+	}
+	public function accesoCheck($acceso_id)
+	{
+		$this->libacceso->acceso($acceso_id);
+		if(!$this->session->userdata('logeado'))
+		redirect('auth', 'refresh');
+	}
 }

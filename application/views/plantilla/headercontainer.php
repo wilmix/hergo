@@ -1,7 +1,7 @@
  <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <?php echo isset($menu) ? $menu :"" ?>
+        <span><?php echo isset($menu) ? $menu :"" ?></span>
         <small><?php echo isset($opcion) ? $opcion :"" ?></small>
       </h1>
       <ol class="breadcrumb">

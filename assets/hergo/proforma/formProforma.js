@@ -94,7 +94,7 @@ const app = new Vue({
         lugarEntrega:'',
         garantia:'',
         tiempoEntregaC:'',
-        title:'ProForma',
+        title:'Crear Proforma',
         n:0,
         fecha: moment().format('MM-DD-YYYY'),
         formaPago:null,
@@ -114,7 +114,7 @@ const app = new Vue({
     agregarcargando()
     this.getTipos()
     let id = document.getElementById("idProforma").value
-    if (id) {
+    if (id>0) {
       console.log(id);
       this.editProforma(id)
     }
