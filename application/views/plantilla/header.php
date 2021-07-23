@@ -33,12 +33,22 @@
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-          <!-- Tipo de cambio -->
-          <li>
-            <a href="<?php echo base_url("index.php/configuracion/tipoCambio") ?>">
-              <i class="fas fa-dollar-sign"> T/C:  <span id="mostrarTipoCambio" ><?= $tipoCambio ?></span> </i>
+        <!-- Tipo de cambio -->
+          <li class="dropdown notifications-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+              <i class="fas fa-dollar-sign"></i>
+              <span class="label label-info"></span>
             </a>
+            <ul class="dropdown-menu">
+              <li class="header">El tipo de cambio del sistema es 6.96</li>
+              <li>
+                <a href="<?php echo base_url("index.php/configuracion/tipoCambio") ?>">
+                  <i class="fa fa-refresh text-aqua"></i> Cambiar tipo de cambio
+                </a>
+              </li>
+            </ul>
           </li>
+          
           <!-- User Account Menu -->
           <li class="dropdown user user-menu">
             <!-- Menu Toggle Button -->
