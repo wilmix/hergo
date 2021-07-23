@@ -31,7 +31,7 @@
 
       <!-- Sidebar Menu -->
     <ul class="sidebar-menu" id="masterMenu">
-      <li class="header text-center">TIPO DE CAMBIO: <b><?= $tipoCambio ?></b></li>
+      <li class="header">MENU <span class="pull-right hidden-xs">T/C: <b><?= $tipoCambio ?></b></span></li>
       <!-- Administración -->
       <li class="treeview">
         <a href="#"><i class="fa fa fa-server"></i> <span>Administración</span>

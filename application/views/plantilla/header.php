@@ -1,10 +1,4 @@
 
-<style>
-  body {
-    /* el tamaño por defecto es 14px */
-    font-size: 14px;
-}
-</style>
 <body class="<?= $skin ?> sidebar-mini fixed">
 
 <input type="hidden" id="baseurl" value="<?php echo base_url() ?>">

@@ -5,7 +5,7 @@
       <strong>Sistema diseñado y desarrollado por Willy Salas</strong> 
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2020 <a href="https://hergo.com.bo/">Hergo Ltda.</a></strong> 
+    <strong>Copyright &copy; 2021 <a href="https://hergo.com.bo/">Hergo Ltda.</a></strong> 
   </footer>
 </div>
 <!-- ./wrapper -->
