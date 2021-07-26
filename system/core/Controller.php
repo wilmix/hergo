@@ -208,8 +208,8 @@ class CI_Controller {
 		$this->load->view('plantilla/headercontainer',$this->datos);
 		$this->load->view( $currentView,$this->datos);
 		$this->load->view('plantilla/footcontainer',$this->datos);
-		$this->load->view('plantilla/footer',$this->datos);
 		$this->load->view('plantilla/footerscript',$this->datos);
+		$this->load->view('plantilla/footer',$this->datos);
 	}
 	public function titles($titulo,$menu,$opcion)
 	{

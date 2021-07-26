@@ -164,8 +164,8 @@ class Pedidos extends CI_Controller
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('importaciones/formPedido.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			//$this->load->view('plantilla/footer.php',$this->datos);
 			$this->load->view('plantilla/footerscript.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
 	}
 	public function store()
 	{
@@ -258,8 +258,8 @@ class Pedidos extends CI_Controller
 			$this->load->view('plantilla/headercontainer.php',$this->datos);
 			$this->load->view('importaciones/formPedido.php',$this->datos);
 			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			//$this->load->view('plantilla/footer.php',$this->datos);
 			$this->load->view('plantilla/footerscript.php',$this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
 	}
 	public function getPedido()  
 	{

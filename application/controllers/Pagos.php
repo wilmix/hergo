@@ -107,14 +107,14 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			/***********************************/
 			/***********************************/
 			/***********************************/
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('pagos/consultarPagos.php',$this->datos); ///*****aki poner la vista
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footerscript.php',$this->datos);
-			//$this->load->view('plantilla/footer.php',$this->datos);						
+			$this->load->view('plantilla/head',$this->datos);
+			$this->load->view('plantilla/header',$this->datos);
+			$this->load->view('plantilla/menu',$this->datos);
+			$this->load->view('plantilla/headercontainer',$this->datos);
+			$this->load->view('pagos/consultarPagos',$this->datos); ///*****aki poner la vista
+			$this->load->view('plantilla/footcontainer',$this->datos);
+			$this->load->view('plantilla/footerscript',$this->datos);
+			$this->load->view('plantilla/footer',$this->datos);						
 	}
 	public function mostrarPagos()  //******cambiar a funcion del modelo
 	{
@@ -185,10 +185,11 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
 			$this->load->view('plantilla/menu.php',$this->datos);
-			//$this->load->view('plantilla/headercontainer.php',$this->datos);
+			$this->load->view('plantilla/headercontainer',$this->datos);
 			$this->load->view('pagos/recibirPagos.php',$this->datos); 
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footerscript.php',$this->datos);
+			$this->load->view('plantilla/footcontainer',$this->datos);
+			$this->load->view('plantilla/footerscript',$this->datos);
+			$this->load->view('plantilla/footer',$this->datos);
 	}
 	public function editarPago($idPago=0)
 	{
@@ -243,13 +244,14 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			/***********************************/
 			/***********************************/
 			/***********************************/
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			//$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('pagos/recibirPagos.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footerscript.php',$this->datos);
+			$this->load->view('plantilla/head',$this->datos);
+			$this->load->view('plantilla/header',$this->datos);
+			$this->load->view('plantilla/menu',$this->datos);
+			//$this->load->view('plantilla/headercontainer',$this->datos);
+			$this->load->view('pagos/recibirPagos',$this->datos);
+			$this->load->view('plantilla/footcontainer',$this->datos);
+			$this->load->view('plantilla/footerscript',$this->datos);
+			$this->load->view('plantilla/footer',$this->datos);
 				
 	}
 	public function getPagoCabecera($id)
