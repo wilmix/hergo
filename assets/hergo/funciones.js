@@ -3,6 +3,8 @@ var glob_art = [];
 var glob_alm_usu
 var fechaHoySystem 
 var PermisosUser = []
+glob_tipoCambio = parseFloat($("#mostrarTipoCambio").text())
+permisos()
 
 $(document).ready(function () 
 {

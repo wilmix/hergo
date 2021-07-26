@@ -23,18 +23,9 @@ class Nuevo extends CI_Controller
 			$this->datos['menu']="Administracion";
 			$this->datos['opcion']="Clientes";
 			$this->datos['titulo']="Clientes";
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/nuevo.js'); /******        JS          ****** */
-			/*************TABLE***************/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/css/bootstrap-table.css'); 
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-export.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/tableExport.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-filter-control.js');
+
+			$this->datos['cabeceras_script'][]=base_url('assets/hergo/nuevo.js'); 
+
 			
 			/****************MOMENT*******************/
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/moment.min.js');

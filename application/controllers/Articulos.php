@@ -59,7 +59,7 @@ class Articulos extends CI_Controller
 			$this->datos['titulo']="Articulos";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
+			//$this->datos['cabeceras_script']= $this->cabecera_script;
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/articulo.js');

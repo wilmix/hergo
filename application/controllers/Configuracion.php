@@ -80,7 +80,7 @@ class Configuracion extends CI_Controller
 			$this->datos['titulo']="Datos Factura";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
+			//$this->datos['cabeceras_script']= $this->cabecera_script;
 
 	        /*************DATERANGEPICKER**********/
 	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
