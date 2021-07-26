@@ -125,7 +125,6 @@ class Auth extends CI_Controller {
 	// log the user in
 	public function login()
 	{
-		
 		$this->data['cabeceras_css']= $this->cabeceras_css;
 		$this->data['cabeceras_script']= $this->cabecera_script;
 		$this->data['cabeceras_css'][]=base_url('assets/login/css/form-elements.css');
@@ -180,9 +179,9 @@ class Auth extends CI_Controller {
 			);
 
 			$this->data['titulo']="Iniciar Sesion";
-			$this->load->view('plantilla/head.php',$this->data);
+			$this->load->view('plantilla/headLogin',$this->data);
 			$this->_render_page('login/login', $this->data);
-			$this->load->view('login/footerlogin.php',$this->data);
+			$this->load->view('login/footerlogin',$this->data);
 		}
 	}
 

@@ -48,8 +48,3 @@
       text-align: center;
   }
 </style>
-<script>
-$(document).ready(function(){
-  retornarTablaFacturacion();
-})
-</script>

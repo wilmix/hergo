@@ -4,6 +4,7 @@ let permisoAnular
 $(document).ready(function(){ 
     permisoAnular = $("#permisoAnular").val()
     console.log(permisoAnular);
+    retornarTablaFacturacion()
     $('#export').click(function () {
         let mes = iniciofecha.format('MMMM').toUpperCase()
         $('#facturasConsulta').tableExport({

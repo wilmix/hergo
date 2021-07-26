@@ -29,7 +29,6 @@ class Almacen extends CI_Controller
 				base_url('assets/plugins/daterangepicker/moment.min.js'),
 				
 			);
-			
 			$hoy = date('Y-m-d');
 			$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
 			if ($tipoCambio) {
@@ -51,14 +50,15 @@ class Almacen extends CI_Controller
 	public function index()
 	{
 		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
+		redirect('auth', 'refresh');
+		
 		
 			$this->datos['menu']="Administracion";
 			$this->datos['opcion']="Almacen";
 			$this->datos['titulo']="Agregar Almacen";
 
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
+			//$this->datos['cabeceras_script']= $this->cabecera_script;
 			/**************FUNCION***************/
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/hergo/almacen.js');
@@ -79,13 +79,13 @@ class Almacen extends CI_Controller
 
 			$this->datos['almacen']=$this->Almacen_model->retornar_tabla("almacenes");
 			//print_r($this->datos['almacen']);
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('administracion/almacen/almacen.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+			$this->load->view('plantilla/head',$this->datos);
+			$this->load->view('plantilla/header',$this->datos);
+			$this->load->view('plantilla/menu',$this->datos);
+			$this->load->view('plantilla/headercontainer',$this->datos);
+			$this->load->view('administracion/almacen/almacen',$this->datos);
+			$this->load->view('plantilla/footerscript',$this->datos);
+			$this->load->view('plantilla/footer',$this->datos);
 	}
 	public function agregarAlmacen()
 	{

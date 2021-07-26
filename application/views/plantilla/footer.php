@@ -47,6 +47,16 @@
                     </div>        
             </div>
         </div>
+        <!-- desde php ex head -->
+        <?php 
+            foreach ($cabeceras_script as $fila)
+            {?>
+            <script src="<?php echo $fila ?>"></script>
+            <?php 
+            }
+        ?>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js" integrity="sha256-JG6hsuMjFnQ2spWq0UiaDRJBaarzhFbUxiUTxQDA9Lk=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <!-- desde php controller -->
         <?php 
             if (isset($foot_script)) {

@@ -79,6 +79,7 @@ class CI_Controller {
 		$this->load->initialize();
 		log_message('info', 'Controller Class Initialized');
 		$this->datos['skin']= ($this->config->item('skin')) ? $this->config->item('skin') : 'skin-blue';
+		$this->getAssets();
 	}
 
 	// --------------------------------------------------------------------
@@ -184,7 +185,6 @@ class CI_Controller {
 			base_url('assets/BootstrapToggle/bootstrap-toggle.min.js'),
 			base_url('assets/plugins/select/bootstrap-select.min.js'),//select
 			base_url('assets/plugins/numeral/numeral.min.js'),
-
 		);
 		$this->foot_script=array(				
 			'https://cdn.jsdelivr.net/npm/vue/dist/vue.js',								
