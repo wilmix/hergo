@@ -137,11 +137,11 @@ $(document).on("click", ".sidebar-toggle", function () {
     $('table').bootstrapTable('resetWidth');
   }, 500);
 })
-$(window).resize(function () {
+/* $(window).resize(function () {
   setTimeout(function () {
     $('table').bootstrapTable('resetWidth');
   }, 500);
-});
+}); */
 
 function formato_fecha(value, row, index) {
   var fecha = ""
