@@ -14,8 +14,6 @@ class Nuevo extends CI_Controller
 		$this->getAssets();
 		$this->getDatos();
 		setlocale(LC_ALL,"es_ES");
-		echo strftime("%A %d de %B del %Y");
-		die();
 	}
 	public function index()
 	{
