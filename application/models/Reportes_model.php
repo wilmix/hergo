@@ -40,7 +40,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
     }
-	public function mostrarNEporFac($ini=null,$fin=null,$alm,$idCliente) 
+	public function mostrarNEporFac($ini,$fin,$alm,$idCliente) 
 	{ 
 		if ($idCliente == 'all') {
 			$sql="SELECT e.`cliente`, e.nmov n,e.idEgresos,t.sigla, e.fechamov, c.nombreCliente, ROUND((SUM(d.`total`)) - (SUM(d.`cantFact` * d.`punitario`)),2) total,  e.estado,e.fecha, 
@@ -99,7 +99,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarFacturasPendientesPago($almacen="", $ini, $fin)
+	public function mostrarFacturasPendientesPago($almacen, $ini, $fin)
 	{ 
 		$sql="SELECT id, almacen, cliente, lote, nFactura, fechaFac,
 		SUM(total) total,
@@ -226,7 +226,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarFacturacionClientes($ini=null,$fin=null,$alm="") 
+	public function mostrarFacturacionClientes($ini,$fin,$alm) 
 	{ 
 		if ($alm=='') {
 			$sql="SELECT IFNULL(nombreCliente,'TOTAL GENERAL') nombreCliente, SUM(total) total, SUM(totalDolares) totalDolares, id,almacen
@@ -299,7 +299,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarLibroVentas($ini=null,$fin=null,$alm="") 
+	public function mostrarLibroVentas($ini,$fin,$alm) 
 	{
 		$sql="SELECT fechaFac, nFactura, df.autorizacion, anulada, c.documento, c.nombreCliente,
 		IF(f.`anulada`=1,0,f.`total`) sumaDetalle,
@@ -317,7 +317,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarLibroVentasTotales($ini=null,$fin=null,$alm="") 
+	public function mostrarLibroVentasTotales($ini,$fin,$alm) 
 	{ //cambiar la consulta
 		$sql="SELECT IFNULL(NULL, 'TotalFacturas') AS titulo,COUNT(anulada) AS resultado
 		FROM factura AS f
@@ -382,7 +382,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarDiarioIngresos($ini=null,$fin=null,$alm="",$tin="") 
+	public function mostrarDiarioIngresos($ini,$fin,$alm,$tin) 
 	{ //cambiar la consulta
 		$sql="SELECT alm.almacen, i.fechamov, i.tipomov,t.sigla, i.nmov, i.ordcomp, 
 		IF(i.`tipomov` = 3,alt.`ciudad`,p.nombreproveedor) nombreproveedor,
@@ -410,7 +410,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarKardexIndividual($art="",$alm="") 
+	public function mostrarKardexIndividual($art,$alm) 
 	{ 
 		if ($alm=="") {
 			$sql="call testKardexGeneral($art);";
@@ -442,7 +442,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function kardexIndividualCliente($cliente,$almacen="",$ini,$fin,$mon) {
+	public function kardexIndividualCliente($cliente,$almacen,$ini,$fin,$mon) {
 		if ($mon == 0) {
 			$sql="SELECT * FROM 
 		(	SELECT    c.`idCliente`, c.`nombreCliente`,'$ini' fecha, '-' numDocumento, '1' almacen,  'SALDO INICIAL' detalle,  
@@ -704,7 +704,7 @@ class Reportes_model extends CI_Model
 	}
 
 
-	public function mostrarEstadoVentasCostoXLS($alm="")
+	public function mostrarEstadoVentasCostoXLS($alm)
 	{ 
 		$sql="SELECT sigla, linea, 
 		idArticulo idArticulo, codigo, descrip, unidad, costo, ppVenta, SUM(saldo) saldo,
@@ -741,7 +741,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarSaldosActualesItems($alm="")
+	public function mostrarSaldosActualesItems($alm)
 	{ 
 		if ($alm >0) {
 			$sql = "SELECT 
@@ -817,7 +817,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarVentasClientesItems($ini, $fin, $alm="")
+	public function mostrarVentasClientesItems($ini, $fin, $alm)
 	{ 
 			$sql = "SELECT * , SUM(cantidadFactura)cantidad, SUM(cantidadFactura * precioUnitario) total
 			FROM
@@ -846,7 +846,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarReporteIngreso ($ini=null,$fin=null,$alm="",$tin="") 
+	public function mostrarReporteIngreso ($ini,$fin,$alm,$tin) 
 	{ //cambiar la consulta
 		$sql="SELECT id,
 		codigo,
@@ -896,7 +896,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarReporteEgreso ($ini=null,$fin=null,$alm="",$tin="") 
+	public function mostrarReporteEgreso ($ini,$fin,$alm,$tin) 
 	{ 
 		$sql="SELECT id,
 		codigo,
@@ -949,7 +949,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarReporteFacturas ($ini, $fin, $alm="") 
+	public function mostrarReporteFacturas ($ini, $fin, $alm) 
 	{ 
 		$sql="SELECT id,
 		idAlm,
@@ -988,7 +988,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function showReportePagos ($ini, $fin, $alm="") 
+	public function showReportePagos ($ini, $fin, $alm) 
 	{ 
 		$sql="SELECT pf.`id`, pf.`idPago`, pf.`idFactura`,
 		p.`numPago`, p.`fechaPago`, c.`nombreCliente`,  f.`nFactura`, p.`glosa`, sum(pf.`monto`) total, f.`lote`
@@ -1004,7 +1004,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function showClienteItems ($ini, $fin, $alm="") 
+	public function showClienteItems ($ini, $fin, $alm) 
 	{ 
 		$sql="SELECT f.`almacen`, fd.`articulo` idArticulo, f.`nFactura`, f.`cliente`idCliente, f.`ClienteFactura`, fd.`ArticuloCodigo` codigo, 
 		fd.`ArticuloNombre` descrip, u.`Sigla` uni, 
@@ -1026,7 +1026,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function showVentasTM ($ini, $fin, $alm="") 
+	public function showVentasTM ($ini, $fin, $alm) 
 	{ 
 		$sql="SELECT * 
 		FROM

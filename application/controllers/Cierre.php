@@ -85,7 +85,7 @@ class Cierre extends CI_Controller
 
 			/**************FUNCION***************/
 			//$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/cierre.js');
+			$this->datos['foot_script'][]=base_url('assets/hergo/cierre.js');
 
 
 

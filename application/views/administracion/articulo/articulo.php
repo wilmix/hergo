@@ -62,7 +62,6 @@ th:hover .filterControl {
            </div>
                 <!--MODAL BODY-->
           <div class="modal-body form form-horizontal">
-            <div style="margin: ">
               <fieldset>
                  <!-- Código--> 
               <div class="form-group">

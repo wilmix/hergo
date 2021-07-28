@@ -22,6 +22,7 @@
                       <th>Direccion</th>
                       <th>Ciudad</th>
                       <th>Telefonos</th>
+                      <th></th>
                   </tr>
               </thead>
               <tbody>                   
@@ -32,7 +33,6 @@
                      <td><?= $fila['direccion'] ?></td>
                      <td><?= $fila['ciudad'] ?></td>
                      <td><?= $fila['Telefonos'] ?></td>
-                     <td></td>
                      <td>
                        <div class="text-right">
                         <button class="btn btn-default botoneditar"><i class=" fa fa-pencil" ></i></button>

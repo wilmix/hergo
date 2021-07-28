@@ -74,7 +74,6 @@ $(document).ready(function(){
 })
 $(document).on("change", "#fechaCambio", function () {
     let fecha = $('#fechaCambio').val()
-        console.log('buscar');
         $.ajax({
             type: "POST",
             async: false,
