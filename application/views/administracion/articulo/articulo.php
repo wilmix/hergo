@@ -54,16 +54,16 @@ th:hover .filterControl {
 <form action=" " method="post"  id="form_articulo" enctype="multipart/form-data">
   <div class="modal fade" id="modalarticulo" role="dialog">
     <input type="" name="id_articulo" value="" id="id_articulo" hidden value="<?= "" ?>"> <!-- input oculto para el codigo de articulo-->
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h3 class="modal-title"></h3>
-           </div>
-                <!--MODAL BODY-->
-          <div class="modal-body form form-horizontal">
-              <fieldset>
-                 <!-- Código--> 
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h3 class="modal-title"></h3>
+        </div>
+        <!--MODAL BODY-->
+        <div class="modal-body form form-horizontal">
+            <fieldset>
+              <!-- Código--> 
               <div class="form-group">
                 <label class="col-md-3 col-lg-3 control-label" for="codigoarticulo">Código</label>  
                 <div class="col-md-9 col-lg-9  inputGroupContainer">
@@ -152,8 +152,6 @@ th:hover .filterControl {
                   </div>
                 </div>
               </div>
-            </fieldset>     
-            </div>
               <!-- Producto o servicio -->
               <div class="form-group"> 
                 <label class="col-md-3 col-lg-3 control-label" for="productoarticulo">Producto o Servicio</label>
@@ -165,16 +163,6 @@ th:hover .filterControl {
                       <option value="p">PRODUCTO</option>
                       <option value="s">SERVICIO</option>
                     </select>
-                  </div>
-                </div>
-              </div>
-              <!-- Numero de parte ALFANUMERICO-->
-              <div class="form-group">
-                <label class="col-md-3 col-lg-3 control-label" for="partearticulo">Precio</label>  
-                <div class="col-md-9 col-lg-9 inputGroupContainer">
-                  <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-money"></i></span>
-                    <input  name="precio" class="form-control" id="precio" type="text">
                   </div>
                 </div>
               </div>
@@ -213,32 +201,26 @@ th:hover .filterControl {
                   </div>
                 </div>
               </div>
-
-                <!-- Imagen -->                
+              <!-- Imagen -->                
               <div class="form-group upload_image">
-                <label class="col-md-3 col-lg-3 control-label" for="imagenes">Imagen de artículo</label>
+                <label class="col-md-3 col-lg-3 control-label" for="imagenes">Imagen</label>
                 <div class="col-md-9 col-lg-9">
                   <!--<input type="file" id="imagen" name="imagen" id="imagenarticulo">-->                  
                   <input id="imagenes" name="imagenes" type="file" class="file-loading" accept="image/*">
                   <p class="help-block">Seleccione imagen para el articulo menor a 1mb.</p>
                 </div>
-              </div>                
-                
-
-                        
-          <div class="modal-footer">
-                <button type="button" class="btn btn-default botoncerrarmodal" data-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary" id="bguardar_articulo">Guardar</button>
-            </div>
-          </div> <!-- /.<div class="modal-body form">-->
+              </div> 
+              
+            </fieldset> 
         </div>
-      </div> <!-- /. modal -->
-  </div>
+        <div class="modal-footer">
+              <button type="button" class="btn btn-default botoncerrarmodal" data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-primary" id="bguardar_articulo">Guardar</button>
+        </div>
+      </div> <!-- /.<div class="modal-body form">-->
+    </div>
+  </div> <!-- /. modal -->
 </form>
-
-<script>
-   
-</script>
 
 <!-- Modal imagen -->
 <div class="modal fade" id="prev_imagen" tabindex="-1" role="dialog" >

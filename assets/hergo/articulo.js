@@ -311,7 +311,6 @@ function retornarTabla()
                 field:"PosicionArancelaria",
                 title:"Posicion<br>Arancelaria",
                 sortable:true,
-                visible:true
             },
             {
                 field:"Requisito",
@@ -324,6 +323,7 @@ function retornarTabla()
                 title:"Producto <br> Servicio",
                 formatter:verproductoservicio,
                 sortable:true,
+                visible:false
             },
             {
                 field:"Fecha",
