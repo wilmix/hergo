@@ -60,8 +60,8 @@ class CodigoControl extends CI_Controller
 			$this->datos['cabeceras_css']= $this->cabeceras_css;
 			$this->datos['cabeceras_script']= $this->cabecera_script;
 			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/almacen.js');
+			//$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
+			$this->datos['foot_script'][]=base_url('assets/hergo/admin/codigoControl.js');
 			/**************TABLA*****************/
         /*$this->datos['cabeceras_css'][] = base_url('assets/plugins/table-boot/css/bootstrap-table.css');
         $this->datos['cabeceras_script'][] = base_url('assets/plugins/table-boot/js/bootstrap-table.js');

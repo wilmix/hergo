@@ -56,13 +56,7 @@
 		   <br>
 		   <div id="micapa"></div><br>
 
-		   <button class="btn btn-primary" id="PageRefresh">Limpiar</button>
-       	   <script type="text/javascript">
-		    $('#PageRefresh').click(function() {
-				location.reload();
-			});
-		   </script>
-
+		   <button class="btn btn-primary" id="PageRefresh" onclick="location.reload()">Limpiar</button>
       </div>
       <!-- /.box-body -->
     </div>
@@ -70,67 +64,3 @@
   </div>
   <!-- /.col -->
 </div>
-
-<script>
-        $( document ).ready(function() {
-        console.log( "ready!" );
-            $("#_save").on('click', function(){
-            console.log("Saving form data...")
-            var autor    = $( "#idAuto" ).val()
-            var nFactura = $( "#idFac" ).val()
-            var idNIT    = $( "#idNit" ).val()
-            var fecha    = $( "#idFecha" ).val()
-            var monto    = $( "#idMonto" ).val()
-            var llave    = $( "#idLlave" ).val()
-            var nitCasa  = $( "#idNITprincipal" ).val()
-            /*console.log(autor)
-            console.log(nFactura)
-            console.log(idNIT)
-            console.log(idNIT)
-            console.log(fecha)
-            console.log(llave)*/
-            //console.log(nitCasa)
-            //console.log(fecha)
-            var gestion = fecha.substring(0, 4);
-            var mes     = fecha.substring(5, 7);
-            var dia     = fecha.substring(8, 11);
-
-            //console.log(gestion)
-            //console.log(mes)
-            //console.log(dia)
-            fecha = gestion + mes + dia;
-            //console.log(fecha)
-
-
-
-            codigo = generateControlCode(
-                        autor,
-                        nFactura,
-                        idNIT,
-                        fecha,
-                        monto,
-                        llave
-                     );
-            //console.log(fecha)
-            $('h3').html("El codigo de control es:")
-            $('h2').html(codigo)
-            var gestion = fecha.substring(0, 4);
-            var mes     = fecha.substring(4, 6);
-            var dia     = fecha.substring(6, 8);
-
-            //console.log(gestion)
-            //console.log(mes)
-            //console.log(dia)
-            var codigoqr = (nitCasa + "|" + nFactura + "|" + autor + "|" + dia + "/" + mes + "/" + gestion + "|" + monto+ "|" + monto +"|" + codigo +"|" + idNIT + "|0|0|0|0");
-            console.log(codigoqr)
-
-            $("#micapa").html(codigoqr);
-            $("#qr").html(codigoqr);
-             new QRCode(document.getElementById("qrcodeimg"), codigoqr);
-
-            });
-
-          
-        });
-
-    </script>
