@@ -209,7 +209,7 @@ function mostrarTablaEgresos(res) {
         showColumns: true,
         stickyHeader: true,
         stickyHeaderOffsetY: '50px',
-        strictSearch: true,
+        //strictSearch: true,
         showToggle:true,
         columns: [
             {
@@ -290,6 +290,13 @@ function mostrarTablaEgresos(res) {
                 }
             },
             {
+                field: "clientePedido",
+                title: "N° Pedido",
+                sortable: true,
+                align: 'center',
+                searchable: true,
+            },
+            {
                 field: "autor",
                 title: "Responsable",
                 sortable: true,
@@ -312,14 +319,6 @@ function mostrarTablaEgresos(res) {
                     data: datosselect[3]
                 },
 
-            },
-            {
-                field: "clientePedido",
-                title: "N° Pedido",
-                sortable: true,
-                visible: false,
-                align: 'center',
-                searchable: false,
             },
             {
                 field: "plazopago",
