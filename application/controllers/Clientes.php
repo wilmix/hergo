@@ -52,6 +52,8 @@ class Clientes extends CI_Controller
 	}
 	public function index()
 	{
+		$this->libacceso->acceso(6);
+		echo 'Pagina en mantenimiento'; die();
 		if(!$this->session->userdata('logeado'))
 			redirect('auth', 'refresh');
 		
@@ -133,7 +135,7 @@ class Clientes extends CI_Controller
         	else //existe, editar
         	{
         		
-        		$result = $this->Cliente_model->editarCliente_model($id,$tipo_doc,trim($carnet),trim(strtoupper($nombre_cliente)),$clientetipo,strtoupper($direccion),$phone,$fax,$email,$website);
+        		$result = $this->Cliente_model->editarCliente_model($id,$tipo_doc,trim(strtoupper($nombre_cliente)),$clientetipo,strtoupper($direccion),$phone,$fax,$email,$website);
         	}
         }
         echo json_encode($result);
