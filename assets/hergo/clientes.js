@@ -15,6 +15,9 @@
                         notEmpty: {
                             message: 'Campo obligatorio'
                         },
+                        integer: {
+                            message: 'Debe ser dato númerico'
+                        }
                     }
                 },
             nombre_cliente: {
@@ -58,18 +61,19 @@
         })
         .on('success.form.bv', function(e) {
             e.preventDefault();
-            //var valuesToSubmit = $("#form_clientes").serialize();  
             var formData = new FormData($('#form_clientes')[0]);  
-            //console.log(formData)              
+             /* for(let pair of formData.entries()) { console.log(pair[0]+ ', '+ pair[1]); };  quitarcargando(); return; */        
             $.ajax({
-                url: base_url("index.php/Clientes/agregarCliente"),
+                url: base_url("index.php/Clientes/store"),
                 type: 'POST',
                 data: formData,
                 cache: false,
                 contentType: false,
                 processData: false,
                 success: function (returndata) {
-                    if (returndata=='true') {
+                    returndata = JSON.parse(returndata)
+                    console.log(returndata)
+                    if (returndata.status==true) {
                         $('#modalcliente').modal('hide');
                         resetForm('#form_clientes')
                         retornarTablaClientes()
@@ -78,11 +82,10 @@
                             '',
                             'success'
                             )
-                    } else {
-                        client = JSON.parse(returndata)
+                    } else if (returndata.status==false){
                         swal({
                             title: 'Atencion',
-                            html: "El NIT <b>" + client.documento + "</b> ya se encuentra registrado a nombre de <b>" + client.nombreCliente + "</b> en fecha  <b>" + formato_fecha_corta(client.fecha) + "</b> registrado por <b>" + client.autor + "</b>.",
+                            html: "El NIT <b>" + returndata.cliente.documento + "</b> ya se encuentra registrado a nombre de <b>" + returndata.cliente.nombreCliente + "</b> en fecha  <b>" + formato_fecha_corta(returndata.cliente.fecha) + "</b> registrado por <b>" + returndata.cliente.autor + "</b>.",
                             type: 'warning',
                         }
                         )
@@ -90,9 +93,10 @@
 
                 }, 
                 error : function (returndata) {
+                    console.log(returndata.status);
                     swal(
                         'Error',
-                        'El número de documento ya se encuentra registrado en nuestra bases de datos',
+                        'Error en bases de datos status:'+returndata.status,
                         'error'
                     )
                     //console.log(returndata);
@@ -119,7 +123,7 @@ function mostrarModal(fila)
     $("#id_cliente").val(fila.idCliente)
     $(".modal-title").html("Editar Cliente")
     asignarselect(fila.documentotipo,"#tipo_doc")
-    $("#carnet").prop('disabled', true);
+    $("#carnet").prop('disabled', false);
     $("#carnet").val(fila.documento)
     $("#nombre_cliente").val(fila.nombreCliente)
     asignarselect(fila.clientetipo,"#clientetipo")

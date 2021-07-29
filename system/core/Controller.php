@@ -80,6 +80,11 @@ class CI_Controller {
 		log_message('info', 'Controller Class Initialized');
 		$this->datos['skin']= ($this->config->item('skin')) ? $this->config->item('skin') : 'skin-blue';
 		$this->getAssets();
+		if ($this->session->userdata('logeado')) {
+			$this->getAssets();
+			$this->getDatos();
+		}
+
 	}
 
 	// --------------------------------------------------------------------
@@ -101,6 +106,7 @@ class CI_Controller {
 		redirect('auth', 'refresh');
 		$this->load->model("General_model");
 		$this->load->library('LibAcceso');
+		$this->load->library('form_validation');
 		//$this->datos['skin']= ($this->config->item('skin')) ? $this->config->item('skin') : 'skin-blue';
 		$this->datos['database']=$this->db->database;
 		date_default_timezone_set("America/La_Paz");
@@ -220,8 +226,8 @@ class CI_Controller {
 	}
 	public function accesoCheck($acceso_id)
 	{
-		$this->libacceso->acceso($acceso_id);
 		if(!$this->session->userdata('logeado'))
 		redirect('auth', 'refresh');
+		$this->libacceso->acceso($acceso_id);
 	}
 }

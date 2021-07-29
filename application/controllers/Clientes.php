@@ -2,145 +2,112 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Clientes extends CI_Controller
 {
-	
 	public function __construct()
 	{	
 		parent::__construct();
-		if(!$this->session->userdata('logeado'))
-		redirect('auth', 'refresh');
-		/*******/
-		$this->load->library('LibAcceso');
-		$this->libacceso->acceso(6);
-		/*******/
-		$this->load->helper('url');	
-		$this->load->model("Cliente_model");
-        $this->load->model("Ingresos_model");
-		$this->cabeceras_css=array(
-				base_url('assets/bootstrap/css/bootstrap.min.css'),
-				base_url("assets/fa/css/font-awesome.min.css"),
-				base_url("assets/dist/css/AdminLTE.min.css"),
-				base_url("assets/dist/css/skins/skin-blue.min.css"),
-				base_url("assets/hergo/estilos.css"),
-				base_url('assets/sweetalert/sweetalert2.min.css'),
-			);
-		$this->cabecera_script=array(
-				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
-				base_url('assets/bootstrap/js/bootstrap.min.js'),
-				base_url('assets/dist/js/app.min.js'),
-				base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
-				base_url('assets/plugins/slimscroll/slimscroll.min.js'),
-				base_url('assets/sweetalert/sweetalert2.min.js'),
-				
-			);
-		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
-		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
-		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
-		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 
-		$hoy = date('Y-m-d');
-		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
-		if ($tipoCambio) {
-			$tipoCambio = $tipoCambio->tipocambio;
-			$this->datos['tipoCambio'] = $tipoCambio;
-		} else {
-			$this->datos['tipoCambio'] = 'No se tiene tipo de cambio para la fecha';
-		}
-			if($this->session->userdata('foto')==NULL)
-				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
-			else
-				$this->datos['foto']=base_url('assets/imagenes/').$this->session->userdata('foto');	
+		$this->load->model("Cliente_model");
+        //$this->load->model("Ingresos_model");
+
 	}
 	public function index()
 	{
-		$this->libacceso->acceso(6);
-		echo 'Pagina en mantenimiento'; die();
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
+		$this->accesoCheck(6);
+		$this->titles('Clientes','Clientes','Administracion',);
 		
-			$this->datos['menu']="Administracion";
-			$this->datos['opcion']="Clientes";
-			$this->datos['titulo']="Clientes";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			//$this->datos['cabeceras_script']= $this->cabecera_script;
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/clientes.js');
-			
-			/*************TABLE***************/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/css/bootstrap-table.css'); 
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-export.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/tableExport.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/js/bootstrap-table-filter-control.js');
-			
-			/****************MOMENT*******************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/moment.min.js');
-			/***********************************/
-			/***********************************/
-			/***********************************/
-			/***********************************/
-
-			//$this->datos['clientes']=$this->Cliente_model->mostrarclientes();
-			$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
-			$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");		
-			
-
-
-			/***********************************/
-			/***********************************/
-			/***********************************/
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('administracion/clientes/clientes.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);						
+		$this->datos['foot_script'][]=base_url('assets/hergo/clientes.js');
+		$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
+		$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
+		
+		$this->setView('administracion/clientes/clientes');
 	}
 	public function mostrarclientes()
 	{
-		if($this->input->is_ajax_request())
-        {
+		if(!$this->input->is_ajax_request())
+		die("PAGINA NO ENCONTRADA");
+
 			$res=$this->Cliente_model->mostrarclientes_model();
 			$res=$res->result_array();
 			echo json_encode($res);
-		}
-		else
-		{
-			die("PAGINA NO ENCONTRADA");
-		}
-	}
-	public function agregarCliente()
-	{
-		if($this->input->is_ajax_request())
-        {
-        	$id = addslashes($this->security->xss_clean($this->input->post('id_cliente')));
-        	$tipo_doc = addslashes($this->security->xss_clean($this->input->post('tipo_doc')));
-        	$carnet = addslashes($this->security->xss_clean($this->input->post('carnet')));
-        	$nombre_cliente = addslashes($this->security->xss_clean($this->input->post('nombre_cliente')));
-        	$clientetipo = addslashes($this->security->xss_clean($this->input->post('clientetipo')));
-        	$direccion = addslashes($this->security->xss_clean($this->input->post('direccion')));           	
-        	$phone = addslashes($this->security->xss_clean($this->input->post('phone')));
-        	$fax = addslashes($this->security->xss_clean($this->input->post('fax')));
-        	$email = addslashes($this->security->xss_clean($this->input->post('email')));
-        	$website = addslashes($this->security->xss_clean($this->input->post('website')));
-       	
-        	if($id=="")//es nuevo, agregar
-        	{
-        		
-        		$result = $this->Cliente_model->agregarCliente_model($id,$tipo_doc,trim($carnet),trim(strtoupper($nombre_cliente)),$clientetipo,strtoupper($direccion),$phone,$fax,$email,$website);
-        	}
-        	else //existe, editar
-        	{
-        		
-        		$result = $this->Cliente_model->editarCliente_model($id,$tipo_doc,trim(strtoupper($nombre_cliente)),$clientetipo,strtoupper($direccion),$phone,$fax,$email,$website);
-        	}
-        }
-        echo json_encode($result);
-	}
-	
 
-	
+	}
+	public function store()
+	{
+		if(!$this->input->is_ajax_request())
+		die("PAGINA NO ENCONTRADA");
+
+			$id = $this->input->post('id_cliente');
+			$cliente = new stdclass();
+			$cliente->documento = (trim($this->input->post('carnet')));
+			$cliente->nombreCliente= strtoupper(trim($this->input->post('nombre_cliente')));
+			$cliente->direccion = strtoupper(trim($this->input->post('direccion')));
+			$cliente->email = $this->input->post('email');
+			$cliente->web = strtoupper(trim($this->input->post('website')));
+			$cliente->telefono = strtoupper(trim($this->input->post('phone')));
+			$cliente->fax = strtoupper(trim($this->input->post('fax')));
+			$cliente->idDocumentoTipo = $this->input->post('tipo_doc');
+			$cliente->idClientetipo = $this->input->post('clientetipo');
+			$cliente->autor = $this->session->userdata('user_id');
+			$cliente->fecha = date('Y-m-d H:i:s');
+
+			if ($id==0) {
+				$checkCliente = $this->chekSaveCliente($cliente->documento,$cliente->nombreCliente);
+			} else {
+				$checkCliente = $this->chekUpdateCliente($cliente->documento,$cliente->nombreCliente);
+			}
+			
+			if ($checkCliente == false) {
+				$id = $this->Cliente_model->storeCliente($id ,$cliente);
+				$res = new stdclass();
+				$res->status = true;
+				$res->id = $id;
+				$res->cliente = $cliente;
+				echo json_encode($res);
+			} else {
+				$res = new stdclass();
+				$res->status = false;
+				$res->id = $id;
+				$res->cliente = $checkCliente->row();
+				echo json_encode($res);
+			}			
+
+	}
+	public function chekSaveCliente($nit,$nombe)
+	{
+		$clienteNit =  $this->Cliente_model->getClientByDoc($nit);
+		$clienteNitName = $this->Cliente_model->getClientByDocName($nit,$nombe);
+		if($clienteNit->num_rows()>0)
+        {
+			if ($nit == '99001' || $nit == '0') {
+				if ($clienteNitName->num_rows()>0) {
+					return $clienteNitName;
+				}
+				else {
+					return false;
+				}
+			} else {
+				if ($clienteNit->num_rows()>0) {
+					return $clienteNit;
+				}
+				else {
+					return false;
+				}
+			}
+        }
+        else
+        {
+            return false;
+        }
+
+	}
+	public function chekUpdateCliente($nit,$nombe)
+	{
+		$clienteNitName = $this->Cliente_model->getClientByDocName($nit,$nombe);
+		if ($clienteNitName->num_rows()>0) {
+			return $clienteNitName;
+		}
+		else {
+			return false;
+		}
+	}
 }

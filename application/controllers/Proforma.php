@@ -7,8 +7,6 @@ class Proforma extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model("Proforma_model");
-		$this->getAssets();
-		$this->getDatos();
 	}
 	public function index()
 	{
@@ -32,18 +30,14 @@ class Proforma extends CI_Controller
 
 	public function getProformas()  
 	{
-		if($this->input->is_ajax_request())
-        {
-        	$ini=$this->security->xss_clean($this->input->post("ini"));
-        	$fin=$this->security->xss_clean($this->input->post("fin"));
-			$alm= $this->input->post("alm");
-			$res=$this->Proforma_model->getProformas($ini, $fin, $alm); 
-			echo json_encode($res);
-		}
-		else
-		{
-			die("PAGINA NO ENCONTRADA");
-		}
+		if(!$this->input->is_ajax_request())
+		die("PAGINA NO ENCONTRADAs");
+ 
+		$ini=$this->security->xss_clean($this->input->post("ini"));
+		$fin=$this->security->xss_clean($this->input->post("fin"));
+		$alm= $this->input->post("alm");
+		$res=$this->Proforma_model->getProformas($ini, $fin, $alm); 
+		echo json_encode($res);
 	}
 	public function store()
 	{
