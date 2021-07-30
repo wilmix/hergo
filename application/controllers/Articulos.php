@@ -56,7 +56,11 @@ class Articulos extends CI_Controller
 				strtoupper($posicion),$autoriza,$proser,$uso,$nom_imagen,$precio,strtoupper($descripcionFabrica));
         	}
         }
-        echo "{}";       
+        $res = new stdclass();
+		$res->status = true;
+		$res->msg = 'Guardado Exitosamente';
+
+		echo json_encode($res);	      
 	}
 	public function mostrarArticulos()
 	{
@@ -87,7 +91,7 @@ class Articulos extends CI_Controller
 
 		if(($archivo_img['imagenes']['name'])!="")
 		{
-			echo $archivo_img['imagenes']['name'];
+			//echo $archivo_img['imagenes']['name'];
 		  // El nombre y nombre temporal del archivo que vamos para adjuntar
 		  $nombreArchivo=isset($archivo_img['imagenes']['name'])?time().$archivo_img['imagenes']['name']:null;
 		  $nombreTemporal=isset($archivo_img['imagenes']['tmp_name'])?$archivo_img['imagenes']['tmp_name']:null;

@@ -154,7 +154,7 @@ $(document).ready(function(){
                             'error'
                             )
                             return false
-                    } else {
+                    } else if(res.status == true) {
                         $('#modalarticulo').modal('hide');
                         resetForm('#form_articulo')
                         swal(
@@ -171,7 +171,7 @@ $(document).ready(function(){
                         'El código de artículo ya se encuentra registrado en nuestra bases de datos',
                         'error'
                     )
-                    //console.log(res);
+                    console.log(res);
                 },
 
             }); 
