@@ -103,7 +103,7 @@
                   <div class="col-md-9 selectContainer">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-pushpin"></i></span>
-                      <select name="ciudad" class="form-control selectpicker" id="modalciudadalmacen" >
+                      <select name="ciudad" class="form-control" id="modalciudadalmacen" >
                         <option value=" " >Selecciona</option>
                         <option>La Paz</option>
                         <option>Potosi</option>

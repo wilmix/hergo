@@ -43,7 +43,7 @@
                     <div class="col-md-9 col-lg-9 selectContainer">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
-                        <select name="tipo_doc" id="tipo_doc" class="form-control selectpicker" >
+                        <select name="tipo_doc" id="tipo_doc" class="form-control " >
                          
                             <option value=" " >Selecciona</option>
                              <?php foreach ($tipodocumento->result_array() as $fila):  ?>

@@ -46,7 +46,7 @@
                                     <span class="input-group-addon">
                                         <i class="glyphicon glyphicon-pushpin"></i>
                                     </span>
-                                    <select name="almacen" class="form-control selectpicker" id="almacen">
+                                    <select name="almacen" class="form-control " id="almacen">
                                         <option value="" >Seleccione</option>
                                         <?php foreach ($almacenes->result_array() as $fila): ?>
                                             <option value="<?= $fila['idalmacen']  ?>"><?= $fila['almacen'] ?></option>
@@ -109,7 +109,7 @@
                             <div class="col-md-9 col-lg-9 selectContainer">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-resize-full"></i></span>
-                                <select name="tipo" class="form-control selectpicker" id="tipo">
+                                <select name="tipo" class="form-control " id="tipo">
                                     <option>Elige</option>
                                     <option value="1">Manual</option>
                                     <option value="0">Computarizada</option>
@@ -169,7 +169,7 @@
                             <div class="col-md-9 col-lg-9 selectContainer">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-object-align-top"></i></span>
-                                <select name="uso" class="form-control selectpicker" id="uso">
+                                <select name="uso" class="form-control " id="uso">
                                 <option>Elige</option>
                                 <option value="1">Si</option>
                                 <option value="0">No</option>

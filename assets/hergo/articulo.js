@@ -1,5 +1,10 @@
+function permisoArticulos() {
+    (!checkAuth(46)) ? $('#btnCrear').addClass('hide') : $('#btnCrear').removeClass('hide')
+}
 $(document).ready(function(){
+   
     retornarTabla()
+    permisoArticulos()
     $("#imagenes").fileinput({
         language: "es",
         showUpload: false,
@@ -133,37 +138,47 @@ $(document).ready(function(){
             let formData = new FormData($('#form_articulo')[0]);  
             /* for(let pair of formData.entries()) { console.log(pair[0]+ ', '+ pair[1]); }
             return */
-            $.ajax({
+            $.getJSON({
                 url: base_url("index.php/Articulos/agregarArticulo"),
                 type: 'POST',
                 data: formData,
                 cache: false,
                 contentType: false,
                 processData: false,
-                success: function (returndata) {
-                    $('#modalarticulo').modal('hide');
-                    resetForm('#form_articulo')
-                    swal(
-                        'Artículo guardado',
-                        '',
-                        'success'
-                        )
-                    retornarTabla()
+                success: function (res) {
+                    console.log(res);
+                    if (res.auth == false) {
+                        swal(
+                            'error',
+                            res.msg,
+                            'error'
+                            )
+                            return false
+                    } else {
+                        $('#modalarticulo').modal('hide');
+                        resetForm('#form_articulo')
+                        swal(
+                            'Artículo guardado',
+                            '',
+                            'success'
+                            )
+                        retornarTabla()
+                    }
                 }, 
-                error : function (returndata) {
+                error : function (res) {
                     swal(
                         'Error',
                         'El código de artículo ya se encuentra registrado en nuestra bases de datos',
                         'error'
                     )
-                    //console.log(returndata);
+                    //console.log(res);
                 },
 
             }); 
         });
 });/**FIN READY**/
-/********MODAL ALMACEN EDITAR**********/
 
+/********MODAL ALMACEN EDITAR**********/
 $(document).on("click",".btnnuevo",function(){
     resetForm('#form_articulo')
     $(".modal-title").html("Agregar articulo")
@@ -182,14 +197,6 @@ $(document).on("click",".btnnuevo",function(){
 $(document).on("click",".botoncerrarmodal",function(){
    resetForm('#form_articulo')
 })
-
-function asignarselect(text1,select)
-{
-    $("option",select).filter(function() {
-        var aux=$(this).text()
-        return aux.toUpperCase() == text1.toUpperCase();
-    }).prop('selected', true);
-}
 
 function mostrarModal(fila)
 {
@@ -216,7 +223,7 @@ function mostrarModal(fila)
 function retornarTabla()
 {
     agregarcargando();
-    $.ajax({
+    $.getJSON({
         type:"POST",
         url: base_url('index.php/Articulos/mostrarArticulos'),
         dataType: "json",
@@ -344,7 +351,8 @@ function retornarTabla()
                 title: 'Editar',
                 align: 'center',
                 events: operateEvents,
-                searchable: false,
+                visible:(!checkAuth(69)) ? false :true,
+                searchable:false,
                 formatter: operateFormatter
             }]
         });
@@ -385,11 +393,14 @@ function verproductoservicio(value, row, index)
 }
 function operateFormatter(value, row, index) 
 {
-    return [
-        '<a class="editar" title="editar" data-toggle="modal" data-target="#editar" style="cursor:pointer">',
-        '<i class="fa fa-pencil"></i>',
-        '</a>  '       
-    ].join('');
+    if (checkAuth(69)) {
+        return [
+            '<a class="editar" title="editar" data-toggle="modal" data-target="#editar" style="cursor:pointer">',
+            '<i class="fa fa-pencil"></i>',
+            '</a>  '       
+        ].join('');
+    }
+    
 }
 /***********Eventos*************/
 window.operateEvents = {
@@ -426,6 +437,4 @@ function cargarimagen(imagen)
     });
     $('#imagenes').fileinput('refresh');
 }
-
-
 

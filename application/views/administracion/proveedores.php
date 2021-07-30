@@ -11,7 +11,7 @@
     <div class="col-md-4 selectContainer">
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
-    <select name="tipo_doc" class="form-control selectpicker" >
+    <select name="tipo_doc" class="form-control" >
       <option value=" " >Selecciona</option>
       <option>NIT</option>
       <option>CARNET DE IDENTIDAD</option>

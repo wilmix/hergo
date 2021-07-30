@@ -192,6 +192,8 @@ class CI_Controller {
 			base_url('assets/BootstrapToggle/bootstrap-toggle.min.js'),
 			base_url('assets/plugins/select/bootstrap-select.min.js'),//select
 			base_url('assets/plugins/numeral/numeral.min.js'),
+			base_url('assets/plugins/FileInput/js/fileinput.min.js'),
+			base_url('assets/plugins/FileInput/js/locales/es.js'),
 		);
 		$this->foot_script=array(				
 			'https://cdn.jsdelivr.net/npm/vue/dist/vue.js',								

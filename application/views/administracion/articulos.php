@@ -31,7 +31,7 @@
                 <div class="col-md-4 selectContainer">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
-                <select name="unidad" class="form-control selectpicker" >
+                <select name="unidad" class="form-control" >
                   <option value=" " >Selecciona</option>
                   <option>PZA</option>
                   <option>MTR</option>
@@ -47,7 +47,7 @@
                 <div class="col-md-4 selectContainer">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
-                <select name="unidad" class="form-control selectpicker" >
+                <select name="unidad" class="form-control" >
                   <option value=" " >Selecciona</option>
                   <option>HANSA</option>
                   <option>INDURA</option>
@@ -64,7 +64,7 @@
                 <div class="col-md-4 selectContainer">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                <select name="unidad" class="form-control selectpicker" >
+                <select name="unidad" class="form-control" >
                   <option value=" " >Selecciona</option>
                   <option>HANSA</option>
                   <option>INDURA</option>
@@ -119,7 +119,7 @@
                 <div class="col-md-4 selectContainer">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-font"></i></span>
-                <select name="autor" class="form-control selectpicker" >
+                <select name="autor" class="form-control" >
                   <option value=" " >Si corresponde</option>
                   <option>IBM</option>
                   <option>ROPA</option>

@@ -27,7 +27,7 @@
     <div class="col-md-4 selectContainer">
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-pushpin"></i></span>
-    <select name="exp" class="form-control selectpicker" >
+    <select name="exp" class="form-control" >
       <option value=" " >Selecciona</option>
       <option>La Paz</option>
       <option>Potosi</option>
@@ -171,7 +171,7 @@
     <div class="col-md-4 selectContainer">
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-text-background"></i></span>
-    <select name="area" class="form-control selectpicker" >
+    <select name="area" class="form-control" >
       <option value=" " >Selecciona el Area de trabajo</option>
       <option>Ventas</option>
       <option>Contabilidad</option>
@@ -190,7 +190,7 @@
     <div class="col-md-4 selectContainer">
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-object-align-vertical"></i></span>
-    <select name="cargo" class="form-control selectpicker" >
+    <select name="cargo" class="form-control" >
       <option value=" " >Selecciona su Cargo</option>
       <option>Ejecutivo de ventas</option>
       <option>Auxiliar de ventas</option>
@@ -231,7 +231,7 @@
     <div class="col-md-4 selectContainer">
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
-    <select name="exp" class="form-control selectpicker" >
+    <select name="exp" class="form-control" >
       <option value=" " >Selecciona la ciudad</option>
       <option>La Paz</option>
       <option>Potosi</option>

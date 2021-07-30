@@ -2,7 +2,7 @@ var glob_tipoCambio = 0;
 var glob_art = [];
 var glob_alm_usu
 var fechaHoySystem 
-var PermisosUser = []
+var PermisosUser
 glob_tipoCambio = parseFloat($("#mostrarTipoCambio").text())
 permisos()
 
@@ -13,14 +13,13 @@ $(document).ready(function ()
   fechaHoySystem = moment(fechaHoySystem).format("YYYY-MM-DD");
   setTipoCambio(fechaHoySystem);
   mantenerMenu();
-  permisos();
 })
 
 function permisos() {
-  $.ajax({
+  $.getJSON({
     type: "POST",
+    async:false,
     url: base_url('index.php/Importaciones/pedidos/permisos'),
-    dataType: "json",
   }).done(function (res) {
     PermisosUser = res
     //console.table(res);
@@ -30,6 +29,7 @@ function permisos() {
 function setTipoCambio(fechaActual) {
   $.ajax({
     type: "POST",
+    //async:false,
     url: base_url('index.php/Facturas/tipoCambio'),
     dataType: "json",
     data: {fechaActual:fechaActual},
@@ -460,4 +460,8 @@ function getRow(tbl, th) {
     }
 	let row = tbl.row(current_row).data()
 	return row
+}
+function checkAuth(n) {
+  let check = PermisosUser.filter((item) => item.id_sub == n)
+  return check=='' ? false : true;
 }

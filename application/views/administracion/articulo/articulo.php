@@ -18,7 +18,7 @@ th:hover .filterControl {
 
       <div id="toolbar" class="btn-group">
           <a class="btn btn-default text-center btnnuevo" tyle="margin-bottom :10px" href="<?php echo base_url("index.php/pdf/articulos_pdf") ?>" target="_blank"><span class="glyphicon glyphicon-print"></span></a>
-          <button class="btn btn-default text-center btnnuevo" style="margin-bottom :10px" data-toggle="modal" data-target="#modalarticulo">Agregar nuevo Artículo</button>
+          <button id="btnCrear" class="btn btn-default text-center btnnuevo" style="margin-bottom :10px" data-toggle="modal" data-target="#modalarticulo">Agregar nuevo Artículo</button>
 
       </div>
 
@@ -99,7 +99,7 @@ th:hover .filterControl {
                   <div class="col-md-9 col-lg-9 selectContainer">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
-                      <select name="unidad" class="form-control selectpicker" id="unidadarticulo" >
+                      <select name="unidad" class="form-control" id="unidadarticulo" >
                         <option value="" disabled>Seleccione</option>
                         <?php foreach ($unidad->result_array() as $fila): ?>
                           <option value="<?= $fila['idUnidad']  ?>"><?= $fila['Unidad'] ?></option>
@@ -114,7 +114,7 @@ th:hover .filterControl {
                   <div class="col-md-9 col-lg-9 selectContainer">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
-                      <select name="marca" class="form-control selectpicker" id="marcaarticulo" >
+                      <select name="marca" class="form-control" id="marcaarticulo" >
                         <option value="" disabled>Seleccione</option>
                         <?php foreach ($marca->result_array() as $fila): ?>
                           <option value="<?= $fila['idMarca']  ?>"><?= $fila['Marca'] ?></option>
@@ -129,7 +129,7 @@ th:hover .filterControl {
                 <div class="col-md-9 col-lg-9 selectContainer">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                    <select name="linea" class="form-control selectpicker" id="lineaarticulo">
+                    <select name="linea" class="form-control" id="lineaarticulo">
                       <option value="" disabled>Seleccione</option>
                       <?php foreach ($linea->result_array() as $fila): ?>
                           <option value="<?= $fila['idLinea']  ?>"><?= $fila['Linea'] ?></option>
@@ -144,7 +144,7 @@ th:hover .filterControl {
                 <div class="col-md-9 col-lg-9 selectContainer">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-object-align-top"></i></span>
-                    <select name="uso" class="form-control selectpicker" id="uso">
+                    <select name="uso" class="form-control" id="uso">
                       <option value="" disabled>Elige si esta en uso</option>
                       <option selected value="1">Si</option>
                       <option value="0">No</option>
@@ -158,7 +158,7 @@ th:hover .filterControl {
                 <div class="col-md-9 col-lg-9 selectContainer">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-resize-full"></i></span>
-                    <select name="proser" class="form-control selectpicker" id="productoarticulo">
+                    <select name="proser" class="form-control" id="productoarticulo">
                       <option value="" disabled>Elige Producto o Servicio</option>
                       <option value="p">PRODUCTO</option>
                       <option value="s">SERVICIO</option>
@@ -192,7 +192,7 @@ th:hover .filterControl {
                 <div class="col-md-9 col-lg-9 selectContainer">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-font"></i></span>
-                    <select name="autoriza" class="form-control selectpicker" id="autorizaarticulo">
+                    <select name="autoriza" class="form-control" id="autorizaarticulo">
                       <option value="" disabled>Si corresponde</option>
                       <?php foreach ($requisito->result_array() as $fila): ?>
                           <option value="<?= $fila['idRequisito']  ?>"><?= $fila['Requisito'] ?></option>

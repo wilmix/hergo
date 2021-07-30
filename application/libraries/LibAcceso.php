@@ -18,6 +18,26 @@ class LibAcceso {
 
 		}
 	}
+	public function accesoInt($SubMenu)
+    {
+     
+	    $aux=$this->retornarSubMenus($_SESSION['accesoMenu']);
+	    if(in_array($SubMenu, $aux))
+	    {
+	 
+			return true;
+	    }	    	
+		else	
+		{			
+			$res = new stdclass();
+			$res->auth = false;
+			$res->msg = 'No tiene permiso para ingresar a esta opcion';
+
+			echo json_encode($res);	
+			die();
+
+		}
+	}
 	public function accesoSubMenu($SubMenu)
     {
      

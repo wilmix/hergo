@@ -163,7 +163,7 @@
               <!-- provedor -->
               <div class="col-xs-12 col-lg-6 col-md-6">
                 <label >Proveedor:</label>
-                  <select  class="form-control selectpicker" 
+                  <select  class="form-control " 
                           data-size="5" data-live-search="true" 
                           id="proveedor_imp" name="proveedor_imp">
                   <?php foreach ($proveedor->result_array() as $fila): ?>

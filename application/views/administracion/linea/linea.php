@@ -84,23 +84,7 @@
                 </div>
                 
               </div>
-                <!-- Ciudad  
-              <div class="form-group"> 
-                <label class="col-md-3 control-label">Ciudad</label>
-                  <div class="col-md-9 selectContainer">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pushpin"></i></span>
-                      <select name="ciudad" class="form-control selectpicker" id="modalciudadalmacen" >
-                        <option value=" " >Selecciona</option>
-                        <option>La Paz</option>
-                        <option>Potosi</option>
-                        <option >Santa Cruz</option>
-                        <option >Tarija</option>
-                      </select>
-                   </div>
-                </div>
-                
-              </div>-->
+
               <!-- Uso -->
               <div class="form-group">
                 <label class="col-md-3 control-label">En Uso</label>
