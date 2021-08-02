@@ -110,9 +110,9 @@
               </a>
               <ul class="treeview-menu">
                 <li class="egresos"><a href="<?php echo base_url("egresos") ?>">Consultas</a></li>
-                <li class="VentasCaja"><a href="<?php echo base_url("egresos/VentasCaja") ?>">Venta Caja</a></li>
-                <li class="notaentrega"><a href="<?php echo base_url("egresos/notaentrega") ?>">Nota de Entrega</a></li>
-                <li class="BajaProducto"><a href="<?php echo base_url("egresos/BajaProducto") ?>">Baja de Producto</a></li>
+                <li class="ventaCaja"><a href="<?php echo base_url("egresos/crear/ventaCaja") ?>">Venta Caja</a></li>
+                <li class="notaEntrega"><a href="<?php echo base_url("egresos/crear/notaEntrega") ?>">Nota de Entrega</a></li>
+                <li class="baja"><a href="<?php echo base_url("egresos/crear/baja") ?>">Baja de Producto</a></li>
               </ul>
             </li>
             <!-- Traspasos -->

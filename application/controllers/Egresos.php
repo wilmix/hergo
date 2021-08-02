@@ -29,23 +29,48 @@ class Egresos extends CI_Controller
 			
 			
 	}
+	public function crear($tipo)
+	{
+		if ($tipo == 'notaEntrega') {
+			$this->accesoCheck(17);
+			$this->titles('NotaEntrega','Nota de Entrega','Egresos');
+			$this->datos['idegreso']=7;
+		} else if($tipo == 'ventaCaja') {
+			$this->accesoCheck(16);
+			$this->titles('VentaCaja','Ventas Caja','Egresos');
+			$this->datos['idegreso']=6;
+		} else if ($tipo == 'baja'){
+			$this->accesoCheck(18);
+			$this->titles('Baja','Baja de Producto','Egresos');
+			$this->datos['idegreso']=9;
+		}
+		
+		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+		$this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
+		$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
+		$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
+		$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
+
+		$this->datos['foot_script'][]=base_url('assets/hergo/notasEntrega.js') .'?'.rand();
+
+		$this->setView('egresos/notaentrega');
+	}
 	public function notaentrega()
 	{
 		$this->accesoCheck(17);
 		$this->titles('NotaEntrega','Nota de Entrega','Egresos');
 
-		$this->datos['foot_script'][]=base_url('assets/hergo/notasEntrega.js') .'?'.rand();
+			$this->datos['foot_script'][]=base_url('assets/hergo/notasEntrega.js') .'?'.rand();
 
-		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-		$this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
-		$this->datos['fecha']=date('Y-m-d');
-		$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
-		$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
-		$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
+			$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+			$this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
+		//$this->datos['fecha']=date('Y-m-d');
+			$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
+			$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
+			$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
 		$this->datos['idegreso']=7;
 		
 		$this->setView('egresos/notaentrega');
-
 	}
 
 	public function VentasCaja()
@@ -53,15 +78,15 @@ class Egresos extends CI_Controller
 		$this->accesoCheck(16);
 		$this->titles('VentaCaja','Ventas Caja','Egresos');
 		
-		$this->datos['foot_script'][]=base_url('assets/hergo/notasEntrega.js') .'?'.rand();
+			$this->datos['foot_script'][]=base_url('assets/hergo/notasEntrega.js') .'?'.rand();
 
-		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-        $this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
-		$this->datos['fecha']=date('Y-m-d');
+			$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+        	$this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
+		//$this->datos['fecha']=date('Y-m-d');
 
-	  	$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
-	  	$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
-		$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
+			$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
+			$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
+			$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
 						
 		$this->datos['idegreso']=6;
 
@@ -74,16 +99,16 @@ class Egresos extends CI_Controller
 		$this->accesoCheck(18);
 		$this->titles('Baja','Baja de Producto','Egresos');
 		
-		$this->datos['foot_script'][]=base_url('assets/hergo/notasEntrega.js') .'?'.rand();
+			$this->datos['foot_script'][]=base_url('assets/hergo/notasEntrega.js') .'?'.rand();
 		
-		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-		$this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
+			$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+			$this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
 		//$this->datos['fecha']=date('Y-m-d');
-		$this->datos['clientes']=$this->Ingresos_model->retornar_tabla("clientes");
-		$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
+		//$this->datos['clientes']=$this->Ingresos_model->retornar_tabla("clientes");
+			$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
 		//$this->datos['auxIdCliente']=1801; //cliente hergo
-		$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
-		$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
+			$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
+			$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
 		$this->datos['idegreso']=9;
 
 		$this->setView('egresos/notaentrega');
