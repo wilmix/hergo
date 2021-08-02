@@ -231,7 +231,7 @@ function mostrarTablaEgresos(res) {
                 title: "Fecha",
                 sortable: true,
                 align: 'center',
-                formatter: formato_fecha_corta,
+                formatter: formato_fecha,
                 searchable: false,
             },
             {
