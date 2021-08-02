@@ -14,7 +14,7 @@ class Almacen extends CI_Controller
 	{
 		$this->accesoCheck(1);
 		$this->titles('Almacenes','Almacenes','Administracion',);
-		$this->datos['foot_script'][]=base_url('assets/hergo/almacen.js');
+		$this->datos['foot_script'][]=base_url('assets/hergo/almacen.js').'?'.rand();
 		$this->datos['almacen']=$this->Almacen_model->retornar_tabla("almacenes");
 		$this->setView('administracion/almacen/almacen');
 	}

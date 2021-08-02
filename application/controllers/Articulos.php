@@ -13,7 +13,7 @@ class Articulos extends CI_Controller
 	{
 		$this->accesoCheck(2);
 		$this->titles('Articulos','Articulos','Administracion',);
-		$this->datos['foot_script'][]=base_url('assets/hergo/articulo.js');
+		$this->datos['foot_script'][]=base_url('assets/hergo/articulo.js').'?'.rand();
 
 		$this->datos['unidad']=$this->Articulo_model->retornar_tabla("unidad");	
 		$this->datos['marca']=$this->Articulo_model->retornar_tabla("marca");

@@ -15,7 +15,7 @@ class Clientes extends CI_Controller
 		$this->accesoCheck(6);
 		$this->titles('Clientes','Clientes','Administracion',);
 		
-		$this->datos['foot_script'][]=base_url('assets/hergo/clientes.js');
+		$this->datos['foot_script'][]=base_url('assets/hergo/clientes.js') .'?'.rand();
 		$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
 		$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
 		

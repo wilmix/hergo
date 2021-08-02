@@ -201,7 +201,7 @@ class CI_Controller {
 			'https://unpkg.com/vue-select@3.10.3/dist/vue-select.js',
 			'https://unpkg.com/vuejs-datepicker',
 			'https://unpkg.com/vuejs-datepicker/dist/locale/translations/es.js',
-			base_url('assets/hergo/funciones.js'),
+			base_url('assets/hergo/funciones.js') .'?'.rand(),
 		);
 
 		$this->datos['cabeceras_css']= $this->cabeceras_css;
