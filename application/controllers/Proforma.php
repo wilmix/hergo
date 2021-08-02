@@ -11,9 +11,9 @@ class Proforma extends CI_Controller
 	public function index()
 	{
 			$this->accesoCheck(67);
-			$this->titles('Proformas','Consulta Proformas','Proformas',);
+			$this->titles('Proformas','Consulta Proformas','Proformas');
 			
-			$this->datos['foot_script'][]=base_url('assets/hergo/proforma/proformas.js');
+			$this->datos['foot_script'][]=base_url('assets/hergo/proforma/proformas.js') .'?'.rand();
 			$this->setView('proforma/consultaProformas');
 	}
 	public function formProforma($id='crear')

@@ -195,12 +195,16 @@ class CI_Controller {
 			base_url('assets/plugins/FileInput/js/fileinput.min.js'),
 			base_url('assets/plugins/FileInput/js/locales/es.js'),
 		);
-		$this->foot_script=array(				
-			'https://cdn.jsdelivr.net/npm/vue/dist/vue.js',								
+		$this->foot_script=array(			
+			base_url('assets/vue/vue.js'),	
+			//'https://cdn.jsdelivr.net/npm/vue/dist/vue.js',								
 			base_url('assets/vue/vue-resource.min.js'),	
-			'https://unpkg.com/vue-select@3.10.3/dist/vue-select.js',
-			'https://unpkg.com/vuejs-datepicker',
-			'https://unpkg.com/vuejs-datepicker/dist/locale/translations/es.js',
+			//'https://unpkg.com/vue-select@3.10.3/dist/vue-select.js',
+			base_url('assets/vue-plugins/vue-select/vue-select.js'),	
+			//'https://unpkg.com/vuejs-datepicker',
+			base_url('assets/vue-plugins/vue-datapicker/vuejs-datepicker.min.js'),	
+			//'https://unpkg.com/vuejs-datepicker/dist/locale/translations/es.js',
+			base_url('assets/vue-plugins/vue-datapicker/translations/es.js'),	
 			base_url('assets/hergo/funciones.js') .'?'.rand(),
 		);
 

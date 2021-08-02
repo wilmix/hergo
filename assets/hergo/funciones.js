@@ -465,3 +465,129 @@ function checkAuth(n) {
   let check = PermisosUser.filter((item) => item.id_sub == n)
   return check=='' ? false : true;
 }
+$(document).on("click","#botonmodalcliente",function(){
+  $("#carnet").prop('disabled', false);
+  resetForm('#form_clientes')
+  
+  $(".modal-title").html("Agregar Cliente")
+  $("#bguardar").html("Guardar")
+  
+})
+$(document).on("click",".botoncerrarmodal",function(){
+ resetForm('#form_clientes')
+})
+function validarCliente(tipo) {
+    $('#form_clientes').bootstrapValidator({
+      feedbackIcons: {
+      valid: 'glyphicon glyphicon-ok',
+      invalid: 'glyphicon glyphicon-remove',
+      validating: 'glyphicon glyphicon-refresh'
+      },
+      fields: {
+      carnet: {
+        validators: {
+          notEmpty: {
+            message: 'Campo obligatorio'
+          },
+          notEmpty: {
+            message: 'Campo obligatorio'
+          },
+          integer: {
+            message: 'Debe ser dato númerico'
+          }
+        }
+      },
+      nombre_cliente: {
+        validators: {
+            stringLength: {
+              min: 1,
+              message: 'Ingrese nombre válido'
+            },
+            notEmpty: {
+              message: 'Campo obligatorio'
+            }
+        }
+      },
+      direccion: {
+        validators: {
+          stringLength: {
+            min: 1,
+            message: 'Ingrese dirección válida'
+          },
+        }
+      },
+      email: {
+        validators: {
+          emailAddress: {
+            message: 'Ingrese un email válido'
+          }
+        }
+      },
+      phone: {
+        validators: {
+          between: {
+            min: 1,
+            max: 999999999999999,
+            message: 'Igrese número de telefono valido'
+          }
+        }
+      },
+    }
+  })
+  .on('success.form.bv', function(e) {
+    e.preventDefault();
+    var formData = new FormData($('#form_clientes')[0]);  
+    $.getJSON({
+      url: base_url("index.php/Clientes/store"),
+      type: 'POST',
+      data: formData,
+      cache: false,
+      contentType: false,
+      processData: false,
+      success: function (returndata) {
+        //console.log(returndata);return;
+        if (returndata.status==true) {
+          /* if(typeof retornarTablaClientes === 'function') {
+            retornarTablaClientes() 
+          }  */
+          if (tipo =='cliente') {
+            retornarTablaClientes() 
+            console.log('desde cliente');
+          } else {
+            console.log('desde otro lado');
+            validarClienteCorrecto(returndata.id,returndata.cliente.nombreCliente,returndata.cliente.documento)
+          }
+          $('#modalcliente').modal('hide');
+          resetForm('#form_clientes')
+          //retornarTablaClientes()
+          swal(
+              'Cliente Registrado',
+              '',
+              'success'
+          )
+        } else if (returndata.status==false){
+            swal({
+              title: 'Atencion',
+              html: "El NIT <b>" + returndata.cliente.documento + "</b> ya se encuentra registrado a nombre de <b>" + returndata.cliente.nombreCliente + "</b> en fecha  <b>" + formato_fecha_corta(returndata.cliente.fecha) + "</b> registrado por <b>" + returndata.cliente.autor + "</b>.",
+              type: 'warning',
+            })
+        }
+      }, 
+      error : function (returndata) {
+        console.log(returndata.status);
+        swal(
+            'Error',
+            'Error en bases de datos status:'+returndata.status,
+            'error'
+        )
+      }, 
+    })
+  });
+}
+function validarClienteCorrecto(id,nombreCliente,documento) {
+  let nombre = `${nombreCliente} - ${documento}`
+  $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
+  $("#cliente_egreso").val(nombre);
+  $("#idCliente").val(id);
+  glob_guardar_cliente = true;
+}

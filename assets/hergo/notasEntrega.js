@@ -10,7 +10,9 @@ let $table
 let checkTipoCambio = false
 let moneda
 let tipoMovEgre 
+agregarcargando()
 $(document).ready(function () {
+    validarCliente()
     tipoMovEgre = $("#_tipomov_ne").val()
     if (tipoMovEgre == 9) {
         $(".hiddenBaja").addClass("hidden");
@@ -200,10 +202,7 @@ $(function () {
             },
 
             select: function (event, ui) {
-                $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
-                $("#cliente_egreso").val(ui.item.nombreCliente + " - " + ui.item.documento);
-                $("#idCliente").val(ui.item.idCliente);
-                glob_guardar_cliente = true;
+                validarClienteCorrecto(ui.item.idCliente,ui.item.nombreCliente,ui.item.documento)
                 return false;
             }
         })

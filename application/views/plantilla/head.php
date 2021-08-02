@@ -13,7 +13,7 @@
       <link type="text/css" rel="stylesheet" href="<?= base_url("assets/fa/css/font-awesome.min.css") ?>" /> 
       <link type="text/css" rel="stylesheet" href="<?= base_url("assets/dist/css/AdminLTE.min.css") ?>" /> 
       <link type="text/css" rel="stylesheet" href="<?= base_url("assets/dist/css/skins/skin-blue.min.css") ?>" /> 
-      <link type="text/css" rel="stylesheet" href="<?= base_url("assets/hergo/estilos.css") ?>" /> 
+      <link type="text/css" rel="stylesheet" href="<?= base_url("assets/hergo/estilos.css")  .'?'.rand() ?>" /> 
       <link type="text/css" rel="stylesheet" href="<?= base_url('assets/plugins/table-boot/css/bootstrap-table.css') ?>" /> 
       <link type="text/css" rel="stylesheet" href="<?= base_url('assets/plugins/table-boot/plugin/select2.min.css') ?>" /> 
       <link type="text/css" rel="stylesheet" href="<?= base_url('assets/sweetalert/sweetalert2.min.css') ?>" /> 
