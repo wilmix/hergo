@@ -24,14 +24,14 @@ class Proforma extends CI_Controller
 		if ($this->datos['id']>0) {
 			$this->titles('EditarProforma','Editar Proforma','Proformas',);
 		}
-		$this->datos['foot_script'][]=base_url('assets/hergo/proforma/formProforma.js');
+		$this->datos['foot_script'][]=base_url('assets/hergo/proforma/formProforma.js') .'?'.rand();
 		$this->setView('proforma/formProforma');
 	}
 
 	public function getProformas()  
 	{
 		if(!$this->input->is_ajax_request())
-		die("PAGINA NO ENCONTRADAs");
+		die("PAGINA NO ENCONTRADA");
  
 		$ini=$this->security->xss_clean($this->input->post("ini"));
 		$fin=$this->security->xss_clean($this->input->post("fin"));
