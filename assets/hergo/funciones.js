@@ -591,3 +591,10 @@ function validarClienteCorrecto(id,nombreCliente,documento) {
   $("#idCliente").val(id);
   glob_guardar_cliente = true;
 }
+$("#input-1").fileinput({
+  language: "es",
+  showUpload: false,
+  previewFileType: "image",
+  maxFileSize: 1024,
+ 
+});

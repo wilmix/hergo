@@ -1,15 +1,3 @@
-
-<section class="content-header">
-      <h1>
-        Usuarios
-        <small>Esditar Usuario</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i>Inicio</a></li>
-        <li><a href="#">Usuarios</a></li>
-        <li class="active">Editar Usuario</li>
-      </ol>
-</section>
 <?php 
 if(isset($message)){ ?>
 <div class="alert alert-warning alert-dismissible">
@@ -18,7 +6,6 @@ if(isset($message)){ ?>
     <?php echo $message; ?>
 </div>
 <?php } ?>
-<section class="content">
     <div class="row">
         <div class="col-xs-12">
             <div class="box box-info">
@@ -156,18 +143,6 @@ if(isset($message)){ ?>
             </div>
         </div>
     </div>
-</section>
-<script>
-    $("#input-1").fileinput({
-        language: "es",
-        showUpload: false,
-        previewFileType: "image",
-        maxFileSize: 1024,
-       
-    });
-
-</script>
-</div> <!-- FIN content-wrapper --> 
 
 
 

@@ -20,34 +20,6 @@ class Auth extends CI_Controller {
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
 
 		$this->lang->load('auth');
-		
-		$this->cabeceras_css=array(
-				base_url('assets/bootstrap/css/bootstrap.min.css'),
-				base_url("assets/fa/css/font-awesome.min.css"),
-				base_url("assets/dist/css/AdminLTE.min.css"),
-				base_url("assets/dist/css/skins/skin-blue.min.css"),
-			);
-		$this->cabecera_script=array(
-				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
-				base_url('assets/bootstrap/js/bootstrap.min.js'),
-				base_url('assets/dist/js/app.min.js'),
-				base_url('assets/plugins/slimscroll/slimscroll.min.js'),
-				
-			);
-		
-		$this->data['nombre_usuario']= $this->session->userdata('nombre');
-		$hoy = date('Y-m-d');
-		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
-		if ($tipoCambio) {
-			$tipoCambio = $tipoCambio->tipocambio;
-			$this->data['tipoCambio'] = $tipoCambio;
-		} else {
-			$this->data['tipoCambio'] = 'No se tiene tipo de cambio para la fecha';
-		}
-			if($this->session->userdata('foto')==NULL)
-				$this->data['foto']=base_url('assets/imagenes/ninguno.png');
-			else
-				$this->data['foto']=base_url('assets/imagenes/').$this->session->userdata('foto');	
 	}
 
 	// redirect if needed, otherwise display the user list
@@ -66,24 +38,23 @@ class Auth extends CI_Controller {
 		//}
 		else
 		{
-			// set the flash data error message if there is one
-			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+			// set the flash datos error message if there is one
+			$this->datos['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
 			//list the users
-			$this->data['users'] = $this->ion_auth->users()->result();
-			foreach ($this->data['users'] as $k => $user)
+			$this->datos['users'] = $this->ion_auth->users()->result();
+			foreach ($this->datos['users'] as $k => $user)
 			{
-				$this->data['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
+				$this->datos['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
 			}
 
-			//$this->_render_page('auth/index', $this->data);
+			//$this->_render_page('auth/index', $this->datos);
 			redirect("principal", 'refresh');			
 		}
 	}
 	//editar credenciales
 	public function usuarios()
 	{
-		$this->libacceso->acceso(35);
 		if (!$this->ion_auth->logged_in())
 		{
 			// redirect them to the login page
@@ -96,44 +67,33 @@ class Auth extends CI_Controller {
 		}*/
 		else
 		{
-			// set the flash data error message if there is one
-			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+			$this->accesoCheck(35);
+			$this->titles('Usuarios','Usuarios','Configuración');
+			// set the flash datos error message if there is one
+			$this->datos['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
 			//list the users
-			$this->data['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
-			$this->data['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
-			$this->data['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
-			$this->data['user_id_actual']=$this->session->userdata['user_id'];
-			$this->data['titulo']="Usuarios";
-			$this->data['users'] = $this->ion_auth->users()->result();
-			foreach ($this->data['users'] as $k => $user)
+			$this->datos['users'] = $this->ion_auth->users()->result();
+			foreach ($this->datos['users'] as $k => $user)
 			{
-				$this->data['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
+				$this->datos['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
 			}
-			$this->data['cabeceras_css']= $this->cabeceras_css;
-			$this->data['cabeceras_script']= $this->cabecera_script;
-
-
-			$this->load->view('plantilla/head.php',$this->data);
-			$this->load->view('plantilla/header.php',$this->data);
-			$this->load->view('plantilla/menu.php',$this->data);
-			$this->_render_page('auth/index', $this->data);
-			$this->load->view('plantilla/footer.php',$this->data);
+			$this->setView('auth/index');
 		}
 	}
 
 	// log the user in
 	public function login()
 	{
-		$this->data['cabeceras_css']= $this->cabeceras_css;
-		$this->data['cabeceras_script']= $this->cabecera_script;
-		$this->data['cabeceras_css'][]=base_url('assets/login/css/form-elements.css');
-		$this->data['cabeceras_css'][]=base_url('assets/login/css/style.css');
-		$this->data['cabeceras_script'][]=base_url('assets/login/js/jquery.backstretch.min.js');
-		$this->data['cabeceras_script'][]=base_url('assets/login/js/scripts.js');
+		$this->datos['cabeceras_css']= $this->cabeceras_css;
+		$this->datos['cabeceras_script']= $this->cabecera_script;
+		$this->datos['cabeceras_css'][]=base_url('assets/login/css/form-elements.css');
+		$this->datos['cabeceras_css'][]=base_url('assets/login/css/style.css');
+		$this->datos['cabeceras_script'][]=base_url('assets/login/js/jquery.backstretch.min.js');
+		$this->datos['cabeceras_script'][]=base_url('assets/login/js/scripts.js');
 
 
-		$this->data['title'] = $this->lang->line('login_heading');
+		$this->datos['title'] = $this->lang->line('login_heading');
 
 		//validate form input
 		$this->form_validation->set_rules('identity', str_replace(':', '', $this->lang->line('login_identity_label')), 'required');
@@ -165,30 +125,30 @@ class Auth extends CI_Controller {
 		else
 		{
 			// the user is not logging in so display the login page
-			// set the flash data error message if there is one
-			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+			// set the flash datos error message if there is one
+			$this->datos['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
-			$this->data['identity'] = array('name' => 'identity',
+			$this->datos['identity'] = array('name' => 'identity',
 				'id'    => 'identity',
 				'type'  => 'text',
 				'value' => $this->form_validation->set_value('identity'),
 			);
-			$this->data['password'] = array('name' => 'password',
+			$this->datos['password'] = array('name' => 'password',
 				'id'   => 'password',
 				'type' => 'password',
 			);
 
-			$this->data['titulo']="Iniciar Sesion";
-			$this->load->view('plantilla/headLogin',$this->data);
-			$this->_render_page('login/login', $this->data);
-			$this->load->view('login/footerlogin',$this->data);
+			$this->datos['titulo']="Iniciar Sesion";
+			$this->load->view('plantilla/headLogin',$this->datos);
+			$this->_render_page('login/login', $this->datos);
+			$this->load->view('login/footerlogin',$this->datos);
 		}
 	}
 
 	// log the user out
 	public function logout()
 	{
-		$this->data['title'] = "Logout";
+		$this->datos['title'] = "Logout";
 
 		// log the user out
 		$logout = $this->ion_auth->logout();
@@ -215,28 +175,28 @@ class Auth extends CI_Controller {
 		if ($this->form_validation->run() == false)
 		{
 			// display the form
-			// set the flash data error message if there is one
-			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+			// set the flash datos error message if there is one
+			$this->datos['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
-			$this->data['min_password_length'] = $this->config->item('min_password_length', 'ion_auth');
-			$this->data['old_password'] = array(
+			$this->datos['min_password_length'] = $this->config->item('min_password_length', 'ion_auth');
+			$this->datos['old_password'] = array(
 				'name' => 'old',
 				'id'   => 'old',
 				'type' => 'password',
 			);
-			$this->data['new_password'] = array(
+			$this->datos['new_password'] = array(
 				'name'    => 'new',
 				'id'      => 'new',
 				'type'    => 'password',
-				'pattern' => '^.{'.$this->data['min_password_length'].'}.*$',
+				'pattern' => '^.{'.$this->datos['min_password_length'].'}.*$',
 			);
-			$this->data['new_password_confirm'] = array(
+			$this->datos['new_password_confirm'] = array(
 				'name'    => 'new_confirm',
 				'id'      => 'new_confirm',
 				'type'    => 'password',
-				'pattern' => '^.{'.$this->data['min_password_length'].'}.*$',
+				'pattern' => '^.{'.$this->datos['min_password_length'].'}.*$',
 			);
-			$this->data['user_id'] = array(
+			$this->datos['user_id'] = array(
 				'name'  => 'user_id',
 				'id'    => 'user_id',
 				'type'  => 'hidden',
@@ -244,7 +204,7 @@ class Auth extends CI_Controller {
 			);
 
 			// render
-			$this->_render_page('auth/change_password', $this->data);
+			$this->_render_page('auth/change_password', $this->datos);
 		}
 		else
 		{
@@ -282,23 +242,23 @@ class Auth extends CI_Controller {
 
 		if ($this->form_validation->run() == false)
 		{
-			$this->data['type'] = $this->config->item('identity','ion_auth');
+			$this->datos['type'] = $this->config->item('identity','ion_auth');
 			// setup the input
-			$this->data['identity'] = array('name' => 'identity',
+			$this->datos['identity'] = array('name' => 'identity',
 				'id' => 'identity',
 			);
 
 			if ( $this->config->item('identity', 'ion_auth') != 'email' ){
-				$this->data['identity_label'] = $this->lang->line('forgot_password_identity_label');
+				$this->datos['identity_label'] = $this->lang->line('forgot_password_identity_label');
 			}
 			else
 			{
-				$this->data['identity_label'] = $this->lang->line('forgot_password_email_identity_label');
+				$this->datos['identity_label'] = $this->lang->line('forgot_password_email_identity_label');
 			}
 
 			// set any errors and display the form
-			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
-			$this->_render_page('auth/forgot_password', $this->data);
+			$this->datos['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+			$this->_render_page('auth/forgot_password', $this->datos);
 		}
 		else
 		{
@@ -358,33 +318,33 @@ class Auth extends CI_Controller {
 			{
 				// display the form
 
-				// set the flash data error message if there is one
-				$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+				// set the flash datos error message if there is one
+				$this->datos['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
-				$this->data['min_password_length'] = $this->config->item('min_password_length', 'ion_auth');
-				$this->data['new_password'] = array(
+				$this->datos['min_password_length'] = $this->config->item('min_password_length', 'ion_auth');
+				$this->datos['new_password'] = array(
 					'name' => 'new',
 					'id'   => 'new',
 					'type' => 'password',
-					'pattern' => '^.{'.$this->data['min_password_length'].'}.*$',
+					'pattern' => '^.{'.$this->datos['min_password_length'].'}.*$',
 				);
-				$this->data['new_password_confirm'] = array(
+				$this->datos['new_password_confirm'] = array(
 					'name'    => 'new_confirm',
 					'id'      => 'new_confirm',
 					'type'    => 'password',
-					'pattern' => '^.{'.$this->data['min_password_length'].'}.*$',
+					'pattern' => '^.{'.$this->datos['min_password_length'].'}.*$',
 				);
-				$this->data['user_id'] = array(
+				$this->datos['user_id'] = array(
 					'name'  => 'user_id',
 					'id'    => 'user_id',
 					'type'  => 'hidden',
 					'value' => $user->id,
 				);
-				$this->data['csrf'] = $this->_get_csrf_nonce();
-				$this->data['code'] = $code;
+				$this->datos['csrf'] = $this->_get_csrf_nonce();
+				$this->datos['code'] = $code;
 
 				// render
-				$this->_render_page('auth/reset_password', $this->data);
+				$this->_render_page('auth/reset_password', $this->datos);
 			}
 			else
 			{
@@ -463,7 +423,7 @@ class Auth extends CI_Controller {
 			// redirect them to the home page because they must be an administrator to view this
 			return show_error('You must be an administrator to view this page.');
 		}
-
+		$this->titles('DesactivarUsuario','Desactivar Usuario','Configuración');
 		$id = (int) $id;
 
 		$this->load->library('form_validation');
@@ -473,19 +433,10 @@ class Auth extends CI_Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			// insert csrf check
-			$this->data['csrf'] = $this->_get_csrf_nonce();
-			$this->data['user'] = $this->ion_auth->user($id)->row();
+			$this->datos['csrf'] = $this->_get_csrf_nonce();
+			$this->datos['user'] = $this->ion_auth->user($id)->row();
 
-
-			$this->data['cabeceras_css']= $this->cabeceras_css;
-			$this->data['cabeceras_script']= $this->cabecera_script;
-
-			$this->load->view('plantilla/head.php',$this->data);
-			$this->load->view('plantilla/header.php',$this->data);
-			$this->load->view('plantilla/menu.php',$this->data);
-			$this->_render_page('auth/deactivate_user', $this->data);
-			$this->load->view('plantilla/footer.php',$this->data);
-			
+			$this->setView('auth/deactivate_user');
 		}
 		else
 		{
@@ -493,10 +444,10 @@ class Auth extends CI_Controller {
 			if ($this->input->post('confirm') == 'yes')
 			{
 				// do we have a valid request?
-				if ($this->_valid_csrf_nonce() === FALSE || $id != $this->input->post('id'))
+				/* if ($this->_valid_csrf_nonce() === FALSE || $id != $this->input->post('id'))
 				{
 					show_error($this->lang->line('error_csrf'));
-				}
+				} */
 
 				// do we have the right userlevel?
 				if ($this->ion_auth->logged_in() && $this->ion_auth->is_admin())
@@ -515,7 +466,7 @@ class Auth extends CI_Controller {
 	public function create_user()
     {
 		$this->libacceso->acceso(36);
-		$this->data['title'] = $this->lang->line('create_user_heading');
+		$this->titles('CrearUsuario','Crear Usuario','Configuración');
 		//if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
 
         if (!$this->ion_auth->logged_in())
@@ -525,12 +476,7 @@ class Auth extends CI_Controller {
 
         $tables = $this->config->item('tables','ion_auth');
         $identity_column = $this->config->item('identity','ion_auth');
-		$this->data['identity_column'] = $identity_column;
-		$this->data['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
-		$this->data['user_id_actual']=$this->session->userdata['user_id'];
-		$this->data['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
-		$this->data['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
-		$this->data['titulo']="Crear Usuario";
+		$this->datos['identity_column'] = $identity_column;
 
         // validate form input
         $this->form_validation->set_rules('first_name', $this->lang->line('create_user_validation_fname_label'), 'required');
@@ -575,10 +521,10 @@ class Auth extends CI_Controller {
         else
         {
             // display the create user form
-            // set the flash data error message if there is one
-            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+            // set the flash datos error message if there is one
+            $this->datos['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
-            $this->data['first_name'] = array(
+            $this->datos['first_name'] = array(
                 'name'  => 'first_name',
                 'id'    => 'first_name',
                 'type'  => 'text',
@@ -586,7 +532,7 @@ class Auth extends CI_Controller {
                 'placeholder' => 'Nombre',//modificado para bootstrap
                 'class' => 'form-control',//modificado para bootstrap
             );
-            $this->data['last_name'] = array(
+            $this->datos['last_name'] = array(
                 'name'  => 'last_name',
                 'id'    => 'last_name',
                 'type'  => 'text',
@@ -594,7 +540,7 @@ class Auth extends CI_Controller {
                 'placeholder' => 'Apellido',//modificado para bootstrap
                 'class' => 'form-control',//modificado para bootstrap
             );
-            $this->data['identity'] = array(
+            $this->datos['identity'] = array(
                 'name'  => 'identity',
                 'id'    => 'identity',
                 'type'  => 'text',
@@ -602,7 +548,7 @@ class Auth extends CI_Controller {
                 'placeholder' => 'identity',//modificado para bootstrap
                 'class' => 'form-control',//modificado para bootstrap
             );
-            $this->data['email'] = array(
+            $this->datos['email'] = array(
                 'name'  => 'email',
                 'id'    => 'email',
                 'type'  => 'text',
@@ -610,7 +556,7 @@ class Auth extends CI_Controller {
                 'placeholder' => 'Correo',//modificado para bootstrap
                 'class' => 'form-control',//modificado para bootstrap
             );
-            $this->data['company'] = array(
+            $this->datos['company'] = array(
                 'name'  => 'company',
                 'id'    => 'company',
                 'type'  => 'text',
@@ -618,7 +564,7 @@ class Auth extends CI_Controller {
                 'placeholder' => 'Cargo',//modificado para bootstrap
                 'class' => 'form-control',//modificado para bootstrap
             );
-            $this->data['phone'] = array(
+            $this->datos['phone'] = array(
                 'name'  => 'phone',
                 'id'    => 'phone',
                 'type'  => 'text',
@@ -626,7 +572,7 @@ class Auth extends CI_Controller {
                 'placeholder' => 'Telefono',//modificado para bootstrap
                 'class' => 'form-control',//modificado para bootstrap
             );
-            $this->data['password'] = array(
+            $this->datos['password'] = array(
                 'name'  => 'password',
                 'id'    => 'password',
                 'type'  => 'password',
@@ -634,7 +580,7 @@ class Auth extends CI_Controller {
                 'placeholder' => 'Contraseña',//modificado para bootstrap
                 'class' => 'form-control',//modificado para bootstrap
             );
-            $this->data['password_confirm'] = array(
+            $this->datos['password_confirm'] = array(
                 'name'  => 'password_confirm',
                 'id'    => 'password_confirm',
                 'type'  => 'password',
@@ -642,7 +588,7 @@ class Auth extends CI_Controller {
                 'placeholder' => 'Cofirmar contraseña',//modificado para bootstrap
                 'class' => 'form-control',//modificado para bootstrap
 			);
-			$this->data['almacen'] = array(
+			$this->datos['almacen'] = array(
                 'name'  => 'almacen',
                 'id'    => 'almacen',
                 'type'  => 'text',
@@ -650,30 +596,14 @@ class Auth extends CI_Controller {
                 'placeholder' => 'Almacen',//modificado para bootstrap
                 'class' => 'form-control',//modificado para bootstrap
             );
-
-            //$this->_render_page('auth/create_user', $this->data);
-            $this->data['cabeceras_css']= $this->cabeceras_css;
-			$this->data['cabeceras_script']= $this->cabecera_script;
-            
-           
-
-			$this->load->view('plantilla/head.php',$this->data);
-			$this->load->view('plantilla/header.php',$this->data);
-			$this->load->view('plantilla/menu.php',$this->data);
-			$this->_render_page('auth/create_user', $this->data);
-			$this->load->view('plantilla/footer.php',$this->data);
+			$this->setView('auth/create_user');
         }
     }
 
 	// edit a user
 	public function edit_user($id)
 	{
-		$this->data['title'] = $this->lang->line('edit_user_heading');
-		$this->data['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
-		$this->data['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
-		$this->data['user_id_actual']=$this->session->userdata['user_id'];
-		$this->data['titulo']="Editar Usuario";
-
+		$this->datos['title'] = $this->lang->line('edit_user_heading');
 		if (!$this->ion_auth->logged_in() || (!$this->ion_auth->is_admin() && !($this->ion_auth->user()->row()->id == $id)))
 		{
 			redirect('auth', 'refresh');
@@ -707,7 +637,7 @@ class Auth extends CI_Controller {
 
 			if ($this->form_validation->run() === TRUE)
 			{
-				$data = array(
+				$datos = array(
 					'first_name' => $this->input->post('first_name'),
 					'last_name'  => $this->input->post('last_name'),
 					'company'    => $this->input->post('company'),
@@ -718,10 +648,10 @@ class Auth extends CI_Controller {
 				// update the password if it was posted
 				if ($this->input->post('password'))
 				{
-					$data['password'] = $this->input->post('password');
+					$datos['password'] = $this->input->post('password');
 				}
 				$this->subir_imagen($id);
-				$this->session->set_userdata("nombre",$data['first_name']." ".$data['last_name']);
+				$this->session->set_userdata("nombre",$datos['first_name']." ".$datos['last_name']);
 
 				// NOT Only allow updating groups if user is admin
 				if ($this->ion_auth->is_admin())
@@ -743,7 +673,7 @@ class Auth extends CI_Controller {
 				}
 
 			// check to see if we are updating the user
-			   if($this->ion_auth->update($user->id, $data))
+			   if($this->ion_auth->update($user->id, $datos))
 			    {
 			    	// redirect them back to the admin page if admin, or to the base url if non admin
 				    $this->session->set_flashdata('message', $this->ion_auth->messages() );
@@ -778,17 +708,17 @@ class Auth extends CI_Controller {
 		}
 
 		// display the edit user form
-		$this->data['csrf'] = $this->_get_csrf_nonce();
+		$this->datos['csrf'] = $this->_get_csrf_nonce();
 
-		// set the flash data error message if there is one
-		$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+		// set the flash datos error message if there is one
+		$this->datos['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
 		// pass the user to the view
-		$this->data['user'] = $user;
-		$this->data['groups'] = $groups;
-		$this->data['currentGroups'] = $currentGroups;
+		$this->datos['user'] = $user;
+		$this->datos['groups'] = $groups;
+		$this->datos['currentGroups'] = $currentGroups;
 
-		$this->data['first_name'] = array(
+		$this->datos['first_name'] = array(
 			'name'  => 'first_name',
 			'id'    => 'first_name',
 			'type'  => 'text',
@@ -796,7 +726,7 @@ class Auth extends CI_Controller {
 			'placeholder' => 'Nombre',//modificado para bootstrap
             'class' => 'form-control',//modificado para bootstrap
 		);
-		$this->data['last_name'] = array(
+		$this->datos['last_name'] = array(
 			'name'  => 'last_name',
 			'id'    => 'last_name',
 			'type'  => 'text',
@@ -804,7 +734,7 @@ class Auth extends CI_Controller {
 			'placeholder' => 'Apellido',//modificado para bootstrap
             'class' => 'form-control',//modificado para bootstrap
 		);
-		$this->data['company'] = array(
+		$this->datos['company'] = array(
 			'name'  => 'company',
 			'id'    => 'company',
 			'type'  => 'text',
@@ -812,7 +742,7 @@ class Auth extends CI_Controller {
 			'placeholder' => 'Cargo',//modificado para bootstrap
             'class' => 'form-control',//modificado para bootstrap
 		);
-		$this->data['phone'] = array(
+		$this->datos['phone'] = array(
 			'name'  => 'phone',
 			'id'    => 'phone',
 			'type'  => 'text',
@@ -820,21 +750,21 @@ class Auth extends CI_Controller {
 			'placeholder' => 'Telefono',//modificado para bootstrap
             'class' => 'form-control',//modificado para bootstrap
 		);
-		$this->data['password'] = array(
+		$this->datos['password'] = array(
 			'name' => 'password',
 			'id'   => 'password',
 			'type' => 'password',
 			'placeholder' => 'Contraseña',//modificado para bootstrap
             'class' => 'form-control',//modificado para bootstrap
 		);
-		$this->data['password_confirm'] = array(
+		$this->datos['password_confirm'] = array(
 			'name' => 'password_confirm',
 			'id'   => 'password_confirm',
 			'type' => 'password',
 			'placeholder' => 'Confirmar contraseña',//modificado para bootstrap
             'class' => 'form-control',//modificado para bootstrap
 		);
-		$this->data['almacen'] = array(
+		$this->datos['almacen'] = array(
 			'name'  => 'almacen',
 			'id'    => 'almacen',
 			'type'  => 'text',
@@ -843,28 +773,16 @@ class Auth extends CI_Controller {
 			'placeholder' => 'Almacen',//modificado para bootstrap
 			'class' => 'form-control',//modificado para bootstrap
 		);
-		$this->data['cabeceras_css']= $this->cabeceras_css;
-		$this->data['cabeceras_script']= $this->cabecera_script;
-		$this->data['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
-		$this->data['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
-		$this->data['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
-            
-           
-
-			$this->load->view('plantilla/head.php',$this->data);
-			$this->load->view('plantilla/header.php',$this->data);
-			$this->load->view('plantilla/menu.php',$this->data);
-			$this->_render_page('auth/edit_user', $this->data);
-			$this->load->view('plantilla/footer.php',$this->data);
-
-		
+		        
+		$this->titles('EditarUsuarios','Editar Usuario','Configuración');
+		$this->setView('auth/edit_user');
 	}
 
 	// create a new group
 	public function create_group()
 	{
 		$this->libacceso->acceso(37);
-		$this->data['title'] = $this->lang->line('create_group_title');
+		$this->datos['title'] = $this->lang->line('create_group_title');
 
 		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
 		{
@@ -888,10 +806,10 @@ class Auth extends CI_Controller {
 		else
 		{
 			// display the create group form
-			// set the flash data error message if there is one
-			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+			// set the flash datos error message if there is one
+			$this->datos['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
-			$this->data['group_name'] = array(
+			$this->datos['group_name'] = array(
 				'name'  => 'group_name',
 				'id'    => 'group_name',
 				'type'  => 'text',
@@ -899,7 +817,7 @@ class Auth extends CI_Controller {
 				'placeholder' => 'Nombre de grupo',//modificado para bootstrap
                 'class' => 'form-control',//modificado para bootstrap
 			);
-			$this->data['description'] = array(
+			$this->datos['description'] = array(
 				'name'  => 'description',
 				'id'    => 'description',
 				'type'  => 'text',
@@ -907,14 +825,14 @@ class Auth extends CI_Controller {
 				'placeholder' => 'Descripcion',//modificado para bootstrap
                 'class' => 'form-control',//modificado para bootstrap
 			);
-			$this->data['cabeceras_css']= $this->cabeceras_css;
-			$this->data['cabeceras_script']= $this->cabecera_script;
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
 
-			$this->load->view('plantilla/head.php',$this->data);
-			$this->load->view('plantilla/header.php',$this->data);
-			$this->load->view('plantilla/menu.php',$this->data);
-			$this->_render_page('auth/create_group', $this->data);
-			$this->load->view('plantilla/footer.php',$this->data);
+			$this->load->view('plantilla/head.php',$this->datos);
+			$this->load->view('plantilla/header.php',$this->datos);
+			$this->load->view('plantilla/menu.php',$this->datos);
+			$this->_render_page('auth/create_group', $this->datos);
+			$this->load->view('plantilla/footer.php',$this->datos);
 
 			
 		}
@@ -929,7 +847,7 @@ class Auth extends CI_Controller {
 			redirect('auth', 'refresh');
 		}
 
-		$this->data['title'] = $this->lang->line('edit_group_title');
+		$this->datos['title'] = $this->lang->line('edit_group_title');
 
 		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
 		{
@@ -959,15 +877,15 @@ class Auth extends CI_Controller {
 			}
 		}
 
-		// set the flash data error message if there is one
-		$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+		// set the flash datos error message if there is one
+		$this->datos['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
 		// pass the user to the view
-		$this->data['group'] = $group;
+		$this->datos['group'] = $group;
 
 		$readonly = $this->config->item('admin_group', 'ion_auth') === $group->name ? 'readonly' : '';
 
-		$this->data['group_name'] = array(
+		$this->datos['group_name'] = array(
 			'name'    => 'group_name',
 			'id'      => 'group_name',
 			'type'    => 'text',
@@ -976,7 +894,7 @@ class Auth extends CI_Controller {
 			'placeholder' => 'Nombre de grupo',//modificado para bootstrap
             'class' => 'form-control',//modificado para bootstrap
 		);
-		$this->data['group_description'] = array(
+		$this->datos['group_description'] = array(
 			'name'  => 'group_description',
 			'id'    => 'group_description',
 			'type'  => 'text',
@@ -985,17 +903,11 @@ class Auth extends CI_Controller {
             'class' => 'form-control',//modificado para bootstrap
 		);
 
-			$this->data['cabeceras_css']= $this->cabeceras_css;
-			$this->data['cabeceras_script']= $this->cabecera_script;
+			$this->datos['cabeceras_css']= $this->cabeceras_css;
+			$this->datos['cabeceras_script']= $this->cabecera_script;
             
            
-
-			$this->load->view('plantilla/head.php',$this->data);
-			$this->load->view('plantilla/header.php',$this->data);
-			$this->load->view('plantilla/menu.php',$this->data);
-			$this->_render_page('auth/edit_group', $this->data);
-			$this->load->view('plantilla/footer.php',$this->data);
-		
+			$this->setView('auth/edit_group');
 	}
 
 
@@ -1023,10 +935,10 @@ class Auth extends CI_Controller {
 		}
 	}
 
-	public function _render_page($view, $data=null, $returnhtml=false)//I think this makes more sense
+	public function _render_page($view, $datos=null, $returnhtml=false)//I think this makes more sense
 	{
 
-		$this->viewdata = (empty($data)) ? $this->data: $data;
+		$this->viewdata = (empty($datos)) ? $this->datos: $datos;
 
 		$view_html = $this->load->view($view, $this->viewdata, $returnhtml);
 

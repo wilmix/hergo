@@ -1,15 +1,3 @@
-
-<section class="content-header">
-      <h1>
-        Usuarios
-        <small>Desactivar usuario</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i>Inicio</a></li>
-        <li><a href="#">Usuarios</a></li>
-        <li class="active">Desactivar usuario</li>
-      </ol>
-</section>
 <?php 
 if(isset($message)){ ?>
 <div class="alert alert-warning alert-dismissible">
@@ -18,7 +6,6 @@ if(isset($message)){ ?>
     <?php echo $message; ?>
 </div>
 <?php } ?>
-<section class="content">
     <div class="row">
         <div class="col-xs-12">
             <div class="box box-info">
@@ -56,28 +43,3 @@ if(isset($message)){ ?>
             </div>
         </div>
     </div>
-</section>
-</div> <!-- FIN content-wrapper --> 
-
-
-
-
-
-<h1><?php echo lang('deactivate_heading');?></h1>
-<p><?php echo sprintf(lang('deactivate_subheading'), $user->username);?></p>
-
-<?php echo form_open("auth/deactivate/".$user->id);?>
-
-  <p>
-  	<?php echo lang('deactivate_confirm_y_label', 'confirm');?>
-    <input type="radio" name="confirm" value="yes" checked="checked" />
-    <?php echo lang('deactivate_confirm_n_label', 'confirm');?>
-    <input type="radio" name="confirm" value="no" />
-  </p>
-
-  <?php echo form_hidden($csrf); ?>
-  <?php echo form_hidden(array('id'=>$user->id)); ?>
-
-  <p><?php echo form_submit('submit', lang('deactivate_submit_btn'));?></p>
-
-<?php echo form_close();?>

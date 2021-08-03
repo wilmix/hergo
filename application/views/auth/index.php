@@ -1,14 +1,3 @@
-<section class="content-header">
-      <h1>
-        Usuarios
-        <small>Ver Usuarios</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i>Inicio</a></li>
-        <li><a href="#">Usuarios</a></li>
-        <li class="active">Ver Usuarios</li>
-      </ol>
-</section>
 <?php 
 if(isset($message)){ ?>
 <div class="alert alert-success alert-dismissible">
@@ -17,7 +6,6 @@ if(isset($message)){ ?>
     <?php echo $message; ?>
 </div>
 <?php } ?>
- <section class="content">
       <div class="row">
         <div class="col-xs-12">
 
@@ -68,5 +56,3 @@ if(isset($message)){ ?>
         <!-- /.col -->
       </div>
       <!-- /.row -->
-    </section>
-</div>
