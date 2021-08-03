@@ -27,44 +27,6 @@
       $idingresocompraslocales=$idingreso;
     }
 ?>
-<style>
-    .totales{
-      font-size: 1.3em;
-      font-weight: bold;
-    }
-
-    input {
-      height: 50px;
-    }
-
-    input:focus {
-      background-color: rgba(60, 141, 188, 0.47);
-      ;
-      /*color: white;*/
-      font-weight: 700;
-    }
-
-    select:focus {
-      background-color: rgba(60, 141, 188, 0.47);
-      /*color: white;*/
-    }
-
-    input[type=date]::-webkit-outer-spin-button,
-    input[type=date]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-</style>
-<section class="content-header">
-  <h1>
-    <?php echo isset($dcab) ?  'Modificar ':$menu.' - ' ?>
-    <span><?php echo isset($dcab) ? $tipoMov.' # '.$dcab->n :$opcion ?></span>
-  </h1>
-</section>
-
-<!-- Main content -->
-<section class="content">
-  
 <div class="row">
   <div class="col-xs-12">
     <div class="box">

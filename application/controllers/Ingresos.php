@@ -6,365 +6,89 @@ class Ingresos extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		if(!$this->session->userdata('logeado'))
-		redirect('auth', 'refresh');
-		$this->load->library('LibAcceso');
-		
-		$this->load->helper('url');
 		$this->load->model("Ingresos_model");
 		$this->load->model("Egresos_model");
-		$this->load->helper('date');
-		date_default_timezone_set("America/La_Paz");
-	 	$this->cabeceras_css=array(
-				base_url('assets/bootstrap/css/bootstrap.min.css'),
-				base_url("assets/fa/css/font-awesome.min.css"),
-				base_url("assets/dist/css/AdminLTE.min.css"),
-				base_url("assets/dist/css/skins/skin-blue.min.css"),
-				base_url("assets/hergo/estilos.css"),
-				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
-				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
-				base_url('assets/sweetalert/sweetalert2.min.css'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),	
-				base_url('assets/plugins/daterangepicker/daterangepicker.css')	
-
-			);
-		$this->cabecera_script=array(
-				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
-				base_url('assets/bootstrap/js/bootstrap.min.js'),
-				base_url('assets/dist/js/app.min.js'),
-				base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
-				base_url('assets/plugins/table-boot/js/tableExport.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
-				base_url('assets/plugins/table-boot/plugin/select2.min.js'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
-        		base_url('assets/plugins/daterangepicker/moment.min.js'),
-        		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
-        		base_url('assets/sweetalert/sweetalert2.min.js'),
-				base_url('assets/busqueda/underscore-min.js'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
-				base_url('assets/plugins/daterangepicker/daterangepicker.js'),
-				base_url('assets/plugins/daterangepicker/locale/es.js')
-			); 
-		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
-		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
-		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
-		$this->datos['nombre_actual']=$this->session->userdata['nombre'];
-		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
-		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
-		$this->datos['grupsOfUser'] = $this->ion_auth->in_group('Nacional') ? 'Nacional' : false;
-		$hoy = date('Y-m-d');
-		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
-		if ($tipoCambio) {
-			$tipoCambio = $tipoCambio->tipocambio;
-			$this->datos['tipoCambio'] = $tipoCambio;
-		} else {
-			$this->datos['tipoCambio'] = 'No se tiene tipo de cambio para la fecha';
-		}
-			if($this->session->userdata('foto')==NULL)
-				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
-			else
-				$this->datos['foto']=base_url('assets/imagenes/').$this->session->userdata('foto');
 	}
 	public function index()
 	{
-		$this->libacceso->acceso(11);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Ingresos";
-			$this->datos['opcion']="Consultas";
-			$this->datos['titulo']="Ingresos";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js'); 
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresos.js');
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js'); 
-			
-            $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-            $this->datos['tipoingreso']=$this->Ingresos_model->retornar_tablaMovimiento("+");
-			$this->datos['tipoPrefer']="2";
-			
-
-			//$this->datos['ingresos']=$this->Ingresos_model->mostrarIngresos();
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('ingresos/importaciones/ingresos.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
-	}
-	public function consultadetalle()
-	{
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Ingresos";
-			$this->datos['opcion']="Consultas Detalle";
-			$this->datos['titulo']="ConsultaDetalle";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/consultadetalle.js');
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-
-            $this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresodetalle.js');
-            $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-            $this->datos['tipoingreso']=$this->Ingresos_model->retornar_tablaMovimiento("+");
-
-			//$this->datos['ingresos']=$this->Ingresos_model->mostrarIngresos();
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('ingresos/importaciones/consultadetalle.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(11);
+		$this->titles('Ingresos','Consultas','Ingresos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/ingresos.js') .'?'.rand();
+        $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+        $this->datos['tipoingreso']=$this->Ingresos_model->retornar_tablaMovimiento("+");
+		$this->datos['tipoPrefer']="2";
+		$this->setView('ingresos/importaciones/ingresos');
 	}
 	public function importaciones()
 	{
-		$this->libacceso->acceso(13);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Ingresos";
-			
-			$this->datos['titulo']="Importaciones";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-            /*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-			/***************SELECT***********/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresosimportaciones.js');
-            /**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			/*********UPLOAD******************/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
-			
-			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
-
-            $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-            $this->datos['tingreso']=$this->Ingresos_model->retornar_tablaMovimiento("+");
-		  	$this->datos['fecha']=date('Y-m-d');
-		  	$this->datos['proveedor']=$this->Ingresos_model->retornar_tabla("provedores");
-		  	$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
-		
-			$this->datos['opcion']="Importaciones";
-			$this->datos['idingreso']=16;
-			
-
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			//$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('ingresos/importaciones/importaciones2.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(13);
+		$this->titles('Importaciones','Importaciones','Ingresos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/ingresosimportaciones.js') .'?'.rand();
+		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+		$this->datos['tingreso']=$this->Ingresos_model->retornar_tablaMovimiento("+");
+		$this->datos['fecha']=date('Y-m-d');
+		$this->datos['proveedor']=$this->Ingresos_model->retornar_tabla("provedores");
+		$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
+		$this->datos['opcion']="Importaciones";
+		$this->datos['idingreso']=16;
+		$this->setView('ingresos/importaciones/importaciones2');
 	}
 	public function compraslocales()
 	{
-		$this->libacceso->acceso(12);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
+		$this->accesoCheck(12);
+		$this->titles('ComprasLocales','Compras Locales','Ingresos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/ingresosimportaciones.js') .'?'.rand();
+		
+		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+		$this->datos['tingreso']=$this->Ingresos_model->retornar_tablaMovimiento("+");
+		$this->datos['fecha']=date('Y-m-d');
+		$this->datos['proveedor']=$this->Ingresos_model->retornar_tabla("provedores");
+		$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
+		$this->datos['opcion']="Compras locales";
+		$this->datos['idingreso']=2;
 
-			$this->datos['menu']="Ingresos";
-			$this->datos['opcion']="Compras Locales";
-			$this->datos['titulo']="Compras Locales";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-            /*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-			/***************SELECT***********/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresosimportaciones.js');
-            /**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			/*********UPLOAD******************/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
-
-			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
-
-            $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-            $this->datos['tingreso']=$this->Ingresos_model->retornar_tablaMovimiento("+");
-		  	$this->datos['fecha']=date('Y-m-d');
-		  	$this->datos['proveedor']=$this->Ingresos_model->retornar_tabla("provedores");
-		  	$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
-			
-			$this->datos['opcion']="Compras locales";
-			$this->datos['idingreso']=2;
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			//$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('ingresos/importaciones/importaciones2.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->setView('ingresos/importaciones/importaciones2.php');
 	}
 	public function anulacionEgresos()
 	{
-		$this->libacceso->acceso(14);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Ingresos";
-			//$this->datos['opcion']="Compras Locales";
-			$this->datos['titulo']="Reingreso";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-            /*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-			/***************SELECT***********/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresosimportaciones.js');
-            /**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			/*********UPLOAD******************/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
-
-			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
-
-            $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-            $this->datos['tingreso']=$this->Ingresos_model->retornar_tablaMovimiento("+");
-		  	$this->datos['fecha']=date('Y-m-d');
-		  	$this->datos['proveedor']=$this->Ingresos_model->retornar_tabla("provedores");
-		  	$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
-			
-			$this->datos['opcion']="Reingreso";
-			$this->datos['idingreso']=5;;
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			//$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('ingresos/importaciones/importaciones2.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
-	}
-	public function editarimportaciones($id=null)//cambiar nombre a editar ingresos!!!!
-	{
-        //if("si no esta autorizado a editar redireccionar o enviar error!!!!")
-        if($id==null) redirect("error");
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Ingresos";
-			$this->datos['opcion']="Modificar";
-			$this->datos['titulo']="Modificar";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-            /*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-			/***************SELECT***********/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/ingresosimportaciones.js');
-            /**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			/*********UPLOAD******************/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
-
-
-			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
-			$this->datos['dcab']=$this->mostrarIngresosEdicion($id);//datos cabecera
-            $this->datos['detalle']=$this->mostrarDetalleEditar($id);
-            if($this->datos['dcab']->idtipomov==3) redirect("error");//evita editar si el tipo de moviemiento es traspaso                  
-
-            if($this->datos['dcab']->moneda==2)//si es dolares dividimos por el tipo de cambio
-            {
-
-            	//$tipodecambiovalor=$this->Ingresos_model->retornarValorTipoCambio($this->datos['dcab']->tipocambio);            	
-            	//$tipodecambiovalor=$tipodecambiovalor->tipocambio;
-            	
-	            for ($i=0; $i < count($this->datos['detalle']) ; $i++) { 
-	            	$this->datos['detalle'][$i]["totaldoc"]=$this->datos['detalle'][$i]["totaldoc"]/$this->datos['detalle'][$i]["tipocambio"];
-	            	$this->datos['detalle'][$i]["punitario"]=$this->datos['detalle'][$i]["punitario"]/$this->datos['detalle'][$i]["tipocambio"];	            	
-	            	$this->datos['detalle'][$i]["total"]=$this->datos['detalle'][$i]["total"]/$this->datos['detalle'][$i]["tipocambio"];	  
-
-				}
-	           
-            }
-           
-            $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-            $this->datos['tingreso']=$this->Ingresos_model->retornar_tablaMovimiento("+");
-		  	$this->datos['fecha']=date('Y-m-d');
-		  	$this->datos['proveedor']=$this->Ingresos_model->retornar_tabla("provedores");
-		  	$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
+		$this->accesoCheck(14);
+		$this->titles('Reingresos','Reingresos','Ingresos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/ingresosimportaciones.js') .'?'.rand();
+		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+		$this->datos['tingreso']=$this->Ingresos_model->retornar_tablaMovimiento("+");
+		$this->datos['fecha']=date('Y-m-d');
+		$this->datos['proveedor']=$this->Ingresos_model->retornar_tabla("provedores");
+		$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
+		$this->datos['idingreso']=5;
 		
-			
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			//$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('ingresos/importaciones/importaciones2.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->setView('ingresos/importaciones/importaciones2');
+	}
+	public function editarimportaciones($id=null)
+	{
+        if($id==null) redirect("error");
+
+		$this->accesoCheck(70);
+		$this->titles('ModificarIngresos','Modificar Ingresos','Ingresos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/ingresosimportaciones.js') .'?'.rand();
+		
+		$this->datos['dcab']=$this->mostrarIngresosEdicion($id);
+        $this->datos['detalle']=$this->mostrarDetalleEditar($id);
+		if($this->datos['dcab']->idtipomov==3) redirect("error");               
+		if($this->datos['dcab']->moneda==2)
+		{
+			for ($i=0; $i < count($this->datos['detalle']) ; $i++) { 
+				$this->datos['detalle'][$i]["totaldoc"]=$this->datos['detalle'][$i]["totaldoc"]/$this->datos['detalle'][$i]["tipocambio"];
+				$this->datos['detalle'][$i]["punitario"]=$this->datos['detalle'][$i]["punitario"]/$this->datos['detalle'][$i]["tipocambio"];	            	
+				$this->datos['detalle'][$i]["total"]=$this->datos['detalle'][$i]["total"]/$this->datos['detalle'][$i]["tipocambio"];	  
+			}
+		}
+		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+		$this->datos['tingreso']=$this->Ingresos_model->retornar_tablaMovimiento("+");
+		$this->datos['fecha']=date('Y-m-d');
+		$this->datos['proveedor']=$this->Ingresos_model->retornar_tabla("provedores");
+		$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
+		
+		$this->setView('ingresos/importaciones/importaciones2');
 	}
 	public function mostrarIngresos()
 	{
@@ -635,7 +359,6 @@ class Ingresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	
 	public function searchProveedor()
     {
         if($this->input->is_ajax_request() && $this->input->post('search'))
