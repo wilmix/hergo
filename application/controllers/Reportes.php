@@ -9,70 +9,10 @@ class Reportes extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		if(!$this->session->userdata('logeado'))
-		redirect('auth', 'refresh');
-		/*******/
-		$this->load->library('LibAcceso');
-	
-		/*******/
-		$this->load->helper('url');
 		$this->load->model("Reportes_model");
 		$this->load->model("Ingresos_model");
-		$this->load->helper('date');
-		date_default_timezone_set("America/La_Paz");
-		$this->cabeceras_css=array(
-			base_url('assets/bootstrap/css/bootstrap.min.css'),
-			base_url("assets/fa/css/font-awesome.min.css"),
-			base_url("assets/dist/css/AdminLTE.min.css"),
-			base_url("assets/dist/css/skins/skin-blue.min.css"),
-			base_url("assets/hergo/estilos.css"),
-			base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
-			base_url('assets/plugins/table-boot/plugin/select2.min.css'),
-			base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.css'),	
-			base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),				
-			base_url('assets/sweetalert/sweetalert2.min.css'),
-			);
-			$this->cabecera_script=array(
-					base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
-					base_url('assets/bootstrap/js/bootstrap.min.js'),
-					base_url('assets/dist/js/app.min.js'),
-					base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
-					base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
-					base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
-					base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
-					base_url('assets/plugins/table-boot/plugin/FileSaver.min.js'),
-					base_url('assets/plugins/table-boot/js/tableExport.js'),
-					base_url('assets/plugins/table-boot/js/xlsx.core.min.js'),
-					base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
-					base_url('assets/plugins/table-boot/plugin/select2.min.js'),
-					base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
-					base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.js'),
-					base_url('assets/plugins/table-boot/js/xlsx.full.min.js'),
-					base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
-					base_url('assets/plugins/daterangepicker/moment.min.js'),
-					base_url('assets/plugins/slimscroll/slimscroll.min.js'),        		
-					base_url('assets/sweetalert/sweetalert2.min.js'),
-			);
-		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
-		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
-		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
-		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
-		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
-		$this->datos['grupsOfUser'] = $this->ion_auth->in_group('Nacional') ? 'Nacional' : false;
-		$hoy = date('Y-m-d');
-		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
-		if ($tipoCambio) {
-			$tipoCambio = $tipoCambio->tipocambio;
-			$this->datos['tipoCambio'] = $tipoCambio;
-		} else {
-			$this->datos['tipoCambio'] = 'No se tiene tipo de cambio para la fecha';
-		}
-			if($this->session->userdata('foto')==NULL)
-				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
-			else
-				$this->datos['foto']=base_url('assets/imagenes/').$this->session->userdata('foto');
+		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 	}
-
 	public function saldosExcel()
     {       
 		$spreadsheet = new Spreadsheet();
@@ -155,44 +95,14 @@ class Reportes extends CI_Controller
 		$writer->save('php://output');  // download file 
  
     }
-
 	public function listaPrecios(){
-		$this->libacceso->acceso(26);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
+		$this->accesoCheck(26);
+		$this->titles('ListaPrecios','Lista de Precios','Reportes');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/listaPrecios.js') .'?'.rand();
+		$this->setView('reportes/listaPrecios');
 
-			$this->datos['menu']="Lista de Precios";
-			$this->datos['opcion']="Reportes";
-			$this->datos['titulo']="Lista de Precios";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-			
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/listaPrecios.js'); 				//*******agregar js********
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.js');
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/listaPrecios.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
 	}
-	public function mostrarListaPrecios()  //******cambiar a funcion del modelo
+	public function mostrarListaPrecios()
 	{
 		if($this->input->is_ajax_request())
         {
@@ -207,39 +117,12 @@ class Reportes extends CI_Controller
 	}
 	public function saldosActuales()
 	{
-		$this->libacceso->acceso(27);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Saldos Actuales";
-			$this->datos['opcion']="Reportes";
-			$this->datos['titulo']="Saldos Actuales";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/saldosActuales.js'); 				//*******agregar js********
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            //$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");				//*******agregar alm********
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/saldosActuales.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(27);
+		$this->titles('SaldosResumen','Saldos Resumen','Reportes');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/saldosActuales.js') .'?'.rand();
+		$this->setView('reportes/saldosActuales');
 	}
-	public function mostrarSaldos()  //******cambiar a funcion del modelo
+	public function mostrarSaldos()
 	{
 		if($this->input->is_ajax_request())
         {
@@ -255,38 +138,12 @@ class Reportes extends CI_Controller
 
 
 	public function estadoVentasCostoItem()
-	{
-		$this->libacceso->acceso(42);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Estado de Ventas y Costos por Item";
-			$this->datos['titulo']="Estado de Ventas y Costos por Item";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/estadoVentasCosto.js'); 				
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-        	$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/estadoVentasCostoItem.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+	{	
+		$this->accesoCheck(31);
+		$this->titles('CostoItem','Reportes','Estado de Ventas y Costos por Item');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/estadoVentasCosto.js') .'?'.rand();
+		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		$this->setView('reportes/estadoVentasCostoItem');
 	}
 	public function mostrarEstadoVentasCosto()  
 	{
@@ -308,71 +165,18 @@ class Reportes extends CI_Controller
 
 	public function estadoVentasCostoItemNew()
 	{
-		$this->libacceso->acceso(42);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Estado de Ventas y Costos por Item New";
-			$this->datos['titulo']="Estado de Ventas y Costos por Item New";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/estadoVentasCostoNew.js'); 				
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-        	$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/estadoVentasCostoItemNew.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(42);
+		$this->titles('CostoItemNew','Reportes','Estado de Ventas y Costos por Item Nuevo');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/estadoVentasCostoNew.js') .'?'.rand();
+		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		$this->setView('reportes/estadoVentasCostoItemNew');
 	}
 	public function pruebaKardex()
 	{
-		$this->libacceso->acceso(42);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Prueba Kardex";
-			$this->datos['titulo']="Prueba Kardex";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/pruebaKardex.js'); 				
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-        	$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/pruebaKardex.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(42);
+		$this->titles('PruebaKardex','Reportes','Prueba Kardex');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/pruebaKardex.js') .'?'.rand();
+		$this->setView('reportes/pruebaKardex');
 	}
 	public function mostrarEstadoVentasCostoNew()  
 	{
@@ -394,43 +198,12 @@ class Reportes extends CI_Controller
 
 	public function kardexIndividualValorado()
 	{
-		$this->libacceso->acceso(34);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Kardex Individual Itemes Valorado";
-			$this->datos['titulo']="Kardex Individual Itemes Valorado";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			/*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/kardexValorado.js'); 				//*******agregar js********
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-			$this->datos['articulos']=$this->Reportes_model->retornarArticulos();
-			/*echo '<pre>';
-			print_r($this->Reportes_model->retornarArticulos()->result());
-			echo '</pre>';*/
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/kardexIndividualValorado.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(34);
+		$this->titles('KardexItems','Reportes','Kardex Individual Itemes Valorado');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/kardexValorado.js') .'?'.rand();
+		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		$this->datos['articulos']=$this->Reportes_model->retornarArticulos();
+		$this->setView('reportes/kardexIndividualValorado');
 	}
 	public function mostrarArticulos() 
 	{
@@ -481,37 +254,11 @@ class Reportes extends CI_Controller
 
 	public function resumenVentasLineaMes()
 	{
-		$this->libacceso->acceso(29);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Resumen de Ventas por Linea y Mes";
-			$this->datos['titulo']="Resumen de Ventas por Linea y Mes";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/resumenVentasLineaMes.js');				//*******agregar js********
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            $this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");					//*******agregar alm********
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/resumenVentasLineaMes.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(29);
+		$this->titles('ResumenLineaMes','Reportes','Resumen de Ventas por Linea y Mes');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/resumenVentasLineaMes.js') .'?'.rand();
+        $this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");	
+		$this->setView('reportes/resumenVentasLineaMes');
 	}
 	public function mostrarVentasLineaMes()  //******cambiar a funcion del modelo
 	{
@@ -531,37 +278,11 @@ class Reportes extends CI_Controller
 	}
 	public function facturasPendietesPago()
 	{
-		$this->libacceso->acceso(28);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Facturas Pendientes de Pago";
-			$this->datos['titulo']="Facturas Pendientes de Pago";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/facturasPendientesPago.js'); 				//*******agregar js********
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");	
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/facturasPendietesPago.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(28);
+		$this->titles('PendientesPago','Facturas Pendientes de Pago','Reportes');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/facturasPendientesPago.js') .'?'.rand();
+		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");	
+		$this->setView('reportes/facturasPendietesPago');
 	}
 	public function mostrarFacturasPendientesPago() 
 	{
@@ -580,37 +301,11 @@ class Reportes extends CI_Controller
 	}
 	public function notasEntregaPorFacturar()
 	{
-		$this->libacceso->acceso(30);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Notas de Entrega por Facturar";
-			$this->datos['opcion']="Reportes";
-			$this->datos['titulo']="Notas de Entrega por Facturar";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/notasEntregaPorFacturar.js'); 				//*******agregar js********
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            $this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");				//*******agregar alm********
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/notasEntregaPorFacturar.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(30);
+		$this->titles('NEporFacturar','Reportes','Notas de Entrega por Facturar');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/notasEntregaPorFacturar.js') .'?'.rand();
+        $this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		$this->setView('reportes/notasEntregaPorFacturar');
 	}
 	public function notasEntregaPorFacturarNew()
 	{
@@ -730,37 +425,11 @@ class Reportes extends CI_Controller
 	}
 	public function facturacionClientes()
 	{
-		$this->libacceso->acceso(31);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Facturación Clientes";
-			$this->datos['opcion']="Reportes";
-			$this->datos['titulo']="Facturación Clientes";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/facturacionClientes.js'); 				//*******agregar js********
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            $this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");					//*******agregar alm********
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/facturacionClientes.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(31);
+		$this->titles('FacturaciónClientes','Reportes','Facturación Clientes');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/facturacionClientes.js') .'?'.rand();
+		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");	
+		$this->setView('reportes/facturacionClientes');
 	}
 	public function mostrarFacturacionClientes()  
 	{
@@ -847,41 +516,13 @@ class Reportes extends CI_Controller
 	}
 	public function diarioIngresos()
 	{
-		$this->libacceso->acceso(32);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Diario de Ingresos";
-			$this->datos['titulo']="Diario de Ingresos";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/diarioIngresos.js');
-			//*******agregar js********
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-			//$this->datos['tingreso']=$this->Reportes_model->retornar_tablaMovimiento("+");
-			$this->datos['tipoingreso']=$this->Reportes_model->retornar_tablaMovimiento("+");
-			$this->datos['tipoPrefer']="2";
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/diarioIngresos.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(31);
+		$this->titles('DiarioIngresos','Reportes','Diario de Ingresos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/diarioIngresos.js') .'?'.rand();
+		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		$this->datos['tipoingreso']=$this->Reportes_model->retornar_tablaMovimiento("+");
+		$this->datos['tipoPrefer']="2";
+		$this->setView('reportes/diarioIngresos');
 	}
 	public function mostrarDiarioIngresos()  
 	{
@@ -1149,37 +790,11 @@ class Reportes extends CI_Controller
 	}
 	public function libroVentas()
 	{
-		$this->libacceso->acceso(33);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Libro de Ventas";
-			$this->datos['titulo']="Libro de Ventas";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/libroVentas.js'); 				//*******agregar js********
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            $this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");					//*******agregar alm********
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/libroVentas.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(33);
+		$this->titles('LibroVentas','Reportes','Libro de Ventas');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/libroVentas.js') .'?'.rand();
+		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		$this->setView('reportes/libroVentas');
 	}
 	public function mostrarLibroVentas()  
 	{
@@ -1215,41 +830,11 @@ class Reportes extends CI_Controller
 	}
 	public function kardexIndividualCliente()
 	{
-		$this->libacceso->acceso(40);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Kardex Individual Cliente";
-			$this->datos['titulo']="Kardex Individual Cliente";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			/*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/kardexIndividualCliente.js');
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-			//$this->datos['clientes']=$this->Reportes_model->retornarClientes3();
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/kardexIndividualCliente.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(40);
+		$this->titles('KardexCliente','Reportes','Kardex Individual Cliente');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/kardexIndividualCliente.js') .'?'.rand();
+		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		$this->setView('reportes/kardexIndividualCliente');
 	}
 	public function mostrarKardexIndividualCliente()  
 	{
@@ -1277,44 +862,13 @@ class Reportes extends CI_Controller
 	}
 	public function saldosActualesItems()
 	{
-		$this->libacceso->acceso(41);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Saldo Actuales Items";
-			$this->datos['titulo']="Saldo Actuales Items";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			/*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/saldosActualesItems.js'); 				
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-			$this->datos['articulos']=$this->Reportes_model->retornarArticulos();
-			$this->datos['linea']=$this->Reportes_model->retornar_tabla("linea");
-			/*echo '<pre>';
-			print_r($this->Reportes_model->retornarArticulos()->result());
-			echo '</pre>';*/
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/saldosActualesItems.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(41);
+		$this->titles('SaldoActualesItems','Saldo Actuales Items','Reportes');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/saldosActualesItems.js') .'?'.rand();
+		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		$this->datos['articulos']=$this->Reportes_model->retornarArticulos();
+		$this->datos['linea']=$this->Reportes_model->retornar_tabla("linea");
+		$this->setView('reportes/saldosActualesItems');
 	}
 	public function mostrarSaldosActualesItems() 
 	{
@@ -1332,44 +886,11 @@ class Reportes extends CI_Controller
 	}
 	public function ventasClientesItems()
 	{
-		$this->libacceso->acceso(49);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Reporte Ventas por Items Clientes";
-			$this->datos['titulo']="Reporte Ventas por Items Clientes";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			/*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/ventasClientesItems.js'); 				
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-			//$this->datos['articulos']=$this->Reportes_model->retornarArticulos();
-			$this->datos['linea']=$this->Reportes_model->retornar_tabla("linea");
-			/*echo '<pre>';
-			print_r($this->Reportes_model->retornarArticulos()->result());
-			echo '</pre>';*/
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/ventasClientesItems.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(49);
+		$this->titles('ItemClientes','Reportes','Reporte Ventas por Items Clientes');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/ventasClientesItems.js') .'?'.rand();
+		$this->datos['linea']=$this->Reportes_model->retornar_tabla("linea");
+		$this->setView('reportes/ventasClientesItems');
 	}
 	public function mostrarVentasClientesItems() 
 	{
@@ -1393,45 +914,12 @@ class Reportes extends CI_Controller
 
 	public function reporteIngresos()
 	{
-		$this->libacceso->acceso(51);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Reporte Ingresos";
-			$this->datos['titulo']="Reporte Ingresos";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			/*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/reporteIngresos.js'); 				
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-			//$this->datos['linea']=$this->Reportes_model->retornar_tabla("linea");
-			$this->datos['tipoingreso']=$this->Reportes_model->retornar_tablaMovimiento("+");
-			$this->datos['tipoPrefer']="2";
-			/*echo '<pre>';
-			print_r($this->Reportes_model->retornarArticulos()->result());
-			echo '</pre>';*/
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/reporteIngresos.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(51);
+		$this->titles('ReporteIngresos','Reporte Ingresos','Reporte Ingresos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/reporteIngresos.js') .'?'.rand();
+		$this->datos['tipoingreso']=$this->Reportes_model->retornar_tablaMovimiento("+");
+		$this->datos['tipoPrefer']="2";
+		$this->setView('reportes/reporteIngresos');
 	}
 	public function mostrarReporteIngreso()  
 	{
@@ -1454,42 +942,12 @@ class Reportes extends CI_Controller
 	}
 	public function reporteEgresos()
 	{
-		$this->libacceso->acceso(52);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Reporte Egresos";
-			$this->datos['titulo']="Reporte Egresos";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			/*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/reporteEgresos.js'); 				
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-
-			$this->datos['tipoingreso']=$this->Reportes_model->retornar_tablaMovimiento("-");
-			$this->datos['tipoPrefer']="7";
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/reporteEgresos.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(52);
+		$this->titles('ReporteEgresos','Reporte Egresos','Reporte Egresos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/reporteEgresos.js') .'?'.rand();
+		$this->datos['tipoingreso']=$this->Reportes_model->retornar_tablaMovimiento("-");
+		$this->datos['tipoPrefer']="7";
+		$this->setView('reportes/reporteEgresos');
 	}
 	public function mostrarReporteEgresos()
 	{
@@ -1511,39 +969,10 @@ class Reportes extends CI_Controller
 	}
 	public function reporteFacturas()
 	{
-		$this->libacceso->acceso(53);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Reporte Facturas";
-			$this->datos['titulo']="Reporte Facturas";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			/*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/reporteFacturas.js'); 				
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/reporteFacturas.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(53);
+		$this->titles('ReporteFacturas','Reporte Facturas','Reporte Facturas');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/reporteFacturas.js') .'?'.rand();
+		$this->setView('reportes/reporteFacturas');
 	}
 	public function mostrarReporteFacturas()
 	{
@@ -1565,39 +994,11 @@ class Reportes extends CI_Controller
 
 	public function reporteClienteItems()
 	{
-		$this->libacceso->acceso(50);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Reporte Ventas por Cliente - Items";
-			$this->datos['titulo']="Reporte Ventas por Cliente - Items";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			/*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/clienteItems.js'); 				
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/clientesItems.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(50);
+		$this->titles('ClienteItems','Reportes','Reporte Ventas por Cliente - Items');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/clienteItems.js') .'?'.rand();
+		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		$this->setView('reportes/clientesItems');
 	}
 	public function showClienteItems()
 	{
@@ -1618,71 +1019,17 @@ class Reportes extends CI_Controller
 	}
 	public function ventasTM()
 	{
-		$this->libacceso->acceso(47);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Reporte Ventas 3M";
-			$this->datos['titulo']="Reporte Ventas 3M";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/ventasTM.js'); 				//*******agregar js********
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            $this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");					//*******agregar alm********
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/ventasTM.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(47);
+		$this->titles('Ventas3M','Reporte Ventas 3M','Reportes');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/ventasTM.js') .'?'.rand();
+		$this->setView('reportes/ventasTM');
 	}
 	public function inventarioTM()
 	{
-		$this->libacceso->acceso(48);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Reporte Inventario 3M";
-			$this->datos['titulo']="Reporte Inventario 3M";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/inventarioTM.js'); 				//*******agregar js********
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            $this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");					//*******agregar alm********
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/inventarioTM.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(48);
+		$this->titles('Inventario3M','Reporte Inventario 3M','Reportes');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/inventarioTM.js') .'?'.rand();
+		$this->setView('reportes/inventarioTM');
 	}
 	public function showVentasTM()
 	{
@@ -1737,38 +1084,9 @@ class Reportes extends CI_Controller
 	}
 	public function reportePagos()
 	{
-		$this->libacceso->acceso(54);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Reportes";
-			$this->datos['opcion']="Reporte Pagos";
-			$this->datos['titulo']="Reporte Pagos";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			/*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/reportes/reportPagos.js'); 				
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('reportes/reportPagoView.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(54);
+		$this->titles('ReportePagos','Reporte Pagos','Reporte Pagos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/reportPagos.js') .'?'.rand();
+		$this->setView('reportes/reportPagoView');
 	}
 }

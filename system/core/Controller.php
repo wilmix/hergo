@@ -162,7 +162,8 @@ class CI_Controller {
 			base_url('assets/vue/vue-resource.min.js'),	
 			base_url('assets/vue-plugins/vue-select/vue-select.js'),	
 			base_url('assets/vue-plugins/vue-datapicker/vuejs-datepicker.min.js'),	
-			base_url('assets/vue-plugins/vue-datapicker/translations/es.js'),	
+			base_url('assets/vue-plugins/vue-datapicker/translations/es.js'),
+			base_url('assets/hergo/NumeroALetras.js'),
 		);
 		$this->foot_script=array(		
 
