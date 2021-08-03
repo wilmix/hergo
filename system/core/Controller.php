@@ -1,40 +1,4 @@
 <?php
-/**
- * CodeIgniter
- *
- * An open source application development framework for PHP
- *
- * This content is released under the MIT License (MIT)
- *
- * Copyright (c) 2014 - 2016, British Columbia Institute of Technology
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- *
- * @package	CodeIgniter
- * @author	EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2016, British Columbia Institute of Technology (http://bcit.ca/)
- * @license	http://opensource.org/licenses/MIT	MIT License
- * @link	https://codeigniter.com
- * @since	Version 1.0.0
- * @filesource
- */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
@@ -84,10 +48,7 @@ class CI_Controller {
 			$this->getAssets();
 			$this->getDatos();
 		}
-
 	}
-
-	// --------------------------------------------------------------------
 
 	/**
 	 * Get the CI singleton
@@ -166,6 +127,7 @@ class CI_Controller {
 			base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
 			base_url('assets/bootstrap/js/bootstrap.min.js'),
 			base_url('assets/plugins/steps/jquery.steps.js'),
+			base_url('assets/plugins/popper/popper.min.js'),
 			base_url('assets/dist/js/app.min.js'),
 			base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
 			base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
@@ -182,29 +144,28 @@ class CI_Controller {
 			base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
 			base_url('assets/plugins/daterangepicker/daterangepicker.js'),
 			base_url('assets/plugins/daterangepicker/locale/es.js'),
-			base_url('assets/plugins/jQueryUI/jquery-ui.min.js'),//autocomplete
-			/**************INPUT MASK***************/
+			base_url('assets/plugins/jQueryUI/jquery-ui.min.js'),
+			base_url('assets/plugins/datatables/datatables.min.js'),
+			base_url('assets/plugins/datatables/dataTables.responsive.min.js'),
 			base_url('assets/plugins/inputmask/inputmask.js'),
 			base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js'),
 			base_url('assets/plugins/inputmask/jquery.inputmask.js'),
 			base_url('assets/plugins/table-boot/plugin/bootstrap-table-editable.js'),
 			base_url('assets/plugins/table-boot/plugin/bootstrap-editable.js'),
 			base_url('assets/BootstrapToggle/bootstrap-toggle.min.js'),
-			base_url('assets/plugins/select/bootstrap-select.min.js'),//select
+			base_url('assets/plugins/select/bootstrap-select.min.js'),
 			base_url('assets/plugins/numeral/numeral.min.js'),
 			base_url('assets/plugins/FileInput/js/fileinput.min.js'),
 			base_url('assets/plugins/FileInput/js/locales/es.js'),
-		);
-		$this->foot_script=array(			
+			base_url('assets/plugins/chartjs/chart3.5.0.js'),
 			base_url('assets/vue/vue.js'),	
-			//'https://cdn.jsdelivr.net/npm/vue/dist/vue.js',								
 			base_url('assets/vue/vue-resource.min.js'),	
-			//'https://unpkg.com/vue-select@3.10.3/dist/vue-select.js',
 			base_url('assets/vue-plugins/vue-select/vue-select.js'),	
-			//'https://unpkg.com/vuejs-datepicker',
 			base_url('assets/vue-plugins/vue-datapicker/vuejs-datepicker.min.js'),	
-			//'https://unpkg.com/vuejs-datepicker/dist/locale/translations/es.js',
 			base_url('assets/vue-plugins/vue-datapicker/translations/es.js'),	
+		);
+		$this->foot_script=array(		
+
 			base_url('assets/hergo/funciones.js') .'?'.rand(),
 		);
 
