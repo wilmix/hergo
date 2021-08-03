@@ -8,4 +8,5 @@
         $this->load->view('modals/cliente-modal');
       }
       $this->load->view('modals/tipoCambio-modal');
+      $this->load->view('facturas/vistaPrevia');
     ?>  

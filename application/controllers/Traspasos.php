@@ -6,154 +6,33 @@ class Traspasos extends CI_Controller
 	public function __construct()
 	{		
 		parent::__construct();
-		if(!$this->session->userdata('logeado'))
-		redirect('auth', 'refresh');
-			/*******/
-			$this->load->library('LibAcceso');
-			
-			/*******/
-		$this->load->helper('url');
 		$this->load->model("Ingresos_model");
 		$this->load->model("Egresos_model");
 		$this->load->model("Cliente_model");
-		$this->load->helper('date');
 		$this->load->model("Traspasos_model");
-		$this->traspasos= new $this->Traspasos_model();
-		date_default_timezone_set("America/La_Paz");
-		$this->cabeceras_css=array(
-				base_url('assets/bootstrap/css/bootstrap.min.css'),
-				base_url("assets/fa/css/font-awesome.min.css"),
-				base_url("assets/dist/css/AdminLTE.min.css"),
-				base_url("assets/dist/css/skins/skin-blue.min.css"),
-				base_url("assets/hergo/estilos.css"),
-				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
-				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
-				base_url('assets/sweetalert/sweetalert2.min.css'),
-				base_url('assets/plugins/daterangepicker/daterangepicker.css')				
-
-
-			);
-		$this->cabecera_script=array(
-				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
-				base_url('assets/bootstrap/js/bootstrap.min.js'),
-				base_url('assets/dist/js/app.min.js'),
-				base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
-				base_url('assets/plugins/table-boot/js/tableExport.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
-				base_url('assets/plugins/table-boot/plugin/select2.min.js'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
-        		base_url('assets/plugins/daterangepicker/moment.min.js'),
-        		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
-        		base_url('assets/sweetalert/sweetalert2.min.js'),     
-				base_url('assets/busqueda/underscore-min.js'),
-				base_url('assets/plugins/daterangepicker/daterangepicker.js'),
-				base_url('assets/plugins/daterangepicker/locale/es.js')   		
-			);
-		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
-		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
-		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
-		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
-		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
-		$hoy = date('Y-m-d');
-		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
-		if ($tipoCambio) {
-			$tipoCambio = $tipoCambio->tipocambio;
-			$this->datos['tipoCambio'] = $tipoCambio;
-		} else {
-			$this->datos['tipoCambio'] = 'No se tiene tipo de cambio para la fecha';
-		}
-
-			if($this->session->userdata('foto')==NULL)
-				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
-			else
-				$this->datos['foto']=base_url('assets/imagenes/').$this->session->userdata('foto');
+		//$this->traspasos= new $this->Traspasos_model();
 	}
-	
 	public function index()
 	{
-		$this->libacceso->acceso(19);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Traspasos";
-			$this->datos['opcion']="Consultas Traspasos";
-			$this->datos['titulo']="Consultas Traspasos";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/traspasos.js');
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-
-            
-            $this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-            $this->datos['tipoingreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");			
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('traspasos/traspasos.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(19);
+		$this->titles('Traspasos','Consulta','Traspasos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/traspasos.js') .'?'.rand();
+		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+		$this->datos['tipoingreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");			
+		$this->setView('traspasos/traspasos');
 	}
 	public function traspasoEgreso()
 	{
-		$this->libacceso->acceso(20);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Traspasos";
-			$this->datos['opcion']="Formulario de Traspasos";
-			$this->datos['titulo']="Traspasos";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-            /*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-			/***************SELECT***********/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/select/bootstrap-select.min.js');
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/select/bootstrap-select.min.css');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/formTraspasos.js');
-            /**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-
-			$this->datos['cabeceras_css'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/BootstrapToggle/bootstrap-toggle.min.js');
-
-			$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-            $this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
-		  	$this->datos['fecha']=date('Y-m-d');
-		  	$this->datos['clientes']=$this->Ingresos_model->retornar_tabla("clientes");
-		  	$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
+		$this->accesoCheck(20);
+		$this->titles('FormTraspasos','Formulario','Traspasos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/formTraspasos.js') .'?'.rand();
+		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+        $this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
+		$this->datos['fecha']=date('Y-m-d');
+		$this->datos['clientes']=$this->Ingresos_model->retornar_tabla("clientes");
+		$this->datos['articulo']=$this->Ingresos_model->retornar_tabla("articulos");
 			
-			$this->datos['opcion']="Traspasos";
-			//$this->datos['idegreso']=7;
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('traspasos/traspasoEgreso.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->setView('traspasos/traspasoEgreso');
 	}
 	public function motrarTraspasos()
 	{
@@ -174,23 +53,6 @@ class Traspasos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	/*private calcularTotal($datos)
-	{
-		$tipocambio=$this->retornarValorTipoCambio();
-		foreach ($datos['tabla'] as $fila) {
-    			//print_r($fila);    			
-                $totalbs=$fila[6];
-                $punitariobs=$fila[5];
-                $totaldoc=$fila[4];
-                if($moneda_imp==2) //convertimos en bolivianos si la moneda es dolares
-                {
-                    $totalbs=$totalbs*$tipocambiovalor;
-                    $punitariobs=$punitariobs*$tipocambiovalor;
-                    $totaldoc=$totaldoc*$tipocambiovalor;
-                }
-    			
-    		}
-	}*/
 	public function guardarmovimiento()
     {
     	if($this->input->is_ajax_request())

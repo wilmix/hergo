@@ -7,13 +7,6 @@ class Facturas extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		if(!$this->session->userdata('logeado'))
-		redirect('auth', 'refresh');
-		$this->load->helper('url');
-			/*******/
-			$this->load->library('LibAcceso');
-			
-			/*******/
 		$this->load->model("Ingresos_model");
 		$this->load->model("Egresos_model");
 		$this->load->model("Cliente_model");
@@ -22,178 +15,42 @@ class Facturas extends CI_Controller
 		$this->load->model("FacturaDetalle_model");
 		$this->load->model("FacturaEgresos_model");
 		$this->load->model("Almacen_model");
-		$this->load->helper('date');
 		$this->load->helper('cookie');
-		date_default_timezone_set("America/La_Paz");
 
-		$this->cabeceras_css=array(
-				base_url('assets/bootstrap/css/bootstrap.min.css'),
-				base_url("assets/fa/css/font-awesome.min.css"),
-				base_url("assets/dist/css/AdminLTE.min.css"),
-				base_url("assets/dist/css/skins/skin-blue.min.css"),
-				base_url("assets/hergo/estilos.css"),
-				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
-				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
-				base_url('assets/sweetalert/sweetalert2.min.css'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),	
-				base_url('assets/plugins/daterangepicker/daterangepicker.css')	
+		$this->datos['cabeceras_script'][]=base_url('assets/hergo/NumeroALetras.js');
+		$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/AllegedRC4.js');
+		$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Base64SIN.js');
+		$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/ControlCode.js');
+		$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Verhoeff.js');
+		$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/qrcode.min.js');
 
-			);
-		$this->cabecera_script=array(
-				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
-				base_url('assets/bootstrap/js/bootstrap.min.js'),
-				base_url('assets/dist/js/app.min.js'),
-				base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
-				base_url('assets/plugins/table-boot/js/tableExport.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
-				base_url('assets/plugins/table-boot/plugin/select2.min.js'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
-        		base_url('assets/plugins/daterangepicker/moment.min.js'),
-        		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
-				base_url('assets/sweetalert/sweetalert2.min.js'),        		
-				base_url('assets/plugins/numeral/numeral.min.js'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
-				base_url('assets/plugins/daterangepicker/daterangepicker.js'),
-				base_url('assets/plugins/daterangepicker/locale/es.js')
-
-			);
-		$this->foot_script=array(				
-        		base_url('assets/vue/vue.js'),								
-				base_url('assets/vue/vue-resource.min.js'),
-				base_url('assets/hergo/vistaPreviaFacturacion/principal.js'),				
-			);
-		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
-		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
-		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
-		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
-		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
-		$this->datos['grupsOfUser'] = $this->ion_auth->in_group('Nacional') ? 'Nacional' : false;
 		$this->libAcc = new LibAcceso();
 		$permisos = $this->libAcc->retornarSubMenus($_SESSION['accesoMenu']);
 		$this->datos['permisoAnular'] = in_array(45, $permisos) ? 'true' : 'false';
-
-		$hoy = date('Y-m-d');
-		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
-		if ($tipoCambio) {
-			$tipoCambio = $tipoCambio->tipocambio;
-			$this->datos['tipoCambio'] = $tipoCambio;
-		} else {
-			$this->datos['tipoCambio'] = 'No se tiene tipo de cambio para la fecha';
-		}
-			if($this->session->userdata('foto')==NULL)
-				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
-			else
-				$this->datos['foto']=base_url('assets/imagenes/').$this->session->userdata('foto');
 	}
 	
 	public function index()
 	{
-		$this->libacceso->acceso(21);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Facturas";
-			$this->datos['opcion']="Consultar Facturas";
-			$this->datos['titulo']="Consultar Facturas";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			$this->datos['foot_script']= $this->foot_script;
-
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			
-			//$this->datos['cabeceras_script'][]=base_url('assets/hergo/facturasConsulta.js');
-			$this->datos['foot_script'][]=base_url('assets/hergo/facturasConsulta.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/NumeroALetras.js');
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-
- 			/*************CODIGO CONTROL***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/AllegedRC4.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Base64SIN.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/ControlCode.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Verhoeff.js');
-			/***********************************/
-			/*************CODIGO QR***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/qrcode.min.js');
-			
-			$this->datos['almacen']=$this->Almacen_model->retornar_tabla("almacenes");
-			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('facturas/facturas.php',$this->datos);
-			$this->load->view('facturas/vistaPrevia.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);			
-			$this->load->view('plantilla/footerscript.php',$this->datos);
+		$this->accesoCheck(21);
+		$this->titles('Facturas','Consultar','Facturas');
+		$this->datos['foot_script'][]=base_url('assets/hergo/facturasConsulta.js') .'?'.rand();
+		$this->datos['foot_script'][]=base_url('assets/hergo/vistaPreviaFacturacion/principal.js') .'?'.rand();
+		$this->datos['almacen']=$this->Almacen_model->retornar_tabla("almacenes");
+		$this->setView('facturas/facturas');
 	}
 
 	public function EmitirFactura()
 	{
-		$this->libacceso->acceso(22);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-
-			$this->datos['menu']="Facturas";
-			$this->datos['opcion']="Emitir Facturas";
-			$this->datos['titulo']="Emitir Facturas";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			$this->datos['foot_script']= $this->foot_script;
-			/*************AUTOCOMPLETE**********/
-            $this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['foot_script'][]=base_url('assets/hergo/facturas.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/NumeroALetras.js');
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            /**************EDITABLE***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-table-editable.js');
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.js');
-            /*************CODIGO CONTROL***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/AllegedRC4.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Base64SIN.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/ControlCode.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Verhoeff.js');
-			/***********************************/
-			/*************CODIGO QR***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/qrcode.min.js');
-			$this->datos['almacen']=$this->Almacen_model->retornar_tabla("almacenes");
-            //$this->datos['almacen']=$this->ingresos_model->retornar_tabla("almacenes");
-            //$this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
-
-			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();
-            $this->datos["fecha"]=date('Y-m-d');
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('facturas/emitirFactura.php',$this->datos);
-			$this->load->view('facturas/vistaPrevia.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
-			$this->load->view('plantilla/footerscript.php',$this->datos);
-			/*borrar cookie facturacion*/
-			
-			if( isset( $_COOKIE['factsistemhergo'] ) ) {			     
-			     delete_cookie("factsistemhergo");
-			}
-			
+		$this->accesoCheck(22);
+		$this->titles('EmitirFactura','Emitir','Facturas');
+		$this->datos['foot_script'][]=base_url('assets/hergo/facturas.js') .'?'.rand();
+		$this->datos['foot_script'][]=base_url('assets/hergo/vistaPreviaFacturacion/principal.js') .'?'.rand();
+		$this->datos['almacen']=$this->Almacen_model->retornar_tabla("almacenes");
+		$this->setView('facturas/emitirFactura');
+		/*borrar cookie facturacion*/
+		if( isset( $_COOKIE['factsistemhergo'] ) ) {			     
+				delete_cookie("factsistemhergo");
+		}
 	}
 	public function MostrarTablaConsultaFacturacion()
 	{
@@ -501,18 +358,6 @@ class Facturas extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	/* private function encriptar($cadena){
-	    $key='SistemaHergo';  // Una clave de codificacion, debe usarse la misma para encriptar y desencriptar
-	    $encrypted = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($key), $cadena, MCRYPT_MODE_CBC, md5(md5($key))));
-	    return $encrypted; //Devuelve el string encriptado
-	 
-	}
-	 
-	private function desencriptar($cadena){
-	     $key='SistemaHergo';  // Una clave de codificacion, debe usarse la misma para encriptar y desencriptar
-	     $decrypted = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($key), base64_decode($cadena), MCRYPT_MODE_CBC, md5(md5($key))), "\0");
-	    return $decrypted;  //Devuelve el string desencriptado
-	} */
 	public function tipoCambio()
 	{
 		//$tipoCambio=$this->Egresos_model->retornarValorTipoCambio();

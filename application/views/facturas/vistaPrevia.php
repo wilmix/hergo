@@ -1,6 +1,6 @@
 
     <div id="facPrev" class="modal fade" role="dialog" >
-        <div class="modal-dialog modal-lg" id="app">
+        <div class="modal-dialog modal-lg" id="fac">
 
             <!-- Modal content-->
             <div class="modal-content">

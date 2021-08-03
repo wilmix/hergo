@@ -1,6 +1,6 @@
 
     var vmVistaPrevia = new Vue({
-        el: '#app',
+        el: '#fac',
         data:{
             nit:'',
             numero:'',
