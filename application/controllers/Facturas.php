@@ -17,7 +17,6 @@ class Facturas extends CI_Controller
 		$this->load->model("Almacen_model");
 		$this->load->helper('cookie');
 
-		$this->datos['cabeceras_script'][]=base_url('assets/hergo/NumeroALetras.js');
 		$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/AllegedRC4.js');
 		$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Base64SIN.js');
 		$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/ControlCode.js');

@@ -6,115 +6,18 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	public function __construct()
 	{	
 		parent::__construct();
-		if(!$this->session->userdata('logeado'))
-		redirect('auth', 'refresh');
-		/*******/
-		$this->load->library('LibAcceso');
-	
-		/*******/
-		$this->load->helper('url');	
-		$this->load->model("Pagos_model");//*****************aki poner el modelo
+		$this->load->model("Pagos_model");
 		$this->load->model("Egresos_model");
 		$this->load->model("Facturacion_model");
 		$this->load->model("Ingresos_model");
-		$this->load->helper('date');
-		date_default_timezone_set("America/La_Paz");
-		$this->cabeceras_css=array(
-				base_url('assets/bootstrap/css/bootstrap.min.css'),
-				base_url("assets/fa/css/font-awesome.min.css"),
-				base_url("assets/dist/css/AdminLTE.min.css"),
-				base_url("assets/dist/css/skins/skin-blue.min.css"),
-				base_url("assets/hergo/estilos.css"),
-				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
-				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
-				base_url('assets/sweetalert/sweetalert2.min.css'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),	
-			);
-		$this->cabecera_script=array(
-				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
-				base_url('assets/bootstrap/js/bootstrap.min.js'),
-				base_url('assets/dist/js/app.min.js'),
-				base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
-				base_url('assets/plugins/table-boot/js/tableExport.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
-				base_url('assets/plugins/table-boot/plugin/select2.min.js'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
-        		base_url('assets/plugins/daterangepicker/moment.min.js'),
-        		base_url('assets/plugins/slimscroll/slimscroll.min.js'),
-				base_url('assets/sweetalert/sweetalert2.min.js'), 
-				base_url('assets/plugins/numeral/numeral.min.js'),
-				base_url('assets/hergo/NumeroALetras.js'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),				
-				
-			);
-			$this->foot_script=array(				
-        		base_url('assets/vue/vue.js'),								
-				base_url('assets/vue/vue-resource.min.js'),	
-				'https://unpkg.com/vuejs-datepicker',
-			);
-		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
-		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
-		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
-		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
-		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
-		$this->datos['grupsOfUser'] = $this->ion_auth->in_group('Nacional') ? 'Nacional' : false;
-
-		$hoy = date('Y-m-d');
-		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
-		if ($tipoCambio) {
-			$tipoCambio = $tipoCambio->tipocambio;
-			$this->datos['tipoCambio'] = $tipoCambio;
-		} else {
-			$this->datos['tipoCambio'] = 'No se tiene tipo de cambio para la fecha';
-		}
-		
-			if($this->session->userdata('foto')==NULL)
-				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
-			else
-				$this->datos['foto']=base_url('assets/imagenes/').$this->session->userdata('foto');	
 	}
 	public function index()
 	{
-		$this->libacceso->acceso(23);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-		
-			$this->datos['menu']="Pagos";
-			$this->datos['opcion']="Consultar Pagos";
-			$this->datos['titulo']="Consultar Pagos";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			$this->datos['foot_script']= $this->foot_script;
-			/*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['foot_script'][]=base_url('assets/hergo/pagos.js');
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			/***********************************/
-			$this->datos['almacen']=$this->Pagos_model->retornar_tabla("almacenes");
-
-
-			/***********************************/
-			/***********************************/
-			/***********************************/
-			$this->load->view('plantilla/head',$this->datos);
-			$this->load->view('plantilla/header',$this->datos);
-			$this->load->view('plantilla/menu',$this->datos);
-			$this->load->view('plantilla/headercontainer',$this->datos);
-			$this->load->view('pagos/consultarPagos',$this->datos); ///*****aki poner la vista
-			$this->load->view('plantilla/footcontainer',$this->datos);
-			$this->load->view('plantilla/footerscript',$this->datos);
-			$this->load->view('plantilla/footer',$this->datos);						
+		$this->accesoCheck(23);
+		$this->titles('Pagos','Consulta','Pagos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/pagos.js') .'?'.rand();
+		$this->datos['almacen']=$this->Pagos_model->retornar_tabla("almacenes");
+		$this->setView('pagos/consultarPagos');
 	}
 	public function mostrarPagos()  //******cambiar a funcion del modelo
 	{
@@ -134,62 +37,14 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	}
 	public function RecibirPago()
 	{
-		$this->libacceso->acceso(24);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
+		$this->accesoCheck(24);
+		$this->titles('RecibirPago','Recibir Pago','Pagos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/recibirPagos.js') .'?'.rand();
+		$this->datos['almacen']=$this->Pagos_model->retornar_tabla("almacenes");
+		$this->datos['tipoPago']=$this->Pagos_model->retornar_tabla("tipoPago");
+		$this->datos['bancos']=$this->Pagos_model->retornar_tabla("bancos");
 		
-			$this->datos['menu']="Pagos";
-			$this->datos['opcion']="Recibir Pago";
-			$this->datos['titulo']="Recibir Pago";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			$this->datos['foot_script']= $this->foot_script;
-
-			/*************DATERANGEPICKER**********/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-
-			/*********UPLOAD******************/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
-
-			/*************AUTOCOMPLETE**********/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-			
-			
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			 /**************EDITABLE***************/
-			 $this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-table-editable.js');
-			 $this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.css');
-			 $this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.js');
-			/***********************************/
-			$this->datos['foot_script'][]=base_url('assets/hergo/recibirPagos.js'); 
-
-			$this->datos['almacen']=$this->Pagos_model->retornar_tabla("almacenes");
-			$this->datos['tipoPago']=$this->Pagos_model->retornar_tabla("tipoPago");
-			$this->datos['bancos']=$this->Pagos_model->retornar_tabla("bancos");
-
-
-			/***********************************/
-			/***********************************/
-			/***********************************/
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer',$this->datos);
-			$this->load->view('pagos/recibirPagos.php',$this->datos); 
-			$this->load->view('plantilla/footcontainer',$this->datos);
-			$this->load->view('plantilla/footerscript',$this->datos);
-			$this->load->view('plantilla/footer',$this->datos);
+		$this->setView('pagos/recibirPagos');
 	}
 	public function editarPago($idPago=0)
 	{
