@@ -251,4 +251,20 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		$query = $this->db->query($sql);
 		return $query;
 	}
+	public function validate_pago($idFactura)
+	{
+		$sql="	SELECT
+					f.idFactura,
+					c.nombreCliente,
+					f.pagada
+				FROM
+					factura f
+					INNER JOIN clientes c on c.idCliente = f.cliente
+				WHERE
+					f.idFactura = '$idFactura'
+					AND f.pagada = 1
+				";
+		$query = $this->db->query($sql);
+		return $query;
+	}
 }

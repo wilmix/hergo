@@ -874,7 +874,7 @@ var vmPago = new Vue({
                 console.log(pair[0]+ ', '+ pair[1]); 
             }
 
-            $.ajax({
+            $.getJSON({
                 url: base_url('index.php/Pagos/guardarPagos'),
                 type: "post",      
                 data: formPagos,                                        
@@ -882,7 +882,6 @@ var vmPago = new Vue({
                 contentType: false,
                 cache:false, 
             }).done(function(res){
-                res = JSON.parse(res)
                 if(res.status == 200)
                 {
                     quitarcargando();
@@ -899,21 +898,30 @@ var vmPago = new Vue({
                         let imprimir = base_url("pdf/Recibo/index/") + res.id;
                         window.open(imprimir);
                     });
-                } else {
+                } else if (res.status ==400) {
                     quitarcargando();
+                    let errors = ''
+                    for (const prop in res.msj) {
+                        errors += `${res.msj[prop]}`
+                    }
                     swal({
                         title: 'Error',
-                        text: "Error al guardar el pago",
+                        html: `${errors}`,
                         type: 'error', 
                         showCancelButton: false,
                         allowOutsideClick: false,  
-                    }).then(
-                            function(result) {   
-                            console.log('error al guardar pago');
                     });
+                } else {
+                    swal({
+                        title: 'Error',
+                        text: "Error desconocido",
+                        type: 'error', 
+                        showCancelButton: false,
+                        allowOutsideClick: false,  
+                    })
                 }
             }).fail(function( jqxhr, textStatus, error ) {
-            var err = textStatus + ", " + error;
+            let err = textStatus + ", " + error;
             console.log( "Request Failed: " + err );
                 quitarcargando();
                 swal({

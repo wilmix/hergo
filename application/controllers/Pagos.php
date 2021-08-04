@@ -48,66 +48,18 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	}
 	public function editarPago($idPago=0)
 	{
-		$this->libacceso->acceso(25);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
+		$this->accesoCheck(25);
+		$this->titles('EditarPago','Editar Pago','Pagos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/recibirPagos.js') .'?'.rand();
+		//$this->datos['foot_script'][]=base_url('assets/hergo/editarPago.js') .'?'.rand();
 
-			$this->datos['menu']="Pagos";
-			$this->datos['opcion']="Editar Pago";
-			$this->datos['titulo']="Editar Pago";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			$this->datos['foot_script']= $this->foot_script;
-
-			/*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['foot_script'][]=base_url('assets/hergo/recibirPagos.js');
-			$this->datos['foot_script'][]=base_url('assets/hergo/editarPago.js');
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			 /**************EDITABLE***************/
-			 $this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-table-editable.js');
-			 $this->datos['cabeceras_css'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.css');
-			 $this->datos['cabeceras_script'][]=base_url('assets/plugins/table-boot/plugin/bootstrap-editable.js');
-			/***********************************/
-			/*********UPLOAD******************/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/FileInput/css/fileinput.min.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/fileinput.min.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/FileInput/js/locales/es.js');
-			/*************AUTOCOMPLETE**********/
-			$this->datos['cabeceras_css'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.css');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/jQueryUI/jquery-ui.min.js');
-
-			$this->datos['almacen']=$this->Pagos_model->retornar_tabla("almacenes");
-			$this->datos['tipoPago']=$this->Pagos_model->retornar_tabla("tipoPago");
-			$this->datos['bancos']=$this->Pagos_model->retornar_tabla("bancos");
-			
-			$this->datos['idPago']=$idPago;
-			$this->datos['cab']=$this->getPagoCabecera($idPago);
-			//echo json_encode ($this->datos['cab']);
-
-
-			
-
-			/***********************************/
-			/***********************************/
-			/***********************************/
-			$this->load->view('plantilla/head',$this->datos);
-			$this->load->view('plantilla/header',$this->datos);
-			$this->load->view('plantilla/menu',$this->datos);
-			//$this->load->view('plantilla/headercontainer',$this->datos);
-			$this->load->view('pagos/recibirPagos',$this->datos);
-			$this->load->view('plantilla/footcontainer',$this->datos);
-			$this->load->view('plantilla/footerscript',$this->datos);
-			$this->load->view('plantilla/footer',$this->datos);
-				
+		$this->datos['almacen']=$this->Pagos_model->retornar_tabla("almacenes");
+		$this->datos['tipoPago']=$this->Pagos_model->retornar_tabla("tipoPago");
+		$this->datos['bancos']=$this->Pagos_model->retornar_tabla("bancos");
+		$this->datos['idPago']=$idPago;
+		$this->datos['cab']=$this->getPagoCabecera($idPago);
+		
+		$this->setView('pagos/recibirPagos');
 	}
 	public function getPagoCabecera($id)
 	{
@@ -152,10 +104,12 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 	}
 	public function guardarPagos()
 	{
+		if ($this->validate()==TRUE)
 		if($this->input->is_ajax_request())
         {
 			$data=($this->input->post());
 			$data=json_decode(json_encode($data), FALSE);
+			
 			
 			$config = [
 				"upload_path" => "./assets/img_pagos/",
@@ -196,8 +150,6 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->transferencia=strtoupper($data->transferencia);
 			$pago->pagos=json_decode($data->porPagar);
 			
-			/* var_dump($pago);
-			die();  */
 			$idPago=$this->Pagos_model->storePago($pago);
 			if ($idPago == false) {
 				$return=new stdClass();
@@ -210,12 +162,61 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 				$return->id=$idPago;
 				echo json_encode($return);
 			}
-			
-			
 		}
 		else
 		{
 			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function validate() {
+        $json = array();
+		$this->form_validation->set_rules('idPago', 'idPago', 'required|numeric');
+		$this->form_validation->set_rules('almacen', 'almacen', 'required|numeric');
+		$this->form_validation->set_rules('fechaPago', 'fechaPago', 'required');
+		$this->form_validation->set_rules('cliente', 'cliente', 'required|numeric');
+		$this->form_validation->set_rules('tipoPago', 'tipoPago', 'required|numeric');
+		$this->form_validation->set_rules('banco', 'banco', 'required|numeric');
+		$this->form_validation->set_rules('porPagar', 'porPagar', 'required|callback_validate_pago');
+		$this->form_validation->set_message('validate_pago','Una Factura esta pagada');
+
+		if ($this->form_validation->run() == FALSE) {
+			$json = array(
+                'transferencia' => form_error('transferencia'),
+                'idPago' => form_error('idPago'),
+                'almacen' => form_error('almacen'),
+                'fechaPago' => form_error('fechaPago'),
+                'cliente' => form_error('cliente'),
+                'tipoPago' => form_error('tipoPago'),
+                'banco' => form_error('banco'),
+                'glosa' => form_error('glosa'), 
+                'porPagar' => form_error('porPagar'),
+            );
+			$json = array_filter($json);
+			$return=new stdClass();
+			$return->status=400;
+			$return->msj=$json;
+			echo json_encode($return);
+			die();
+		} else {
+			return TRUE;
+		}
+    }
+	function validate_pago($pagos)
+	{
+		$pagos =json_decode($pagos);
+		$result = [];
+		foreach ($pagos as $pago) {
+			if ($this->Pagos_model->validate_pago($pago->idFactura)->num_rows()>0) {
+				array_push($result, $this->Pagos_model->validate_pago($pago->idFactura)->row());
+			}
+		}
+		if($result === [])
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
 		}
 	}
 	public function retornarNumPago($almacen, $gestion)
