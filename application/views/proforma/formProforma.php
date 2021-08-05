@@ -151,7 +151,7 @@
             <!-- addButton -->
             <div class="col-sm-4 col-xs-12 col-md-2">
               <label></label>
-              <button type="button" class="form-control btn btn-success" @click="addDetalle">
+              <button type="button" class="form-control btn btn-success table-layout: fixed" @click="addDetalle">
                 Añadir
               </button>
             </div>
@@ -165,10 +165,10 @@
                   <th>#</th>
                   <th>Código</th>
                   <th>Imagen</th>
-                  <th>Descripción</th>
+                  <th class="col-md-4">Descripción</th>
                   <th class="text-left">Marca</th>
-                  <th>Industria</th>
-                  <th>Tiempo de Entrega</th>
+                  <th class="">Industria</th>
+                  <th class="">Tiempo de Entrega</th>
                   <th>Unidad</th>
                   <th class="bg-info text-right">Cantidad</th>
                   <th class="bg-info text-right">Precio</th>
@@ -188,33 +188,33 @@
                     <img :src="item.url_img" class="card-img img-responsive center-block" width="50" height="50" style="background: #CEE6F5;border-radius: 10px;" >
                   </td>
                   <div>
-                    <td v-if="edit" class="text-left col-md-6"> 
+                    <td v-if="edit" class="text-left col-md-4"> 
                       <input type="text" class="form-control input-sm" v-model="item.descrip" v-on:keyup.enter="editRow"></input>
                     </td>
-                    <td v-else @dblclick="editRow()" class="text-left">{{ item.descrip }}</td>
+                    <td v-else @dblclick="editRow()" class="text-left col-md-4">{{ item.descrip }}</td>
                   </div>
                   <div>
                     <td v-if="edit" class="text-right">
-                      <input type="text" class="form-control input-sm text-right col-md-2" v-model="item.marcaSigla" v-on:keyup.enter="editRow">
+                      <input type="text" class="form-control input-sm text-right" v-model="item.marcaSigla" v-on:keyup.enter="editRow">
                     </td>
                     <td v-else @dblclick="editRow()" class="text-left">{{ item.marcaSigla}}</td>
                   </div>
                   <div>
                     <td v-if="edit" class="text-right">
-                      <input type="text" class="form-control input-sm text-right col-md-2" v-model="item.industria" v-on:keyup.enter="editRow" maxlength="6">
+                      <input type="text" class="form-control input-sm text-right" v-model="item.industria" v-on:keyup.enter="editRow" maxlength="6">
                     </td>
                     <td v-else @dblclick="editRow()" class="text-left">{{ item.industria}}</td>
                   </div>
                   <div>
                     <td v-if="edit" class="text-right">
-                      <input type="text" class="form-control input-sm text-right col-md-2" v-model="item.tiempoEntrega" v-on:keyup.enter="editRow" maxlength="9">
+                      <input type="text" class="form-control input-sm text-right" v-model="item.tiempoEntrega" v-on:keyup.enter="editRow" maxlength="9">
                     </td>
                     <td v-else @dblclick="editRow()" class="text-left">{{ item.tiempoEntrega}}</td>
                   </div>
                   <td class="text-center">{{ item.uni }}</td>
                   <div>
                     <td v-if="edit" class="text-right">
-                      <input type="number" class="form-control input-sm text-right col-md-2" v-model="item.cantidad" v-on:keyup.enter="editRow">
+                      <input type="number" class="form-control input-sm text-right" v-model="item.cantidad" v-on:keyup.enter="editRow">
                     </td>
                     <td v-else @dblclick="editRow()" class="text-right">{{ item.cantidad | moneda}}</td>
                   </div>
