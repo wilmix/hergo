@@ -3,6 +3,8 @@ var glob_art = [];
 var glob_alm_usu
 var fechaHoySystem 
 var PermisosUser
+const isAdmin = $('#isAdmin').val()
+const isNacional = $('#nacional').val()
 glob_tipoCambio = parseFloat($("#mostrarTipoCambio").text())
 permisos()
 
@@ -14,7 +16,6 @@ $(document).ready(function ()
   setTipoCambio(fechaHoySystem);
   mantenerMenu();
 })
-
 function permisos() {
   $.getJSON({
     type: "POST",

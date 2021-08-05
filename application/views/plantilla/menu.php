@@ -12,6 +12,7 @@
               <p><?php echo $nombre_usuario ?></p>
               <input type="text" value = "<?= $id_Almacen_actual ?>" class="hidden" id="idAlmacenUsuario">
               <input type="text" value = "<?= ($this->ion_auth->is_admin())?"admin":""?>" class="hidden" id="isAdmin">
+              <input type="text" value = "<?= ($grupsOfUser=='Nacional') ? "nacional" : ""?>" class="hidden" id="nacional">
               <!-- Status -->
               <a href="#"><i class="fa fa-circle text-success"></i> <?php echo $almacen_usuario ?></a>
             </div>
