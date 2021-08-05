@@ -3,8 +3,8 @@ var glob_art = [];
 var glob_alm_usu
 var fechaHoySystem 
 var PermisosUser
-const isAdmin = $('#isAdmin').val()
-const isNacional = $('#nacional').val()
+const isAdminGlobal = $('#isAdmin').val()
+const isNacionalGlobal = $('#nacional').val()
 glob_tipoCambio = parseFloat($("#mostrarTipoCambio").text())
 permisos()
 
