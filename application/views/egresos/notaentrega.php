@@ -23,14 +23,6 @@
       $idegresocompraslocales=$idtegreso;
     }
 ?>
-<!-- <style>
-    input[type=date]::-webkit-outer-spin-button,
-    input[type=date]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-</style> -->
-
 <!-- Your Page Content Here -->
 <?php $auxIdTipoIngreso=($cont)?$idtegreso:$idegreso ?>
 <?php $auxIdAlmacen=($cont)?$idalmacen:$idalmacen ?>
