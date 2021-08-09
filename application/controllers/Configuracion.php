@@ -6,103 +6,20 @@ class Configuracion extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		if(!$this->session->userdata('logeado'))
-		redirect('auth', 'refresh');
-		$this->load->helper('url');
-        $this->load->model("Ingresos_model");
-		/*******/
-		$this->load->library('LibAcceso');
 		
-		/*******/
+        $this->load->model("Ingresos_model");
 		$this->load->model("Configuracion_model");
-		$this->load->helper('date');
-		date_default_timezone_set("America/La_Paz");
-		$this->cabeceras_css=array(
-				base_url('assets/bootstrap/css/bootstrap.min.css'),
-				base_url("assets/fa/css/font-awesome.min.css"),
-				base_url("assets/dist/css/AdminLTE.min.css"),
-				base_url("assets/dist/css/skins/skin-blue.min.css"),
-				base_url("assets/hergo/estilos.css"),
-				base_url('assets/plugins/table-boot/css/bootstrap-table.css'),
-				base_url('assets/plugins/table-boot/plugin/select2.min.css'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.css'),	
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.css'),				
-				base_url('assets/sweetalert/sweetalert2.min.css'),
-		);
-		$this->cabecera_script=array(
-				base_url('assets/plugins/jQuery/jquery-2.2.3.min.js'),
-				base_url('assets/bootstrap/js/bootstrap.min.js'),
-				base_url('assets/dist/js/app.min.js'),
-				base_url('assets/plugins/validator/bootstrapvalidator.min.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-es-MX.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-export.js'),
-				base_url('assets/plugins/table-boot/js/tableExport.js'),
-				base_url('assets/plugins/table-boot/js/xlsx.core.min.js'),
-				base_url('assets/plugins/table-boot/js/bootstrap-table-filter.js'),
-				base_url('assets/plugins/table-boot/plugin/select2.min.js'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-select2-filter.js'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-group-by.js'),
-				base_url('assets/plugins/table-boot/plugin/FileSaver.min.js'),
-				base_url('assets/plugins/table-boot/plugin/bootstrap-table-sticky-header.js'),
-        		base_url('assets/plugins/daterangepicker/moment.min.js'),
-        		base_url('assets/plugins/slimscroll/slimscroll.min.js'),        		
-        		base_url('assets/sweetalert/sweetalert2.min.js'),
-        		
-
-		);
-		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
-		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
-		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
-		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
-
-		$hoy = date('Y-m-d');
-		$tipoCambio = $this->Ingresos_model->getTipoCambio($hoy);
-		if ($tipoCambio) {
-			$tipoCambio = $tipoCambio->tipocambio;
-			$this->datos['tipoCambio'] = $tipoCambio;
-		} else {
-			$this->datos['tipoCambio'] = 'No se tiene tipo de cambio para la fecha';
-		}
-			if($this->session->userdata('foto')==NULL)
-				$this->datos['foto']=base_url('assets/imagenes/ninguno.png');
-			else
-				$this->datos['foto']=base_url('assets/imagenes/').$this->session->userdata('foto');
 	}
 
 	public function DatosFactura(){
-		$this->libacceso->acceso(9);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
 
-			$this->datos['menu']="Datos Factura";
-			$this->datos['opcion']="Configuracion";
-			$this->datos['titulo']="Datos Factura";
+		$this->accesoCheck(9);
+		$this->titles('DatosFactura','Datos Factura','Configuración');
+		$this->datos['almacenes']=$this->Configuracion_model->retornar_tabla("almacenes");
 
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			//$this->datos['cabeceras_script']= $this->cabecera_script;
+		$this->datos['foot_script'][]=base_url('assets/hergo/configuracion/datosFactura.js') .'?'.rand();
+		$this->setView('administracion/configuracion/datosFactura');
 
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/configuracion/datosFactura.js'); 				//*******agregar js********
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			$this->datos['almacenes']=$this->Configuracion_model->retornar_tabla("almacenes");
-
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('administracion/configuracion/datosFactura.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
 	}
 	public function mostrarDatosFactura()//******cambiar a funcion del modelo
 	{
@@ -141,38 +58,13 @@ class Configuracion extends CI_Controller
         echo "{}";       
 	}
 	
-	public function TipoCambio(){
-		$this->libacceso->acceso(10);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
-			$this->datos['menu']="Tipo de Cambio";
-			$this->datos['opcion']="Configuracion";
-			$this->datos['titulo']="Tipo de Cambio";
+	public function TipoCambio()
+	{
 
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-
-	        /*************DATERANGEPICKER**********/
-	        $this->datos['cabeceras_css'][]=base_url('assets/plugins/daterangepicker/daterangepicker.css');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/daterangepicker.js');
-	        $this->datos['cabeceras_script'][]=base_url('assets/plugins/daterangepicker/locale/es.js');
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/configuracion/tipoCambio.js'); 				//*******agregar js********
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			$this->datos['almacenes']=$this->Configuracion_model->retornar_tabla("almacenes");
-
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('administracion/configuracion/tipoCambio.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);
+		$this->accesoCheck(10);
+		$this->titles('TipoCambio','Tipo de Cambio','Configuración');
+		$this->datos['foot_script'][]=base_url('assets/hergo/configuracion/tipoCambio.js') .'?'.rand();
+		$this->setView('administracion/configuracion/tipoCambio');
 	}
 	public function agregarTipoCambio(){
 		if($this->input->is_ajax_request()){

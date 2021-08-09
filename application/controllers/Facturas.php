@@ -14,6 +14,7 @@ class Facturas extends CI_Controller
 		$this->load->model("DatosFactura_model");
 		$this->load->model("FacturaDetalle_model");
 		$this->load->model("FacturaEgresos_model");
+		$this->load->model("Configuracion_model");
 		$this->load->model("Almacen_model");
 		$this->load->helper('cookie');
 
@@ -819,53 +820,19 @@ class Facturas extends CI_Controller
 	}
 	public function modificarFacturaManual()
 	{
-		$this->libacceso->acceso(47);
-		if(!$this->session->userdata('logeado'))
-			redirect('auth', 'refresh');
+		$this->accesoCheck(47);
+		$this->titles('Modificar Factura','Modificar Factura','Facturas');
+		$this->datos['almacen']=$this->Configuracion_model->retornar_tabla("almacenes");
+		/*************CODIGO CONTROL***************/
+	   $this->datos['cabeceras_script'][]=base_url('assets/codigoControl/AllegedRC4.js');
+	   $this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Base64SIN.js');
+	   $this->datos['cabeceras_script'][]=base_url('assets/codigoControl/ControlCode.js');
+	   $this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Verhoeff.js');
+	   $this->datos['cabeceras_script'][]=base_url('assets/codigoControl/qrcode.min.js');
+	   $this->datos['lotes']=$this->FacturaEgresos_model->showLotes();
 
-			$this->datos['menu']="Facturas";
-			$this->datos['opcion']="Modificar Factura";
-			$this->datos['titulo']="Modificar Factura";
-
-			$this->datos['cabeceras_css']= $this->cabeceras_css;
-			$this->datos['cabeceras_script']= $this->cabecera_script;
-			$this->datos['foot_script']= $this->foot_script;
-
-			/**************FUNCION***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/funciones.js');
-			
-			//$this->datos['cabeceras_script'][]=base_url('assets/hergo/facturasConsulta.js');
-			$this->datos['foot_script'][]=base_url('assets/hergo/updateFacturasManual.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/hergo/NumeroALetras.js');
-			/**************INPUT MASK***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
-            $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-
- 			/*************CODIGO CONTROL***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/AllegedRC4.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Base64SIN.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/ControlCode.js');
-			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Verhoeff.js');
-			/***********************************/
-			/*************CODIGO QR***************/
-			$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/qrcode.min.js');
-            
-			$this->datos['almacen']=$this->Almacen_model->retornar_tabla("almacenes");
-			$this->datos['lotes']=$this->FacturaEgresos_model->showLotes();
-            //$this->datos['tipoingreso']=$this->ingresos_model->retornar_tablaMovimiento("-");
-
-			//$this->datos['ingresos']=$this->ingresos_model->mostrarIngresos();
-
-			$this->load->view('plantilla/head.php',$this->datos);
-			$this->load->view('plantilla/header.php',$this->datos);
-			$this->load->view('plantilla/menu.php',$this->datos);
-			$this->load->view('plantilla/headercontainer.php',$this->datos);
-			$this->load->view('facturas/updateFacturaManual.php',$this->datos);
-			$this->load->view('facturas/vistaPrevia.php',$this->datos);
-			$this->load->view('plantilla/footcontainer.php',$this->datos);
-			$this->load->view('plantilla/footer.php',$this->datos);			
-			$this->load->view('plantilla/footerscript.php',$this->datos);
+		$this->datos['foot_script'][]=base_url('assets/hergo/updateFacturasManual.js') .'?'.rand();
+		$this->setView('facturas/updateFacturaManual');
 	}
 	public function showFactuasManuales()
 	{
