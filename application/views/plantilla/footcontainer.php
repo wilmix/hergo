@@ -4,7 +4,7 @@
   <!-- /.content-wrapper -->
   <!-- food container -->
     <?php
-      if (isset($tipodocumento)) {
+      if (isset($tipodocumento) && isset($tipocliente)) {
         $this->load->view('modals/cliente-modal');
       }
       $this->load->view('modals/tipoCambio-modal');
