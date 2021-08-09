@@ -13,7 +13,7 @@ class Provedores extends CI_Controller
 	}
 	public function index()
 	{
-		$this->accesoCheck(67);
+		$this->accesoCheck(7);
 		$this->titles('Provedores','Provedores','Administracion');
 			
 		$this->datos['tipodocumento']=$this->Proveedores_model->retornar_tabla("documentotipo");			
