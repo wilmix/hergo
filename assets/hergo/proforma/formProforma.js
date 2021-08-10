@@ -71,6 +71,7 @@ const app = new Vue({
         articulosArray:[],
         articulosArraySelected:null,
         almacen:document.getElementById("idAlmacenUsuario").value,
+        disabled: document.getElementById("nacional").value == '' ? true : false,
         almacenes: [],
         tipo:1,
         tipos: [],
@@ -101,6 +102,8 @@ const app = new Vue({
         pedidoPor:'',
         condicionPago:'',
         cliente:'',
+        clienteDato:'',
+        complemento:'',
         glosa:'',
         porcentajeDescuento:0,
         descuento:0,
@@ -126,7 +129,7 @@ const app = new Vue({
         this.total()
        
         e.preventDefault()
-        if (!this.cliente || !this.items.length>0) {
+        if (!this.clienteDato || !this.items.length>0) {
           quitarcargando()
           swal({
             title: 'Error',
@@ -140,7 +143,8 @@ const app = new Vue({
         form.append('id', this.id)
         form.append('fecha', moment(this.fecha).format('YYYY-MM-DD'))
         form.append('almacen', this.almacen)
-        form.append('cliente', this.cliente.id)
+        form.append('clienteDato', this.clienteDato)
+        form.append('complemento', this.complemento)
         form.append('n', this.n)
         form.append('moneda', this.moneda)
         form.append('condicionesPago', this.condicionPago)
@@ -232,7 +236,7 @@ const app = new Vue({
           app.cleanCard()
           app.total() 
           const codigo = document.getElementsByClassName('vs__search');
-          codigo[1].focus()
+          codigo[0].focus()
         }
         else{
           swal({
@@ -361,6 +365,8 @@ const app = new Vue({
           app.title = `Editar Proforma ${app.n}`
           app.fecha = moment(res.proforma.fecha).format('MM-DD-YYYY')
           app.almacen = res.proforma.idAlm
+          app.clienteDato = res.proforma.clienteDatos
+          app.complemento = res.proforma.complemento
           app.cliente = {
             id: res.proforma.idCliente,
             label: res.proforma.clienteNombre

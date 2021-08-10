@@ -11,6 +11,7 @@
         </div>
         <div class="form-group col-sm-6 col-md-2" id="almacen" @change="onChangeAlm()">
             <select class="form-control" 
+                        :disabled="disabled"
                         v-model="almacen" 
                         id="almacen" 
                         name="almacen">
@@ -20,6 +21,10 @@
                 </option>
             </select>
         </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" v-model="firma">
+          <label class="form-check-label" for="exampleCheck1">Firma</label>
+        </div>
 
       </div>
       <div class="box-body">
@@ -28,7 +33,7 @@
       </div> <!-- /.box-body -->
     </div> <!-- /.class="box" -->
   </div>
-   <!-- /.class="col-xs-12" -->
+  <!-- /.class="col-xs-12" -->
 </div> <!-- /.class="row" -->
 
 

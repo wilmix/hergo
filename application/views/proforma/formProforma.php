@@ -21,6 +21,7 @@
             <div class="form-group col-sm-6 col-md-2">
               <label for="recepcion">Almacen:</label>
                 <select class="form-control" 
+                            :disabled="disabled"
                             v-model="almacen" 
                             id="almacen" 
                             name="almacen">
@@ -29,16 +30,6 @@
                             v-text="option.alm">
                     </option>
                 </select>
-            </div>
-            <!-- cliente -->
-            <div class="form-group col-sm-12 col-md-4">
-              <label for="cliente">Cliente:</label>
-              <v-select label="label" :filterable="false" :options="clienteList"
-                  @search="onSearchCliente" v-model="cliente" :select-on-key-codes="[9, 13]" :required="!cliente">
-                  <template slot="no-options">
-                    Busca un cliente..
-                  </template>
-              </v-select>
             </div>
             <!-- MONEDA -->
             <div class="form-group col-sm-6 col-md-2">
@@ -52,6 +43,26 @@
                     </option>
                 </select>
             </div>
+            <!-- cliente -->
+            <div class="form-group col-sm-12 col-md-2">
+              <label for="cliente">Cliente:</label>
+              <input type="text" class="form-control" id="clienteDato" name="clienteDato" v-model="clienteDato">
+            </div>
+            <!-- complemento -->
+            <div class="form-group col-sm-12 col-md-2">
+              <label for="cliente">Complemento:</label>
+              <textarea class="form-control" id="complemento" rows="1"name="complemento" v-model="complemento"></textarea>
+            </div>
+            <!-- <div class="form-group col-sm-12 col-md-4">
+              <label for="cliente">Cliente:</label>
+              <v-select label="label" :filterable="false" :options="clienteList"
+                  @search="onSearchCliente" v-model="cliente" :select-on-key-codes="[9, 13]" :required="!cliente">
+                  <template slot="no-options">
+                    Busca un cliente..
+                  </template>
+              </v-select>
+            </div> -->
+            
             <!-- condicionPago -->
             <div class="form-group col-sm-6 col-md-2">
               <label for="condicionPago">Condicion de Pago:</label>

@@ -7,7 +7,6 @@ $(document).ready(function () {
 	$('#reportrange').on('apply.daterangepicker', function (ev, picker) {
 		getProforma()
 	});
-
 })
 
 function getProforma() {
@@ -51,7 +50,7 @@ function getProforma() {
 					render: formato_fecha,
 				},
 				{
-					data: 'nombreCliente',
+					data: 'clienteDatos',
 					title: 'CLIENTE',
 				},
 				{
@@ -223,7 +222,10 @@ return `
 $(document).on("click", "button.print", function () {
 
     let row = getRow(table, this)
-	let print = base_url("pdf/Proforma/index/") + row.id;
+	let dist = 10
+	let imgSize = 12
+	let firma = pro.firma ? 1 : 0
+	let print = base_url("pdf/Proforma/index/") + `${row.id}/${dist}/${imgSize}/${firma}`
 	window.open(print);
 })
 $(document).on("click", "button.edit", function () {
@@ -236,7 +238,7 @@ $(document).on("click", "button.edit", function () {
 const pro = new Vue({
 	el: '#app',
 	data: {
-        almacen:'1',
+        almacen:document.getElementById("idAlmacenUsuario").value,
         almacenes: [
             { alm: 'CENTRAL HERGO', value: '1' },
             { alm: 'DEPOSITO EL ALTO', value: '2' },
@@ -244,11 +246,23 @@ const pro = new Vue({
             { alm: 'SANTA CRUZ', value: '4' },
         ],
 		id:0,
+		firma:false,
+		disabled: document.getElementById("nacional").value == '' ? true : false,
+	},
+	mounted() {
+		if (localStorage.firma) {
+		  this.firma = localStorage.firma;
+		}
 	},
 	methods:{
 		onChangeAlm(){
             getProforma()
-        }
+        },
+		idNacional(){
+			if (isNacional == "") {
+				console.log('no es nacional');
+			}
+		},
 	},
 	filters:{
 		moneda:function(value){
@@ -257,5 +271,10 @@ const pro = new Vue({
 			//return(num);
 			return numeral(num).format('0,0.00');            
 		}, 
+	},
+	watch: {
+		firma() {
+			localStorage.firma = this.firma
+		}
 	}
-  })
+})

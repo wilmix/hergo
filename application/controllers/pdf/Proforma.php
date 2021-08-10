@@ -4,7 +4,7 @@
     require_once APPPATH."/third_party/numerosLetras/NumeroALetras.php";
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
 class Proforma extends CI_Controller {
-  public function index($id, $dist=14, $imgSize=12) {
+  public function index($id, $dist=14, $imgSize=12,$firma=0) {
 
     $this->load->model('Proforma_model');
     $this->dist = $dist;
@@ -15,7 +15,8 @@ class Proforma extends CI_Controller {
     $year = date('y',strtotime($proforma->fecha));
     $mes = date('n',strtotime($proforma->fecha));
     $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-    
+    $params["firma"]=$firma;
+
     $this->load->library('Proforma_lib', $params);
         $this->pdf = new Proforma_lib($params);
         $this->pdf->AddPage('P','Letter');
@@ -61,12 +62,11 @@ class Proforma extends CI_Controller {
             $this->pdf->Cell(20,5,number_format($item->precioLista, 2, ".", ","),$l,0,'R',0);
             $this->pdf->Cell(20,5,number_format($item->total, 2, ".", ","),$l,0,'R',0);
           $this->pdf->Ln($this->dist);//DISTANCIA ENTRE LINEAS 
-          $this->pdf->Line($this->pdf->GetX(),$this->pdf->GetY()-5,$this->pdf->GetX()+200,$this->pdf->GetY()-5);
-          $this->pdf->SetY($this->pdf->GetY()-5);
+          $this->pdf->Line($this->pdf->GetX(),$this->pdf->GetY(),$this->pdf->GetX()+200,$this->pdf->GetY());
+          //$this->pdf->SetY($this->pdf->GetY()-5);
         }
-        $this->pdf->SetY($this->pdf->GetY()-5);
-        //$this->pdf->SetFont('Arial','B',8);
-        $this->pdf->SetFont('Roboto','',8);
+        //$this->pdf->SetY($this->pdf->GetY()-5);
+        $this->pdf->SetFont('Roboto','B',8);
         $this->pdf->Cell(180,5,'Total:','T',0,'R',1); 
         $this->pdf->Cell(20,5,number_format($total, 2, ".", ","),'T',0,'R',1); 
         $this->pdf->Ln(5);
@@ -83,9 +83,9 @@ class Proforma extends CI_Controller {
         $ctvs = sprintf('%02d',$ctvs);
         $ctvs = ($ctvs == 0) ? '00' : $ctvs;
         $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '. $proforma->moneda;
-        $this->pdf->Ln(6);
-        $this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
-        $this->pdf->Cell(188,6,$literal,0,0,'l',1);
+        $this->pdf->Ln(1);
+        $this->pdf->Cell(7,6,'SON:',$l,0,'L',1);
+        $this->pdf->Cell(156,6,$literal,$l,0,'l',1);
         //$this->pdf->Ln(5);
         $this->pdf->SetFillColor(20,60,190);
         //$this->pdf->Rect(10,$this->pdf->GetY()+5,200,1,'F');
@@ -98,18 +98,18 @@ class Proforma extends CI_Controller {
     if ($glosas) {
       $this->pdf->Ln(6);
       $this->pdf->SetFillColor(20,60,190);
-     // $this->pdf->SetFont('Arial','B',8); 
-      $this->pdf->SetFont('Roboto','',8);
+      $this->pdf->SetFont('Roboto','B',8); 
+      //$this->pdf->SetFont('Roboto','',8);
       $this->pdf->SetTextColor(255,255,255);
       $this->pdf->Cell(200,5, utf8_decode('OBSERVACIONES: '),1,0,'C',1);
       $this->pdf->Ln(5);
       $this->pdf->SetTextColor(0,0,0);
-      //$this->pdf->SetFont('Arial','',8); 
+      //$this->pdf->SetFont('Arial','',8);
       $this->pdf->SetFont('Roboto','',8);
       $glosas = explode('<br />',$glosas);
       foreach ($glosas as $glosa) {
         $this->pdf->MultiCell(200,5,$glosa,0,'L',0);
-      $this->pdf->SetXY(10,$this->pdf->GetY()-5);
+        $this->pdf->SetXY(10,$this->pdf->GetY()-5);
       }
       $this->pdf->SetDrawColor(20,60,190);
       $this->pdf->SetLineWidth(1);
