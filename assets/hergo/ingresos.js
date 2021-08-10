@@ -514,7 +514,6 @@ function operateFormatter2(value, row, index) {
     return ($ret);
 }
 function operateFormatter3(value, row, index) {
-    console.log(value);
     if (value) {
         num = Math.round(value * 100) / 100
         num = num.toFixed(2);
