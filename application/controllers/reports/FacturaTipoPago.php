@@ -15,6 +15,7 @@ class FacturaTipoPago extends CI_Controller
 	
 	public function index()
 	{
+		$this->accesoCheck(0);
 		$this->titles('FacturaTipoPago','Factura Tipo Pago','Reporte');
 		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/facturaTipoPago.js') .'?'.rand();
 		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
