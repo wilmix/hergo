@@ -196,6 +196,8 @@ class CI_Controller {
 	{
 		if(!$this->session->userdata('logeado'))
 		redirect('auth', 'refresh');
-		$this->libacceso->acceso($acceso_id);
+		if ($acceso_id > 0) {
+			$this->libacceso->acceso($acceso_id);
+		}
 	}
 }

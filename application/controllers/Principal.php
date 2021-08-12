@@ -13,10 +13,11 @@ class Principal extends CI_Controller
 			}
 	public function index()
 	{
-			$this->titles('Hergo | Inventarios','Dashboard','Versión 1.3');
-			$this->datos['foot_script'][]=base_url('assets/hergo/dashboard.js') .'?'.rand();
-			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
-			$this->setView('dashboard/dashboard_v1');
+		$this->accesoCheck(0);
+		$this->titles('Hergo | Inventarios','Dashboard','Versión 1.3');
+		$this->datos['foot_script'][]=base_url('assets/hergo/dashboard.js') .'?'.rand();
+		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		$this->setView('dashboard/dashboard_v1');
 	}
 	public function ventasGestion()
 	{
