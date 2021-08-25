@@ -135,7 +135,7 @@ function getPedidos() {
 					titleAttr: 'ExportExcel',
 					autoFilter: true,
 					//messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
-					title: 'Notas de Entrega Pendientes de Pago ',
+					title: 'Pedidos ',
 					exportOptions: {
 						columns: ':visible'
 					},
