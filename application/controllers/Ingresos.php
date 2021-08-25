@@ -413,7 +413,7 @@ class Ingresos extends CI_Controller
         	$ingreso->ordcomp = $this->security->xss_clean($this->input->post('ordcomp_imp'));
 			$ingreso->nfact = $this->security->xss_clean($this->input->post('nfact_imp'));
 			$ingreso->tipoDoc = $this->security->xss_clean($this->input->post('tipoDoc'));
-			$ingreso->obs = $this->security->xss_clean($this->input->post('obs_imp'));
+			$ingreso->obs = strtoupper($this->input->post('obs_imp'));
 			$ingreso->flete = $this->security->xss_clean($this->input->post('flete'));
 			$ingreso->img_route = $img_name;
 			$ingreso->articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
