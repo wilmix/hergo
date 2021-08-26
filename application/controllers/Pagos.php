@@ -146,8 +146,8 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 			$pago->tipoCambio = $tipocambio->tipocambio;
 			$pago->tipoPago=$data->tipoPago;
 			$pago->cheque=isset($data->cheque) ? $data->cheque : '';
-			$pago->banco=$data->banco;
-			$pago->transferencia=strtoupper($data->transferencia);
+			$pago->banco=$data->banco ?? 0;
+			$pago->transferencia=strtoupper($data->transferencia ?? '');
 			$pago->pagos=json_decode($data->porPagar);
 			
 			$idPago=$this->Pagos_model->storePago($pago);
@@ -175,7 +175,7 @@ class Pagos extends CI_Controller  /////**********nombre controlador
 		$this->form_validation->set_rules('fechaPago', 'fechaPago', 'required');
 		$this->form_validation->set_rules('cliente', 'cliente', 'required|numeric');
 		$this->form_validation->set_rules('tipoPago', 'tipoPago', 'required|numeric');
-		$this->form_validation->set_rules('banco', 'banco', 'required|numeric');
+		$this->form_validation->set_rules('banco', 'banco', 'numeric');
 		$this->form_validation->set_rules('porPagar', 'porPagar', 'required|callback_validate_pago');
 		$this->form_validation->set_message('validate_pago','Una Factura esta pagada');
 
