@@ -26,7 +26,7 @@ class Egresos_model extends CI_Model
                 WHEN sigla = 'ET' THEN 'TRASPASO'
                 WHEN sigla = 'EB' THEN 'BAJA PRODUCTO'
                 WHEN estado = 0 THEN 'NO FACTURADO'
-                WHEN estado = 1 THEN 'FACTURADO'
+                WHEN estado = 1 THEN '*FACTURADO*'
                 WHEN estado = 2 THEN 'PARCIAL'	
             END estadoF, estado
             FROM(

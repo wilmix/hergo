@@ -202,8 +202,8 @@ function mostrarTablaEgresos(res) {
 
         data: res,
         striped: true,
-        pagination: false,
-        pageSize: "500",
+        pagination: true,
+        pageSize: "100",
         search: true,
         filter: true,
         showColumns: true,
@@ -398,7 +398,7 @@ function cellStyle(value, row, index) {
                 "padding-top": "15px",
             } 
         }
-     }else if (row.estadoF =='FACTURADO'){
+     }else if (row.estadoF =='*FACTURADO*'){
         return { 
             css: {
             "color":"green",
