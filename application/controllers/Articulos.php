@@ -104,7 +104,7 @@ class Articulos extends CI_Controller
 		//return ($nombreArchivo=="")?"ninguno.jpg":$nombreArchivo;
 		  return($nombreArchivo);
 	}
-	public function cambiarPrecio()
+	protected function cambiarPrecio()
 	{
 		$data = [
 			['CodigoArticulo'=>'TM3100','precio'=>1.4],
