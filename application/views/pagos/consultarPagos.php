@@ -44,24 +44,21 @@
         <div class="col-md-3">
           <p>Fecha: {{fecha | fechaCorta}}</p>
         </div>  
-        <div v-if="tipoPago == 'TRANSFERENCIA'">
-            <div class="col-md-3">
+             <div class="col-md-3">
               <p>Banco: {{ banco }}</p>
             </div>  
             <div class="col-md-3">
               <p>Vaucher: {{ transferencia }}</p>
             </div>
-        </div>
         <div v-if="tipoPago == 'CHEQUE'">
         <div class="col-md-3">
               <p>Cheque: {{ cheque }}</p>
             </div> 
         </div>
-        
       </div>
       <div class="row">
       <div class="col-md-12">
-          <p>Cliente: {{cliente}}</p><!-- Nombre de cliente que pago  -->
+          <p>Cliente: {{cliente}}</p>
         </div>
       </div>
         

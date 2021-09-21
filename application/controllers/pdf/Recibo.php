@@ -9,6 +9,7 @@ class Recibo extends CI_Controller {
     $this->load->model('Pagos_model');
     $pago = $this->Pagos_model->retornarEdicion($id)->row();
     $lineas = $this->Pagos_model->retornarEdicionDetalle($id)->result();
+    //var_dump($pago);
     $params = array(
       'almacen' => $pago->nomAlmacen,
       'autor' => $pago->autor,

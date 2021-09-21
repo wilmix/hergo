@@ -73,17 +73,26 @@
             $this->Line(10,120,206,120);
             $this->SetY(-155);
             $this->SetFont('Arial','',10); 
-
+            /* 1:EFECTIVO 2:TRANSFERENCIA 3:CHEQUE 4:OTROS*/
+            $transf = isset($this->datos['transferencia']) ?  $this->datos['transferencia'] : '';
              if ($this->datos['idTipoPago'] == 3) {
-                 $tipo = utf8_decode($this->datos['tipoPago'] . ' Nº ' . $this->datos['cheque']);
+                 $tipo = utf8_decode($this->datos['tipoPago'] . ' Nº ' . $this->datos['cheque'] );
              } else if ($this->datos['idTipoPago'] == 2) {
-                 $tipo = utf8_decode($this->datos['tipoPago'] . ' DE ' . $this->datos['nomBanco'] . ' Nº '.$this->datos['transferencia']);
+                 $tipo = utf8_decode($this->datos['tipoPago'] . ' DE ' . $this->datos['nomBanco'] );
              } else{
                 $tipo = $this->datos['tipoPago'];
              }
-             $this->Cell(15,6,'Tipo de Pago: '.$tipo,0,0,'L',0);
-             $this->SetY(-150);
-             $this->Cell(15,6,'Observaciones: '.$this->datos['glosa'],0,0,'L',0);
+             $this->newCell('B',30,5,'Tipo de Pago: ',0,0,'L');
+             $this->newCell('',70,5,$tipo,0,1,'L');
+             $this->newCell('B',30,5,'Vaucher Nº: ',0,0,'L');
+             $this->newCell('',70,5,$transf,0,1,'L');
+
+
+
+             $this->SetY(-145);
+             $this->newCell('B',30,5,'Observaciones: ',0,0,'L');
+             $this->newCell('',70,5,$this->datos['glosa'],0,0,'L');
+             //$this->Cell(15,5,'Observaciones: '.$this->datos['glosa'],0,0,'L',0);
 
              $this->SetXY(165,-145);
              $this->SetFont('Arial','BI', 9);
@@ -96,6 +105,11 @@
                 $this->SetY(-138);
                 $this->SetFont('Arial','I', 8);
                 $this->Cell(0,10, 'Pagina '.$this->PageNo().'/{nb}',0,0,'C' );
+        }
+        public function newCell($type, $w, $h, $text, $b, $s, $a)
+        {
+            $this->SetFont('Arial',$type,10); 
+             $this->Cell($w,$h,utf8_decode($text),$b,$s,$a,0);
         }
     }
 ?>
