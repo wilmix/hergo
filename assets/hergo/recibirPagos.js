@@ -425,6 +425,7 @@ function editarPago(idPago) {
                 { tipo: 'EFECTIVO', value: '1' },
                 { tipo: 'TRANSFERENCIA', value: '2' },
                 { tipo: 'CHEQUE', value: '3' },
+                { tipo: 'TARJETA', value: '5' },
                 { tipo: 'OTROS', value: '4' }
                 ],
             totalPago:'',
@@ -465,6 +466,7 @@ function datosEditar(idPago) {
                     { tipo: 'EFECTIVO', value: '1' },
                     { tipo: 'TRANSFERENCIA', value: '2' },
                     { tipo: 'CHEQUE', value: '3' },
+                    { tipo: 'TARJETA', value: '5' },
                     { tipo: 'OTROS', value: '4' }
                     ],
                 totalPago:'',

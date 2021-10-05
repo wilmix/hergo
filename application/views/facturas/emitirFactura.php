@@ -78,6 +78,7 @@
                   <option value="1">EFECTIVO</option>
                   <option value="2">TRANSFERENCIA</option>
                   <option value="3">CHEQUE</option>
+                  <option value="5">TARJETA</option>
                   <option value="4">OTROS</option>
                 </select>
               <span class="input-group-addon">
