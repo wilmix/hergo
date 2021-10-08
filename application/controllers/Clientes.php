@@ -44,7 +44,7 @@ class Clientes extends CI_Controller
 			$cliente->email = $this->input->post('email');
 			$cliente->web = strtoupper(trim($this->input->post('website')));
 			$cliente->telefono = strtoupper(trim($this->input->post('phone')));
-			$cliente->fax = strtoupper(trim($this->input->post('fax')));
+			$cliente->diasCredito = strtoupper(trim($this->input->post('diasCredito')));
 			$cliente->idDocumentoTipo = $this->input->post('tipo_doc');
 			$cliente->idClientetipo = $this->input->post('clientetipo');
 			$cliente->autor = $this->session->userdata('user_id');
@@ -53,9 +53,8 @@ class Clientes extends CI_Controller
 			if ($id==0) {
 				$checkCliente = $this->chekSaveCliente($cliente->documento,$cliente->nombreCliente);
 			} else {
-				$checkCliente = $this->chekUpdateCliente($cliente->documento,$cliente->nombreCliente);
+				$checkCliente = false;//$this->chekUpdateCliente($cliente->documento,$cliente->nombreCliente);
 			}
-			
 			if ($checkCliente == false) {
 				$id = $this->Cliente_model->storeCliente($id ,$cliente);
 				$res = new stdclass();

@@ -14,7 +14,7 @@ function mostrarModal(fila)
     asignarselect(fila.clientetipo,"#clientetipo")
     $("#direccion").val(fila.direccion)
     $("#phone").val(fila.telefono)
-    $("#fax").val(fila.fax)
+    $("#diasCredito").val(fila.diasCredito)
     $("#email").val(fila.email)
     $("#website").val(fila.web)
 
@@ -93,6 +93,7 @@ function retornarTablaClientes()
                 sortable:true,
                 visible:false,
                 searchable: false,
+                
             },
             {
                 field:"web",
@@ -109,11 +110,11 @@ function retornarTablaClientes()
                 searchable: false,
             },
             {
-                field:"fax",
-                title:"Fax",
+                field:"diasCredito",
+                title:"Días Credito",
                 sortable:true,
-                visible:false,
                 searchable: false,
+                align: 'right',
             },
             {
                 field:"fecha",

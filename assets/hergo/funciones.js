@@ -524,6 +524,15 @@ function validarCliente(tipo) {
           }
         }
       },
+      diasCredito: {
+        validators: {
+          between: {
+            min: 0,
+            max: 1000,
+            message: 'Igrese número de días de Crédito para el cliente'
+          }
+        }
+      },
       phone: {
         validators: {
           between: {

@@ -61,6 +61,16 @@
                       </div>
                     </div>
                   </div>
+                  <!-- diasCredito -->
+                  <div class="form-group">
+                    <label class="col-md-3 col-lg-3 control-label">Tiempo Crédito</label>  
+                    <div class="col-md-9 col-lg-9 inputGroupContainer">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="fas fa-clock"></i></span>
+                        <input name="diasCredito" id="diasCredito" placeholder="Tiempo de crédito del cliente" class="form-control" type="number" />
+                      </div>
+                    </div>
+                  </div>
                   <!-- Direccion-->
                   <div class="form-group">
                     <label class="col-md-3 col-lg-3 control-label">Direccion</label>  
@@ -78,16 +88,6 @@
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
                         <input name="phone" id="phone" placeholder="Telefono de Cliente" class="form-control" type="number">
-                      </div>
-                    </div>
-                  </div>
-                   <!-- Fax -->
-                  <div class="form-group">
-                    <label class="col-md-3 col-lg-3 control-label">Fax</label>  
-                    <div class="col-md-9 col-lg-9 inputGroupContainer">
-                      <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-                        <input name="fax" id="fax" placeholder="Fax" class="form-control" type="number">
                       </div>
                     </div>
                   </div>

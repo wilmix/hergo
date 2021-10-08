@@ -10,7 +10,7 @@ class Cliente_model extends CI_Model
 	}
 	public function mostrarclientes_model()
 	{
-		$sql="SELECT c.idCliente, d.documentotipo, c.documento, c.nombreCliente, cl.clientetipo, c.direccion, c.email, c.web, c.telefono, c.fax, c.fecha, Concat(u.first_name,' ',u.last_name) as autor
+		$sql="SELECT c.idCliente, d.documentotipo, c.documento, c.nombreCliente, cl.clientetipo, c.direccion, c.email, c.web, c.telefono, c.diasCredito, c.fecha, Concat(u.first_name,' ',u.last_name) as autor
 		FROM clientes c
 		LEFT JOIN documentotipo d
 		ON c.idDocumentoTipo=d.idDocumentoTipo
