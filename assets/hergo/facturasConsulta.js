@@ -186,13 +186,13 @@ function retornarTablaFacturacion()
                 align: 'center',
             },
             {
-                field:'vendedor',
-                title:"Vendedor",
-                sortable:true,
+                field:'tipoPago',
+                title:"Tipo Pago",                
+                //sortable:true,
                 align: 'center',
                 filter: {
-                    type: "select",
-                    data: datosselect[1]
+                    type: 'select',
+                    data: datosselect[4]
                 }
             },
             {
@@ -218,7 +218,17 @@ function retornarTablaFacturacion()
                 searchable: false,
                 //visible:false,
                 formatter:printPago
-            },   
+            },  
+            {
+                field:'vendedor',
+                title:"Vendedor",
+                sortable:true,
+                align: 'center',
+                filter: {
+                    type: "select",
+                    data: datosselect[1]
+                }
+            }, 
             {
                 field:'pagadaF',
                 title:"Pagado",
@@ -345,20 +355,24 @@ function restornardatosSelect(res)
     let vendedor = new Array()
     let estado = new Array()
     let moneda = new Array()
+    let tipoPago = new Array()
     let datos =new Array()
     $.each(res, function(index, value){
         cliente.push(value.ClienteFactura)
         vendedor.push(value.vendedor)
         estado.push(value.pagadaF)
         moneda.push(value.moneda)
+        tipoPago.push(value.tipoPago)
     })
-    cliente.sort();
-    vendedor.sort();
+    cliente.sort()
+    vendedor.sort()
+    tipoPago.sort()
     datos.push(cliente.unique())
     datos.push(vendedor.unique())
     datos.push(estado.unique())
     datos.push(moneda.unique())
-    return(datos);
+    datos.push(tipoPago.unique())
+    return(datos)
 }
 Array.prototype.unique = function (a) {
     return function () {

@@ -63,14 +63,14 @@ function retornarTablaPagos()
     agregarcargando();
     $.ajax({
         type:"POST",
-        url: base_url('index.php/Pagos/mostrarPagos'), //******controlador
+        url: base_url('index.php/Pagos/mostrarPagos'),
         dataType: "json",
-        data: {i:ini,f:fin,a:alm}, //**** variables para filtro
+        data: {i:ini,f:fin,a:alm},
     }).done(function(res){
         quitarcargando();
         datosselect= restornardatosSelect(res)
         $("#tpagos").bootstrapTable('destroy');
-        $("#tpagos").bootstrapTable({            ////********cambiar nombre tabla viata
+        $("#tpagos").bootstrapTable({
 
                 data:res,           
                     striped: true,
@@ -164,10 +164,13 @@ function retornarTablaPagos()
                         field: 'tipoPago',            
                         title: 'Tipo',
                         visible:true,
-                        sortable:true,
-                        searchable: false,
                         align: 'center',
                         formatter: tipoPago,
+                        filter: 
+                        {
+                            type: "select",
+                            data: datosselect[3]
+                        }
                     },
                     {   
                         field: 'transferencia',            
@@ -322,23 +325,27 @@ function retornarTablaPagos()
     function restornardatosSelect(res)
     {
 
-    var autor = new Array()
-    var cliente = new Array()
+    let autor = new Array()
+    let cliente = new Array()
     let numPago = new Array()
-    var datos =new Array()
+    let tipoPago = new Array()
+    let datos =new Array()
     $.each(res, function(index, value){
 
         autor.push(value.autor)
         cliente.push(value.nombreCliente)
         numPago.push(value.numPago)
+        tipoPago.push(value.tipoPago)
     })
 
-    autor.sort();
-    cliente.sort();
-    datos.push(autor.unique());
-    datos.push(cliente.unique());
+    autor.sort()
+    cliente.sort()
+    tipoPago.sort()
+    datos.push(autor.unique())
+    datos.push(cliente.unique())
     datos.push(numPago.unique())
-    return(datos);
+    datos.push(tipoPago.unique())
+    return(datos)
     }
 Array.prototype.unique=function(a){
   return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0

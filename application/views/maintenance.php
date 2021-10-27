@@ -1,9 +1,9 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <html>
 <head>
-	<title>Página web en mantenimiento</title>
+	<title>Sistema en mantenimiento</title>
 	<meta charset="utf-8"/>
-	<meta name="description" content="Ejemplo práctico de aplicación del posicionamiento fijo"/>
+	<meta name="description"/>
 	<meta name="author" content="francesc ricart"/>
 	<style>
 		/*TIPOGRAFÍAS*/

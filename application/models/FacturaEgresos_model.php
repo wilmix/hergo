@@ -46,7 +46,8 @@ class FacturaEgresos_model extends CI_Model
 			WHEN f.`pagada` = 0 THEN 'NO PAGADA'
 			WHEN f.`pagada` = 1 THEN 'PAGADA'
 			WHEN f.`pagada` = 2 THEN 'PAGO PARCIAL'
-		END pagadaF, CONCAT(ua.first_name,' ', ua.last_name) emisor
+		END pagadaF, CONCAT(ua.first_name,' ', ua.last_name) emisor,
+		tp.tipoPago
 		FROM factura_egresos fe 
 		INNER JOIN egresos e on e.idegresos=fe.idegresos
 		INNER JOIN factura f on f.idFactura=fe.idFactura
@@ -56,6 +57,7 @@ class FacturaEgresos_model extends CI_Model
 		INNER JOIN datosfactura df on df.idDatosFactura = f.lote
 		INNER JOIN users u on u.id = e.vendedor
 		INNER JOIN users ua ON ua.id = f.autor
+		INNER JOIN tipoPago tp ON tp.id = f.tipoPago
 		WHERE f.fechaFac
 		BETWEEN '$ini' AND '$fin'
 		";        
