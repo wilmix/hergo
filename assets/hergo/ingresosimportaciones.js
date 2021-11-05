@@ -1,6 +1,7 @@
 let glob_factorIVA=0.87;
 let glob_factorRET=0.087;
 let glob_guardar = false
+let validar_proveedor = false
 let loc_almacen;
 let hoy
 let checkTipoCambio = false
@@ -178,6 +179,10 @@ $(document).on("click","#guardarMovimiento",function(){
         swal("Error", "No se puede guardar movimiento", "error")
         return false
     }
+    if (!validar_proveedor) {
+        swal("Error", "No se tiene un proveedor seleccionado", "error")
+        return false;
+    }
     storeIngreso();
 })
 $(document).on("click","#cancelarMovimiento",function(){
@@ -311,7 +316,9 @@ function calcularTotal()
         $("#nombretotaldoc").html("Bs Doc");
         $("#nombretotalsis").html("Bs Sis");        
     }
-    totald += flete
+
+    totald = totald + flete
+
     totald = (Math.round(totald * 100) / 100).toFixed(2);
     total = (Math.round(total * 100) / 100).toFixed(2);
 
@@ -527,7 +534,6 @@ function updateIngreso()
     let tableIngresos=tablatoarray();
     let tabla=JSON.stringify(tableIngresos);
     formData.append('tabla',tabla)
-
     if (tableIngresos.length>0) {
         $.ajax({
             url: base_url("index.php/Ingresos/updateIngreso"),
@@ -751,6 +757,9 @@ $(document).on("change","#almacen_imp",function(){
     alm = $("#almacen_imp").val();
     console.log(alm);
 }); 
+$(document).on("change","#flete",function(){
+    calcularTotal()
+}); 
 
 /*******************CLIENTE*****************/
 $( function() {
@@ -793,3 +802,44 @@ $( function() {
     };
  });
 /******************FIN CLIENTE*************/
+
+/*******************PROVEEDOR*****************/
+$(function () {
+    $("#search_proveedor").autocomplete({
+            minLength: 2,
+            autoFocus: true,
+            source: function (request, response) {
+                $("#cargandocliente").show(150)
+                $("#clientecorrecto").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
+                glob_guardar_cliente = false;
+                $.ajax({
+                    type:"POST",
+                    url: base_url("index.php/Ingresos/searchProveedor"),
+                    dataType: "json",
+                    data: {
+                        search: request.term
+                    },
+                    success: function (data) {
+                        response(data);
+                        $("#cargandocliente").hide(150)
+                    }
+                });
+
+            },
+
+            select: function (event, ui) {
+                validar_proveedor = true
+                $("#clientecorrecto").html('<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>');
+                $("#search_proveedor").val(ui.item.label);
+                $("#idProveedor").val(ui.item.id);
+                return false;
+            }
+        })
+        .autocomplete("instance")._renderItem = function (ul, item) {
+
+            return $("<li>")
+                .append("<a><div>" + item.label + " </div></a>")
+                .appendTo(ul);
+        };
+
+});

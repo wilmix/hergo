@@ -409,7 +409,7 @@ class Ingresos extends CI_Controller
 			$ingreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_imp'));
 			$ingreso->fechamov = date('Y-m-d',strtotime($ingreso->fechamov));
         	$ingreso->moneda = $this->security->xss_clean($this->input->post('moneda_imp'));
-        	$ingreso->proveedor = $this->security->xss_clean($this->input->post('proveedor_imp'));
+        	$ingreso->proveedor = $this->security->xss_clean($this->input->post('idProveedor'));
         	$ingreso->ordcomp = $this->security->xss_clean($this->input->post('ordcomp_imp'));
 			$ingreso->nfact = $this->security->xss_clean($this->input->post('nfact_imp'));
 			$ingreso->tipoDoc = $this->security->xss_clean($this->input->post('tipoDoc'));
@@ -500,7 +500,7 @@ class Ingresos extends CI_Controller
 			$ingreso->fechamov = date('Y-m-d',strtotime($ingreso->fechamov));
 			$ingreso->moneda = $this->security->xss_clean($this->input->post('moneda_imp'));
         	$ingreso->ordcomp = $this->security->xss_clean($this->input->post('ordcomp_imp'));
-		    $ingreso->proveedor = $this->security->xss_clean($this->input->post('proveedor_imp'));
+		    $ingreso->proveedor = $this->security->xss_clean($this->input->post('idProveedor'));
 			$ingreso->nfact = $this->security->xss_clean($this->input->post('nfact_imp'));
 			$ingreso->tipoDoc = $this->security->xss_clean($this->input->post('tipoDoc'));
 			$ingreso->obs = strtoupper($this->security->xss_clean($this->input->post('obs_imp')));

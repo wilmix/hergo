@@ -124,17 +124,17 @@
             <div class="row"> 
               <!-- provedor -->
               <div class="col-xs-12 col-lg-6 col-md-6">
-                <label >Proveedor:</label>
-                  <select  class="form-control " 
-                          data-size="5" data-live-search="true" 
-                          id="proveedor_imp" name="proveedor_imp">
-                  <?php foreach ($proveedor->result_array() as $fila): ?>
-                    <option  value=<?= $fila['idproveedor'] ?> 
-                              <?= ($idproveedor==$fila['idproveedor'])?"selected":"" ?>>
-                              <?= $fila['nombreproveedor'] ?>
-                    </option>
-                  <?php endforeach ?>
-                </select>
+                <label>Proveedor:</label>
+                <span style="margin-left: 10px;display: none;" id="cargandocliente">
+                  <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                </span>
+                <input class="form-control form-control-sm" type="text" id="search_proveedor" name="search_proveedor" value="<?= ($cont)?$dcab->nombreproveedor:''  ?>">
+                <input class="hidden" type="text" readonly="true" name="idProveedor" id="idProveedor" value="<?= ($cont)?$dcab->idproveedor:'0' ?>" >
+                <div style="right: 22px;top:32px;position: absolute;" id="clientecorrecto">
+                  <?= ($cont) ? '<i class="fa fa-check" style="color:#07bf52" aria-hidden="true"></i>'
+                              : '<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>' 
+                  ?>
+                </div>
               </div>
               <!-- tipo nFactura-->
               <div id="tipoNumFactura" >
