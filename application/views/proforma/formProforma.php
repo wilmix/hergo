@@ -120,15 +120,21 @@
           <!-- 2 -->
           <div class="row">
             <div class="form-group col-sm-12 col-md-4">
-              <!-- <label for="codigo">Articulo:</label>
-              <v-select label="label" :filterable="false" :options="articulosList"
-                  @search="onSearch" v-model="selectedart" id="codigoArt" :select-on-key-codes="[9, 13]">
-                  <template slot="no-options">
-                    Busca un artículo..
-                  </template>
-              </v-select> -->
               <label for="articulosArray">Artículo:</label>
-              <v-select :options="articulosArray" id="codigo" label="label" id="value" :select-on-key-codes="[9, 13]" v-model="articulosArraySelected" />
+              <v-select class="style-chooser"
+                        :options="articulosArray" 
+                        id="codigo" 
+                        label="label" 
+                        id="value" 
+                        :select-on-key-codes="[9, 13]"
+                        v-model="articulosArraySelected">
+              <template v-slot:option="option">
+                <div class="optionsVSelect">
+                  <span class="codigoVSelect">{{option.codigo}}</span>
+                  <span class="descpVSelect" >{{ option.descp }}</span>
+                </div>
+              </template>
+            </v-select>
             </div>
             <div class="form-group col-sm-12 col-md-8">
               <card-product :selectedart="selectedart" ></card-product>

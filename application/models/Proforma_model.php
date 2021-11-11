@@ -279,6 +279,8 @@ class Proforma_model extends CI_Model
 	{ 
     	$sql="      SELECT
                         a.idArticulos value,
+                        a.CodigoArticulo codigo,
+                        a.Descripcion descp,
                         concat(a.CodigoArticulo, ' | ', a.Descripcion) label
                     FROM
                         articulos a
