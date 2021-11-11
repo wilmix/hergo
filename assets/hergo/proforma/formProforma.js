@@ -87,6 +87,7 @@ const app = new Vue({
         precioLista:0.00,
         tiempoEntrega:'',
         industria: '',
+        marca:'',
         /* documento */
         id:0,
         btnGuardar:'Guardar',
@@ -229,6 +230,7 @@ const app = new Vue({
         }
         if (this.selectedart && this.cantidad > 0 && this.precioLista > 0) {
           this.selectedart.cantidad = this.cantidad
+          this.selectedart.marcaSigla = this.marca
           this.selectedart.tiempoEntrega = this.tiempoEntrega
           this.selectedart.industria = this.industria
           this.selectedart.precioLista = this.precioLista
@@ -413,7 +415,9 @@ const app = new Vue({
             }).done(function(res){
                 app.selectedart = res
                 app.precioLista = app.moneda == 1 ? app.selectedart.precio : app.selectedart.precioDol
+                app.marca = app.selectedart.marcaSigla
                 app.articulosArraySelected = null
+
             })
           }
       }

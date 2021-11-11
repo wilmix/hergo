@@ -143,12 +143,17 @@
           <!-- 3 -->
           <div class="row">
             <!-- vacio -->
-            <div class="form-group col-sm-0 col-md-2">
-            </div>
+            <!-- <div class="form-group col-sm-0 col-md-2">
+            </div> -->
             <!-- industria -->
             <div class="form-group col-sm-0 col-md-2">
             <label for="industria">Industria:</label>
               <input type="text" class="form-control" v-model="industria" maxlength="6">
+            </div>
+            <!-- marca -->
+            <div class="form-group col-sm-0 col-md-2">
+              <label for="industria">Marca:</label>
+              <input type="text" class="form-control" v-model="marca" maxlength="6">
             </div>
             <!-- TiempoEntrega -->
             <div class="form-group col-sm-0 col-md-2">
