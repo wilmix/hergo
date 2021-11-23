@@ -15,6 +15,13 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function retornar_almacen($id)
+	{
+		$sql="SELECT * from almacenes where idalmacen = $id";
+		
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 	public function retornarArticulos() {
 		$sql="SELECT idArticulos, CodigoArticulo,Descripcion
 		FROM articulos_activos

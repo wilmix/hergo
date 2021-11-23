@@ -6,13 +6,11 @@
 class ReportKardexCliente extends CI_Controller {
   public function index($cliente,$alm,$ini,$fin,$mon) {
       //CARGAR MODELO
-        $alm = $alm == 0 ? '' : $alm;
+      $alm = $alm == 0 ? '' : $alm;
       $this->load->model('Reportes_model');
       $lineas = $this->Reportes_model->kardexIndividualCliente($cliente,$alm,$ini,$fin,$mon)->result();
-
       $cliente = $lineas ? utf8_decode(strtoupper($lineas[0]->nombreCliente)) : '';
-      $alm = $lineas ? utf8_decode(strtoupper($lineas[0]->almacen)) : '';
-
+      $alm = $alm=='' ? 'GENERAL' : $this->Reportes_model->retornar_almacen($alm)->row()->almacen;
      
     //PARAMETROS PARA LA LIBRERIA
     $params = array(
