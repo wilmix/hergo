@@ -8,7 +8,7 @@ class ReportKardexCliente extends CI_Controller {
       //CARGAR MODELO
         $alm = $alm == 0 ? '' : $alm;
       $this->load->model('Reportes_model');
-      $lineas = $this->Reportes_model->kardexIndividualCliente($cliente,$almacen="",$ini,$fin,$mon)->result();
+      $lineas = $this->Reportes_model->kardexIndividualCliente($cliente,$alm,$ini,$fin,$mon)->result();
 
       $cliente = $lineas ? utf8_decode(strtoupper($lineas[0]->nombreCliente)) : '';
       $alm = $lineas ? utf8_decode(strtoupper($lineas[0]->almacen)) : '';
