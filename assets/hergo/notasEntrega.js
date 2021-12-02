@@ -324,6 +324,9 @@ function agregarArticulo() {
 function guardarmovimiento() {
     let valuesToSubmit = $("#form_egreso").serialize()
     let articulos = $("#tablaEditarEgreso").bootstrapTable('getData')
+    articulos.forEach(element => {
+        delete element.Descripcion;
+    });
     let tipoEgreso = $("#tipomov_ne2").text()
     if ($("#_tipomov_ne").val() == 9){
         glob_guardar_cliente = true
