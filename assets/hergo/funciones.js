@@ -418,8 +418,9 @@ function cleanItemImage() {
   $( "#itemImage" ).removeClass( "active" )
   $("#itemImage").html('');
 }
-function dataPicker() {
-	let start = moment().subtract(0, 'year').startOf('year')
+let aYearAgo = moment().subtract(0, 'year').startOf('year')
+function dataPicker(start = aYearAgo) {
+	//let start = moment().subtract(0, 'year').startOf('year')
 	let end = moment().subtract(0, 'year').endOf('year')
 	$(function() {
 

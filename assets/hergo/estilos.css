@@ -247,3 +247,13 @@ input[type=number]::-webkit-outer-spin-button {
   display: block;
   text-align: justify;
 }
+.totalesBG {
+  background-color: #3c8dbc !important;
+  font-weight: bold;
+  color: white;
+}
+.subTotalesBG {
+  background-color: #95bad1 !important;
+  color: rgb(58, 57, 57);
+  font-weight: 600;
+}
