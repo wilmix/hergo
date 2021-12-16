@@ -614,7 +614,7 @@ var vmPago = new Vue({
             //this.selectClient(this.porPagar)
             if(this.porPagar.length>0)
             {                
-                if(this.porPagar.map((el) => el.nFactura).indexOf(row.nFactura)>=0)
+                if(this.porPagar.map((el) => el.idFactura).indexOf(row.idFactura)>=0)
                 {
                     swal("Atencion", "Esta factura ya fue agregada","info");
                     return false;
