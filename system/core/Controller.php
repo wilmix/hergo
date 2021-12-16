@@ -121,6 +121,7 @@ class CI_Controller {
 			base_url("assets/dist/css/skins/skin-red.min.css"),
 			base_url("assets/dist/css/skins/skin-purple.min.css"),
 			base_url("assets/dist/css/skins/skin-yellow.min.css"),
+			'https://cdn.datatables.net/fixedheader/3.2.0/css/fixedHeader.dataTables.min.css'
 
 		);
 		$this->cabecera_script=array(

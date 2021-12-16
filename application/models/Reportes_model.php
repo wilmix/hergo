@@ -175,40 +175,7 @@ class Reportes_model extends CI_Model
 		}
 		return $res;
 	}
-	public function facturasPendientesPagoNew($almacen, $ini, $fin){
-		$res = $this->getFacturasPendientesPagoNew($almacen, $ini, $fin);
-		$aux = 0;
-		$auxD = 0;
-		foreach ($res as $line) {
-				if ($line->id == NULL && $line->cliente == NULL) {
-					$line->lote = '';
-					$line->nFactura = '';
-					$line->fechaFac = '';
-					$line->vendedor = '';
-					$line->almacen = '';
-					$line->cliente = 'TOTAL GENERAL';
-					$line->saldo = $line->total - $line->montoPagado;
-					$line->saldoDol = $line->totalFacDol - $line->montoPagoDol;
-				} elseif ($line->id == NULL) {
-					$line->lote = '';
-					$line->nFactura = '';
-					$line->fechaFac = '';
-					$line->vendedor = '';
-					$line->almacen = '';
-					$line->cliente = 'SUBTOTAL: ' . $line->cliente;
-					$line->saldo = $line->total - $line->montoPagado;
-					$line->saldoDol = $line->totalFacDol - $line->montoPagoDol;
-				} else {
-					$line->cliente = $line->cliente;
-					$line->saldo = $aux + $line->total - $line->montoPagado;
-					$line->saldoDol = $auxD + $line->totalFacDol - $line->montoPagoDol;
-				}
-				$aux = $line->id == NULL ? 0 : $aux + $line->total - $line->montoPagado;
-				$auxD = $line->id == NULL ? 0 : $auxD + $line->totalFacDol - $line->montoPagoDol;
-		}
-		return $res;
-	}
-	public function getFacturasPendientesPagoNew($almacen, $ini, $fin)
+	public function getFacturasPendientesPago($almacen, $ini, $fin)
 	{
 		$sql="SELECT
 			id,

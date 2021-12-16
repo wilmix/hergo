@@ -31,7 +31,7 @@ function getFPP() {
 				[10, 25, 50, -1],
 				['10 filas', '25 filas', '50 filas', 'Todo']
 			],
-			pageLength: 10,
+			pageLength: -1,
             createdRow: function( row, data, dataIndex ) {
                 if (data['id'] == null && data['cliente'] != "TOTAL GENERAL" ) {
                     $(row).addClass( 'subTotalesBG' );
@@ -44,6 +44,7 @@ function getFPP() {
 					data: 'id',
 					title: 'id',
 					className: 'text-center',
+					sorting: false,
                     visible: false
 				},
                 {
@@ -119,7 +120,7 @@ function getFPP() {
 					extend: 'copy',
 					text: '<i class="fas fa-copy" style="font-size:18px;"> </i>',
 					titleAttr: 'Configuracion',
-					header: false,
+					header: true,
 					title: null,
 					exportOptions: {
 						columns: [':visible'],
@@ -147,12 +148,6 @@ function getFPP() {
 					}
 				},
 				{
-					text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
-					action: function (e, dt, node, config) {
-						getFPP()
-					}
-				},
-				{
 					extend: 'collection',
 					text: '<i class="fa fa-cogs" aria-hidden="true" style="font-size:18px;"></i>',
 					titleAttr: 'Configuracion',
@@ -176,6 +171,14 @@ function getFPP() {
 
 					]
 				},
+				{
+					text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
+					action: function (e, dt, node, config) {
+						//table.state.clear()
+						getFPP()
+					}
+				},
+
 			],
 			order: [],
 			fixedHeader: {
@@ -183,7 +186,7 @@ function getFPP() {
 				footer: true
 			},
 			//paging: false,
-			//responsive: true,
+			responsive: true,
 			language: {
 				buttons: {
 					colvisRestore: "Restaurar",
@@ -216,13 +219,40 @@ function getFPP() {
 					"previous": "Anterior"
 				},
 			},
-
+			/* initComplete: function() {
+				this.api().columns([4,9,11]).every(function() {
+					let column = this;
+					let select = $('<select><option value=""></option></select>')
+						.appendTo($(column.header()))
+						.on('change', function() {
+							let val = $.fn.dataTable.util.escapeRegex(
+								$(this).val()
+							);
+							 
+								column
+								.search(val ? '^' + val + '$' : '', true, false)
+								.draw();
+						});
+					//Este codigo sirve para que no se active el ordenamiento junto con el filtro
+					$(select).click(function(e) {
+						e.stopPropagation();
+					});
+					column.data().unique().sort().each(function(d, j) {
+							select.append('<option value="' + d + '">' + d + '</option>')
+					});
+				});
+			}, */
+			aoColumnDefs: [
+			 { "bSearchable": false, "aTargets": [ 0,1 ] }
+		   ] 
 		});
+		//table.columns.adjust();
 		quitarcargando();
 	}).fail(function (jqxhr, textStatus, error) {
 		let err = textStatus + ", " + error;
 		console.log("Request Failed: " + err);
 	});
+	
 }
 
 const pro = new Vue({
