@@ -41,7 +41,7 @@ class Facturas extends CI_Controller
 
 	public function EmitirFactura()
 	{
-		$this->accesoCheck(220);
+		$this->accesoCheck(22);
 		$this->titles('EmitirFactura','Emitir','Facturas');
 		$this->datos['foot_script'][]=base_url('assets/hergo/facturas.js') .'?'.rand();
 		$this->datos['foot_script'][]=base_url('assets/hergo/vistaPreviaFacturacion/principal.js') .'?'.rand();

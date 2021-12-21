@@ -32,15 +32,15 @@ class Egresos extends CI_Controller
 	public function crear($tipo)
 	{
 		if ($tipo == 'notaEntrega') {
-			$this->accesoCheck(170);
+			$this->accesoCheck(17);
 			$this->titles('NotaEntrega','Nota de Entrega','Egresos');
 			$this->datos['idegreso']=7;
 		} else if($tipo == 'ventaCaja') {
-			$this->accesoCheck(160);
+			$this->accesoCheck(16);
 			$this->titles('VentaCaja','Ventas Caja','Egresos');
 			$this->datos['idegreso']=6;
 		} else if ($tipo == 'baja'){
-			$this->accesoCheck(180);
+			$this->accesoCheck(18);
 			$this->titles('Baja','Baja de Producto','Egresos');
 			$this->datos['idegreso']=9;
 		}
