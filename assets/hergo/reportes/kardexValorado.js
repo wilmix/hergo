@@ -184,6 +184,14 @@ function agregarTabla(res , nombre) {
                 //footerFormatter: saldo
             },
             {
+                field: '_cpp',
+                title: 'CPP',
+                align: 'right',
+                formatter: operateFormatter3,
+                //visible:false,
+                //footerFormatter: cpp
+            },
+            {
                 field: '_total',
                 title: 'Total',
                 align: 'right',
@@ -191,14 +199,7 @@ function agregarTabla(res , nombre) {
                 //footerFormatter: total
             },
             
-            {
-                field: '_cpp',
-                title: 'CPP',
-                align: 'right',
-                formatter: costoPromedio4,
-                visible:false,
-                //footerFormatter: cpp
-            },
+            
         ]
       });
 }
