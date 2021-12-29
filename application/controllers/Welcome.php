@@ -2,24 +2,40 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Welcome extends CI_Controller {
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model("Welcome_model");
+	}
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/user_guide/general/urls.html
-	 */
 	public function index()
 	{
-		$this->load->view('welcome_message');
+		$result = $this->Welcome_model->kardexByCode(1,0,'2021-01-01','2021-12-31');
+		$dateNegative = null;
+		$n = 0;
+		foreach ($result as $value) {
+			//echo $value->codigo.'<br>';
+			if($value->operacion == '-' && $value->cantidadSaldo < 0 && isset($dateNegative)){
+				continue;
+			}
+			if($value->operacion == '-' && $value->cantidadSaldo < 0 ){
+				$dateNegative = $value->fechakardex;
+				//print_r($value->id);
+				//echo'<br>';
+				continue;
+			}
+			else if ($value->operacion == '+' && $value->cantidadSaldo>=0 && isset($dateNegative)) {
+				$value->newDate = $dateNegative;
+				//print_r($value);
+				$n = $n +1;
+				echo "$n - AL ID: $value->id CAMBIAR LA FECHA DE $value->fechakardex A $value->newDate";
+				echo'<br>';
+
+			}
+			$dateNegative = null;
+			
+			
+		}
+
 	}
 }
