@@ -22,7 +22,7 @@ class Pagos_model extends CI_Model  ////////////***** nombre del modelo
 		INNER JOIN moneda m ON m.`id` = p.`moneda`
 		INNER JOIN almacenes a ON a.`idalmacen` = p.`almacen`
 		INNER JOIN tipoPago tp ON tp.`id`= p.`tipoPago`
-		WHERE p.fecha
+		WHERE p.fechaPago
 		BETWEEN '$ini' AND '$fin' AND p.almacen like '%$alm'
 		-- AND f.`anulada` = 0
 		GROUP BY p.`idPago`
