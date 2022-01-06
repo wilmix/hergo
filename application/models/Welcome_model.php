@@ -10,9 +10,17 @@ class Welcome_model extends CI_Model
 	}
     public function kardexByCode($alm,$mon,$ini,$fin) 
 	{ 
-			$sql="CALL kardexByCode('$alm','$mon','$ini','$fin');";
-
-		$query=$this->db->query($sql)->result();		
-		return $query;
+		$sql="CALL kardexByCode('$alm','$mon','$ini','$fin');";
+		mysqli_next_result( $this->db->conn_id );
+		$query=$this->db->query($sql);	
+		$res = $query->result();
+		$query->next_result(); 
+		$query->free_result(); 
+		return $res;
+	}
+	public function update_date($id, $data)
+	{
+		$this->db->where('idIngresos', $id);
+		$this->db->update('ingresos', $data);
 	}
 }

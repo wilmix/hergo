@@ -8,34 +8,38 @@ class Welcome extends CI_Controller {
 		$this->load->model("Welcome_model");
 	}
 
-	public function index()
+	public function cambiarFechaKardex()
 	{
 		$result = $this->Welcome_model->kardexByCode(1,0,'2021-01-01','2021-12-31');
 		$dateNegative = null;
+		$data =[];
 		$n = 0;
 		foreach ($result as $value) {
-			//echo $value->codigo.'<br>';
+			if ($value->idDetalle == '') {
+				continue;
+			}
+			if ($value->operacion == '+' && $value->tipo == 'II') {
+				continue;
+			}
 			if($value->operacion == '-' && $value->cantidadSaldo < 0 && isset($dateNegative)){
 				continue;
 			}
 			if($value->operacion == '-' && $value->cantidadSaldo < 0 ){
 				$dateNegative = $value->fechakardex;
-				//print_r($value->id);
-				//echo'<br>';
 				continue;
 			}
-			else if ($value->operacion == '+' && $value->cantidadSaldo>=0 && isset($dateNegative)) {
+			else if ($value->operacion == '+'  && isset($dateNegative)) {
 				$value->newDate = $dateNegative;
-				//print_r($value);
 				$n = $n +1;
-				echo "$n - AL ID: $value->id CAMBIAR LA FECHA DE $value->fechakardex A $value->newDate";
+				$data = array(
+					'fechaIngreso' => $value->newDate
+				);
+				$this->Welcome_model->update_date($value->id, $data);
+				echo "$n - $value->codigo -  AL ID: $value->id CAMBIAR LA FECHA DE $value->fechakardex A $value->newDate";
 				echo'<br>';
-
 			}
 			$dateNegative = null;
-			
-			
+			$data =[];
 		}
-
 	}
 }
