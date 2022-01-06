@@ -423,13 +423,16 @@ class Ingresos extends CI_Controller
 			$ingreso->tipoCambio=$tipocambio->tipocambio;
 
 			$ingreso->autor=$this->session->userdata('user_id');
-			//$ingreso->fecha = date('Y-m-d H:i:s');
+			$ingreso->fecha = date('Y-m-d H:i:s');
+			$ingreso->fechaIngreso = $ingreso->fechamov;
+			$gestion= $this->Ingresos_model->getGestionActual()->gestionActual;
 
-			$gestion= date("Y", strtotime($ingreso->fechamov));
+			//$gestion= date("Y", strtotime($ingreso->fechamov));
 			$ingreso->gestion = $gestion;
 			$ingreso->nmov = $this->Ingresos_model->retornarNumMovimiento($ingreso->tipomov,$gestion,$ingreso->almacen);
 
 			$id = $this->Ingresos_model->storeIngreso($ingreso);
+
 
 			if($id)
         	{
