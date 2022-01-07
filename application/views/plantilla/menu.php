@@ -212,8 +212,19 @@
                 <li class="roles"><a href="<?php echo base_url("index.php/Roles/roles") ?>"><i class="fas fa-lock"></i> Roles</a></li>
               </ul>
             </li>
-            <!-- Novedades -->
-            <li class=""><a href="<?php echo base_url("timeline") ?>"> Novedades <small class="label pull-right bg-green"> new </small></a></li>
+            <!-- Gestiones Anteriores -->
+            <li class="treeview">
+              <a href="#"><i class="fa fa-arrow-left"></i> <span>Gestiones Anteriores</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li class="usuarios"><a href="https://2021.hergo.app/" target="_blank"><i class="fa fa-arrow-circle-left"></i>Gestión 2021</a></li>
+                <li class="create_user"><a href="https://2020.hergo.app/" target="_blank"><i class="fa fa-arrow-circle-left"></i>Gestión 2020</a></li>
+                <li class="roles"><a href="https://2019.hergo.app/" target="_blank"><i class="fa fa-arrow-circle-left"></i>Gestión 2019</a></li>
+              </ul>
+            </li>
           </ul>
           <!-- /.sidebar-menu -->
         </section>
