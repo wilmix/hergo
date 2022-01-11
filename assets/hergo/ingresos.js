@@ -448,6 +448,7 @@ function cellStyle(value, row, index) {
 }
 function retornarTablaIngresos() {
     ini = iniciofecha.format('YYYY-MM-DD')
+    ini = '2021-12-23'
     fin = finfecha.format('YYYY-MM-DD')
     alm = $("#almacen_filtro").val()
     tipoingreso = $("#tipo_filtro").val()
