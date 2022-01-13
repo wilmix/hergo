@@ -27,6 +27,12 @@
           <!-- Navbar Right Menu -->
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
+              <!-- email  -->
+            <li class="dropdown messages-menu">
+              <a href="https://webmail.hergo.com.bo/" target="_blank" class="dropdown-toggle" aria-expanded="true">
+                <i class="fa fa-envelope-o"></i>
+              </a>
+            </li>
             <!-- Tipo de cambio -->
               <li class="dropdown notifications-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">

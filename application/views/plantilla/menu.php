@@ -164,17 +164,18 @@
                 <li class="listaPrecios"><a href="<?php echo base_url("reportes/listaPrecios") ?>">Lista de Precios</a></li>
                 <li class="saldosActuales"><a href="<?php echo base_url("reportes/saldosActuales") ?>">Saldos Resumen</a></li>
                 <li class="saldosActualesItems"><a href="<?php echo base_url("reportes/saldosActualesItems") ?>">Saldos Actuales Items</a></li>
-                <li class="facturasPendietesPago"><a href="<?php echo base_url("reportes/facturasPendietesPago") ?>">Facturas Pendientes Pago</a></li>
+                <li class="FacturasPendientesPago"><a href="<?php echo base_url("reports/FacturasPendientesPago") ?>">Facturas Pendientes Pago<small class="label pull-right bg-green">new</small></a></li>
+                <li class="facturasPendietesPago"><a href="<?php echo base_url("reportes/facturasPendietesPago") ?>"><del>Facturas Pendientes Pago</del></a></li>
                 <li class="resumenVentasLineaMes"><a href="<?php echo base_url("reportes/resumenVentasLineaMes") ?>">Resumen de Ventas Linea Mes</a></li>
                 <li class="notasEntregaPorFacturar"><a href="<?php echo base_url("reportes/notasEntregaPorFacturar") ?>">Notas de Entrega por Facturar</a></li>
                 <li class="facturacionClientes"><a href="<?php echo base_url("reportes/facturacionClientes") ?>">Facturacion Clientes</a></li>
-                <li class="diarioIngresos"><a href="<?php echo base_url("reportes/diarioIngresos") ?>">Diario de Ingreso</a></li>
+                <!-- <li class="diarioIngresos"><a href="<?php echo base_url("reportes/diarioIngresos") ?>">Diario de Ingreso</a></li> -->
                 <li class="libroVentas"><a href="<?php echo base_url("reportes/libroVentas") ?>">Libro de Ventas</a></li>
                 <li class="kardexIndividualValorado"><a href="<?php echo base_url("reportes/kardexIndividualValorado") ?>">Kardex Individual Valorado</a></li>
                 <li class="kardexIndividualCliente"><a href="<?php echo base_url("reportes/kardexIndividualCliente") ?>">Kardex Individual Clientes</a></li>
-                <li class="estadoVentasCostoItem"><a href="<?php echo base_url("reportes/estadoVentasCostoItem") ?>">Estado de Ventas y Costos</a></li>
-                <li class="estadoVentasCostoItemNew"><a href="<?php echo base_url("reportes/estadoVentasCostoItemNew") ?>">Estado de Ventas y Costos<small class="label pull-right bg-green">new</small></a></li>
-                <li class="pruebaKardex"><a href="<?php echo base_url("reportes/pruebaKardex") ?>">Prueba Kardex<small class="label pull-right bg-green">new</small></a></li>
+                <!-- <li class="estadoVentasCostoItem"><a href="<?php echo base_url("reportes/estadoVentasCostoItem") ?>">Estado de Ventas y Costos</a></li> -->
+                <li class="estadoVentasCostoItemNew"><a href="<?php echo base_url("reportes/estadoVentasCostoItemNew") ?>">Estado de Ventas y Costos</a></li>
+                <li class="pruebaKardex"><a href="<?php echo base_url("reportes/pruebaKardex") ?>">Prueba Kardex</a></li>
                 <li class="ventasClientesItems"><a href="<?php echo base_url("reportes/ventasClientesItems") ?>">Movimientos Item Cliente</a></li>
                 <li class="reporteClienteItems"><a href="<?php echo base_url("reportes/reporteClienteItems") ?>">Movimientos Cliente Item</a></li>
                 <li class="reporteIngresos"><a href="<?php echo base_url("reportes/reporteIngresos") ?>">Reporte Ingresos</a></li>
