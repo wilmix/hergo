@@ -70,7 +70,7 @@ class Ingresos_model extends CI_Model
                     INNER JOIN tipocambio tc
                     ON i.fechamov=tc.fecha
                     WHERE i.fechamov BETWEEN '$ini' AND '$fin'
-                    and (i.gestion) = (SELECT gestionActual FROM `config`)
+                    -- and (i.gestion) = (SELECT gestionActual FROM `config`)
                     AND i.almacen LIKE '%$alm' AND t.id LIKE '%$tin'
                     GROUP BY i.idIngresos 
             ORDER BY i.nmov DESC
