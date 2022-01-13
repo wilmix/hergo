@@ -73,9 +73,8 @@ class Ingresos_model extends CI_Model
                     -- and (i.gestion) = (SELECT gestionActual FROM `config`)
                     AND i.almacen LIKE '%$alm' AND t.id LIKE '%$tin'
                     GROUP BY i.idIngresos 
-            ORDER BY i.nmov DESC
+                    ORDER BY i.gestion DESC, i.nmov DESC
             ";
-            
         }
         else
         {
