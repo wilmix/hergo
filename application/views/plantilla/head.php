@@ -34,6 +34,6 @@
       <link type="text/css" rel="stylesheet" href="<?php echo base_url("assets/hergo/print.css") ?>" media="print">
       <link type="text/css" rel="stylesheet" href="<?= base_url('assets/plugins/steps/css/jquery.steps.css') ?>" />
       <link type="text/css" rel="stylesheet" href="<?= base_url('assets/plugins/steps/css/main.css') ?>" />
-      <link type="text/css" rel="stylesheet" href="'https://cdn.datatables.net/fixedheader/3.2.0/css/fixedHeader.dataTables.min.css'" /> 
+      <link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.2.0/css/fixedHeader.dataTables.min.css" /> 
       
   </head>
