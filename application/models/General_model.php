@@ -127,6 +127,27 @@ class General_model extends CI_Model
         $query=$this->db->query($sql);	
 		return $query->row();
     }
-
-
+    public function getCantidadNotasEntregaPendientes($user)
+	{ 
+        //$user = 25;
+    	$sql="  SELECT
+                    count(distinct(e.idegresos)) pendientes
+                FROM
+                    egresos e
+                WHERE
+                    e.`estado` <> 1
+                    AND e.tipomov = 7
+                    AND e.anulado = 0
+                    AND e.fechamov > '2010-01-01'
+                    AND e.autor = $user
+                ";
+        $query=$this->db->query($sql);	
+		return $query->row();
+    }
+    public function getGestionActual()
+    {
+        $sql="SELECT gestionActual FROM config LIMIT 1";
+        $sql=$this->db->query($sql);
+        return $sql->row();
+    }
 }

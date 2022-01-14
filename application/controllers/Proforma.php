@@ -7,6 +7,7 @@ class Proforma extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model("Proforma_model");
+		$this->load->model("General_model");
 	}
 	public function index()
 	{
@@ -42,7 +43,7 @@ class Proforma extends CI_Controller
 	public function store()
 	{
 		$id = $this->input->post('id');
-		$gestion = date("Y", strtotime($this->input->post('fecha')));
+		$gestion = $this->General_model->getGestionActual()->gestionActual;
 		$proforma = new stdclass();
 		$proforma->almacen = $this->input->post('almacen');
 		$proforma->num = $id ? $this->input->post('n') : $this->Proforma_model->getNumMov($gestion,$proforma->almacen);
@@ -71,11 +72,6 @@ class Proforma extends CI_Controller
 
 		$id = $this->Proforma_model->storeProforma($id , $proforma);
 
-		/* if ($id == 0) {
-			$id = $this->Proforma_model->storeProforma($id , $proforma);
-		} else {
-			$id = $this->Proforma_model->updateProforma($id , $proforma);
-		} */
 
 		if($id)
 		{
