@@ -16,10 +16,10 @@ class FacturasPendientesPago extends CI_Controller
     {
         $this->accesoCheck(28);
         $this->titles('PendientesPago','Facturas Pendientes de Pago','Reportes');
-		$this->datos['cabeceras_css'][]='https://cdn.datatables.net/fixedheader/3.2.0/css/fixedHeader.dataTables.min.css';
+		//$this->datos['cabeceras_css'][]='https://cdn.datatables.net/fixedheader/3.2.0/css/fixedHeader.dataTables.min.css';
         
         $this->datos['foot_script'][]=base_url('assets/hergo/reportes/facturasPendientesPagoNew.js') .'?'.rand();
-		$this->datos['foot_script'][]='https://cdn.datatables.net/fixedheader/3.2.0/js/dataTables.fixedHeader.min.js';
+		//$this->datos['foot_script'][]='https://cdn.datatables.net/fixedheader/3.2.0/js/dataTables.fixedHeader.min.js';
         $this->setView('reportes/facturasPendietesPagoNew');
     }
     public function show()
