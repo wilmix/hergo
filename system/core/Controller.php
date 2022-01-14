@@ -80,6 +80,8 @@ class CI_Controller {
 		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 		$this->datos['grupsOfUser'] = $this->ion_auth->in_group('Nacional') ? 'Nacional' : false;
+		$cantidadNotasPendientes = $this->General_model->getCantidadNotasEntregaPendientes($this->datos['user_id_actual'])->pendientes;
+		$this->datos['cantidadNotasEntregaPendientes'] = $cantidadNotasPendientes;
 		$hoy = date('Y-m-d');
 		$tipoCambio = $this->General_model->getTipoCambio($hoy);
 		if ($tipoCambio) {
@@ -148,6 +150,7 @@ class CI_Controller {
 			base_url('assets/plugins/jQueryUI/jquery-ui.min.js'),
 			base_url('assets/plugins/datatables/datatables.min.js'),
 			base_url('assets/plugins/datatables/dataTables.responsive.min.js'),
+			base_url('assets/plugins/datatables/dataTables.fixedHeader.min.js'),
 			base_url('assets/plugins/inputmask/inputmask.js'),
 			base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js'),
 			base_url('assets/plugins/inputmask/jquery.inputmask.js'),
