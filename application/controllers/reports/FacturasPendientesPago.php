@@ -7,8 +7,9 @@ class FacturasPendientesPago extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model("Reportes_model");
+		$this->load->model("reports/FacturasPendientesPago_model");
 		$this->load->model("Ingresos_model");
+		$this->load->model("Reportes_model");
 		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 	}
 
@@ -27,39 +28,43 @@ class FacturasPendientesPago extends CI_Controller
 			$alm=$this->security->xss_clean($this->input->post('alm')); 
 			$ini=$this->security->xss_clean($this->input->post('ini')); 
 			$fin=$this->security->xss_clean($this->input->post('fin')); 
-			$res=$this->Reportes_model->getFacturasPendientesPago($alm, $ini, $fin); 
+			$tipoEgreso=$this->security->xss_clean($this->input->post('tipoEgreso')); 
+			$res=$this->FacturasPendientesPago_model->getFacturasPendientesPago($alm, $ini, $fin,$tipoEgreso); 
 			$aux = 0;
 			$auxD = 0;
 			foreach ($res as $line) {
-					if ($line->id == NULL && $line->cliente == NULL) {
+					if ($line->idFactura == NULL && $line->cliente == NULL) {
 						$line->lote = '';
 						$line->nFactura = '';
+						$line->egreso ='';
 						$line->fechaFac = '';
 						$line->vendedor = '';
 						$line->almacen = '';
 						$line->fechaVencimiento = '';
 						$line->estado = '';
+						$line->diasCredito='';
 						$line->cliente = 'TOTAL GENERAL';
 						$line->saldo = $line->total - $line->montoPagado;
-						$line->saldoDol = $line->totalFacDol - $line->montoPagoDol;
-					} elseif ($line->id == NULL) {
+						//$line->saldoDol = $line->totalFacDol - $line->montoPagoDol;
+					} elseif ($line->idFactura == NULL) {
 						$line->lote = '';
 						$line->nFactura = '';
 						$line->fechaFac = '';
 						$line->vendedor = '';
+						$line->egreso ='';
 						$line->almacen = '';
 						$line->cliente =  $line->cliente;
 						$line->saldo = $line->total - $line->montoPagado;
-						$line->saldoDol = $line->totalFacDol - $line->montoPagoDol;
+						//$line->saldoDol = $line->totalFacDol - $line->montoPagoDol;
 						$line->fechaVencimiento = '';
 						$line->estado = '';
 					} else {
 						$line->cliente = $line->cliente;
 						$line->saldo = $aux + $line->total - $line->montoPagado;
-						$line->saldoDol = $auxD + $line->totalFacDol - $line->montoPagoDol;
+						//$line->saldoDol = $auxD + $line->totalFacDol - $line->montoPagoDol;
 					}
-					$aux = $line->id == NULL ? 0 : $aux + $line->total - $line->montoPagado;
-					$auxD = $line->id == NULL ? 0 : $auxD + $line->totalFacDol - $line->montoPagoDol;
+					$aux = $line->idFactura == NULL ? 0 : $aux + $line->total - $line->montoPagado;
+					//$auxD = $line->idFactura == NULL ? 0 : $auxD + $line->totalFacDol - $line->montoPagoDol;
 			}
 			echo json_encode($res);
 	}

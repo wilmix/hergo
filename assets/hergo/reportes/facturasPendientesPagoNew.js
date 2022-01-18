@@ -19,9 +19,11 @@ function getFPP() {
 		data: {
                 ini:ini,
                 fin:fin,
-                alm:pro.almacen
+                alm:fpp.almacen,
+				tipoEgreso:fpp.tipoEgreso
 		},
 	}).done(function (res) {
+		//console.log(res);
 		table = $('#table').DataTable({
 			data: res,
 			destroy: true,
@@ -33,20 +35,30 @@ function getFPP() {
 			],
 			pageLength: -1,
             createdRow: function( row, data, dataIndex ) {
-                if (data['id'] == null && data['cliente'] != "TOTAL GENERAL" ) {
+                if (data['idFactura'] == null && data['cliente'] != "TOTAL GENERAL" ) {
                     $(row).addClass( 'subTotalesBG' );
                 } else if ( data['cliente'] == "TOTAL GENERAL") {
                     $(row).addClass( 'totalesBG' );
-                }
+                } /* else if ( data['estado'] == "VENCIDA") {
+                    $(row).addClass( 'styleRed' );
+                }  */
             },
 			columns: [
 				{
-					data: 'id',
-					title: 'id',
+					data: 'idFactura',
+					title: 'idFactura',
+					className: 'text-center',
+					sorting: false,
+                    visible: false,
+				},
+				{
+					data: 'idEgresos',
+					title: 'idEgresos',
 					className: 'text-center',
 					sorting: false,
                     visible: false
 				},
+
                 {
 					data: 'almacen',
 					title: 'ALMACEN',
@@ -54,9 +66,18 @@ function getFPP() {
                     visible: false
 				},
 				{
+					data: 'egreso',
+					title: 'Egreso',
+					className: 'text-center',
+					sorting: false,
+                    visible: true,
+					render:linkEgreso
+				},
+				{
 					data: 'nFactura',
 					title: 'Nº FAC',
 					className: 'text-center',
+					render:linkFactura
 				},
 				{
 					data: 'fechaFac',
@@ -110,6 +131,14 @@ function getFPP() {
 					className: 'text-right',
 					sorting: false,
 				},
+				/* {
+					data: null,
+					title: '',
+					//width: '120px',
+					className: 'text-center',
+					sorting: false,
+					render: buttons
+				}, */
 			],
 			stateSave: true,
 			stateSaveParams: function (settings, data) {
@@ -219,29 +248,6 @@ function getFPP() {
 					"previous": "Anterior"
 				},
 			},
-			/* initComplete: function() {
-				this.api().columns([4,9,11]).every(function() {
-					let column = this;
-					let select = $('<select><option value=""></option></select>')
-						.appendTo($(column.header()))
-						.on('change', function() {
-							let val = $.fn.dataTable.util.escapeRegex(
-								$(this).val()
-							);
-							 
-								column
-								.search(val ? '^' + val + '$' : '', true, false)
-								.draw();
-						});
-					//Este codigo sirve para que no se active el ordenamiento junto con el filtro
-					$(select).click(function(e) {
-						e.stopPropagation();
-					});
-					column.data().unique().sort().each(function(d, j) {
-							select.append('<option value="' + d + '">' + d + '</option>')
-					});
-				});
-			}, */
 			aoColumnDefs: [
 			 { "bSearchable": false, "aTargets": [ 0,1 ] }
 		   ] 
@@ -254,11 +260,41 @@ function getFPP() {
 	});
 	
 }
+function linkFactura(value, row, index) {
+	let print = base_url("pdf/Factura/index/") + index.idFactura;
+	return `<a href=${print} target="_blank">${index.nFactura}</a>`
+}
+function linkEgreso(value, row, index) {
+	let print = base_url("pdf/Egresos/index/") + index.idEgresos;
+	return `<a href=${print} target="_blank">${index.egreso}</a>`
+}
+function buttons (data, type, row) {
+	if (row.id>0) {
+		return `
+			<button type="button" class="btn btn-default add">
+				<span class="fa fa-plus" aria-hidden="true">
+				</span>
+			</button>
+			<button type="button" class="btn btn-default see">
+				<span class="fa fa-search" aria-hidden="true">
+				</span>
+			</button>
+		`
+	}
+}
+$(document).on("click", "button.add", function () {
+    let row = getRow(table, this)
+	fpp.addNota(row)
+})
+$(document).on("click", "button.see", function () {
+    let row = getRow(table, this)
 
-const pro = new Vue({
+})
+const fpp = new Vue({
 	el: '#app',
 	data: {
         almacen:document.getElementById("idAlmacenUsuario").value,
+		tipoEgreso:7,
         almacenes: [
             { alm: 'CENTRAL HERGO', value: '1' },
             { alm: 'DEPOSITO EL ALTO', value: '2' },
@@ -266,8 +302,13 @@ const pro = new Vue({
             { alm: 'SANTA CRUZ', value: '4' },
             { alm: 'TODOS', value: '' },
         ],
+		tiposEgreso: [
+            { tipo: 'NOTA DE ENTREGA', value: '7' },
+            { tipo: 'VENTA CAJA', value: '6' },
+            { tipo: 'TODOS', value: '' },
+        ],
 		id:0,
-		firma:false,
+		nota:'',
 		disabled: document.getElementById("nacional").value == '' ? true : false,
 	},
 	mounted() {
@@ -276,13 +317,18 @@ const pro = new Vue({
 		}
 	},
 	methods:{
-		onChangeAlm(){
+		onChangeFilter(){
             getFPP()
         },
 		idNacional(){
 			if (isNacional == "") {
 				console.log('no es nacional');
 			}
+		},
+		addNota(row){
+			console.log(row);
+			fpp.id = row.id
+			$("#addNotaModal").modal("show")
 		},
 	},
 	filters:{

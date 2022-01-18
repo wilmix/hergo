@@ -175,82 +175,95 @@ class Reportes_model extends CI_Model
 		}
 		return $res;
 	}
-	public function getFacturasPendientesPago($almacen, $ini, $fin)
+	public function getFacturasPendientesPago($almacen, $ini, $fin,$tipoEgreso)
 	{
-		$sql="SELECT
-			id,
-			almacen,
-			cliente,
-			lote,
-			nFactura,
-			fechaFac,
-			SUM(total) total,
-			SUM(montoPagado) montoPagado,
-			vendedor,
-			plazopago,
-			SUM(totalFacDol) totalFacDol,
-			SUM(montoPagoDol) montoPagoDol,
-			diasCredito,
-			DATE_ADD(fechaFac,INTERVAL diasCredito DAY) fechaVencimiento,
-			IF(DATE_ADD(fechaFac,INTERVAL diasCredito DAY) < CURDATE() , 'VENCIDA','VIGENTE') estado 
-		FROM
-			(
-				SELECT
-					f.`idFactura` id,
-					a.`almacen`,
-					f.`ClienteFactura` cliente,
-					f.`lote`,
-					f.`nFactura`,
-					f.`fechaFac`,
-					f.`total`,
-					cl.diasCredito,
-					IFNULL(pr.monto, 0) montoPagado,
-					CONCAT(u.`first_name`, ' ', u.`last_name`) vendedor,
-					e.`plazopago`,
-					ROUND(f.`total` / tc.`tipocambio`, 2) totalFacDol,
-					IFNULL(ROUND(pr.montoDolares, 2), 0) montoPagoDol
+		$sql="	SELECT
+					idEgresos,
+					tipomov,
+					concat(sigla, '-', nmov, '/', gestion) egreso,
+					idFactura,
+					almacen,
+					cliente,
+					lote,
+					nFactura,
+					fechaFac,
+					SUM(total) total,
+					SUM(montoPagado) montoPagado,
+					vendedor,
+					plazopago,
+					SUM(totalFacDol) totalFacDol,
+					SUM(montoPagoDol) montoPagoDol,
+					diasCredito,
+					DATE_ADD(fechaFac, INTERVAL diasCredito DAY) fechaVencimiento,
+					IF(
+						DATE_ADD(fechaFac, INTERVAL diasCredito DAY) < CURDATE(),
+						'VENCIDA',
+						'VIGENTE'
+					) estado
 				FROM
-					factura f
-					LEFT JOIN (
+					(
 						SELECT
-							pf.`idPago`,
-							pf.`idFactura`,
-							SUM(pf.`monto`) monto,(SUM(pf.`monto`) / tcp.`tipocambio`) montoDolares
+							e.idegresos idEgresos,
+							e.tipomov,
+							tm.sigla,
+							e.nmov,
+							SUBSTRING(e.gestion, 3, 2) gestion,
+							f.`idFactura`,
+							a.`almacen`,
+							f.`ClienteFactura` cliente,
+							f.`lote`,
+							f.`nFactura`,
+							f.`fechaFac`,
+							f.`total`,
+							cl.diasCredito,
+							IFNULL(pr.monto, 0) montoPagado,
+							CONCAT(u.`first_name`, ' ', u.`last_name`) vendedor,
+							e.`plazopago`,
+							ROUND(f.`total` / tc.`tipocambio`, 2) totalFacDol,
+							IFNULL(ROUND(pr.montoDolares, 2), 0) montoPagoDol
 						FROM
-							pago_factura pf
-							INNER JOIN pago p ON pf.`idPago` = p.`idPago`
-							AND p.`anulado` = 0
-							INNER JOIN tipocambio tcp ON tcp.`fecha` = p.`fechaPago`
+							factura f
+							LEFT JOIN (
+								SELECT
+									pf.`idPago`,
+									pf.`idFactura`,
+									SUM(pf.`monto`) monto,(SUM(pf.`monto`) / tcp.`tipocambio`) montoDolares
+								FROM
+									pago_factura pf
+									INNER JOIN pago p ON pf.`idPago` = p.`idPago`
+									AND p.`anulado` = 0
+									INNER JOIN tipocambio tcp ON tcp.`fecha` = p.`fechaPago`
+								GROUP BY
+									pf.`idFactura`
+							) pr ON f.`idFactura` = pr.idFactura
+							INNER JOIN almacenes a ON a.`idalmacen` = f.`almacen`
+							INNER JOIN factura_egresos fe ON fe.`idFactura` = f.`idFactura`
+							INNER JOIN egresos e ON e.`idegresos` = fe.`idegresos`
+							INNER JOIN users u ON u.`id` = e.`vendedor`
+							INNER JOIN tipocambio tc ON tc.`fecha` = f.`fechaFac`
+							inner join clientes cl on cl.idCliente = f.cliente
+							INNER JOIN tmovimiento tm on tm.id = e.tipomov
+						WHERE
+							f.`fechaFac` BETWEEN '$ini'
+							AND '$fin'
+							AND f.`anulada` = 0
+							AND f.`pagada` <> 1
+							AND f.`almacen` LIKE '%$almacen%'
+							AND e.tipomov LIKE '%$tipoEgreso%'
+							AND f.`nFactura` > 0
 						GROUP BY
-							pf.`idFactura`
-					) pr ON f.`idFactura` = pr.idFactura
-					INNER JOIN almacenes a ON a.`idalmacen` = f.`almacen`
-					INNER JOIN factura_egresos fe ON fe.`idFactura` = f.`idFactura`
-					INNER JOIN egresos e ON e.`idegresos` = fe.`idegresos`
-					INNER JOIN users u ON u.`id` = e.`vendedor`
-					INNER JOIN tipocambio tc ON tc.`fecha` = f.`fechaFac`
-					inner join clientes cl on cl.idCliente = f.cliente
-				WHERE
-					f.`fechaFac` BETWEEN '$ini'
-					AND '$fin'
-					AND f.`anulada` = 0
-					AND f.`pagada` <> 1
-					AND f.`almacen` LIKE '%$almacen%'
-					/* and f.cliente LIKE '710' */
-					AND f.`nFactura` > 0
+							f.`idFactura`
+						ORDER BY
+							f.`ClienteFactura`
+					) tbla
 				GROUP BY
-					f.`idFactura`
-				ORDER BY
-					f.`ClienteFactura`
-			) tbla
-		GROUP BY
-			cliente,
-			id WITH ROLLUP";
+					cliente,
+					idFactura WITH ROLLUP";
 		$query=$this->db->query($sql);		
 		return $query->result();
 	}
 	public function mostrarListaPrecios() 
-	{ //cambiar la consulta
+	{ 
 		$sql="SELECT
 				CodigoArticulo,
 				Descripcion,
@@ -268,7 +281,7 @@ class Reportes_model extends CI_Model
 		return $query;
 	}
 	public function mostrarSaldos() 
-	{ //cambiar la consulta
+	{ 
 		$sql="SELECT 	aa.`idArticulos` id,
 						aa.`CodigoArticulo` codigo,
 						aa.`Descripcion` descripcion,
