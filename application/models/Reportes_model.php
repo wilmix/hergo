@@ -24,8 +24,7 @@ class Reportes_model extends CI_Model
 	}
 	public function retornarArticulos() {
 		$sql="SELECT idArticulos, CodigoArticulo,Descripcion
-		FROM articulos_activos
-		-- WHERE SUBSTRING(CodigoArticulo,1,2)<>'SR'
+		FROM articulos_activos_kardex
 		";
 		$query=$this->db->query($sql);		
 		return $query;
@@ -530,7 +529,7 @@ class Reportes_model extends CI_Model
 	{ 
 	
 			$sql="SELECT a.`idArticulos` id, a.`CodigoArticulo` codigo, a.`Descripcion` descrip, a.`Sigla` unidad
-			FROM articulos_activos a
+			FROM articulos_activos_kardex a
 			WHERE a.`CodigoArticulo` BETWEEN '$a' AND '$b'
 			ORDER BY a.`CodigoArticulo`;";
 		$query=$this->db->query($sql);		
