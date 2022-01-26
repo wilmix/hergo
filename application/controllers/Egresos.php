@@ -141,7 +141,7 @@ class Egresos extends CI_Controller
 
 	public function editarEgresos($id=null)
 	{
-		$this->accesoCheck(17);
+		$this->accesoCheck(43);
 		if(!$this->Egresos_model->puedeeditar($id)) redirect("error");
 
 		$this->datos['foot_script'][]=base_url('assets/hergo/notasEntrega.js');
