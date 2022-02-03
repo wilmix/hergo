@@ -136,6 +136,7 @@ class Traspasos extends CI_Controller
 			$ingreso->fecha = date('Y-m-d H:i:s');
 			$gestion= date("Y", strtotime($ingreso->fechamov));
 			$ingreso->gestion = $gestion;
+			$ingreso->fechaIngreso = $ingreso->fechamov;
 			$ingreso->nmov = $this->Ingresos_model->retornarNumMovimiento($ingreso->tipomov,$gestion,$ingreso->almacen);
 			$articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
 			$ingreso->articulos=$this->convertirTablaIngresos($articulos);
