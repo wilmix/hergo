@@ -67,7 +67,7 @@ class Proforma extends CI_Controller
 		$proforma->glosa = nl2br(strtoupper($this->input->post('glosa')));
 		$proforma->gestion = $gestion;
 		$proforma->autor = $this->session->userdata('user_id');
-		$proforma->updated_at = $id ? date('Y-m-d H:i:s') : 0;
+		$proforma->updated_at = $id ? date('Y-m-d H:i:s') : null;
 		$proforma->items = json_decode($this->input->post('items'));
 
 		$id = $this->Proforma_model->storeProforma($id , $proforma);
