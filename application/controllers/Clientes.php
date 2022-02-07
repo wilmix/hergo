@@ -45,6 +45,7 @@ class Clientes extends CI_Controller
 			$cliente->web = strtoupper(trim($this->input->post('website')));
 			$cliente->telefono = strtoupper(trim($this->input->post('phone')));
 			$cliente->diasCredito = strtoupper(trim($this->input->post('diasCredito')));
+			$cliente->diasCredito = $cliente->diasCredito == '' ? 5 :$cliente->diasCredito;
 			$cliente->idDocumentoTipo = $this->input->post('tipo_doc');
 			$cliente->idClientetipo = $this->input->post('clientetipo');
 			$cliente->autor = $this->session->userdata('user_id');

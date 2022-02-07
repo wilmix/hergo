@@ -67,7 +67,7 @@
                     <div class="col-md-9 col-lg-9 inputGroupContainer">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="fas fa-clock"></i></span>
-                        <input name="diasCredito" id="diasCredito" placeholder="Tiempo de crédito del cliente" class="form-control" type="number" />
+                        <input name="diasCredito" id="diasCredito" placeholder="5" class="form-control" type="text"/>
                       </div>
                     </div>
                   </div>
