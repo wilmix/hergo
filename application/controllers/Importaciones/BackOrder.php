@@ -45,6 +45,7 @@ class BackOrder extends CI_Controller
 			$status = new stdclass();
 			$status->estado = strtoupper($this->input->post('estado'));
 			$status->recepcion = $this->input->post('fecha');
+			$status->recepcion = $status->recepcion == 'Invalid date' ? null : $status->recepcion;
 			$status->embarque = strtoupper($this->input->post('embarque'));
 			$status->status = $this->input->post('status');
 
