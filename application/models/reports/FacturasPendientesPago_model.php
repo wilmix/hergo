@@ -121,4 +121,21 @@ class FacturasPendientesPago_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query->result();
 	}
+    public function storeNote($id, $data)
+	{	
+        if ($id) {
+            $this->db->trans_start();
+                $this->db->where('id', $id);
+                $this->db->update('ordenescompra', $data);
+            $this->db->trans_complete();
+            return ( $this->db->trans_status() === FALSE ) ? false : $id;
+        } else {
+            $this->db->trans_start();
+                $this->db->insert("seguimiento_facturas", $data);
+                $id=$this->db->insert_id();
+            $this->db->trans_complete();
+            return ( $this->db->trans_status() === FALSE ) ? false : $id;
+        }
+    }
+
 }							

@@ -43,18 +43,20 @@
 
   <!-- Modal -->
   <div id="addNotaModal" class="modal fade" role="dialog">
-      <div class="modal-dialog modal-95">
+      <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
           <div class="modal-header">
-              <div class="col-md-12" class="text-center">
-                <h2 class="modal-title text-center">
-                  <span>Seguimiento Facturas por pagar</span>
-                </h2>
-              </div>
-              <div class="col-md-4">
+              <div class="col-md-12">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
+              <div class="col-md-12" class="text-center">
+                <h2 class="modal-title text-center">
+                  <span>Seguimiento Facturas Por Pagar</span>
+                </h2>
+                <h3>{{ title }}</h3>
+              </div>
+             
           </div>
           <div class="modal-body"> 
             <form method="post"  id="modalAsociarFactura">
@@ -62,24 +64,11 @@
 
               <div class="row">
 
-                <div class="form-group col-sm-3 col-md-3">
-                  <strong>N° Factura: </strong>
-                  <input type="text" name="n" class="form-control" >
-                </div>
-                
-                <!-- <div class="form-group col-sm-2 col-md-2">
-                  <strong>Tiempo Credito: </strong>
-                  <input type="number" name="tiempo_credito" class="form-control" v-model="tiempo_credito">
-                </div>
-                
-                <div class="form-group col-sm-2 col-md-2">
-                  <strong>Total Factura: </strong>
-                  <input type="number" name="monto" class="form-control" v-model="totalFacturaC">
+                <div class="form-group col-sm-12 col-md-12">
+                  <strong>Nota: </strong>
+                  <textarea class="form-control" rows="3" name="nota" v-model="nota"></textarea>
                 </div>
 
-                <div class="form-group col-sm-2 col-md-2">
-                  <strong>Saldo: <br>{{montoOrden - totalFacturaC | moneda }} </strong>
-                </div> -->
               </div>
 
 
@@ -87,7 +76,7 @@
           </div>
 
           <div class="modal-footer">
-              <!-- <button type="button" class="btn btn-success" @click="save">Guardar</button> -->
+              <button type="button" class="btn btn-success" @click="save">Guardar</button>
             <button type="button" class="btn btn-default" data-dismiss="modal" >Cerrar</button>
           </div>
         </div>

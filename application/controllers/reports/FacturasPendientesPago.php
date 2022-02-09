@@ -68,5 +68,34 @@ class FacturasPendientesPago extends CI_Controller
 			}
 			echo json_encode($res);
 	}
+	public function store()
+	{
+		if($this->input->is_ajax_request())
+		{
+			$id = $this->input->post('id');
+			$data = new stdclass();
+			$data->idFactura = $this->input->post('idFactura');
+			$data->note = $this->input->post('note');
+			$data->created_by = $this->session->userdata('user_id');
+
+			$id = $data;//$this->FacturasPendientesPago_model->storeNote($id , $data);
+
+			if($id)
+			{
+				$res = new stdclass();
+				$res->status = true;
+				$res->id = $id;
+				$res->data = $data;
+				echo json_encode($res);
+			} else {
+				echo json_encode($id);
+			}
+
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
 
 }
