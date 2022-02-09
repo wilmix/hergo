@@ -164,7 +164,7 @@
                           class="form-control form-control-sm" 
                           id="flete" 
                           name="flete"
-                          value="<?= ($cont)?$dcab->flete:"" ?>" />
+                          value="<?= ($cont)?$dcab->flete:0 ?>" />
               </div>
             </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
             <hr>
