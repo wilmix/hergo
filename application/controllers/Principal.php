@@ -120,4 +120,14 @@ class Principal extends CI_Controller
 		<?php 
 
 	}
+	public function notasPendientes() 
+	{
+		$tipo=$this->security->xss_clean($this->input->post("tipo"));
+		$autor = $this->session->userdata('user_id');
+		//$autor = 25;
+		$res=$this->Dashboard_model->notasPendientes($tipo, $autor);
+		$res=$res->result_array();
+		echo json_encode($res);
+	}
+
 }

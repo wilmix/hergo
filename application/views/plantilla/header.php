@@ -27,20 +27,30 @@
           <!-- Navbar Right Menu -->
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
+              <!-- notificacion Notas Pendientes -->
+              <li class="dropdown notifications-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                  <i class="fa fa-bell-o"></i>
+                  <?= $cantidadNotasEntregaPendientes>0 ?  "<span class='label label-warning'><span>$cantidadNotasEntregaPendientes </span></span>": '' ?>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="header"> <?= $cantidadNotasEntregaPendientes==0 ? '' :  "<b>Tiene:</b> $cantidadNotasEntregaPendientes NE Pendientes de Facturación"?> </li>
+                </ul>
+              </li>
               <!-- email  -->
-            <li class="dropdown messages-menu">
-              <a href="https://webmail.hergo.com.bo/" target="_blank" class="dropdown-toggle" aria-expanded="true">
-                <i class="fa fa-envelope-o"></i>
-              </a>
-            </li>
-            <!-- Tipo de cambio -->
+              <li class="dropdown messages-menu">
+                <a href="https://webmail.hergo.com.bo/" target="_blank" class="dropdown-toggle" aria-expanded="true">
+                  <i class="fa fa-envelope-o"></i>
+                </a>
+              </li>
+              <!-- Tipo de cambio -->
               <li class="dropdown notifications-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                   <i class="fas fa-dollar-sign"></i>
                   <span class="label label-info"></span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li class="header">El tipo de cambio del sistema es 6.96</li>
+                  <li class="header">El tipo de cambio del sistema es <?= $tipoCambio ?></li>
                   <li>
                     <a href="<?php echo base_url("index.php/configuracion/tipoCambio") ?>">
                       <i class="fa fa-refresh text-aqua"></i> Cambiar tipo de cambio
@@ -48,7 +58,6 @@
                   </li>
                 </ul>
               </li>
-              
               <!-- User Account Menu -->
               <li class="dropdown user user-menu">
                 <!-- Menu Toggle Button -->
@@ -80,8 +89,6 @@
                   </li>
                 </ul>
               </li>
-              <!-- Control Sidebar Toggle Button -->
-              
             </ul>
           </div>
         </nav>

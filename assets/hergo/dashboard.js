@@ -8,6 +8,7 @@
     getNotaEntregaHoy()
     getVentaCajaHoy()
     showNegatives()
+    showNotasPendientes()
     //newTable()
     //getCantidadHoy()
 })
@@ -526,6 +527,167 @@ function showNegatives() {
         "emptyTable": "No existen Negativos",
         "info": "Mostrando _START_ a _END_ de _TOTAL_ Negativos",
         "infoEmpty": "No existen Negativos",
+        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+        "infoPostFix": "",
+        "thousands": ",",
+        "lengthMenu": "Mostrar _MENU_ Registros",
+        "loadingRecords": "Cargando...",
+        "processing": "Procesando...",
+        "search": "Buscar:",
+        "zeroRecords": "Sin resultados encontrados",
+        "paginate": {
+            "first": "Primero",
+            "last": "Ultimo",
+            "next": "Siguiente",
+            "previous": "Anterior"
+        },
+      },
+
+		});
+	}).fail(function (jqxhr, textStatus, error) {
+		let err = textStatus + ", " + error;
+		console.log("Request Failed: " + err);
+	});
+}
+function showNotasPendientes() {
+
+  tipo = $("#tipo_filtro").val()
+  tipo = 1
+	$.ajax({
+      url :  base_url('index.php/Principal/notasPendientes'),
+      type : 'POST',
+      "dataSrc": "",
+      dataType: "json",
+      data: {
+              tipo: tipo
+        },
+	}).done(function (res) {
+		table = $('#notasPendietes').DataTable({
+			data: res,
+      responsive: true,
+      destroy: true,
+      dom: 'Bfrtip',
+      pageLength: 5,
+      stateSave: true,
+      order: [],
+			columns: [
+        { 
+            data: 'fechamov',
+            title: 'Fecha',
+        }, 
+        { 
+            data: 'nombreCliente',
+            title: 'Cliente',
+        },
+        { 
+            data: 'n',
+            title: 'Nº',
+
+        },
+        { 
+          data: 'total',
+          title: 'Total',
+
+        },
+
+      ],
+			stateSave: true,
+			stateSaveParams: function (settings, data) {
+				data.order = []
+			},
+			buttons: [
+          
+          
+        {
+            extend: 'copy',
+            text: '<i class="fas fa-copy" style="font-size:18px;"> </i>',
+            titleAttr: 'Copiar',
+            header : false,
+            title : null,
+            exportOptions: {
+                columns: [':visible' ],
+                title: null,
+                modifier: {
+                order: 'current',
+                }
+            }
+        },
+        {
+            extend: 'excel',
+            text: '<i class="fas fa-file-excel" aria-hidden="true" style="font-size:18px;"> </i>',
+            titleAttr: 'Exportar a Excel',
+            autoFilter: true,
+            //messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
+            title: 'Negativos',
+            exportOptions: {
+                columns: ':visible'
+            },
+        },
+        {
+            extend: 'pdf',
+            titleAttr: 'Exportar PDF',
+            title: 'Negativos',
+            text: '<i class="fas fa-print" aria-hidden="true" style="font-size:18px;"></i>',
+        },
+        {
+            text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
+            titleAttr: 'Recargar',
+            action: function ( e, dt, node, config ) {
+              showNegatives()
+            }
+        },
+        {
+            extend: 'collection',
+            text: '<i class="fa fa-cogs" aria-hidden="true" style="font-size:18px;"></i>',
+            titleAttr: 'Configuracion',
+            autoClose: true,
+            buttons: [
+                'pageLength',
+                {
+                    extend: 'colvis',
+                    text: '<i class="fas fa-eye" aria-hidden="true"> Ver/Ocultar</i>',
+                    collectionLayout: 'fixed two-column',
+                    postfixButtons: [ 'colvisRestore' ]
+                },
+                {
+                    text: '<i class="fas fa-redo" aria-hidden="true"> Reestablecer</i>',
+                    className: 'btn btn-link',
+                    action: function ( e, dt, node, config ) {
+                        this.state.clear()
+                        showNegatives()
+                    }
+                },
+
+            ]
+        },
+        
+        
+      ],
+			order: [],
+			fixedHeader: {
+				header: true,
+				footer: true
+			},
+			//paging: false,
+			//responsive: true,
+			language: {
+        buttons: {
+
+            colvisRestore: "Restaurar",
+            copyTitle: 'Información copiada',
+            pageLength: {
+                            _: "VER %d FILAS",
+                            '-1': "VER TODO"
+                        },
+            copySuccess: {
+                            _: '%d lineas copiadas',
+                            1: '1 linea copiada'
+                        },
+        },
+        "decimal": "",
+        "emptyTable": "No existen Notas de entrega Pendientes",
+        "info": "Mostrando _START_ a _END_ de _TOTAL_ Notas",
+        "infoEmpty": "No existen Notas Pendientes",
         "infoFiltered": "(Filtrado de _MAX_ total entradas)",
         "infoPostFix": "",
         "thousands": ",",
