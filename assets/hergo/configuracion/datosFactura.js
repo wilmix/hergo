@@ -21,8 +21,9 @@ $(document).ready(function() {
                     notEmpty: {
                         message: 'Inserte número de autorización'
                     },
-                    numeric: {
-                        message: 'Debe ser de tipo Numérico'
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9_]+$/,
+                        message: 'El código debe ser alfanumérico'
                     }
                 }
             },
