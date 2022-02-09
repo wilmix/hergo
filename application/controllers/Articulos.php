@@ -46,14 +46,14 @@ class Articulos extends CI_Controller
 				$this->libacceso->accesoInt(46);
         		$nom_imagen=$this->subir_imagen($id,$_FILES);
 				$this->Articulo_model->agregarArticulo_model($id,strtoupper($codigo) ,strtoupper($descripcion),$unidad,$marca,$linea,strtoupper($parte),
-				strtoupper($posicion),$autoriza,$proser,$uso,$nom_imagen,$precio,strtoupper($descripcionFabrica));
+				strtoupper($posicion),$autoriza,$proser,$uso,$nom_imagen,strtoupper($descripcionFabrica));
         	}
         	else
         	{
 				$this->libacceso->accesoInt(69);
         		$nom_imagen=$this->subir_imagen($id,$_FILES);
 				$this->Articulo_model->editarArticulo_model($id,strtoupper($codigo),strtoupper($descripcion),$unidad,$marca,$linea,strtoupper($parte),
-				strtoupper($posicion),$autoriza,$proser,$uso,$nom_imagen,$precio,strtoupper($descripcionFabrica));
+				strtoupper($posicion),$autoriza,$proser,$uso,$nom_imagen,strtoupper($descripcionFabrica));
         	}
         }
         $res = new stdclass();

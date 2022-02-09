@@ -51,32 +51,32 @@ class Articulo_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function agregarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen,$precio,$descripcionFabrica)
+	public function agregarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen,$descripcionFabrica)
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
 		$sql="INSERT INTO 
 		articulos (CodigoArticulo, Descripcion, NumParte, idUnidad, idMarca, 
 		idLinea, PosicionArancelaria, idRequisito, ProductoServicio, EnUso, 
-		detalleLargo, Autor, Imagen,precio) 
+		detalleLargo, Autor, Imagen) 
 		VALUES('$codigo','$descripcion','$parte','$unidad','$marca',
 		'$linea','$posicion','$autoriza','$proser','$uso',
-		'$descripcionFabrica','$autor','$nom_imagen', '$precio')";
+		'$descripcionFabrica','$autor','$nom_imagen')";
 		$query=$this->db->query($sql);
 	}
-	public function editarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen,$precio,$descripcionFabrica)
+	public function editarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen,$descripcionFabrica)
 	{
 		$autor=$this->session->userdata('user_id');
 		$fecha = date('Y-m-d H:i:s');
 		if($nom_imagen=="") {
 			$sql="UPDATE articulos SET CodigoArticulo='$codigo', Descripcion='$descripcion', NumParte='$parte', idUnidad='$unidad', 
 			idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito='$autoriza', ProductoServicio='$proser', 
-			EnUso='$uso', detalleLargo='$descripcionFabrica', Autor='$autor',  precio='$precio' WHERE idArticulos=$id";
+			EnUso='$uso', detalleLargo='$descripcionFabrica', Autor='$autor' WHERE idArticulos=$id";
 		}	
 		else {
 			$sql="UPDATE articulos SET CodigoArticulo='$codigo', Descripcion='$descripcion', NumParte='$parte', idUnidad='$unidad', 
 			idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito='$autoriza', ProductoServicio='$proser', 
-			EnUso='$uso', detalleLargo='$descripcionFabrica', Autor='$autor', Imagen='$nom_imagen', precio='$precio' WHERE idArticulos=$id";
+			EnUso='$uso', detalleLargo='$descripcionFabrica', Autor='$autor', Imagen='$nom_imagen' WHERE idArticulos=$id";
 		}
 		$query=$this->db->query($sql);		
 	}
