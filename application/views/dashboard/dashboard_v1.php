@@ -127,14 +127,14 @@
         <div class="col-md-6">
           <div class="box">
             <div class="box-header with-border" name="notasPendientes">
-              <!-- <h3 class="box-title">Mis Notas de Entrega Pendientes de Facturación</h3> -->
+              <h3 class="box-title">Mis Notas de Entrega Pendientes de Facturación</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
               <div class="row">
                 <div class="col-md-12">
                     <div class="chart">
-                      <!-- <table id="notasPendietes" class="table table-hover table-striped " style="width:100%"></table>  --> 
+                      <table id="notasPendietes" class="table table-hover table-striped " style="width:100%"></table>  
                     </div>
                   <!-- /.chart-responsive -->
                 </div>
