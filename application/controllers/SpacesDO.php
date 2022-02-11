@@ -41,7 +41,7 @@ class SpacesDO extends CI_Controller {
     // Upload a file to the Space
     $insert = $client->putObject([
       'Bucket' => 'hergo-space',
-      'Key'    => 'file.txt',
+      'Key'    => 'articulos/file.txt',
       'Body'   => 'el body.',
       'ACL' => 'public-read'
     ]);
