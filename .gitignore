@@ -38,4 +38,4 @@ application/config/config.php
 assets/pagoProveedores
 /qr
 .htaccess
-
+/vendor
