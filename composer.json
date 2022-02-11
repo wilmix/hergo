@@ -12,12 +12,15 @@
 	},
 	"require": {
 		"php": ">=5.2.4",
-		"phpoffice/phpspreadsheet": "^1.14"
+		"phpoffice/phpspreadsheet": "^1.14",
+		"sociallydev/spaces-api": "^3.4",
+		"aws/aws-sdk-php": "^3.209",
+		"league/flysystem-aws-s3-v3": "^2.1"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
 	},
 	"require-dev": {
-		"mikey179/vfsStream": "1.1.*"
+		"mikey179/vfsstream": "1.1.*"
 	}
 }
