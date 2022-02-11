@@ -1,4 +1,7 @@
 .DS_Store
+/vendor/
+/vendor/composer
+/vendor/*
 
 application/cache/*
 !application/cache/index.html
@@ -38,4 +41,6 @@ application/config/config.php
 assets/pagoProveedores
 /qr
 .htaccess
-/vendor
+
+
+vendor/autoload.php

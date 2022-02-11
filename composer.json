@@ -12,7 +12,8 @@
 	},
 	"require": {
 		"php": ">=5.2.4",
-		"phpoffice/phpspreadsheet": "^1.14"
+		"phpoffice/phpspreadsheet": "^1.14",
+		"aws/aws-sdk-php": "^3.209"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
