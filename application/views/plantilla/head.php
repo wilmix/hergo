@@ -35,5 +35,15 @@
       <link type="text/css" rel="stylesheet" href="<?= base_url('assets/plugins/steps/css/jquery.steps.css') ?>" />
       <link type="text/css" rel="stylesheet" href="<?= base_url('assets/plugins/steps/css/main.css') ?>" />
       <link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.2.0/css/fixedHeader.dataTables.min.css" /> 
+
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-FYRHY8R5TX"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-FYRHY8R5TX');
+      </script>
       
   </head>
