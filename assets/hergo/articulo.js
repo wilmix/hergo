@@ -176,7 +176,10 @@ $(document).ready(function(){
 
             }); 
         });
-});/**FIN READY**/
+})
+$(document).on("change", "#is_active", function () {
+    retornarTabla();
+})
 
 /********MODAL ALMACEN EDITAR**********/
 $(document).on("click",".btnnuevo",function(){
@@ -222,12 +225,14 @@ function mostrarModal(fila)
 }
 function retornarTabla()
 {
+    uso = $("#is_active").val()
     agregarcargando();
+
     $.getJSON({
         type:"POST",
         url: base_url('index.php/Articulos/mostrarArticulos'),
         dataType: "json",
-        data: {},
+        data: {uso: uso},
     }).done(function(res){
         quitarcargando();
         $("#tarticulo").bootstrapTable('destroy');

@@ -66,7 +66,9 @@ class Articulos extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-			$res=$this->Articulo_model->mostrarArticulos();
+
+			$uso = $this->input->post("uso");
+			$res=$this->Articulo_model->mostrarArticulos($uso);
 			$res=$res->result_array();
 			echo json_encode($res);
 		}

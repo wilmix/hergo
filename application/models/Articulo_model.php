@@ -15,7 +15,7 @@ class Articulo_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarArticulos()
+	public function mostrarArticulos($uso)
 	{
 		$sql="	SELECT
 					a.idArticulos,
@@ -36,7 +36,7 @@ class Articulo_model extends CI_Model
 					a.idUnidad,
 					a.idMarca,
 					a.idLinea,
-					Concat(us.first_name, ' ', us.last_name) as autor,
+					CONCAT(us.first_name, ' ', us.last_name) AS autor,
 					precio
 				FROM
 					articulos a
@@ -45,8 +45,10 @@ class Articulo_model extends CI_Model
 					INNER JOIN linea l ON a.idLinea = l.idLinea
 					INNER JOIN requisito r ON a.idRequisito = r.idRequisito
 					INNER JOIN users us ON a.Autor = us.id
+				WHERE
+					a.EnUso LIKE '%$uso'
 				ORDER BY
-					a.idArticulos desc";
+					a.idArticulos DESC";
 		
 		$query=$this->db->query($sql);		
 		return $query;
