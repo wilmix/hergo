@@ -23,7 +23,6 @@
         </div>
         <div class="form-group col-sm-6 col-md-2" @change="onChangeFilter()">
             <select class="form-control" 
-                        :disabled="disabled"
                         v-model="tipoEgreso" 
                         name="tipoEgreso">
                 <option v-for="option in tiposEgreso" 
