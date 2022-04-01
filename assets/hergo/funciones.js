@@ -6,6 +6,38 @@ var PermisosUser
 const isAdminGlobal = $('#isAdmin').val()
 const isNacionalGlobal = $('#nacional').val()
 glob_tipoCambio = parseFloat($("#mostrarTipoCambio").text())
+datatableLangage = {
+  buttons: {
+    colvisRestore: "Restaurar",
+    copyTitle: 'Información copiada',
+    pageLength: {
+      _: "VER %d FILAS",
+      '-1': "VER TODO"
+    },
+    copySuccess: {
+      _: '%d lineas copiadas',
+      1: '1 linea copiada'
+    },
+  },
+  "decimal": "",
+  "emptyTable": "No hay información",
+  "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+  "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+  "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+  "infoPostFix": "",
+  "thousands": ",",
+  "lengthMenu": "Mostrar _MENU_ Registros",
+  "loadingRecords": "Cargando...",
+  "processing": "Procesando...",
+  "search": "Buscar:",
+  "zeroRecords": "Sin resultados encontrados",
+  "paginate": {
+    "first": "Primero",
+    "last": "Ultimo",
+    "next": "Siguiente",
+    "previous": "Anterior"
+  },
+}
 permisos()
 
 $(document).ready(function () 

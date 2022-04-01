@@ -56,6 +56,26 @@
                 <li class="cierre"><a href="<?php echo base_url("index.php/cierre") ?>"><i class="fa fa-server"></i> Cierre </a> </li>
               </ul>
             </li>
+            <!-- Articulos Web -->
+            <li class="treeview">
+              <a href="#"><i class="fa fa fa-server"></i> <span>Web</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li class="ConfigArticulosWeb"><a href="<?php echo base_url("web/ConfigArticulosWeb") ?>"><i class="fa fa-industry "></i> Niveles</a></li>
+                <li class="">
+                  <a href="<?php echo base_url("#") ?> " class="disabled">
+                    <i class="fa fa-list-ol ">
+                    </i> Articulos Web 
+                      <span class="pull-right-container">
+                        <small class="label pull-right bg-yellow">en desarrollo</small>
+                      </span>
+                  </a>
+                </li>
+              </ul>
+            </li>
             <!-- Importaciones -->
             <li class="treeview">
               <a href="#"><i class="fa fa fa-truck"></i> <span>Importaciones</span>

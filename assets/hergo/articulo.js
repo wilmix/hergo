@@ -5,6 +5,7 @@ $(document).ready(function(){
    
     retornarTabla()
     permisoArticulos()
+    formItemValidator()
     $("#imagenes").fileinput({
         language: "es",
         showUpload: false,
@@ -12,9 +13,13 @@ $(document).ready(function(){
         maxFileSize: 1024,
       
     });
-    
-     $('#form_articulo').bootstrapValidator({
-             
+   
+})
+$(document).on("change", "#is_active", function () {
+    retornarTabla();
+})
+function formItemValidator() {
+    $('#form_articulo').bootstrapValidator({
         feedbackIcons: {
         valid: 'glyphicon glyphicon-ok',
         invalid: 'glyphicon glyphicon-remove',
@@ -22,164 +27,159 @@ $(document).ready(function(){
         },
         excluded: ':disabled',
         fields: {
-            codigo: {
-                validators: {
-                        /*stringLength: {
-                        min: 6,
-                        max: 6,
-                        message: 'Ingrese cógigo válido'
-                    },*/
+                codigo: {
+                    validators: {
+                            /*stringLength: {
+                            min: 6,
+                            max: 6,
+                            message: 'Ingrese cógigo válido'
+                        },*/
+                        notEmpty: {
+                            message: 'Campo obligatorio'
+                        },
+                        /*regexp: {
+                            regexp: /[A-Z]{2}[0-9]{4}/,
+                            message: 'Formato de código incorrecto'
+                        }*/
+                    }
+                },
+                descripcion: {
+                    validators: {
+                            stringLength: {
+                            min: 3,
+                            message: 'Ingrese descrición válida'
+                            
+                        },
                     notEmpty: {
-                        message: 'Campo obligatorio'
-                    },
-                    /*regexp: {
-                        regexp: /[A-Z]{2}[0-9]{4}/,
-                        message: 'Formato de código incorrecto'
-                    }*/
-                }
-            },
-            descripcion: {
-                validators: {
-                        stringLength: {
-                        min: 3,
-                        message: 'Ingrese descrición válida'
-                        
-                    },
-                   notEmpty: {
-                        message: 'Campo obligatorio'
+                            message: 'Campo obligatorio'
+                        }
+                            
                     }
-                        
-                }
-            },
-            descripcionFabrica: {
-                validators: {
-                        stringLength: {
-                        min: 2,
-                        message: 'Ingrese descrición válida'
-                        
-                    },
-                }
-            },
-            unidad: {
-                validators: {
+                },
+                descripcionFabrica: {
+                    validators: {
+                            stringLength: {
+                            min: 2,
+                            message: 'Ingrese descrición válida'
+                            
+                        },
+                    }
+                },
+                unidad: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Campo obligatorio'
+                        }
+                    }
+                },
+                marca: {
+                    validators: {
                     notEmpty: {
-                        message: 'Campo obligatorio'
+                            message: 'Campo obligatorio'
+                        }
+                        
+                    }
+                },
+                linea: {
+                    validators: {
+                    notEmpty: {
+                            message: 'Campo obligatorio'
+                        }
+                        
+                    }
+                },
+                parte: {
+                    validators: {
+                        stringLength: {
+                            min: 1,
+                        },
+                    }
+                },
+                posicion: {
+                    validators: {                 
+                        stringLength: {
+                            min: 1,
+                        },
+                    }
+                },
+                autoriza: {
+                    validators: {
+                    notEmpty: {
+                            message: 'Campo obligatorio'
+                        }
+                        
+                    }
+                },
+                proser: {
+                    validators: {
+                    notEmpty: {
+                            message: 'Campo obligatorio'
+                        }
+                        
+                    }
+                },
+                uso: {
+                    validators: {
+                    notEmpty: {
+                            message: 'Elija si articulo esta en uso'
+                        }                    
+                    }
+                },             
+                imagen: {
+                    validators: {
+                        file: {
+                            //extension: 'jpeg,jpg,png',
+                            type: 'image/jpeg,image/png',
+                            maxSize: 2097152,   // 2048 * 1024
+                            //message: 'Archivo no válido'
+                        }
+                    }
+                },
+                web:{
+                    validators: {
+                        notEmpty: {
+                            message: 'Campo obligatorio'
+                        }
                     }
                 }
-            },
-            marca: {
-                validators: {
-                  notEmpty: {
-                        message: 'Campo obligatorio'
-                    }
-                    
-                }
-            },
-            linea: {
-                validators: {
-                  notEmpty: {
-                        message: 'Campo obligatorio'
-                    }
-                    
-                }
-            },
-            parte: {
-                validators: {
-                     stringLength: {
-                        min: 1,
-                    },
-                }
-            },
-            posicion: {
-                validators: {                 
-                    stringLength: {
-                        min: 1,
-                    },
-                }
-            },
-            autoriza: {
-                validators: {
-                  notEmpty: {
-                        message: 'Campo obligatorio'
-                    }
-                    
-                }
-            },
-            proser: {
-                validators: {
-                  notEmpty: {
-                        message: 'Campo obligatorio'
-                    }
-                    
-                }
-            },
-            uso: {
-                validators: {
-                  notEmpty: {
-                        message: 'Elija si articulo esta en uso'
-                    }                    
-                }
-            },             
-            imagen: {
-                validators: {
-                     file: {
-                        //extension: 'jpeg,jpg,png',
-                        type: 'image/jpeg,image/png',
-                        maxSize: 2097152,   // 2048 * 1024
-                        //message: 'Archivo no válido'
-                    }
-                }
-            },
-           }
-        })
-        .on('success.form.bv', function(e) {
-            e.preventDefault();
-            let valuesToSubmit = $("#form_articulo").serialize();  
-            let formData = new FormData($('#form_articulo')[0]);  
-            /* for(let pair of formData.entries()) { console.log(pair[0]+ ', '+ pair[1]); }
-            return */
-            $.getJSON({
-                url: base_url("index.php/Articulos/agregarArticulo"),
+        }
+    }).on('success.form.bv', function(e) {
+        e.preventDefault();
+        //let valuesToSubmit = $("#form_articulo").serialize();  
+        let formData = new FormData($('#form_articulo')[0]);  
+        /* for(let pair of formData.entries()) { console.log(pair[0]+ ', '+ pair[1]); }
+        return */
+        $.ajax({
+                url: base_url("index.php/Articulos/addItem"),
                 type: 'POST',
                 data: formData,
                 cache: false,
                 contentType: false,
                 processData: false,
-                success: function (res) {
-                    console.log(res);
-                    if (res.auth == false) {
-                        swal(
-                            'error',
-                            res.msg,
-                            'error'
-                            )
-                            return false
-                    } else if(res.status == true) {
-                        $('#modalarticulo').modal('hide');
-                        resetForm('#form_articulo')
-                        swal(
-                            'Artículo guardado',
-                            '',
-                            'success'
-                            )
-                        retornarTabla()
-                    }
-                }, 
-                error : function (res) {
+                dataType: "json",
+        }).done(function (res) {
+                console.log(res);
+                if(res.status == true) {
+                    $('#modalarticulo').modal('hide');
+                    resetForm('#form_articulo')
                     swal(
-                        'Error',
-                        'El código de artículo ya se encuentra registrado en nuestra bases de datos',
-                        'error'
-                    )
-                    console.log(res);
-                },
-
-            }); 
+                        'Artículo guardado',
+                        `El articulo ${res.item.CodigoArticulo} fue ${res.msg} exitosamente.`,
+                        'success'
+                        )
+                    retornarTabla()
+                }
+        }).error(function (res) {
+            console.log(res);
+            swal(
+                'Error',
+                'El código de artículo ya se encuentra registrado en nuestra bases de datos. <br> ' + res.status,
+                'error'
+            )
         });
-})
-$(document).on("change", "#is_active", function () {
-    retornarTabla();
-})
+     
+    });
+}
 
 /********MODAL ALMACEN EDITAR**********/
 $(document).on("click",".btnnuevo",function(){
@@ -203,7 +203,6 @@ $(document).on("click",".botoncerrarmodal",function(){
 
 function mostrarModal(fila)
 {
-    //console.log(fila)
     cargarimagen(fila.Imagen)
     $("#id_articulo").val(fila.idArticulos)
     $("#codigoarticulo").val(fila.CodigoArticulo)
@@ -217,6 +216,7 @@ function mostrarModal(fila)
     $("#arancelariaarticulo").val(fila.PosicionArancelaria)
     asignarselect(fila.Requisito,$("#autorizaarticulo"))
     $("#uso").val(fila.EnUso)
+    $("#web").val(fila.web_catalogo)
     $("#productoarticulo").val(fila.ProductoServicio)
     $(".modal-title").html("Modificar articulo")
     $("#bguardar_articulo").html("Modificar")

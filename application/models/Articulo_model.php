@@ -36,6 +36,7 @@ class Articulo_model extends CI_Model
 					a.idUnidad,
 					a.idMarca,
 					a.idLinea,
+					a.web_catalogo,
 					CONCAT(us.first_name, ' ', us.last_name) AS autor,
 					precio
 				FROM
@@ -53,33 +54,14 @@ class Articulo_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function agregarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen,$descripcionFabrica)
+	public function store($item)
 	{
-		$autor=$this->session->userdata('user_id');
-		$fecha = date('Y-m-d H:i:s');
-		$sql="INSERT INTO 
-		articulos (CodigoArticulo, Descripcion, NumParte, idUnidad, idMarca, 
-		idLinea, PosicionArancelaria, idRequisito, ProductoServicio, EnUso, 
-		detalleLargo, Autor, Imagen) 
-		VALUES('$codigo','$descripcion','$parte','$unidad','$marca',
-		'$linea','$posicion','$autoriza','$proser','$uso',
-		'$descripcionFabrica','$autor','$nom_imagen')";
-		$query=$this->db->query($sql);
+		return $this->db->insert('articulos', $item);
 	}
-	public function editarArticulo_model($id,$codigo,$descripcion,$unidad,$marca,$linea,$parte,$posicion,$autoriza,$proser,$uso,$nom_imagen,$descripcionFabrica)
+	public function update($id, $item)
 	{
-		$autor=$this->session->userdata('user_id');
-		$fecha = date('Y-m-d H:i:s');
-		if($nom_imagen=="") {
-			$sql="UPDATE articulos SET CodigoArticulo='$codigo', Descripcion='$descripcion', NumParte='$parte', idUnidad='$unidad', 
-			idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito='$autoriza', ProductoServicio='$proser', 
-			EnUso='$uso', detalleLargo='$descripcionFabrica', Autor='$autor' WHERE idArticulos=$id";
-		}	
-		else {
-			$sql="UPDATE articulos SET CodigoArticulo='$codigo', Descripcion='$descripcion', NumParte='$parte', idUnidad='$unidad', 
-			idMarca='$marca', idLinea='$linea', PosicionArancelaria='$posicion', idRequisito='$autoriza', ProductoServicio='$proser', 
-			EnUso='$uso', detalleLargo='$descripcionFabrica', Autor='$autor', Imagen='$nom_imagen' WHERE idArticulos=$id";
-		}
-		$query=$this->db->query($sql);		
+		$this->db->where('idArticulos', $id);
+		$res = $this->db->update('articulos', $item);
+		return $res;
 	}
 }

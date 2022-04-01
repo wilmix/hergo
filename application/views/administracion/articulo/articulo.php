@@ -58,7 +58,7 @@ th:hover .filterControl {
 <!-- Modal -->
 <form action=" " method="post"  id="form_articulo" enctype="multipart/form-data">
   <div class="modal fade" id="modalarticulo" role="dialog">
-    <input type="" name="id_articulo" value="" id="id_articulo" hidden value="<?= "" ?>"> <!-- input oculto para el codigo de articulo-->
+  <input type="" name="id_articulo" value="" id="id_articulo" hidden value="<?= "" ?>"> <!-- input oculto para el codigo de articulo-->
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -153,6 +153,19 @@ th:hover .filterControl {
                       <option value="" disabled>Elige si esta en uso</option>
                       <option selected value="1">Si</option>
                       <option value="0">No</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!-- web -->
+              <div class="form-group"> 
+                <label class="col-md-3 col-lg-3 control-label">Catalogo Web</label>
+                <div class="col-md-9 col-lg-9 selectContainer">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-internet-explorer"></i></span>
+                    <select name="web" class="form-control" id="web">
+                      <option selected value="0">No</option>
+                      <option value="1">Si</option>
                     </select>
                   </div>
                 </div>

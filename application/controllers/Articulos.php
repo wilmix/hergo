@@ -19,48 +19,42 @@ class Articulos extends CI_Controller
 		$this->datos['marca']=$this->Articulo_model->retornar_tabla("marca");
 		$this->datos['linea']=$this->Articulo_model->retornar_tabla("linea");
 		$this->datos['requisito']=$this->Articulo_model->retornar_tabla("requisito");
-		//echo json_encode($this->datos['articulos']->result());die();		
 					
 		$this->setView('administracion/articulo/articulo');
 	}
-	public function agregarArticulo()
+	public function addItem()
 	{
-		if($this->input->is_ajax_request())
-        {
-        	$id = addslashes($this->security->xss_clean($this->input->post('id_articulo')));
-        	$codigo = addslashes($this->security->xss_clean($this->input->post('codigo')));
-			$descripcion = addslashes($this->security->xss_clean($this->input->post('descripcion')));
-			$descripcionFabrica = addslashes($this->security->xss_clean($this->input->post('descripcionFabrica')));
-        	$unidad = addslashes($this->security->xss_clean($this->input->post('unidad')));
-        	$marca = addslashes($this->security->xss_clean($this->input->post('marca')));           	
-        	$linea = addslashes($this->security->xss_clean($this->input->post('linea')));
-        	$parte = addslashes($this->security->xss_clean($this->input->post('parte')));
-        	$posicion = addslashes($this->security->xss_clean($this->input->post('posicion')));
-        	$autoriza = addslashes($this->security->xss_clean($this->input->post('autoriza')));   
-        	$proser = addslashes($this->security->xss_clean($this->input->post('proser')));
-			$uso = addslashes($this->security->xss_clean($this->input->post('uso')));
-			$precio = addslashes($this->security->xss_clean($this->input->post('precio')));
-        	
-        	if($id=="")
-        	{
-				$this->libacceso->accesoInt(46);
-        		$nom_imagen=$this->subir_imagen($id,$_FILES);
-				$this->Articulo_model->agregarArticulo_model($id,strtoupper($codigo) ,strtoupper($descripcion),$unidad,$marca,$linea,strtoupper($parte),
-				strtoupper($posicion),$autoriza,$proser,$uso,$nom_imagen,strtoupper($descripcionFabrica));
-        	}
-        	else
-        	{
-				$this->libacceso->accesoInt(69);
-        		$nom_imagen=$this->subir_imagen($id,$_FILES);
-				$this->Articulo_model->editarArticulo_model($id,strtoupper($codigo),strtoupper($descripcion),$unidad,$marca,$linea,strtoupper($parte),
-				strtoupper($posicion),$autoriza,$proser,$uso,$nom_imagen,strtoupper($descripcionFabrica));
-        	}
-        }
-        $res = new stdclass();
-		$res->status = true;
-		$res->msg = 'Guardado Exitosamente';
+		$id = $this->input->post('id_articulo');
+		$item = new stdClass();
+ 		$item->CodigoArticulo = strtoupper($this->input->post('codigo'));
+		$item->Descripcion = strtoupper($this->input->post('descripcion'));
+		$item->NumParte = strtoupper($this->input->post('parte'));
+		$item->idUnidad = $this->input->post('unidad');
+		$item->idMarca = $this->input->post('marca');
+		$item->idLinea = $this->input->post('linea');
+		$item->PosicionArancelaria = $this->input->post('posicion');
+		$item->idRequisito = $this->input->post('autoriza');
+		$item->ProductoServicio = $this->input->post('proser');
+		$item->EnUso = $this->input->post('uso');
+		$item->detalleLargo = strtoupper($this->input->post('descripcionFabrica'));
+		$item->web_catalogo = $this->input->post('web');
+		$item->Autor = $this->session->userdata('user_id');
+		$item->Imagen = $this->subir_imagen($id,$_FILES);
 
-		echo json_encode($res);	      
+		if ($id == '') {
+			$result = $this->Articulo_model->store($item);
+		} else if ( $id > 0 ) {
+			if ( $item->Imagen == '' ) {
+				unset($item->Imagen);
+			}
+			$result = $this->Articulo_model->update($id, $item);
+		}
+
+			$res = new stdclass();
+			$res->item = $item;
+			$res->status = $result;
+			$res->msg = $id == '' ? 'guardado' : 'modificado';
+			echo json_encode($res);
 	}
 	public function mostrarArticulos()
 	{
