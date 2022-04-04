@@ -25,12 +25,30 @@ class ConfigArticulosWeb extends CI_Controller
     }
     public function store()
     {
+        $config = [
+            "upload_path" => "./images/levels/",
+            "allowed_types" => "jpg|jpeg|png"
+        ];
+        $this->load->library("upload",$config);
+            if ($this->upload->do_upload('img')) {
+                $pdf = array("upload_data" => $this->upload->data());
+                $url = $pdf['upload_data']['file_name'];
+            }
+            else{
+                //echo $this->upload->display_errors();
+                $url = '';
+            }
         $nivel = new stdclass();
         $nivel->id = $this->input->post('id');
         $nivel->name = $this->input->post('name');
+        $nivel->description = $this->input->post('description');
         $nivel->is_active = $this->input->post('isActive');
         $nivel->autor = $this->session->userdata('user_id');
+        $nivel->img = $url;
         $table = $this->input->post('table');
+
+
+
         $id = $this->ArticulosWeb_model->store($nivel, $table);
         echo json_encode($id);
     }

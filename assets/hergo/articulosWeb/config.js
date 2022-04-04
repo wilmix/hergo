@@ -235,6 +235,7 @@ const modal = new Vue({
 	data: {
         id : 0,
 		name : '',
+		description: '',
         isActive: 1,
         modalTitle: 'Añadir a Nivel ',
         nameTable: '',
@@ -246,7 +247,6 @@ const modal = new Vue({
             let regex = /(\d+)/g
             this.nameTable = nameTable
             number = parseInt(nameTable.match(regex))
-
             this.modalTitle = this.modalTitle + number
             $("#levelModal").modal("show");
         },
@@ -263,26 +263,37 @@ const modal = new Vue({
                 })
                 return
             }
+			let formData = new FormData($('#formModalNiveles')[0])
+			formData.append('table', this.nameTable)
+			/* for(let pair of formData.entries()) {
+				console.log(pair[0]+ ', '+ pair[1]); 
+			}  */
+			/* quitarcargando()
+			return */
+
             $.ajax({
                 url: base_url('index.php/web/ConfigArticulosWeb/store'),
-                type: "post",      
-                data: {
-                    id : this.id,
-                    name : this.name,
-                    isActive : this.isActive,
-                    table : this.nameTable
-                },                                    
+                type: "POST",      
+                data: formData,    
+				cache: false,
+				contentType: false,
+				processData: false,
+				dataType: "json" 
               }).done(function(res){
+				formData.delete('img');
+				console.log(res);
                 modal.clear()
                 $("#levelModal").modal("hide");
-                getLevels(modal.nameTable)
                 quitarcargando()
+				location.reload();
               }) 
         },
         clear(){
             this.name = ''
+			this.description = ''
             this.isActive = 1
             this.modalTitle = 'Añadir a Nivel '
+			//formData.delete('img');
         },
         edit(row){
 

@@ -55,24 +55,39 @@
                         <h4 class="modal-title">{{ modalTitle }}</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-horizontal">
-                            <div class="form-group">
-                                <label for="name" class="col-sm-2 control-label">Nombre</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" v-model="name">
+                        <form method="post" id="formModalNiveles">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="name" class="col-sm-2 control-label">Nombre</label>
+                                    <div class="col-sm-10">
+                                        <input name="name" type="text" class="form-control" v-model="name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="description" class="col-sm-2 control-label">Descripción</label>
+                                    <div class="col-sm-10">
+                                        <input name="description" type="text" class="form-control" v-model="description">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="isActive" class="col-sm-2 control-label">Activo</label>
+                                    <div class="col-sm-10">
+                                        <!-- <v-select :options="['EFECTIVO','CRÉDITO']" v-model="isActive"></v-select> -->
+                                        <select name="isActive" class="form-control" v-model="isActive">
+                                            <option value="1">Activo</option>
+                                            <option value="0">Inactivo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="img" class="col-sm-2 control-label">Imagen</label>
+                                    <div class="col-sm-10">
+                                        <input name="img" type="file" class="form-control" id="img" accept=".png, .jpg, .jpeg">
+                                        <p class="help-block">Imagen del nivel.</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="" class="col-sm-2 control-label">Activo</label>
-                                <div class="col-sm-10">
-                                    <!-- <v-select :options="['EFECTIVO','CRÉDITO']" v-model="isActive"></v-select> -->
-                                    <select name="isActive" class="form-control" v-model="isActive">
-                                        <option value="1">Activo</option>
-                                        <option value="0">Inactivo</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal" @click="clear">Close</button>
