@@ -26,7 +26,6 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.sublime-workspace
 *.sublime-project
 #config codeigniter
-/vendor
 /application/config/config.php
 application/config/database.php
 test
