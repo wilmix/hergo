@@ -271,7 +271,8 @@ const modal = new Vue({
 		dataNivel1: []
 	},
 	methods:{
-		showModal(nameTable){
+		showModal(nameTable, img){
+			this.loadImg(img)
             this.modalTitle = 'Añadir a Nivel '
             let regex = /(\d+)/g
             this.nameTable = nameTable
@@ -322,6 +323,7 @@ const modal = new Vue({
 			this.description = ''
             this.isActive = 1
             this.modalTitle = 'Añadir a Nivel '
+			$('#img').fileinput('destroy');
         },
         edit(row){
 
@@ -329,7 +331,25 @@ const modal = new Vue({
             this.name = row.name
 			this.description = row.description
             this.isActive = row.is_active
-            this.showModal(row.level)
+            this.showModal(row.level, row.img)
         },
+		loadImg(img){
+			console.log(img);
+			ruta=img ? "https://images.hergo.app/web/levels/level-1/"+img : base_url('/assets/img_articulos/ninguno.png')
+			$('#img').fileinput('destroy');
+			console.log(ruta)
+			$("#img").fileinput({
+				initialPreview: [
+					ruta
+				],
+				initialPreviewAsData: true,
+				initialCaption: img,
+				language: "es",
+				showUpload: false,
+				previewFileType: "image",
+				maxFileSize: 1024,
+			});
+			$('#img').fileinput('refresh');
+		}
 	}
 })

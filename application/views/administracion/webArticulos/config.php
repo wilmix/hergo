@@ -82,7 +82,7 @@
                                 <div class="form-group">
                                     <label for="img" class="col-sm-2 control-label">Imagen</label>
                                     <div class="col-sm-10">
-                                        <input name="img" type="file" class="form-control" id="img" accept=".png, .jpg, .jpeg">
+                                        <input name="img" type="file" class="file-loading" id="img" accept=".png, .jpg, .jpeg">
                                         <p class="help-block">Imagen del nivel.</p>
                                     </div>
                                 </div>
