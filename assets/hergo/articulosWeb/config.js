@@ -32,6 +32,7 @@ let columns = [
 		data: 'img',
 		title: 'Imagen',
 		className: 'text-left',
+		render: mostrarimagen,
 	},
 	{
 		data: 'is_active',
@@ -217,6 +218,24 @@ function getLevel3() {
 		let err = textStatus + ", " + error;
 		console.log("Request Failed: " + err);
 	});
+}
+function mostrarimagen(value, row, index)
+{
+    let ruta=""
+    let imagen=""
+    if((value=="")||(value==null))
+    {
+        ruta="/assets/img_articulos/hergo.jpg"
+        clase=""
+    }
+    else
+    {
+        clase="imagenminiatura"
+        ruta="https://images.hergo.app/web/levels/level-1/"+value
+    }
+
+    imagen = '<div class="contimg"><img src="'+ruta+'" class="'+clase+'"></div>'
+    return [imagen].join('')
 }
 
 function buttons (data, type, row) {

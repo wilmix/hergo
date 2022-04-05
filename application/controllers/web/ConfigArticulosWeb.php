@@ -36,6 +36,9 @@ class ConfigArticulosWeb extends CI_Controller
         $nivel->img = ($_FILES['img']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/levels/level-1/');
 
         if ($id > 0) {
+            if ( $nivel->img == '' ) {
+				unset($nivel->img);
+			}
             $this->ArticulosWeb_model->update($table, $id, $nivel);
         } else if($id == 0){
             $this->ArticulosWeb_model->store($nivel, $table);
