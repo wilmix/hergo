@@ -265,9 +265,9 @@ const modal = new Vue({
             }
 			let formData = new FormData($('#formModalNiveles')[0])
 			formData.append('table', this.nameTable)
-			/* for(let pair of formData.entries()) {
+			for(let pair of formData.entries()) {
 				console.log(pair[0]+ ', '+ pair[1]); 
-			}  */
+			} 
 			/* quitarcargando()
 			return */
 
