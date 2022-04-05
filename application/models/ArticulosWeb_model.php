@@ -18,15 +18,15 @@ class ArticulosWeb_model extends CI_Model
 	}
 	public function store($item, $table)
 	{
-        if ($item->id > 0) {
-            $this->db->where('id', $item->id);
-            $this->db->update($table, $item);
-            return $item->id;
-        } else if ($item->id == 0)  {
             $this->db->insert($table, $item);
-            $id=$this->db->insert_id();
-            return $id;
-        }
+            /* $id=$this->db->insert_id();
+            return $id; */
+	}
+	public function update($table, $id, $item)
+	{
+		$this->db->where('id', $id);
+		$res = $this->db->update($table, $item);
+		return $res;
 	}
 
 }

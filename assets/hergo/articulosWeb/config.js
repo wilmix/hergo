@@ -24,6 +24,16 @@ let columns = [
 		className: 'text-left',
 	},
 	{
+		data: 'description',
+		title: 'Descripcion',
+		className: 'text-left',
+	},
+	{
+		data: 'img',
+		title: 'Imagen',
+		className: 'text-left',
+	},
+	{
 		data: 'is_active',
 		title: 'Activo',
 		className: 'text-center',
@@ -265,14 +275,15 @@ const modal = new Vue({
             }
 			let formData = new FormData($('#formModalNiveles')[0])
 			formData.append('table', this.nameTable)
-			for(let pair of formData.entries()) {
+			formData.append('id', this.id)
+			/* for(let pair of formData.entries()) {
 				console.log(pair[0]+ ', '+ pair[1]); 
 			} 
-			/* quitarcargando()
+			quitarcargando()
 			return */
 
             $.ajax({
-                url: base_url('index.php/web/ConfigArticulosWeb/store'),
+                url: base_url('index.php/web/ConfigArticulosWeb/addLevel'),
                 type: "POST",      
                 data: formData,    
 				cache: false,
@@ -280,7 +291,6 @@ const modal = new Vue({
 				processData: false,
 				dataType: "json" 
               }).done(function(res){
-				formData.delete('img');
 				console.log(res);
                 modal.clear()
                 $("#levelModal").modal("hide");
@@ -293,12 +303,12 @@ const modal = new Vue({
 			this.description = ''
             this.isActive = 1
             this.modalTitle = 'Añadir a Nivel '
-			//formData.delete('img');
         },
         edit(row){
 
             this.id = row.id
             this.name = row.name
+			this.description = row.description
             this.isActive = row.is_active
             this.showModal(row.level)
         },

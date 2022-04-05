@@ -23,33 +23,36 @@ class ConfigArticulosWeb extends CI_Controller
         $res = $this->ArticulosWeb_model->show($table);
         echo json_encode($res);
     }
-    public function store()
+    public function addLevel()
     {
-        $config = [
-            "upload_path" => "./images/levels/",
-            "allowed_types" => "jpg|jpeg|png"
-        ];
-        $this->load->library("upload",$config);
-            if ($this->upload->do_upload('img')) {
-                $pdf = array("upload_data" => $this->upload->data());
-                $url = $pdf['upload_data']['file_name'];
-            }
-            else{
-                //echo $this->upload->display_errors();
-                $url = '';
-            }
+
+        $id = $this->input->post('id');
+        $table = $this->input->post('table');
         $nivel = new stdclass();
-        $nivel->id = $this->input->post('id');
         $nivel->name = $this->input->post('name');
         $nivel->description = $this->input->post('description');
         $nivel->is_active = $this->input->post('isActive');
         $nivel->autor = $this->session->userdata('user_id');
-        $nivel->img = $url;
-        $table = $this->input->post('table');
+        $nivel->img = ($_FILES['img']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/levels/level-1/');
 
+        if ($id > 0) {
+            $this->ArticulosWeb_model->update($table, $id, $nivel);
+        } else if($id == 0){
+            $this->ArticulosWeb_model->store($nivel, $table);
+        }
 
-
-        $id = $this->ArticulosWeb_model->store($nivel, $table);
-        echo json_encode($id);
+        echo json_encode($nivel);
     }
+    public function uploadSpaces($file, $folder)
+	{
+		$client = new Aws\S3\S3Client($this->config->item('credentialsSpacesDO'));
+		$uploadObject = $client->putObject([
+				'Bucket' => 'hergo-space',
+				'Key' => $folder.$file['img']['name'],
+				'SourceFile' => $file['img']['tmp_name'],
+				'ACL' => 'public-read'
+		]);	
+        //print_r($uploadObject['@metadata']['statusCode']);
+		return $file['img']['name'];
+	}
 }
