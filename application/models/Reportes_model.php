@@ -24,7 +24,7 @@ class Reportes_model extends CI_Model
 	}
 	public function retornarArticulos() {
 		$sql="SELECT idArticulos, CodigoArticulo,Descripcion
-		FROM articulos_activos_kardex
+		FROM articulos
 		";
 		$query=$this->db->query($sql);		
 		return $query;
