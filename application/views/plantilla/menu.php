@@ -65,8 +65,8 @@
               </a>
               <ul class="treeview-menu">
                 <li class="ConfigArticulosWeb"><a href="<?php echo base_url("web/ConfigArticulosWeb") ?>"><i class="fa fa-industry "></i> Niveles</a></li>
-                <li class="">
-                  <a href="<?php echo base_url("#") ?> " class="disabled">
+                <li class="ArticulosWeb">
+                  <a href="<?php echo base_url("web/ArticulosWeb") ?>">
                     <i class="fa fa-list-ol ">
                     </i> Articulos Web 
                       <span class="pull-right-container">

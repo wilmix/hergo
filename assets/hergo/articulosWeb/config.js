@@ -40,6 +40,11 @@ let columns = [
 		className: 'text-center',
 	},
 	{
+		data: 'label',
+		title: 'Nivel Superior',
+		className: 'text-center',
+	},
+	{
 		data: 'autor',
 		title: 'AUTOR',
 		className: 'text-right',
@@ -258,9 +263,12 @@ $(document).on("click", "button.edit_web_nivel3", function () {
     let row = getRow(nivel3, this)
 	modal.edit(row)
 })
-
+Vue.component("v-select", VueSelect.VueSelect);
 const modal = new Vue({
 	el: '#app',
+	mounted() {
+		this.getData()
+	},
 	data: {
         id : 0,
 		name : '',
@@ -268,10 +276,14 @@ const modal = new Vue({
         isActive: 1,
         modalTitle: 'Añadir a Nivel ',
         nameTable: '',
-		dataNivel1: []
+		dataNivel1: [],
+		dataNivel2: [],
+		n1: 0,
+		n2: 0
 	},
 	methods:{
 		showModal(nameTable, img){
+			this.clear()
 			this.loadImg(img)
             this.modalTitle = 'Añadir a Nivel '
             let regex = /(\d+)/g
@@ -293,15 +305,27 @@ const modal = new Vue({
                 })
                 return
             }
+			if (this.nameTable == 'web_nivel2' && !this.n1.hasOwnProperty('label') || this.nameTable == 'web_nivel3' && !this.n2.hasOwnProperty('label')) {
+				quitarcargando()
+                swal({
+                    title: 'Error',
+                    text: "Por favor escoja nivel superior",
+                    type: 'error', 
+                    showCancelButton: false,
+                })
+                return
+			}
 			let formData = new FormData($('#formModalNiveles')[0])
 			formData.append('table', this.nameTable)
 			formData.append('id', this.id)
+			formData.append('id_nivel1', this.n1.id)
+			formData.append('id_nivel2', this.n2.id)
 			/* for(let pair of formData.entries()) {
 				console.log(pair[0]+ ', '+ pair[1]); 
 			} 
 			quitarcargando()
-			return */
-
+			return
+ 			*/
             $.ajax({
                 url: base_url('index.php/web/ConfigArticulosWeb/addLevel'),
                 type: "POST",      
@@ -315,25 +339,29 @@ const modal = new Vue({
                 $("#levelModal").modal("hide");
                 quitarcargando()
 				getLevels()
+				modal.getData()
             }) 
         },
         clear(){
             this.name = ''
 			this.description = ''
             this.isActive = 1
+			this.n1 = {}
+			this.n2 = {}
             this.modalTitle = 'Añadir a Nivel '
 			$('#img').fileinput('destroy');
         },
         edit(row){
-
+            this.showModal(row.level, row.img)
             this.id = row.id
             this.name = row.name
 			this.description = row.description
             this.isActive = row.is_active
-            this.showModal(row.level, row.img)
+			this.n1 = {"id":row.id_nivel1,"label":row.label}
+			this.n2 = {"id":row.id_nivel2,"label":row.label}
         },
 		loadImg(img){
-			ruta=img ? "https://images.hergo.app/web/levels/levels/"+img : base_url('/assets/img_articulos/ninguno.png')
+			ruta=img ? "https://images.hergo.app/web/levels/"+img : base_url('/assets/img_articulos/ninguno.png')
 			$('#img').fileinput('destroy');
 			$("#img").fileinput({
 				initialPreview: [
@@ -347,6 +375,26 @@ const modal = new Vue({
 				maxFileSize: 1024,
 			});
 			$('#img').fileinput('refresh');
+		},
+		getDataLevel(table){
+			$.ajax({
+				type: "POST",
+				url: base_url('index.php/web/ConfigArticulosWeb/getDataLevels'),
+				dataType: "json",
+				data: {
+					table: table
+				},
+			}).done(function (res) {
+				if (table == 'web_nivel1') {
+					modal.dataNivel1 = res
+				} else if (table == 'web_nivel2'){
+					modal.dataNivel2 = res
+				}
+			});
+		},
+		getData(){
+			this.getDataLevel('web_nivel1')
+			this.getDataLevel('web_nivel2')
 		}
 	}
 })

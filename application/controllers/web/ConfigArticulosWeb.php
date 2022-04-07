@@ -32,6 +32,12 @@ class ConfigArticulosWeb extends CI_Controller
         $nivel->name = $this->input->post('name');
         $nivel->description = $this->input->post('description');
         $nivel->is_active = $this->input->post('isActive');
+        if ($table == 'web_nivel2') {
+            $nivel->id_nivel1 = $this->input->post('id_nivel1');
+        }
+        if ($table == 'web_nivel3') {
+            $nivel->id_nivel2 = $this->input->post('id_nivel2');
+        }
         $nivel->autor = $this->session->userdata('user_id');
         $nivel->img = ($_FILES['img']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/levels/');
 
@@ -44,7 +50,7 @@ class ConfigArticulosWeb extends CI_Controller
             $this->ArticulosWeb_model->store($nivel, $table);
         }
 
-        echo json_encode($nivel);
+        echo json_encode($nivel); 
     }
     public function uploadSpaces($file, $folder)
 	{
@@ -58,4 +64,10 @@ class ConfigArticulosWeb extends CI_Controller
         //print_r($uploadObject['@metadata']['statusCode']);
 		return $file['img']['name'];
 	}
+    public function getDataLevels()
+    {
+        $table = $this->input->post('table');
+        $res = $this->ArticulosWeb_model->getDataLevels($table);
+        echo json_encode($res);
+    }
 }
