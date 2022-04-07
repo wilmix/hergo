@@ -106,7 +106,7 @@ function buttonsTable(table) {
 function getLevel1() {
 	$.ajax({
 		type: "POST",
-		url: base_url('index.php/web/ConfigArticulosWeb/getLevel1'),
+		url: base_url('index.php/web/ConfigArticulosWeb/getLevels'),
 		dataType: "json",
 		data: {
             table: 'web_nivel1'
@@ -144,7 +144,7 @@ function getLevel1() {
 function getLevel2() {
 	$.ajax({
 		type: "POST",
-		url: base_url('index.php/web/ConfigArticulosWeb/getLevel1'),
+		url: base_url('index.php/web/ConfigArticulosWeb/getLevels'),
 		dataType: "json",
 		data: {
             table: 'web_nivel2'
@@ -183,7 +183,7 @@ function getLevel2() {
 function getLevel3() {
 	$.ajax({
 		type: "POST",
-		url: base_url('index.php/web/ConfigArticulosWeb/getLevel1'),
+		url: base_url('index.php/web/ConfigArticulosWeb/getLevels'),
 		dataType: "json",
 		data: {
             table: 'web_nivel3'
@@ -231,7 +231,7 @@ function mostrarimagen(value, row, index)
     else
     {
         clase="imagenminiatura"
-        ruta="https://images.hergo.app/web/levels/level-1/"+value
+        ruta="https://images.hergo.app/web/levels/"+value
     }
 
     imagen = '<div class="contimg"><img src="'+ruta+'" class="'+clase+'"></div>'
@@ -333,9 +333,8 @@ const modal = new Vue({
             this.showModal(row.level, row.img)
         },
 		loadImg(img){
-			ruta=img ? "https://images.hergo.app/web/levels/level-1/"+img : base_url('/assets/img_articulos/ninguno.png')
+			ruta=img ? "https://images.hergo.app/web/levels/levels/"+img : base_url('/assets/img_articulos/ninguno.png')
 			$('#img').fileinput('destroy');
-			console.log(ruta)
 			$("#img").fileinput({
 				initialPreview: [
 					ruta

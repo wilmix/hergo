@@ -17,7 +17,7 @@ class ConfigArticulosWeb extends CI_Controller
 					
 		$this->setView('administracion/webArticulos/config.php');
 	}
-    public function getLevel1()
+    public function getLevels()
     {
         $table = $this->input->post('table');
         $res = $this->ArticulosWeb_model->show($table);
@@ -33,7 +33,7 @@ class ConfigArticulosWeb extends CI_Controller
         $nivel->description = $this->input->post('description');
         $nivel->is_active = $this->input->post('isActive');
         $nivel->autor = $this->session->userdata('user_id');
-        $nivel->img = ($_FILES['img']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/levels/level-1/');
+        $nivel->img = ($_FILES['img']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/levels/');
 
         if ($id > 0) {
             if ( $nivel->img == '' ) {
