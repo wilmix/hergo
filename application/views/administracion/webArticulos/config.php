@@ -6,7 +6,7 @@
         <!-- <h3 class="box-title" v-text="title"></h3> -->
       </div>
         <div class="box-body">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title">Nivel 1</h3>
@@ -17,28 +17,28 @@
                     </div>
                     <div class="box-footer clearfix">
                     </div>
-
-                    <div class="box">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Nivel 3</h3>
-                        </div>
-                        <div class="box-body">
-                            <table id="web_nivel3" class="table table-hover table-striped table-sm" style="width:100%">
-                            </table>
-                        </div>
-                        <div class="box-footer clearfix">
-                        </div>
-                    </div>
-
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title">Nivel 2</h3>
                     </div>
                     <div class="box-body">
                         <table id="web_nivel2" class="table table-hover table-striped table-sm" style="width:100%">
+                        </table>
+                    </div>
+                    <div class="box-footer clearfix">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                            <h3 class="box-title">Nivel 3</h3>
+                    </div>
+                    <div class="box-body">
+                        <table id="web_nivel3" class="table table-hover table-striped table-sm" style="width:100%">
                         </table>
                     </div>
                     <div class="box-footer clearfix">

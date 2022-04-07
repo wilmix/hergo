@@ -310,13 +310,12 @@ const modal = new Vue({
 				contentType: false,
 				processData: false,
 				dataType: "json" 
-              }).done(function(res){
-				console.log(res);
+            }).done(function(res){
                 modal.clear()
                 $("#levelModal").modal("hide");
                 quitarcargando()
-				location.reload();
-              }) 
+				getLevels()
+            }) 
         },
         clear(){
             this.name = ''
@@ -334,7 +333,6 @@ const modal = new Vue({
             this.showModal(row.level, row.img)
         },
 		loadImg(img){
-			console.log(img);
 			ruta=img ? "https://images.hergo.app/web/levels/level-1/"+img : base_url('/assets/img_articulos/ninguno.png')
 			$('#img').fileinput('destroy');
 			console.log(ruta)
