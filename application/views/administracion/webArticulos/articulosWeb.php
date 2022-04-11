@@ -20,42 +20,51 @@
                 </div>
             </div>
         </div> <!-- /.box-body -->
-        <div id="levelModal" class="modal fade" role="dialog">
+        <div id="itemWeb" class="modal fade" role="dialog">
             <div class="modal-dialog">
-                <!-- <div class="modal-content">
+                <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="clear">
+                        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="clear"> -->
                         <span aria-hidden="true">×</span></button>
-                        <h4 class="modal-title">{{ modalTitle }}</h4>
+                        <h4 class="modal-title"> Editar Artículo </h4>
                     </div>
                     <div class="modal-body">
-                        <form method="post" id="formModalNiveles">
+                        <form method="post" id="formItemWeb">
                             <div class="form-horizontal">
                                 <div class="form-group">
-                                    <label for="name" class="col-sm-2 control-label">Nombre</label>
+                                    <label for="titulo" class="col-sm-2 control-label">Nombre</label>
                                     <div class="col-sm-10">
-                                        <input name="name" type="text" class="form-control" v-model="name">
+                                        <input name="titulo" type="text" class="form-control" v-model="titulo">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="description" class="col-sm-2 control-label">Descripción</label>
+                                    <label for="descripcion" class="col-sm-2 control-label">Descripción</label>
                                     <div class="col-sm-10">
-                                        <input name="description" type="text" class="form-control" v-model="description">
+                                        <input name="descripcion" type="text" class="form-control" v-model="descripcion">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="isActive" class="col-sm-2 control-label">Activo</label>
+                                    <label for="n1" class="col-sm-2 control-label">Nivel 1</label>
                                     <div class="col-sm-10">
-                                        <select name="isActive" class="form-control" v-model="isActive">
-                                            <option value="1">Activo</option>
-                                            <option value="0">Inactivo</option>
-                                        </select>
+                                        <v-select :options="data_n1" v-model="n1" @input="getLevel(n1.id, 'web_nivel2', 'id_nivel1')"></v-select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="img" class="col-sm-2 control-label">Imagen</label>
+                                    <label for="isActive" class="col-sm-2 control-label">Nivel 2</label>
                                     <div class="col-sm-10">
-                                        <input name="img" type="file" class="file-loading" id="img" accept=".png, .jpg, .jpeg">
+                                        <v-select :options="data_n2" v-model="n2"  @input="getLevel(n2.id, 'web_nivel3', 'id_nivel2')"></v-select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="isActive" class="col-sm-2 control-label">Nivel 3</label>
+                                    <div class="col-sm-10">
+                                        <v-select :options="data_n3" v-model="n3"></v-select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="imagen" class="col-sm-2 control-label">Imagen Web</label>
+                                    <div class="col-sm-10">
+                                        <input name="imagen" type="file" class="file-loading" id="imagen" accept=".png, .jpg, .jpeg">
                                         <p class="help-block">Imagen del nivel.</p>
                                     </div>
                                 </div>
@@ -63,10 +72,10 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" @click="clear">Close</button>
+                        <!-- <button type="button" class="btn btn-default pull-left" data-dismiss="modal" @click="clear">Close</button> -->
                         <button type="button" class="btn btn-primary" @click="add">Guardar</button>
                     </div>
-                </div> -->
+                </div>
             </div>
         </div><!-- /.modal -->
     </div> <!-- /.class="box" -->

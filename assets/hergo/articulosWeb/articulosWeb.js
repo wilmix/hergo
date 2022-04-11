@@ -18,43 +18,37 @@ function showImage(value, row, index, route, xxx)
     imagen = '<div class="contimg"><img src="'+ruta+'" class="'+clase+'"></div>'
     return [imagen].join('')
 }
-
-function buttons (data, type, row) {
-return `
-	<button type="button" class="btn btn-default edit">
-		<span class="fa fa-pencil" aria-hidden="true">
-		</span>
-	</button>
-`
-}
-
-
-
 $(document).on("click", "button.edit", function () {
-
     let row = getRow(table, this)
-	console.log(row);
+	web.edit(row)
 })
 
+Vue.component("v-select", VueSelect.VueSelect);
 const web = new Vue({
 	el: '#app',
 	data: {
-		id:0,
-
+		data_n1: [],
+		data_n2: [],
+		data_n3: [],
+		articulo_id:0,
+		titulo: '',
+		descripcion: '',
+		n1: {},
+		n2: {},
+		n3: {},
+		id: 0
 	},
 	mounted() {
-		$.fn.dataTable.ext.errMode = 'none';
 		this.getItems()
+		this.getData()
 	},
 	methods:{
 		getItems(){
+			$.fn.dataTable.ext.errMode = 'none';
 			$.ajax({
 				type: "POST",
 				url: base_url('web/ArticulosWeb/getItems'),
-				dataType: "json",
-				data: {
-					   
-				},
+				dataType: "json"
 			}).done(function (res) {
 				table = $('#web').DataTable({
 					data: res,
@@ -106,7 +100,7 @@ const web = new Vue({
 							title: 'Nivel 3',
 						},
 						{
-							data: 'autor',
+							data: 'created_by',
 							title: 'AUTOR',
 							className: 'text-right',
 							sorting: false,
@@ -123,14 +117,16 @@ const web = new Vue({
 							title: 'Imagen Sis',
 							className: 'text-left',
 							render: function (data, type, row) {
-								return web.showImage(data)
+								return web.showImage(data,'img_sis')
 							}
 						},
 						{
-							data: 'img',
-							title: 'Imagen',
+							data: 'img_web',
+							title: 'Imagen Web',
 							className: 'text-left',
-							render: showImage
+							render: function (data, type, row) {
+								return web.showImage(data,'img_web')
+							}
 
 						},
 						{
@@ -138,7 +134,14 @@ const web = new Vue({
 							title: '',
 							width: '120px',
 							className: 'text-center',
-							render: buttons
+							render: function () {
+								return `
+									<button type="button" class="btn btn-default edit">
+										<span class="fa fa-pencil" aria-hidden="true">
+										</span>
+									</button>
+								`
+							}
 						},
 					],
 					stateSave: true,
@@ -222,24 +225,124 @@ const web = new Vue({
 				let err = textStatus + ", " + error;
 				console.log("Request Failed: " + err);
 			});
-		},showImage(data){
+		},
+		showImage(data, field){
 			data =encodeURI(data)
-			let ruta=""
-			let imagen=""
-			if((data=="")||(data==null))
-			{
-				ruta="/assets/img_articulos/hergo.jpg"
-				clase=""
-			}
-			else
-			{
-				clase="imagenminiatura"
-				ruta=base_url("/assets/img_articulos/")+data
-			}
-
-			imagen = '<div class="contimg"><img src="'+ruta+'" class="'+clase+'"></div>'
-			console.log([imagen].join(''))
+			imgVacio = "/assets/img_articulos/hergo.jpg"
+			clase="imagenminiatura"
+				if (field == 'img_sis') {
+					ruta = data ? base_url("/assets/img_articulos/") + data : imgVacio
+				} else if (field == 'img_web'){
+					ruta = data == 'null' ? imgVacio : "https://images.hergo.app/web/items/" + data 
+				}
+			let imagen = '<div class="contimg"><img src="'+ruta+'" class="'+clase+'"></div>'
 			return [imagen].join('')
+		},
+		edit(row){
+			console.log(row);
+			this.loadImg(row.img_web)
+			this.id = row.id 
+			this.articulo_id = row.articulo_id_sis
+			this.titulo = row.titulo
+			this.descripcion = row.descripcion
+			this.n1 = {id:row.n1_id,label:row.n1}
+			this.n2 = {id:row.n2_id,label:row.n2}
+			this.n3 = {id:row.n3_id,label:row.n3}
+			$("#itemWeb").modal("show");
+		},
+		loadImg(img){
+			ruta = img ? "https://images.hergo.app/web/items/"+img : base_url('/assets/img_articulos/ninguno.png')
+			$('#imagen').fileinput('destroy');
+			$("#imagen").fileinput({
+				initialPreview: [
+					ruta
+				],
+				initialPreviewAsData: true,
+				initialCaption: img,
+				language: "es",
+				showUpload: false,
+				previewFileType: "image",
+				maxFileSize: 1024,
+			});
+			$('#imagen').fileinput('refresh');
+		},
+		getData(){
+			$.ajax({
+				type: "POST",
+				url: base_url('index.php/web/ArticulosWeb/getData'),
+				dataType: "json"
+			}).done(function (res) {
+				web.data_n1 = res.n1
+				//web.data_n2 = res.n2
+				//web.data_n3 = res.n3
+			})
+		},
+		add(e){
+            //agregarcargando()
+            e.preventDefault()
+            if (!this.titulo || !this.descripcion ) {
+                quitarcargando()
+                swal({
+                    title: 'Error',
+                    text: "Por favor llene correctamente el formulario",
+                    type: 'error', 
+                    showCancelButton: false,
+                })
+                return
+            }
+			let formData = new FormData($('#formItemWeb')[0])
+			formData.append('id', this.id ? this.id : 0)
+			formData.append('articulo_id', this.articulo_id)
+			formData.append('id_nivel1', this.n1.id )
+			formData.append('id_nivel2', this.n2.id )
+			formData.append('id_nivel3', this.n3.id )
+
+			/* for(let pair of formData.entries()) {
+				console.log(pair[0]+ ', '+ pair[1]); 
+			} 
+			quitarcargando()
+			return */
+ 			
+            $.ajax({
+                url: base_url('index.php/web/ArticulosWeb/addItemWeb'),
+                type: "POST",      
+                data: formData,    
+				cache: false,
+				contentType: false,
+				processData: false,
+				dataType: "json" 
+            }).done(function(res){
+				console.log(res);
+                /* modal.clear()
+                $("#levelModal").modal("hide");
+                quitarcargando()
+				getLevels()
+				modal.getData() */
+            }) 
+        },
+		getLevel(n, table, where){
+			if (table == 'web_nivel2') {
+				web.n2 = {}
+				web.n3 = {}
+			} else if(table == 'web_nivel3'){
+				web.n3 = {}
+			} 
+			$.ajax({
+				type: "POST",
+				url: base_url('index.php/web/ArticulosWeb/getLevel'),
+				dataType: "json",
+				data: {
+					level: n,
+					table: table,
+					where: where
+				}
+			}).done(function (res) {
+				if (table == 'web_nivel2') {
+					web.data_n2 = res
+				} else if(table == 'web_nivel3'){
+					web.data_n3 = res
+				}
+			})
 		}
 	},
 	filters:{

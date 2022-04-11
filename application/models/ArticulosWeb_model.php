@@ -52,6 +52,7 @@ class ArticulosWeb_model extends CI_Model
 	public function showItems()
 	{
 		$sql =	"SELECT
+					wa.id,
 					a.idArticulos articulo_id_sis,
 					a.CodigoArticulo codigo_sis,
 					a.Descripcion descripcion_sis,
@@ -60,9 +61,13 @@ class ArticulosWeb_model extends CI_Model
 					a.web_catalogo,
 					wa.titulo,
 					wa.descripcion,
+					n1.id n1_id,
+					n2.id n2_id,
+					n3.id n3_id,
 					n1.name n1,
 					n2.name n2,
 					n3.name n3,
+					wa.imagen img_web,
 					CONCAT(uc.first_name, ' ', uc.last_name) created_by,
 					CONCAT(uu.first_name, ' ', uu.last_name) updated_by,
 					wa.created_at,
@@ -90,5 +95,29 @@ class ArticulosWeb_model extends CI_Model
                 ";
 		$query=$this->db->query($sql);		
 		return $query->result_array();
+	}
+	public function getLevel($level, $table, $where)
+	{
+		$sql="  SELECT 
+				id,
+				name label 
+				FROM 
+				$table
+				WHERE $where = $level
+                ";
+		$query=$this->db->query($sql);		
+		return $query->result_array();
+	}
+	public function storeItem($item)
+	{
+            $this->db->insert('web_articulos', $item);
+            /* $id=$this->db->insert_id();
+            return $id; */
+	}
+	public function updateItem($id, $item)
+	{
+		$this->db->where('id', $id);
+		$res = $this->db->update('web_articulos', $item);
+		return $res;
 	}
 }
