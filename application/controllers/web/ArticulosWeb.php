@@ -49,14 +49,35 @@ class ArticulosWeb extends CI_Controller
 			'n2_id' => $this->input->post('id_nivel2'),
 			'n3_id' => $this->input->post('id_nivel3'),
 			'created_by' => $this->session->userdata('user_id'),
-			'imagen' => ($_FILES['imagen']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/levels/')
+			'imagen' => ($_FILES['imagen']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/items/','imagen')
 		];
 		if ($id == 0) {
 			$this->ArticulosWeb_model->storeItem($item);
 		} else if ($id > 0) {
+			if ( $item['imagen'] == '' ) {
+				unset($item['imagen']);
+			}
 			$this->ArticulosWeb_model->updateItem($id, $item);
 		}
 		echo json_encode($item);
 	}
+	public function uploadSpaces($file, $folder, $field)
+	{
+		$client = new Aws\S3\S3Client($this->config->item('credentialsSpacesDO'));
+		$uploadObject = $client->putObject([
+				'Bucket' => 'hergo-space',
+				'Key' => $folder.$file[$field]['name'],
+				'SourceFile' => $file[$field]['tmp_name'],
+				'ACL' => 'public-read'
+		]);	
+        //print_r($uploadObject['@metadata']['statusCode']);
+		return $file[$field]['name'];
+	}
+    public function getDataLevels()
+    {
+        $table = $this->input->post('table');
+        $res = $this->ArticulosWeb_model->getDataLevels($table);
+        echo json_encode($res);
+    }
 
 }

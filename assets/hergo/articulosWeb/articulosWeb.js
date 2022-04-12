@@ -31,8 +31,10 @@ const web = new Vue({
 		data_n2: [],
 		data_n3: [],
 		articulo_id:0,
+		codigo:'',
 		titulo: '',
 		descripcion: '',
+		desc_sis:'',
 		n1: {},
 		n2: {},
 		n3: {},
@@ -104,6 +106,7 @@ const web = new Vue({
 							title: 'AUTOR',
 							className: 'text-right',
 							sorting: false,
+							visible: false
 						},
 						{
 							data: 'created_at',
@@ -164,26 +167,9 @@ const web = new Vue({
 							}
 						},
 						{
-							extend: 'excel',
-							text: '<i class="fas fa-file-excel" aria-hidden="true" style="font-size:18px;"> </i>',
-							titleAttr: 'ExportExcel',
-							autoFilter: true,
-							//messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
-							title: 'Notas de Entrega Pendientes de Pago ',
-							exportOptions: {
-								columns: ':visible'
-							},
-						},
-						{
-							text: '<i class="fas fa-print" aria-hidden="true" style="font-size:18px;"></i>',
-							action: function (e, dt, node, config) {
-								window.window.print()
-							}
-						},
-						{
 							text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
 							action: function (e, dt, node, config) {
-								getProforma()
+								web.getItems()
 							}
 						},
 						{
@@ -204,7 +190,7 @@ const web = new Vue({
 									className: 'btn btn-link',
 									action: function (e, dt, node, config) {
 										table.state.clear()
-										getProforma()
+										web.getItems()
 									}
 								},
 		
@@ -230,8 +216,8 @@ const web = new Vue({
 			data =encodeURI(data)
 			imgVacio = "/assets/img_articulos/hergo.jpg"
 			clase="imagenminiatura"
-				if (field == 'img_sis') {
-					ruta = data ? base_url("/assets/img_articulos/") + data : imgVacio
+				if (field == 'img_sis') { 
+					ruta = !data || data =='null' ? imgVacio : base_url("assets/img_articulos/") + data 
 				} else if (field == 'img_web'){
 					ruta = data == 'null' ? imgVacio : "https://images.hergo.app/web/items/" + data 
 				}
@@ -239,7 +225,7 @@ const web = new Vue({
 			return [imagen].join('')
 		},
 		edit(row){
-			console.log(row);
+			//console.log(row);
 			this.loadImg(row.img_web)
 			this.id = row.id 
 			this.articulo_id = row.articulo_id_sis
@@ -248,10 +234,12 @@ const web = new Vue({
 			this.n1 = {id:row.n1_id,label:row.n1}
 			this.n2 = {id:row.n2_id,label:row.n2}
 			this.n3 = {id:row.n3_id,label:row.n3}
+			this.codigo = row.codigo_sis
+			this.desc_sis = row.descripcion_sis
 			$("#itemWeb").modal("show");
 		},
 		loadImg(img){
-			ruta = img ? "https://images.hergo.app/web/items/"+img : base_url('/assets/img_articulos/ninguno.png')
+			ruta = img ? "https://images.hergo.app/web/items/"+img : base_url('assets/img_articulos/ninguno.png')
 			$('#imagen').fileinput('destroy');
 			$("#imagen").fileinput({
 				initialPreview: [
@@ -293,9 +281,9 @@ const web = new Vue({
 			let formData = new FormData($('#formItemWeb')[0])
 			formData.append('id', this.id ? this.id : 0)
 			formData.append('articulo_id', this.articulo_id)
-			formData.append('id_nivel1', this.n1.id )
-			formData.append('id_nivel2', this.n2.id )
-			formData.append('id_nivel3', this.n3.id )
+			formData.append('id_nivel1', this.n1.id ? this.n1.id : 0 )
+			formData.append('id_nivel2', this.n2.id ? this.n2.id : 0 )
+			formData.append('id_nivel3', this.n3.id ?this.n3.id : 0 )
 
 			/* for(let pair of formData.entries()) {
 				console.log(pair[0]+ ', '+ pair[1]); 
@@ -312,12 +300,9 @@ const web = new Vue({
 				processData: false,
 				dataType: "json" 
             }).done(function(res){
-				console.log(res);
-                /* modal.clear()
-                $("#levelModal").modal("hide");
+                $("#itemWeb").modal("hide");
                 quitarcargando()
-				getLevels()
-				modal.getData() */
+				web.getItems()
             }) 
         },
 		getLevel(n, table, where){
