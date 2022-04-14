@@ -32,6 +32,7 @@ class ConfigArticulosWeb extends CI_Controller
         $nivel->name = $this->input->post('name');
         $nivel->description = $this->input->post('description');
         $nivel->is_active = $this->input->post('isActive');
+        $nivel->url = $this->get_slug($nivel->name);
         if ($table == 'web_nivel2') {
             $nivel->id_nivel1 = $this->input->post('id_nivel1');
         }
@@ -39,7 +40,7 @@ class ConfigArticulosWeb extends CI_Controller
             $nivel->id_nivel2 = $this->input->post('id_nivel2');
         }
         $nivel->autor = $this->session->userdata('user_id');
-        $nivel->img = ($_FILES['img']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/levels/');
+        $nivel->img = $this->get_slug(($_FILES['img']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/levels/'));
 
         if ($id > 0) {
             if ( $nivel->img == '' ) {
@@ -57,7 +58,7 @@ class ConfigArticulosWeb extends CI_Controller
 		$client = new Aws\S3\S3Client($this->config->item('credentialsSpacesDO'));
 		$uploadObject = $client->putObject([
 				'Bucket' => 'hergo-space',
-				'Key' => $folder.$file['img']['name'],
+				'Key' => $folder.$this->get_slug($file['img']['name']),
 				'SourceFile' => $file['img']['tmp_name'],
 				'ACL' => 'public-read'
 		]);	
@@ -69,5 +70,18 @@ class ConfigArticulosWeb extends CI_Controller
         $table = $this->input->post('table');
         $res = $this->ArticulosWeb_model->getDataLevels($table);
         echo json_encode($res);
+    }
+    function get_slug($string_in){
+        $string_output=mb_strtolower($string_in, 'UTF-8');
+        //caracteres inválidos en una url
+        $find=array('¥','µ','à','á','â','ã','ä','å','æ','ç','è','é','ê','ë','ì','í','î','ï','ð','ñ','ò','ó','ô','õ','ö','ø','ù','ú','û','ü','ý','ÿ','\'','"');
+        //traduccion caracteres válidos
+        $repl=array('-','-','a','a','a','a','a','a','a','c','e','e','e','e','i','i','i','i','o','ny','o','o','o','o','o','o','u','u','u','u','y','y','','' );
+        $string_output=str_replace($find, $repl, $string_output);
+        //más caracteres inválidos en una url que sustituiremos por guión
+        $find=array(' ', '&','%','$','·','!','(',')','?','¿','¡',':','+','*','\n','\r\n', '\\', '´', '`', '¨', ']', '[');
+        $string_output=str_replace($find, '-', $string_output);
+        $string_output=str_replace('--', '', $string_output);
+        return $string_output;
     }
 }
