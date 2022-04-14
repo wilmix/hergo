@@ -33,6 +33,9 @@ class ConfigArticulosWeb extends CI_Controller
         $nivel->description = $this->input->post('description');
         $nivel->is_active = $this->input->post('isActive');
         $nivel->url = $this->get_slug($nivel->name);
+        if ($table == 'web_nivel1') {
+            $nivel->is_service = $this->input->post('isService');
+        }
         if ($table == 'web_nivel2') {
             $nivel->id_nivel1 = $this->input->post('id_nivel1');
         }

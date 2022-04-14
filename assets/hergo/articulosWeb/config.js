@@ -11,7 +11,7 @@ let lengtMenu = [
 	[10, 25, 50, -1],
 	['10 filas', '25 filas', '50 filas', 'Todo']
 ]
-let columns = [
+let columnsLevel1 = [
 	{
 		data: 'id',
 		title: 'id',
@@ -33,6 +33,49 @@ let columns = [
 		title: 'Imagen',
 		className: 'text-left',
 		render: mostrarimagen,
+	},
+	{
+		data: 'is_active',
+		title: 'Activo',
+		className: 'text-center',
+	},{
+		data: 'is_service',
+		title: 'Producto Servicio',
+		className: 'text-center',
+	},
+	{
+		data: 'autor',
+		title: 'AUTOR',
+		className: 'text-right',
+		sorting: false,
+		visible: false
+	},
+	{
+		data: 'created_at',
+		title: 'CREADO EN',
+		className: 'text-center',
+		render: formato_fecha_corta,
+		visible: false
+	},
+	{
+		data: null,
+		title: '',
+		width: '120px',
+		className: 'text-center',
+		render: buttons
+	},
+]
+let columnsLevel2 = [
+	{
+		data: 'id',
+		title: 'id',
+		className: 'text-center',
+		visible: false
+	},
+	{
+		data: 'name',
+		title: 'Nombre',
+		className: 'text-left',
 	},
 	{
 		data: 'is_active',
@@ -125,7 +168,7 @@ function getLevel1() {
 			responsive: true,
 			lengthMenu: lengtMenu,
 			pageLength: 5,
-			columns: columns,
+			columns: columnsLevel1,
 			stateSave: true,
 			stateSaveParams: function (settings, data) {
 				data.order = []
@@ -163,7 +206,7 @@ function getLevel2() {
 			responsive: true,
 			lengthMenu: lengtMenu,
 			pageLength: 5,
-			columns: columns,
+			columns: columnsLevel2,
 			stateSave: true,
 			stateSaveParams: function (settings, data) {
 				data.order = []
@@ -202,7 +245,7 @@ function getLevel3() {
 			responsive: true,
 			lengthMenu: lengtMenu,
 			pageLength: 5,
-			columns: columns,
+			columns: columnsLevel2,
 			stateSave: true,
 			stateSaveParams: function (settings, data) {
 				data.order = []
@@ -274,6 +317,7 @@ const modal = new Vue({
 		name : '',
 		description: '',
         isActive: 1,
+		isService: 0,
         modalTitle: 'Añadir a Nivel ',
         nameTable: '',
 		dataNivel1: [],
@@ -324,8 +368,7 @@ const modal = new Vue({
 				console.log(pair[0]+ ', '+ pair[1]); 
 			} 
 			quitarcargando()
-			return
- 			*/
+			return */
             $.ajax({
                 url: base_url('index.php/web/ConfigArticulosWeb/addLevel'),
                 type: "POST",      
@@ -343,6 +386,7 @@ const modal = new Vue({
             }) 
         },
         clear(){
+			this.id = 0
             this.name = ''
 			this.description = ''
             this.isActive = 1
@@ -355,13 +399,14 @@ const modal = new Vue({
             this.showModal(row.level, row.img)
             this.id = row.id
             this.name = row.name
+			this.isService = row.is_service
 			this.description = row.description
             this.isActive = row.is_active
 			this.n1 = {"id":row.id_nivel1,"label":row.label}
 			this.n2 = {"id":row.id_nivel2,"label":row.label}
         },
 		loadImg(img){
-			ruta=img ? "https://images.hergo.app/web/levels/"+img : base_url('/assets/img_articulos/ninguno.png')
+			ruta = img ? "https://images.hergo.app/web/levels/"+img : base_url('/assets/img_articulos/ninguno.png')
 			$('#img').fileinput('destroy');
 			$("#img").fileinput({
 				initialPreview: [

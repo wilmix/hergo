@@ -63,7 +63,7 @@
                                         <input name="name" type="text" class="form-control" v-model="name">
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" v-if="nameTable == 'web_nivel1'">
                                     <label for="description" class="col-sm-2 control-label">Descripción</label>
                                     <div class="col-sm-10">
                                         <input name="description" type="text" class="form-control" v-model="description">
@@ -73,6 +73,15 @@
                                     <label class="col-sm-2 control-label">Nivel 1</label>
                                     <div class="col-sm-10">
                                         <v-select :options="dataNivel1"  v-model="n1"></v-select>
+                                    </div>
+                                </div>
+                                <div class="form-group" v-if="nameTable == 'web_nivel1'">
+                                    <label class="col-sm-2 control-label">Producto - Servicio</label>
+                                    <div class="col-sm-10">
+                                        <select name="isService" class="form-control" v-model="isService">
+                                            <option value="0">Producto</option>
+                                            <option value="1">Servicio</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group" v-if="nameTable == 'web_nivel3'">
@@ -91,7 +100,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" v-show="nameTable == 'web_nivel1'">
                                     <label for="img" class="col-sm-2 control-label">Imagen</label>
                                     <div class="col-sm-10">
                                         <input name="img" type="file" class="file-loading" id="img" accept=".png, .jpg, .jpeg">
