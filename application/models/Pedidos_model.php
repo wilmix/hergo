@@ -114,7 +114,7 @@ class Pedidos_model extends CI_Model
                 )saldoFac ON saldoFac.`id_orden` = oc.`id`
                 INNER JOIN (SELECT
                             pit.`idPedido`,
-                            (SUM(ROUND(pit.`cantidad` * pit.`precioFabrica`,2))+ IFNULL(p.flete,0)) total$,
+                            (ROUND(SUM(pit.`cantidad` * pit.`precioFabrica`), 2) + IFNULL(p.flete,0)) total$,
                             SUM(ROUND(pit.`cantidad` * pit.`precioFabrica` * tc.`tipocambio`,2)) + ROUND(IFNULL(p.flete * tc.`tipocambio`,0),2) totalBOB
                             FROM
                             pedidos_items pit
