@@ -266,7 +266,7 @@ const web = new Vue({
 			})
 		},
 		add(e){
-            //agregarcargando()
+            agregarcargando()
             e.preventDefault()
             if (!this.titulo || !this.descripcion ) {
                 quitarcargando()

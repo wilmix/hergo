@@ -69,9 +69,6 @@
                   <a href="<?php echo base_url("web/ArticulosWeb") ?>">
                     <i class="fa fa-list-ol ">
                     </i> Articulos Web 
-                      <span class="pull-right-container">
-                        <small class="label pull-right bg-yellow">en desarrollo</small>
-                      </span>
                   </a>
                 </li>
               </ul>
