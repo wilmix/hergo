@@ -44,7 +44,7 @@ class ArticulosWeb extends CI_Controller
 		$item = [
 			'articulo_id' => $this->input->post('articulo_id'),
 			'titulo' => $this->input->post('titulo'),
-			'descripcion' => $this->input->post('descripcion'),
+			'descripcion' => ($this->input->post('descripcion')),
 			'n1_id' => $this->input->post('id_nivel1'),
 			'n2_id' => $this->input->post('id_nivel2'),
 			'n3_id' => $this->input->post('id_nivel3'),

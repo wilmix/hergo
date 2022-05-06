@@ -40,7 +40,7 @@
                                 <div class="form-group">
                                     <label for="descripcion" class="col-sm-2 control-label">Descripción</label>
                                     <div class="col-sm-10">
-                                        <input name="descripcion" type="text" class="form-control" v-model="descripcion">
+                                        <textarea name="descripcion" class="form-control" id="glosa" rows="5"name="glosa" v-model="descripcion"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">

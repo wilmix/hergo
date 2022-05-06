@@ -88,6 +88,7 @@ const web = new Vue({
 							data: 'descripcion',
 							title: 'Descripción',
 							className: 'text-right',
+							visible: false
 						},
 						{
 							data: 'n1',
