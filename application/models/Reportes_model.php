@@ -1415,7 +1415,7 @@ class Reportes_model extends CI_Model
 							i.idIngresos id,
 							i.`almacen`,
 							IF(i.`tipomov`= 3, CONCAT('DE: ',a.`almacen`), p.`nombreproveedor`) nombreproveedor,
-							IF(i.`tipomov`=1,0,i.`fechamov`) AS fecha,
+							IF(i.`tipomov`=1,0,i.`fechaIngreso`) AS fecha,
 							tm.`sigla` tipo,
 							i.`nmov` AS numMov,
 							id.`punitario`,

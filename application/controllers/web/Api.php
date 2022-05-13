@@ -28,4 +28,14 @@ class Api extends CI_Controller
         }
 		echo json_encode($menu);
 	}
+	public function lineProducts()
+	{
+		$res = $this->ApiModel->lineProducts();
+		echo json_encode($res);
+	}
+	public function services()
+	{
+		$res = $this->ApiModel->services();
+		echo json_encode($res);
+	}
 }

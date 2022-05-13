@@ -87,4 +87,36 @@ class ApiModel extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query->result();
 	}
+    public function lineProducts()
+	{
+		$sql=   "SELECT
+                    n.`name`,
+                    n.description,
+                    n.img,
+                    n.url
+                FROM
+                    web_nivel1 n
+                WHERE
+                    n.is_active = 1
+                    AND n.is_service = 0
+                ";
+		$query=$this->db->query($sql);		
+		return $query->result();
+	}
+    public function services()
+	{
+		$sql=   "SELECT
+                    n.`name`,
+                    n.description,
+                    n.img,
+                    n.url
+                FROM
+                    web_nivel1 n
+                WHERE
+                    n.is_active = 1
+                    AND n.is_service = 1
+                ";
+		$query=$this->db->query($sql);		
+		return $query->result();
+	}
 }
