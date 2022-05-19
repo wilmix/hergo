@@ -50,11 +50,11 @@ class VentasNotario extends CI_Controller {
             $this->pdf->Cell(5,$alto,$n++,$b,0,'C',0);
             $this->pdf->Cell(15,$alto, date('d/m/Y',strtotime($venta->fecha)),$b,0,'R',1);
             $this->pdf->Cell(10,$alto, utf8_decode($venta->nFac),$b,0,'R',1);
-            $this->pdf->Cell(22,$alto, utf8_decode($venta->nAut),$b,0,'R',0);
-            $this->pdf->Cell(5,$alto, utf8_decode($venta->estado),$b,0,'L',0);
+            $this->pdf->Cell(22,$alto, utf8_decode($venta->nAut),$b,0,'L',0);
+            $this->pdf->Cell(5,$alto, utf8_decode($venta->estado),$b,0,'L',1);
 
-            $this->pdf->Cell(15,$alto, utf8_decode($venta->nit),$b,0,'L',0);
-            $this->pdf->Cell(50,$alto, utf8_decode($venta->nombre),$b,0,'L',0);
+            $this->pdf->Cell(15,$alto, utf8_decode($venta->nit),$b,0,'L',1);
+            $this->pdf->Cell(50,$alto, utf8_decode($venta->nombre),$b,0,'L',1);
 
             $this->pdf->Cell(15,$alto,number_format($venta->totalVenta, 2, ".", ","),$b,0,'R',1);
             $this->pdf->Cell(15,$alto,number_format(0, 2, ".", ","),$b,0,'R',1);
@@ -92,7 +92,7 @@ class VentasNotario extends CI_Controller {
       $this->pdf->Cell(15,$alto,number_format($total, 2, ".", ","),'TB',0,'R',1);
       $this->pdf->Cell(15,$alto,number_format($totalDebito, 2, ".", ","),'TB',1,'R',1);
       //guardar
-      $this->pdf->Output("VentasNotario-$alm->ciudad-$mes-$year", 'I');
+      $this->pdf->Output("VentasNotario-$alm->ciudad-$mes-$year.pdf", 'I');
   }
   public function subTotales($venta,$alto,$b,$subTotal,$subDebito)
   {

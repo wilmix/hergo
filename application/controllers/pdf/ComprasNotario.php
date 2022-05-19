@@ -66,7 +66,7 @@ class ComprasNotario extends CI_Controller {
             $this->pdf->Cell(50,$alto, utf8_decode($compra->razonSocial),$b,0,'L',0);
             $this->pdf->Cell(10,$alto, utf8_decode($compra->nFactura),$b,0,'R',1);
             $this->pdf->Cell(20,$alto, utf8_decode($compra->nDUI),$b,0,'R',1);
-            $this->pdf->Cell(30,$alto, utf8_decode($compra->nAut),$b,0,'R',0);
+            $this->pdf->Cell(30,$alto, utf8_decode($compra->nAut),$b,0,'L',0);
             $this->pdf->Cell(15,$alto,number_format($compra->total, 2, ".", ","),$b,0,'R',1);
             $this->pdf->Cell(15,$alto,number_format($compra->noSujetoCF, 2, ".", ","),$b,0,'R',1);
             $this->pdf->Cell(15,$alto,number_format($compra->subtotal, 2, ".", ","),$b,0,'R',1);
@@ -110,7 +110,7 @@ class ComprasNotario extends CI_Controller {
       $this->pdf->Cell(15,$alto,number_format($totalBase, 2, ".", ","),'TB',0,'R',1);
       $this->pdf->Cell(15,$alto,number_format($totalCredito, 2, ".", ","),'TB',1,'R',1);
       //guardar
-      $this->pdf->Output("ComprasNotario $mes-$year", 'I');
+      $this->pdf->Output("ComprasNotario $mes-$year" . ".pdf", 'I');
   }
   public function subTotales($compra,$alto,$b,$subTotal,$subNoSujeto,$subSubtotal,$subDescuento,$subBase,$subCredito)
   {
