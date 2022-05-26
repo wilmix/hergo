@@ -38,4 +38,27 @@ class Api extends CI_Controller
 		$res = $this->ApiModel->services();
 		echo json_encode($res);
 	}
+	public function item($id)
+	{
+		$res = $this->ApiModel->item($id);
+		echo json_encode($res);
+	}
+	public function list_items($n2) //5 17
+	{
+		$subList = $this->getSubList($n2);
+		$list = [];
+		foreach ($subList as $value) {
+			$item['n3_name'] = $value->n3_name;
+			$item['n2_name'] = $value->n2_name;
+			$sub = $this->ApiModel->list_items($value->n3_id);
+			$item['items'] = $sub;
+			array_push($list,$item);
+		}
+		echo json_encode($list); 
+	}
+	public function getSubList($n2) //5 17
+	{
+		$res = $this->ApiModel->getSubList($n2);
+		return $res;
+	}
 }

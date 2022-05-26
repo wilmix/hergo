@@ -119,4 +119,66 @@ class ApiModel extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query->result();
 	}
+    public function item($id)
+	{
+		$sql=   "SELECT
+                    a.articulo_id id,
+                    a.titulo,
+                    a.descripcion,
+                    a.imagen,
+                    a.fichaTecnica 
+                FROM
+                    web_articulos a
+                WHERE
+                    a.id = $id
+                ";
+		$query=$this->db->query($sql);		
+		return $query->result();
+	}
+    public function list_items($n3)
+	{
+		$sql=   "SELECT
+                    	a.id,
+                        a.articulo_id,
+                        n1.id n1_id,
+                        n1.`name` n1_title,
+                        n1.url n1_url,
+                        n2.id n2_id,
+                        n2.`name` n2_title,
+                        n2.url n2_url,
+                        n3.id n3_id,
+                        n3.`name` n3_title,
+                        n3.url n3_url,
+                        a.titulo,
+                        n2.url,
+                        a.imagen
+                FROM
+                    web_articulos a
+                    INNER JOIN web_nivel1 n1 ON n1.id = a.n1_id
+                    INNER JOIN web_nivel2 n2 ON n2.id = a.n2_id
+                    INNER JOIN web_nivel3 n3 ON n3.id = a.n3_id
+                WHERE
+                    n3.id = '$n3'
+                ";
+		$query=$this->db->query($sql);		
+		return $query->result();
+	}
+    public function getSubList($n2)
+	{
+		$sql=   "SELECT
+                    a.n3_id,
+                    n2.`name` n2_name,
+                    n3.`name` n3_name
+                FROM
+                    web_articulos a
+                    INNER JOIN web_nivel2 n2 ON n2.id = a.n2_id
+                    INNER JOIN web_nivel3 n3 ON n3.id = a.n3_id
+                WHERE
+                    n2.url = '$n2'
+                GROUP BY 
+                    a.n3_id
+                ";
+		$query=$this->db->query($sql);		
+		return $query->result();
+	}
 }
