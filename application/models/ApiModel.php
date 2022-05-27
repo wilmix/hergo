@@ -126,7 +126,8 @@ class ApiModel extends CI_Model
                     a.titulo,
                     a.descripcion,
                     a.imagen,
-                    a.fichaTecnica 
+                    a.fichaTecnica,
+                    a.video 
                 FROM
                     web_articulos a
                 WHERE
