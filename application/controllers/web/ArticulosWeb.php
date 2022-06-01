@@ -49,7 +49,9 @@ class ArticulosWeb extends CI_Controller
 			'n2_id' => $this->input->post('id_nivel2'),
 			'n3_id' => $this->input->post('id_nivel3'),
 			'created_by' => $this->session->userdata('user_id'),
-			'imagen' => ($_FILES['imagen']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/items/','imagen')
+			'imagen' => ($_FILES['imagen']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/items/','imagen','image/jpg'),
+			'fichaTecnica' => ($_FILES['pdf']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/pdf/','pdf','application/pdf'),
+			'video' => ($_FILES['video']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/videos/','video','video/mp4'),
 		];
 		if ($id == 0) {
 			$this->ArticulosWeb_model->storeItem($item);
@@ -61,23 +63,37 @@ class ArticulosWeb extends CI_Controller
 		}
 		echo json_encode($item);
 	}
-	public function uploadSpaces($file, $folder, $field)
+	public function uploadSpaces($file, $folder, $field, $type)
 	{
 		$client = new Aws\S3\S3Client($this->config->item('credentialsSpacesDO'));
 		$uploadObject = $client->putObject([
 				'Bucket' => 'hergo-space',
-				'Key' => $folder.$file[$field]['name'],
+				'Key' => $folder.$this->get_slug($file[$field]['name']),
 				'SourceFile' => $file[$field]['tmp_name'],
-				'ACL' => 'public-read'
+				'ACL' => 'public-read',
+				'ContentType' => $type
 		]);	
         //print_r($uploadObject['@metadata']['statusCode']);
-		return $file[$field]['name'];
+		return $this->get_slug($file[$field]['name']);
 	}
     public function getDataLevels()
     {
         $table = $this->input->post('table');
         $res = $this->ArticulosWeb_model->getDataLevels($table);
         echo json_encode($res);
+    }
+	function get_slug($string_in){
+        $string_output=mb_strtolower($string_in, 'UTF-8');
+        //caracteres inválidos en una url
+        $find=array('¥','µ','à','á','â','ã','ä','å','æ','ç','è','é','ê','ë','ì','í','î','ï','ð','ñ','ò','ó','ô','õ','ö','ø','ù','ú','û','ü','ý','ÿ','\'','"');
+        //traduccion caracteres válidos
+        $repl=array('-','-','a','a','a','a','a','a','a','c','e','e','e','e','i','i','i','i','o','ny','o','o','o','o','o','o','u','u','u','u','y','y','','' );
+        $string_output=str_replace($find, $repl, $string_output);
+        //más caracteres inválidos en una url que sustituiremos por guión
+        $find=array(' ', '&','%','$','·','!','(',')','?','¿','¡',':','+','*','\n','\r\n', '\\', '´', '`', '¨', ']', '[');
+        $string_output=str_replace($find, '-', $string_output);
+        $string_output=str_replace('--', '', $string_output);
+        return $string_output;
     }
 
 }

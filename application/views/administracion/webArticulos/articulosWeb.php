@@ -68,6 +68,20 @@
                                         <p class="help-block">Imagen del nivel.</p>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="pdf" class="col-sm-2 control-label">Ficha Técnica</label>
+                                    <div class="col-sm-10">
+                                        <input name="pdf" type="file" class="file-loading" id="pdf" accept=".pdf">
+                                        <p class="help-block">Ficha tecnica PDF</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="video" class="col-sm-2 control-label">Video</label>
+                                    <div class="col-sm-10">
+                                        <input name="video" type="file" class="file-loading" id="video" accept=".mp4">
+                                        <p class="help-block">Video Opcional</p>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>

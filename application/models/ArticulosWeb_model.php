@@ -68,6 +68,8 @@ class ArticulosWeb_model extends CI_Model
 					n2.name n2,
 					n3.name n3,
 					wa.imagen img_web,
+					wa.fichaTecnica pdf,
+					wa.video video,
 					CONCAT(uc.first_name, ' ', uc.last_name) created_by,
 					CONCAT(uu.first_name, ' ', uu.last_name) updated_by,
 					wa.created_at,
