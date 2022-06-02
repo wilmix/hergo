@@ -71,6 +71,7 @@ class ArticulosWeb extends CI_Controller
 				'Key' => $folder.$this->get_slug($file[$field]['name']),
 				'SourceFile' => $file[$field]['tmp_name'],
 				'ACL' => 'public-read',
+				'CacheControl' => 'max-age=2628000',
 				'ContentType' => $type
 		]);	
         //print_r($uploadObject['@metadata']['statusCode']);
