@@ -38,7 +38,7 @@ class ArticulosWeb extends CI_Controller
         $res = $this->ArticulosWeb_model->getLevel($level, $table, $where);
         echo json_encode($res);
 	}
-	/* public function addItemWeb()
+	public function addItemWeb()
 	{
 		$id =$this->input->post('id');
 		$item = [
@@ -61,14 +61,6 @@ class ArticulosWeb extends CI_Controller
 			}
 			$this->ArticulosWeb_model->updateItem($id, $item);
 		}
-		echo json_encode($item);
-	} */
-	public function addItemWeb()
-	{
-		$item = [
-			'video' => ($_FILES['video']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/videos/','video','video/mp4'),
-		];
-
 		echo json_encode($item);
 	}
 	public function uploadSpaces($file, $folder, $field, $type)
