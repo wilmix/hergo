@@ -226,7 +226,7 @@ const web = new Vue({
 			return [imagen].join('')
 		},
 		edit(row){
-			//console.log(row);
+			console.log(row);
 			this.loadImg(row.img_web)
 			this.loadPdf(row.pdf)
 			this.loadVideo(row.video)
@@ -255,7 +255,7 @@ const web = new Vue({
 				previewFileType: "image",
 				maxFileSize: 1024,
 			});
-			$('#imagen').fileinput('refresh');
+			//$('#imagen').fileinput('refresh');
 		},
 		loadPdf(pdf){
 			ruta = pdf ? "https://images.hergo.app/web/pdf/"+pdf : ''
@@ -266,7 +266,7 @@ const web = new Vue({
 				showUpload: false,
 				maxFileSize: 5120,
 			});
-			$('#pdf').fileinput('refresh');
+			//$('#pdf').fileinput('refresh');
 		},
 		loadVideo(video){
 			ruta = video ? "https://images.hergo.app/web/videos/"+video : ''
@@ -277,7 +277,7 @@ const web = new Vue({
 				showUpload: false,
 				maxFileSize: 102400,
 			});
-			$('#video').fileinput('refresh');
+			//$('#video').fileinput('refresh');
 		},
 		getData(){
 			$.ajax({
