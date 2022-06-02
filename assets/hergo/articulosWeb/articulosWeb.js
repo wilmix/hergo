@@ -275,7 +275,7 @@ const web = new Vue({
 				initialCaption: video,
 				language: "es",
 				showUpload: false,
-				maxFileSize: 102400,
+				maxFileSize: 202400,
 			});
 			//$('#video').fileinput('refresh');
 		},
