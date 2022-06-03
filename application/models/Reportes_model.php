@@ -1153,7 +1153,7 @@ class Reportes_model extends CI_Model
 			inner join marca m on m.`idMarca` = a.`idMarca`
 			INNER JOIN unidad u ON a.`idUnidad` = u.`idUnidad`
 			INNER JOIN almacenes al on al.`idalmacen` = f.`almacen`
-			WHERE f.`anulada` = 0 AND m.`idMarca` = 30 AND  f.`almacen` LIKE '%$alm' AND
+			WHERE f.`anulada` = 0 AND  f.`almacen` LIKE '%$alm' AND
 			f.`fechaFac` BETWEEN '$ini' AND '$fin' 
 			ORDER BY f.`almacen`, f.`fechaFac`, fd.`ArticuloCodigo`, f.`ClienteFactura`
 		) tbl
@@ -1173,7 +1173,7 @@ class Reportes_model extends CI_Model
 			INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
 			INNER JOIN marca m ON m.`idMarca` = a.`idMarca`
 			INNER JOIN almacenes alm ON alm.`idalmacen` = sa.`idAlmacen`
-			WHERE m.`idMarca` = 30 AND sa.`saldo`<> 0
+			WHERE sa.`saldo`<> 0
 		ORDER BY a.`CodigoArticulo`
 		) tbl
 		WHERE SUBSTRING(codigo,1,2) = 'TM' OR SUBSTRING(codigo,1,2) = 'TS' 
