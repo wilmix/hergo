@@ -182,4 +182,46 @@ class ApiModel extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query->result();
 	}
+    public function factura()
+	{
+		$sql=   "SELECT
+        '1000991026' nit,
+        'HERGO LTDA' razonSocialEmisor,
+        a.ciudad municipio,
+        '2285837' telefono,
+        f.nFactura numeroFactura,
+        '' cufd,
+        0 codigoSucursal,
+        -- a.sucursal,
+        a.direccion direccion,
+        f.fechaFac,
+        c.nombreCliente nombreRazonSocial,
+        c.idDocumentoTipo codigoTipoDocumentoIdentidad,
+        c.documento numeroDocumento,
+        c.idCliente codigoCliente,
+        f.tipoPago codigoMetodoPago,
+        ROUND(SUM(fd.facturaCantidad * fd.facturaPUnitario),2) montoTotal,
+        ROUND(SUM(fd.facturaCantidad * fd.facturaPUnitario),2) montoTotalSujetoIva,
+        0 montoGiftCard,
+        0 descuentoAdicional,
+        1 codigoMoneda,
+        1 tipoCambio,
+        ROUND(SUM(fd.facturaCantidad * fd.facturaPUnitario),2) montoTotalMoneda,
+        'leyenda' leyenda,
+        CONCAT(SUBSTRING(upper(u.first_name), 1, 1),SUBSTRING(upper(u.last_name), 1, 9)) usuario,
+        1 codigoDocumentoSector
+        
+    FROM
+        factura f
+        INNER JOIN almacenes a ON a.idalmacen = f.almacen
+        INNER JOIN clientes c ON c.idCliente = f.cliente
+        inner join facturadetalle fd on fd.idFactura = f.idFactura
+        inner join users u ON u.id = f.autor
+    
+    WHERE
+        f.idFactura = 84478
+                ";
+		$query=$this->db->query($sql);		
+		return $query->result();
+	}
 }

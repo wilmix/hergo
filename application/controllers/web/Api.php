@@ -61,4 +61,9 @@ class Api extends CI_Controller
 		$res = $this->ApiModel->getSubList($n2);
 		return $res;
 	}
+	public function factura()
+	{
+		$res = $this->ApiModel->factura();
+		echo json_encode($res);
+	}
 }
