@@ -78,6 +78,12 @@ let columnsLevel2 = [
 		className: 'text-left',
 	},
 	{
+		data: 'img',
+		title: 'Imagen',
+		className: 'text-left',
+		render: mostrarimagen,
+	},
+	{
 		data: 'is_active',
 		title: 'Activo',
 		className: 'text-center',
@@ -276,10 +282,15 @@ function mostrarimagen(value, row, index)
         ruta="/assets/img_articulos/hergo.jpg"
         clase=""
     }
-    else
+    else if(index.level == 'web_nivel1')
     {
         clase="imagenminiatura"
         ruta="https://images.hergo.app/web/levels/"+value
+    }
+	else if(index.level == 'web_nivel2')
+    {
+        clase="imagenminiatura"
+        ruta="https://images.hergo.app/web/levels/n2"+value
     }
 
     imagen = '<div class="contimg"><img src="'+ruta+'" class="'+clase+'"></div>'

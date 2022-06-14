@@ -100,7 +100,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group" v-show="nameTable == 'web_nivel1'">
+                                <div class="form-group" v-show="nameTable != 'web_nivel3'">
                                     <label for="img" class="col-sm-2 control-label">Imagen</label>
                                     <div class="col-sm-10">
                                         <input name="img" type="file" class="file-loading" id="img" accept=".png, .jpg, .jpeg">

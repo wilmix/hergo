@@ -35,15 +35,17 @@ class ConfigArticulosWeb extends CI_Controller
         $nivel->url = $this->get_slug($nivel->name);
         if ($table == 'web_nivel1') {
             $nivel->is_service = $this->input->post('isService');
+            $nivel->img = $this->get_slug(($_FILES['img']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/levels/'));
         }
         if ($table == 'web_nivel2') {
             $nivel->id_nivel1 = $this->input->post('id_nivel1');
+            $nivel->img = $this->get_slug(($_FILES['img']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/levels/n2/'));
         }
         if ($table == 'web_nivel3') {
             $nivel->id_nivel2 = $this->input->post('id_nivel2');
         }
         $nivel->autor = $this->session->userdata('user_id');
-        $nivel->img = $this->get_slug(($_FILES['img']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/levels/'));
+        
 
         if ($id > 0) {
             if ( $nivel->img == '' ) {
