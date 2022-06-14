@@ -115,6 +115,50 @@ let columnsLevel2 = [
 		render: buttons
 	},
 ]
+let columnsLevel3 = [
+	{
+		data: 'id',
+		title: 'id',
+		className: 'text-center',
+		visible: false
+	},
+	{
+		data: 'name',
+		title: 'Nombre',
+		className: 'text-left',
+	},
+	{
+		data: 'is_active',
+		title: 'Activo',
+		className: 'text-center',
+	},
+	{
+		data: 'label',
+		title: 'Nivel Superior',
+		className: 'text-center',
+	},
+	{
+		data: 'autor',
+		title: 'AUTOR',
+		className: 'text-right',
+		sorting: false,
+		visible: false
+	},
+	{
+		data: 'created_at',
+		title: 'CREADO EN',
+		className: 'text-center',
+		render: formato_fecha_corta,
+		visible: false
+	},
+	{
+		data: null,
+		title: '',
+		width: '120px',
+		className: 'text-center',
+		render: buttons
+	},
+]
 function buttonsTable(table) {
 	return [
 		{
@@ -251,7 +295,7 @@ function getLevel3() {
 			responsive: true,
 			lengthMenu: lengtMenu,
 			pageLength: 5,
-			columns: columnsLevel2,
+			columns: columnsLevel3,
 			stateSave: true,
 			stateSaveParams: function (settings, data) {
 				data.order = []
