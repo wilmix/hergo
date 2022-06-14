@@ -22,6 +22,7 @@ class Api extends CI_Controller
         foreach ($res as $key => $value) {
             $item = array();
             $item['menu'] = $value->name;
+			$item['url'] = $value->url;
             $sub = $this->ApiModel->nivel_2($value->id);
             $item['sub'] = $sub;
             array_push($menu, $item); 
@@ -56,10 +57,15 @@ class Api extends CI_Controller
 		}
 		echo json_encode($list); 
 	}
-	public function getSubList($n2) //5 17
+	public function getSubList($n2)
 	{
 		$res = $this->ApiModel->getSubList($n2);
 		return $res;
+	}
+	public function list_n2($line)
+	{
+		$res = $this->ApiModel->getListN2($line);
+		echo json_encode($res);
 	}
 	public function factura()
 	{

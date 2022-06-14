@@ -182,6 +182,25 @@ class ApiModel extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query->result();
 	}
+    public function getListN2($line)
+	{
+		$sql=   "SELECT
+                    n2.id,
+                    n1.`name` name_n1,
+                    n2.`name` name_n2,
+                    n2.url url_n2,
+                    n2.description,
+                    n2.img
+                FROM
+                    web_nivel2 n2
+                    INNER JOIN web_nivel1 n1 ON n1.id = n2.id_nivel1
+                WHERE
+                    n1.url = '$line'
+                    AND n2.is_active = 1
+                            ";
+		$query=$this->db->query($sql);		
+		return $query->result();
+	}
     public function factura()
 	{
 		$sql=   "SELECT
