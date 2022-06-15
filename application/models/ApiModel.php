@@ -55,6 +55,7 @@ class ApiModel extends CI_Model
                 FROM
                     web_nivel1 n1
                 WHERE n1.is_active = 1
+                ORDER BY n1.`name` 
                 ";
 		$query=$this->db->query($sql);		
 		return $query->result();
@@ -70,6 +71,7 @@ class ApiModel extends CI_Model
                 WHERE 
                     n2.id_nivel1 = $id_n1
                     AND n2.is_active = 1
+                ORDER BY n2.name DESC 
                 ";
 		$query=$this->db->query($sql);		
 		return $query->result();
@@ -83,6 +85,7 @@ class ApiModel extends CI_Model
                 WHERE
                     n3.id_nivel2 = $id_n2
                     AND n3.is_active = 1
+                ORDER BY n3.name
                 ";
 		$query=$this->db->query($sql);		
 		return $query->result();
