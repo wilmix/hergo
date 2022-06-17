@@ -43,6 +43,7 @@ class ConfigArticulosWeb extends CI_Controller
         }
         if ($table == 'web_nivel3') {
             $nivel->id_nivel2 = $this->input->post('id_nivel2');
+            $nivel->img = '';
         }
         $nivel->autor = $this->session->userdata('user_id');
         
