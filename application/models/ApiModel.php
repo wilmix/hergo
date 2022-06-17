@@ -206,16 +206,15 @@ class ApiModel extends CI_Model
 	}
     public function factura()
 	{
-		$sql=   "SELECT
-        '1000991026' nit,
+		$sql=   " SELECT
+        '1000991026' nitEmisor,
         'HERGO LTDA' razonSocialEmisor,
         a.ciudad municipio,
-        '2285837' telefono,
+        a.phone telefono,
         f.nFactura numeroFactura,
         '' cufd,
-        0 codigoSucursal,
-        -- a.sucursal,
-        a.direccion direccion,
+        a.siat_sucursal codigoSucursal,
+        a.address direccion,
         f.fechaFac,
         c.nombreCliente nombreRazonSocial,
         c.idDocumentoTipo codigoTipoDocumentoIdentidad,
@@ -224,7 +223,7 @@ class ApiModel extends CI_Model
         f.tipoPago codigoMetodoPago,
         ROUND(SUM(fd.facturaCantidad * fd.facturaPUnitario),2) montoTotal,
         ROUND(SUM(fd.facturaCantidad * fd.facturaPUnitario),2) montoTotalSujetoIva,
-        0 montoGiftCard,
+        NULL montoGiftCard,
         0 descuentoAdicional,
         1 codigoMoneda,
         1 tipoCambio,
@@ -241,7 +240,34 @@ class ApiModel extends CI_Model
         inner join users u ON u.id = f.autor
     
     WHERE
-        f.idFactura = 84478
+        f.idFactura = 13006
+                ";
+		$query=$this->db->query($sql);		
+		return $query->result();
+	}
+    public function facturaDetalle()
+	{
+		$sql=   " SELECT
+                        '465000' actividadEconomica,
+                        99100 codigoProductoSin,
+                        fd.ArticuloCodigo codigoProducto,
+                        fd.ArticuloNombre descripcion,
+                        fd.facturaCantidad cantidad,
+                        u.siat_codigo unidadMedida,
+                        fd.facturaPUnitario precioUnitario,
+                        0 montoDescuento,
+                        ROUND(fd.facturaPUnitario * fd.facturaCantidad, 2) subTotal,
+                        a.NumParte numeroSerie,
+                        NULL numeroImei
+                        
+                        
+                    FROM
+                        facturadetalle fd
+                        INNER JOIN factura f on f.idFactura = fd.idFactura
+                        INNER JOIN articulos a on a.idArticulos = fd.articulo
+                        INNER JOIN unidad u on u.idUnidad = a.idUnidad
+                    WHERE
+                        f.idFactura = 13006
                 ";
 		$query=$this->db->query($sql);		
 		return $query->result();
