@@ -30,6 +30,17 @@ class ArticulosWeb extends CI_Controller
 		$res->n3 = $this->ArticulosWeb_model->getDataLevels('web_nivel3');
 		echo json_encode($res);
 	}
+	public function getItem()
+	{
+		$nivel1 = $this->input->post('n1');
+		$nivel2 = $this->input->post('n2');
+
+		$res = new stdClass;
+		$res->n2 = $this->ArticulosWeb_model->getDataLevelsItem('web_nivel2','n.id_nivel1', $nivel1);
+		$res->n3 = $this->ArticulosWeb_model->getDataLevelsItem('web_nivel3','n.id_nivel2', $nivel2);
+
+		echo json_encode($res);
+	}
 	public function getLevel()
 	{
 		$level = $this->input->post('level');

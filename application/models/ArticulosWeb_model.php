@@ -98,6 +98,29 @@ class ArticulosWeb_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query->result_array();
 	}
+	public function getDataLevelsItem($table, $where , $nivel)
+	{
+		if ($nivel > 0) {
+			$sql="  SELECT
+						n.id,
+						n.name label
+					FROM
+						$table n
+					WHERE
+						$where = $nivel
+                ";
+		}  else {
+			$sql="  SELECT
+						n.id,
+						n.name label
+					FROM
+						$table n
+		";
+		}
+		
+		$query=$this->db->query($sql);		
+		return $query->result_array();
+	}
 	public function getLevel($level, $table, $where)
 	{
 		$sql="  SELECT 

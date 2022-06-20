@@ -227,6 +227,7 @@ const web = new Vue({
 		},
 		edit(row){
 			console.log(row);
+			this.getItem(row.n1_id, row.n2_id)
 			this.loadImg(row.img_web)
 			this.loadPdf(row.pdf)
 			this.loadVideo(row.video)
@@ -240,6 +241,21 @@ const web = new Vue({
 			this.codigo = row.codigo_sis
 			this.desc_sis = row.descripcion_sis
 			$("#itemWeb").modal("show");
+		},
+		getItem(n1, n2){
+			$.ajax({
+				type: "POST",
+				url: base_url('index.php/web/ArticulosWeb/getItem'),
+				dataType: "json",
+				data: {
+					n1: n1,
+					n2: n2,
+				}
+			}).done(function (res) {
+				console.log(res);
+				web.data_n2 = res.n2
+				web.data_n3 = res.n3
+			})
 		},
 		loadImg(img){
 			ruta = img ? "https://images.hergo.app/web/items/"+img : base_url('assets/img_articulos/ninguno.png')
@@ -306,9 +322,9 @@ const web = new Vue({
 			let formData = new FormData($('#formItemWeb')[0])
 			formData.append('id', this.id ? this.id : 0)
 			formData.append('articulo_id', this.articulo_id)
-			formData.append('id_nivel1', this.n1.id ? this.n1.id : 0 )
-			formData.append('id_nivel2', this.n2.id ? this.n2.id : 0 )
-			formData.append('id_nivel3', this.n3.id ?this.n3.id : 0 )
+			formData.append('id_nivel1', this.n1 ? this.n1.id : 0 )
+			formData.append('id_nivel2', this.n2 ? this.n2.id : 0 )
+			formData.append('id_nivel3', this.n3 ? this.n3.id : 0 )
 
 			/* for(let pair of formData.entries()) {
 				console.log(pair[0]+ ', '+ pair[1]); 
