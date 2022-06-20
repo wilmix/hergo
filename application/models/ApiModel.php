@@ -207,7 +207,7 @@ class ApiModel extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query->result();
 	}
-    public function factura()
+    public function factura($id)
 	{
 		$sql=   " SELECT
         '1000991026' nitEmisor,
@@ -243,12 +243,12 @@ class ApiModel extends CI_Model
         inner join users u ON u.id = f.autor
     
     WHERE
-        f.idFactura = 13006
+        f.idFactura = '$id'
                 ";
 		$query=$this->db->query($sql);		
 		return $query->result();
 	}
-    public function facturaDetalle()
+    public function facturaDetalle($id)
 	{
 		$sql=   " SELECT
                         '465000' actividadEconomica,
@@ -270,7 +270,7 @@ class ApiModel extends CI_Model
                         INNER JOIN articulos a on a.idArticulos = fd.articulo
                         INNER JOIN unidad u on u.idUnidad = a.idUnidad
                     WHERE
-                        f.idFactura = 13006
+                        f.idFactura = '$id'
                 ";
 		$query=$this->db->query($sql);		
 		return $query->result();
