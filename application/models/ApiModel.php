@@ -142,27 +142,30 @@ class ApiModel extends CI_Model
     public function list_items($n3)
 	{
 		$sql=   "SELECT
-                    	a.id,
-                        a.articulo_id,
-                        n1.id n1_id,
-                        n1.`name` n1_title,
-                        n1.url n1_url,
-                        n2.id n2_id,
-                        n2.`name` n2_title,
-                        n2.url n2_url,
-                        n3.id n3_id,
-                        n3.`name` n3_title,
-                        n3.url n3_url,
-                        a.titulo,
-                        n2.url,
-                        a.imagen
+                    aw.id,
+                    aw.articulo_id,
+                    n1.id n1_id,
+                    n1.`name` n1_title,
+                    n1.url n1_url,
+                    n2.id n2_id,
+                    n2.`name` n2_title,
+                    n2.url n2_url,
+                    n3.id n3_id,
+                    n3.`name` n3_title,
+                    n3.url n3_url,
+                    aw.titulo,
+                    n2.url,
+                    aw.imagen
                 FROM
-                    web_articulos a
-                    INNER JOIN web_nivel1 n1 ON n1.id = a.n1_id
-                    INNER JOIN web_nivel2 n2 ON n2.id = a.n2_id
-                    INNER JOIN web_nivel3 n3 ON n3.id = a.n3_id
+                    web_articulos aw
+                    INNER JOIN web_nivel1 n1 ON n1.id = aw.n1_id
+                    INNER JOIN web_nivel2 n2 ON n2.id = aw.n2_id
+                    INNER JOIN web_nivel3 n3 ON n3.id = aw.n3_id
+                    INNER JOIN articulos a ON a.idArticulos = aw.articulo_id
+                    
                 WHERE
                     n3.id = '$n3'
+                    and a.web_catalogo = 1
                 ";
 		$query=$this->db->query($sql);		
 		return $query->result();
