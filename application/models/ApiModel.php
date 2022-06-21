@@ -184,6 +184,7 @@ class ApiModel extends CI_Model
                     n2.url = '$n2'
                 GROUP BY 
                     a.n3_id
+                ORDER BY n3.`name` DESC  
                 ";
 		$query=$this->db->query($sql);		
 		return $query->result();
