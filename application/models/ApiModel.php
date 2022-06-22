@@ -240,7 +240,8 @@ class ApiModel extends CI_Model
         '' cafc,
         'leyenda' leyenda,
         CONCAT(SUBSTRING(upper(u.first_name), 1, 1),SUBSTRING(upper(u.last_name), 1, 9)) usuario,
-        1 codigoDocumentoSector
+        1 codigoDocumentoSector,
+        SUBSTRING(DATE_FORMAT(NOW(3), '%d-%b-%y %H:%i:%s.%f'),1,22) fechaSiat
     FROM
         factura f
         INNER JOIN almacenes a ON a.idalmacen = f.almacen
