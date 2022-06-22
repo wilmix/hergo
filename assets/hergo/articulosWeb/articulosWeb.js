@@ -237,7 +237,7 @@ const web = new Vue({
 			this.descripcion = row.descripcion
 			this.n1 = {id:row.n1_id,label:row.n1}
 			this.n2 = {id:row.n2_id,label:row.n2}
-			this.n3 = {id:row.n3_id,label:row.n3}
+			this.n3 = row.n3 == null ? 0 : {id:row.n3_id,label:row.n3}
 			this.codigo = row.codigo_sis
 			this.desc_sis = row.descripcion_sis
 			$("#itemWeb").modal("show");
