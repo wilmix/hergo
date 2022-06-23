@@ -46,7 +46,7 @@ class ApiModel extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query->result_array();
 	}
-    public function nivel_1()
+    public function nivel_1($is_service)
 	{
 		$sql=   "SELECT
                     n1.id,
@@ -55,6 +55,7 @@ class ApiModel extends CI_Model
                 FROM
                     web_nivel1 n1
                 WHERE n1.is_active = 1
+                AND n1.is_service = $is_service
                 ORDER BY n1.`name` 
                 ";
 		$query=$this->db->query($sql);		
@@ -90,7 +91,7 @@ class ApiModel extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query->result();
 	}
-    public function lineProducts()
+    public function lineProducts($is_service)
 	{
 		$sql=   "SELECT
                     n.`name`,
@@ -101,7 +102,7 @@ class ApiModel extends CI_Model
                     web_nivel1 n
                 WHERE
                     n.is_active = 1
-                    AND n.is_service = 0
+                    AND n.is_service = $is_service
                 ";
 		$query=$this->db->query($sql);		
 		return $query->result();

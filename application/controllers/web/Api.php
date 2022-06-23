@@ -14,9 +14,9 @@ class Api extends CI_Controller
 		$res = $this->ApiModel->showMenuItems();
 		echo json_encode($res);
 	}
-    public function menu()
+    public function menu($is_service = 0)
 	{
-		$res = $this->ApiModel->nivel_1();
+		$res = $this->ApiModel->nivel_1($is_service);
         $menu = array();
 
         foreach ($res as $key => $value) {
@@ -29,9 +29,9 @@ class Api extends CI_Controller
         }
 		echo json_encode($menu);
 	}
-	public function lineProducts()
+	public function lineProducts($is_service = 0)
 	{
-		$res = $this->ApiModel->lineProducts();
+		$res = $this->ApiModel->lineProducts($is_service);
 		echo json_encode($res);
 	}
 	public function services()
