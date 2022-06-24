@@ -287,4 +287,19 @@ class ApiModel extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query->result();
 	}
+    public function listaFacturas($almacen)
+    {
+        $sql="  SELECT
+                    idFactura id 
+                FROM
+                    factura f 
+                WHERE
+                    f.almacen = '$almacen'
+                AND f.anulada = '0' 
+                AND year(f.fechaFac) = '2022'
+                AND MONTH(f.fechaFac) = 1
+            ";
+            $query=$this->db->query($sql);		
+            return $query->result();
+    }
 }

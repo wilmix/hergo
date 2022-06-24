@@ -70,6 +70,12 @@ class ArticulosWeb extends CI_Controller
 			if ( $item['imagen'] == '' ) {
 				unset($item['imagen']);
 			}
+			if ( $item['fichaTecnica'] == '' ) {
+				unset($item['fichaTecnica']);
+			}
+			if ( $item['video'] == '' ) {
+				unset($item['video']);
+			}
 			$this->ArticulosWeb_model->updateItem($id, $item);
 		}
 		echo json_encode($item);
