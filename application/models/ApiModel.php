@@ -287,6 +287,18 @@ class ApiModel extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query->result();
 	}
+    public function promos()
+    {
+        $sql="  SELECT
+                    *
+                FROM
+                    web_promos wp
+                WHERE
+                    wp.is_active = 1
+            ";
+            $query=$this->db->query($sql);		
+            return $query->result();
+    }
     public function listaFacturas($almacen)
     {
         $sql="  SELECT

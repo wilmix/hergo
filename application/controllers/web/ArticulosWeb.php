@@ -112,5 +112,30 @@ class ArticulosWeb extends CI_Controller
         $string_output=str_replace('--', '', $string_output);
         return $string_output;
     }
+	public function getPromos()
+	{
+		$res = $this->ArticulosWeb_model->showPromos();
+		echo json_encode($res);
+	}
+	public function addItemPromo()
+	{
+		$id =$this->input->post('id');
+		$item = [
+			'titulo' => $this->input->post('titulo'),
+			'descripcion' => ($this->input->post('descripcion')),
+			'created_by' => $this->session->userdata('user_id'),
+			'is_active' => ($this->input->post('isActive')),
+			'imagen' => ($_FILES['imagen']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/promos/','imagen','image/jpg'),
+		];
+		if ($id == 0) {
+			$this->ArticulosWeb_model->storeItemPromo($item);
+		} else if ($id > 0) {
+			if ( $item['imagen'] == '' ) {
+				unset($item['imagen']);
+			}
+			$this->ArticulosWeb_model->updateItemPromos($id, $item);
+		}
+		echo json_encode($item);
+	}
 
 }

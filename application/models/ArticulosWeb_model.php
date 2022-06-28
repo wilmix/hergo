@@ -87,6 +87,16 @@ class ArticulosWeb_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query->result_array();
 	}
+	public function showPromos()
+	{
+		$sql =	"SELECT
+						*
+				FROM 
+					web_promos wp 
+                ";
+		$query=$this->db->query($sql);		
+		return $query->result_array();
+	}
 	public function getDataLevels($table)
 	{
 		$sql="  SELECT
@@ -143,6 +153,18 @@ class ArticulosWeb_model extends CI_Model
 	{
 		$this->db->where('id', $id);
 		$res = $this->db->update('web_articulos', $item);
+		return $res;
+	}
+	public function storeItemPromo($item)
+	{
+            $this->db->insert('web_promos', $item);
+            /* $id=$this->db->insert_id();
+            return $id; */
+	}
+	public function updateItemPromos($id, $item)
+	{
+		$this->db->where('id', $id);
+		$res = $this->db->update('web_promos', $item);
 		return $res;
 	}
 }

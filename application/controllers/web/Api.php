@@ -81,4 +81,9 @@ class Api extends CI_Controller
 		$res = $this->ApiModel->listaFacturas($almacen);
 		echo json_encode($res);
 	}
+	public function promos()
+	{
+		$res = $this->ApiModel->promos();
+		echo json_encode($res);
+	}
 }

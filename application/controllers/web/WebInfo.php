@@ -25,4 +25,12 @@ class WebInfo extends CI_Controller
 					
 		$this->setView('administracion/webArticulos/home.php');
 	}
+	public function promos()
+	{
+		//$this->accesoCheck(2);
+		$this->titles('ArticulosWeb','Articulos Web Promociones','AdministracionWeb',);
+		$this->datos['foot_script'][]=base_url('assets/hergo/articulosWeb/promos.js').'?'.rand();
+					
+		$this->setView('administracion/webArticulos/promos.php');
+	}
 }
