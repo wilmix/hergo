@@ -74,7 +74,7 @@
                 <li class="promos">
                   <a href="<?php echo base_url("web/WebInfo/promos") ?>">
                     <i class="fa fa-list-ol ">
-                    </i> Web Promos
+                    </i> Promociones Web
                   </a>
                 </li>
               </ul>
