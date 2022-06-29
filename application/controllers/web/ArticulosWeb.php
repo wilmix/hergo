@@ -76,6 +76,7 @@ class ArticulosWeb extends CI_Controller
 			if ( $item['video'] == '' ) {
 				unset($item['video']);
 			}
+			$item['updated_at'] = date('Y-m-d H:i:s');
 			$this->ArticulosWeb_model->updateItem($id, $item);
 		}
 		echo json_encode($item);
