@@ -302,14 +302,33 @@ class ApiModel extends CI_Model
     public function listaFacturas($almacen)
     {
         $sql="  SELECT
-                    idFactura id 
+                    f.idFactura id
                 FROM
-                    factura f 
+                    factura f
+                    INNER JOIN facturadetalle fd ON f.idFactura = fd.idFactura
                 WHERE
-                    f.almacen = '$almacen'
-                AND f.anulada = '0' 
-                AND year(f.fechaFac) = '2022'
-                AND MONTH(f.fechaFac) = 1
+                    f.almacen = '1'
+                    AND year(f.fechaFac) = '2021'
+                    -- AND MONTH(f.fechaFac) = '12'
+                    AND TRUNCATE(fd.facturaPUnitario, 2) = fd.facturaPUnitario
+                GROUP BY
+                    f.idFactura
+                LIMIT
+                    100
+            ";
+            $query=$this->db->query($sql);		
+            return $query->result();
+    }
+    public function cuis($sucursal, $pos)
+    {
+        $sql="  SELECT
+                    *
+                FROM
+                    siat_cuis
+                WHERE
+                    siat_cuis.active
+                    AND siat_cuis.sucursal = '$sucursal'
+                    AND siat_cuis.codigoPuntoVenta = '$pos'
             ";
             $query=$this->db->query($sql);		
             return $query->result();

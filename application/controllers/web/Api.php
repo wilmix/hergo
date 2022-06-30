@@ -86,4 +86,9 @@ class Api extends CI_Controller
 		$res = $this->ApiModel->promos();
 		echo json_encode($res);
 	}
+	public function cuis($sucursal, $pos = 0)
+	{
+		$res = $this->ApiModel->cuis($sucursal, $pos);
+		echo json_encode($res);
+	}
 }
