@@ -269,7 +269,7 @@ class ApiModel extends CI_Model
                         fd.ArticuloNombre descripcion,
                         fd.facturaCantidad cantidad,
                         u.siat_codigo unidadMedida,
-                        fd.facturaPUnitario precioUnitario,
+                        ROUND(fd.facturaPUnitario,2) precioUnitario,
                         0 montoDescuento,
                         ROUND(fd.facturaPUnitario * fd.facturaCantidad, 2) subTotal,
                         a.NumParte numeroSerie,
@@ -309,12 +309,12 @@ class ApiModel extends CI_Model
                 WHERE
                     f.almacen = '1'
                     AND year(f.fechaFac) = '2021'
-                    -- AND MONTH(f.fechaFac) = '12'
+                    AND MONTH(f.fechaFac) BETWEEN 5 AND 6
                     AND TRUNCATE(fd.facturaPUnitario, 2) = fd.facturaPUnitario
                 GROUP BY
                     f.idFactura
                 LIMIT
-                    100
+                    250
             ";
             $query=$this->db->query($sql);		
             return $query->result();
