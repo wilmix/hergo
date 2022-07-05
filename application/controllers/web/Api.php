@@ -91,4 +91,9 @@ class Api extends CI_Controller
 		$res = $this->ApiModel->cuis($sucursal, $pos);
 		echo json_encode($res);
 	}
+	public function search($search)
+	{
+		$res = $this->ApiModel->search($search);
+		echo json_encode($res);
+	}
 }

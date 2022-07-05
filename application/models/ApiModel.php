@@ -299,6 +299,20 @@ class ApiModel extends CI_Model
             $query=$this->db->query($sql);		
             return $query->result();
     }
+    public function search($search)
+    {
+        $sql="  SELECT
+                    *
+                FROM
+                    web_articulos wa
+                WHERE
+                    wa.titulo LIKE '%$search%'
+                    OR wa.descripcion LIKE '%$search%'
+                    
+            ";
+            $query=$this->db->query($sql);		
+            return $query->result();
+    }
     public function listaFacturas($almacen)
     {
         $sql="  SELECT
