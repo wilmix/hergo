@@ -322,13 +322,16 @@ class ApiModel extends CI_Model
                     INNER JOIN facturadetalle fd ON f.idFactura = fd.idFactura
                 WHERE
                     f.almacen = '1'
+                    -- and f.nFactura BETWEEN 10 and 1000
                     AND year(f.fechaFac) = '2021'
-                    AND MONTH(f.fechaFac) BETWEEN 5 AND 6
-                    AND TRUNCATE(fd.facturaPUnitario, 2) = fd.facturaPUnitario
+                    AND MONTH(f.fechaFac) BETWEEN 8
+                    AND 9
+                    
                 GROUP BY
                     f.idFactura
+                    ORDER BY f.nFactura
                 LIMIT
-                    250
+                    10
             ";
             $query=$this->db->query($sql);		
             return $query->result();
