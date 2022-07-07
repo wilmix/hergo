@@ -320,18 +320,31 @@ class ApiModel extends CI_Model
                 FROM
                     factura f
                     INNER JOIN facturadetalle fd ON f.idFactura = fd.idFactura
+                    INNER JOIN datosfactura df ON df.idDatosFactura = f.lote
                 WHERE
                     f.almacen = '1'
-                    -- and f.nFactura BETWEEN 10 and 1000
+                    AND f.nFactura BETWEEN 1 and 1000
                     AND year(f.fechaFac) = '2021'
-                    AND MONTH(f.fechaFac) BETWEEN 8
-                    AND 9
+                    -- AND MONTH(f.fechaFac) BETWEEN 1 AND 2
+                    AND df.manual = 0 
+                    AND f.idFactura <> 80642
+                    AND f.idFactura <> 80650
+                    AND f.idFactura <> 81007
+                    AND f.idFactura <> 81255
+                    AND f.idFactura <> 81261
+                    AND f.idFactura <> 81271                    
+                    AND f.idFactura <> 81302
+
+                    AND f.idFactura <> 74545
+                    AND f.idFactura <> 74721
+                    AND f.idFactura <> 74787
+                    AND f.idFactura <> 74878
                     
                 GROUP BY
                     f.idFactura
                     ORDER BY f.nFactura
                 LIMIT
-                    10
+                    500
             ";
             $query=$this->db->query($sql);		
             return $query->result();
