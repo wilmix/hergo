@@ -12,7 +12,7 @@ function showImage(row)
     else
     {
         clase="imagenminiatura"
-        ruta="https://images.hergo.app/promos/"+row.imagen
+        ruta="https://images.hergo.app/web/promos/"+row.imagen
     }
 
     imagen = '<div class="contimg"><img src="'+ruta+'" class="'+clase+'"></div>'
