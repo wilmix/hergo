@@ -96,10 +96,12 @@ class FacturasPendientesPago_model extends CI_Model
                                     pf.id,
                                     pf.idFactura,
                                     sum(pf.monto) totalPagado
-                                from
-                                    pago_factura pf
-                                group by
-                                    pf.idFactura
+                                    FROM
+                                        pago_factura pf 
+                                        INNER JOIN pago p on p.idPago = pf.idPago
+                                        WHERE p.anulado = 0 
+                                    group by
+                                        pf.idFactura
                             ) tbl on tbl.idFactura = f.idFactura
                         WHERE
                             f.`fechaFac` BETWEEN '$ini'	AND '$fin'
