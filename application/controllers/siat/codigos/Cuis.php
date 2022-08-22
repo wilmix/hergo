@@ -6,6 +6,7 @@ class Cuis extends CI_Controller
 	{	
 		parent::__construct();
         $this->load->model("Almacen_model");
+        $this->load->model('siat/Cuis_model');
 
 	}
     public function index()
@@ -18,8 +19,19 @@ class Cuis extends CI_Controller
     }
     public function getAlmacenes()
     {
-        $res = $this->datos['stores']=$this->Almacen_model->retornar_tabla('almacenes')->result();
+        $res = $this->datos['stores']=$this->Almacen_model->siatSucursales()->result();
         echo json_encode($res);
+    }
+    public function store()
+    {
+        $cuis = [
+            'sucursal' => $this->input->post('sucursal'),
+            'cuis' => $this->input->post('cuis'),
+            'fechaVigencia' => $this->input->post('fechaVigencia'),
+            'codigoPuntoVenta' => $this->input->post('codigoPuntoVenta'),
+        ];
+        $this->Cuis_model->store($cuis);
+        echo json_encode($cuis);
     }
 
 }

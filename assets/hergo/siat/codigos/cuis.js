@@ -1,3 +1,7 @@
+$(document).on("click", "button.get", function () {
+	let row = getRow(table, this)
+	cuis.getCuis(row)
+})
 const cuis = new Vue({
 	el: '#app',
 	data: {
@@ -8,9 +12,10 @@ const cuis = new Vue({
 	},
 	methods:{
         getAlmacenes(){
+            $.fn.dataTable.ext.errMode = 'none';
             $.ajax({
                 type: "POST",
-                url: base_url('index.php//siat/codigos/cuis/getAlmacenes'),
+                url: base_url('index.php/siat/codigos/cuis/getAlmacenes'),
                 dataType: "json",
             }).done(function (res) {
                 console.log(res);
@@ -26,7 +31,7 @@ const cuis = new Vue({
                     pageLength: 10,
                     columns: [
                         {
-                            data: 'idalmacen',
+                            data: 'id',
                             title: 'id',
                             className: 'text-center',
                         },
@@ -36,21 +41,36 @@ const cuis = new Vue({
                             className: 'text-center',
                         },
                         {
+                            data: 'siat_sucursal',
+                            title: 'Sucursal',
+                            className: 'text-center',
+                        },
+                        {
                             data: 'cuis',
                             title: 'CUIS',
                             className: 'text-center',
                         },
                         {
+                            data: 'codigoPuntoVenta',
+                            title: 'Punto de Venta',
+                            className: 'text-center',
+                        },
+                        {
+                            data: 'fechaVigencia',
+                            title: 'Vigencia',
+                            className: 'text-center',
+                        },
+                        {
                             data: 'status',
-                            title: 'ACTIVO',
-                            //sorting: nameCliente == '' || nameCliente == 'TODOS' ? true : false
+                            title: 'Estado',
+                            className: 'text-center',
                         },
                         {
                             data: null,
                             title: '',
                             width: '120px',
                             className: 'text-center',
-                            render: buttons
+                            render: cuis.buttons
                         },
                     ],
                     stateSave: true,
@@ -162,16 +182,67 @@ const cuis = new Vue({
         
                 });
             });
-          
+        },
+        getCuis(row){
+            console.log(row);
+            $.ajax({
+                type: "POST",
+                url: 'http://obs.test/api/codigos/cuis',
+                dataType: "json",
+                data: {
+                        "cliente": {
+                            "codigoSucursal": row.siat_sucursal,
+                            "codigoPuntoVenta": row.codigoPuntoVenta
+                        }
+                },
+            }).done(function (res) {
+                let cuis = res.RespuestaCuis.codigo
+                let fechaVigencia = res.RespuestaCuis.fechaVigencia
+                let status = res.RespuestaCuis.transaccion
+                if (status) {
+                    $.ajax({
+                        type: "post",   
+                        url: base_url('index.php/Siat/codigos/Cuis/store'),
+                        dataType: "json",   
+                        data: {
+                            sucursal: row.siat_sucursal,
+                            cuis: cuis,
+                            fechaVigencia: fechaVigencia,
+                            codigoPuntoVenta: 0,
+                        },                                    
+                    }).done(function(res){
+                            console.log(res);
+                            swal({
+                                title: 'CUIS Guardado!',
+                                text: "El Código Único de Inicio de Sistema fue guardado exitosamente.",
+                                type: 'success', 
+                                showCancelButton: false,
+                            })
+                            return 
+                    }) 
+                } else {
+                    swal({
+                        title: 'Error ',
+                        text: res.RespuestaCuis.mensajesList.descripcion,
+                        type: 'error', 
+                        showCancelButton: false,
+                    })
+                    return
+                }
+
+            }).fail(function (jqxhr, textStatus, error) {
+                let err = textStatus + ", " + error;
+                console.log("Request Failed: " + err);
+            });
+        },
+        buttons(){
+            return `
+                <button type="button" class="btn btn-default get">
+                    <span class="fa fa-get-pocket" aria-hidden="true">
+                    </span>
+                </button>
+            `
         }
 
 	},
-	filters:{
-		moneda:function(value){
-			num=Math.round(value * 100) / 100
-			num=num.toFixed(2);
-			//return(num);
-			return numeral(num).format('0,0.00');            
-		}, 
-	}
   })
