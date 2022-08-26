@@ -64,4 +64,17 @@ class Articulo_model extends CI_Model
 		$res = $this->db->update('articulos', $item);
 		return $res;
 	}
+	public function getCodigosSiat($codigoActividad)
+	{
+		$sql="SELECT
+				*
+			FROM
+				siat_sincro_productos_servicios ps
+			WHERE
+				ps.codigoActividad = '$codigoActividad'
+				";
+		
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 }

@@ -113,6 +113,33 @@ th:hover .filterControl {
                   </div>
                 </div>
               </div>
+              <!-- actividad  -->
+              <div class="form-group"> 
+                <label class="col-md-3 col-lg-3 control-label" for="unidadarticulo">Actividad</label>
+                  <div class="col-md-9 col-lg-9 selectContainer">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
+                      <select name="unidad" class="form-control" id="codigoActividadSiat" >
+                        <option value="" disabled>Seleccione</option>
+                        <?php foreach ($codigosCaeb as $fila): ?>
+                          <option value="<?= $fila['codigoCaeb']  ?>"><?= $fila['codigoCaeb'] . ' | ' . $fila['descripcion'] ?></option>
+                        <?php endforeach ?>
+                      </select>
+                  </div>
+                </div>
+              </div>
+              <!-- codigoSiat  -->
+              <div class="form-group"> 
+                <label class="col-md-3 col-lg-3 control-label" for="unidadarticulo">Codigo Siat</label>
+                  <div class="col-md-9 col-lg-9 selectContainer">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
+                      <select name="codigoSiatSelect" class="form-control" id="codigoSiatSelect" >
+                        <option value="" disabled>Seleccione</option>
+                      </select>
+                  </div>
+                </div>
+              </div>
               <!-- Marca  -->
               <div class="form-group"> 
                 <label class="col-md-3 col-lg-3 control-label" for="marcaarticulo">Marca</label>

@@ -3,8 +3,7 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-header with-border">
-        <div class="forPrint col-md-3">
-        
+        <div class="forPrint">
         </div>
       </div>
       <div class="box-body">

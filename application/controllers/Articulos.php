@@ -19,6 +19,7 @@ class Articulos extends CI_Controller
 		$this->datos['marca']=$this->Articulo_model->retornar_tabla("marca");
 		$this->datos['linea']=$this->Articulo_model->retornar_tabla("linea");
 		$this->datos['requisito']=$this->Articulo_model->retornar_tabla("requisito");
+		$this->datos['codigosCaeb']= $this->Articulo_model->retornar_tabla("siat_sincro_actividades")->result_array();
 					
 		$this->setView('administracion/articulo/articulo');
 	}
@@ -63,6 +64,21 @@ class Articulos extends CI_Controller
 
 			$uso = $this->input->post("uso");
 			$res=$this->Articulo_model->mostrarArticulos($uso);
+			$res=$res->result_array();
+			echo json_encode($res);
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function getCodigosSiat()
+	{
+		if($this->input->is_ajax_request())
+        {
+
+			$codigoActividad = $this->input->post("codigoActividad");
+			$res=$this->Articulo_model->getCodigosSiat($codigoActividad);
 			$res=$res->result_array();
 			echo json_encode($res);
 		}

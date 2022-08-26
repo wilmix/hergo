@@ -1,21 +1,78 @@
 $(document).on("click", "button.get", function () {
 	let row = getRow(table, this)
-	cuis.getCuis(row)
+	cufd.getCufd(row)
 })
-const cuis = new Vue({
+Vue.component('v-select', VueSelect.VueSelect);
+const cufd = new Vue({
 	el: '#app',
 	data: {
-		cuis: ''
+		almacenes: [],
+        almacen:[],
 	},
     mounted() {
 		this.getAlmacenes()
+        this.getCufdTable()
 	},
 	methods:{
         getAlmacenes(){
-            $.fn.dataTable.ext.errMode = 'none';
             $.ajax({
                 type: "POST",
                 url: base_url('index.php/siat/codigos/cuis/getAlmacenes'),
+                dataType: "json",
+            }).done(function (res) {
+                cufd.almacenes = res
+            });
+        },
+        getCufd(row){
+            $.ajax({
+                type: "POST",
+                url: 'http://obs.test/api/codigos/cufd',
+                dataType: "json",
+                data:{
+                    cliente: {
+                        cuis: row.cuis,
+                        codigoSucursal: row.siat_sucursal,
+                        codigoPuntoVenta: row.codigoPuntoVenta
+                    }
+                }
+            }).done(function (res) {
+                console.log(res);
+                if (res.RespuestaCufd.transaccion) {
+                    $.ajax({
+                        type: "post",   
+                        url: base_url('index.php/Siat/codigos/Cufd/store'),
+                        dataType: "json",   
+                        data: {
+                            codigo: res.RespuestaCufd.codigo,
+                            codigoControl: res.RespuestaCufd.codigoControl,
+                            fechaVigencia: res.RespuestaCufd.fechaVigencia,
+                            cuis: row.cuis,
+                        },                                    
+                    }).done(function(res){
+                            console.log(res); 
+                            swal({
+                                title: 'CUFD Generado!',
+                                html: `Código Unico de Facturación Diaria fue generado y guardado exitosamente para ${cufd.almacen.almacen}, <br>
+                                vigente hasta ${res.fechaVigencia}`,
+                                type: 'success', 
+                                showCancelButton: false,
+                            })
+                            cufd.getCufdTable()
+                            return 
+                    }) 
+                } else {
+                    console.log('error');
+                }
+                
+
+                
+            });
+        },
+        getCufdTable(){
+            $.fn.dataTable.ext.errMode = 'none';
+            $.ajax({
+                type: "POST",
+                url: base_url('index.php/siat/codigos/Cufd/getCufdList'),
                 dataType: "json",
             }).done(function (res) {
                 console.log(res);
@@ -41,7 +98,7 @@ const cuis = new Vue({
                             className: 'text-center',
                         },
                         {
-                            data: 'siat_sucursal',
+                            data: 'sucrusal',
                             title: 'Sucursal',
                             className: 'text-center',
                         },
@@ -56,13 +113,24 @@ const cuis = new Vue({
                             className: 'text-center',
                         },
                         {
-                            data: 'fechaVigencia',
-                            title: 'Vigencia',
+                            data: 'codigo',
+                            title: 'codigo',
+                            className: 'text-center',
+                            //visible: false
+                        },
+                        {
+                            data: 'ini',
+                            title: 'ini',
                             className: 'text-center',
                         },
                         {
-                            data: 'status',
-                            title: 'Estado',
+                            data: 'fin',
+                            title: 'fin',
+                            className: 'text-center',
+                        },
+                        {
+                            data: 'estado',
+                            title: 'estado',
                             className: 'text-center',
                         },
                         {
@@ -70,7 +138,7 @@ const cuis = new Vue({
                             title: '',
                             width: '120px',
                             className: 'text-center',
-                            render: cuis.buttons
+                            render: cufd.buttons
                         },
                     ],
                     stateSave: true,
@@ -112,7 +180,7 @@ const cuis = new Vue({
                         {
                             text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
                             action: function (e, dt, node, config) {
-                                getPedidos()
+                                cufd.getCufdTable()
                             }
                         },
                         {
@@ -133,7 +201,7 @@ const cuis = new Vue({
                                     className: 'btn btn-link',
                                     action: function (e, dt, node, config) {
                                         table.state.clear()
-                                        getPedidos()
+                                        cufd.getCufdTable()
                                     }
                                 },
         
@@ -147,92 +215,38 @@ const cuis = new Vue({
                     },
                     //paging: false,
                     //responsive: true,
-                    language: {
-                        buttons: {
-                            colvisRestore: "Restaurar",
-                            copyTitle: 'Información copiada',
-                            pageLength: {
-                                _: "VER %d FILAS",
-                                '-1': "VER TODO"
-                            },
-                            copySuccess: {
-                                _: '%d lineas copiadas',
-                                1: '1 linea copiada'
-                            },
-                        },
-                        "decimal": "",
-                        "emptyTable": "No hay información",
-                        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-                        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-                        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-                        "infoPostFix": "",
-                        "thousands": ",",
-                        "lengthMenu": "Mostrar _MENU_ Registros",
-                        "loadingRecords": "Cargando...",
-                        "processing": "Procesando...",
-                        "search": "Buscar:",
-                        "zeroRecords": "Sin resultados encontrados",
-                        "paginate": {
-                            "first": "Primero",
-                            "last": "Ultimo",
-                            "next": "Siguiente",
-                            "previous": "Anterior"
-                        },
-                    },
-        
+                    language: datatableLangage
                 });
             });
         },
-        getCuis(row){
-            $.ajax({
-                type: "POST",
-                url: 'http://obs.test/api/codigos/cuis',
-                dataType: "json",
-                data: {
-                        "cliente": {
-                            "codigoSucursal": row.siat_sucursal,
-                            "codigoPuntoVenta": row.codigoPuntoVenta
+        getData(){
+            if (sincro.almacen == '' || sincro.almacen == null) {
+                swal({
+                    title: 'Error ',
+                    text: 'Seleccione almacen válido.',
+                    type: 'error', 
+                    showCancelButton: false,
+                })
+                return
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: 'http://obs.test/api/sincronizar',
+                    dataType: "json",
+                    data:{
+                        cliente: {
+                            cuis: sincro.almacen.cuis,
+                            codigoSucursal: sincro.almacen.siat_sucursal,
+                            codigoPuntoVenta: sincro.almacen.codigoPuntoVenta,
+                            method: sincro.metodo
                         }
-                },
-            }).done(function (res) {
-                let cuis = res.RespuestaCuis.codigo
-                let fechaVigencia = res.RespuestaCuis.fechaVigencia
-                let status = res.RespuestaCuis.transaccion
-                if (status) {
-                    $.ajax({
-                        type: "post",   
-                        url: base_url('index.php/Siat/codigos/Cuis/store'),
-                        dataType: "json",   
-                        data: {
-                            sucursal: row.siat_sucursal,
-                            cuis: cuis,
-                            fechaVigencia: fechaVigencia,
-                            codigoPuntoVenta: 0,
-                        },                                    
-                    }).done(function(res){
-                            console.log(res);
-                            swal({
-                                title: 'CUIS Guardado!',
-                                text: "El Código Único de Inicio de Sistema fue guardado exitosamente.",
-                                type: 'success', 
-                                showCancelButton: false,
-                            })
-                            return 
-                    }) 
-                } else {
-                    swal({
-                        title: 'Error ',
-                        text: res.RespuestaCuis.mensajesList.descripcion,
-                        type: 'error', 
-                        showCancelButton: false,
-                    })
-                    return
-                }
+                    }
+                }).done(function (res) {
+                    sincro.datasiat = res.RespuestaListaParametricas.listaCodigos
+                    table = sincro.table(sincro.datasiat, columns)
+                });
+            }
 
-            }).fail(function (jqxhr, textStatus, error) {
-                let err = textStatus + ", " + error;
-                console.log("Request Failed: " + err);
-            });
         },
         buttons(){
             return `

@@ -18,6 +18,40 @@ $(document).ready(function(){
 $(document).on("change", "#is_active", function () {
     retornarTabla();
 })
+$(document).on("change", "#codigoActividadSiat", function () {
+    let act = $("#codigoActividadSiat").val()
+    console.log(act);
+    getCodigosSiat();
+})
+function getCodigosSiat() {
+    $.ajax({
+        url: base_url("index.php/Articulos/getCodigosSiat"),
+        dataType: "json",
+        type: 'POST',
+        data: {
+            codigoActividad: '465000'
+        },
+    }).done(function (res) {
+            console.log(res); return
+            if(res.status == true) {
+                $('#modalarticulo').modal('hide');
+                resetForm('#form_articulo')
+                swal(
+                    'Artículo guardado',
+                    `El articulo ${res.item.CodigoArticulo} fue ${res.msg} exitosamente.`,
+                    'success'
+                    )
+                retornarTabla()
+            }
+    }).error(function (res) {
+        console.log(res);
+        swal(
+            'Error',
+            'El código de artículo ya se encuentra registrado en nuestra bases de datos. <br> ' + res.status,
+            'error'
+        )
+    });
+}
 function formItemValidator() {
     $('#form_articulo').bootstrapValidator({
         feedbackIcons: {
