@@ -40,7 +40,7 @@ const cufd = new Vue({
                 if (res.RespuestaCufd.transaccion) {
                     $.ajax({
                         type: "post",   
-                        url: base_url('index.php/Siat/codigos/Cufd/store'),
+                        url: base_url('index.php/siat/codigos/Cufd/store'),
                         dataType: "json",   
                         data: {
                             codigo: res.RespuestaCufd.codigo,
