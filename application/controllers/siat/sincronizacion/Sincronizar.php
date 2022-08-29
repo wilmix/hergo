@@ -100,9 +100,9 @@ class Sincronizar extends CI_Controller
             $this->Sincronizar_model->storeListaProductosServicios($value);
         } */
         $res = $siatNew === $local;
-        sleep(15);
-        //print_r(['local'=>$local, 'siat'=>$siatNew, 'res'=>$res]);
-        echo json_encode($res);
+        sleep(5);
+        $resp = ['local'=>$local, 'siat'=>$siatNew, 'res'=>$res];
+        echo json_encode($resp);
     }
     public function parametricas()
     {

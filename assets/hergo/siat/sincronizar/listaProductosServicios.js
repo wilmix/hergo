@@ -166,10 +166,11 @@ const sincro = new Vue({
                         dataSiat:sincro.datasiat
                     },                                    
                 }).done(function(res){
+                    res = JSON.parse(res)
                     console.log(res);
                         quitarcargando()
                         //console.log(res); return;
-                        if (res == 'true') {
+                        if (res.res == true) {
                             quitarcargando()
                             swal({
                                 title: 'OK',
