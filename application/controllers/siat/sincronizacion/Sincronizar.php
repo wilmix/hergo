@@ -101,7 +101,7 @@ class Sincronizar extends CI_Controller
         } */
         $res = $siatNew === $local;
         sleep(5);
-        $resp = ['local'=>$local, 'siat'=>$siatNew, 'res'=>true, 'comp'=>$res];
+        $resp = ['local'=>$local, 'siat'=>$siatNew, 'res'=>true, 'comp'=>$res, 'siatLenght'=>count($siat)];
         echo json_encode($resp);
     }
     public function parametricas()
