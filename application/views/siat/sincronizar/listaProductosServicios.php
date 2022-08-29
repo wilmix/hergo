@@ -4,7 +4,7 @@
     <div class="box">
       <div class="box-header with-border">
         <div class="col-md-5">
-            <v-select :options="almacenes" v-model="almacen"/>
+            <v-select :options="almacenes" v-model="almacen" key="id"/>
         </div>
         <div class="col-md-2">
           <button type="button" class="btn btn-primary" @click="getData">Get</button>

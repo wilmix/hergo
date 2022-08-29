@@ -122,7 +122,7 @@ const sincro = new Vue({
                     {
                         text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
                         action: function (e, dt, node, config) {
-                            getPedidos()
+                            sincro.getData()
                         }
                     },
                     {
@@ -143,7 +143,7 @@ const sincro = new Vue({
                                 className: 'btn btn-link',
                                 action: function (e, dt, node, config) {
                                     table.state.clear()
-                                    getPedidos()
+                                    sincro.getData()
                                 }
                             },
     
@@ -161,15 +161,12 @@ const sincro = new Vue({
                 $.ajax({
                     type: "post",   
                     url: base_url('index.php/siat/sincronizacion/Sincronizar/sincronizarListaProductosServicios'),
-                    //dataType: "json",   
+                    dataType: "json",   
                     data: {
                         dataSiat:sincro.datasiat
                     },                                    
                 }).done(function(res){
-                    res = JSON.parse(res)
-                    console.log(res);
                         quitarcargando()
-                        //console.log(res); return;
                         if (res.res == true) {
                             quitarcargando()
                             swal({
