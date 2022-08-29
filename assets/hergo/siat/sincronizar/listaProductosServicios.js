@@ -160,7 +160,7 @@ const sincro = new Vue({
             if (sincro.datasiat) {
                 $.ajax({
                     type: "post",   
-                    url: base_url('index.php/Siat/sincronizacion/Sincronizar/sincronizarListaProductosServicios'),
+                    url: base_url('index.php/siat/sincronizacion/Sincronizar/sincronizarListaProductosServicios'),
                     //dataType: "json",   
                     data: {
                         dataSiat:sincro.datasiat

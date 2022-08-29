@@ -201,7 +201,7 @@ const cuis = new Vue({
                 if (status) {
                     $.ajax({
                         type: "post",   
-                        url: base_url('index.php/Siat/codigos/Cuis/store'),
+                        url: base_url('index.php/siat/codigos/Cuis/store'),
                         dataType: "json",   
                         data: {
                             sucursal: row.siat_sucursal,
