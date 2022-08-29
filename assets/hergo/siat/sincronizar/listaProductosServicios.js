@@ -158,7 +158,10 @@ const sincro = new Vue({
         sincronizar(){
             agregarcargando()
             console.log(sincro.datasiat);
-            console.log(sincro.datasiat.length);
+            sincro.datasiat.forEach(element => {
+                delete element.nandina;
+            });
+            console.log(sincro.datasiat);
             if (sincro.datasiat) {
                 $.ajax({
                     type: "post",   
