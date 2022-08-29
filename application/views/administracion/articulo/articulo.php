@@ -119,8 +119,8 @@ th:hover .filterControl {
                   <div class="col-md-9 col-lg-9 selectContainer">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
-                      <select name="unidad" class="form-control" id="codigoActividadSiat" >
-                        <option value="" disabled>Seleccione</option>
+                      <select name="codigoActividadSiat" class="form-control" id="codigoActividadSiat" >
+                        <option value="" disabled selected>Seleccione</option>
                         <?php foreach ($codigosCaeb as $fila): ?>
                           <option value="<?= $fila['codigoCaeb']  ?>"><?= $fila['codigoCaeb'] . ' | ' . $fila['descripcion'] ?></option>
                         <?php endforeach ?>

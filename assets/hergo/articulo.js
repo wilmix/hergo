@@ -19,37 +19,30 @@ $(document).on("change", "#is_active", function () {
     retornarTabla();
 })
 $(document).on("change", "#codigoActividadSiat", function () {
-    let act = $("#codigoActividadSiat").val()
-    console.log(act);
-    getCodigosSiat();
+    let codigo = $("#codigoActividadSiat").val()
+    const $select = $("#codigoSiatSelect");
+    $select.empty();
+    getCodigosSiat(codigo);
 })
-function getCodigosSiat() {
+function getCodigosSiat(codigo) {
     $.ajax({
         url: base_url("index.php/Articulos/getCodigosSiat"),
         dataType: "json",
         type: 'POST',
         data: {
-            codigoActividad: '465000'
+            codigoActividad: codigo
         },
     }).done(function (res) {
-            console.log(res); return
-            if(res.status == true) {
-                $('#modalarticulo').modal('hide');
-                resetForm('#form_articulo')
-                swal(
-                    'Artículo guardado',
-                    `El articulo ${res.item.CodigoArticulo} fue ${res.msg} exitosamente.`,
-                    'success'
-                    )
-                retornarTabla()
-            }
+            const $select = $("#codigoSiatSelect");
+            Object.entries(res).forEach(([key, value]) => {
+                //console.log(key);
+                $select.append($("<option>", {
+                    value: value.codigoProducto,
+                    text: value.codigoProducto + ' | ' + value.descripcionProducto
+                }))
+              });
     }).error(function (res) {
         console.log(res);
-        swal(
-            'Error',
-            'El código de artículo ya se encuentra registrado en nuestra bases de datos. <br> ' + res.status,
-            'error'
-        )
     });
 }
 function formItemValidator() {
@@ -100,6 +93,20 @@ function formItemValidator() {
                     }
                 },
                 unidad: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Campo obligatorio'
+                        }
+                    }
+                },
+                codigoActividadSiat: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Campo obligatorio'
+                        }
+                    }
+                },
+                codigoSiatSelect: {
                     validators: {
                         notEmpty: {
                             message: 'Campo obligatorio'
@@ -237,6 +244,8 @@ $(document).on("click",".botoncerrarmodal",function(){
 
 function mostrarModal(fila)
 {
+    //console.log(fila);
+    getCodigosSiat(fila.codigoCaeb)
     cargarimagen(fila.Imagen)
     $("#id_articulo").val(fila.idArticulos)
     $("#codigoarticulo").val(fila.CodigoArticulo)
@@ -245,6 +254,9 @@ function mostrarModal(fila)
     asignarselect(fila.Unidad,$("#unidadarticulo"))
     asignarselect(fila.Marca,$("#marcaarticulo"))
     asignarselect(fila.Linea,$("#lineaarticulo"))
+    asignarselect(fila.actividadCaeb,$("#codigoActividadSiat"))
+    asignarselect(fila.codigoDescProductoSiat,$("#codigoSiatSelect"))
+
     $("#partearticulo").val(fila.NumParte)
     $("#precio").val(fila.precio)
     $("#arancelariaarticulo").val(fila.PosicionArancelaria)
@@ -257,6 +269,7 @@ function mostrarModal(fila)
     $("#modalarticulo").modal("show");
   
 }
+
 function retornarTabla()
 {
     uso = $("#is_active").val()

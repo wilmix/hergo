@@ -213,10 +213,16 @@ function formato_fecha_corta_sub(value, row, index) {
 }
 
 function asignarselect(text1, select) {
+  text1 = text1 == null ? '' : text1
+  //console.log(text1);
   text1 = text1.trim()
   $("option", select).filter(function () {
     var aux = $(this).text()
     aux = aux.trim()
+    if (select == '#codigoSiatSelect') {
+      console.log(select);
+      
+    }
     return aux.toUpperCase() == text1.toUpperCase();
   }).prop('selected', true);
 }

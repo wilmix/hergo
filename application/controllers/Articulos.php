@@ -40,8 +40,9 @@ class Articulos extends CI_Controller
 		$item->detalleLargo = strtoupper($this->input->post('descripcionFabrica'));
 		$item->web_catalogo = $this->input->post('web');
 		$item->Autor = $this->session->userdata('user_id');
+		$item->codigoCaeb = $this->input->post('codigoActividadSiat');
+		$item->codigoProducto = $this->input->post('codigoSiatSelect');
 		$item->Imagen = $this->subir_imagen($id,$_FILES);
-
 		if ($id == '') {
 			$result = $this->Articulo_model->store($item);
 		} else if ( $id > 0 ) {
