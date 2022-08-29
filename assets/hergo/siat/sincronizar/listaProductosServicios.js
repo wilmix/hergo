@@ -157,6 +157,8 @@ const sincro = new Vue({
         },
         sincronizar(){
             agregarcargando()
+            console.log(sincro.datasiat);
+            console.log(sincro.datasiat.length);
             if (sincro.datasiat) {
                 $.ajax({
                     type: "post",   
