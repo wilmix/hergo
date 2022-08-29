@@ -186,7 +186,7 @@ const cuis = new Vue({
         getCuis(row){
             $.ajax({
                 type: "POST",
-                url: 'http://obs.test/api/codigos/cuis',
+                url: 'https://obs.hergo.app/api/codigos/cuis',
                 dataType: "json",
                 data: {
                         "cliente": {

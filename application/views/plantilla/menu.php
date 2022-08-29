@@ -79,6 +79,74 @@
                 </li>
               </ul>
             </li>
+            <!-- SIAT -->
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-share"></i> <span>SIAT</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li class="Cuis">
+                  <a href="<?php echo base_url("siat/codigos/Cuis") ?>">
+                    <i class="fa fa-list-ol ">
+                    </i> CUIS
+                  </a>
+                </li>
+                <li class="treeview" style="height: auto;">
+                  <a href="#"><i class="fa fa-circle-o"></i> Sincronización de Catálogos
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                  </a>
+                  <ul class="treeview-menu">
+                    <li class="actividades">
+                      <a href="<?php echo base_url("siat/sincronizacion/sincronizar/actividades") ?>">
+                        <i class="fa fa-list-ol ">
+                        </i> Actividades Económicas
+                      </a>
+                    </li>
+                    <li class="actividadesDocumentoSector">
+                      <a href="<?php echo base_url("siat/sincronizacion/sincronizar/actividadesDocumentoSector") ?>">
+                        <i class="fa fa-list-ol ">
+                        </i> Actividades Documento Sector
+                      </a>
+                    </li>
+                    <li class="listaLeyendasFactura">
+                      <a href="<?php echo base_url("siat/sincronizacion/sincronizar/listaLeyendasFactura") ?>">
+                        <i class="fa fa-list-ol ">
+                        </i> Lista de Leyendas Factura 
+                      </a>
+                    </li>
+                    <li class="listaMensajesServicios">
+                      <a href="<?php echo base_url("siat/sincronizacion/sincronizar/listaMensajesServicios") ?>">
+                        <i class="fa fa-list-ol ">
+                        </i> Lista Mensajes de Servicio 
+                      </a>
+                    </li>
+                    <li class="listaProductosServicios">
+                      <a href="<?php echo base_url("siat/sincronizacion/sincronizar/listaProductosServicios") ?>">
+                        <i class="fa fa-list-ol ">
+                        </i> Lista Productos y Servicios
+                      </a>
+                    </li>
+                    <li class="parametricas">
+                      <a href="<?php echo base_url("siat/sincronizacion/sincronizar/parametricas") ?>">
+                        <i class="fa fa-list-ol ">
+                        </i> Listado Paramétricas 
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="Cufd">
+                  <a href="<?php echo base_url("/siat/codigos/Cufd") ?>">
+                    <i class="fa fa-list-ol ">
+                    </i> CUFD
+                  </a>
+                </li>
+              </ul>
+            </li>
             <!-- Importaciones -->
             <li class="treeview">
               <a href="#"><i class="fa fa fa-truck"></i> <span>Importaciones</span>

@@ -45,7 +45,7 @@ const sincro = new Vue({
             } else {
                 $.ajax({
                     type: "POST",
-                    url: 'http://obs.test/api/sincronizar',
+                    url: 'https://obs.hergo.app/api/sincronizar',
                     dataType: "json",
                     data:{
                         cliente: {

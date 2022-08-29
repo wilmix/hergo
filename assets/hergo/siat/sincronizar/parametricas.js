@@ -39,7 +39,7 @@ const sincro = new Vue({
         getMetodos(){
             $.ajax({
                 type: "GET",
-                url: 'http://obs.test/api/sincronizacion/metodos',
+                url: 'https://obs.hergo.app/api/sincronizacion/metodos',
                 dataType: "json",
             }).done(function (res) {
                 filtrados = res.filter(text => text.substring(0, 22) == 'sincronizarParametrica')
@@ -59,7 +59,7 @@ const sincro = new Vue({
             } else {
                 $.ajax({
                     type: "POST",
-                    url: 'http://obs.test/api/sincronizar',
+                    url: 'https://obs.hergo.app/api/sincronizar',
                     dataType: "json",
                     data:{
                         cliente: {

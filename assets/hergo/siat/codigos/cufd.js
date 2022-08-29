@@ -26,7 +26,7 @@ const cufd = new Vue({
         getCufd(row){
             $.ajax({
                 type: "POST",
-                url: 'http://obs.test/api/codigos/cufd',
+                url: 'https://obs.hergo.app/api/codigos/cufd',
                 dataType: "json",
                 data:{
                     cliente: {
@@ -231,7 +231,7 @@ const cufd = new Vue({
             } else {
                 $.ajax({
                     type: "POST",
-                    url: 'http://obs.test/api/sincronizar',
+                    url: 'https://obs.hergo.app/api/sincronizar',
                     dataType: "json",
                     data:{
                         cliente: {
