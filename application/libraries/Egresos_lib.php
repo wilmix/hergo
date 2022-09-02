@@ -27,8 +27,6 @@
             $nIng = $this->datos['nIng'];
             $vendedor = $this->datos['nVendedor'];
             
-
-
             //TITULO
             $this->SetXY(10,10);
             
@@ -136,7 +134,7 @@
             $userName = $this->datos['userName'];
             $autor = $this->datos['autor'];
             $vendedor = $this->datos['nVendedor'];
-            $saldoDeudor = $this->datos['saldoDeudor'];
+            $saldoDeudor = $this->datos['saldoDeudor'] ?? 0;
             $fechaPriFac = $saldoDeudor ? ' - ' . date('d/m/Y',strtotime($this->datos['fechaPrimeraFac'])): '';
             $this->SetLineWidth(0.5);
             $this->Line(10,127,206,127);
