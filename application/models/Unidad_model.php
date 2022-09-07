@@ -15,18 +15,40 @@ class Unidad_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function agregarUnidad_model($uni,$sig)
+	public function unidadesMedidaSiat()
 	{
-		$autor=$this->session->userdata('user_id');
-		$fecha = date('Y-m-d H:i:s');
-		$sql="INSERT INTO unidad(Unidad, Sigla) VALUES('$uni','$sig')";
+		$sql="  SELECT
+                    u.codigoClasificador,
+                    u.descripcion
+                FROM
+                    siat_sincro_unidad_medida u
+				ORDER BY u.descripcion
+                ";
 		$query=$this->db->query($sql);		
+		return $query->result_array();
+    }
+	public function unidadesSiat()
+	{
+		$sql="  SELECT
+					u.idUnidad,
+					u.Unidad,
+					u.Sigla,
+					siat.codigoClasificador siat_codigo,
+					siat.descripcion siat_unidadMedida
+				FROM
+					unidad u 
+					LEFT JOIN siat_sincro_unidad_medida siat ON u.siat_codigo = siat.codigoClasificador
+                ";
+		$query=$this->db->query($sql);		
+		return $query->result_array();
+    }
+	public function store($data)
+	{
+		return $this->db->insert('unidad', $data);	
 	}
-	public function editarUnidad_model($uni,$sig,$cod)
+	public function update($id, $data)
 	{
-		$autor=$this->session->userdata('user_id');
-		$fecha = date('Y-m-d H:i:s');
-		$sql="UPDATE unidad SET Unidad='$uni', Sigla='$sig'  WHERE idUnidad=$cod";
-		$query=$this->db->query($sql);		
+		$this->db->where('idUnidad', $id);
+        return $this->db->update('unidad', $data);
 	}
 }

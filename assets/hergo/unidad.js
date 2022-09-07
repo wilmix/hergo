@@ -6,33 +6,40 @@ $(document).ready(function(){
         validating: 'glyphicon glyphicon-refresh'
         },
         excluded: ':disabled',
-        fields: {          
-            unidad: {
-                validators: {
+        fields: {
+                unidad: {
+                    validators: {
                         stringLength: {
-                        min: 1,
-                        max: 3,
-                        message: 'Dede contener 3 caracteres'
-                        
-                    },
-                    notEmpty: {
-                        message: 'Campo obligatorio'
+                            min: 1,
+                            max: 3,
+                            message: 'Dede contener 3 caracteres'
+
+                        },
+                        notEmpty: {
+                            message: 'Campo obligatorio'
+                        }
+
                     }
-                        
-                }
-            },            
-            sigla: {
-                validators: {
-                     stringLength: {
-                        min: 1,
-                        max: 100,
-                        message: ''
-                    },
-                    notEmpty: {
-                        message: 'Campo obligatorio'
+                },
+                sigla: {
+                    validators: {
+                        stringLength: {
+                            min: 1,
+                            max: 100,
+                            message: ''
+                        },
+                        notEmpty: {
+                            message: 'Campo obligatorio'
+                        }
                     }
-                }
-            },                
+                },
+                unidadSiat: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Campo obligatorio'
+                        }
+                    }
+                },
         }
         })
         .on('success.form.bv', function(e) {
@@ -41,24 +48,33 @@ $(document).ready(function(){
             // Get the form instance
             let valuesToSubmit = $("#form_unidad").serialize();
             $.ajax({
-                url: base_url("index.php/Unidad/agregarUnidad"),
+                url: base_url("index.php/Unidad/addOrUpdate"),
                 data: valuesToSubmit,              
                 type: 'POST',
             })
             .done(function( data, textStatus, jqXHR ) {
-                resetForm('#form_unidad')
-                swal(
-                    'Unidad guardada',
-                    '',
-                    'success'
+                console.log(data);
+                if (data == 'true') {
+                    resetForm('#form_unidad')
+                    swal(
+                        'Unidad guardada',
+                        '',
+                        'success'
+                        )
+                    $('#modalunidad').modal('hide')
+                    document.location.href=""
+                } else {
+                    swal(
+                        'Error',
+                        'No se pudo guardar la unidad nuestra bases de datos ' + data,
+                        'error'
                     )
-                $('#modalunidad').modal('hide')
-                document.location.href=""
+                }
             })
-            .fail(function( jqXHR, textStatus, errorThrown ) {
+            .fail(function( jqXHR, textStatus, errorThrown, ) {
                 swal(
                     'Error',
-                    'La unidad ya se encuentra registrado en nuestra bases de datos',
+                    'No se pudo guardar la unidad nuestra bases de datos ' + errorThrown,
                     'error'
                 )
             });
@@ -79,13 +95,15 @@ function enivardatosmodalalmacen(data)
     datos=$(fila).find("td")
     uni=$(datos[0]).html();
     sigla=$(datos[1]).html();
-    console.log(fila)
-    console.log(id);
-    console.log(datos);
+    siat_codigo=$(datos[2]).html();
+    siat_unidadMedida=$(datos[3]).html();
+
     $("#cod_unidad").val(id)
     $(".modalunidadtitulo").html("Editar Unidad")
     $("#modalnombreunidad").val(uni)
     $("#modalsiglaunidad").val(sigla)
+    $("#siat_codigo").val(siat_codigo)
+    $("#siat_unidadMedida").val(siat_codigo)
     $("#bguardar_unidad").html("Editar")
     $('#modalunidad').modal('show');
 }

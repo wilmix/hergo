@@ -17,23 +17,32 @@ class Unidad extends CI_Controller {
     public function index() {
         $this->accesoCheck(5);
 		$this->titles('Unidad','Unidad','Administracion');
-        $this->datos['unidad'] = $this->Articulo_model->retornar_tabla("unidad");
+        $this->datos['unidad'] = $this->Unidad_model->unidadesSiat();
+        $this->datos['unidadMedidaSiat'] = $this->Unidad_model->unidadesMedidaSiat();
 		$this->datos['foot_script'][]=base_url('assets/hergo/unidad.js') .'?'.rand();
 		$this->setView('administracion/unidad/unidad');
     }
+    public function addOrUpdate() {
+        try {
+            $id = $this->input->post('cod');
+            $data = array(
+                'Unidad' => strtoupper($this->security->xss_clean($this->input->post('unidad'))),
+                'Sigla' => strtoupper($this->security->xss_clean($this->input->post('sigla'))),
+                'siat_codigo' => $this->input->post('unidadSiat'),
+                'user_id' => $this->session->userdata('user_id'),
+                'updated_at' => date('Y-m-d H:i:s')
+            );
 
-    public function agregarUnidad() {
-        if ($this->input->is_ajax_request()) {
-            $uni = $this->security->xss_clean($this->input->post('unidad'));
-            $sig = $this->security->xss_clean($this->input->post('sigla'));
-            $cod = $this->security->xss_clean($this->input->post('cod'));
-            if ($cod == "")
-                $this->Unidad_model->agregarUnidad_model($uni, $sig);
-            else
-                $this->Unidad_model->editarUnidad_model($uni, $sig, $cod);
+            if ($id === ''){
+                $res = $this->Unidad_model->store($data);
+            }
+            else if($id > 0){
+                $res = $this->Unidad_model->update($id, $data);
+            }
+            echo json_encode($res);
+        } catch (Exception $exception) {
+            $error = $exception->getMessage();
+            echo json_encode($error);
         }
-        echo "{}";
     }
-    
-
 }
