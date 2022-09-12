@@ -259,6 +259,14 @@ $( function() {
         .appendTo( ul );
     };
  });
+ function validateDecimal(valor) {
+    var RE = /^\d*(\.\d{1})?\d{0,1}$/;
+    if (RE.test(valor)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 function agregarArticulo() {
     let saldoAlmacen = $("#saldo_ne").inputmask('unmaskedvalue')
@@ -267,8 +275,23 @@ function agregarArticulo() {
     let dcto = $("#descuento_ne").inputmask('unmaskedvalue')
     let codigoArticulo = $("#articulo_impTest").val()
     let iniCod = codigoArticulo.substr(0,2)
-
-
+    if (costo<=0 || cant<=0 ) {
+        console.log('error debe poner costo y cantidad');
+        swal(
+            'Oops...',
+            'Llene el formulario correctametne',
+            'error'
+        )
+        return
+    } 
+    if (!validateDecimal(costo) || !validateDecimal(cant) || !validateDecimal(dcto)) {
+        swal(
+            'Oops...',
+            'Solo puede poner dos decimales',
+            'error'
+        )
+        return
+    } 
     cant = parseFloat((cant == '') ? 0 : cant)
     cant = cant.toFixed(2)
     costo = (costo == '') ? 0 : costo
@@ -324,9 +347,9 @@ function agregarArticulo() {
 function guardarmovimiento() {
     let valuesToSubmit = $("#form_egreso").serialize()
     let articulos = $("#tablaEditarEgreso").bootstrapTable('getData')
-    articulos.forEach(element => {
+    /* articulos.forEach(element => {
         delete element.Descripcion;
-    });
+    }); */
     let tipoEgreso = $("#tipomov_ne2").text()
     if ($("#_tipomov_ne").val() == 9){
         glob_guardar_cliente = true
@@ -646,10 +669,11 @@ function retornarTablaEgresoDetalle(idEgreso=null) {
                         field: 'Descripcion',
                         title: 'Descripcion',
                         class: "col-sm-7",
-                        /*editable: {
+                        editable: {
                             container: 'body',
                             type: 'text',
-                        },*/
+                            validate: validarTextTable,
+                        },
                     },
 
                     {
@@ -774,6 +798,11 @@ function validatePUedit(value) {
 
     if (parseFloat(row.cantidad) == parseFloat(row.cantFact)) {
         return 'El artículo fue facturado totalmente' 
+    }
+}
+function validarTextTable(value) {
+    if (value == '') {
+        return 'Debe ingresar descripcion válida'
     }
 }
 function calcularTotalEgresoMod() {

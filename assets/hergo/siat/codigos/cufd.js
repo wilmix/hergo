@@ -113,6 +113,12 @@ const cufd = new Vue({
                             className: 'text-center',
                         },
                         {
+                            data: 'codigoControl',
+                            title: 'codigoControl',
+                            className: 'text-center',
+                            //visible: false
+                        },
+                        {
                             data: 'codigo',
                             title: 'codigo',
                             className: 'text-center',

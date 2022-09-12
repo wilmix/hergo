@@ -176,7 +176,7 @@ class Egresos_model extends CI_Model
     }
 	public function mostrarDetalle($id)//lista todos los detalles de un egreso
 	{
-		$sql="SELECT a.idArticulos,a.CodigoArticulo, a.Descripcion, e.cantidad, 
+		$sql="SELECT a.idArticulos,e.codigoProducto CodigoArticulo, e.descripcion Descripcion, e.cantidad, 
         e.punitario punitario11, 
         tc.`tipocambio`,
         e.descuento, e.idingdetalle, 
@@ -226,7 +226,12 @@ class Egresos_model extends CI_Model
     }
     public function mostrarDetalleFacturas($id)//lista todos los detalles de un egreso
     {
-        $sql="SELECT e.articulo id, a.CodigoArticulo, a.Descripcion, e.cantidad, FORMAT(e.punitario,3) punitario11, 
+        $sql="SELECT e.articulo id, 
+        -- a.CodigoArticulo, 
+        -- a.Descripcion, 
+        e.cantidad, FORMAT(e.punitario,3) punitario11, 
+        e.codigoProducto CodigoArticulo,
+        e.descripcion Descripcion,
         e.punitario punitario, ((e.cantidad-e.cantFact) * ROUND(e.punitario,2) ) total, e.descuento, e.idingdetalle, e.idegreso, u.Sigla, (e.cantidad-e.cantFact) cantidadReal
         FROM egredetalle e
         INNER JOIN articulos a
@@ -680,6 +685,8 @@ class Egresos_model extends CI_Model
                     $detalle->articulo = $fila->idArticulos;
                     $detalle->moneda = $egreso->moneda;
                     $detalle->cantidad = $fila->cantidad;
+                    $detalle->codigoProducto = strtoupper($fila->CodigoArticulo);
+                    $detalle->descripcion = strtoupper($fila->Descripcion);
                     if ($egreso->moneda == 2) {
                         $detalle->punitario= $fila->punitario * $egreso->tipoCambio;
                         $detalle->total=$fila->total * $egreso->tipoCambio;
@@ -721,6 +728,8 @@ class Egresos_model extends CI_Model
                     $detalle->moneda = $egreso->moneda;
                     $detalle->cantidad = $fila->cantidad;
                     $detalle->cantFact = $fila->cantFact;
+                    $detalle->descripcion = strtoupper($fila->Descripcion);
+                    $detalle->codigoProducto = strtoupper($fila->CodigoArticulo);
                     if ($egreso->moneda == 2) {
                         $detalle->punitario= $fila->punitario * $egreso->tipoCambio;
                         $detalle->total=$fila->total * $egreso->tipoCambio;
