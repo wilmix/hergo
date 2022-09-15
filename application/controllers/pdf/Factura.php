@@ -71,7 +71,9 @@ class Factura extends CI_Controller {
                         $this->pdf->Cell(15,5,number_format($linea->facturaCantidad, 2, ".", ","),'',0,'C',0);
                         $this->pdf->Cell(10,5,$linea->Sigla,'',0,'C',0); //unidad $linea->Sigla
                         $this->pdf->Cell(15,5,$linea->ArticuloCodigo,'',0,'C',0); //codigo $linea->ArticuloCodigo
-                        $this->pdf->Cell(118,5,utf8_decode($linea->ArticuloNombre),0,0,'L',0);
+                        //$this->pdf->Cell(118,5,utf8_decode($linea->ArticuloNombre),0,0,'L',0);
+                        $this->pdf->MultiCell(118,5,iconv('UTF-8', 'windows-1252', ($linea->ArticuloNombre)),0,'L',0);
+                        $this->pdf->SetXY(168,$this->pdf->GetY()-5);
                         $this->pdf->Cell(20,5,number_format($linea->facturaPUnitario, 2, ".", ","),0,0,'R',1);
                         $this->pdf->Cell(20,5,number_format(($linea->facturaCantidad*$linea->facturaPUnitario), 2, ".", ","),'',0,'R',1);
                     $this->pdf->Ln(5);
@@ -103,7 +105,9 @@ class Factura extends CI_Controller {
                         $this->pdf->Cell(15,5,number_format($linea->facturaCantidad, 2, ".", ","),'',0,'R',0);
                         $this->pdf->Cell(10,5,$linea->Sigla,'',0,'C',0);
                         $this->pdf->Cell(15,5,$linea->ArticuloCodigo,'',0,'C',0);
-                        $this->pdf->Cell(118,5,utf8_decode($linea->ArticuloNombre),0,0,'L',0);
+                        //$this->pdf->Cell(118,5,utf8_decode($linea->ArticuloNombre),0,0,'L',0);
+                        $this->pdf->MultiCell(118,5,iconv('UTF-8', 'windows-1252', ($linea->ArticuloNombre)),0,'L',0);
+                        $this->pdf->SetXY(168,$this->pdf->GetY()-5);
                         $this->pdf->Cell(20,5,number_format(($linea->facturaPUnitario/$tipoCambio), 2, ".", ","),0,0,'R',1);
                         $this->pdf->Cell(20,5,number_format(( $linea->facturaCantidad * round($linea->facturaPUnitario/$tipoCambio,2) ), 2, ".", ","),'',0,'R',1);
                     $this->pdf->Ln(5);
