@@ -624,7 +624,8 @@ function formatoMoneda(value, row, index) {
 function formatoCosto(value, row, index) {
     num = Math.round(value * 100) / 100
     num = num.toFixed(2);
-    return (formatNumber.new(num));
+    return num
+    //return (formatNumber.new(num));
 }
 function retornarTablaEgresoDetalle(idEgreso=null) {
     agregarcargando();
