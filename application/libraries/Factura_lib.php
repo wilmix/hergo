@@ -109,7 +109,7 @@
             $this->Cell(35,8, utf8_decode($nFactura),0,0,'C');
             $this->SetXY(138,25);
             $this->SetFont('Arial','B',7);
-            $this->Cell(32,8, utf8_decode('AUNTORIZACIÓN N°:'),0,0,'R');
+            $this->Cell(32,8, utf8_decode('AUTORIZACIÓN N°:'),0,0,'R');
             $this->SetFont('Arial','B',11);
             $this->Cell(35,8, utf8_decode($autorizacion),0,0,'C');
             $this->SetXY(138,33);
