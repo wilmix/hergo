@@ -24,9 +24,10 @@ const cufd = new Vue({
             });
         },
         getCufd(row){
+            agregarcargando()
             $.ajax({
                 type: "POST",
-                url: 'https://obs.hergo.app/api/codigos/cufd',
+                url: base_url_siat('codigos/cufd'),
                 dataType: "json",
                 data:{
                     cliente: {
@@ -49,7 +50,7 @@ const cufd = new Vue({
                             cuis: row.cuis,
                         },                                    
                     }).done(function(res){
-                            console.log(res); 
+                            quitarcargando();
                             swal({
                                 title: 'CUFD Generado!',
                                 html: `Código Unico de Facturación Diaria fue generado y guardado exitosamente para ${cufd.almacen.almacen}, <br>
@@ -237,7 +238,7 @@ const cufd = new Vue({
             } else {
                 $.ajax({
                     type: "POST",
-                    url: 'https://obs.hergo.app/api/sincronizar',
+                    url: base_url_siat('sincronizar'),
                     dataType: "json",
                     data:{
                         cliente: {

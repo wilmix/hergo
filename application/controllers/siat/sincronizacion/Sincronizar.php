@@ -21,7 +21,7 @@ class Sincronizar extends CI_Controller
         $actividades = $this->input->post('dataSiat');
         $actividadesLocal = $this->Sincronizar_model->getActividades();
         //$res = $actividades === $actividadesLocal;
-        sleep(5);
+        //sleep(5);
         //$res = $this->Sincronizar_model->storeActividades($actividades);
         echo json_encode($actividades);
     }
@@ -37,7 +37,7 @@ class Sincronizar extends CI_Controller
         $siat = $this->input->post('dataSiat');
         $local = $this->Sincronizar_model->getActividadesDocumentoSector();
         $res = $siat === $local;
-        sleep(4);
+        //sleep(4);
         //$res = $this->Sincronizar_model->storeActividadesDocumentoSector($siat);
         //echo json_encode(['local'=>$local, 'siat'=>$siat]);
         echo json_encode($res);
@@ -71,7 +71,7 @@ class Sincronizar extends CI_Controller
         $siat = $this->input->post('dataSiat');
         $local = $this->Sincronizar_model->getListaMensajesServicios();
         $res = $siat === $local;
-        sleep(12);
+        //sleep(12);
         //$res = $this->Sincronizar_model->storeMensajesServicios($siat);
         //echo json_encode(['local'=>$local, 'siat'=>$siat]);
         echo json_encode($res);
@@ -116,7 +116,7 @@ class Sincronizar extends CI_Controller
         $siat = $this->input->post('dataSiat');
         $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_eventos_significativos');
         $res = $siat === $local;
-        sleep(1);
+        //sleep(1);
         //$res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_eventos_significativos');
         //echo json_encode(['local'=>$local, 'siat'=>$siat]);
         echo json_encode($res);
@@ -136,7 +136,7 @@ class Sincronizar extends CI_Controller
         $siat = $this->input->post('dataSiat');
         $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_paises');
         $res = $siat === $local;
-        sleep(1);
+        //sleep(1);
         //$res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_paises');
         //echo json_encode(['local'=>$local, 'siat'=>$siat]);
         echo json_encode($res);
@@ -156,7 +156,7 @@ class Sincronizar extends CI_Controller
         $siat = $this->input->post('dataSiat');
         $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_tipo_doc_sector');
         $res = $siat === $local;
-        sleep(3);
+        //sleep(3);
         //$res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_tipo_doc_sector');
         //echo json_encode(['local'=>$local, 'siat'=>$siat]);
         echo json_encode($res);

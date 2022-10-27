@@ -12,7 +12,7 @@ class Cuis extends CI_Controller
     public function index()
     {
         
-        //$this->accesoCheck(57);
+        //$this->accesoCheck(74);
 		$this->titles('CUIS','Código Único de Inicio de Sistemas','');
 		$this->datos['foot_script'][]=base_url('assets/hergo/siat/codigos/cuis.js') .'?'.rand();
 		$this->setView('siat/codigos/cuis');

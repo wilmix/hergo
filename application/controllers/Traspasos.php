@@ -334,7 +334,7 @@ class Traspasos extends CI_Controller
 		}	
     }
     /*************FUNCIONES DE EGRESOS*************************/
-    public function actualizarCostoArticuloEgreso($tabla,$idalmacen)
+    /* public function actualizarCostoArticuloEgreso($tabla,$idalmacen)
 	{
 		
 		foreach ($tabla as $fila) 
@@ -375,10 +375,10 @@ class Traspasos extends CI_Controller
 		}
 		
 		return $obj;
-	}
+	} */
 	/****************FIN**************************************/
     /*************FUNCIONES DE INGRESOS***********************/
-    public function actualizarCostoArticuloIngreso($tabla,$idalmacen,$moneda)
+    /* public function actualizarCostoArticuloIngreso($tabla,$idalmacen,$moneda)
 	{		
 		foreach ($tabla as $fila) 
 		{	
@@ -428,7 +428,7 @@ class Traspasos extends CI_Controller
 		}
 		
 		return $obj;
-	}
+	} */
 	/***********FIN**********************************************/
 	private function convertirTablaIngresos($tabla)//convierte tabla a ingresos
 	{

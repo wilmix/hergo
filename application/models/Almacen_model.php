@@ -40,7 +40,7 @@ class Almacen_model extends CI_Model
 		WHERE idalmacen=$cod";
 		$query=$this->db->query($sql);		
 	}
-	public function siatSucursales(Type $var = null)
+	public function siatSucursales()
 	{
 		$sql = 'SELECT
 					a.idalmacen id,
@@ -56,7 +56,10 @@ class Almacen_model extends CI_Model
 					almacenes a
 					INNER JOIN siat_cuis sc ON sc.sucursal = a.siat_sucursal
 				WHERE
-					a.siat_sucursal IS NOT NULL';
+					a.siat_sucursal IS NOT NULL
+					AND sc.active = 1
+					';
+
 		$query = $this->db->query($sql);
 		return $query;
 	}

@@ -186,7 +186,7 @@ const cuis = new Vue({
         getCuis(row){
             $.ajax({
                 type: "POST",
-                url: 'https://obs.hergo.app/api/codigos/cuis',
+                url: base_url_siat('codigos/cuis'),
                 dataType: "json",
                 data: {
                         "cliente": {
@@ -207,7 +207,7 @@ const cuis = new Vue({
                             sucursal: row.siat_sucursal,
                             cuis: cuis,
                             fechaVigencia: fechaVigencia,
-                            codigoPuntoVenta: 0,
+                            codigoPuntoVenta: CPV,
                         },                                    
                     }).done(function(res){
                             console.log(res);

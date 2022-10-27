@@ -40,3 +40,5 @@ assets/pagoProveedores
 /qr
 .htaccess
 
+/application/third_party/phpqrcode
+

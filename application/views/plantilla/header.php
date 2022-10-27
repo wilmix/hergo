@@ -2,6 +2,8 @@
   <body class="<?= $skin ?> sidebar-mini fixed">
 
     <input type="hidden" id="baseurl" value="<?php echo base_url() ?>">
+    <input type="hidden" id="user_id_actual" value="<?php echo $user_id_actual ?>">
+    <input type="hidden" id="base_url_siat" value="<?php echo $this->config->item('base_url_siat') ?>">
 
     <div class="wrapper">
 

@@ -222,9 +222,9 @@ class Ingresos extends CI_Controller
 		die();*/
 		return $tabla;
 	}
-	public function get_costo_articulo($codigo,$cant=0,$preciou=0,$idAlmacen,$_idArticulo=0)	//para tabla, si $_idArticulo==0 buscar id segun el codigo
+	/* public function get_costo_articulo($codigo,$cant=0,$preciou=0,$idAlmacen,$_idArticulo=0)	//para tabla, si $_idArticulo==0 buscar id segun el codigo
 	{		
-		$cant=$cant==""?0:$cant;
+		//$cant=$cant==""?0:$cant;
 		$preciou=$preciou==""?0:$preciou;
 		$ncantidad=0;
     	$nprecionu=0;
@@ -258,8 +258,8 @@ class Ingresos extends CI_Controller
 		}
 		
 		return $obj;
-	}
-	public function retornarcostoarticulo_tabla($tabla,$idalmacen,$moneda,$_traspaso=false)//si $_traspaso == true es traspaso 
+	} */
+	/* public function retornarcostoarticulo_tabla($tabla,$idalmacen,$moneda,$_traspaso=false)//si $_traspaso == true es traspaso 
 	{
 		
 		foreach ($tabla as $fila) 
@@ -278,7 +278,7 @@ class Ingresos extends CI_Controller
 			$this->Ingresos_model->actualizartablacostoarticulo($aux->idArticulo,$aux->ncantidad,$preciounbitario,$idalmacen);
 		}
 		
-	}
+	} */
 	public function retornarcostoarticulo($id,$idAlmacen)
 	{
 		$idArticulo=$this->Ingresos_model->retornar_datosArticulo($id);

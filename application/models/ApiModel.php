@@ -235,10 +235,10 @@ class ApiModel extends CI_Model
                             ROUND(SUM(fd.facturaCantidad * fd.facturaPUnitario),2) montoTotalSujetoIva,
                             '1' codigoMoneda,
                             '1' tipoCambio,
-                            ROUND(SUM(fd.facturaCantidad * fd.facturaPUnitario),2) montoTotalMoneda,
-                            NULL montoGiftCard,
+                            ROUND(SUM(fd.facturaCantidad * fd.facturaPUnitario),2) montoTotalMoneda,  
+                            0 montoGiftCard,
                             0 descuentoAdicional,
-                            '' codigoExcepcion,
+                            '' codigoExcepcion ,
                             '' cafc,
                             'leyenda' leyenda,
                             CONCAT(SUBSTRING(upper(u.first_name), 1, 1),SUBSTRING(upper(u.last_name), 1, 9)) usuario,
@@ -257,9 +257,9 @@ class ApiModel extends CI_Model
                         WHERE
                         f.idFactura = '$id'
                 ";
-		$query=$this->db->query($sql);		
-		return $query->result();
-	}
+            $query=$this->db->query($sql);		
+            return $query->result();
+        }
     public function facturaDetalle($id)
 	{
 		$sql=   " SELECT
@@ -344,7 +344,7 @@ class ApiModel extends CI_Model
                     f.idFactura
                     ORDER BY f.nFactura
                 LIMIT
-                    500
+                    5
             ";
             $query=$this->db->query($sql);		
             return $query->result();
@@ -363,4 +363,57 @@ class ApiModel extends CI_Model
             $query=$this->db->query($sql);		
             return $query->result();
     }
+    public function pendientesFacturacion()
+        {
+                $sql=  "SELECT
+                            e.idegresos id,
+                            t.sigla sigla,
+                            e.nmov num,
+                            e.fechamov fecha,
+                            c.idcliente cliente_id,
+                            c.nombreCliente nombreCliente,
+                            ROUND(
+                                SUM(ROUND(d.cantidad, 2) * ROUND(d.punitario, 2)),
+                                2
+                            ) montoTotal,
+                            e.estado estado_id,
+                            CASE
+                                WHEN e.estado = 0 THEN 'POR FACTURAR'
+                                WHEN e.estado = 2 THEN 'PARCIAL'
+                            END estado,
+                            CONCAT(u.first_name, ' ', u.last_name) vendedor,
+                            m.sigla monedaSigla,
+                            e.clientePedido,
+                            ROUND(
+                                SUM(ROUND(d.cantidad, 2) * ROUND(d.punitario, 2)) / tc.tipocambio,
+                                2
+                            ) montoTotalDolares
+                        FROM
+                            egresos e
+                            INNER JOIN egredetalle d on e.idegresos = d.idegreso
+                            INNER JOIN tmovimiento t ON e.tipomov = t.id
+                            INNER JOIN clientes c ON e.cliente = c.idCliente
+                            INNER JOIN users u ON u.id = e.vendedor
+                            INNER JOIN almacenes a ON a.idalmacen = e.almacen
+                            INNER JOIN moneda m ON e.moneda = m.id
+                            INNER JOIN tipocambio tc ON tc.fecha = e.fechamov
+                        WHERE
+                            e.anulado <> 1
+                            AND e.almacen = 1
+                            AND (
+                                e.tipomov = 6
+                                OR e.tipomov = 7
+                            )
+                            AND (
+                                e.estado = 0
+                                OR e.estado = 2
+                            )
+                        GROUP BY
+                            e.idegresos
+                        ORDER BY
+                            e.idegresos DESC
+                ";
+            $query=$this->db->query($sql);		
+            return $query->result();
+        }
 }

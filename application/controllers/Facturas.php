@@ -886,6 +886,13 @@ class Facturas extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
+	public function emitirFacturaSiat()
+	{
+		//$this->accesoCheck(71);
+		$this->titles('SiatEmitirFactura','Facturacion Online','Facturas');
+		$this->datos['foot_script'][]=base_url('assets/hergo/facturacion/emitirFacturaSiat.js') .'?'.rand();
+		$this->setView('facturas/emitirFacturaSiat');
+	}
 }
 
 

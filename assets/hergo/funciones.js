@@ -1,7 +1,9 @@
 var glob_tipoCambio = 0;
 var glob_art = [];
-var glob_alm_usu
+var glob_alm_usu = $('#idAlmacenUsuario').val()
+var glob_user_id = $('#user_id_actual').val()
 var fechaHoySystem 
+const CPV = 1
 var PermisosUser
 const isAdminGlobal = $('#isAdmin').val()
 const isNacionalGlobal = $('#nacional').val()
@@ -85,6 +87,11 @@ function setTipoCambio(fechaActual) {
 function base_url(complemento) {
   complemento = (complemento) ? complemento : '';
   let baseurl = $('#baseurl').val();
+  return baseurl + complemento;
+}
+function base_url_siat(complemento) {
+  complemento = (complemento) ? complemento : '';
+  let baseurl = $('#base_url_siat').val();
   return baseurl + complemento;
 }
 
@@ -647,3 +654,23 @@ $("#input-1").fileinput({
   maxFileSize: 1024,
  
 });
+function tipoFactura(data, type, row){
+
+	
+
+	//$icon = row.cafc == '' || row.cafc == null ?  $comp2 : $manual
+  if (row.cafc == '' || row.cafc == null) {
+    if (row.codigoRecepcion == '') {
+      $icon = '<div style=" font-size:1.5em; "><span class="fa fa-desktop computarizada"></span></div>'
+    } else {
+      $icon = '<div style=" font-size:1.5em; color:green;"><span class="fa fa-desktop computarizada"></span></div>'
+    }
+  } else {
+    if (row.codigoRecepcion == '') {
+      $icon = '<div style=" font-size:1.5em; "><span class="fa fa-pencil computarizada"></span></div>'
+    } else {
+      $icon = '<div style=" font-size:1.5em; color:green;"><span class="fa fa-pencil computarizada"></span></div>' 
+    }
+  }
+	return $icon;
+}

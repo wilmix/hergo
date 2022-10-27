@@ -24,19 +24,7 @@ date_default_timezone_set("America/La_Paz");
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = '';
-/*
-|--------------------------------------------------------------------------
-| Maintenance Mode
-|--------------------------------------------------------------------------
-|
-| For whatever reason sometimes a site needs to be taken offline.
-| Set $config['maintenance_mode'] to TRUE if the site has to be offline
-|
-| $config['maintenance_mode'] = TRUE; // site is offline
-| $config['maintenance_mode'] = FALSE; // site is online
-*/
-$config['maintenance_mode'] = FALSE;
+$config['base_url'] = 'http://hergo.test';
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -525,4 +513,36 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 /* skin */
-$config['skin'] = 'skin-purple';
+$config['skin'] = 'skin-red';
+/*
+|--------------------------------------------------------------------------
+| Maintenance Mode
+|--------------------------------------------------------------------------
+|
+| For whatever reason sometimes a site needs to be taken offline.
+| Set $config['maintenance_mode'] to TRUE if the site has to be offline
+|
+| $config['maintenance_mode'] = TRUE; // site is offline
+| $config['maintenance_mode'] = FALSE; // site is online
+*/
+$config['maintenance_mode'] = FALSE;
+/*
+|--------------------------------------------------------------------------
+| Spaces
+|--------------------------------------------------------------------------
+|
+| Personal access tokens function like a combined name and password for API Authentication. 
+| Generate a token to access the DigitalOcean API
+|
+*/
+$config['credentialsSpacesDO'] = [
+                                    'version' => 'latest',
+                                    'region'  => 'nyc3',
+                                    'endpoint' => 'https://nyc3.digitaloceanspaces.com',
+                                    'credentials' =>    [
+                                                            'key'    => '',
+                                                            'secret' => '',
+                                                        ],
+                                ];
+
+$config['base_url_siat'] = '';

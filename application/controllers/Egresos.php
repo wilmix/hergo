@@ -485,7 +485,7 @@ class Egresos extends CI_Controller
 		
 		echo json_encode($obj);
 	}
-	public function get_costo_articuloEgreso($codigo,$cant=0,$preciou=0,$idAlmacen)	//xxxxxxx
+	/* public function get_costo_articuloEgreso($codigo,$cant=0,$preciou=0,$idAlmacen)	//xxxxxxx
 	{		
 		$cant=$cant==""?0:$cant;
 		$preciou=$preciou==""?0:$preciou;
@@ -516,7 +516,7 @@ class Egresos extends CI_Controller
 		}
 		
 		return $obj;
-	}
+	} */
 	public function actualizarCostoArticuloEgreso($tabla,$idalmacen) //xxxxxxx
 	{
 		

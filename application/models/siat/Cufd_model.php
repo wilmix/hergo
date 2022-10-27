@@ -38,7 +38,7 @@ class Cufd_model extends CI_Model
                         GROUP BY
                             c.cuis
                     ) last_cufd ON last_cufd.cufd_id_last = c.id
-                    INNER JOIN siat_cuis cuis on cuis.cuis = c.cuis
+                    INNER JOIN siat_cuis cuis on cuis.cuis = c.cuis AND cuis.active = 1
                     INNER JOIN almacenes a ON a.siat_sucursal = cuis.sucursal
         ";
         $query=$this->db->query($sql);		
