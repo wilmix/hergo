@@ -20,6 +20,7 @@ function subTotalDetalle(value, row, index) {
     return (formato_moneda(pu * cant));
 }
 
+Vue.component('vue-ctk-date-time-picker', window['vue-ctk-date-time-picker']);
 Vue.component("v-select", VueSelect.VueSelect);
 const bill = new Vue({
 	el: '#app',
@@ -27,13 +28,14 @@ const bill = new Vue({
 		vuejsDatepicker
 	},
 	data: {
+		yourValue:null,
 		siatOnline: false,
 		tituloFactura: '',
 		configuracion:{},
 		infoAlmacen:[],
 		egreso:[],
-		//cufd: '',
 		codigoEmision:'1',
+		emision:'1',
 		tipoFacturaDocumento: '1',
 		egresoDetalle:[],
 		cabecera:false,
@@ -41,12 +43,15 @@ const bill = new Vue({
 		edit:false,
 		totalFactura:0,
 		validar: false,
-		fecha:moment().format('MM-DD-YYYY'),
+		fechaEmision:null,
 		es: vdp_translation_es.js,
 		moneda: '1',
 		monedas_siat:[],
 		metodos_pago_siat:[],
-		codigoMetodoPago: '1',
+		metodo_pago_siat: {
+			id: '1',
+			label: 'EFECTIVO'
+		},
 		glosa:'',
 		errors:[],
 		errorsDetalle :[],
@@ -57,7 +62,7 @@ const bill = new Vue({
 		factura_id:0,
 		tituloAlmacen: 'ALMACEN',
 		numeroFacturaContingencia: '',
-		cafc: '1018E82642F3D'
+		cafc: '1018E82642F3D',
 	},
 	mounted() {
 		this.verificarSiat()
@@ -455,6 +460,17 @@ const bill = new Vue({
 				this.validar = true
 			}
 		},
+		validarTarjeta(){
+			let regex = /^[0-9]{4}(-[0-9]{4})?$/
+			if (regex.test(this.numeroTarjeta)) {
+				let numeros = this.numeroTarjeta.split('-',2)
+				this.numeroTarjeta = `${numeros[0]}00000000${numeros[1]}`
+				return this.numeroTarjeta
+			} else {
+				return false
+			}
+
+		},
 		validarDetalle(){
 			this.errorsDetalle = []
 			this.detalle.forEach(element => {
@@ -585,7 +601,10 @@ const bill = new Vue({
 			}
 		},
 		customFormatter(date) {
-			return moment(date).format('D MMMM  YYYY');
+			//return moment(date).format('D MMMM  YYYY');
+
+			return moment(date).format('YYYY-MM-DDTHH:mm:ss.SSS');
+
 		},
 		cleanBill(){
 			location.reload();
@@ -594,8 +613,43 @@ const bill = new Vue({
 			return moment().format('YYYY-MM-DDTHH:mm:ss.SSS');
 		},
         showModal(){
+			this.codigoEmision = this.emision == '1' ? '1' : '2'
+			if (this.metodo_pago_siat.label.includes('TARJETA')) {
+				if (!this.validarTarjeta()) {
+					swal({
+						title: 'Error',
+						html: `Error formato de Numero de Tarjeta debe ser 0000-0000`,
+						type: 'error',
+						showCancelButton: false,
+						allowOutsideClick: false,
+					})
+					return
+				}
+			}
+			if (this.codigoEmision == '2' && this.emision == '3' ) {
+				if (!Number(this.numeroFacturaContingencia) > 0 || this.fechaEmision == null) {
+					swal({
+						title: 'Error',
+						html: `Error en numero de o fecha de Factura de contingencia`,
+						type: 'error',
+						showCancelButton: false,
+						allowOutsideClick: false,
+					})
+					return
+				}
+			}
+			if (this.detalle.length == 0) {
+				swal({
+					title: 'Error',
+					html: `Error no se tiene articulos`,
+					type: 'error',
+					showCancelButton: false,
+					allowOutsideClick: false,
+				})
+				return
+			}
 			agregarcargando()
-			let cafc = this.numeroFacturaContingencia == '' ? '' : this.cafc
+			let cafc = this.emision == '3' ? this.cafc : ''
 			this.cabecera.user_id = glob_user_id		
 			this.cabecera.glosa = this.glosa		
 			let cabeceraFactura = {
@@ -603,19 +657,19 @@ const bill = new Vue({
 				"razonSocialEmisor": "HERGO LTDA",
 				"municipio": this.infoAlmacen.ciudad,
 				"telefono": this.infoAlmacen.phone,
-				"numeroFactura": this.numeroFacturaContingencia== '' ? '' : this.numeroFacturaContingencia,
+				"numeroFactura": this.emision == '3' ? this.numeroFacturaContingencia: '',
 				"cuf":"",
 				"cufd":this.infoAlmacen.codigoCufd,
 				"codigoSucursal":this.infoAlmacen.sucursal,
 				"direccion": this.infoAlmacen.address,
 				"codigoPuntoVenta":this.codigoPuntoVenta,
-				"fechaEmision": this.now(),
+				"fechaEmision": this.emision == '3' ? this.fechaEmision : this.now(),
 				"nombreRazonSocial": this.cabecera.nombreCliente,
 				"codigoTipoDocumentoIdentidad": this.cabecera.codigoTipoDocumentoIdentidad,
 				"numeroDocumento": this.cabecera.numeroDocumento,
 				"complemento": "",
 				"codigoCliente": this.cabecera.cliente_id,
-				"codigoMetodoPago": this.codigoMetodoPago,
+				"codigoMetodoPago": this.metodo_pago_siat.id,
 				"numeroTarjeta": this.numeroTarjeta,
 				"montoTotal": this.totalFactura,
 				"montoTotalSujetoIva": this.totalFactura,
@@ -653,6 +707,7 @@ const bill = new Vue({
                 data:data
             }).done(function (res) {
 				if (res.errors) {
+					quitarcargando()
 					errores = ''
 					Object.keys(res.errors).forEach(error => {
 						errores += `<li>${res.errors[error]}</li>`
@@ -715,15 +770,22 @@ const bill = new Vue({
 			});
             
         },
+		cambioEmision(){
+			this.validar = this.emision == 3 ? true : this.validar
+		},
 		setTituloFactura(){
-			this.tituloFactura = this.siatOnline ? 'FACTURA ONLINE' : 'FACTURA OFFLINE SIAT NO ESTA EN LINEA'
-			this.codigoEmision = this.siatOnline ? '1' : '2'
+			//this.tituloFactura = this.siatOnline ? `FACTURA ONLINE POS:${this.codigoPuntoVenta}` : 'FACTURA OFFLINE SIAT NO ESTA EN LINEA'
+			//this.codigoEmision = this.siatOnline ? '1' : '2'
+			//this.emision = this.siatOnline ? '1' : '2'
+
 			if (this.siatOnline) {
 				this.codigoEmision = '1'
-				this.tituloFactura = 'FACTURA SIAT'
+				this.emision = 1
+				this.tituloFactura = `FACTURA ONLINE PV:${this.codigoPuntoVenta}`
 			} else {
 				this.codigoEmision = '2'
-				this.tituloFactura = 'FACTURA OFFLINE SIAT NO ESTA EN LINEA'
+				this.emision = 2
+				this.tituloFactura = `FACTURA OFFLINE PV:${this.codigoPuntoVenta}`
 				swal({
 					title: 'Error',
 					html: `El sistema de SIAT no esta en linea en este momento.`,

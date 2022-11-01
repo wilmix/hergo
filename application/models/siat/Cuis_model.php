@@ -14,6 +14,10 @@ class Cuis_model extends CI_Model
             /* $id=$this->db->insert_id();
             return $id; */
 	}
-
-
+	public function editEstadoCuis($id)
+	{
+		$this->db->set('active', '0', FALSE);
+		$this->db->where('id', $id);
+		$this->db->update('siat_cuis');
+	}
 }

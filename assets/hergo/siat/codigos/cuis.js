@@ -1,23 +1,63 @@
-$(document).on("click", "button.get", function () {
+$(document).on("click", "button.edit", function () {
 	let row = getRow(table, this)
-	cuis.getCuis(row)
+	cuis.editEstadoCuis(row)
 })
+$(document).on("click", "button.add", function () {
+	let row = getRow(table, this)
+	cuis.showModal(row)
+})
+Vue.component("v-select", VueSelect.VueSelect);
 const cuis = new Vue({
 	el: '#app',
 	data: {
-		cuis: ''
+		cuis: '',
+        sucursal: '',
+        puntoVenta:'0',
+        descripcion:'',
+        nombrePuntoVenta:'',
+        tiposPuntoVenta: [],
+        codigoTipoPuntoVenta: [],
+        sucursal:''
+
+
 	},
     mounted() {
-		this.getAlmacenes()
+		this.getAlmacenesCuis()
+        this.getAlmacenes()
+        this.getTipoPuntoVenta()
 	},
 	methods:{
         getAlmacenes(){
+            $.ajax({
+                type: "POST",
+                url: base_url('index.php/siat/codigos/cuis/getAlmacenes'),
+                dataType: "json",
+                data: {
+                    
+            },
+            }).done(function (res) {
+                cuis.almacenes = res
+                console.log(res);
+            });
+        },
+        getTipoPuntoVenta(){
+            $.ajax({
+                type: "POST",
+                url: base_url('index.php/siat/sincronizacion/Sincronizar/tipoPuntoVenta'),
+                dataType: "json",
+            }).done(function (res) {
+                cuis.tiposPuntoVenta = res
+            });
+        },
+        getAlmacenesCuis(){
+            agregarcargando()
             $.fn.dataTable.ext.errMode = 'none';
             $.ajax({
                 type: "POST",
                 url: base_url('index.php/siat/codigos/cuis/getAlmacenes'),
                 dataType: "json",
             }).done(function (res) {
+                quitarcargando()
                 console.log(res);
                 table = $('#table').DataTable({
                     data: res,
@@ -112,7 +152,7 @@ const cuis = new Vue({
                         {
                             text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
                             action: function (e, dt, node, config) {
-                                getPedidos()
+                                cuis.getAlmacenesCuis()
                             }
                         },
                         {
@@ -133,7 +173,7 @@ const cuis = new Vue({
                                     className: 'btn btn-link',
                                     action: function (e, dt, node, config) {
                                         table.state.clear()
-                                        getPedidos()
+                                        cuis.getAlmacenesCuis()
                                     }
                                 },
         
@@ -183,31 +223,78 @@ const cuis = new Vue({
                 });
             });
         },
-        getCuis(row){
+        editEstadoCuis(row){
+            let fechaVigencia = new Date(row.fechaVigencia)
+            let now = new Date()
+            if (fechaVigencia > now) {
+                swal({
+                    title: 'CUIS VIGENTE',
+                    html: `El CUIS: ${row.cuis} esta aun vigente <br> fecha de vigencia: ${row.fechaVigencia}`,
+                    type: 'warning',
+                    showCancelButton: false,
+                    allowOutsideClick: false,
+                })
+                return
+            }
+            swal({
+                title: 'Esta seguro de inactivar CUIS?',
+                text: `La fecha de vigencia ${row.fechaVigencia} del CUIS: ${row.cuis} del ${row.almacen} se inactivará`,
+                type: 'warning',
+                showCancelButton: false,
+                allowOutsideClick: false,
+            }).then(
+                function (result) {
+                    $.ajax({
+                        type: "POST",
+                        url: base_url('index.php/Siat/codigos/Cuis/editEstadoCuis'),
+                        dataType: "json",
+                        data: {
+                            row:row
+                    },
+                    }).done(function (res) {
+                        console.log(res);
+                    });
+            });
+        },
+        getCuis(){
+            if (!this.sucursal || !this.puntoVenta) {
+                swal({
+                    title: 'Error ',
+                    text: 'Seleccione un Sucursal o punto de venta validos',
+                    type: 'error', 
+                    showCancelButton: false,
+                })
+                return
+            }
+            agregarcargando()
             $.ajax({
                 type: "POST",
                 url: base_url_siat('codigos/cuis'),
                 dataType: "json",
                 data: {
                         "cliente": {
-                            "codigoSucursal": row.siat_sucursal,
-                            "codigoPuntoVenta": row.codigoPuntoVenta
+                            "codigoSucursal": this.sucursal,
+                            "codigoPuntoVenta": this.puntoVenta
                         }
                 },
             }).done(function (res) {
-                let cuis = res.RespuestaCuis.codigo
+                quitarcargando()
+                let cuisGenerado = res.RespuestaCuis.codigo
                 let fechaVigencia = res.RespuestaCuis.fechaVigencia
                 let status = res.RespuestaCuis.transaccion
+
+                //if (status || res.RespuestaCuis.mensajesList.descripcion == 'EXISTE UN CUIS VIGENTE PARA LA SUCURSAL O PUNTO DE VENTA') {
                 if (status) {
+
                     $.ajax({
                         type: "post",   
                         url: base_url('index.php/siat/codigos/Cuis/store'),
                         dataType: "json",   
                         data: {
-                            sucursal: row.siat_sucursal,
-                            cuis: cuis,
+                            sucursal: cuis.sucursal,
+                            cuis: cuisGenerado,
                             fechaVigencia: fechaVigencia,
-                            codigoPuntoVenta: CPV,
+                            codigoPuntoVenta: cuis.puntoVenta,
                         },                                    
                     }).done(function(res){
                             console.log(res);
@@ -219,7 +306,8 @@ const cuis = new Vue({
                             })
                             return 
                     }) 
-                } else {
+                } 
+                else {
                     swal({
                         title: 'Error ',
                         text: res.RespuestaCuis.mensajesList.descripcion,
@@ -236,11 +324,76 @@ const cuis = new Vue({
         },
         buttons(){
             return `
-                <button type="button" class="btn btn-default get">
-                    <span class="fa fa-get-pocket" aria-hidden="true">
+                <button type="button" class="btn btn-default edit">
+                    <span class="fa fa-pencil" aria-hidden="true">
+                    </span>
+                </button>
+                <button type="button" class="btn btn-default add">
+                    <span class="fa fa-plus-circle" aria-hidden="true">
                     </span>
                 </button>
             `
+        },
+        showModal(row){
+            console.log(row);
+            this.sucursal = row.siat_sucursal
+            this.cuis = row.cuis
+            $("#modal").modal("show");
+        },
+        registrarPuntoventa(){
+            if (this.codigoTipoPuntoVenta.length == 0 || this.descripcion == '' || this.nombrePuntoVenta == '') {
+                swal({
+                    title: 'Error ',
+                    text: 'Llenar correctamente el formulario',
+                    type: 'error', 
+                    showCancelButton: false,
+                })
+                return
+            }
+            agregarcargando()
+            $.ajax({
+                type: "POST",
+                url: base_url_siat('operaciones/registroPuntoVenta'),
+                dataType: "json",
+                data: {
+                    "cliente": {
+                        "cuis":this.cuis,
+                        "codigoSucursal": this.sucursal,
+                        "codigoTipoPuntoVenta": cuis.codigoTipoPuntoVenta.codigoClasificador,
+                        "descripcion": this.descripcion,
+                        "nombrePuntoVenta": this.puntoVenta
+                    }
+                },
+            }).done(function (res) {
+                quitarcargando()
+                
+                res = res.RespuestaRegistroPuntoVenta
+                if (res.transaccion) {
+                    quitarcargando()
+                    swal({
+                        title: 'PUNTO CREADO',
+                        html: `El punto de venta: ${res.codigoPuntoVenta} fue creado.`,
+                        type: 'success',
+                        showCancelButton: false,
+                        allowOutsideClick: false,
+                    })
+                } else {
+                    quitarcargando()
+                    swal({
+                        title: 'ERROR',
+                        html: `${res.mensajesList.descripcion}`,
+                        type: 'error',
+                        showCancelButton: false,
+                        allowOutsideClick: false,
+                    })
+                }
+               console.log(res.RespuestaRegistroPuntoVenta);
+
+            }).fail(function (jqxhr, textStatus, error) {
+                let err = textStatus + ", " + error;
+                console.log("Request Failed: " + err);
+            });
+
         }
 
 	},

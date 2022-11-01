@@ -123,7 +123,7 @@ class CI_Controller {
 			base_url("assets/dist/css/skins/skin-red.min.css"),
 			base_url("assets/dist/css/skins/skin-purple.min.css"),
 			base_url("assets/dist/css/skins/skin-yellow.min.css"),
-			'https://cdn.datatables.net/fixedheader/3.2.0/css/fixedHeader.dataTables.min.css'
+			'https://cdn.datatables.net/fixedheader/3.2.0/css/fixedHeader.dataTables.min.css',
 
 		);
 		$this->cabecera_script=array(
@@ -168,6 +168,7 @@ class CI_Controller {
 			base_url('assets/vue-plugins/vue-datapicker/vuejs-datepicker.min.js'),	
 			base_url('assets/vue-plugins/vue-datapicker/translations/es.js'),
 			base_url('assets/hergo/NumeroALetras.js'),
+			'https://cdn.jsdelivr.net/npm/vue-ctk-date-time-picker@2.5.0/dist/vue-ctk-date-time-picker.umd.js'
 		);
 		$this->foot_script=array(		
 

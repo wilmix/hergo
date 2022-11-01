@@ -43,7 +43,8 @@ class Almacen_model extends CI_Model
 	public function siatSucursales()
 	{
 		$sql = 'SELECT
-					a.idalmacen id,
+					sc.id,
+					a.idalmacen almacen_id,
 					CONCAT(a.sucursal, " | ", a.almacen, " | PV:" ,sc.codigoPuntoVenta, " | CUIS:", sc.cuis) label,
 					a.almacen,
 					a.siat_sucursal,

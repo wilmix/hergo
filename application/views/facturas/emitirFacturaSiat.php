@@ -27,57 +27,52 @@
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="">Cliente</label>
-                  <input type="text" class="form-control" placeholder="Nombre Cliente" v-model="cabecera.nombreCliente">
+                  <input type="text" class="form-control" placeholder="Nombre Cliente" v-model="cabecera.nombreCliente" disabled>
                   <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-                </div>
-                <div class="form-group col-md-3">
-                  <label for="">Fecha</label>
-                  <vuejs-datepicker  v-model="fecha" :language="es" :format="customFormatter" name="fecha" input-class="form-control">
-                  </vuejs-datepicker>
-                </div>
+                </div>                
                 <div class="form-group col-md-3">
                   <label for="">Moneda</label>
                   <select class="form-control" 
-                          v-model="moneda" 
-                          name="moneda">
-                  <option v-for="option in monedas_siat" 
-                          v-bind:value="option.id"
-                          v-text="option.label">
-                  </option>
-              </select>
+                            v-model="moneda" 
+                            name="moneda">
+                    <option v-for="option in monedas_siat" 
+                            v-bind:value="option.id"
+                            v-text="option.label">
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="">OC/PedidoNº</label>
+                    <input type="text" class="form-control" placeholder="Pedido" v-model="cabecera.clientePedido">
                 </div>
               </div>
 
               <div class="row">
                 <div class="form-group col-md-3">
                   <label for="">Metodo de Pago</label>
-                  <select class="form-control" 
-                          v-model="codigoMetodoPago" 
-                          name="codigoMetodoPago">
-                    <option v-for="option in metodos_pago_siat" 
-                            v-bind:value="option.id"
-                            v-text="option.label">
-                    </option>
-                  </select>
+                  <v-select :options="metodos_pago_siat" v-model="metodo_pago_siat" :clearable="false"></v-select>
                 </div>
-                <div v-show="codigoMetodoPago == 2" class="form-group col-md-3">
+                <div v-show="metodo_pago_siat.label.includes('TARJETA')" class="form-group col-md-3">
                   <label for="">Número de Tarjeta</label>
-                  <input type="text" class="form-control" v-model="numeroTarjeta" placeholder="XXXXXXXXXXXXXXXX">
-                  <small class="form-text text-muted">Solo si el metodo de pago es tarjeta.</small>
+                  <input type="text" class="form-control" v-model="numeroTarjeta" placeholder="XXXX-XXXX" minlength="9" maxlength="9">
+                  <small class="form-text text-muted">Solo si el metodo de pago es tarjeta primeros y ultimos cuatro numeros separados por guión.</small>
                 </div>
-                <div class="form-group col-md-3">
-                  <label for="">OC/PedidoNº</label>
-                  <input type="text" class="form-control" placeholder="Pedido" v-model="cabecera.clientePedido">
-                </div>
+                
                 <div class="form-group col-md-3">
                   <label for="">Emision</label>
-                  <select class="form-control"
-                            v-model="codigoEmision">
+                  <select @change="cambioEmision" class="form-control"
+                            v-model="emision">
                     <option value="1">Online</option>
                     <option value="2">Offline</option>
+                    <option value="3">Contingencia</option>
+
                   </select>
                 </div>
-                <div v-show="codigoEmision == 2" class="form-group col-md-3">
+                <div v-show="emision == 3" class="form-group col-md-3">
+                  <label for="">Fecha Emisión Contingencia</label>
+                  <vue-ctk-date-time-picker label="Fecha Emisión Contingencia" format="YYYY-MM-DDTHH:mm:ss.SSS" v-model="fechaEmision" input-class="form-control"></vue-ctk-date-time-picker>
+                </div>
+                <div v-show="emision == 3" class="form-group col-md-3">
                   <label for="">Número de Factura de Contingencia</label>
                   <input type="text" class="form-control" v-model="numeroFacturaContingencia">
                   <small class="form-text text-muted">Solo si es factura de contingencia (MANUAL).</small>

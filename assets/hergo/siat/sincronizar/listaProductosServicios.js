@@ -18,6 +18,7 @@ let columns = [
         data: 'nandina',
         title: 'nandina',
         className: 'text-center',
+        visible: false
         
     },
 ]
@@ -172,7 +173,7 @@ const sincro = new Vue({
                     },                                    
                 }).done(function(res){
                         quitarcargando()
-                        if (res.res == true) {
+                        if (res == true) {
                             quitarcargando()
                             swal({
                                 title: 'OK',

@@ -33,5 +33,16 @@ class Cuis extends CI_Controller
         $this->Cuis_model->store($cuis);
         echo json_encode($cuis);
     }
+    public function editEstadoCuis()
+    {
+        $row = $this->input->post('row');
+        $res = $this->Cuis_model->editEstadoCuis($row['id']);
+        echo json_encode($res);
+    }
+    public function registrarPuntoventa()
+    {
+        $data = $this->input->post('cliente');
+        echo json_encode($data);
+    }
 
 }

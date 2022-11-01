@@ -340,7 +340,9 @@ const pro = new Vue({
                     allowOutsideClick: false,
                 })
                 return
-            }
+            } else {
+				this.cantidadFacturas = cufs.length
+			}
             $("#modal").modal("show");
 		},
         enviarPaquete(){
@@ -367,18 +369,30 @@ const pro = new Vue({
 			}).done(function (res) {
                 if (res.transaccion) {
                     quitarcargando()
+					msj = ''
+					console.log(res.mensajesList.length);
                     if (res.mensajesList) {
-                        let mensajesList = ''
-                        res.mensajesList.forEach(element => {
-                            mensajesList += `<li> ${element.descripcion}</li>`
-                        });
+                        var mensajesList = ''
+						if (res.mensajesList.length > 0) {
+							Object.entries(res.mensajesList).forEach(element => {
+								console.log(element[1].descripcion);
+								mensajesList += `<li>${element[1].descripcion}</li>`
+							});
+						}
                         console.log(mensajesList);
-                    }
+						msj = `Existen las siguientes observaciones: 
+									<br> ${mensajesList}
+									<br> Código estado: ${res.codigoEstado}`
+						
+                    } else {
+						msj = `Las facturas se empaquetaron y enviaron de manera correcta con el codigo de recepción:
+						<br> ${res.codigoRecepcion} 
+						<br> Código estado: ${res.codigoEstado}`
+					}
+					
                     swal({
-						title: `ENVIADA - ${res.codigoDescripcion}`,
-						html: `Las facturas se empaquetaron y enviaron de manera correcta con el codigo de recepción:
-									<br> ${res.codigoRecepcion} 
-									<br> Código estado: ${res.codigoEstado}`,
+						title: `${res.codigoDescripcion}`,
+						html: msj,
 						type: 'success',
 						showCancelButton: false,
 						allowOutsideClick: false,

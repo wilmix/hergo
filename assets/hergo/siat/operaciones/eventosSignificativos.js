@@ -1,3 +1,4 @@
+Vue.component('vue-ctk-date-time-picker', window['vue-ctk-date-time-picker']);
 const app = new Vue({
 	el: '#app',
     components: {
@@ -11,7 +12,7 @@ const app = new Vue({
         fecha: '',
         es: vdp_translation_es.js,
         motivos: false,
-        motivo:'3',
+        motivo:'1',
         descripcion:'',
         fechaRegistro:{
             date: new Date()
@@ -25,7 +26,7 @@ const app = new Vue({
             date: ''
         },
         registroFecha: '',
-        cufdEvento:'BQTlDwqxKQUJBNzTNFMjkyMTYyNUU=QzkyVURRYUtXVUFIzN0I5MjA5OEY4N',
+        cufdEvento:'',
         codigoEvento: '',
         codigoRecepcion:''
 

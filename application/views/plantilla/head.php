@@ -35,6 +35,8 @@
       <link type="text/css" rel="stylesheet" href="<?= base_url('assets/plugins/steps/css/jquery.steps.css') ?>" />
       <link type="text/css" rel="stylesheet" href="<?= base_url('assets/plugins/steps/css/main.css') ?>" />
       <link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.2.0/css/fixedHeader.dataTables.min.css" /> 
+      <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-ctk-date-time-picker@2.5.0/dist/vue-ctk-date-time-picker.css" /> 
+
 
       <!-- Global site tag (gtag.js) - Google Analytics -->
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-FYRHY8R5TX"></script>

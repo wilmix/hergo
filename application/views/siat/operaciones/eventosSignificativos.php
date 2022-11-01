@@ -73,13 +73,15 @@
                             <div class="form-group">
                                 <label for="inicio" class="col-sm-2 control-label">Inicio Evento</label>
                                 <div class="col-sm-10">
-                                    <input name="inicio" placeholder="AAAA-MM-DD HH:MM:SS" type="text" class="form-control" v-model="fechaHoraInicioEvento" >
+                                <vue-ctk-date-time-picker label="Fecha Inicio Contingencia" format="YYYY-MM-DDTHH:mm:ss.SSS" v-model="fechaHoraInicioEvento" input-class="form-control"></vue-ctk-date-time-picker>
+                                    <!-- <input name="inicio" placeholder="AAAA-MM-DD HH:MM:SS" type="text" class="form-control" v-model="fechaHoraInicioEvento" > -->
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="fin" class="col-sm-2 control-label">Inicio Evento</label>
+                                <label for="fin" class="col-sm-2 control-label">Fin Evento</label>
                                 <div class="col-sm-10">
-                                    <input name="fin" placeholder="AAAA-MM-DD HH:MM:SS" type="text" class="form-control" v-model="fechaHoraFinEvento" >
+                                <vue-ctk-date-time-picker label="Fecha Fin Contingencia" format="YYYY-MM-DDTHH:mm:ss.SSS" v-model="fechaHoraFinEvento" input-class="form-control"></vue-ctk-date-time-picker>
+                                    <!-- <input name="fin" placeholder="AAAA-MM-DD HH:MM:SS" type="text" class="form-control" v-model="fechaHoraFinEvento" > -->
                                 </div>
                             </div>
                             <div class="form-group">

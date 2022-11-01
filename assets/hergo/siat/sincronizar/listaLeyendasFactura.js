@@ -43,6 +43,7 @@ const sincro = new Vue({
                 })
                 return
             } else {
+                agregarcargando()
                 $.ajax({
                     type: "POST",
                     url: base_url_siat('sincronizar'),
@@ -56,6 +57,7 @@ const sincro = new Vue({
                         }
                     }
                 }).done(function (res) {
+                    quitarcargando()
                     sincro.datasiat = res.RespuestaListaParametricasLeyendas.listaLeyendas
                     listaLeyendas = res.RespuestaListaParametricasLeyendas.listaLeyendas
                     table = sincro.table(listaLeyendas, columns)

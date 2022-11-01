@@ -179,7 +179,7 @@ class Emitir extends CI_Controller
 			$factura->moneda = $cabeceraSiat['codigoMoneda'];
 			$factura->total = $cabeceraSiat['montoTotal'];
 			$factura->glosa = isset($cabecera['glosa']) ? $cabecera['glosa'] : '';
-			$factura->tipoPago = $cabeceraSiat['codigoMetodoPago'];
+			//$factura->tipoPago = $cabeceraSiat['codigoMetodoPago'];
 			$factura->codigoControl = '';
 			$factura->autor= $cabecera['user_id'];
 			$factura->tipoCambio=$this->Egresos_model->retornarTipoCambio();
@@ -197,6 +197,8 @@ class Emitir extends CI_Controller
 			$facturaSiat->leyenda = $cabeceraSiat['leyenda'];
 			$facturaSiat->pedido = isset($cabecera['clientePedido']) ? $cabecera['clientePedido'] : '';
 			$facturaSiat->cafc = isset($cabeceraSiat['cafc']) ? $cabeceraSiat['cafc'] : '';
+			$facturaSiat->numeroTarjeta = isset($cabeceraSiat['numeroTarjeta']) ? $cabeceraSiat['numeroTarjeta'] : '';
+			$facturaSiat->codigoMetodoPago = isset($cabeceraSiat['codigoMetodoPago']) ? $cabeceraSiat['codigoMetodoPago'] : '';
 			$facturaSiat->codigoRecepcion = $cabeceraSiat['codigoRecepcion'];
 		
 			$idFactura = $this->Emitir_model->storeFacturaSiat($factura, $facturaSiat);

@@ -3,7 +3,7 @@ var glob_art = [];
 var glob_alm_usu = $('#idAlmacenUsuario').val()
 var glob_user_id = $('#user_id_actual').val()
 var fechaHoySystem 
-const CPV = 1
+const CPV = 0
 var PermisosUser
 const isAdminGlobal = $('#isAdmin').val()
 const isNacionalGlobal = $('#nacional').val()
