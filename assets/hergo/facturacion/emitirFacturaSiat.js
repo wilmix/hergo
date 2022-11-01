@@ -546,6 +546,8 @@ const bill = new Vue({
 			}
 		},
 		facturarItem(row){
+			this.moneda = this.egreso.moneda_id
+			this.tipoCambio = this.moneda == 2 ? this.egreso.tipoCambio : 1
 			idsDetalle = this.detalle.map((el) => el.detalle_egreso_id)
 			if (idsDetalle.includes( row.detalle_egreso_id)) {
 				console.log(row)
@@ -778,8 +780,20 @@ const bill = new Vue({
 					return false
 				}
             }).fail(function (jqxhr, textStatus, error) {
+				quitarcargando();
 				let err = textStatus + ", " + error;
 				console.log("Request Failed: " + err);
+				swal({
+					title: 'Revisar Consulta Factura Siat',
+					text: "Para imprimir vaya a consulta facturas SIAT",
+					type: 'warning',
+					showCancelButton: false,
+					allowOutsideClick: false,
+				}).then(
+					function (result) {
+						//agregarcargando();
+						window.location.href =base_url("siat/facturacion/Emitir/consultaFacturasSiat");
+				});
 			});
             
         },

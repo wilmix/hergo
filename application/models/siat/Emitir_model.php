@@ -314,7 +314,7 @@ class Emitir_model extends CI_Model
                     facturadetalle fd
                     INNER JOIN articulos a ON a.idArticulos = fd.articulo
                     INNER JOIN unidad u ON u.idUnidad = a.idUnidad
-                    INNER JOIN siat_sincro_unidad_medida su ON su.codigoClasificador = u.idUnidad
+                    INNER JOIN siat_sincro_unidad_medida su ON su.codigoClasificador = u.siat_codigo
                 WHERE
                     fd.idFactura ='$id'
                 ";

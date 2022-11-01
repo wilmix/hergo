@@ -370,7 +370,6 @@ const pro = new Vue({
                 if (res.transaccion) {
                     quitarcargando()
 					msj = ''
-					console.log(res.mensajesList.length);
                     if (res.mensajesList) {
                         var mensajesList = ''
 						if (res.mensajesList.length > 0) {
@@ -411,8 +410,16 @@ const pro = new Vue({
                     return
                 }
 			}).fail(function (jqxhr, textStatus, error) {
+				quitarcargando();
 				let err = textStatus + ", " + error;
 				console.log("Request Failed: " + err);
+				swal({
+					title: 'Vuelva a intentar',
+					text: "Vuelva a intenar error con conexion al SIAT",
+					type: 'warning',
+					showCancelButton: false,
+					allowOutsideClick: false,
+				})
 			});
         },
 

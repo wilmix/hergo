@@ -169,6 +169,18 @@ const app = new Vue({
         },
         registrarEvento(){
             agregarcargando()
+            if (this.fechaHoraInicioEvento == '' || this.fechaHoraFinEvento == '' || this.cufdEvento== '') {
+                quitarcargando()
+                swal({
+					title: 'Error',
+					text: "Llenar correctamente el formulario",
+					type: 'error',
+					showCancelButton: false,
+					allowOutsideClick: false,
+				})
+                return
+            }
+
             data = {
                     "cuis": this.dataSiat.cuis,
                     "codigoSucursal": this.dataSiat.sucursal,
@@ -210,7 +222,18 @@ const app = new Vue({
 						allowOutsideClick: false,
 					})
                 }
-			})
+			}).fail(function (jqxhr, textStatus, error) {
+				quitarcargando();
+				let err = textStatus + ", " + error;
+				console.log("Request Failed: " + err);
+				swal({
+					title: 'Vuelva a intentar',
+					text: "Vuelva a intenar error con conexion al SIAT",
+					type: 'warning',
+					showCancelButton: false,
+					allowOutsideClick: false,
+				})
+			});
             //console.log(data);
         },
         enviarPaquete(){
