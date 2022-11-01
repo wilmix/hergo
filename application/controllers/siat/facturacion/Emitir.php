@@ -20,7 +20,8 @@ class Emitir extends CI_Controller
 	}
 	public function pendientesFacturarDetalle()
 	{
-		$id  = $this->input->post('id');
+		$data  = $this->input->post('row');
+		$id = $data['id'];
 		$res = $this->Emitir_model->pendientesDetalle($id);
 		echo json_encode($res);
 	}
@@ -200,6 +201,12 @@ class Emitir extends CI_Controller
 			$facturaSiat->numeroTarjeta = isset($cabeceraSiat['numeroTarjeta']) ? $cabeceraSiat['numeroTarjeta'] : '';
 			$facturaSiat->codigoMetodoPago = isset($cabeceraSiat['codigoMetodoPago']) ? $cabeceraSiat['codigoMetodoPago'] : '';
 			$facturaSiat->codigoRecepcion = $cabeceraSiat['codigoRecepcion'];
+
+			$facturaSiat->montoTotal = $cabeceraSiat['montoTotal'];
+			$facturaSiat->montoTotalMoneda = $cabeceraSiat['montoTotalMoneda'];
+			$facturaSiat->tipoCambio = $cabeceraSiat['tipoCambio'];
+
+
 		
 			$idFactura = $this->Emitir_model->storeFacturaSiat($factura, $facturaSiat);
 

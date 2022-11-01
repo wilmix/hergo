@@ -31,7 +31,9 @@ class Emitir_model extends CI_Model
                         WHEN e.estado = 0 THEN 'POR FACTURAR'
                         WHEN e.estado = 2 THEN 'PARCIAL'
                     END estado,
+                    tc.tipoCambio,
                     CONCAT(u.first_name, ' ', u.last_name) vendedor,
+                    m.id moneda_id,
                     m.sigla monedaSigla,
                     e.clientePedido,
                     ROUND(
@@ -76,12 +78,20 @@ class Emitir_model extends CI_Model
                     a.Descripcion descripcion,
                     (d.cantidad - d.cantFact) cantidad,
                     u.siat_codigo unidadMedida,
-                    d.punitario precioUnitario,
+                    CASE
+					    WHEN  e.moneda= '3' THEN ROUND(d.punitario / tc.tipocambio,2) 
+					    ELSE d.punitario
+					END precioUnitario,
                     0 montoDescuento,
-                    ROUND(d.cantidad * d.punitario,2) subTotal,
+                    CASE
+					    WHEN  e.moneda= '3' THEN ROUND(d.cantidad * d.punitario/ tc.tipocambio,2)
+					    ELSE ROUND(d.cantidad * d.punitario,2)
+					END subTotal,
+
                     '' numeroSerie,
                     '' numeroImei,
-
+                    IF(e.moneda = '2' , '2', '1') moneda,
+                    tc.tipocambio,
                     a.idArticulos articulo_id,
                     d.idingdetalle detalle_egreso_id,
                     d.idegreso egreso_id,
@@ -93,6 +103,8 @@ class Emitir_model extends CI_Model
                     INNER JOIN articulos a ON a.idArticulos = d.articulo
                     INNER JOIN unidad u ON u.idUnidad = a.idUnidad
                     INNER JOIN siat_sincro_unidad_medida siat ON siat.codigoClasificador = u.siat_codigo
+                    INNER JOIN egresos e ON e.idegresos = d.idegreso
+                    INNER JOIN tipocambio tc ON tc.fecha = e.fechamov
                 WHERE
                     d.idegreso = '$id'
                     AND (d.cantidad - d.cantFact) > 0
@@ -274,6 +286,7 @@ class Emitir_model extends CI_Model
                     fs.leyenda,
                     f.glosa,
                     f.moneda,
+                    fs.montoTotalMoneda,
                     f.total
                 FROM
                     factura f
@@ -301,9 +314,9 @@ class Emitir_model extends CI_Model
                     facturadetalle fd
                     INNER JOIN articulos a ON a.idArticulos = fd.articulo
                     INNER JOIN unidad u ON u.idUnidad = a.idUnidad
-                    INNER JOIN siat_sincro_unidad_medida su ON su.id = u.siat_codigo
+                    INNER JOIN siat_sincro_unidad_medida su ON su.codigoClasificador = u.idUnidad
                 WHERE
-                    fd.idFactura = '$id'
+                    fd.idFactura ='$id'
                 ";
 		$query=$this->db->query($sql);		
 		return $query->result();

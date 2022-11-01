@@ -127,6 +127,14 @@
                         <td class="text-right" colspan="6"><strong>Total Final:</strong> </td>
                         <td class="text-right bg-primary"><strong> {{ totalFactura | moneda }} </strong></td>
                       </tr>
+                      <tr v-show="moneda == 2">
+                        <td class="text-right" colspan="6"><strong>Tipo de Cambio:</strong> </td>
+                        <td class="text-right bg-primary"><strong> {{ tipoCambio }} </strong></td>
+                      </tr>
+                      <tr v-show="moneda == 2">
+                        <td class="text-right" colspan="6"><strong>Total $U$:</strong> </td>
+                        <td class="text-right bg-primary"><strong> {{ montoTotalMoneda | moneda }} </strong></td>
+                      </tr>
                   </tfoot>
                 </table>
               </div>

@@ -63,6 +63,8 @@ const bill = new Vue({
 		tituloAlmacen: 'ALMACEN',
 		numeroFacturaContingencia: '',
 		cafc: '1018E82642F3D',
+		tipoCambio: null,
+		montoTotalMoneda: null
 	},
 	mounted() {
 		this.verificarSiat()
@@ -298,7 +300,7 @@ const bill = new Vue({
 				url: base_url('siat/facturacion/Emitir/pendientesFacturarDetalle'),
 				dataType: "json",
                 data:{
-                    id:row.id
+                    row:row
                 }
 			}).done(function (res) {
 				console.log(res);
@@ -352,7 +354,7 @@ const bill = new Vue({
 							className: 'text-right',
 						},
                         {
-							data: 'montoTotal',
+							data: 'subTotal',
 							title: 'Total',
 							className: 'text-right',
 						},
@@ -507,13 +509,22 @@ const bill = new Vue({
 		},
 		total(){
 			if (this.detalle.length>0) {
-			  this.detalle.map(function (item,index,array) {
-				//item.total = Math.round( item.cantidad * item.precioUnitario * 100) / 100
-				item.subTotal = Math.round( item.cantidad * item.precioUnitario * 100) / 100
-
-			  })
-			  this.totalFactura = this.detalle.map((item, index, array) => parseFloat(item.subTotal)).reduce( (a,b)=> a+b) 
-			  this.totalFactura =  Math.round( this.totalFactura * 100) / 100
+				if (this.moneda == 2) {
+					this.detalle.map(function (item,index,array) {
+						item.subTotal = Math.round( item.cantidad * item.precioUnitario * 100) / 100
+					  })
+					  this.totalFactura = this.detalle.map((item, index, array) => parseFloat(item.subTotal)).reduce( (a,b)=> a+b) 
+					  this.totalFactura =  Math.round( this.totalFactura * 100) / 100
+					  this.montoTotalMoneda = Math.round( this.totalFactura / 6.96 * 100) / 100 
+					
+				} else {
+					this.detalle.map(function (item,index,array) {
+					  item.subTotal = Math.round( item.cantidad * item.precioUnitario * 100) / 100
+					})
+					this.totalFactura = this.detalle.map((item, index, array) => parseFloat(item.subTotal)).reduce( (a,b)=> a+b) 
+					this.totalFactura =  Math.round( this.totalFactura * 100) / 100
+					this.montoTotalMoneda = this.totalFactura
+				}
 			}
 		},
 		deleteRow(item){
@@ -567,6 +578,8 @@ const bill = new Vue({
 		
 		},
 		facturarEgreso(){
+			this.moneda = this.egreso.moneda_id
+			this.tipoCambio = this.moneda == 2 ? this.egreso.tipoCambio : 1
 			if (this.detalle.length == 0) {
 				this.cabecera = this.egreso
 				this.detalle = this.egresoDetalle
@@ -674,8 +687,8 @@ const bill = new Vue({
 				"montoTotal": this.totalFactura,
 				"montoTotalSujetoIva": this.totalFactura,
 				"codigoMoneda": this.moneda,
-				"tipoCambio": "1",
-				"montoTotalMoneda": this.totalFactura,
+				"tipoCambio": this.tipoCambio,
+				"montoTotalMoneda": this.montoTotalMoneda,
 				"montoGiftCard": null,
 				"descuentoAdicional": "0",
 				"codigoExcepcion": "",
