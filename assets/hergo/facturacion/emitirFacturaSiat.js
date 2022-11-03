@@ -64,7 +64,8 @@ const bill = new Vue({
 		numeroFacturaContingencia: '',
 		cafc: '1018E82642F3D',
 		tipoCambio: null,
-		montoTotalMoneda: null
+		montoTotalMoneda: null,
+		codigoExcepcion: '0'
 	},
 	mounted() {
 		this.verificarSiat()
@@ -663,6 +664,17 @@ const bill = new Vue({
 				})
 				return
 			}
+			if (!Number(this.cabecera.numeroDocumento)) {
+				swal({
+					title: 'Error',
+					html: `Error en el numero de documento cliente 
+							<br> <b>${this.cabecera.numeroDocumento}</b>`,
+					type: 'error',
+					showCancelButton: false,
+					allowOutsideClick: false,
+				})
+				return
+			}
 			agregarcargando()
 			let cafc = this.emision == '3' ? this.cafc : ''
 			this.cabecera.user_id = glob_user_id		
@@ -681,7 +693,7 @@ const bill = new Vue({
 				"fechaEmision": this.emision == '3' ? this.fechaEmision : this.now(),
 				"nombreRazonSocial": this.cabecera.nombreCliente,
 				"codigoTipoDocumentoIdentidad": this.cabecera.codigoTipoDocumentoIdentidad,
-				"numeroDocumento": this.cabecera.numeroDocumento,
+				"numeroDocumento": Number(this.cabecera.numeroDocumento),
 				"complemento": "",
 				"codigoCliente": this.cabecera.cliente_id,
 				"codigoMetodoPago": this.metodo_pago_siat.id,
@@ -693,7 +705,7 @@ const bill = new Vue({
 				"montoTotalMoneda": this.montoTotalMoneda,
 				"montoGiftCard": null,
 				"descuentoAdicional": "0",
-				"codigoExcepcion": "",
+				"codigoExcepcion": this.codigoExcepcion,
 				"cafc": cafc,
 				"leyenda": this.leyenda,
 				"usuario": this.usuario,

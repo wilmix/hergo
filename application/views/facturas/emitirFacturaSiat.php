@@ -65,9 +65,19 @@
                     <option value="1">Online</option>
                     <option value="2">Offline</option>
                     <option value="3">Contingencia</option>
-
                   </select>
                 </div>
+
+                <div class="form-group col-md-3">
+                  <label for="">Código Excepción</label>
+                  <select class="form-control"
+                            v-model="codigoExcepcion">
+                    <option value="0">SIN EXCEPCION</option>
+                    <option value="1">ENVIAR EXCEPCION</option>
+                  </select>
+                  <small class="form-text text-muted">Solo si se desea enviar excepción para el NIT.</small>
+                </div>
+
                 <div v-show="emision == 3" class="form-group col-md-3">
                   <label for="">Fecha Emisión Contingencia</label>
                   <vue-ctk-date-time-picker label="Fecha Emisión Contingencia" format="YYYY-MM-DDTHH:mm:ss.SSS" v-model="fechaEmision" input-class="form-control"></vue-ctk-date-time-picker>
