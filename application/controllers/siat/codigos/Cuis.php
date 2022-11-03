@@ -44,5 +44,13 @@ class Cuis extends CI_Controller
         $data = $this->input->post('cliente');
         echo json_encode($data);
     }
+    public function cierrePuntoVenta()
+    {
+        $cuis = $this->input->post('cuis');
+        $codigoSucursal = $this->input->post('codigoSucursal');
+        $codigoPuntoVenta = $this->input->post('codigoPuntoVenta');
+        $res = $this->Cuis_model->cierrePuntoVenta($cuis, $codigoSucursal, $codigoPuntoVenta);
+        echo json_encode($res);
+    }
 
 }

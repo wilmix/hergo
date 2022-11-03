@@ -328,10 +328,6 @@ const cuis = new Vue({
                     <span class="fa fa-pencil" aria-hidden="true">
                     </span>
                 </button>
-                <button type="button" class="btn btn-default add">
-                    <span class="fa fa-plus-circle" aria-hidden="true">
-                    </span>
-                </button>
             `
         },
         showModal(row){

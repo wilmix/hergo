@@ -32,6 +32,7 @@ const app = new Vue({
 
 	},
 	mounted() {
+        this.verificar()
         this.get_codigos()
 	},
 	methods:{
@@ -148,6 +149,34 @@ const app = new Vue({
 				console.log("Request Failed: " + err);
 			});
 		},
+        verificar(){
+            $.ajax({
+				type: "GET",
+				url: base_url_siat('operaciones/verificar'),
+				dataType: "json",
+			}).done(function (res) {
+                if (!res.transaccion) {
+                    swal({
+                        title: 'Error Conexión',
+                        text: "Error de conexión con el SIAT vuelva intentar",
+                        type: 'error',
+                        showCancelButton: false,
+                        allowOutsideClick: false,
+                    })
+                }
+
+			}).fail(function (jqxhr, textStatus, error) {
+				let err = textStatus + ", " + error;
+				console.log("Request Failed: " + err);
+                swal({
+                    title: 'Error Conexión',
+                    text: "Error de conexión con el SIAT vuelva intentar",
+                    type: 'error',
+                    showCancelButton: false,
+                    allowOutsideClick: false,
+                })
+			});
+        },
         customFormatter(date) {
             return moment(date).format('DD MMMM YYYY');
         },

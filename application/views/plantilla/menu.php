@@ -151,6 +151,12 @@
                     </i> Eventos Significativos
                   </a>
                 </li>
+                <li class="puntosVenta">
+                  <a href="<?php echo base_url("siat/operaciones/Operaciones/puntosVenta") ?>">
+                    <i class="fa fa-list-ol ">
+                    </i> Puntos de Venta
+                  </a>
+                </li>
               </ul>
             </li>
             <!-- Importaciones -->

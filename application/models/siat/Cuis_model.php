@@ -20,4 +20,11 @@ class Cuis_model extends CI_Model
 		$this->db->where('id', $id);
 		$this->db->update('siat_cuis');
 	}
+	public function cierrePuntoVenta($cuis, $codigoSucursal, $codigoPuntoVenta)
+	{
+		$this->db->set('active', '0', FALSE);
+		$this->db->where('sucursal', $codigoSucursal);
+		$this->db->where('codigoPuntoVenta', $codigoPuntoVenta);
+		$this->db->update('siat_cuis');
+	}
 }
