@@ -667,6 +667,17 @@ const bill = new Vue({
 			if (!Number(this.cabecera.numeroDocumento)) {
 				swal({
 					title: 'Error',
+					html: `Para montos mayores se debe tener documento cliente valido
+							<br> <b>${this.cabecera.numeroDocumento}</b>`,
+					type: 'error',
+					showCancelButton: false,
+					allowOutsideClick: false,
+				})
+				return
+			}
+			if (Number(this.cabecera.montoTotal) >= 1000 && this.cabecera.numeroDocumento == 0) {
+				swal({
+					title: 'Error',
 					html: `Error en el numero de documento cliente 
 							<br> <b>${this.cabecera.numeroDocumento}</b>`,
 					type: 'error',
