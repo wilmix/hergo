@@ -58,8 +58,14 @@ function getData() {
 					title: 'FECHA',
 					className: 'text-center',
 					render: formato_fecha,
+					visible: false
 				},
-                
+                {
+					data: 'fechaEmisionSiat',
+					title: 'FECHA SIAT',
+					className: 'text-center',
+					render: formato_fecha_corta,
+				},
                 {
 					data: 'ClienteNit',
 					title: 'NIT',
@@ -87,6 +93,12 @@ function getData() {
 					title: 'PEDIDO',
 					className: 'text-center',
 					visible: false
+				},
+				{
+					data: 'metodoPago',
+					title: 'METODO PAGO',
+					className: 'text-center',
+					visible: true
 				},
                 {
 					data: 'pagos',
@@ -229,7 +241,11 @@ function buttons (data, type, row) {
 					<span class="fa fa-print" aria-hidden="true">
 					</span>
 				</button>`
-	let buttons = row.anulada == 1 || row.pagada == 1 ?  `${pdf}${xml}` :  `${pdf}${xml}${anular}`
+	let verificar = `<button type="button" class="btn btn-default check">
+		<span class="fa fa-check" aria-hidden="true">
+		</span>
+	</button>`
+	let buttons = row.anulada == 1 || row.pagada == 1 ?  `${pdf}${xml}${verificar}` :  `${pdf}${xml}${anular}${verificar}`
 	return buttons
 }
 function printEgreso(value, row, index) {
@@ -261,6 +277,10 @@ $(document).on("click", "button.print", function () {
     let row = getRow(table, this)
 	let print = base_url(`pdf/Siat/factura/${row.idFactura}`)
 	window.open(print);
+})
+$(document).on("click", "button.check", function () {
+    let row = getRow(table, this)
+	pro.verificarFactura(row)
 })
 $(document).on("click", "button.xml", function () {
     let row = getRow(table, this)
@@ -382,6 +402,40 @@ const pro = new Vue({
 			}).done(function (res) {
 				pro.motivosAnulacion = res
 			})
+		},
+		verificarFactura(row){
+			data = {
+				codigoPuntoVenta: row.codigoPuntoVenta,
+				codigoSucursal: row.codigoSucursal,
+				codigoDocumentoSector: "1",
+				codigoEmision: "1",
+				cufd: this.infoAlmacen.codigoCufd,
+				cuis: row.cuis,
+				tipoFacturaDocumento: "1",
+				cuf: row.cuf
+			}
+			$.ajax({
+				type: "POST",
+				url: base_url_siat('verificarFactura'),
+				dataType: "json",
+				data:{
+					data: data
+                }
+			}).done(function (res) {
+				quitarcargando()
+				swal({
+					title: res.codigoDescripcion,
+					html: `${res.codigoRecepcion} </br>
+							${res.codigoEstado}	`,
+					type: res.codigoEstado == '691' ? 'warning' : 'success',
+					showCancelButton: false,
+					allowOutsideClick: false,
+				})
+				quitarcargando();
+			}).fail(function (jqxhr, textStatus, error) {
+				let err = textStatus + ", " + error;
+				console.log("Request Failed: " + err);
+			});
 		}
 
 	},

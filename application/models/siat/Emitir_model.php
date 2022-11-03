@@ -396,7 +396,9 @@ class Emitir_model extends CI_Model
                     fs.codigoRecepcion,
                     fs.cuf,
                     fs.cafc,
-                    fs.pedido
+                    fs.pedido,
+                    sp.descripcion metodoPago,
+                    fs.fechaEmision fechaEmisionSiat
                 FROM
                     factura_egresos fe
                     INNER JOIN egresos e on e.idegresos = fe.idegresos
@@ -409,6 +411,7 @@ class Emitir_model extends CI_Model
                     INNER JOIN users ua ON ua.id = f.autor
                     INNER JOIN tipoPago tp ON tp.id = f.tipoPago
                     INNER JOIN factura_siat fs ON fs.factura_id = f.idFactura 
+                    INNER JOIN siat_sincro_tipo_metodo_pago sp ON sp.codigoClasificador = fs.codigoMetodoPago
                     INNER JOIN siat_cuis cuis ON cuis.sucursal = fs.codigoSucursal AND cuis.codigoPuntoVenta = fs.codigoPuntoVenta AND cuis.active = 1
                 WHERE
                     f.fechaFac BETWEEN '$ini'
