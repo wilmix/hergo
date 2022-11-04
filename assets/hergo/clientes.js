@@ -65,7 +65,12 @@ function retornarTablaClientes()
             },         
             {
                 field:'documento',
-                title:"N Documento",
+                title:"Documento",
+                sortable:true,
+            },
+            {
+                field:'complemento',
+                title:"Complemento",
                 sortable:true,
             },
             {

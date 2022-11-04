@@ -539,9 +539,6 @@ function validarCliente(tipo) {
           notEmpty: {
             message: 'Campo obligatorio'
           },
-          integer: {
-            message: 'Debe ser dato númerico'
-          }
         }
       },
       nombre_cliente: {
@@ -553,6 +550,14 @@ function validarCliente(tipo) {
             notEmpty: {
               message: 'Campo obligatorio'
             }
+        }
+      },
+      complemento: {
+        validators: {
+          stringLength: {
+            min: 1,
+            message: 'Ingrese complemento válido'
+          },
         }
       },
       direccion: {
@@ -593,6 +598,8 @@ function validarCliente(tipo) {
   .on('success.form.bv', function(e) {
     e.preventDefault();
     var formData = new FormData($('#form_clientes')[0]);  
+    /* for(let pair of formData.entries()) { console.log(pair[0]+ ', '+ pair[1]); }
+    return */
     $.getJSON({
       url: base_url("index.php/Clientes/store"),
       type: 'POST',

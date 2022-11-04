@@ -18,9 +18,8 @@
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-equalizer"></i></span>
                         <select name="tipo_doc" id="tipo_doc" class="form-control" >
-                        <option value="2" selected="selected">NIT</option>
-                          <?php foreach ($tipodocumento->result_array() as $fila):  ?>
-                            <option value="<?= $fila['idDocumentoTipo'] ?>"><?= $fila['documentotipo']?></option>
+                          <?php foreach ($tipodocumento as $fila):  ?>
+                            <option value="<?= $fila['idDocumentoTipo'] ?>"><?= $fila['descripcion']?></option>
                           <?php endforeach ?>
                         </select>
                       </div>
@@ -28,11 +27,21 @@
                   </div>
                   <!-- Documento-->
                   <div class="form-group">
-                    <label class="col-md-3 col-lg-3 control-label">N° Documento</label>  
+                    <label class="col-md-3 col-lg-3 control-label">Documento</label>  
                     <div class="col-md-9 col-lg-9 inputGroupContainer">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
                         <input  name="carnet" id="carnet" placeholder="00000000" class="form-control"  type="text">
+                      </div>
+                    </div>
+                  </div>
+                   <!-- Complemento-->
+                   <div class="form-group">
+                    <label class="col-md-3 col-lg-3 control-label">Complemento</label>  
+                    <div class="col-md-9 col-lg-9 inputGroupContainer">
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-subtitles"></i></span>
+                        <input  name="complemento" id="complemento" placeholder="OPCIONAL - Solo si es necesario (no es LP,SCZ etc)" class="form-control"  type="text">
                       </div>
                     </div>
                   </div>
@@ -97,7 +106,7 @@
                     <div class="col-md-9 col-lg-9 inputGroupContainer">
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                        <input name="email" id="email"  placeholder="Dirección Email" class="form-control"  type="text">
+                        <input name="email" id="email"  placeholder="LLenar email para el envio de factura online" class="form-control"  type="text">
                       </div>
                     </div>
                   </div>

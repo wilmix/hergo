@@ -16,7 +16,7 @@ class Clientes extends CI_Controller
 		$this->titles('Clientes','Clientes','Administracion',);
 		
 		$this->datos['foot_script'][]=base_url('assets/hergo/clientes.js') .'?'.rand();
-		$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
+		$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo")->result_array();			
 		$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
 		
 		$this->setView('administracion/clientes/clientes');
@@ -49,6 +49,7 @@ class Clientes extends CI_Controller
 			$cliente->idDocumentoTipo = $this->input->post('tipo_doc');
 			$cliente->idClientetipo = $this->input->post('clientetipo');
 			$cliente->autor = $this->session->userdata('user_id');
+			$cliente->complemento = $this->input->post('complemento');
 			$cliente->fecha = date('Y-m-d H:i:s');
 
 			if ($id==0) {
@@ -78,7 +79,7 @@ class Clientes extends CI_Controller
 		$clienteNitName = $this->Cliente_model->getClientByDocName($nit,$nombe);
 		if($clienteNit->num_rows()>0)
         {
-			if ($nit == '99001' || $nit == '0') {
+			if ($nit == '99001') {
 				if ($clienteNitName->num_rows()>0) {
 					return $clienteNitName;
 				}

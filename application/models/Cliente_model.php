@@ -10,15 +10,27 @@ class Cliente_model extends CI_Model
 	}
 	public function mostrarclientes_model()
 	{
-		$sql="SELECT c.idCliente, d.documentotipo, c.documento, c.nombreCliente, cl.clientetipo, c.direccion, c.email, c.web, c.telefono, c.diasCredito, c.fecha, Concat(u.first_name,' ',u.last_name) as autor
-		FROM clientes c
-		LEFT JOIN documentotipo d
-		ON c.idDocumentoTipo=d.idDocumentoTipo
-		LEFT JOIN clientetipo cl
-		ON cl.idClienteTipo=c.idClientetipo
-		LEFT JOIN users u
-		ON u.id=c.autor
-		ORDER BY c.idCliente DESC ";
+		$sql="SELECT
+				c.idCliente,
+				d.descripcion documentotipo,
+				c.documento,
+				c.complemento,
+				c.nombreCliente,
+				cl.clientetipo,
+				c.direccion,
+				c.email,
+				c.web,
+				c.telefono,
+				c.diasCredito,
+				c.fecha,
+				Concat(u.first_name, ' ', u.last_name) as autor
+			FROM
+				clientes c
+				LEFT JOIN documentotipo d ON c.idDocumentoTipo = d.idDocumentoTipo
+				LEFT JOIN clientetipo cl ON cl.idClienteTipo = c.idClientetipo
+				LEFT JOIN users u ON u.id = c.autor
+			ORDER BY
+		c.idCliente DESC";
 		
 		$query=$this->db->query($sql);		
 		return $query;
