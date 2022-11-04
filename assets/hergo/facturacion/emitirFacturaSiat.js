@@ -756,7 +756,7 @@ const bill = new Vue({
 				"nombreRazonSocial": this.cabecera.nombreCliente,
 				"codigoTipoDocumentoIdentidad": this.cabecera.codigoTipoDocumentoIdentidad,
 				"numeroDocumento": Number(this.cabecera.numeroDocumento),
-				"complemento": "",
+				"complemento": this.cabecera.complemento,
 				"codigoCliente": this.cabecera.cliente_id,
 				"codigoMetodoPago": this.metodo_pago_siat.id,
 				"numeroTarjeta": this.numeroTarjeta,

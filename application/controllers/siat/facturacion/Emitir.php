@@ -201,6 +201,10 @@ class Emitir extends CI_Controller
 			$facturaSiat->numeroTarjeta = isset($cabeceraSiat['numeroTarjeta']) ? $cabeceraSiat['numeroTarjeta'] : '';
 			$facturaSiat->codigoMetodoPago = isset($cabeceraSiat['codigoMetodoPago']) ? $cabeceraSiat['codigoMetodoPago'] : '';
 			$facturaSiat->codigoRecepcion = $cabeceraSiat['codigoRecepcion'];
+			$facturaSiat->codigoTipoDocumentoIdentidad = $cabeceraSiat['codigoTipoDocumentoIdentidad'];
+			$facturaSiat->numeroDocumento = $cabeceraSiat['numeroDocumento'];
+			$facturaSiat->complemento = $cabeceraSiat['complemento'];
+			$facturaSiat->nombreRazonSocial = $cabeceraSiat['nombreRazonSocial'];
 
 			$facturaSiat->montoTotal = $cabeceraSiat['montoTotal'];
 			$facturaSiat->montoTotalMoneda = $cabeceraSiat['montoTotalMoneda'];

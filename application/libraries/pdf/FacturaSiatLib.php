@@ -43,7 +43,7 @@
             $this->Cell(60,3,utf8_decode('No. Punto de Venta: ' . $this->datos['codigoPuntoVenta']),0,1,'C');
             $this->Cell(60,3,utf8_decode($this->datos['direccion']),0,1,'C');
             $this->Cell(60,3,utf8_decode('Teléfono: ' . $this->datos['telefono']),0,1,'C');
-            $this->Cell(60,3,utf8_decode($this->datos['ciudad'] . ' - BOLIVIA'),0,1,'C');
+            $this->Cell(60,3,utf8_decode($this->datos['ciudad']),0,1,'C');
 
 
             //n FACTURA DERECHA
@@ -78,29 +78,45 @@
                 $this->Cell(40, 6, utf8_decode($this->datos['fechaEmision']),$l,0,'L');
                 $this->SetFont('Arial','B',9);
                 if ($this->datos['pedido'] ==! '') {
-                    $this->Cell(20,6, utf8_decode('Pedido: '),$l,0,'');
+                    
+                    $this->Cell(15,6, utf8_decode('Pedido: '),$l,0,'');
                     $this->SetFont('Arial','',9);
-                    $this->Cell(60, 6, utf8_decode($this->datos['pedido']),$l,0,'L');
+                    if ($this->datos['complemento']) {
+                    $this->Cell(55, 6, utf8_decode($this->datos['pedido']),$l,0,'L');
+                    } else {
+                        $this->Cell(75, 6, utf8_decode($this->datos['pedido']),$l,0,'L');
+                    }
                 } else {
-                    $this->Cell(20,6, '',$l,0,'');
-                    $this->Cell(60,6, '',$l,0,'');
+                    if ($this->datos['complemento']) {
+                    $this->Cell(15,6, '',$l,0,'');
+                    $this->Cell(55,6, '',$l,0,'');
+                    } else {
+                        $this->Cell(15,6, '',$l,0,'');
+                        $this->Cell(75,6, '',$l,0,'');
+                    }
 
                 }
                 $this->SetFont('Arial','B',9);
-                $this->Cell(20,6, utf8_decode('NIT/CI/CEX:'),$l,0,'');
+                $this->Cell(25,6, utf8_decode('NIT/CI/CEX:'),$l,0,'');
                 $this->SetFont('Arial','',9);
-                $this->Cell(30, 6, utf8_decode($this->datos['documentoNumero']), $l,0,'L');
+                $this->Cell(20, 6, utf8_decode($this->datos['documentoNumero']), $l,0,'L');
+                if ($this->datos['complemento']) {
+                    $this->SetFont('Arial','B',9);
+                    $this->Cell(10,6, utf8_decode('COMP:'),$l,0,'');
+                    $this->SetFont('Arial','',9);
+                    $this->Cell(10, 6, utf8_decode($this->datos['complemento'] ), $l,0,'R');
+                }
                 $this->Ln(6);
 
                 $this->SetX(13);
                 $this->SetFont('Arial','B',9);
                 $this->Cell(20,6, utf8_decode('Señor(es): '),$l,0,'');
                 $this->SetFont('Arial','',9);
-                $this->Cell(120, 6, utf8_decode($this->datos['nombreRazonSocial']),$l,0,'L');
+                $this->Cell(135, 6, utf8_decode($this->datos['nombreRazonSocial']),$l,0,'L');
                 $this->SetFont('Arial','B',9);
-                $this->Cell(20,6, utf8_decode('Cod. Cliente:'),$l,0,'');
+                $this->Cell(25,6, utf8_decode('Cod. Cliente:'),$l,0,'');
                 $this->SetFont('Arial','',9);
-                $this->Cell(30, 6, utf8_decode($this->datos['codigoCliente']),$l,0,'L');
+                $this->Cell(15, 6, utf8_decode($this->datos['codigoCliente']),$l,0,'R');
                 
                 $this->Ln(8);
 
