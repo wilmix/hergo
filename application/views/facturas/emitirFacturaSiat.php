@@ -27,7 +27,7 @@
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="">Cliente</label>
-                  <input type="text" class="form-control" placeholder="Nombre Cliente" v-model="cabecera.nombreCliente" disabled>
+                  <input type="text" class="form-control" placeholder="Nombre Cliente" v-model="nombreClienteDocumento" disabled>
                   <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                 </div>                
                 <div class="form-group col-md-3">
@@ -68,7 +68,7 @@
                   </select>
                 </div>
 
-                <div class="form-group col-md-3">
+                <div v-show="cabecera.codigoTipoDocumentoIdentidad == 5" class="form-group col-md-3">
                   <label for="">Código Excepción</label>
                   <select class="form-control"
                             v-model="codigoExcepcion">

@@ -10,6 +10,9 @@ class Emitir_model extends CI_Model
 	public function pendientes($almacen)
 	{
 		$sql="  SELECT
+                    dt.codigoClasificador codigoDocumentoTipo,
+                    dt.descripcion documentoTipo,
+                    dt.documentosigla documentoTipoSigla,
                     a.almacen,
                     e.idegresos id,
                     t.sigla sigla,

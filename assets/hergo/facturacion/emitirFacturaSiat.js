@@ -65,7 +65,9 @@ const bill = new Vue({
 		cafc: '1018E82642F3D',
 		tipoCambio: null,
 		montoTotalMoneda: null,
-		codigoExcepcion: '0'
+		codigoExcepcion: '0',
+		nitValido: null,
+		nombreClienteDocumento:''
 	},
 	mounted() {
 		this.verificarSiat()
@@ -532,9 +534,11 @@ const bill = new Vue({
 			this.detalle.splice(item,1);
 			this.validarDetalle()
 			this.edit = false
+			
 			this.total()
 			if (this.detalle.length == 0) {
 				this.cabecera = []
+				this.nombreClienteDocumento =''
 				this.validar = false
 			}
 		},
@@ -564,6 +568,7 @@ const bill = new Vue({
 
 			if (this.cabecera.cliente_id === this.egreso.cliente_id || this.cabecera == false) {
 				this.cabecera = this.egreso
+				this.nombreClienteDocumento = `${this.cabecera.nombreCliente} - ${this.cabecera.documentoTipoSigla} - ${this.cabecera.numeroDocumento}`
 				this.detalle.push(row)
 				this.validarCabecera()
 				this.validarDetalle()
@@ -586,6 +591,10 @@ const bill = new Vue({
 			if (this.detalle.length == 0) {
 				this.cabecera = this.egreso
 				this.detalle = this.egresoDetalle
+				this.nombreClienteDocumento = `${this.cabecera.nombreCliente} - ${this.cabecera.documentoTipoSigla} - ${this.cabecera.numeroDocumento}`
+				if (this.cabecera.codigoTipoDocumentoIdentidad == 5) {
+					this.verificarNit()
+				}
 				this.validarCabecera()
 				this.validarDetalle()
 				this.showErrors(this.errors, this.errorsDetalle)
@@ -595,7 +604,6 @@ const bill = new Vue({
 					this.facturarItem(item)
 				});
 			}
-
 		},
 		showErrors(errors, errorsDetalle){
 			if (errors.length > 0 || errorsDetalle.length > 0) {
@@ -628,7 +636,50 @@ const bill = new Vue({
 		now(){
 			return moment().format('YYYY-MM-DDTHH:mm:ss.SSS');
 		},
+		verificarNit(){
+			agregarcargando()
+				$.ajax({
+					type: "POST",
+					url: base_url_siat('verificarNit'),
+					dataType: "json",
+					//async: false,
+					data:{
+						cliente: {
+							codigoSucursal: bill.infoAlmacen.sucursal,
+							cuis:bill.infoAlmacen.cuis,
+							nitParaVerificacion:this.cabecera.numeroDocumento
+						}
+					}
+				}).done(function (res) {
+					quitarcargando()
+					if (res.transaccion) {
+						if (res.mensajesList.codigo == 994) {
+							console.log(res.mensajesList);
+							bill.nitValido = true
+						}
+					} else {
+						swal({
+							title: 'Error',
+							html: `NIT invalido se debe enviar codigo de excepción`,
+							type: 'error',
+							showCancelButton: false,
+							allowOutsideClick: false,
+						})
+						bill.nitValido = false
+					}
+				})
+		},
         showModal(){
+			if (this.nitValido == false && this.codigoExcepcion == 0) {
+				swal({
+					title: 'Error',
+					html: `NIT invalido se debe enviar codigo de excepción`,
+					type: 'error',
+					showCancelButton: false,
+					allowOutsideClick: false,
+				})
+				return
+			}
 			this.codigoEmision = this.emision == '1' ? '1' : '2'
 			if (this.metodo_pago_siat.label.includes('TARJETA')) {
 				if (!this.validarTarjeta()) {
