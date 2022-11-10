@@ -68,7 +68,7 @@ function getData() {
 				},
                 {
 					data: 'ClienteNit',
-					title: 'NIT',
+					title: 'DOCUMENTO',
 					width: '10%'
 				},
 				{
@@ -337,6 +337,7 @@ const pro = new Vue({
 			});
 		},
 		showModalAnular(row){
+			console.log(row);
 			this.facturaRow = row
 			$("#anular").modal("show");
 		},
@@ -352,7 +353,10 @@ const pro = new Vue({
 					"cuis": this.infoAlmacen.cuis,
 					"tipoFacturaDocumento": "1",
 					"codigoMotivo": this.codigoMotivo,
-					"cuf": this.facturaRow.cuf
+					"cuf": this.facturaRow.cuf,
+					"nombreRazonSocial": this.facturaRow.ClienteFactura,
+					"numeroFactura": this.facturaRow.numeroFactura,
+					"emailCliente": this.facturaRow.emailCliente,
 				}
 			}
 			data = {
@@ -376,10 +380,10 @@ const pro = new Vue({
 				let respuestaSiat = res.siat.RespuestaServicioFacturacion
 				let transaccion = respuestaSiat.transaccion
 				let titulo = respuestaSiat.codigoDescripcion
-				let descripcion = transaccion ?  'La factura se anuló con exito en el SIAT y en el sistema de inventarios.' : respuestaSiat.mensajesList.descripcion
+				let descripcion = transaccion ?  `La factura se anuló con exito en el SIAT y en el sistema de inventarios. <br> Se envio notificación a: ${res.mailEnviado}` : respuestaSiat.mensajesList.descripcion
 				swal({
 					title: titulo,
-					html: `<br> ${descripcion} </br>`,
+					html: `${descripcion} `,
 					type: transaccion ? 'success' : 'error',
 					showCancelButton: false,
 					allowOutsideClick: false,
@@ -423,14 +427,28 @@ const pro = new Vue({
                 }
 			}).done(function (res) {
 				quitarcargando()
-				swal({
-					title: res.codigoDescripcion,
-					html: `${res.codigoRecepcion} </br>
-							${res.codigoEstado}	`,
-					type: res.codigoEstado == '691' ? 'warning' : 'success',
-					showCancelButton: false,
-					allowOutsideClick: false,
-				})
+				if (res.transaccion) {
+					swal({
+						title: res.codigoDescripcion,
+						html: `${res.codigoRecepcion} </br>
+								${res.codigoEstado}	`,
+						type: res.codigoEstado == '691' ? 'warning' : 'success',
+						showCancelButton: false,
+						allowOutsideClick: false,
+					})
+				} else {
+					console.log(res);
+					swal({
+						title: res.codigoDescripcion,
+						html: `Código estado: ${res.codigoEstado}	
+								<br>${res.mensajesList.descripcion}
+								`,
+						type: 'error',
+						showCancelButton: false,
+						allowOutsideClick: false,
+					})
+				}
+				
 				quitarcargando();
 			}).fail(function (jqxhr, textStatus, error) {
 				let err = textStatus + ", " + error;

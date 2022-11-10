@@ -48,7 +48,7 @@ class Egresos extends CI_Controller
 		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
 		$this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
 		$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
-		$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
+		$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo")->result_array();			
 		$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
 
 		$this->datos['foot_script'][]=base_url('assets/hergo/notasEntrega.js') .'?'.rand();

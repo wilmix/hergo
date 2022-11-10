@@ -203,7 +203,7 @@ class Emitir extends CI_Controller
 			$facturaSiat->codigoRecepcion = $cabeceraSiat['codigoRecepcion'];
 			$facturaSiat->codigoTipoDocumentoIdentidad = $cabeceraSiat['codigoTipoDocumentoIdentidad'];
 			$facturaSiat->numeroDocumento = $cabeceraSiat['numeroDocumento'];
-			$facturaSiat->complemento = $cabeceraSiat['complemento'];
+			$facturaSiat->complemento = isset($cabeceraSiat['complemento']) ? $cabeceraSiat['complemento'] : '';
 			$facturaSiat->nombreRazonSocial = $cabeceraSiat['nombreRazonSocial'];
 
 			$facturaSiat->montoTotal = $cabeceraSiat['montoTotal'];
@@ -251,7 +251,7 @@ class Emitir extends CI_Controller
 
 		$data = $this->input->post();
 		$factura_id  = $data['data']['factura_id'];
-		$detalle  = $data['data']['detalleAnulacion'];
+		$detalle  = isset($data['data']['detalleAnulacion']) ? $data['data']['detalleAnulacion'] : '';
 		$almacen_id  = $data['data']['almacen_id'];
 		$user_id  = $data['data']['user_id'];
 
@@ -284,6 +284,12 @@ class Emitir extends CI_Controller
 		$cuf = $this->input->post()['cuf'];
 		$codigoRecepcion = $this->input->post()['codigoRecepcion'];
 		$res = $this->Emitir_model->updateCodigoRecepcion($cuf, $codigoRecepcion); 
+		echo json_encode($res);
+	}
+	public function getCufdFecha()
+	{
+		$fechaHora = $this->input->post()['fechaHora'];
+		$res = $this->Emitir_model->getCufdFecha($fechaHora); 
 		echo json_encode($res);
 	}
 

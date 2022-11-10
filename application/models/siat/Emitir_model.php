@@ -339,6 +339,7 @@ class Emitir_model extends CI_Model
                     f.`nFactura` numeroFactura,
                     f.`fechaFac`,
                     f.`ClienteNit`,
+                    c.email emailCliente,
                     f.`ClienteFactura`,
                     t.`sigla`,
                     f.`total`,
@@ -416,6 +417,7 @@ class Emitir_model extends CI_Model
                     INNER JOIN users ua ON ua.id = f.autor
                     INNER JOIN tipoPago tp ON tp.id = f.tipoPago
                     INNER JOIN factura_siat fs ON fs.factura_id = f.idFactura 
+                    INNER JOIN clientes c ON c.idCliente = f.cliente
                     INNER JOIN siat_sincro_tipo_metodo_pago sp ON sp.codigoClasificador = fs.codigoMetodoPago
                     INNER JOIN siat_cuis cuis ON cuis.sucursal = fs.codigoSucursal AND cuis.codigoPuntoVenta = fs.codigoPuntoVenta AND cuis.active = 1
                 WHERE
@@ -538,5 +540,19 @@ class Emitir_model extends CI_Model
         $this->db->where('cuf', $cuf);
         $res = $this->db->update('factura_siat');
         return $res;
+    }
+    public function getCufdFecha($fechaHora)
+	{
+		$sql="  SELECT
+                    *
+                FROM
+                    siat_cufd c
+                WHERE
+                DATE_FORMAT('$fechaHora','%Y-%m-%d %H:%i:%s') BETWEEN DATE_FORMAT(c.created_at,'%Y-%m-%d %H:%i:%s') AND DATE_FORMAT(c.fechaVigencia,'%Y-%m-%d %H:%i:%s')
+                ORDER BY c.id DESC 
+                LIMIT 1
+                ";
+		$query=$this->db->query($sql);		
+		return $query->row();
     }
 }

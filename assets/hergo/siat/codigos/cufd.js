@@ -37,8 +37,17 @@ const cufd = new Vue({
                     }
                 }
             }).done(function (res) {
-                console.log(res);
-                if (res.RespuestaCufd.transaccion) {
+                if (res.hasOwnProperty('errors') && res.errors.status == 422) {
+                    quitarcargando()
+                    swal({
+                        title: `Error ${res.errors.title}`,
+                        html: `Se produjo un error de conexión 
+                                <br> status: ${res.errors.status}
+                                <br> source: ${res.errors.source}`,
+                        type: 'error', 
+                        showCancelButton: false,
+                    })
+                } else if (res.RespuestaCufd.transaccion) {
                     $.ajax({
                         type: "post",   
                         url: base_url('index.php/siat/codigos/Cufd/store'),
