@@ -184,7 +184,7 @@ function getData() {
 					text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
 					action: function (e, dt, node, config) {
 						pro.checkFacturas()
-						getData()
+						//getData()
 					}
 				},
 				{
@@ -314,7 +314,7 @@ const pro = new Vue({
 		codigoPuntoVenta:CPV,
 	},
 	mounted() {
-		//this.checkFacturas()
+		this.checkFacturas()
 		this.getMotivosAnulacion()
 		this.get_codigos()
 	},
@@ -323,7 +323,7 @@ const pro = new Vue({
 			agregarcargando()
 			$.ajax({
 				type: "GET",
-				url: base_url_siat('getDataEvento'),
+				url: base_url_siat('enviarPaquete'),
 				dataType: "json",
 			}).done(function (res) {
 				if (res.status == 'sin facturas' || res.status =='sin conexion siat') {

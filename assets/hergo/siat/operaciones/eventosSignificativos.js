@@ -212,7 +212,6 @@ const app = new Vue({
                     "cuis": this.dataSiat.cuis,
                     "codigoSucursal": this.dataSiat.sucursal,
                     "codigoPuntoVenta": this.dataSiat.codigoPuntoVenta,
-                    "fechaEvento": moment(this.registroFecha).format('YYYY-MM-DD'),
                     "codigoMotivoEvento": this.motivo,
                     "cufdEvento": this.cufdEvento,
                     "descripcion": this.descripcion,
@@ -224,9 +223,10 @@ const app = new Vue({
 				type: "POST",
 				url: base_url_siat('operaciones/registroEventoSignificativo'),
 				dataType: "json",
-				data:{ data }
+				data:data
 			}).done(function (res) {
                 quitarcargando()
+                res = res.RespuestaListaEventos
                 if (res.transaccion) {
                     swal({
 						title: 'Evento Registrado',

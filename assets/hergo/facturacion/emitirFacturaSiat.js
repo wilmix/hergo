@@ -84,7 +84,7 @@ const bill = new Vue({
 				agregarcargando()
 				$.ajax({
 					type: "GET",
-					url: base_url_siat('getDataEvento'),
+					url: base_url_siat('enviarPaquete'),
 					dataType: "json",
 				}).done(function (res) {
 					quitarcargando()
