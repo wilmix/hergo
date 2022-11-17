@@ -30,11 +30,9 @@ const cufd = new Vue({
                 url: base_url_siat('codigos/cufd'),
                 dataType: "json",
                 data:{
-                    cliente: {
                         cuis: row.cuis,
                         codigoSucursal: row.siat_sucursal,
                         codigoPuntoVenta: row.codigoPuntoVenta
-                    }
                 }
             }).done(function (res) {
                 if (res.hasOwnProperty('errors') && res.errors.status == 422) {

@@ -77,8 +77,29 @@ const bill = new Vue({
 		this.porFacturar(glob_alm_usu)
 		this.get_codigos()
 		this.setTituloFactura()
+		this.checkFacturas()
 	},
 	methods:{
+		checkFacturas(){
+				agregarcargando()
+				$.ajax({
+					type: "GET",
+					url: base_url_siat('getDataEvento'),
+					dataType: "json",
+				}).done(function (res) {
+					quitarcargando()
+					if (res.status == 'sin facturas' || res.status =='sin conexion siat') {
+						console.log(res.status);
+					} else {
+						console.log(res);
+						bill.get_codigos()
+					}
+				}).fail(function (jqxhr, textStatus, error) {
+					let err = textStatus + ", " + error;
+					console.log("Request Failed: " + err);
+				});
+
+		},
 		info_factura(){
 			$.ajax({
 				type: "POST",
@@ -232,6 +253,7 @@ const bill = new Vue({
 						{
 							text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
 							action: function (e, dt, node, config) {
+								bill.checkFacturas()
 								bill.porFacturar(glob_alm_usu)
 							}
 						},
@@ -877,7 +899,7 @@ const bill = new Vue({
 					}).then(
 						function (result) {
 							//agregarcargando();
-							window.location.href =base_url("siat/facturacion/Emitir/consultaFacturasSiat");
+							//window.location.href =base_url("siat/facturacion/Emitir/consultaFacturasSiat");
 					});
 				});
            
@@ -916,9 +938,7 @@ const bill = new Vue({
             }).done(function (res) {
 				quitarcargando()
 				if (res.hasOwnProperty('errors') && res.errors.status == 422) {
-					if (bill.siatOnline == false) {
-						bill.registrarInicioEvento()
-					}
+					bill.setTituloFactura()
 				} else {
 					bill.siatOnline = true //Boolean(res)
 					bill.setTituloFactura()
@@ -954,7 +974,27 @@ const bill = new Vue({
 		},
 		cambioFechaContingencia(){
 			console.log('cambioFechaContingencia');
-		}
+		},
+		getCufd(){
+            $.ajax({
+                type: "POST",
+                url: base_url_siat('codigos/cufd'),
+                dataType: "json",
+                data:{
+                    cliente: {
+                        cuis: infoAlmacen.cuis,
+                        codigoSucursal: row.siat_sucursal,
+                        codigoPuntoVenta: row.codigoPuntoVenta
+                    }
+                }
+            }).done(function (res) {
+                if (res.hasOwnProperty('errors') && res.errors.status == 422) {
+					console.log('Error al obtener CUFD');
+                } else if (res.RespuestaCufd.transaccion) {
+                    return res
+                }                       
+            });
+        },
 	},
 	watch: {
 		fechaEmision() {

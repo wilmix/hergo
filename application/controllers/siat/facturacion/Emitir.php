@@ -292,5 +292,34 @@ class Emitir extends CI_Controller
 		$res = $this->Emitir_model->getCufdFecha($fechaHora); 
 		echo json_encode($res);
 	}
+	public function dataEvento()
+	{
+		$cufs = $this->Emitir_model->getCufs();
+		/* echo json_encode(count($cufs));
+		return; */
+		if (count($cufs)>0) {
+			$inicio = $this->Emitir_model->getInicioEvento();
+			$fin = $this->Emitir_model->getFinEvento();
+			$cufdEvento = '';
+			if ($inicio->cufd == $fin->cufd) {
+				$cufdEvento = $inicio->cufd;
+			}
+			$res =[
+				'cuis'=> $inicio->cuis,
+				'codigoSucursal'=> $inicio->codigoSucursal,
+				'codigoPuntoVenta'=> $inicio->codigoPuntoVenta,
+				'codigoMotivoEvento' => '2',
+				'cufdEvento' => $cufdEvento,
+				'descripcion' => 'INACCESIBILIDAD AL SERVICIO WEB DE LA ADMINISTRACIÓN TRIBUTARIA',
+				'fechaHoraInicioEvento' => $inicio->inicio,
+				'fechaHoraFinEvento' => $fin->fin,
+				'fechaEvento' => $inicio->fechaEvento,
+				'cufs' => $cufs,
+			];
+			echo json_encode($res); 
+		} else {
+			echo(0);
+		}		
+	}
 
 }

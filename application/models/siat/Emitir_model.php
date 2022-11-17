@@ -555,4 +555,65 @@ class Emitir_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query->row();
     }
+    public function getInicioEvento()
+    {
+        $sql="  SELECT
+                    COUNT(f.idFactura) cantidadFacturas,
+                    fs.codigoSucursal,
+                    cuis.cuis,
+                    fs.cufd,
+                    cuis.codigoPuntoVenta,
+                    date_format(fs.fechaEmision, '%Y-%m-%d') fechaEvento,
+                    date_format(DATE_SUB(fs.fechaEmision, INTERVAL 3.87 SECOND), '%Y-%m-%dT%H:%i:%s.%f') inicio
+                FROM
+                    factura f
+                    INNER JOIN factura_siat fs ON fs.factura_id = f.idFactura
+                    INNER JOIN siat_cuis cuis ON cuis.sucursal = fs.codigoSucursal AND cuis.codigoPuntoVenta = fs.codigoPuntoVenta AND cuis.active = 1 AND cuis.almacen_id = f.almacen
+                WHERE
+                    f.almacen = '1'
+                    AND fs.codigoRecepcion = ''
+                    OR fs.codigoRecepcion IS NULL
+                ORDER BY
+                    DATE_SUB(fs.fechaEmision, INTERVAL 1 SECOND)
+                LIMIT
+                    1
+                ";
+		$query=$this->db->query($sql);		
+		return $query->row();
+    }
+    public function getFinEvento()
+    {
+        $sql="  SELECT
+                    fs.cufd,
+                    date_format(DATE_ADD(fs.fechaEmision, INTERVAL 3.73 SECOND), '%Y-%m-%dT%H:%i:%s.%f') fin
+                FROM
+                    factura f
+                    INNER JOIN factura_siat fs ON fs.factura_id = f.idFactura
+                WHERE
+                    f.almacen = '1'
+                    AND fs.codigoRecepcion = ''
+                    OR fs.codigoRecepcion IS NULL
+                ORDER BY
+                    DATE_ADD(fs.fechaEmision, INTERVAL 1 SECOND) DESC
+                LIMIT
+                    1
+                ";
+		$query=$this->db->query($sql);		
+		return $query->row();
+    }
+    public function getCufs()
+    {
+        $sql=" SELECT
+                    fs.cuf
+                FROM
+                    factura f
+                    INNER JOIN factura_siat fs ON fs.factura_id = f.idFactura
+                    INNER JOIN siat_cuis cuis ON cuis.sucursal = fs.codigoSucursal AND cuis.codigoPuntoVenta = fs.codigoPuntoVenta AND cuis.active = 1 AND cuis.almacen_id = f.almacen
+                WHERE
+                    f.almacen = '1'
+                    AND fs.codigoRecepcion = ''
+                    OR fs.codigoRecepcion IS NULL";
+		$query=$this->db->query($sql);		
+		return $query->result();
+    }
 }

@@ -183,6 +183,7 @@ function getData() {
 				{
 					text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
 					action: function (e, dt, node, config) {
+						pro.checkFacturas()
 						getData()
 					}
 				},
@@ -313,10 +314,30 @@ const pro = new Vue({
 		codigoPuntoVenta:CPV,
 	},
 	mounted() {
+		//this.checkFacturas()
 		this.getMotivosAnulacion()
 		this.get_codigos()
 	},
 	methods:{
+		checkFacturas(){
+			agregarcargando()
+			$.ajax({
+				type: "GET",
+				url: base_url_siat('getDataEvento'),
+				dataType: "json",
+			}).done(function (res) {
+				if (res.status == 'sin facturas' || res.status =='sin conexion siat') {
+					console.log(res.status);
+				} else {
+					console.log(res);
+					pro.get_codigos()
+					getData()
+				}
+			}).fail(function (jqxhr, textStatus, error) {
+				let err = textStatus + ", " + error;
+				console.log("Request Failed: " + err);
+			});
+		},
 		onChangeAlm(){
             getData()
         },
@@ -337,7 +358,7 @@ const pro = new Vue({
 			});
 		},
 		showModalAnular(row){
-			console.log(row);
+			//console.log(row);
 			this.facturaRow = row
 			$("#anular").modal("show");
 		},
@@ -376,11 +397,23 @@ const pro = new Vue({
                 }
 			}).done(function (res) {
 				quitarcargando()
-				console.log(this.facturaRow);
+				console.log(res);
+				if (Object.hasOwn(res.siat,'errors')) {
+					swal({
+						title: 'ERROR SIAT',
+						html: `El SIAT esta fuera de linea`,
+						type: 'error',
+						showCancelButton: false,
+						allowOutsideClick: false,
+					})
+					return
+				}
 				let respuestaSiat = res.siat.RespuestaServicioFacturacion
 				let transaccion = respuestaSiat.transaccion
 				let titulo = respuestaSiat.codigoDescripcion
-				let descripcion = transaccion ?  `La factura se anuló con exito en el SIAT y en el sistema de inventarios. <br> Se envio notificación a: ${res.mailEnviado}` : respuestaSiat.mensajesList.descripcion
+				let email = res.mailEnviado
+				let msj = email ? `La factura se anuló con exito en el SIAT y en el sistema de inventarios. <br> Se envio notificación a: ${res.mailEnviado}`: `La factura se anuló con exito en el SIAT y en el sistema de inventarios. <br> <b>Notificar al cliente</b>.`
+				let descripcion = transaccion ?  msj : respuestaSiat.mensajesList.descripcion
 				swal({
 					title: titulo,
 					html: `${descripcion} `,
@@ -422,9 +455,7 @@ const pro = new Vue({
 				type: "POST",
 				url: base_url_siat('verificarFactura'),
 				dataType: "json",
-				data:{
-					data: data
-                }
+				data:data
 			}).done(function (res) {
 				quitarcargando()
 				if (res.transaccion) {
@@ -433,6 +464,14 @@ const pro = new Vue({
 						html: `${res.codigoRecepcion} </br>
 								${res.codigoEstado}	`,
 						type: res.codigoEstado == '691' ? 'warning' : 'success',
+						showCancelButton: false,
+						allowOutsideClick: false,
+					})
+				} else if(Object.hasOwn(res,'errors')){
+					swal({
+						title: 'ERROR SIAT',
+						html: `El SIAT esta fuera de linea`,
+						type: 'error',
 						showCancelButton: false,
 						allowOutsideClick: false,
 					})

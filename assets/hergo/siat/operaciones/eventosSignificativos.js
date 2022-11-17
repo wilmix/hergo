@@ -67,13 +67,11 @@ const app = new Vue({
 				url: base_url_siat('operaciones/consultaEventoSignificativo'),
 				dataType: "json",
 				data:{
-					"cliente": {
                         "cuis": this.dataSiat.cuis,
                         "codigoSucursal": this.dataSiat.sucursal,
                         "codigoPuntoVenta":this.dataSiat.codigoPuntoVenta,
                         "fechaEvento": moment(this.fecha).format('YYYY-MM-DD') ,
                         "cufd": this.dataSiat.codigoCufd
-                    }
                 }
 			}).done(function (res) {
                 if (res.RespuestaListaEventos.transaccion) {
@@ -226,9 +224,7 @@ const app = new Vue({
 				type: "POST",
 				url: base_url_siat('operaciones/registroEventoSignificativo'),
 				dataType: "json",
-				data:{
-					cliente : data
-                }
+				data:{ data }
 			}).done(function (res) {
                 quitarcargando()
                 if (res.transaccion) {
