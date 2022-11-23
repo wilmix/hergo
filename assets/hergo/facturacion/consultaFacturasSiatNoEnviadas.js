@@ -283,6 +283,7 @@ const pro = new Vue({
 				dataType: "json",
 				data:data
 			}).done(function (res) {
+				res = res.RespuestaServicioFacturacion
                 console.log(res);
                 if (res.transaccion) {
                     quitarcargando()

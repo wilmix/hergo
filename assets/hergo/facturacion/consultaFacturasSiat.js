@@ -131,6 +131,11 @@ function getData() {
 					title: 'CODIGO RECEPCIÓN',
 					visible: false
 				},
+				{
+					data: 'leyenda',
+					title: 'LEYENDA',
+					visible: false
+				},
                 {
 					data: 'cuf',
 					title: 'CUF',
@@ -183,7 +188,7 @@ function getData() {
 				{
 					text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
 					action: function (e, dt, node, config) {
-						pro.checkFacturas()
+						pro.verificarEvento()
 						//getData()
 					}
 				},
@@ -281,7 +286,13 @@ $(document).on("click", "button.print", function () {
 })
 $(document).on("click", "button.check", function () {
     let row = getRow(table, this)
-	pro.verificarFactura(row)
+	console.log(row.codigoRecepcion);
+	if (row.codigoRecepcion == '') {
+		pro.validarFacturasCufs()
+	} else {
+		pro.verificarFactura(row)
+	}
+
 })
 $(document).on("click", "button.xml", function () {
     let row = getRow(table, this)
@@ -314,12 +325,50 @@ const pro = new Vue({
 		codigoPuntoVenta:CPV,
 	},
 	mounted() {
-		this.checkFacturas()
+		this.validarFacturasCufs()
 		this.getMotivosAnulacion()
 		this.get_codigos()
 	},
 	methods:{
-		checkFacturas(){
+		validarFacturasCufs(){
+			agregarcargando()
+			$.ajax({
+				type: "GET",
+				url: base_url_siat('validarFacturasCufs'),
+				dataType: "json",
+			}).done(function (res) {
+				if (res.status == 'sin facturas' || res.status =='sin conexion siat') {
+					console.log(res.status);
+				} else {
+					console.log(res);
+					pro.get_codigos()
+					getData()
+				}
+			}).fail(function (jqxhr, textStatus, error) {
+				let err = textStatus + ", " + error;
+				console.log("Request Failed: " + err);
+			});
+		},
+		verificarEvento(){
+			agregarcargando()
+			$.ajax({
+				type: "GET",
+				url: base_url_siat('verificarEvento'),
+				dataType: "json",
+			}).done(function (res) {
+				if (res.status == 'sin facturas' || res.status =='sin conexion siat') {
+					console.log(res.status);
+				} else {
+					console.log(res);
+					pro.get_codigos()
+					getData()
+				}
+			}).fail(function (jqxhr, textStatus, error) {
+				let err = textStatus + ", " + error;
+				console.log("Request Failed: " + err);
+			});
+		},
+		enviarPaquete(){
 			agregarcargando()
 			$.ajax({
 				type: "GET",

@@ -404,6 +404,7 @@ class Emitir_model extends CI_Model
                     fs.cafc,
                     fs.pedido,
                     sp.descripcion metodoPago,
+                    fs.leyenda,
                     fs.fechaEmision fechaEmisionSiat
                 FROM
                     factura_egresos fe

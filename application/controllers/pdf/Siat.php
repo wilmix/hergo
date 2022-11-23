@@ -24,7 +24,7 @@ class Siat extends CI_Controller {
         //$this->pdf->AddPage('P',array(195,216));
         $this->pdf->AddPage('P','Letter');
         $this->pdf->AliasNbPages();
-        $this->pdf->SetAutoPageBreak(true,140); //40
+        $this->pdf->SetAutoPageBreak(true,130); //40
         $this->pdf->SetTitle('FAC' . '-' .$factura->numeroFactura. '-' . $factura->gestion);
         $this->pdf->SetLeftMargin(10);
         $this->pdf->SetRightMargin(10);

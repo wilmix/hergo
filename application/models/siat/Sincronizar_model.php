@@ -15,6 +15,13 @@ class Sincronizar_model extends CI_Model
             $this->db->insert_batch('siat_sincro_actividades', $data);
         $this->db->trans_complete();
 	}
+    public function storeData($data, string $table)
+	{
+        $this->db->trans_start();
+            $this->deleteTable($table);
+            $this->db->insert_batch($table, $data);
+        $this->db->trans_complete();
+	}
     public function storeActividadesDocumentoSector($data)
 	{
         $this->db->trans_start();
