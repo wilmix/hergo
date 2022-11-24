@@ -39,7 +39,7 @@ class Clientes extends CI_Controller
 			$id = $this->input->post('id_cliente');
 			$cliente = new stdclass();
 			$cliente->documento = (trim($this->input->post('carnet')));
-			$cliente->nombreCliente= strtoupper(trim($this->input->post('nombre_cliente')));
+			$cliente->nombreCliente=  mb_strtoupper(trim($this->input->post('nombre_cliente')));
 			$cliente->direccion = strtoupper(trim($this->input->post('direccion')));
 			$cliente->email = $this->input->post('email');
 			$cliente->web = strtoupper(trim($this->input->post('website')));
