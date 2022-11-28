@@ -9,6 +9,13 @@ class Sincronizar extends CI_Controller
         $this->load->model('siat/Sincronizar_model');
 
 	}
+    public function sincronizarCatalogos()
+    {
+        //$this->accesoCheck(57);
+		$this->titles('SincronizarDatos','Sincronizar Catálogos','');
+		$this->datos['foot_script'][]=base_url('assets/hergo/siat/sincronizar/sincronizarCatalogos.js') .'?'.rand();
+		$this->setView('siat/sincronizar/sincronizarCatalogos');
+    }
     public function actividades()
     {
         //$this->accesoCheck(57);
@@ -25,6 +32,8 @@ class Sincronizar extends CI_Controller
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeActividades($siat);
+            $local = $this->Sincronizar_model->getActividades();
+            $res = $siat == $local;
             echo json_encode($res);
         }
     }
@@ -35,16 +44,34 @@ class Sincronizar extends CI_Controller
 		$this->datos['foot_script'][]=base_url('assets/hergo/siat/sincronizar/actividadesDocumentoSector.js') .'?'.rand();
 		$this->setView('siat/sincronizar/actividadesDocumentoSector');
     }
+    public function sincronizarParametros()
+    {
+        $siat = $this->input->post('dataSiat');
+        $get = $this->input->post('get');
+        $store = $this->input->post('store');
+        $local = $this->Sincronizar_model->$get();
+        $res = $siat == $local;
+        
+        if ($res) {
+            echo json_encode($res);
+        } else {
+            $res = $this->Sincronizar_model->$store($siat);
+            $local = $this->Sincronizar_model->$get();
+            $res = $siat == $local;
+            echo json_encode($res);
+        }
+    }
     public function sincronizarActividadesDocumentoSector()
     {
         $siat = $this->input->post('dataSiat');
         $local = $this->Sincronizar_model->getActividadesDocumentoSector();
-        $res = $siat === $local;
         $res = $siat == $local;
         if ($res) {
             echo json_encode($res);
         } else {
-            $res = $this->Sincronizar_model->storeActividadesDocumentoSector($siat);;
+            $res = $this->Sincronizar_model->storeActividadesDocumentoSector($siat);
+            $local = $this->Sincronizar_model->getActividadesDocumentoSector();
+            $res = $siat == $local;
             echo json_encode($res);
         }
     }
@@ -64,6 +91,8 @@ class Sincronizar extends CI_Controller
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeListaLeyendasFactura($siat);
+            $local = $this->Sincronizar_model->getListaLeyendasFactura();
+            $res = $siat === $local;
             echo json_encode($res);
         }
     }
@@ -83,6 +112,8 @@ class Sincronizar extends CI_Controller
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeMensajesServicios($siat);
+            $local = $this->Sincronizar_model->getListaMensajesServicios();
+            $res = $siat == $local;
             echo json_encode($res);
         }
     }
@@ -97,11 +128,16 @@ class Sincronizar extends CI_Controller
     {
         $siat = $this->input->post('dataSiat');
         $local = $this->Sincronizar_model->getlistaProductosServicios();
+
         $res = $siat ==  $local;
+        /* echo json_encode($siat);
+        return; */
         if ($res) {
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeListaProductosServicios($siat);
+            $local = $this->Sincronizar_model->getlistaProductosServicios();
+            $res = $siat ==  $local;
             echo json_encode($res);
         }
     }
@@ -112,6 +148,22 @@ class Sincronizar extends CI_Controller
 		$this->datos['foot_script'][]=base_url('assets/hergo/siat/sincronizar/parametricas.js') .'?'.rand();
 		$this->setView('siat/sincronizar/parametricas');
     }
+    public function sincronizarParametricas()
+    {
+        $siat = $this->input->post('dataSiat');
+        $table = $this->input->post('table');
+
+        $local = $this->Sincronizar_model->getListaParametricas($table);
+        $res = $siat == $local;
+        if ($res) {
+            echo json_encode($res);
+        } else {
+            $res = $this->Sincronizar_model->storeParametricas($siat, $table);
+            $local = $this->Sincronizar_model->getListaParametricas($table);
+            $res = $siat == $local;
+            echo json_encode($res);
+        }
+    }
     public function sincronizarParametricaEventosSignificativos()
     {
         $siat = $this->input->post('dataSiat');
@@ -121,6 +173,8 @@ class Sincronizar extends CI_Controller
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_eventos_significativos');
+            $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_eventos_significativos');
+            $res = $siat == $local;
             echo json_encode($res);
         }
     }

@@ -101,6 +101,12 @@
                     </span>
                   </a>
                   <ul class="treeview-menu">
+                  <li class="sincronizarCatalogos">
+                      <a href="<?php echo base_url("siat/sincronizacion/sincronizar/sincronizarCatalogos") ?>">
+                        <i class="fa fa-list-ol ">
+                        </i> Sincronizar Catálogos
+                      </a>
+                    </li>
                     <li class="actividades">
                       <a href="<?php echo base_url("siat/sincronizacion/sincronizar/actividades") ?>">
                         <i class="fa fa-list-ol ">
