@@ -48,11 +48,9 @@ const sincro = new Vue({
                     url: base_url_siat('sincronizarAutomatico'),
                     dataType: "json",   
                     data: {
-                        cliente: {
                             cuis: "268DE987",
                             codigoSucursal: "0",
                             codigoPuntoVenta: "0"
-                        }
                     },                                    
                 }).done(function(res){
                     if (res.id > 0) {
