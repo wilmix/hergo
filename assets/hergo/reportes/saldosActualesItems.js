@@ -8,6 +8,13 @@ $(document).ready(function() {
         placeholder:'Seleccione rango Articulos',*/
         allowClear: true,
     })});
+    $('#excel').click(function () {
+        $('#tablaSaldos').tableExport({
+        type:'excel',
+        fileName: 'Saldos_Actuales_de_Items',
+        numbers: {output : false}
+        })
+      });
 $(document).on("click", "#saldos", function () {
     tituloReporte();
     retornarSaldos();
@@ -33,7 +40,7 @@ $(document).on("click", "#pdf", function () {
     let imprimir = base_url("pdf/SaldosActuales/index/") + alm;
     window.open(imprimir);
 })
-$(document).on("click", "#excel", function () {
+/* $(document).on("click", "#excel", function () {
     let alm = $("#almacen_filtro").val()
     let mon = $("#moneda").val()
     let tc = (mon == 1) ?  glob_tipoCambio : 'BOB'
@@ -41,7 +48,7 @@ $(document).on("click", "#excel", function () {
     let excel = base_url("ReportesExcel/saldoActualesItem/"+alm+"/"+tc);
     console.log(excel);
     location.href = (excel);
-})
+}) */
 
 function retornarSaldos() {
 
