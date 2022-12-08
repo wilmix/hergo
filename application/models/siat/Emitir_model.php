@@ -542,13 +542,14 @@ class Emitir_model extends CI_Model
         $res = $this->db->update('factura_siat');
         return $res;
     }
-    public function getCufdFecha($fechaHora)
+    public function getCufdFecha($fechaHora,$cuis)
 	{
 		$sql="  SELECT
                     *
                 FROM
                     siat_cufd c
                 WHERE
+                c.cuis = '$cuis' AND
                 DATE_FORMAT('$fechaHora','%Y-%m-%d %H:%i:%s') BETWEEN DATE_FORMAT(c.created_at,'%Y-%m-%d %H:%i:%s') AND DATE_FORMAT(c.fechaVigencia,'%Y-%m-%d %H:%i:%s')
                 ORDER BY c.id DESC 
                 LIMIT 1
@@ -616,5 +617,20 @@ class Emitir_model extends CI_Model
                     OR fs.codigoRecepcion IS NULL";
 		$query=$this->db->query($sql);		
 		return $query->result();
+    }
+    public function getCufdByCode($codigoCufd)
+    {
+        $sql="  SELECT
+                    *
+                FROM
+                    siat_cufd c
+                WHERE
+                    c.codigo = '$codigoCufd'
+                ORDER BY
+                    c.id DESC
+                LIMIT
+                    1 ";
+        $query=$this->db->query($sql);		
+        return $query->row();
     }
 }

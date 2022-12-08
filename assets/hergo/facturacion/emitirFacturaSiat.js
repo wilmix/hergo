@@ -957,11 +957,22 @@ const bill = new Vue({
 				url: base_url('siat/facturacion/Emitir/getCufdFecha'),
 				dataType: "json",
 				data:{
-					fechaHora : bill.fechaEmision
+					fechaHora : bill.fechaEmision,
+					cuis: this.infoAlmacen.cuis
                 }
 			}).done(function (res) {
 				if (!res) {
+					bill.cufdContingencia = ''
+					bill.codigoControlCUFDContingencia = ''
 					console.log('error cufd Contingencia Servidor');
+					swal({
+						title: 'Error',
+						html: `No se encontro CUFD para la fecha y hora establecida.`,
+						type: 'error',
+						showCancelButton: false,
+						allowOutsideClick: false,
+					})
+
 				} else {
 					console.log(res);
 					bill.cufdContingencia = res.codigo

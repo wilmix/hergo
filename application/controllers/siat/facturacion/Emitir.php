@@ -289,7 +289,8 @@ class Emitir extends CI_Controller
 	public function getCufdFecha()
 	{
 		$fechaHora = $this->input->post()['fechaHora'];
-		$res = $this->Emitir_model->getCufdFecha($fechaHora); 
+		$cuis = $this->input->post()['cuis'];
+		$res = $this->Emitir_model->getCufdFecha($fechaHora, $cuis); 
 		echo json_encode($res);
 	}
 	public function dataEvento()
@@ -320,6 +321,12 @@ class Emitir extends CI_Controller
 		} else {
 			echo(0);
 		}		
+	}
+	public function getCufdByCode()
+	{
+		$codigoCufd = $this->input->post()['codigoCufd'];
+		$res = $this->Emitir_model->getCufdByCode($codigoCufd); 
+		echo json_encode($res);
 	}
 
 }

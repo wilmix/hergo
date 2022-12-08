@@ -220,9 +220,12 @@ $(document).on("click", "button.validar", function () {
     let row = getRow(table, this)
 	pro.validarEstadoFactura(row)
 })
-
+Vue.component('vue-ctk-date-time-picker', window['vue-ctk-date-time-picker']);
 const pro = new Vue({
 	el: '#app',
+	components: {
+        vuejsDatepicker
+    },
 	data: {
         almacen:document.getElementById("idAlmacenUsuario").value,
         almacenes: [
@@ -239,7 +242,19 @@ const pro = new Vue({
         codigoEvento: '',
         cantidadFacturas:0,
         cufs: [],
-        cafc:''//'1018E82642F3D'
+        cafc:'1018E82642F3D',
+		/* eventoSignificativo */
+		es: vdp_translation_es.js,
+		registroFecha: '',
+		motivos: false,
+        motivo:'1',
+		fechaHoraFinEvento:'',//moment().format('YYYY-MM-DDTHH:mm:ss.SSS'),
+        fechaHoraInicioEvento:'', //moment().format('YYYY-MM-DDTHH:mm:ss.SSS')
+		descripcion:'',
+		cufdEvento:'',
+		cufdEventoInicio:'',
+		cufdEventoFin:'',
+
 
 	},
 	mounted() {
@@ -422,6 +437,124 @@ const pro = new Vue({
 					allowOutsideClick: false,
 				})
 			});
+        },
+		showModalEvento(){
+			let cufd = []
+			let selected = table.rows('.selected').data()
+			selected.map(x =>cufd.push(x.cufd))
+			let last =[...cufd].pop();
+			let first = [...cufd].shift();  
+			if (last == first) {
+				this.cufdEvento = first
+			}
+			this.getCufdByCode(first)
+			//console.log(cufd);
+            $("#modalEvento").modal("show");
+            this.getMotivosAnulacion()
+        },
+        getMotivosAnulacion(){
+			$.ajax({
+				type: "POST",
+				url: base_url('siat/facturacion/Emitir/getMotivosEvento'),
+				dataType: "json",
+			}).done(function (res) {
+				pro.motivos = res
+			})
+		},
+		customFormatter(date) {
+            return moment(date).format('DD MMMM YYYY');
+        },
+		formatFechaSiat(date){
+            return moment(date).format('YYYY-MM-DDTHH:mm:ss.SSS');
+        },
+		getCufdByCode(codigoCufd){
+			$.ajax({
+				type: "POST",
+				url: base_url('siat/facturacion/Emitir/getCufdByCode'),
+				dataType: "json",
+				data:{
+					codigoCufd : codigoCufd
+                }
+			}).done(function (res) {
+				console.log(res);
+				pro.cufdEventoFin =moment(res.fechaVigencia).format('DD-MM-YYYY h:mm:ss');
+				pro.cufdEventoInicio =moment(res.created_at).format('DD-MM-YYYY h:mm:ss');
+
+				console.log(this.cufdEventoFin);
+				console.log(this.cufdEventoInicio);
+
+				//quitarcargando();
+			}).fail(function (jqxhr, textStatus, error) {
+				let err = textStatus + ", " + error;
+				console.log("Request Failed: " + err);
+			});
+		},
+		registrarEvento(){
+            agregarcargando()
+            if (this.fechaHoraInicioEvento == '' || this.fechaHoraFinEvento == '' || this.cufdEvento== '') {
+                quitarcargando()
+                swal({
+					title: 'Error',
+					text: "Llenar correctamente el formulario",
+					type: 'error',
+					showCancelButton: false,
+					allowOutsideClick: false,
+				})
+                return
+            }
+
+            data = {
+                    "cuis": this.infoAlmacen.cuis,
+                    "codigoSucursal": this.infoAlmacen.sucursal,
+                    "codigoPuntoVenta": this.infoAlmacen.codigoPuntoVenta,
+                    "codigoMotivoEvento": this.motivo,
+                    "cufdEvento": this.cufdEvento,
+                    "descripcion": this.descripcion,
+                    "fechaHoraInicioEvento": this.formatFechaSiat(this.fechaHoraInicioEvento),
+                    "fechaHoraFinEvento": this.formatFechaSiat(this.fechaHoraFinEvento),
+                    "cufd": this.infoAlmacen.codigoCufd
+            }
+            $.ajax({
+				type: "POST",
+				url: base_url_siat('operaciones/registroEventoSignificativo'),
+				dataType: "json",
+				data:data
+			}).done(function (res) {
+                quitarcargando()
+                res = res.RespuestaListaEventos
+                if (res.transaccion) {
+                    swal({
+						title: 'Evento Registrado',
+						html: `El codigo del evento es: ${res.codigoRecepcionEventoSignificativo}`,
+						type: 'success',
+						showCancelButton: false,
+						allowOutsideClick: false,
+					}).then(function (result) {
+							console.log(result);
+							location.reload();
+					});
+                } else {
+                    swal({
+						title: 'Error',
+						html: `${res.mensajesList.descripcion}`,
+						type: 'error',
+						showCancelButton: false,
+						allowOutsideClick: false,
+					})
+                }
+			}).fail(function (jqxhr, textStatus, error) {
+				quitarcargando();
+				let err = textStatus + ", " + error;
+				console.log("Request Failed: " + err);
+				swal({
+					title: 'Vuelva a intentar',
+					text: "Vuelva a intenar error con conexion al SIAT",
+					type: 'warning',
+					showCancelButton: false,
+					allowOutsideClick: false,
+				})
+			});
+            //console.log(data);
         },
 
 	},
