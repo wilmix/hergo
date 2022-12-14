@@ -68,11 +68,6 @@
                   </select>
                 </div>
 
-                <div v-show="emision == 3" class="form-group col-md-3">
-                  <label for="">Fecha Emisión Contingencia</label>
-                  <vue-ctk-date-time-picker label="Fecha Emisión Contingencia" format="YYYY-MM-DDTHH:mm:ss.SSS" v-model="fechaEmision" input-class="form-control"></vue-ctk-date-time-picker>
-                </div>
-
                 <div v-show="cabecera.codigoTipoDocumentoIdentidad == 5" class="form-group col-md-3">
                   <label for="">Código Excepción</label>
                   <select class="form-control"
@@ -82,11 +77,17 @@
                   </select>
                   <small class="form-text text-muted">Solo si se desea enviar excepción para el NIT.</small>
                 </div>
-                
+              </div>
+              <div class="row">
                 <div v-show="emision == 3" class="form-group col-md-3">
                   <label for="">Número de Factura de Contingencia</label>
                   <input type="text" class="form-control" v-model="numeroFacturaContingencia">
                   <small class="form-text text-muted">Solo si es factura de contingencia (MANUAL).</small>
+                </div>
+
+                <div v-show="emision == 3" class="form-group col-md-3">
+                  <label for="">Fecha Emisión Contingencia</label>
+                  <vue-ctk-date-time-picker label="Fecha Emisión Contingencia" format="YYYY-MM-DDTHH:mm:ss.SSS" v-model="fechaEmision" input-class="form-control"></vue-ctk-date-time-picker>
                 </div>
               </div>
               <div class="col-md-12 table-responsive">

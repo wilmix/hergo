@@ -905,6 +905,11 @@ const bill = new Vue({
            
         },
 		cambioEmision(){
+			if (this.emision == 3) {
+				this.codigoExcepcion = 1
+			} else {
+				this.codigoExcepcion = 0
+			}
 			this.validar = this.emision == 3 ? true : this.validar
 		},
 		setTituloFactura(){

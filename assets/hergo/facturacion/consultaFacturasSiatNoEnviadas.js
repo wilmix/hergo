@@ -247,13 +247,15 @@ const pro = new Vue({
 		es: vdp_translation_es.js,
 		registroFecha: '',
 		motivos: false,
-        motivo:'1',
+        motivo:'7',
 		fechaHoraFinEvento:'',//moment().format('YYYY-MM-DDTHH:mm:ss.SSS'),
         fechaHoraInicioEvento:'', //moment().format('YYYY-MM-DDTHH:mm:ss.SSS')
 		descripcion:'',
 		cufdEvento:'',
 		cufdEventoInicio:'',
 		cufdEventoFin:'',
+		fechaMin:'',
+		fechaMax:''
 
 
 	},
@@ -417,8 +419,9 @@ const pro = new Vue({
                 } else {
                     quitarcargando()
                     swal({
-                        title: `${res.codigoDescripcion}`,
-                        html: `${res.mensajesList.descripcion}`,
+                        title: `${res.RespuestaServicioFacturacion.codigoDescripcion}`,
+                        html: `${res.RespuestaServicioFacturacion.mensajesList.descripcion} <br> 
+								archivo:${res.RespuestaServicioFacturacion.mensajesList.numeroArchivo}`,
                         type: 'error',
                         showCancelButton: false,
                         allowOutsideClick: false,
@@ -440,15 +443,19 @@ const pro = new Vue({
         },
 		showModalEvento(){
 			let cufd = []
+			let fechas = []
 			let selected = table.rows('.selected').data()
 			selected.map(x =>cufd.push(x.cufd))
+			selected.map(x =>fechas.push(x.fechaEmision))
+			let dates = fechas.map((fechaActual) => new Date(fechaActual) );
+			this.fechaMax = new Date(Math.max.apply(null,dates));
+			this.fechaMin= new Date(Math.min.apply(null,dates));
 			let last =[...cufd].pop();
 			let first = [...cufd].shift();  
 			if (last == first) {
 				this.cufdEvento = first
 			}
 			this.getCufdByCode(first)
-			//console.log(cufd);
             $("#modalEvento").modal("show");
             this.getMotivosAnulacion()
         },
@@ -476,7 +483,7 @@ const pro = new Vue({
 					codigoCufd : codigoCufd
                 }
 			}).done(function (res) {
-				console.log(res);
+				//console.log(res);
 				pro.cufdEventoFin =moment(res.fechaVigencia).format('DD-MM-YYYY h:mm:ss');
 				pro.cufdEventoInicio =moment(res.created_at).format('DD-MM-YYYY h:mm:ss');
 
@@ -502,6 +509,17 @@ const pro = new Vue({
 				})
                 return
             }
+			if ( new Date(this.fechaHoraInicioEvento) >= this.fechaMin || new Date(this.fechaHoraFinEvento) <= this.fechaMax ) {
+				quitarcargando()
+				swal({
+					title: 'Error',
+					text: "Las fechas son mayores o menores al evento",
+					type: 'error',
+					showCancelButton: false,
+					allowOutsideClick: false,
+				})
+                return
+			} 
 
             data = {
                     "cuis": this.infoAlmacen.cuis,

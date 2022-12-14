@@ -95,11 +95,11 @@
                   </a>
                 </li>
                 <li class="treeview" style="height: auto;">
-                  <!-- <a href="#"><i class="fa fa-circle-o"></i> Sincronización de Catálogos
+                  <a href="#"><i class="fa fa-circle-o"></i> Sincronización de Catálogos
                     <span class="pull-right-container">
                       <i class="fa fa-angle-left pull-right"></i>
                     </span>
-                  </a> -->
+                  </a>
                   <ul class="treeview-menu">
                   <li class="sincronizarCatalogos">
                       <a href="<?php echo base_url("siat/sincronizacion/sincronizar/sincronizarCatalogos") ?>">
@@ -107,7 +107,7 @@
                         </i> Sincronizar Catálogos
                       </a>
                     </li>
-                    <li class="actividades">
+                    <!-- <li class="actividades">
                       <a href="<?php echo base_url("siat/sincronizacion/sincronizar/actividades") ?>">
                         <i class="fa fa-list-ol ">
                         </i> Actividades Económicas
@@ -142,7 +142,7 @@
                         <i class="fa fa-list-ol ">
                         </i> Listado Paramétricas 
                       </a>
-                    </li>
+                    </li> -->
                   </ul>
                 </li>
                 <li class="Cufd">cliente
@@ -250,7 +250,7 @@
               </ul>
             </li>
             <!-- FacturasSiat -->
-           <!--  <li class="treeview">
+            <li class="treeview">
               <a href="#"><i class="fa fa-money"></i> <span>Siat Facturas</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
@@ -262,7 +262,7 @@
                 <li class="consultaFacturasNoEnviadasSiat"><a href="<?php echo base_url("siat/facturacion/emitir/consultaFacturasNoEnviadasSiat") ?>">Siat Facturas No Enviadas</a></li>
 
               </ul>
-            </li> -->
+            </li>
             <!-- Pagos -->
             <li class="treeview">
               <a href="#"><i class="fa fa-book"></i> <span>Pagos</span>
