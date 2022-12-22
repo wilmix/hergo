@@ -70,7 +70,7 @@
 
             
                 //****ENCABEZADO****
-                $this->SetXY(13,42);
+                $this->SetXY(10,42);
                 $fontSize = 9;
                 //cliente
                 $this->SetFont('Arial','B',$fontSize);
@@ -85,7 +85,7 @@
                     /* if ($this->datos['complemento']) {
                     $this->Cell(55, 6, utf8_decode($this->datos['pedido']),$l,0,'L');
                     } else { */
-                        $this->Cell(65, 6, utf8_decode($this->datos['pedido']),$l,0,'L');
+                        $this->Cell(68, 6, utf8_decode($this->datos['pedido']),$l,0,'L');
                     /* } */
                 } else {
                    /*  if ($this->datos['complemento']) {
@@ -93,7 +93,7 @@
                     $this->Cell(55,6, '',$l,0,'');
                     } else { */
                         $this->Cell(15,6, '',$l,0,'');
-                        $this->Cell(65,6, '',$l,0,'');
+                        $this->Cell(68,6, '',$l,0,'');
                     /* } */
 
                 }
@@ -105,18 +105,18 @@
                     /* $this->SetFont('Arial','B',$fontSize);
                     $this->Cell(10,6, utf8_decode('-'),$l,0,''); */
                     $this->SetFont('Arial','',$fontSize);
-                    $this->Cell(25, 6, utf8_decode($this->datos['documentoNumero'] . ' - ' . $this->datos['complemento']), $l,0,'R');
+                    $this->Cell(35, 6, utf8_decode($this->datos['documentoNumero'] . ' - ' . $this->datos['complemento']), $l,0,'R');
                     //$this->Cell(6, 6, utf8_decode(' - ' . $this->datos['complemento'] ), $l,0,'R');
                 } else {
                     $this->Cell(35, 6, utf8_decode($this->datos['documentoNumero']), $l,0,'R');
                 }
                 $this->Ln(6);
 
-                $this->SetX(13);
+                $this->SetX(10);
                 $this->SetFont('Arial','B',$fontSize);
-                $this->Cell(20,6, utf8_decode('Señor(es): '),$l,0,'');
+                $this->Cell(35,6, utf8_decode('Nombre/Razon Social: '),$l,0,'');
                 $this->SetFont('Arial','',$fontSize);
-                $this->Cell(120, 6, utf8_decode($this->datos['nombreRazonSocial']),$l,0,'L');
+                $this->Cell(108, 6, utf8_decode($this->datos['nombreRazonSocial']),$l,0,'L');
                 $this->SetFont('Arial','B',$fontSize);
                 $this->Cell(20,6, utf8_decode('Cod. Cliente:'),$l,0,'');
                 $this->SetFont('Arial','',$fontSize);
