@@ -61,14 +61,15 @@
                 <div class="form-group col-md-3">
                   <label for="">Emision</label>
                   <select @change="cambioEmision" class="form-control"
-                            v-model="emision">
+                            v-model="emision" 
+                            v-bind:disabled="selectEmisionDesabled">
                     <option value="1">Online</option>
-                    <option value="2">Offline</option>
+                    <!-- <option value="2">Offline</option> -->
                     <option value="3">Contingencia</option>
                   </select>
                 </div>
 
-                <div v-show="cabecera.codigoTipoDocumentoIdentidad == 5" class="form-group col-md-3">
+                <!-- <div v-show="cabecera.codigoTipoDocumentoIdentidad == 5" class="form-group col-md-3">
                   <label for="">Código Excepción</label>
                   <select class="form-control"
                             v-model="codigoExcepcion">
@@ -76,7 +77,7 @@
                     <option value="1">ENVIAR EXCEPCION</option>
                   </select>
                   <small class="form-text text-muted">Solo si se desea enviar excepción para el NIT.</small>
-                </div>
+                </div> -->
               </div>
               <div class="row">
                 <div v-show="emision == 3" class="form-group col-md-3">

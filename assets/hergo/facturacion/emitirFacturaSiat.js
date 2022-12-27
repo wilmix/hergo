@@ -69,7 +69,8 @@ const bill = new Vue({
 		codigoExcepcion: '0',
 		nitValido: null,
 		nombreClienteDocumento:'',
-		nitValidoMensaje:null
+		nitValidoMensaje:null,
+		selectEmisionDesabled:null
 	},
 	mounted() {
 		this.verificarSiat()
@@ -125,6 +126,7 @@ const bill = new Vue({
 					codigoPuntoVenta : this.codigoPuntoVenta
                 }
 			}).done(function (res) {
+				//console.log(res);
 				bill.infoAlmacen = res
 				//bill.cuis = res.cuis
 				//bill.codigoControlCUFD = res.codigoControlCufd
@@ -593,13 +595,13 @@ const bill = new Vue({
 
 			if (this.cabecera.cliente_id === this.egreso.cliente_id || this.cabecera == false) {
 				this.cabecera = this.egreso
-				if (this.cabecera.codigoTipoDocumentoIdentidad == 5) {
+				/* if (this.cabecera.codigoTipoDocumentoIdentidad == 5) {
 					this.verificarNit()
-				}
+				} */
 				if (this.cabecera.complemento == null || this.cabecera.complemento == '') {
-					this.nombreClienteDocumento = `${this.cabecera.nombreCliente} - ${this.cabecera.documentoTipoSigla} - ${this.cabecera.numeroDocumento}` 
+					this.nombreClienteDocumento = `${this.cabecera.nombreCliente} - ${this.cabecera.documentoTipoSigla} - ${this.cabecera.numeroDocumento} | ${this.cabecera.email}` 
 				} else {
-					this.nombreClienteDocumento = `${this.cabecera.nombreCliente} - ${this.cabecera.documentoTipoSigla} - ${this.cabecera.numeroDocumento} | COMP ${this.cabecera.complemento}` 
+					this.nombreClienteDocumento = `${this.cabecera.nombreCliente} - ${this.cabecera.documentoTipoSigla} - ${this.cabecera.numeroDocumento} - ${this.cabecera.complemento}  | ${this.cabecera.email}` 
 				}
 				this.detalle.push(row)
 				this.validarCabecera()
@@ -623,13 +625,13 @@ const bill = new Vue({
 			if (this.detalle.length == 0) {
 				this.cabecera = this.egreso
 				this.detalle = this.egresoDetalle
-				if (this.cabecera.codigoTipoDocumentoIdentidad == 5) {
+				/* if (this.cabecera.codigoTipoDocumentoIdentidad == 5) {
 					this.verificarNit()
-				}
+				} */
 				if (this.cabecera.complemento == null || this.cabecera.complemento == '') {
-					this.nombreClienteDocumento = `${this.cabecera.nombreCliente} - ${this.cabecera.documentoTipoSigla} - ${this.cabecera.numeroDocumento}` 
+					this.nombreClienteDocumento = `${this.cabecera.nombreCliente} - ${this.cabecera.documentoTipoSigla} - ${this.cabecera.numeroDocumento} | ${this.cabecera.email}` 
 				} else {
-					this.nombreClienteDocumento = `${this.cabecera.nombreCliente} - ${this.cabecera.documentoTipoSigla} - ${this.cabecera.numeroDocumento} | COMP ${this.cabecera.complemento}` 
+					this.nombreClienteDocumento = `${this.cabecera.nombreCliente} - ${this.cabecera.documentoTipoSigla} - ${this.cabecera.numeroDocumento}-${this.cabecera.complemento} | ${this.cabecera.email}` 
 				}
 				this.validarCabecera()
 				this.validarDetalle()
@@ -678,7 +680,7 @@ const bill = new Vue({
 					type: "POST",
 					url: base_url_siat('verificarNit'),
 					dataType: "json",
-					//async: false,
+					async: false,
 					data:{
 						cliente: {
 							codigoSucursal: bill.infoAlmacen.sucursal,
@@ -687,33 +689,11 @@ const bill = new Vue({
 						}
 					}
 				}).done(function (res) {
-					quitarcargando()
-					if (res.transaccion) {
-						console.log(res);
-						if (res.mensajesList.codigo == 986) {
-							bill.nitValido = true
-							bill.nitValidoMensaje = res.mensajesList.descripcion
-							bill.nombreClienteDocumento = `${bill.cabecera.nombreCliente} - ${bill.cabecera.documentoTipoSigla} - ${bill.cabecera.numeroDocumento} | ${res.mensajesList.descripcion}`
-						}
-					} else {
-						swal({
-							title: 'Error',
-							html: `${res.mensajesList.descripcion} 
-									<br>codigo: ${res.mensajesList.codigo}  
-									<br>se debe enviar codigo de excepción`,
-							type: 'error',
-							showCancelButton: false,
-							allowOutsideClick: false,
-						})
-						bill.nitValido = false
-						bill.nitValidoMensaje = res.mensajesList.descripcion
-						bill.nombreClienteDocumento = `${bill.cabecera.nombreCliente} - ${bill.cabecera.documentoTipoSigla} - ${bill.cabecera.numeroDocumento} | ${res.mensajesList.descripcion}`
-
-					}
+					bill.nitValidoMensaje = res
 				})
 		},
         showModal(){
-				if (this.nitValido == false && this.codigoExcepcion == 0) {
+				/* if (this.nitValido == false && this.codigoExcepcion == 0) {
 					swal({
 						title: 'Error',
 						html: `NIT invalido se debe enviar codigo de excepción`,
@@ -722,7 +702,7 @@ const bill = new Vue({
 						allowOutsideClick: false,
 					})
 					return
-				}
+				} */
 				this.codigoEmision = this.emision == '1' ? '1' : '2'
 				if (this.metodo_pago_siat.label.includes('TARJETA')) {
 					if (!this.validarTarjeta()) {
@@ -770,142 +750,191 @@ const bill = new Vue({
 					})
 					return
 				}
-				agregarcargando()
-				let cafc = this.emision == '3' ? this.cafc : ''
-				this.cabecera.user_id = glob_user_id		
-				this.cabecera.glosa = this.glosa		
-				let cabeceraFactura = {
-					"nitEmisor": "",
-					"razonSocialEmisor": "HERGO LTDA",
-					"municipio": this.infoAlmacen.ciudad,
-					"telefono": this.infoAlmacen.phone,
-					"numeroFactura": this.emision == '3' ? this.numeroFacturaContingencia: '',
-					"cuf":"",
-					"cufd": this.emision == '3' ? this.cufdContingencia : this.infoAlmacen.codigoCufd,
-					"codigoSucursal":this.infoAlmacen.sucursal,
-					"direccion": this.infoAlmacen.address,
-					"codigoPuntoVenta":this.codigoPuntoVenta,
-					"fechaEmision": this.emision == '3' ? this.fechaEmision : '0',
-					"nombreRazonSocial": this.cabecera.nombreCliente,
-					"codigoTipoDocumentoIdentidad": this.cabecera.codigoTipoDocumentoIdentidad,
-					"numeroDocumento": this.cabecera.numeroDocumento,
-					"complemento": this.cabecera.complemento,
-					"codigoCliente": this.cabecera.cliente_id,
-					"codigoMetodoPago": this.metodo_pago_siat.id,
-					"numeroTarjeta": this.numeroTarjeta,
-					"montoTotal": this.totalFactura,
-					"montoTotalSujetoIva": this.totalFactura,
-					"codigoMoneda": this.moneda,
-					"tipoCambio": this.tipoCambio,
-					"montoTotalMoneda": this.montoTotalMoneda,
-					"montoGiftCard": null,
-					"descuentoAdicional": "0",
-					"codigoExcepcion": this.codigoExcepcion,
-					"cafc": cafc,
-					"leyenda": this.leyenda,
-					"usuario": this.usuario,
-					"codigoDocumentoSector": "1"
-				}
-				let configuracionSiat = {
-					"cuis": this.infoAlmacen.cuis,
-					"tipoFacturaDocumento": "1",
-					"fechaEnvio": "",
-					"codigoControlCUFD":this.emision == '3' ? this.codigoControlCUFDContingencia : this.infoAlmacen.codigoControlCufd,
-					"codigoEmision":this.codigoEmision 
-				}
-				let data = {
-					configuracion: configuracionSiat,
-					cabeceraFactura: cabeceraFactura,
-					detalle: this.detalle,
-					cabecera: this.cabecera
-				}
-				/* console.log(data);
-				quitarcargando()
-				return */
-				$.ajax({
-					type: "POST",
-					url: base_url_siat('recepcionFactura'),
-					dataType: "json",
-					data:data
-				}).done(function (res) {
-					if (res.errors) {
-						quitarcargando()
-						errores = ''
-						Object.keys(res.errors).forEach(error => {
-							errores += `<li>${res.errors[error]}</li>`
-						});
-						swal({
-							title: 'Error',
-							html: `Los datos enviados para la facturación con errorneos  ${errores}`,
-							type: 'error',
-							showCancelButton: false,
-							allowOutsideClick: false,
-						})
-					} else if (res.statusfactura == 'OFFLINE'){
-						quitarcargando()
-						swal({
-							title: 'FACTURA OFFLINE',
-							html: `La factura ${res.factura.cabecera.numeroFactura} se emitio de manera  
-										<br> OFFLINE </br>
-										No se registro en el SIAT`,
-							type: 'success',
-							showCancelButton: false,
-							allowOutsideClick: false,
-						}).then(function (result) {
-								console.log(res.hasOwnProperty('idFacturaInventarios'));
-								let imprimir = base_url("pdf/Siat/factura/") + res.idFacturaInventarios;
-								window.open(imprimir);
-								location.reload();
-						});
-					}
-					 else if (res.statusfactura.codigoDescripcion == 'VALIDADA') {
-						quitarcargando()
-						respuestaEmail = res.mailEnviado ? `La factura se envió a: ${ res.mailEnviado}` : `No se tiene el correo del cliente ENVIAR MANUALMENTE`
-						swal({
-							title: res.statusfactura.codigoDescripcion,
-							html: `La factura se autorizó por el SIAT y se guardó con exito 
-										<br> ${respuestaEmail} </br>
-										<br> Codigo de recepción:${res.statusfactura.codigoRecepcion}</br>`,
-							type: 'success',
-							showCancelButton: false,
-							allowOutsideClick: false,
-						}).then(function (result) {
-								console.log(result);
-								let imprimir = base_url("pdf/Siat/factura/") + res.idFacturaInventarios;
-								window.open(imprimir);
-								location.reload();
-						});
+				if (this.cabecera.codigoTipoDocumentoIdentidad == 5 && this.siatOnline == true && this.emision != 3) {
+					this.verificarNit()
+					console.log(this.nitValidoMensaje.transaccion); 
+					if (this.nitValidoMensaje.transaccion) {
+						console.log(this.nitValidoMensaje);
+						//if (this.nitValidoMensaje.mensajesList.codigo == 986) {
+							bill.nitValido = true
+							//bill.nitValidoMensaje = this.nitValidoMensaje.mensajesList.descripcion
+							console.log('NIT VALIDO: '+ this.nitValidoMensaje.mensajesList.descripcion);
+							this.facturar()
+							//bill.nombreClienteDocumento = `${bill.cabecera.nombreCliente} - ${bill.cabecera.documentoTipoSigla} - ${bill.cabecera.numeroDocumento} | ${res.mensajesList.descripcion} | ${bill.cabecera.email}`
+						//}
 					} else {
 						quitarcargando()
 						swal({
-							title: res.statusfactura.codigoDescripcion,
-							html: `${res.statusfactura.mensajesList.descripcion}</br>`,
-							type: 'error',
-							showCancelButton: false,
-							allowOutsideClick: false,
+							title: 'ERROR EN NIT',
+							html: `${this.nitValidoMensaje.mensajesList.descripcion}. <br> Desea continuar de todos modos?`,
+							type: 'warning',
+							showCancelButton: true,
+							confirmButtonColor: '#3085d6',
+							cancelButtonColor: '#d33',
+							confirmButtonText: 'Si, Continuar ',
+							cancelButtonText: 'No, Cancelar'
+						}).then((result) => {
+							this.codigoExcepcion = 1
+							console.log('Facturar de todos modos y con excepcioon');
+							this.facturar()
+						}, (dismiss) => {
+							console.log('Ir a clientes y modificar el numero correcto del NIT');
+							swal({
+								type: 'success',
+								title: 'Ir a clientes y modificar el numero correcto del NIT',
+								showConfirmButton: false,
+								timer: 1500
+							})
 						})
-						return false
+						bill.nitValido = false
+						//bill.nitValidoMensaje = this.nitValidoMensaje.mensajesList.descripcion
+						console.log('ERROR NIT: '+ this.nitValidoMensaje.mensajesList.descripcion);
+						//bill.nombreClienteDocumento = `${bill.cabecera.nombreCliente} - ${bill.cabecera.documentoTipoSigla} - ${bill.cabecera.numeroDocumento} | ${res.mensajesList.descripcion}  | ${bill.cabecera.email}`
+
 					}
-				}).fail(function (jqxhr, textStatus, error) {
-					quitarcargando();
-					let err = textStatus + ", " + error;
-					console.log("Request Failed: " + err);
-					swal({
-						title: 'Revisar Consulta Factura Siat',
-						text: "Para imprimir vaya a consulta facturas SIAT",
-						type: 'warning',
-						showCancelButton: false,
-						allowOutsideClick: false,
-					}).then(
-						function (result) {
-							//agregarcargando();
-							//window.location.href =base_url("siat/facturacion/Emitir/consultaFacturasSiat");
-					});
-				});
+				} else {
+					this.facturar()
+				}
            
         },
+		facturar(){
+			agregarcargando()
+			let cafc = this.emision == '3' ? this.cafc : ''
+			this.cabecera.user_id = glob_user_id		
+			this.cabecera.glosa = this.glosa		
+			let cabeceraFactura = {
+				"nitEmisor": "",
+				"razonSocialEmisor": "HERGO LTDA",
+				"municipio": this.infoAlmacen.ciudad,
+				"telefono": this.infoAlmacen.phone,
+				"numeroFactura": this.emision == '3' ? this.numeroFacturaContingencia: '',
+				"cuf":"",
+				"cufd": this.emision == '3' ? this.cufdContingencia : this.infoAlmacen.codigoCufd,
+				"codigoSucursal":this.infoAlmacen.sucursal,
+				"direccion": this.infoAlmacen.address,
+				"codigoPuntoVenta":this.codigoPuntoVenta,
+				"fechaEmision": this.emision == '3' ? this.fechaEmision : '0',
+				"nombreRazonSocial": this.cabecera.nombreCliente,
+				"codigoTipoDocumentoIdentidad": this.cabecera.codigoTipoDocumentoIdentidad,
+				"numeroDocumento": this.cabecera.numeroDocumento,
+				"complemento": this.cabecera.complemento,
+				"codigoCliente": this.cabecera.cliente_id,
+				"codigoMetodoPago": this.metodo_pago_siat.id,
+				"numeroTarjeta": this.numeroTarjeta,
+				"montoTotal": this.totalFactura,
+				"montoTotalSujetoIva": this.totalFactura,
+				"codigoMoneda": this.moneda,
+				"tipoCambio": this.tipoCambio,
+				"montoTotalMoneda": this.montoTotalMoneda,
+				"montoGiftCard": null,
+				"descuentoAdicional": "0",
+				"codigoExcepcion": this.codigoExcepcion,
+				"cafc": cafc,
+				"leyenda": this.leyenda,
+				"usuario": this.usuario,
+				"codigoDocumentoSector": "1"
+			}
+			let configuracionSiat = {
+				"cuis": this.infoAlmacen.cuis,
+				"tipoFacturaDocumento": "1",
+				"fechaEnvio": "",
+				"codigoControlCUFD":this.emision == '3' ? this.codigoControlCUFDContingencia : this.infoAlmacen.codigoControlCufd,
+				//"codigoControlCUFD":this.infoAlmacen.codigoControlCufd,
+				"codigoCufd" :this.infoAlmacen.codigoCufd,
+				"codigoEmision":''//this.codigoEmision 
+			}
+			let data = {
+				configuracion: configuracionSiat,
+				cabeceraFactura: cabeceraFactura,
+				detalle: this.detalle,
+				cabecera: this.cabecera
+			}
+			/* console.log(data);
+			quitarcargando()
+			return */
+			$.ajax({
+				type: "POST",
+				url: base_url_siat('recepcionFactura'),
+				dataType: "json",
+				data:data
+			}).done(function (res) {
+				if (res.errors) {
+					quitarcargando()
+					errores = ''
+					Object.keys(res.errors).forEach(error => {
+						errores += `<li>${res.errors[error]}</li>`
+					});
+					swal({
+						title: 'Error',
+						html: `Los datos enviados para la facturación con errorneos  ${errores}`,
+						type: 'error',
+						showCancelButton: false,
+						allowOutsideClick: false,
+					})
+				} else if (res.statusfactura == 'OFFLINE'){
+					quitarcargando()
+					swal({
+						title: 'FACTURA OFFLINE',
+						html: `La factura ${res.factura.cabecera.numeroFactura} se emitio de manera  
+									<br> OFFLINE </br>
+									No se registro en el SIAT`,
+						type: 'success',
+						showCancelButton: false,
+						allowOutsideClick: false,
+					}).then(function (result) {
+							console.log(res.hasOwnProperty('idFacturaInventarios'));
+							let imprimir = base_url("pdf/Siat/factura/") + res.idFacturaInventarios;
+							window.open(imprimir);
+							location.reload();
+					});
+				}
+				 else if (res.statusfactura.codigoDescripcion == 'VALIDADA') {
+					quitarcargando()
+					respuestaEmail = res.mailEnviado ? `La factura se envió a: ${ res.mailEnviado}` : `No se tiene el correo del cliente ENVIAR MANUALMENTE`
+					swal({
+						title: res.statusfactura.codigoDescripcion,
+						html: `La factura se autorizó por el SIAT y se guardó con exito 
+									<br> ${respuestaEmail} </br>
+									<br> Codigo de recepción:${res.statusfactura.codigoRecepcion}</br>`,
+						type: 'success',
+						showCancelButton: false,
+						allowOutsideClick: false,
+					}).then(function (result) {
+							console.log(result);
+							let imprimir = base_url("pdf/Siat/factura/") + res.idFacturaInventarios;
+							window.open(imprimir);
+							location.reload();
+					});
+				} else {
+					quitarcargando()
+					swal({
+						title: res.statusfactura.codigoDescripcion,
+						html: `${res.statusfactura.mensajesList.descripcion}</br>`,
+						type: 'error',
+						showCancelButton: false,
+						allowOutsideClick: false,
+					})
+					return false
+				}
+			}).fail(function (jqxhr, textStatus, error) {
+				quitarcargando();
+				let err = textStatus + ", " + error;
+				console.log("Request Failed: " + err);
+				swal({
+					title: 'Revisar Consulta Factura Siat',
+					text: "Para imprimir vaya a consulta facturas SIAT",
+					type: 'warning',
+					showCancelButton: false,
+					allowOutsideClick: false,
+				}).then(
+					function (result) {
+						//agregarcargando();
+						//window.location.href =base_url("siat/facturacion/Emitir/consultaFacturasSiat");
+				});
+			});
+		},
 		cambioEmision(){
-			if (this.emision == 3) {
+			if (this.emision == 3 && this.cabecera.codigoTipoDocumentoIdentidad == 5) {
 				this.codigoExcepcion = 1
 			} else {
 				this.codigoExcepcion = 0

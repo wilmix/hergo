@@ -156,6 +156,7 @@ class Emitir extends CI_Controller
 		$cabecera = $this->input->post('cabecera');
 		$detalle = $this->input->post('detalle');
 		$configuracion = $this->input->post('configuracion');
+		$codigoEmision = $this->input->post('codigoEmision');
 
 			$items = [];
 			foreach ($detalle as $item) {
@@ -186,7 +187,7 @@ class Emitir extends CI_Controller
 			$factura->tipoCambio=$this->Egresos_model->retornarTipoCambio();
 			$factura->ClienteFactura=$cabeceraSiat['nombreRazonSocial'];
 			$factura->ClienteNit=$cabeceraSiat['numeroDocumento'];
-			$factura->codigoEmision = $configuracion['codigoEmision'];
+			$factura->codigoEmision = $codigoEmision;
 			$factura->articulos = $items;
 
 			$facturaSiat = new stdclass();
