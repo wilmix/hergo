@@ -46,6 +46,16 @@ const cufd = new Vue({
                         showCancelButton: false,
                     })
                 } else if (res.RespuestaCufd.transaccion) {
+                    quitarcargando();
+                    swal({
+                        title: 'CUFD Generado!',
+                        html: `Código Unico de Facturación Diaria fue generado y guardado exitosamente para ${cufd.almacen.almacen}, <br>
+                        vigente hasta ${res.RespuestaCufd.fechaVigencia}`,
+                        type: 'success', 
+                        showCancelButton: false,
+                    })
+                    cufd.getCufdTable()
+                    return 
                     $.ajax({
                         type: "post",   
                         url: base_url('index.php/siat/codigos/Cufd/store'),
