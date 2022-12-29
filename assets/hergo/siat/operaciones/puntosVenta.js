@@ -166,7 +166,7 @@ const app = new Vue({
             agregarcargando()
             $.ajax({
                 type: "POST",
-                url: base_url_siat('operaciones/registroPuntoVenta'),
+                url: base_url_siat('operaciones/puntoVenta'),
                 dataType: "json",
                 data: {
                     "cliente": {
@@ -174,18 +174,17 @@ const app = new Vue({
                         "codigoSucursal": this.codigoSucursal,
                         "codigoTipoPuntoVenta": app.codigoTipoPuntoVenta.codigoClasificador,
                         "descripcion": this.descripcion,
-                        "nombrePuntoVenta": this.nombrePuntoVenta
+                        "nombrePuntoVenta": this.nombrePuntoVenta,
+                        "almacen_id": glob_alm_usu
                     }
                 },
             }).done(function (res) {
                 quitarcargando()
-                
-                res = res.RespuestaRegistroPuntoVenta
-                if (res.transaccion) {
+                if (res.client > 0) {
                     quitarcargando()
                     swal({
                         title: 'PUNTO CREADO',
-                        html: `El punto de venta: ${res.codigoPuntoVenta} fue creado.`,
+                        html: `El punto de venta: ${res.puntoVenta.RespuestaRegistroPuntoVenta.codigoPuntoVenta} fue creado.`,
                         type: 'success',
                         showCancelButton: false,
                         allowOutsideClick: false,
@@ -197,7 +196,7 @@ const app = new Vue({
                     quitarcargando()
                     swal({
                         title: 'ERROR',
-                        html: `${res.mensajesList.descripcion}`,
+                        html: `${res.RespuestaRegistroPuntoVenta.mensajesList.descripcion}`,
                         type: 'error',
                         showCancelButton: false,
                         allowOutsideClick: false,

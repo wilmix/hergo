@@ -11,8 +11,8 @@ class Cufd_model extends CI_Model
     public function store($cufd)
 	{
             $this->db->insert('siat_cufd', $cufd);
-            /* $id=$this->db->insert_id();
-            return $id; */
+            $id=$this->db->insert_id();
+            return $id;
 	}
     public function getCufdList()
     {

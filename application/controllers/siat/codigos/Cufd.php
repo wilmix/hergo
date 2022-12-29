@@ -31,8 +31,8 @@ class Cufd extends CI_Controller
             'fechaVigencia' => $this->input->post('fechaVigencia'),
             //'created_at' => date('Y-m-d'),
         ];
-        $this->Cufd_model->store($cufd);
-        echo json_encode($cufd);
+        $id = $this->Cufd_model->store($cufd);
+        echo json_encode($id);
     }
     public function getCufdList()
     {

@@ -29,8 +29,12 @@ class Cuis extends CI_Controller
             'cuis' => $this->input->post('cuis'),
             'fechaVigencia' => $this->input->post('fechaVigencia'),
             'codigoPuntoVenta' => $this->input->post('codigoPuntoVenta'),
+            'almacen_id' => $this->input->post('almacen_id')
         ];
-        $this->Cuis_model->store($cuis);
+        $res = $this->Cuis_model->search($this->input->post('cuis'));
+        if($res == null){
+            $this->Cuis_model->store($cuis);
+        };
         echo json_encode($cuis);
     }
     public function editEstadoCuis()
@@ -51,6 +55,10 @@ class Cuis extends CI_Controller
         $codigoPuntoVenta = $this->input->post('codigoPuntoVenta');
         $res = $this->Cuis_model->cierrePuntoVenta($cuis, $codigoSucursal, $codigoPuntoVenta);
         echo json_encode($res);
+    }
+    public function buscarCuis($cuis)
+    {
+        $this->Cuis_model->search($cuis);
     }
 
 }

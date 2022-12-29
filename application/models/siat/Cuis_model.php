@@ -27,4 +27,16 @@ class Cuis_model extends CI_Model
 		$this->db->where('codigoPuntoVenta', $codigoPuntoVenta);
 		$this->db->update('siat_cuis');
 	}
+	public function search($cuis)
+	{
+		$sql =	"SELECT
+					*
+				FROM
+					siat_cuis c
+				where
+					c.cuis = '$cuis'";
+        $query=$this->db->query($sql);		
+        return $query->row();
+	}
+
 }
