@@ -8,7 +8,7 @@ class Siat extends CI_Controller {
     //echo $id;
     $this->load->model('siat/Emitir_model');
     $factura = $this->Emitir_model->getFactura($id);
-    $lineas = $this->Emitir_model->getDetalleFactura($id);;
+    $lineas = $this->Emitir_model->getDetalleFactura($id);
     $params = (array) $factura;
     //$year = date('y',strtotime($factura->fechaEmision));
     

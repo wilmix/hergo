@@ -32,7 +32,7 @@
 
             $this->SetFont('Arial','B',7);
            
-            if ($this->datos['sucursal'] != 'Casa Matriz - 0') {
+            if ($this->datos['sucursal'] != 'Casa Matriz') {
                 $this->SetFont('Arial','B',7);
                 $this->Cell(60,4,utf8_decode($this->datos['sucursal']),0,1,'C');
                 $this->SetFont('Arial','',5);
@@ -182,7 +182,7 @@
                 
 
                 //NUMERO PIED PAGINA
-                $this->SetY($y+15);
+                $this->SetY($y+18);
                 $this->SetFont('Arial','I', 7);
                 $this->Cell(0,10, 'Pagina '.$this->PageNo().'/{nb}',0,0,'C' );
                 //QR

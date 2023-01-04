@@ -2,7 +2,7 @@ let iniciofecha = moment().subtract(0, 'year').startOf('year')
 let finfecha = moment().subtract(0, 'year').endOf('year')
 $(document).ready(function(){
     $('#export').click(function () {
-        $('#estadoVentasCostos').tableExport({
+        $('#estadoVentasCostosNew').tableExport({
         type:'excel',
         fileName: 'Estado de Ventas y Costos',
         numbers: {output : false}
