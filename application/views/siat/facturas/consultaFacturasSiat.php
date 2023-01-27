@@ -1,5 +1,6 @@
 <!-- Your Page Content Here -->
 <div class="row" id="app">
+<input type="hidden" id="permisoAnular" value="<?= $permisoAnular ?>">
   <div class="col-xs-12">
     <div class="box">
       <div class="box-header with-border">

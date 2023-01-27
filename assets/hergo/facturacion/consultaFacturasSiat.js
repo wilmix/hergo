@@ -1,6 +1,9 @@
 let ini = moment().subtract(0, 'year').startOf('year').format('YYYY-MM-DD')
 let fin = moment().subtract(0, 'year').endOf('year').format('YYYY-MM-DD')
+let permisoAnular
 $(document).ready(function () {
+	permisoAnular = $("#permisoAnular").val()
+    console.log(permisoAnular);
 	$.fn.dataTable.ext.errMode = 'none';
 	dataPicker()
 	getData()
@@ -251,7 +254,14 @@ function buttons (data, type, row) {
 		<span class="fa fa-check" aria-hidden="true">
 		</span>
 	</button>`
-	let buttons = row.anulada == 1 || row.pagada == 1 ?  `${pdf}${xml}${verificar}` :  `${pdf}${xml}${anular}${verificar}`
+	let buttons
+	if (row.anulada == 1 || row.pagada == 1) {
+		buttons = `${pdf}${xml}${verificar}`
+	} else if (permisoAnular == 'true') {
+		buttons = `${pdf}${xml}${anular}${verificar}`
+	} else {
+		buttons = `${pdf}${xml}${verificar}`
+	}
 	return buttons
 }
 function printEgreso(value, row, index) {

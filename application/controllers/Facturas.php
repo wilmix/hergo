@@ -3,7 +3,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH."/third_party/codigoControl/CodigoControlV7.php";
 class Facturas extends CI_Controller
 {
-	
+	public $load;
+	public $libAcc;
+	public $Almacen_model;
+	public $input;
+	public $security;
+	public $FacturaEgresos_model;
+	public $Egresos_model;
+	public $Ingresos_model;
+	public $session;
+	public $Facturacion_model;
+	public $Cliente_model;
+	public $DatosFactura_model;
+	public $Configuracion_model;
+	public $libacceso;
+	public $FacturaDetalle_model;
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -888,7 +903,7 @@ class Facturas extends CI_Controller
 	}
 	public function emitirFacturaSiat()
 	{
-		//$this->accesoCheck(71);
+		$this->accesoCheck(22);
 		$this->titles('SiatEmitirFactura','Facturacion Online','Facturas');
 		$this->datos['foot_script'][]=base_url('assets/hergo/facturacion/emitirFacturaSiat.js') .'?'.rand();
 		$this->setView('facturas/emitirFacturaSiat');

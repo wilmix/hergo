@@ -2,7 +2,24 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Emitir extends CI_Controller
 {
-	
+	public $load;
+	public $libAcc;
+	public $Almacen_model;
+	public $input;
+	public $security;
+	public $FacturaEgresos_model;
+	public $Egresos_model;
+	public $Ingresos_model;
+	public $session;
+	public $Facturacion_model;
+	public $Cliente_model;
+	public $DatosFactura_model;
+	public $Configuracion_model;
+	public $libacceso;
+	public $FacturaDetalle_model;
+	public $Emitir_model;
+
+
 	public function __construct()
 	{	
 		parent::__construct();
@@ -220,7 +237,11 @@ class Emitir extends CI_Controller
 	}
 	public function consultaFacturasSiat()
 	{
-		//$this->accesoCheck(72);
+		$this->libAcc = new LibAcceso();
+		$permisos = $this->libAcc->retornarSubMenus($_SESSION['accesoMenu']);
+		$this->datos['permisoAnular'] = in_array(45, $permisos) ? 'true' : 'false';
+
+		$this->accesoCheck(21);
 		$this->titles('SiatFacturas','Siat Consulta Facturas','Facturas');
 			
 		$this->datos['foot_script'][]=base_url('assets/hergo/facturacion/consultaFacturasSiat.js') .'?'.rand();
@@ -263,7 +284,7 @@ class Emitir extends CI_Controller
 	}
 	public function consultaFacturasNoEnviadasSiat()
 	{
-		//$this->accesoCheck(73);
+		$this->accesoCheck(71);
 		$this->titles('SiatFacturasNoEnviadas','Siat Consulta No Enviadas Facturas','SIAT');
 			
 		$this->datos['foot_script'][]=base_url('assets/hergo/facturacion/consultaFacturasSiatNoEnviadas.js') .'?'.rand();
