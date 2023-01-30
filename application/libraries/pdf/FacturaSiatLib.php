@@ -191,7 +191,7 @@
                 $nit = '1000991026';
                 $cuf = $this->datos['cuf'];
                 $numeroFactura = $this->datos['numeroFactura'];
-                $QR = "https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=1000991026&cuf=$cuf&numero=$numeroFactura&t=2";
+                $QR = "https://siat.impuestos.gob.bo/consulta/QR?nit=1000991026&cuf=$cuf&numero=$numeroFactura&t=2";
                 $nameQR ='qr/' . $this->datos['cuf'] . '.png';
                 QRcode::png($QR, $nameQR );
                 $this->Image($nameQR, 176, 160, 30,0, 'png');
