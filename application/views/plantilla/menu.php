@@ -246,22 +246,22 @@
               </a>
               <ul class="treeview-menu">
                 <li class="facturas"><a href="<?php echo base_url("facturas") ?>">Consulta de Facturas</a></li>
-                <li class="EmitirFactura"><a href="<?php echo base_url("facturas/EmitirFactura") ?>">Emitir Factura</a></li>
+                <!-- <li class="EmitirFactura"><a href="<?php echo base_url("facturas/EmitirFactura") ?>">Emitir Factura</a></li> -->
               </ul>
             </li>
             <!-- FacturasSiat -->
             <li class="treeview">
-              <!-- <a href="#"><i class="fa fa-money"></i> <span>Siat Facturas</span>
+              <a href="#"><i class="fa fa-money"></i> <span>Siat Facturas</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>
-              </a> -->
-             <!--  <ul class="treeview-menu">
+              </a>
+              <ul class="treeview-menu">
                 <li class="consultaFacturasSiat"><a href="<?php echo base_url("siat/facturacion/emitir/consultaFacturasSiat") ?>">Siat Facturas Consulta</a></li>
                 <li class="emitirFacturaSiat"><a href="<?php echo base_url("facturas/emitirFacturaSiat") ?>">Siat Emitir Factura</a></li>
                 <li class="consultaFacturasNoEnviadasSiat"><a href="<?php echo base_url("siat/facturacion/emitir/consultaFacturasNoEnviadasSiat") ?>">Siat Facturas No Enviadas</a></li>
 
-              </ul> -->
+              </ul>
             </li>
             <!-- Pagos -->
             <li class="treeview">
