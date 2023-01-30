@@ -32,11 +32,11 @@
 
             $this->SetFont('Arial','B',7);
            
-            if ($this->datos['sucursal'] != 'Casa Matriz') {
+            /* if ($this->datos['sucursal'] != 'Casa Matriz') {
                 $this->SetFont('Arial','B',7);
                 $this->Cell(60,4,utf8_decode($this->datos['sucursal']),0,1,'C');
                 $this->SetFont('Arial','',5);
-            }
+            } */
             $this->SetFont('Arial','B',7);
             $this->Cell(60,4,utf8_decode($this->datos['sucursal']),0,1,'C');
             $this->SetFont('Arial','',6);
