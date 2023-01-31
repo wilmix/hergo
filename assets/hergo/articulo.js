@@ -321,14 +321,12 @@ function retornarTabla()
                 field:"codigoCaeb",
                 title:"codigoCaeb",
                 sortable:true,
-                searchable: false,
                 align: 'center',
             },
             {
                 field:"codigoProductoSiat",
                 title:"codigoProductoSiat",
                 sortable:true,
-                searchable: false,
                 align: 'center',
             },
             {
