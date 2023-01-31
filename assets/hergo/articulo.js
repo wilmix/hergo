@@ -2,7 +2,6 @@ function permisoArticulos() {
     (!checkAuth(46)) ? $('#btnCrear').addClass('hide') : $('#btnCrear').removeClass('hide')
 }
 $(document).ready(function(){
-   
     retornarTabla()
     permisoArticulos()
     formItemValidator()
@@ -319,6 +318,20 @@ function retornarTabla()
                 align: 'center',
             },
             {
+                field:"codigoCaeb",
+                title:"codigoCaeb",
+                sortable:true,
+                searchable: false,
+                align: 'center',
+            },
+            {
+                field:"codigoProductoSiat",
+                title:"codigoProductoSiat",
+                sortable:true,
+                searchable: false,
+                align: 'center',
+            },
+            {
                 field:'Descripcion',
                 title:"Descripcion",
                 sortable:true,
@@ -457,10 +470,11 @@ function operateFormatter(value, row, index)
 /***********Eventos*************/
 window.operateEvents = {
     'click .editar': function (e, value, row, index) {
+        //resetForm('#form_articulo')
+        //console.log(row);
       //  alert('You click like action, row: ' + JSON.stringify(row));
-      resetForm('#form_articulo')
-       mostrarModal(row)
-            $("#tarticulo").bootstrapTable('hideLoading');            
+      mostrarModal(row)
+      $("#tarticulo").bootstrapTable('hideLoading');            
     }
 };
 $(document).on("click",".imagenminiatura",function(){    
