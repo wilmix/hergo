@@ -142,10 +142,10 @@
                     $this->SetXY($x,$this->GetY()-5);
                     $this->MultiCell(15,3,utf8_decode('CANTIDAD'),$l,'C',$f);
                     $this->SetXY($x+=15,$this->GetY()-5);
-                    $this->MultiCell(15,3,utf8_decode('UNIDAD DE MEDIDA'),$l,'C',$f);
-                    $this->SetXY($x+=15,$this->GetY()-5);
-                    $this->MultiCell(93,3,utf8_decode('DESCRIPCIÓN'),$l,'C',$f);
-                    $this->SetXY($x+=93,$this->GetY()-5);
+                    $this->MultiCell(20,3,utf8_decode('UNIDAD DE MEDIDA'),$l,'C',$f);
+                    $this->SetXY($x+=20,$this->GetY()-5);
+                    $this->MultiCell(88,3,utf8_decode('DESCRIPCIÓN'),$l,'C',$f);
+                    $this->SetXY($x+=88,$this->GetY()-5);
                     $this->MultiCell(20,3,utf8_decode('PRECIO UNITARIO'),$l,'R',$f);
                     $this->SetXY($x+=20,$this->GetY()-5);
                     $this->MultiCell(20,3,utf8_decode('DESCUENTO'),$l,'R',$f);
