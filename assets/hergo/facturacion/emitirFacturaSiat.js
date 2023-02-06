@@ -476,9 +476,12 @@ const bill = new Vue({
 			if (this.infoAlmacen.estadoCuis == 'CADUCO') {
 				this.errors.push(`El CUIS esta caduco`)
 			}
-			/* if (this.infoAlmacen.estadoCufd == 'CADUCO') {
+			if (!this.validarEmail(this.cabecera.email) && this.cabecera.email != null) {
+				this.errors.push(`El email es incorrecto, modificar en el módulo de CLIENTES.`)
+			}
+			if (this.infoAlmacen.estadoCufd == 'CADUCO') {
 				this.errors.push(`El CUFD esta caduco`)
-			} */
+			}
 			if (Number(this.cabecera.codigoTipoDocumentoIdentidad) < 1  || Number(this.cabecera.codigoTipoDocumentoIdentidad) > 6) {
 				this.errors.push(`El código de documento de ${this.cabecera.nombreCliente} es ${this.cabecera.codigoTipoDocumentoIdentidad}
 				según impuestos debe ser entre 1-5.`)
@@ -654,7 +657,7 @@ const bill = new Vue({
 				});
 				swal({
 					title: 'Error',
-					html: `Los datos enviados para la facturación con errorneos  ${errores}`,
+					html: `Los datos para enviar al SIAT son errorneos  ${errores}`,
 					type: 'error',
 					showCancelButton: false,
 					allowOutsideClick: false,
@@ -1040,6 +1043,16 @@ const bill = new Vue({
                 }                       
             });
         },
+		validarEmail(email){
+			const validEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+			if( validEmail.test(email) ){
+				console.log('Email is valid, continue with billing');
+				return true;
+			}else{
+				console.log('Email is invalid, skip form billing');
+				return false;
+			}
+		}
 	},
 	watch: {
 		fechaEmision() {
