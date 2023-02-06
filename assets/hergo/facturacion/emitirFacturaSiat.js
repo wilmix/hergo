@@ -476,7 +476,7 @@ const bill = new Vue({
 			if (this.infoAlmacen.estadoCuis == 'CADUCO') {
 				this.errors.push(`El CUIS esta caduco`)
 			}
-			if (!this.validarEmail(this.cabecera.email) && this.cabecera.email != null) {
+			if (!this.validarEmail(this.cabecera.email) && this.cabecera.email != null && this.cabecera.email != '') {
 				this.errors.push(`El email es incorrecto, modificar en el módulo de CLIENTES.`)
 			}
 			if (this.infoAlmacen.estadoCufd == 'CADUCO') {
