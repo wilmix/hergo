@@ -79,7 +79,8 @@ class Emitir_model extends CI_Model
                     a.codigoCaeb actividadEconomica,
                     a.codigoProducto codigoProductoSin,
                     a.CodigoArticulo codigoProducto,
-                    a.Descripcion descripcion,
+                    -- a.Descripcion descripcion,
+                    d.descripcion,
                     (d.cantidad - d.cantFact) cantidad,
                     u.siat_codigo unidadMedida,
                     CASE
