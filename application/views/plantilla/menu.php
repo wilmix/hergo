@@ -107,7 +107,7 @@
                         </i> Sincronizar Catálogos
                       </a>
                     </li>
-                    <!-- <li class="actividades">
+                    <li class="actividades">
                       <a href="<?php echo base_url("siat/sincronizacion/sincronizar/actividades") ?>">
                         <i class="fa fa-list-ol ">
                         </i> Actividades Económicas
@@ -142,7 +142,7 @@
                         <i class="fa fa-list-ol ">
                         </i> Listado Paramétricas 
                       </a>
-                    </li> -->
+                    </li>
                   </ul>
                 </li>
                 <li class="Cufd">cliente
