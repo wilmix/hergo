@@ -157,7 +157,7 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getListaParametricas($table);
         $res = $siat == $local;
         if ($res) {
-            echo json_encode($res);
+            echo json_encode(['siat'=>$siat,'local'=>$local]);
         } else {
             $res = $this->Sincronizar_model->storeParametricas($siat, $table);
             $local = $this->Sincronizar_model->getListaParametricas($table);
