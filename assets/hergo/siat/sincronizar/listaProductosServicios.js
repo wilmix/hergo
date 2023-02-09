@@ -62,12 +62,10 @@ const sincro = new Vue({
                     url: base_url_siat('sincronizar'),
                     dataType: "json",
                     data:{
-                        cliente: {
                             cuis: sincro.almacen.cuis,
                             codigoSucursal: sincro.almacen.siat_sucursal,
                             codigoPuntoVenta: sincro.almacen.codigoPuntoVenta,
                             method: 'sincronizarListaProductosServicios'
-                        }
                     }
                 }).done(function (res) {
                     quitarcargando()
