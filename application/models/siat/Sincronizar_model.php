@@ -52,6 +52,8 @@ class Sincronizar_model extends CI_Model
 	}
     public function storeListaProductosServicios($data)
 	{
+        ini_set('max_execution_time', 0); 
+		ini_set('memory_limit','2048M');
         $this->db->trans_start();
             $this->deleteTable('siat_sincro_productos_servicios');
             foreach ($data as $value) {
