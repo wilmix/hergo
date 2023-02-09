@@ -131,8 +131,8 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getlistaProductosServicios();
 
         $res = $siat ==  $local;
-        /* echo json_encode(($siat));
-        return; */
+        echo json_encode($res);
+        return;
         if ($res) {
             echo json_encode($res);
         } else {
