@@ -54,7 +54,10 @@ class Sincronizar_model extends CI_Model
 	{
         $this->db->trans_start();
             $this->deleteTable('siat_sincro_productos_servicios');
-            $this->db->insert_batch('siat_sincro_productos_servicios', $data);
+            foreach ($data as $value) {
+                $this->db->insert('siat_sincro_productos_servicios', $value);
+            }
+            //$this->db->insert_batch('siat_sincro_productos_servicios', $data);
         $this->db->trans_complete();       
 	}
     public function getActividades()
