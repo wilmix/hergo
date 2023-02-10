@@ -128,7 +128,7 @@ class Sincronizar extends CI_Controller
     public function sincronizarListaProductosServicios()
     {
         $siat =  $this->input->post('dataSiat');
-         echo print_r($siat);
+         echo print_r(false);
          return;
 
         $siat = $this->input->post('dataSiat');
