@@ -410,6 +410,21 @@ function tipoNumeroMovimiento(value, row, index) {
 
 function formatoBotones(value, row, index)
 {
+    if (row.siat == null ) {
+        return [
+            '<button type="button" class="btn btn-default verFactura"  aria-label="Right Align" data-toggle="tooltip" title="Ver">',
+            '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',        
+            '<button type="button" class="btn btn-default printFactura" aria-label="Right Align" data-toggle="tooltip" title="Imprimir">',
+            '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
+            ].join(''); 
+    } else 
+    {
+        return [
+            '<button type="button" class="btn btn-default verFactura"  aria-label="Right Align" data-toggle="tooltip" title="Ver">',
+            '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',        
+            ].join('');
+    }
+   
     if(row.anulada==1 || row.pagada != 0)
     {
         return [
@@ -427,8 +442,8 @@ function formatoBotones(value, row, index)
         '<button type="button" class="btn btn-default verFactura"  aria-label="Right Align" data-toggle="tooltip" title="Ver">',
         '<span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>',        
         
-        '<button type="button" class="btn btn-default anularFactura"  aria-label="Right Align" data-toggle="tooltip" title="Anular">',
-        '<span class="fa fa-times " aria-hidden="true"></span></button>',
+       /*  '<button type="button" class="btn btn-default anularFactura"  aria-label="Right Align" data-toggle="tooltip" title="Anular">',
+        '<span class="fa fa-times " aria-hidden="true"></span></button>', */
 
         '<button type="button" class="btn btn-default printFactura" aria-label="Right Align" data-toggle="tooltip" title="Imprimir">',
         '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
@@ -442,6 +457,7 @@ function formatoBotones(value, row, index)
             '<span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>'
             ].join('');   
     }
+    
     
 }
 

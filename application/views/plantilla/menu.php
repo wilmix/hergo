@@ -239,13 +239,13 @@
             </li>
             <!-- Facturas -->
             <li class="treeview">
-              <!-- <a href="#"><i class="fa fa-money"></i> <span>Facturas</span>
+              <a href="#"><i class="fa fa-money"></i> <span>Facturas</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
                 </span>
-              </a> -->
+              </a>
               <ul class="treeview-menu">
-                <!-- <li class="facturas"><a href="<?php echo base_url("facturas") ?>">Consulta de Facturas</a></li> -->
+                <li class="facturas"><a href="<?php echo base_url("facturas") ?>">Consulta de Facturas</a></li>
                 <!-- <li class="EmitirFactura"><a href="<?php echo base_url("facturas/EmitirFactura") ?>">Emitir Factura</a></li> -->
               </ul>
             </li>
