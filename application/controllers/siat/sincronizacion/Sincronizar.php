@@ -128,30 +128,9 @@ class Sincronizar extends CI_Controller
     public function sincronizarListaProductosServicios()
     {
         $siat =  $this->input->post('dataSiat');
-        $local = $this->Sincronizar_model->getlistaProductosServicios();
         $siat = json_decode($siat,TRUE);
+        $local = $this->Sincronizar_model->getlistaProductosServicios();
         $res = $siat ==  $local;
-        if ($res) {
-            echo json_encode($res);
-        } else {
-            $res = $this->Sincronizar_model->storeListaProductosServicios($siat);
-            $local = $this->Sincronizar_model->getlistaProductosServicios();
-            $res = $siat ==  $local;
-            echo json_encode($res);
-        }
-        return;
-         print_r ([ "siat"=>$siat ,"local"=> json_encode($local)]);
-         return;
-
-        $siat = $this->input->post('dataSiat');
-        echo json_encode([ "siat"=>$siat ,"local"=> $local]);
-
-        return;
-        
-
-        $res = $siat ==  $local;
-        echo json_encode(['siat'=>$siat,'local'=>$local]);
-        return;
         if ($res) {
             echo json_encode($res);
         } else {
