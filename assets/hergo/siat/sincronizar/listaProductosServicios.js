@@ -167,8 +167,10 @@ const sincro = new Vue({
                     url: base_url('index.php/siat/sincronizacion/Sincronizar/sincronizarListaProductosServicios'),
                     dataType: "json",   
                     data: {
-                        dataSiat:sincro.datasiat
-                    },                                    
+                        dataSiat:JSON.stringify(sincro.datasiat)
+                    },              
+                    //processData: false,
+                    //contentType: "application/json",                      
                 }).done(function(res){
                         quitarcargando()
                         if (res == true) {
