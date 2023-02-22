@@ -7,14 +7,14 @@
       </div>
       <div class="box-body">
           <h3>Ultima Sincronización => {{ ultima }}</h3>
-          <ul>
+          <ol>
             <li v-for="(value, key, index) in catalogos">
               {{ key }}::: {{ value ? 'CORRECTO' : 'ERROR' }}
             </li>
-          </ul>
+          </ol>
         </table>
         <div class="col-md-12">
-          <button type="button" class="btn btn-primary btn-block" @click="sincronizarManual">Sincronizar Manualmente</button>
+          <button type="button" class="btn btn-primary btn-block hidden" @click="sincronizarManual">Sincronizar Manualmente</button>
         </div>
       </div> <!-- /.box-body -->
     </div> <!-- /.class="box" -->
