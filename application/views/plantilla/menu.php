@@ -237,18 +237,6 @@
                 <li class="traspasoEgreso"><a href="<?php echo base_url("Traspasos/traspasoEgreso") ?>">FormTraspaso</a></li>
               </ul>
             </li>
-            <!-- Facturas -->
-            <li class="treeview">
-              <a href="#"><i class="fa fa-money"></i> <span>Facturas</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li class="facturas"><a href="<?php echo base_url("facturas") ?>">Consulta de Facturas</a></li>
-                <!-- <li class="EmitirFactura"><a href="<?php echo base_url("facturas/EmitirFactura") ?>">Emitir Factura</a></li> -->
-              </ul>
-            </li>
             <!-- FacturasSiat -->
             <li class="treeview">
               <a href="#"><i class="fa fa-money"></i> <span>Siat Facturas</span>
@@ -348,6 +336,18 @@
                 <li class=""><a href="https://2021.hergo.app/" target="_blank"><i class="fa fa-arrow-circle-left"></i>Gestión 2021</a></li>
                 <li class=""><a href="https://2020.hergo.app/" target="_blank"><i class="fa fa-arrow-circle-left"></i>Gestión 2020</a></li>
                 <li class=""><a href="https://2019.hergo.app/" target="_blank"><i class="fa fa-arrow-circle-left"></i>Gestión 2019</a></li>
+              </ul>
+            </li>
+            <!-- Facturas Anterior-->
+            <li class="treeview">
+              <a href="#"><i class="fa fa-money"></i> <span>Facturas Anterior</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li class="facturas"><a href="<?php echo base_url("facturas") ?>">Consulta de Facturas</a></li>
+                <!-- <li class="EmitirFactura"><a href="<?php echo base_url("facturas/EmitirFactura") ?>">Emitir Factura</a></li> -->
               </ul>
             </li>
           </ul>
