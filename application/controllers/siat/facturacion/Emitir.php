@@ -18,6 +18,7 @@ class Emitir extends CI_Controller
 	public $libacceso;
 	public $FacturaDetalle_model;
 	public $Emitir_model;
+	public $config;
 
 
 	public function __construct()
@@ -350,5 +351,43 @@ class Emitir extends CI_Controller
 		$res = $this->Emitir_model->getCufdByCode($codigoCufd); 
 		echo json_encode($res);
 	}
+	/**
+	 *
+	 * Valida un email usando expresiones regulares. 
+	 *  Devuelve true si es correcto o false en caso contrario
+	 *
+	 * @param    string  $str la dirección a validar
+	 * @return   boolean
+	 *
+	 */
+	function is_valid_email($str)
+	{
+		$matches = null;
+		return (1 === preg_match('/^[A-z0-9\\._-]+@[A-z0-9][A-z0-9-]*(\\.[A-z0-9_-]+)*\\.([A-z]{2,6})$/', $str, $matches));
+	}
+	function enviarMensajeSlack($mensaje) 
+	{
+        $url = $this->config->item('SLACK_WEBHOOK_URL');
+        $data = array('text' => $mensaje);
+        $options = array(
+           'http' => array(
+              'header'  => "Content-type: application/json",
+              'method'  => 'POST',
+              'content' => json_encode($data)
+           )
+        );
+        $context  = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        return $result;
+     }
+	 function slack()
+     {
+        $this->enviarMensajeSlack('¡Hola, Slack!  => Desde inventarios');
+     }
+	 function checkFacturasInventarios($año,$mes,$dia)
+	 {
+		$info = $this->Emitir_model->checkFacturasInventarios($año, $mes, $dia); 
+		echo json_encode($info);
+	 }
 
 }

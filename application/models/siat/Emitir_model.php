@@ -634,4 +634,21 @@ class Emitir_model extends CI_Model
         $query=$this->db->query($sql);		
         return $query->row();
     }
+    public function checkFacturasInventarios($año, $mes, $dia)
+    {
+        $sql="  SELECT
+                    COUNT(*) facturas,
+                    sum(fs.montoTotal) total 
+                FROM
+                    factura_siat fs
+                    INNER JOIN factura f on f.idFactura = fs.factura_id
+                WHERE
+                    YEAR(fs.fechaEmision) = $año
+                    AND MONTH(fs.fechaEmision) = $mes
+                    AND YEAR(f.fechaFac) = $año
+                    AND MONTH(f.fechaFac) = $mes
+                    AND DAY(f.fechaFac) = $dia";
+        $query=$this->db->query($sql);		
+        return $query->row();
+    }
 }
