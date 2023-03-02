@@ -254,13 +254,17 @@ function buttons (data, type, row) {
 		<span class="fa fa-check" aria-hidden="true">
 		</span>
 	</button>`
+	let linkSiat = `<button type="button" class="btn btn-default linkSiat" title="top">
+		<span class="fa fa-external-link" aria-hidden="true">
+		</span>
+	</button>`
 	let buttons
 	if (row.anulada == 1 || row.pagada == 1) {
-		buttons = `${pdf}${xml}${verificar}`
+		buttons = `${pdf}${xml}${linkSiat}`
 	} else if (permisoAnular == 'true') {
-		buttons = `${pdf}${xml}${anular}${verificar}`
+		buttons = `${pdf}${xml}${anular}${linkSiat}`
 	} else {
-		buttons = `${pdf}${xml}${verificar}`
+		buttons = `${pdf}${xml}${linkSiat}`
 	}
 	return buttons
 }
@@ -293,6 +297,12 @@ $(document).on("click", "button.print", function () {
     let row = getRow(table, this)
 	let print = base_url(`pdf/Siat/factura/${row.idFactura}`)
 	window.open(print);
+})
+$(document).on("click", "button.linkSiat", function () {
+    let row = getRow(table, this)
+	//let link = `https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=1000991026&cuf=${row.cuf}&numero=${row.numeroFactura}&t=2`
+	let link = `https://siat.impuestos.gob.bo/consulta/QR?nit=1000991026&cuf=${row.cuf}&numero=${row.numeroFactura}&t=2`
+	window.open(link);
 })
 $(document).on("click", "button.check", function () {
     let row = getRow(table, this)
