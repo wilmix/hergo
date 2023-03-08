@@ -209,6 +209,11 @@ function returnVentasTM() {
             title: 'Bonificación',
             //visible: false
           },
+          {
+            field: 'vendedor',
+            title: 'Vendedor',
+            visible: true
+          },
          
         ]
       });

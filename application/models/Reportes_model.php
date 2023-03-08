@@ -1146,15 +1146,21 @@ class Reportes_model extends CI_Model
 			al.`ciudad`,  
 			'NO DEFINIDO', 
 			'' regalo , 
-			f.`almacen`
-			FROM facturadetalle fd
-			inner join factura f on f.`idFactura` = fd.`idFactura`
-			inner join articulos a on a.`idArticulos` = fd.`articulo`
-			inner join marca m on m.`idMarca` = a.`idMarca`
-			INNER JOIN unidad u ON a.`idUnidad` = u.`idUnidad`
-			INNER JOIN almacenes al on al.`idalmacen` = f.`almacen`
+			f.`almacen`,
+			CONCAT(us.first_name, ' ' , us.last_name) vendedor
+			FROM
+            facturadetalle fd
+            inner join factura f on f.`idFactura` = fd.`idFactura`
+            INNER JOIN factura_egresos fe ON fe.idFactura = f.idFactura
+            INNER JOIN egresos e ON e.idegresos = fe.idegresos
+            INNER JOIN users us ON us.id = e.vendedor
+            inner join articulos a on a.`idArticulos` = fd.`articulo`
+            inner join marca m on m.`idMarca` = a.`idMarca`
+            INNER JOIN unidad u ON a.`idUnidad` = u.`idUnidad`
+            INNER JOIN almacenes al on al.`idalmacen` = f.`almacen`
 			WHERE f.`anulada` = 0 AND  f.`almacen` LIKE '%$alm' AND
 			f.`fechaFac` BETWEEN '$ini' AND '$fin' 
+			GROUP BY fd.id
 			ORDER BY f.`almacen`, f.`fechaFac`, fd.`ArticuloCodigo`, f.`ClienteFactura`
 		) tbl
 		WHERE SUBSTRING(codigo,1,2) = 'TM' OR SUBSTRING(codigo,1,2) = 'TS' 
