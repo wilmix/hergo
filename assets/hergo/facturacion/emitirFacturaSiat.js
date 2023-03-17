@@ -70,7 +70,8 @@ const bill = new Vue({
 		nitValido: null,
 		nombreClienteDocumento:'',
 		nitValidoMensaje:null,
-		selectEmisionDesabled:null
+		selectEmisionDesabled:null,
+		timeClic: 0
 	},
 	mounted() {
 		this.verificarSiat()
@@ -696,6 +697,7 @@ const bill = new Vue({
 				})
 		},
         showModal(){
+			this.timeClic = Date.now();
 				/* if (this.nitValido == false && this.codigoExcepcion == 0) {
 					swal({
 						title: 'Error',
@@ -845,7 +847,8 @@ const bill = new Vue({
 				"codigoControlCUFD":this.emision == '3' ? this.codigoControlCUFDContingencia : this.infoAlmacen.codigoControlCufd,
 				//"codigoControlCUFD":this.infoAlmacen.codigoControlCufd,
 				"codigoCufd" :this.infoAlmacen.codigoCufd,
-				"codigoEmision":''//this.codigoEmision 
+				"codigoEmision":'',//this.codigoEmision ,
+				"timeClic" : this.timeClic
 			}
 			let data = {
 				configuracion: configuracionSiat,
