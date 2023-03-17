@@ -78,7 +78,7 @@ const bill = new Vue({
 		this.porFacturar(glob_alm_usu)
 		this.get_codigos()
 		this.setTituloFactura()
-		this.checkFacturas()
+		//this.checkFacturas()
 	},
 	methods:{
 		checkFacturas(){
@@ -801,6 +801,7 @@ const bill = new Vue({
            
         },
 		facturar(){
+			$('#facturar-btn').prop('disabled', true);
 			agregarcargando()
 			let cafc = this.emision == '3' ? this.cafc : ''
 			this.cabecera.user_id = glob_user_id		
@@ -919,6 +920,7 @@ const bill = new Vue({
 					})
 					return false
 				}
+				$('#facturar-btn').prop('disabled', false);
 			}).fail(function (jqxhr, textStatus, error) {
 				quitarcargando();
 				let err = textStatus + ", " + error;
@@ -934,6 +936,7 @@ const bill = new Vue({
 						//agregarcargando();
 						//window.location.href =base_url("siat/facturacion/Emitir/consultaFacturasSiat");
 				});
+				$('#facturar-btn').prop('disabled', false);
 			});
 		},
 		cambioEmision(){

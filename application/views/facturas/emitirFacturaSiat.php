@@ -162,7 +162,7 @@
               <div class="row">
                   <div class="col-xs-12 text-center">
                     
-                    <button v-show="validar" type="button" class="btn btn-primary" @click="showModal">Factura</button>
+                    <button id="facturar-btn" v-show="validar" type="button" class="btn btn-primary" @click="showModal">Factura</button>
                     <button type="button" class="btn btn-default" @click="cleanBill">Cancelar</button>
                 </div>
               </div>
