@@ -886,6 +886,7 @@ const bill = new Vue({
 					})
 				} else if (res.statusfactura == 'OFFLINE'){
 					quitarcargando()
+					bill.infoFacturasObsInv()
 					swal({
 						title: 'FACTURA OFFLINE',
 						html: `La factura ${res.factura.cabecera.numeroFactura} se emitio de manera  
@@ -903,6 +904,7 @@ const bill = new Vue({
 				}
 				 else if (res.statusfactura.codigoDescripcion == 'VALIDADA') {
 					quitarcargando()
+					bill.infoFacturasObsInv()
 					respuestaEmail = res.mailEnviado ? `La factura se envió a: ${ res.mailEnviado}` : `No se tiene el correo del cliente ENVIAR MANUALMENTE`
 					swal({
 						title: res.statusfactura.codigoDescripcion,
@@ -932,6 +934,7 @@ const bill = new Vue({
 				$('#facturar-btn').prop('disabled', false);
 			}).fail(function (jqxhr, textStatus, error) {
 				quitarcargando();
+				bill.infoFacturasObsInv()
 				let err = textStatus + ", " + error;
 				console.log("Request Failed: " + err);
 				swal({
@@ -1064,6 +1067,14 @@ const bill = new Vue({
 				console.log('Email is invalid, skip form billing');
 				return false;
 			}
+		},
+		infoFacturasObsInv(){
+			$.ajax({
+                type: "GET",
+				url: base_url_siat('infoFac'),
+            }).done(function (res) {
+				console.log(res);
+            });
 		}
 	},
 	watch: {
