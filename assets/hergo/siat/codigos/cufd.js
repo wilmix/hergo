@@ -8,10 +8,12 @@ const cufd = new Vue({
 	data: {
 		almacenes: [],
         almacen:[],
+        infoSincro:0
 	},
     mounted() {
 		this.getAlmacenes()
         this.getCufdTable()
+        this.getDataSincroInventarios()
 	},
 	methods:{
         getAlmacenes(){
@@ -23,8 +25,31 @@ const cufd = new Vue({
                 cufd.almacenes = res
             });
         },
+        getDataSincroInventarios(){
+            agregarcargando()
+            $.ajax({
+                type: "POST",
+                url: base_url('siat/sincronizacion/Sincronizar/sincroCatalogosUltimas24Horas'),
+                dataType: "json",
+            }).done(function (res) {
+                quitarcargando()
+                //sincro.cantidadSincronizados = Object.keys(res).length
+                cufd.infoSincro = res
+            });
+        },
         getCufd(row){
             agregarcargando()
+            if (Object.keys(cufd.infoSincro).length !== 17) {
+                quitarcargando()
+                swal({
+                    title: `Error`,
+                    html: `Se produjo un error con la sincronizacion de datos PENDIENTE (${17 - Object.keys(cufd.infoSincro).length})`,
+                    type: 'error', 
+                    showCancelButton: false,
+                })
+                return false
+            }
+
             $.ajax({
                 type: "POST",
                 url: base_url_siat('codigos/cufd'),

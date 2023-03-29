@@ -24,17 +24,23 @@ class Sincronizar extends CI_Controller
 		$this->datos['foot_script'][]=base_url('assets/hergo/siat/sincronizar/actividades.js') .'?'.rand();
 		$this->setView('siat/sincronizar/actividades');
     }
+    public function sincronizacionesSiat(string $tabla)
+    {
+        $this->Sincronizar_model->sincronizacionesSiat($tabla);
+    }
     public function sincronizarActividades()
     {
         $siat = $this->input->post('dataSiat');
         $local = $this->Sincronizar_model->getActividades();
         $res = $siat == $local;
         if ($res) {
+            $this->sincronizacionesSiat('1');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeActividades($siat);
             $local = $this->Sincronizar_model->getActividades();
             $res = $siat == $local;
+            $this->sincronizacionesSiat('1');
             echo json_encode($res);
         }
     }
@@ -68,11 +74,13 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getActividadesDocumentoSector();
         $res = $siat == $local;
         if ($res) {
+            $this->sincronizacionesSiat('2');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeActividadesDocumentoSector($siat);
             $local = $this->Sincronizar_model->getActividadesDocumentoSector();
             $res = $siat == $local;
+            $this->sincronizacionesSiat('2');
             echo json_encode($res);
         }
     }
@@ -89,11 +97,13 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getListaLeyendasFactura();
         $res = $siat === $local;
         if ($res) {
+            $this->sincronizacionesSiat('3');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeListaLeyendasFactura($siat);
             $local = $this->Sincronizar_model->getListaLeyendasFactura();
             $res = $siat === $local;
+            $this->sincronizacionesSiat('3');
             echo json_encode($res);
         }
     }
@@ -110,11 +120,13 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getListaMensajesServicios();
         $res = $siat == $local;
         if ($res) {
+            $this->sincronizacionesSiat('4');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeMensajesServicios($siat);
             $local = $this->Sincronizar_model->getListaMensajesServicios();
             $res = $siat == $local;
+            $this->sincronizacionesSiat('4');
             echo json_encode($res);
         }
     }
@@ -132,11 +144,13 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getlistaProductosServicios();
         $res = $siat ==  $local;
         if ($res) {
+            $this->sincronizacionesSiat('5');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeListaProductosServicios($siat);
             $local = $this->Sincronizar_model->getlistaProductosServicios();
             $res = $siat ==  $local;
+            $this->sincronizacionesSiat('5');
             echo json_encode($res);
         }
     }
@@ -169,11 +183,13 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_eventos_significativos');
         $res = $siat == $local;
         if ($res) {
+            $this->sincronizacionesSiat('13');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_eventos_significativos');
             $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_eventos_significativos');
             $res = $siat == $local;
+            $this->sincronizacionesSiat('13');
             echo json_encode($res);
         }
     }
@@ -183,9 +199,11 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_motivo_anulacion');
         $res = $siat == $local;
         if ($res) {
+            $this->sincronizacionesSiat('6');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_motivo_anulacion');
+            $this->sincronizacionesSiat('6');
             echo json_encode($res);
         }
     }
@@ -195,9 +213,11 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_paises');
         $res = $siat == $local;
         if ($res) {
+            $this->sincronizacionesSiat('16');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_paises');
+            $this->sincronizacionesSiat('16');
             echo json_encode($res);
         }
     }
@@ -207,9 +227,11 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_tipo_documento_identidad');
         $res = $siat == $local;
         if ($res) {
+            $this->sincronizacionesSiat('8');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_tipo_documento_identidad');
+            $this->sincronizacionesSiat('8');
             echo json_encode($res);
         }
     }
@@ -219,9 +241,11 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_tipo_doc_sector');
         $res = $siat == $local;
         if ($res) {
+            $this->sincronizacionesSiat('10');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_tipo_doc_sector');
+            $this->sincronizacionesSiat('10');
             echo json_encode($res);
         }
     }
@@ -231,9 +255,11 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_tipo_emision');
         $res = $siat == $local;
         if ($res) {
+            $this->sincronizacionesSiat('15');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_tipo_emision');
+            $this->sincronizacionesSiat('15');
             echo json_encode($res);
         }
     }
@@ -243,9 +269,11 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_tipo_habitacion');
         $res = $siat == $local;
         if ($res) {
+            $this->sincronizacionesSiat('7');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_tipo_habitacion');
+            $this->sincronizacionesSiat('7');
             echo json_encode($res);
         }
     }
@@ -255,9 +283,11 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_tipo_metodo_pago');
         $res = $siat == $local;
         if ($res) {
+            $this->sincronizacionesSiat('12');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_tipo_metodo_pago');
+            $this->sincronizacionesSiat('12');
             echo json_encode($res);
         }
     }
@@ -267,9 +297,11 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_tipo_moneda');
         $res = $siat == $local;
         if ($res) {
+            $this->sincronizacionesSiat('17');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_tipo_moneda');
+            $this->sincronizacionesSiat('17');
             echo json_encode($res);
         }
     }
@@ -279,9 +311,11 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_tipo_punto_venta');
         $res = $siat == $local;
         if ($res) {
+            $this->sincronizacionesSiat('14');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_tipo_punto_venta');
+            $this->sincronizacionesSiat('14');
             echo json_encode($res);
         }
     }
@@ -296,9 +330,11 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_tipo_factura');
         $res = $siat == $local;
         if ($res) {
+            $this->sincronizacionesSiat('11');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_tipo_factura');
+            $this->sincronizacionesSiat('11');
             echo json_encode($res);
         }
     }
@@ -308,11 +344,18 @@ class Sincronizar extends CI_Controller
         $local = $this->Sincronizar_model->getListaParametricas('siat_sincro_unidad_medida');
         $res = $siat == $local;
         if ($res) {
+            $this->sincronizacionesSiat('9');
             echo json_encode($res);
         } else {
             $res = $this->Sincronizar_model->storeParametricas($siat, 'siat_sincro_unidad_medida');
+            $this->sincronizacionesSiat('9');
             echo json_encode($res);
         }
+    }
+    public function sincroCatalogosUltimas24Horas()
+    {
+        $res = $this->Sincronizar_model->sincroCatalogosUltimas24Horas();
+        echo json_encode($res);
     }
 }
 

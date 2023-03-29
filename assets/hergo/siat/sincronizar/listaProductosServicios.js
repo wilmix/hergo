@@ -29,10 +29,12 @@ const sincro = new Vue({
 	data: {
 		almacenes: [],
         almacen:[],
-        datasiat:false
+        datasiat:false,
+        cantidadSincronizados:0
 	},
     mounted() {
 		this.getAlmacenes()
+        this.getDataSincroInventarios()
 	},
 	methods:{
         getAlmacenes(){
@@ -43,6 +45,17 @@ const sincro = new Vue({
             }).done(function (res) {
                 sincro.almacenes = res
                 console.log(res);
+            });
+        },
+        getDataSincroInventarios(){
+            agregarcargando()
+            $.ajax({
+                type: "POST",
+                url: base_url('siat/sincronizacion/Sincronizar/sincroCatalogosUltimas24Horas'),
+                dataType: "json",
+            }).done(function (res) {
+                quitarcargando()
+                sincro.cantidadSincronizados = Object.keys(res).length
             });
         },
         getData(){
@@ -156,11 +169,14 @@ const sincro = new Vue({
         },
         sincronizar(){
             agregarcargando()
-            console.log(sincro.datasiat);
             sincro.datasiat.forEach(element => {
                 delete element.nandina;
             });
-            console.log(sincro.datasiat);
+            if (sincro.cantidadSincronizados == 17) {
+                quitarcargando()
+                swal("Error", "La sincronizacion para el dia de hoy esta completada", "error")
+                return false
+            }
             if (sincro.datasiat) {
                 $.ajax({
                     type: "post",   

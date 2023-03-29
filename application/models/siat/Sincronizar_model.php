@@ -8,6 +8,12 @@ class Sincronizar_model extends CI_Model
 		$this->load->helper('date');
 		date_default_timezone_set("America/La_Paz");
 	}
+    public function sincronizacionesSiat($tabla_id)
+	{
+        $data = new stdclass();
+        $data->sincro_tabla_id = $tabla_id;
+        $this->db->insert('sincronizaciones_siat', $data);
+	}
     public function storeActividades($data)
 	{
         $this->db->trans_start();
@@ -131,11 +137,27 @@ class Sincronizar_model extends CI_Model
         $query=$this->db->query($sql);		
         return $query->result_array();
     }
-
     public function deleteTable($table)
     {
         $sql =	"DELETE FROM $table";
         $query=$this->db->query($sql);
+    }
+    public function sincroCatalogosUltimas24Horas()
+    {
+        $sql =	"SELECT
+                    MAX(ss.id) sincro_id,
+                    sts.id,
+                    sts.tabla,
+                    DATE_FORMAT(MAX(ss.created_at), '%d/%m/%Y %H:%i') created_at
+                FROM
+                    sincronizaciones_siat ss
+                    INNER JOIN siat_tablas_sincro sts ON sts.id = ss.sincro_tabla_id
+                WHERE
+                    ss.created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+                GROUP BY
+                    ss.sincro_tabla_id";
+        $query=$this->db->query($sql);		
+        return $query->result();
     }
 
 

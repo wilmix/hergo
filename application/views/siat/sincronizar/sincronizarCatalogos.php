@@ -6,10 +6,13 @@
 
       </div>
       <div class="box-body">
-          <h3>Ultima Sincronización => {{ ultima }}</h3>
+          <h3> Sincronización => {{  cantidadSincronizados == 17 ? 'COMPLETADA' : `PENDIENTE (${17 - cantidadSincronizados})`  }}</h3>
           <ol>
-            <li v-for="(value, key, index) in catalogos">
+            <!-- <li v-for="(value, key, index) in catalogos">
               {{ key }}::: {{ value ? 'CORRECTO' : 'ERROR' }}
+            </li> -->
+            <li v-for="(value) in catalogos">
+              {{ `${value.created_at} -> ${value.tabla} `}}
             </li>
           </ol>
         </table>

@@ -20,11 +20,13 @@ const sincro = new Vue({
 	el: '#app',
 	data: {
 		catalogos: false,
-        ultima: false
+        ultima: false,
+        cantidadSincronizados: 0
 
 	},
     mounted() {
-        this.getData()
+        //this.getData()
+        this.getDataInventarios()
 	},
 	methods:{
         getData(){
@@ -40,6 +42,18 @@ const sincro = new Vue({
                     sincro.ultima = moment(res.created_at).format('D MMMM YYYY, h:mm:ss a');
                 });
 
+        },
+        getDataInventarios(){
+            agregarcargando()
+            $.ajax({
+                type: "POST",
+                url: base_url('siat/sincronizacion/Sincronizar/sincroCatalogosUltimas24Horas'),
+                dataType: "json",
+            }).done(function (res) {
+                quitarcargando()
+                sincro.cantidadSincronizados = Object.keys(res).length
+                sincro.catalogos = res
+            });
         },
         sincronizarManual(){
             agregarcargando()
