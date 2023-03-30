@@ -28,39 +28,60 @@ class Egresos_model extends CI_Model
                 WHEN estado = 0 THEN 'NO FACTURADO'
                 WHEN estado = 1 THEN '*FACTURADO*'
                 WHEN estado = 2 THEN 'PARCIAL'	
-            END estadoF, estado
+            END estadoF, 
+            diasCredito,          
+            estado
             FROM(
-                    SELECT DISTINCTROW d.idingdetalle, e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov, 
-                    c.nombreCliente, (round(d.`punitario`,2) * d.`cantidad`) total1, ROUND((ROUND(d.`punitario` / tc.`tipocambio`,2) * d.`cantidad`),2) totalDol,
-                    e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, 
-                    e.moneda, a.almacen, m.sigla monedasigla, e.obs, e.anulado, e.plazopago, e.clientePedido,c.idcliente,
-                    c.documento,e.tipocambio, tc.tipocambio tipocambiovalor,f.nFactura,GROUP_CONCAT(DISTINCTROW f.nfactura SEPARATOR '-') factura, e.almacen idAlmacen
-                    FROM egresos e
-                    INNER JOIN egredetalle d
-                    on e.idegresos=d.idegreso
-                    INNER JOIN tmovimiento t 
-                    ON e.tipomov = t.id 
-                    INNER JOIN clientes c 
-                    ON e.cliente=c.idCliente
-                    INNER JOIN users u 
-                    ON u.id=e.vendedor 
-                    INNER JOIN almacenes a 
-                    ON a.idalmacen=e.almacen 
-                    INNER JOIN moneda m 
-                    ON e.moneda=m.id 
-            INNER JOIN tipocambio tc
-            ON e.fechamov=tc.fecha
-            LEFT JOIN factura_egresos fe
-            ON e.idegresos=fe.idegresos
-            left JOIN factura f
-            ON (f.idFactura=fe.idFactura and f.anulada=0)
-            WHERE DATE(e.fechamov)
-            BETWEEN '$ini' AND '$fin' and e.almacen like '%$alm' and t.id like '%$tin'  
-
-            GROUP BY d.idingdetalle 
-          
+                SELECT 
+                    d.idingdetalle,
+                    e.nmov n,
+                    e.idEgresos,
+                    t.sigla,
+                    t.tipomov,
+                    e.fechamov,
+                    c.nombreCliente,
+                    ROUND((d.`punitario` * d.`cantidad`), 2) total1,
+                    ROUND((d.`punitario` * d.`cantidad` / tc.`tipocambio`), 2) totalDol,
+                    e.estado,
+                    e.fecha,
+                    CONCAT(u.first_name, ' ', u.last_name) vendedor,
+                    e.moneda,
+                    a.almacen,
+                    m.sigla monedasigla,
+                    e.obs,
+                    e.anulado,
+                    e.plazopago,
+                    e.clientePedido,
+                    c.idcliente,
+                    c.documento,
+                    e.tipocambio,
+                    tc.tipocambio tipocambiovalor,
+                    f.nFactura,
+                    GROUP_CONCAT(DISTINCT f.nfactura SEPARATOR '-') factura,
+                    e.almacen idAlmacen,
+                    ne.tiempoCredito diasCredito,
+                    ne.tipoNota,
+                    CONCAT(ua.first_name, ' ', ua.last_name) autor
+                FROM 
+                    egresos e 
+                    INNER JOIN egredetalle d ON e.idegresos = d.idegreso 
+                    INNER JOIN tmovimiento t ON e.tipomov = t.id 
+                    INNER JOIN clientes c ON e.cliente = c.idCliente 
+                    INNER JOIN users u ON u.id = e.vendedor 
+                    INNER JOIN users ua ON ua.id = e.autor
+                    INNER JOIN almacenes a ON a.idalmacen = e.almacen 
+                    INNER JOIN moneda m ON e.moneda = m.id 
+                    INNER JOIN tipocambio tc ON e.fechamov = tc.fecha 
+                    LEFT JOIN factura_egresos fe ON e.idegresos = fe.idegresos 
+                    LEFT JOIN factura f ON f.idFactura = fe.idFactura AND f.anulada = 0 
+                    LEFT JOIN notaentregasinfo ne ON ne.egresos_id = e.idegresos 
+                WHERE 
+                    e.fechamov BETWEEN '$ini' AND '$fin'
+                    AND e.almacen like '%$alm'
+                    AND t.id like '%$tin' 
+                GROUP BY 
+                    d.idingdetalle  
                 ) tabla    
-         
             GROUP BY tabla.idegresos
             ORDER BY tabla.idEgresos DESC				
             ";
@@ -673,11 +694,16 @@ class Egresos_model extends CI_Model
         $query=$this->db->query($sql);
         return $query;
     }
-    public function storeEgreso($egreso)
+    public function storeEgreso($egreso, $notaEntrega)
 	{	
         $this->db->trans_start();
             $this->db->insert("egresos", $egreso);
             $idEgreso=$this->db->insert_id();
+
+            if ($egreso->tipomov == 7) {
+				$notaEntrega->egresos_id = $idEgreso;
+                $this->db->insert("notaEntregasInfo", $notaEntrega);
+			}
             $egresoDetalle = array();
                 foreach ($egreso->articulos as $fila) {
                     $detalle=new stdclass();
@@ -709,6 +735,12 @@ class Egresos_model extends CI_Model
             
             return $idEgreso;
         }
+    }
+    public function storeNotaEntrega($notaEntrega)
+	{	
+            $this->db->insert("notaEntregasInfo", $notaEntrega);
+            $id=$this->db->insert_id();
+            return $id;
     }
     
     public function updateEgreso($id, $egreso)

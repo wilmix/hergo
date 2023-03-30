@@ -28,6 +28,19 @@ class CI_Controller {
 	 * @return	void
 	 */
 	public $datos;
+	public $load;
+	public $input;
+	public $security;
+	public $libacceso;
+	public $ion_auth;
+	public $session;
+	public $General_model;
+	public $config;
+	public $db;
+	public $cabeceras_css;
+	public $cabecera_script;
+	public $foot_script;
+
 	public function __construct()
 	{
 		self::$instance =& $this;

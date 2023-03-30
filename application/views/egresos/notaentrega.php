@@ -8,7 +8,8 @@
     if($cont) //editar
     {
         $originalDate = $dcab->fechamov;      
-        $newDate = date("Y-m-d", strtotime($originalDate));//revisar mes y año    
+        $newDate = date("Y-m-d", strtotime($originalDate));//revisar mes y año
+        //$fechaPago = date("Y-m-d", strtotime($dcab->plazopago));//revisar mes y año        
         $idalmacen=$dcab->idalmacen;
         $idtegreso=$dcab->idtipomov;
         $idmoneda=$dcab->idmoneda;
@@ -17,6 +18,9 @@
         $idvendedor=$dcab->vendedor;
         $nmov = $dcab->n;
         $tipoMov = $dcab->tipomov;
+        $fechaMovimiento = new DateTime($originalDate);
+        $fechaPago = new DateTime($dcab->plazopago);
+        $tiempoCredito = $fechaMovimiento->diff($fechaPago)->format('%a');
     }
     else
     {
@@ -130,10 +134,10 @@
                 <label>Pedido Cliente:</label>
                 <input id="pedido_ne" type="text" class="form-control form-control-sm" name="pedido_ne" value="<?= ($cont)?$dcab->clientePedido:''  ?>">
               </div>
-              <div class="hiddenBaja col-xs-4 col-sm-4 col-md-2">
-                <label>Fecha de Pago: </label>
-                <input id="fechapago_ne" name="fechapago_ne" type="text" class="form-control form-control-sm fecha_egreso"
-                  value="<?= ($cont)?$dcab->plazopago: "" ?>">
+              <div class="hiddenBaja hiddenVC col-xs-4 col-sm-4 col-md-2">
+                <label>Días de Crédito: </label>
+                <input id="tiempoCredito" name="tiempoCredito" type="number" class="form-control form-control-sm"
+                  value="<?= ($cont)?$tiempoCredito: '0' ?>">
               </div>
               <div class="hiddenBaja col-xs-4 col-md-2">
                 <label></label>
@@ -141,6 +145,11 @@
                   id="botonmodalcliente" style="margin-top: 4px;">
                   Añadir Cliente
                 </button>
+              </div>
+              <div class="hiddenBaja hidden col-xs-4 col-sm-4 col-md-2">
+                <label>Fecha de Pago:</label>
+                <input id="fechapago_ne" name="fechapago_ne" type="text" class="form-control form-control-sm"
+                  value="<?= ($cont)?$dcab->plazopago: '' ?>">
               </div>
             </div><!-- div class="form-group-sm row" SEGUNDA FILA-->
             <hr>
@@ -231,9 +240,18 @@
           </div>
            <hr>
           <div class="row">
-            <div class="col-xs-12 col-md-12">
+            <div class="col-xs-12 col-md-10">
               <label for="observaciones_ne">Observaciones:</label>
               <input type="text" class="form-control" id="obs_ne" name="obs_ne" value="<?= ($cont)?$dcab->obs:''  ?>" />
+            </div>
+            <div class="col-xs-12 col-md-2 hiddenVC">
+              <label for="tipoNota">Tipo:</label>
+              <select class="form-control form-control-sm"  name="tipoNota" id="tipoNota">
+                <option value="1">Venta</option>
+                <option value="2">Prestamo</option>
+                <option value="3">Muestra</option>
+                <option value="4">Reserva</option>
+              </select>
             </div>
           </div>
           <hr>

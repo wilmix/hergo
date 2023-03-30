@@ -9,6 +9,7 @@
         <?php
             $this->load->view('reportHead/buttonDate');
             $this->load->view('reportHead/selectAlm');
+            $this->load->view('reportHead/buttonTypeNota');
             $this->load->view('reportHead/buttonRefresh');
         ?>
         </div>

@@ -14,8 +14,10 @@ agregarcargando()
 $(document).ready(function () {
     validarCliente()
     tipoMovEgre = $("#_tipomov_ne").val()
-    if (tipoMovEgre == 9) {
+    if (tipoMovEgre == 9 ) {
         $(".hiddenBaja").addClass("hidden");
+    } else if (tipoMovEgre == 6){
+        $(".hiddenVC").addClass("hidden");
     }
     console.log(tipoMovEgre);
     moneda = $("#moneda_ne").val()
@@ -144,6 +146,7 @@ $(document).on("change", "#moneda_ne", function () {
     cambiarMoneda()
 })
 $(document).on("click", "#guardarMovimiento", function () {
+    calcularFechaDiasCredito();
     almForm = $('#almacen_ne').val()
     almUser = $('#idAlmacenUsuario').val()
     isAdmin = $('#isAdmin').val()
@@ -159,6 +162,7 @@ $(document).on("click", "#cancelarMovimiento", function () {
 
 })
 $(document).on("click", "#actualizarMovimiento", function () {
+    calcularFechaDiasCredito()
     actualizarMovimiento();
 })
 $(document).on("click", "#anularMovimiento", function () {
@@ -202,14 +206,15 @@ $(function () {
             },
 
             select: function (event, ui) {
-                validarClienteCorrecto(ui.item.idCliente,ui.item.nombreCliente,ui.item.documento)
+                validarClienteCorrecto(ui.item.idCliente,ui.item.nombreCliente,ui.item.documento,ui.item.email)
+                $("#tiempoCredito").val(ui.item.diasCredito);
                 return false;
             }
         })
         .autocomplete("instance")._renderItem = function (ul, item) {
 
             return $("<li>")
-                .append("<a><div>" + item.nombreCliente + " </div><div style='color:#615f5f; font-size:10px'>" + item.documento + "</div></a>")
+                .append("<a><div>" + item.nombreCliente + " </div><div style='color:#615f5f; font-size:10px'>" + item.documento + ' - ' + item.email + "</div></a>")
                 .appendTo(ul);
         };
 
@@ -267,7 +272,16 @@ $( function() {
         return false;
     }
 }
-
+function calcularFechaDiasCredito() {
+    const creditDays = parseInt(document.getElementById("tiempoCredito").value);
+    let fechaMovimiento = document.getElementById("fechamov_ne").value;
+    fechaMovimiento = moment(fechaMovimiento, 'DD-MM-YYYY');;
+    futureDate = fechaMovimiento.add(creditDays, 'days');
+    fechaPago = moment(futureDate).format("YYYY-MM-DD")
+    console.log(fechaPago);
+    almForm = $('#fechapago_ne').val(fechaPago)
+  }
+  
 function agregarArticulo() {
     let saldoAlmacen = $("#saldo_ne").inputmask('unmaskedvalue')
     let cant = $("#cantidad_ne").inputmask('unmaskedvalue')
@@ -351,6 +365,9 @@ function guardarmovimiento() {
         delete element.Descripcion;
     }); */
     let tipoEgreso = $("#tipomov_ne2").text()
+    if (!validarTipoNotaTiempoCredito()) {
+        return false
+    }
     if ($("#_tipomov_ne").val() == 9){
         glob_guardar_cliente = true
     } else {
@@ -399,6 +416,9 @@ function guardarmovimiento() {
     }
 }
 function actualizarMovimiento() {
+    if (!validarTipoNotaTiempoCredito()) {
+        return false
+    }
     let valuesToSubmit = $("#form_egreso").serialize();
     let articulos = $("#tablaEditarEgreso").bootstrapTable('getData');
     if (articulos.length > 0) {
@@ -433,6 +453,16 @@ function actualizarMovimiento() {
     } else {
         alert("no se tiene datos en la tabla para guardar")
     }
+}
+function validarTipoNotaTiempoCredito() {
+    let tipoEgreso = $("#_tipomov_ne").val()
+    let tipoNota = $("#tipoNota").val()
+    let tiempoCredito = $("#tiempoCredito").val()
+    if ( tipoEgreso== 7 && tipoNota == 1 && (tiempoCredito == 0 || tiempoCredito == '')) {
+        swal("Error", "Debe poner dias de crédito para Nota de Entrega tipo Venta", "error")
+        return false
+    }
+    return true
 }
 function recuperarMovimiento() // X
 {

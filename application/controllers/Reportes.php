@@ -5,6 +5,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Reportes extends CI_Controller
 {
+	public $Reportes_model;
 	
 	public function __construct()
 	{
@@ -350,12 +351,13 @@ class Reportes extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-        	$ini=$this->security->xss_clean($this->input->post("i"));
-        	$fin=$this->security->xss_clean($this->input->post("f"));
-			$alm=$this->security->xss_clean($this->input->post("a"));
+        	$ini=$this->security->xss_clean($this->input->post("ini"));
+        	$fin=$this->security->xss_clean($this->input->post("fin"));
+			$alm=$this->security->xss_clean($this->input->post("alm"));
+			$tipoNota=$this->security->xss_clean($this->input->post("tipoNota"));
 			$alm = $alm == 'all' ? '' : $alm;
 			$idCliente=$this->security->xss_clean($this->input->post("c"));
-			$res=$this->Reportes_model->mostrarNEporFac($ini,$fin,$alm,$idCliente); 
+			$res=$this->Reportes_model->mostrarNEporFac($ini,$fin,$alm,$idCliente,$tipoNota); 
 			$res=$res->result_array();
 			echo json_encode($res);
 		}

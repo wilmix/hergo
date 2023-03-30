@@ -61,26 +61,35 @@ $(document).ready(function () {
 })
 $(document).on("change", "#almacen_filtro", function () {
     retornarNEporFac();
-}) //para cambio filtro segun cada uno
+})
+$(document).on("change", "#tipoNota", function () {
+    retornarNEporFac();
+})
+$(document).on("click", "#refresh", function () {
+    retornarNEporFac();
+})
 
 
 
 function retornarNEporFac() //*******************************
 {
     tituloReporte()
-    ini = iniciofecha.format('YYYY-MM-DD')
-    fin = finfecha.format('YYYY-MM-DD')
-    alm = $("#almacen_filtro").val();
+    let ini = iniciofecha.format('YYYY-MM-DD')
+    let fin = finfecha.format('YYYY-MM-DD')
+    let alm = $("#almacen_filtro").val();
+    let tipoNota = $("#tipoNota").val();
     agregarcargando();
     $.ajax({
         type: "POST",
         url: base_url('index.php/Reportes/mostrarNEporFac'), //******controlador
         dataType: "json",
         data: {
-            i: ini,
-            f: fin,
-            a: alm,
-            c:'all'
+            ini: ini,
+            fin: fin,
+            alm: alm,
+            c:'all',
+            tipoNota: tipoNota
+
         }, //**** variables para filtro
     }).done(function (res) {
         quitarcargando();

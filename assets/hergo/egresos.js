@@ -290,6 +290,14 @@ function mostrarTablaEgresos(res) {
                 }
             },
             {
+                field: "tipoNota",
+                title: "TipoNota",
+                sortable: true,
+                align: 'center',
+                searchable: true,
+                visible: false
+            },
+            {
                 field: "clientePedido",
                 title: "N° Pedido",
                 sortable: true,
@@ -298,14 +306,25 @@ function mostrarTablaEgresos(res) {
             },
             {
                 field: "autor",
+                title: "Autor",
+                sortable: true,
+                visible: false,
+                align: 'center',
+                /* filter: {
+                    type: "select",
+                    data: datosselect[0]
+                }, */
+            },
+            {
+                field: "vendedor",
                 title: "Responsable",
                 sortable: true,
                 visible: true,
                 align: 'center',
-                filter: {
+                /* filter: {
                     type: "select",
                     data: datosselect[0]
-                },
+                }, */
             },
             {
                 field: "estadoF",
@@ -341,7 +360,7 @@ function mostrarTablaEgresos(res) {
             {
                 title: 'Acciones',
                 align: 'center',
-                width: '150px',
+                width: '200px',
                 searchable: false,
                 events: operateEvents,
                 formatter: operateFormatter

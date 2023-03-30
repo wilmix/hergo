@@ -2,6 +2,10 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Egresos extends CI_Controller
 {
+	public $Ingresos_model;
+	public $Egresos_model;
+	public $Cliente_model;
+
 	
 	public function __construct()
 	{
@@ -348,7 +352,13 @@ class Egresos extends CI_Controller
 			$egreso->plazopago = $egreso->plazopago == '' ? $egreso->fechamov : $egreso->plazopago;
 			$egreso->clientePedido = $this->security->xss_clean($this->input->post('pedido_ne'));       
 			$egreso->vendedor = $this->security->xss_clean($this->input->post('idUsuarioVendedor'));
-			
+
+			$notaEntrega = new stdclass();
+			if ($egreso->tipomov == 7) {
+				$notaEntrega->tipoNota = $this->input->post('tipoNota');;
+				$notaEntrega->tiempoCredito = $this->input->post('tiempoCredito');
+			} 
+
 			$tipocambio = $this->Ingresos_model->getTipoCambio($egreso->fechamov);
 			$egreso->tipoCambio = $tipocambio->tipocambio;
 
@@ -360,7 +370,7 @@ class Egresos extends CI_Controller
 			$egreso->nmov = $this->Egresos_model->retornarNumMovimiento($egreso->tipomov ,$gestion,$egreso->almacen);
 			$egreso->articulos = json_decode($this->security->xss_clean($this->input->post('tabla')));
 
-			$id = $this->Egresos_model->storeEgreso($egreso);
+			$id = $this->Egresos_model->storeEgreso($egreso, $notaEntrega);
 
 			if($id)
         	{

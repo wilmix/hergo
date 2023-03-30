@@ -77,7 +77,8 @@ class FacturasPendientesPago_model extends CI_Model
                             f.nFactura,
                             f.fechaFac,
                             f.total,
-                            c.diasCredito,
+                            -- c.diasCredito,
+                            ne.tiempoCredito diasCredito,
                             tbl.totalPagado montoPagado,
                             CONCAT(u.first_name, ' ', u.last_name) vendedor,
                             round(f.total - tbl.totalPagado, 2) diff,
@@ -87,6 +88,7 @@ class FacturasPendientesPago_model extends CI_Model
                             factura f
                             inner join factura_egresos fe on fe.idFactura = f.idFactura
                             inner join egresos e on e.idegresos = fe.idegresos
+                            left join notaentregasinfo ne ON ne.egresos_id = e.idegresos
                             inner join tmovimiento tm on tm.id = e.tipomov
                             inner join almacenes a on a.idalmacen = f.almacen
                             inner join clientes c on c.idCliente = f.cliente

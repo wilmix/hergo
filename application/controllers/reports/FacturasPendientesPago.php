@@ -3,7 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class FacturasPendientesPago extends CI_Controller
 {
-	
+	public $FacturasPendientesPago_model;
+	public $Reportes_model;
 	public function __construct()
 	{
 		parent::__construct();

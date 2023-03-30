@@ -295,7 +295,7 @@ class Ingresos_model extends CI_Model
     }
      public function retornarClienteBusqueda($b)
     {
-        $sql="SELECT c.`idCliente`, c.`nombreCliente`, c.`documento`
+        $sql="SELECT c.`idCliente`, c.`nombreCliente`, c.`documento`,c.diasCredito,c.email
         FROM clientes c     
         where nombreCliente like '%$b%' or documento like '%$b%' ORDER By nombreCliente asc
         LIMIT 50";

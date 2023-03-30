@@ -46,7 +46,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
     }
-	public function mostrarNEporFac($ini,$fin,$alm,$idCliente) 
+	public function mostrarNEporFac($ini,$fin,$alm,$idCliente,$tipoNota) 
 	{ 
 		if ($idCliente == 'all') {
 			$sql="SELECT e.`cliente`, e.nmov n,e.idEgresos,t.sigla, e.fechamov, c.nombreCliente, ROUND((SUM(d.`total`)) - (SUM(d.`cantFact` * d.`punitario`)),2) total,  e.estado,e.fecha, 
@@ -66,10 +66,13 @@ class Reportes_model extends CI_Model
 					ON e.moneda=m.id 
 					INNER JOIN tipocambio tc
 					ON e.`fechamov` = tc.`fecha`
+					LEFT JOIN notaentregasinfo ne 
+					ON ne.egresos_id = e.idegresos
 					WHERE
 					e.`estado`<>1
 					AND t.id = 7
 					AND e.anulado = 0
+					AND ne.tipoNota LIKE '%$tipoNota'
 					AND e.fechamov 
 					BETWEEN '$ini' AND '$fin'
 					AND e.almacen LIKE '%$alm'
