@@ -738,7 +738,7 @@ class Egresos_model extends CI_Model
     }
     public function storeNotaEntrega($notaEntrega)
 	{	
-            $this->db->insert("notaEntregasInfo", $notaEntrega);
+            $this->db->insert("notaentregasinfo", $notaEntrega);
             $id=$this->db->insert_id();
             return $id;
     }
