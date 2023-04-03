@@ -702,7 +702,7 @@ class Egresos_model extends CI_Model
 
             if ($egreso->tipomov == 7) {
 				$notaEntrega->egresos_id = $idEgreso;
-                $this->db->insert("notaEntregasInfo", $notaEntrega);
+                $this->db->insert("notaentregasinfo", $notaEntrega);
 			}
             $egresoDetalle = array();
                 foreach ($egreso->articulos as $fila) {
