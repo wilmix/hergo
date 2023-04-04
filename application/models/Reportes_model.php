@@ -50,7 +50,7 @@ class Reportes_model extends CI_Model
 	{ 
 		if ($idCliente == 'all') {
 			$sql="SELECT e.`cliente`, e.nmov n,e.idEgresos,t.sigla, e.fechamov, c.nombreCliente, ROUND((SUM(d.`total`)) - (SUM(d.`cantFact` * d.`punitario`)),2) total,  e.estado,e.fecha, 
-		CONCAT(u.first_name,' ', u.last_name) autor, a.almacen, m.sigla monedasigla, ROUND(ROUND((SUM(d.`total`)) - (SUM(d.`cantFact` * d.`punitario`)),2) /tc.`tipocambio`,2) totalDol
+		CONCAT(u.first_name,' ', u.last_name) autor,e.obs glosa, a.almacen, m.sigla monedasigla, ROUND(ROUND((SUM(d.`total`)) - (SUM(d.`cantFact` * d.`punitario`)),2) /tc.`tipocambio`,2) totalDol
 		FROM egresos e
 					INNER JOIN egredetalle d
 					ON e.idegresos=d.idegreso

@@ -162,11 +162,18 @@ function retornarNEporFac() //*******************************
                 {
                     field: 'totalDol',
                     title: 'Importe $U$',
-                    visible: true,
+                    visible: false,
                     sortable: true,
                     align: 'right',
                     formatter: operateFormatter3,
                     footerFormatter: sumaColumna
+                },
+                {
+                    field: 'glosa',
+                    title: 'Glosa',
+                    visible: false,
+                    sortable: true,
+                    align: 'right',
                 },
                 {
                     field: 'autor',
