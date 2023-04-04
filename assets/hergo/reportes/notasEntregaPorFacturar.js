@@ -173,6 +173,7 @@ function retornarNEporFac() //*******************************
                     title: 'Glosa',
                     visible: false,
                     sortable: true,
+                    formatter: cellEmpy,
                     align: 'right',
                 },
                 {
