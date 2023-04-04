@@ -295,7 +295,8 @@ function mostrarTablaEgresos(res) {
                 sortable: true,
                 align: 'center',
                 searchable: true,
-                visible: false
+                //visible: false,
+                formatter: tipoNota,
             },
             {
                 field: "clientePedido",
@@ -321,10 +322,10 @@ function mostrarTablaEgresos(res) {
                 sortable: true,
                 visible: true,
                 align: 'center',
-                /* filter: {
+                filter: {
                     type: "select",
                     data: datosselect[0]
-                }, */
+                },
             },
             {
                 field: "estadoF",
@@ -506,6 +507,27 @@ function operateFormatter3(value, row, index) {
     num = Math.round(value * 100) / 100
     num = num.toFixed(2);
     return (formatNumber.new(num));
+}
+function tipoNota(value, row, index) {
+    console.log(value);
+    switch (value) {
+        case '1':
+            return ('Venta');
+            break;
+        case '2':
+            return ('Prestamo');
+            break;
+        case '3':
+            return ('Muestra');
+            break;
+        case '4':
+            return ('Reserva');
+            break;          
+        default:
+            return ("-");
+            break;
+    }
+    
 }
 
 function totalEgreso (value, row, index) {
