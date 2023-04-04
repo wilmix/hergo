@@ -115,8 +115,9 @@ class Traspasos_model extends CI_Model
 	public function storeTraspaso($ingreso,$egreso)
 	{	
         $this->db->trans_start();
+			$notaEntrega = new stdclass();
 			$idIngreso = $this->Ingresos_model->storeIngreso($ingreso);
-			$idEgreso = $this->Egresos_model->storeEgreso($egreso);
+			$idEgreso = $this->Egresos_model->storeEgreso($egreso,$notaEntrega);
 
 			$traspaso = new stdclass();
 			$traspaso->idIngreso = $idIngreso;
