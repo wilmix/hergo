@@ -432,7 +432,7 @@ class Emitir_model extends CI_Model
                 GROUP BY
                     fe.idFactura
                 ORDER BY
-                    f.idFactura DESC  
+                    f.`fechaFac` DESC, f.idFactura DESC
                 ";
 		$query=$this->db->query($sql);		
 		return $query->result();
