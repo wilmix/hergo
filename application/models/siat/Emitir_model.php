@@ -293,7 +293,8 @@ class Emitir_model extends CI_Model
                     f.glosa,
                     f.moneda,
                     fs.montoTotalMoneda,
-                    f.total
+                    f.total,
+                    f.lote
                 FROM
                     factura f
                     INNER JOIN factura_siat fs ON fs.factura_id = f.idFactura
@@ -305,17 +306,17 @@ class Emitir_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query->row();
     }
-    public function getDetalleFactura($id)
+    public function getDetalleFactura($id, int $decimal = 2)
     {
         $sql="  SELECT
                     fd.ArticuloCodigo codigo,
-                    ROUND(fd.facturaCantidad, 2) cantidad,
+                    ROUND(fd.facturaCantidad, $decimal) cantidad,
                     u.Unidad unidadHergo,
                     su.descripcion unidad,
                     fd.ArticuloNombre descripcion,
-                    ROUND(fd.facturaPUnitario, 2) precioUnitario,
+                    ROUND(fd.facturaPUnitario, $decimal) precioUnitario,
                     0 descuento,
-                    ROUND(fd.facturaCantidad, 2) * ROUND(fd.facturaPUnitario, 2) subTotal
+                    ROUND(fd.facturaCantidad, $decimal) * ROUND(fd.facturaPUnitario, $decimal) subTotal
                 FROM
                     facturadetalle fd
                     INNER JOIN articulos a ON a.idArticulos = fd.articulo
@@ -406,7 +407,8 @@ class Emitir_model extends CI_Model
                     fs.pedido,
                     sp.descripcion metodoPago,
                     fs.leyenda,
-                    fs.fechaEmision fechaEmisionSiat
+                    fs.fechaEmision fechaEmisionSiat,
+                    f.lote
                 FROM
                     factura_egresos fe
                     INNER JOIN egresos e on e.idegresos = fe.idegresos
@@ -426,7 +428,7 @@ class Emitir_model extends CI_Model
                     f.fechaFac BETWEEN '$ini'
                     AND '$fin'
                     AND f.almacen = '$alm'
-                    AND f.lote = 0 
+                    AND (f.lote = 0 OR f.lote = '138')
                 GROUP BY
                     fe.idFactura
                 ORDER BY

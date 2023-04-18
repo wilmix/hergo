@@ -669,6 +669,8 @@ function tipoFactura(data, type, row){
   if (row.cafc == '' || row.cafc == null) {
     if (row.codigoRecepcion == '') {
       $icon = '<div style=" font-size:1.5em; "><span class="fa fa-desktop computarizada"></span></div>'
+    } else if(row.lote == '138'){
+      $icon = '<div style=" font-size:1.5em; color:blue;"><span class="fa fa-desktop computarizada"></span></div>'
     } else {
       $icon = '<div style=" font-size:1.5em; color:green;"><span class="fa fa-desktop computarizada"></span></div>'
     }
