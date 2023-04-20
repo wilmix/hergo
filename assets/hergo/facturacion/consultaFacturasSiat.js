@@ -345,7 +345,7 @@ const pro = new Vue({
 		codigoPuntoVenta:CPV,
 	},
 	mounted() {
-		this.validarFacturasCufs()
+		//this.validarFacturasCufs()
 		this.getMotivosAnulacion()
 		this.get_codigos()
 	},
