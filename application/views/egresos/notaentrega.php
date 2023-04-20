@@ -246,11 +246,23 @@
             </div>
             <div class="col-xs-12 col-md-2 hiddenVC">
               <label for="tipoNota">Tipo:</label>
-              <select class="form-control form-control-sm"  name="tipoNota" id="tipoNota">
-                <option value="1">Venta</option>
-                <option value="2">Prestamo</option>
-                <option value="3">Muestra</option>
-                <option value="4">Reserva</option>
+              <select class="form-control form-control-sm" name="tipoNota" id="tipoNota">
+                <?php
+                  // Definir opciones de tipoNota
+                  $opcionesTipoNota = [
+                    1 => 'Venta',
+                    2 => 'Prestamo',
+                    3 => 'Muestra',
+                    4 => 'Reserva'
+                  ];
+                  // Obtener tipoNota seleccionado
+                  $tipoNotaSeleccionado = isset($dcab) ? $dcab->tipoNota : 1;
+                  // Mostrar opciones de tipoNota
+                  foreach ($opcionesTipoNota as $valor => $texto) {
+                    $seleccionado = $valor == $tipoNotaSeleccionado ? 'selected="selected"' : '';
+                    echo "<option value=\"$valor\" $seleccionado>$texto</option>";
+                  }
+                ?>
               </select>
             </div>
           </div>

@@ -392,16 +392,26 @@ class Egresos extends CI_Controller
         {
 			$egreso = new stdclass();
 			$idEgreso = $this->security->xss_clean($this->input->post('idegreso'));
+			$egreso->tipomov = $this->security->xss_clean($this->input->post('tipomov_ne'));
 			$egreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_ne'));
 			$egreso->fechamov = date('Y-m-d',strtotime($egreso->fechamov));
 			$gestion = date('Y',strtotime($egreso->fechamov));
 			$egreso->cliente = $this->security->xss_clean($this->input->post('idCliente'));
 			$egreso->moneda = $this->security->xss_clean($this->input->post('moneda_ne'));
-			$egreso->obs = $this->security->xss_clean($this->input->post('obs_ne'));
+			$egreso->obs = strtoupper(htmlspecialchars($this->input->post('obs_ne'), ENT_QUOTES, 'UTF-8'));
 			$egreso->plazopago = $this->security->xss_clean($this->input->post('fechapago_ne'));
 			$egreso->plazopago = date('Y-m-d',strtotime($egreso->plazopago));
 			$egreso->clientePedido = $this->security->xss_clean($this->input->post('pedido_ne'));       
 			$egreso->vendedor = $this->security->xss_clean($this->input->post('idUsuarioVendedor'));
+
+			$notaEntregaTipo = new stdclass();
+			if ($egreso->tipomov == 7) {
+				$notaEntregaTipo->egresos_id = $idEgreso;
+				$notaEntregaTipo->tipoNota = $this->input->post('tipoNota');
+				$notaEntregaTipo->tiempoCredito = $this->input->post('tiempoCredito');
+			}
+			/* echo json_encode($notaEntregaTipo);
+			return false; */
 			
 			$tipocambio = $this->Ingresos_model->getTipoCambio($egreso->fechamov);
 			$egreso->tipoCambio = floatval($tipocambio->tipocambio);
@@ -414,18 +424,20 @@ class Egresos extends CI_Controller
 			$gestionActual = $this->Egresos_model->getGestionActual()->gestionActual;
 			//echo json_encode($gestionEgreso. '  -  actual ' . $gestionUpdate);
 			//return false;
+			 
 			if ($gestionUpdate != $gestionFechaEgreso) {
 				echo json_encode (false);
 				die (false);
 			}
 			//$egreso->gestion = $gestion;
-			$egreso->articulos = json_decode($this->security->xss_clean($this->input->post('tabla')));
+			$egreso->articulos = json_decode($this->input->post('tabla'));
 
-			$id = $this->Egresos_model->updateEgreso($idEgreso, $egreso);
+			$id = $this->Egresos_model->updateEgreso($idEgreso, $egreso, $notaEntregaTipo);
 
 			$res = new stdclass();
 			$res->id = $id;
 			$res->egreso = $egreso;
+			$res->notaEntregaTipo = $notaEntregaTipo;
 			if($id)
         	{
 				echo json_encode($res);

@@ -89,40 +89,64 @@ class Egresos_model extends CI_Model
         }
         else
         {            
-             $sql="SELECT e.nmov n,e.idEgresos,t.sigla,t.tipomov, e.fechamov,t.id as idtipomov, c.nombreCliente,c.idcliente, sum(d.total) total,  
-            e.estado,e.fecha, CONCAT(u.first_name,' ', u.last_name) autor, e.moneda, a.almacen, a.idalmacen, m.sigla monedasigla, 
-            m.id as idmoneda, e.obs, e.anulado, e.plazopago, e.clientePedido,c.documento,e.tipocambio,total/tc.tipocambio totalsus , 
-            e.vendedor, CONCAT(uv.first_name,' ', uv.last_name) nVendedor,  tc.tipocambio, c.direccion, c.telefono, c.fax, ades.`almacen` almDes, ing.`nmov` nIng,
-            a.`direccion` almDirec,a.`Telefonos` almFono
-            FROM egresos e
-            INNER JOIN egredetalle d
-            on e.idegresos=d.idegreso
-            INNER JOIN tmovimiento t 
-            ON e.tipomov = t.id 
-            INNER JOIN clientes c 
-            ON e.cliente=c.idCliente
-            INNER JOIN users u 
-            ON u.id=e.autor 
-            INNER JOIN users uv 
-            ON uv.id=e.vendedor 
-            INNER JOIN almacenes a 
-            ON a.idalmacen=e.almacen 
-            INNER JOIN moneda m 
-            ON e.moneda=m.id 
-            INNER JOIN tipocambio tc 
-            ON e.fechamov=tc.fecha
-            LEFT JOIN traspasos tr
-            ON tr.`idEgreso` = e.`idegresos` 
-            LEFT JOIN ingresos ing
-            ON ing.`idIngresos` = tr.`idIngreso`
-            LEFT JOIN almacenes ades 
-            ON ades.idalmacen=ing.`almacen`           
-            WHERE idEgresos=$id
-            ORDER BY e.idEgresos DESC
-            LIMIT 1   
+             $sql=" SELECT
+                        e.nmov n,
+                        e.idEgresos,
+                        t.sigla,
+                        t.tipomov,
+                        e.fechamov,
+                        t.id as idtipomov,
+                        c.nombreCliente,
+                        c.idcliente,
+                        sum(d.total) total,
+                        e.estado,
+                        e.fecha,
+                        CONCAT(u.first_name, ' ', u.last_name) autor,
+                        e.moneda,
+                        a.almacen,
+                        a.idalmacen,
+                        m.sigla monedasigla,
+                        m.id as idmoneda,
+                        e.obs,
+                        e.anulado,
+                        e.plazopago,
+                        e.clientePedido,
+                        c.documento,
+                        e.tipocambio,
+                        total / tc.tipocambio totalsus,
+                        e.vendedor,
+                        CONCAT(uv.first_name, ' ', uv.last_name) nVendedor,
+                        tc.tipocambio,
+                        c.direccion,
+                        c.telefono,
+                        c.fax,
+                        ades.`almacen` almDes,
+                        ing.`nmov` nIng,
+                        a.`direccion` almDirec,
+                        a.`Telefonos` almFono,
+                        nei.tipoNota,
+                        nei.tiempoCredito
+                    FROM
+                        egresos e
+                        INNER JOIN egredetalle d on e.idegresos = d.idegreso
+                        INNER JOIN tmovimiento t ON e.tipomov = t.id
+                        INNER JOIN clientes c ON e.cliente = c.idCliente
+                        INNER JOIN users u ON u.id = e.autor
+                        INNER JOIN users uv ON uv.id = e.vendedor
+                        INNER JOIN almacenes a ON a.idalmacen = e.almacen
+                        INNER JOIN moneda m ON e.moneda = m.id
+                        INNER JOIN tipocambio tc ON e.fechamov = tc.fecha
+                        LEFT JOIN traspasos tr ON tr.`idEgreso` = e.`idegresos`
+                        LEFT JOIN ingresos ing ON ing.`idIngresos` = tr.`idIngreso`
+                        LEFT JOIN almacenes ades ON ades.idalmacen = ing.`almacen`
+                        LEFT JOIN notaentregasinfo nei ON nei.egresos_id = e.idegresos
+                    WHERE        
+                        idEgresos = $id
+                    ORDER BY e.idEgresos DESC
+                    LIMIT
+                        1   
             ";
         }
-
 		$query=$this->db->query($sql);
 		return $query;
 	}
@@ -742,12 +766,21 @@ class Egresos_model extends CI_Model
             $id=$this->db->insert_id();
             return $id;
     }
+    public function uptadeNotaEntregaInfo($notaEntregaTipo)
+	{	
+        $this->db->where('egresos_id', $notaEntregaTipo->egresos_id);
+        $this->db->update('notaentregasinfo', $notaEntregaTipo);
+    }
     
-    public function updateEgreso($id, $egreso)
+    public function updateEgreso($id, $egreso, $notaEntregaTipo)
 	{	
         $this->db->trans_start();
             $this->db->where('idegresos', $id);
             $this->db->update('egresos', $egreso);
+
+            if ($egreso->tipomov == 7) {
+                $this->uptadeNotaEntregaInfo($notaEntregaTipo);
+            }
 
             $this->db->where('idegreso', $id);
             $this->db->delete('egredetalle');
