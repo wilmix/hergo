@@ -193,6 +193,7 @@ class Traspasos extends CI_Controller
 			$gestion = date('Y',strtotime($egreso->fechamov));
 			$egreso->moneda = $this->security->xss_clean($this->input->post('moneda_ne'));
 			$egreso->obs = $this->security->xss_clean($this->input->post('obs_ne'));
+			$egreso->tipomov = '8';
 			$egreso->plazopago = $this->security->xss_clean($this->input->post('fechamov_ne'));
 			$egreso->plazopago = date('Y-m-d',strtotime($egreso->plazopago));
 			$egreso->clientePedido = $this->security->xss_clean($this->input->post('pedido_ne'));       

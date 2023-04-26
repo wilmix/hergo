@@ -158,7 +158,8 @@ class Traspasos_model extends CI_Model
 	public function updateTraspaso($idIng, $ingreso,$idEgre, $egreso)
 	{	
         $this->db->trans_start();
-			$this->Egresos_model->updateEgreso($idEgre, $egreso);
+			$notaEntregaTipo = new stdclass();
+			$this->Egresos_model->updateEgreso($idEgre, $egreso, $notaEntregaTipo);
 			$this->Ingresos_model->updateIngreso($idIng, $ingreso);
 
 			$this->db->set('estado', '0');
