@@ -131,14 +131,14 @@ function getFPP() {
 					className: 'text-right',
 					sorting: false,
 				},
-				/* {
+				{
 					data: null,
 					title: '',
-					//width: '120px',
+					width: '120px',
 					className: 'text-center',
 					sorting: false,
-					render: buttons
-				}, */
+					render: buttons,
+				},
 			],
 			stateSave: true,
 			stateSaveParams: function (settings, data) {
@@ -269,14 +269,10 @@ function linkEgreso(value, row, index) {
 	return `<a href=${print} target="_blank">${index.egreso}</a>`
 }
 function buttons (data, type, row) {
-	if (row.id>0) {
+	if (1==1) { 
 		return `
 			<button type="button" class="btn btn-default add">
 				<span class="fa fa-plus" aria-hidden="true">
-				</span>
-			</button>
-			<button type="button" class="btn btn-default see">
-				<span class="fa fa-search" aria-hidden="true">
 				</span>
 			</button>
 		`
@@ -310,6 +306,12 @@ const fpp = new Vue({
 		id:0,
 		nota:'',
 		disabled: document.getElementById("nacional").value == '' ? true : false,
+		selectedRow: [],
+		nombreUsuario : document.getElementById("nombre_usuario").innerText,
+		notasFactura:[],
+
+
+
 	},
 	mounted() {
 		if (localStorage.firma) {
@@ -327,9 +329,67 @@ const fpp = new Vue({
 		},
 		addNota(row){
 			console.log(row);
-			fpp.id = row.id
+			this.selectedRow = row
+			this.id = row.idFactura
+			this.getNotasFactura(this.id)
 			$("#addNotaModal").modal("show")
 		},
+		save(){
+			let = nota = {
+				"registros": [
+					{
+						"nota": this.nota,
+						"autor": this.nombreUsuario,
+						"fecha_hora": moment().format("YYYY-MM-DD HH:mm:ss")
+					}
+				]
+			}
+			let data = {
+				idFactura: this.id,
+				notas: JSON.stringify(nota),
+			}
+
+			console.log(data);
+			$.ajax({
+				type: "POST",
+				url: base_url('index.php/reports/FacturasPendientesPago/saveOrUpdate'),
+				dataType: "json",
+				data: data
+			}).done(function (res) {
+				swal({
+                    title: 'Exito!',
+                    text: "El nota se guardo exitosamente",
+                    type: 'success', 
+                    showCancelButton: false,
+                })
+				$("#addNotaModal").modal("hide")
+				fpp.notasFactura = []
+				fpp.nota = []
+				fpp.id = 0
+				return
+			})
+
+		},
+		getNotasFactura(factura_id){
+			$.ajax({
+				type: "POST",
+				url: base_url('index.php/reports/FacturasPendientesPago/getNotasFactura'),
+				dataType: "json",
+				data: {
+					idFactura: factura_id,
+				}
+			}).done(function (res) {
+				if (res !== null) {
+					fpp.notasFactura = JSON.parse(res.notas)
+					fpp.notasFactura.registros.reverse()
+
+				} else {
+					fpp.notasFactura = []
+				}
+				//console.log(fpp.notasFactura);
+			})
+		}
+
 	},
 	filters:{
 		moneda:function(value){

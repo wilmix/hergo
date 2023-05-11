@@ -1,48 +1,49 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
- 
-class FacturasPendientesPago_model extends CI_Model  
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+class FacturasPendientesPago_model extends CI_Model
 {
-	public function __construct()
-	{	
-		parent::__construct();
-		$this->load->helper('date');
-		date_default_timezone_set("America/La_Paz");
-	}
-	public function facturasPendientesPago($almacen, $ini, $fin){
-		$res = $this->mostrarFacturasPendientesPago($almacen, $ini, $fin)->result();
-		$aux = 0;
-		$auxD = 0;
-		foreach ($res as $line) {
-				if ($line->id == NULL && $line->cliente == NULL) {
-					$line->lote = '';
-					$line->nFactura = '';
-					$line->fechaFac = '';
-					$line->vendedor = '';
-					$line->almacen = '';
-					$line->cliente = 'TOTAL GENERAL';
-					$line->saldo = $line->total - $line->montoPagado;
-					$line->saldoDol = $line->totalFacDol - $line->montoPagoDol;
-				} elseif ($line->id == NULL) {
-					$line->lote = '';
-					$line->nFactura = '';
-					$line->fechaFac = '';
-					$line->vendedor = '';
-					$line->almacen = '';
-					$line->saldo = $line->total - $line->montoPagado;
-					$line->saldoDol = $line->totalFacDol - $line->montoPagoDol;
-				} else {
-					$line->cliente = $line->cliente;
-					$line->saldo = $aux + $line->total - $line->montoPagado;
-					$line->saldoDol = $auxD + $line->totalFacDol - $line->montoPagoDol;
-				}
-				$aux = $line->id == NULL ? 0 : $aux + $line->total - $line->montoPagado;
-				$auxD = $line->id == NULL ? 0 : $auxD + $line->totalFacDol - $line->montoPagoDol;
-		}
-		return $res;
-	}
-	public function getFacturasPendientesPago($almacen, $ini, $fin,$tipoEgreso)
-	{
-		$sql="  SELECT
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->helper('date');
+        date_default_timezone_set("America/La_Paz");
+    }
+    public function facturasPendientesPago($almacen, $ini, $fin)
+    {
+        $res = $this->mostrarFacturasPendientesPago($almacen, $ini, $fin)->result();
+        $aux = 0;
+        $auxD = 0;
+        foreach ($res as $line) {
+            if ($line->id == NULL && $line->cliente == NULL) {
+                $line->lote = '';
+                $line->nFactura = '';
+                $line->fechaFac = '';
+                $line->vendedor = '';
+                $line->almacen = '';
+                $line->cliente = 'TOTAL GENERAL';
+                $line->saldo = $line->total - $line->montoPagado;
+                $line->saldoDol = $line->totalFacDol - $line->montoPagoDol;
+            } elseif ($line->id == NULL) {
+                $line->lote = '';
+                $line->nFactura = '';
+                $line->fechaFac = '';
+                $line->vendedor = '';
+                $line->almacen = '';
+                $line->saldo = $line->total - $line->montoPagado;
+                $line->saldoDol = $line->totalFacDol - $line->montoPagoDol;
+            } else {
+                $line->cliente = $line->cliente;
+                $line->saldo = $aux + $line->total - $line->montoPagado;
+                $line->saldoDol = $auxD + $line->totalFacDol - $line->montoPagoDol;
+            }
+            $aux = $line->id == NULL ? 0 : $aux + $line->total - $line->montoPagado;
+            $auxD = $line->id == NULL ? 0 : $auxD + $line->totalFacDol - $line->montoPagoDol;
+        }
+        return $res;
+    }
+    public function getFacturasPendientesPago($almacen, $ini, $fin, $tipoEgreso)
+    {
+        $sql = "  SELECT
                     idEgresos,
                     tipomov,
                     concat(sigla, '-', nmov, '/', gestion) egreso,
@@ -122,7 +123,26 @@ class FacturasPendientesPago_model extends CI_Model
                 GROUP BY
                     cliente,
                     idFactura WITH ROLLUP";
-		$query=$this->db->query($sql);		
-		return $query->result();
-	}
-}							
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+    public function save($data)
+    {
+
+        $this->db->insert("seguimiento_cobranzas", $data);
+        return $this->db->insert_id();
+    }
+    public function update($data)
+    {
+        // Consulta SQL para actualizar el campo 'notas' con la nueva nota
+        $nota = $this->db->escape_str($data->notas);
+        $sql = "UPDATE seguimiento_cobranzas SET notas = JSON_ARRAY_APPEND(notas, '$.registros', CAST('$nota' AS JSON)) WHERE factura_id = $data->factura_id";
+        $this->db->query($sql);
+
+    }
+    public function validarFactura($id)
+    {
+        $query = $this->db->get_where('seguimiento_cobranzas', array('factura_id' => $id), 1);
+        return $query->row();
+    }
+}

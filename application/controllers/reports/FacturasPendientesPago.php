@@ -18,10 +18,7 @@ class FacturasPendientesPago extends CI_Controller
     {
         $this->accesoCheck(28);
         $this->titles('PendientesPago','Facturas Pendientes de Pago','Reportes');
-		//$this->datos['cabeceras_css'][]='https://cdn.datatables.net/fixedheader/3.2.0/css/fixedHeader.dataTables.min.css';
-        
         $this->datos['foot_script'][]=base_url('assets/hergo/reportes/facturasPendientesPagoNew.js') .'?'.rand();
-		//$this->datos['foot_script'][]='https://cdn.datatables.net/fixedheader/3.2.0/js/dataTables.fixedHeader.min.js';
         $this->setView('reportes/facturasPendietesPagoNew');
     }
     public function show()
@@ -69,5 +66,41 @@ class FacturasPendientesPago extends CI_Controller
 			}
 			echo json_encode($res);
 	}
+	public function getNotasFactura()
+	{
+		$factura_id  = $this->input->post('idFactura');
+		$res = $this->FacturasPendientesPago_model->validarFactura($factura_id);
+		echo json_encode($res);
+	}
+	public function saveOrUpdate() {
+		$data = $this->get_data_Facturas();
 
+		$row = $this->FacturasPendientesPago_model->validarFactura($data->factura_id);
+
+		if (isset($row)) {
+			$data->notas = json_decode($data->notas)->registros[0];
+			$data->notas = json_encode($data->notas);
+			$res = $this->FacturasPendientesPago_model->update($data);
+		} else {
+			$res = $this->FacturasPendientesPago_model->save($data);
+		}
+
+		echo json_encode($res);
+	}
+	public function update() {
+		$data = $this->get_data_Facturas();
+
+		$res = $this->FacturasPendientesPago_model->update($data);
+
+		echo json_encode($res);
+	}
+	public function get_data_Facturas()
+	{
+		$data = new stdclass();
+		$data->factura_id = $this->input->post('idFactura');
+		$data->notas = ($this->input->post('notas'));
+		$data->prorroga = $this->input->post('prorroga');
+		$data->prorroga = ($data->prorroga === '') ? NULL : $data->prorroga;
+		return $data;
+	}
 }
