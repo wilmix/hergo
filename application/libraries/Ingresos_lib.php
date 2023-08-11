@@ -55,9 +55,13 @@
                 $this->Cell(65, 10, utf8_decode($proveedor), 0,0,'L');
                 //factura
                 $this->SetFont('Arial','B',9);
-                $this->Cell(25,10, 'Orden Compra: ',0,0,'');
+                if ($tipo == 'Reingresos') {
+                    # code...
+                }
+                $tipo == 'Reingresos' ? $this->Cell(25,10, 'Egreso Baja: ',0,0,'') : $this->Cell(25,10, 'Orden Compra: ',0,0,'');
+                //$this->Cell(25,10, 'Orden Compra: ',0,0,'');
                 $this->SetFont('Arial','',9);
-                $this->Cell(40, 10, $ordenCompra, 0,0,'L');
+                $this->Cell(40, 10, $ordenCompra , 0,0,'L');
 
                 // Orden de compra
                 $this->SetFont('Arial','B',9);

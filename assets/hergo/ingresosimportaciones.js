@@ -1,4 +1,8 @@
 let glob_factorIVA=0.87;
+const factorIVA = 0.87
+const retencion_bienes = 0.087
+const retencion_servicios = 0.1905
+
 let glob_factorRET=0.087;
 let glob_guardar = false
 let validar_proveedor = false
@@ -12,29 +16,38 @@ let tipomov
 $(document).ready(function(){
     fileImg()
     tipomov = $("#tipomov_imp2").val()
+    console.log(tipomov);
     if (tipomov == 5) {
+        $("#ordcomp_imp").prev("label").text("Número de Baja");
+        $("#ordcomp_imp").attr("placeholder", "Solo poner el número");
         $("#tipoNumFactura").addClass("hidden")
     }
     moneda = $("#moneda_imp").val()
     fechaMod = $('#fechamov_imp').val()
-    if (fechaMod) {
-        hoy = moment(fechaMod).format('DD-MM-YYYY')
+    fechaModKardex = $('#fecha_kardex').val()
+    setFechaInput(fechaMod, 'fecha_ingreso')
+    setFechaInput(fechaModKardex, 'fecha_kardex')
+    
+    loc_almacen= $("#almacen_imp").val();   
+    if ($("#tipoDoc").val() == 1 || $("#tipoDoc").val() == 3) {
+        $(".tipoDocumento").removeClass("hidden")
+    } 
+})
+function setFechaInput(fecha, input) {
+    if (fecha) {
+        hoy = moment(fecha).format('DD-MM-YYYY')
     } else{
         hoy = moment().format('DD-MM-YYYY, hh:mm:ss a')
     }
-    $('.fecha_ingreso').daterangepicker({
+    $('.'+ input ).daterangepicker({
         startDate:hoy,
         locale: {
             format: 'DD-MM-YYYY'
         },
         singleDatePicker: true,
         showDropdowns: true
-      });    
-    loc_almacen= $("#almacen_imp").val();   
-    if ($("#tipoDoc").val() == 1 || $("#tipoDoc").val() == 3) {
-        $(".tipoDocumento").removeClass("hidden")
-    } 
-})
+    });
+}
 $(document).on("change", "#fechamov_imp", function () {
     let fecha = $('#fechamov_imp').val()
     if (hoy == fecha) {
@@ -153,16 +166,21 @@ $(document).on("keyup","#cantidad_imp,#punitario_imp",function(){
     var tipoingreso=$("#tipomov_imp2").val()
     cant=(cant=="")?0:cant;
     costo=(costo=="")?0:costo;
-    if(tipoingreso==2)//si es compra local idcompralocal=2
-    {
-        costo=calculocompraslocales(cant,costo)
-    }
+    /* if(tipoingreso==2 || tipoingreso==3)//si es compra local idcompralocal=2
+    { */
+        costo=calculoCostoInventarios(cant,costo)
+    /* } */
     //total=cant*costo;
     $("#constounitario").val(costo);//costo calculado
     /***para la alerta*******/
     var costobase=$("#costo_imp").inputmask('unmaskedvalue');//costo de base de datos
     alertacosto(costo,costobase);
 })
+function validarBajaReingreso() {
+    const tipomov = $("#tipomov_imp2").val()
+    const baja = $("#ordcomp_imp").val()
+    return !(tipomov == '5' && baja == '');
+}
 $(document).on("click","#guardarMovimiento",function(){
     almForm = $('#almacen_imp').val()
     almUser = $('#idAlmacenUsuario').val()
@@ -175,6 +193,10 @@ $(document).on("click","#guardarMovimiento",function(){
         swal("Error", "Fecha no se encuentra en la gestiòn actual", "error")
         return false
     }*/
+    if (!validarBajaReingreso()) {
+        swal("Error", "Debe poner la baja que generó el Reingreso", "error")
+        return false
+    }
     if (almForm != almUser && isAdmin == '') {
         swal("Error", "No se puede guardar movimiento", "error")
         return false
@@ -191,6 +213,10 @@ $(document).on("click","#cancelarMovimiento",function(){
     limpiarTabla();
 })
 $(document).on("click","#actualizarMovimiento",function(){
+    if (!validarBajaReingreso()) {
+        swal("Error", "Debe poner la baja que generó el Reingreso", "error")
+        return false
+    }
     updateIngreso();
 })
 $(document).on("click","#cancelarMovimientoActualizar",function(){
@@ -225,7 +251,7 @@ $(document).on("click","#recuperarMovimiento",function(){
         }
     );
 })
-$(document).on("change","#tipoDoc",function(){
+/* $(document).on("change","#tipoDoc",function(){
     if ($("#tipoDoc").val() == 1 || $("#tipoDoc").val() == 3) {
         $(".tipoDocumento").removeClass("hidden")
         $(".tipoDocumento").val('')
@@ -241,7 +267,7 @@ $(document).on("change","#tipoDoc",function(){
             })
         $(".tipoDocumento").val('')
     }
-})
+}) */
 function fileImg() {
     $("#img_route").fileinput({
         language: "es",
@@ -334,11 +360,31 @@ function calculocompraslocales(cant,costo)
     if($("#tipoDoc").val() == 2)  //sin factura      
         ret=pu*glob_factorRET+pu; //sinfactura  
     else                        
-        ret=pu*glob_factorIVA; //confactura   
+        ret=pu*factorIVA; //confactura   
     //console.log(ret);       
     return ret;
 
 
+}
+function calculoCostoInventarios(cantidad, costo) {
+    let costoFinal = 0;    
+    let precioUnitario = costo / cantidad
+    let tipoCompra = $("#tipoDoc").val()
+
+    switch (tipoCompra) {
+        case '1':
+        case '4':
+            costoFinal = precioUnitario * factorIVA
+            break;
+        case '2':
+            costoFinal = precioUnitario * retencion_bienes + precioUnitario
+            break;
+        case '3':
+            costoFinal = precioUnitario * retencion_servicios + precioUnitario
+            break;
+    }
+
+    return costoFinal
 }
 function agregarArticulo() //faltaria el id costo; si se guarda en la base primero
 {
@@ -366,11 +412,11 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
     }
 
 
-    if(tipoingreso==2)//si es compra local idcompralocal=2
-    {
+    /* if(tipoingreso==2 || tipoingreso==3 )//si es compra local idcompralocal=2
+    { */
         totalfac = costo
-        costo=calculocompraslocales(cant,costo)
-    } 
+        costo=calculoCostoInventarios(cant,costo)
+   /*  } */ 
     total=cant*costo; 
     let punitfac=cant==0?0:(totalfac/cant);
     let articulo

@@ -408,6 +408,8 @@ class Ingresos extends CI_Controller
         	$ingreso->tipomov = $this->security->xss_clean($this->input->post('tipomov_imp'));
 			$ingreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_imp'));
 			$ingreso->fechamov = date('Y-m-d',strtotime($ingreso->fechamov));
+			$ingreso->fechaIngreso = $this->input->post('fecha_kardex');
+			$ingreso->fechaIngreso = date('Y-m-d',strtotime($ingreso->fechaIngreso));
         	$ingreso->moneda = $this->security->xss_clean($this->input->post('moneda_imp'));
         	$ingreso->proveedor = $this->security->xss_clean($this->input->post('idProveedor'));
         	$ingreso->ordcomp = $this->security->xss_clean($this->input->post('ordcomp_imp'));
@@ -424,12 +426,14 @@ class Ingresos extends CI_Controller
 
 			$ingreso->autor=$this->session->userdata('user_id');
 			$ingreso->fecha = date('Y-m-d H:i:s');
-			$ingreso->fechaIngreso = $ingreso->fechamov;
+			//$ingreso->fechaIngreso = $ingreso->fechamov;
 			$gestion= $this->Ingresos_model->getGestionActual()->gestionActual;
 
 			//$gestion= date("Y", strtotime($ingreso->fechamov));
 			$ingreso->gestion = $gestion;
 			$ingreso->nmov = $this->Ingresos_model->retornarNumMovimiento($ingreso->tipomov,$gestion,$ingreso->almacen);
+
+			//echo json_encode($ingreso);return;
 
 			$id = $this->Ingresos_model->storeIngreso($ingreso);
 
@@ -501,6 +505,8 @@ class Ingresos extends CI_Controller
 			$ingreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_imp'));
 			$ingreso->img_route = $img_name;
 			$ingreso->fechamov = date('Y-m-d',strtotime($ingreso->fechamov));
+			$ingreso->fechaIngreso = $this->input->post('fecha_kardex');
+			$ingreso->fechaIngreso = date('Y-m-d',strtotime($ingreso->fechaIngreso));
 			$ingreso->moneda = $this->security->xss_clean($this->input->post('moneda_imp'));
         	$ingreso->ordcomp = $this->security->xss_clean($this->input->post('ordcomp_imp'));
 		    $ingreso->proveedor = $this->security->xss_clean($this->input->post('idProveedor'));
@@ -510,6 +516,8 @@ class Ingresos extends CI_Controller
 			$ingreso->estado = 0;
 			$ingreso->flete = $this->security->xss_clean($this->input->post('flete'));
 			$ingreso->articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
+			$ingreso->fechaIngreso = $this->security->xss_clean($this->input->post('fecha_kardex'));
+			$ingreso->fechaIngreso = date('Y-m-d',strtotime($ingreso->fechaIngreso));
 			
 			$gestionFechaIngreso = date("Y", strtotime($ingreso->fechamov)); 
 			$gestionUpdate = $this->Ingresos_model->gestionUpdate($idIngresos)->gestion; 

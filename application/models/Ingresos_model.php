@@ -37,69 +37,107 @@ class Ingresos_model extends CI_Model
 	{
 		if($id==null)
         {
-		    $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov, i.fechamov, p.nombreproveedor,
-           (SUM(id.totaldoc) + IFNULL(i.flete,0)) total,SUM(id.total) totalSis, i.fecha, UPPER(CONCAT(u.first_name,' ', u.last_name,'')) autor, 
-            i.moneda, a.almacen, m.sigla monedasigla, i.ordcomp, i.obs, i.anulado,
-            i.tipocambio, 
-            tc.tipocambio valorTipoCambio, 
-            SUM(id.total)/tc.tipoCambio totalsus, 
-            t.sigla, i.almacen idAlmacen,
-            CASE
-                WHEN i.anulado = 1 THEN 'ANULADO'
-                WHEN i.estado = 0 THEN 'PENDIENTE'
-                WHEN i.estado = 1 THEN 'APROBADO'
-            END estado,
-            CASE
-                    WHEN i.tipoDoc = 1 THEN i.nfact
-                    WHEN i.tipoDoc = 2 THEN 'SIN FACTURA'
-                    WHEN i.tipoDoc = 3 THEN 'EN TRANSITO'
-            END tipoDoc , i.tipomov idTipoMov
-            FROM ingresos i
-                    INNER JOIN ingdetalle id
-                    ON i.idingresos=id.idingreso
-                    INNER JOIN tmovimiento  t
-                    ON i.tipomov = t.id
-                    INNER JOIN provedores p
-                    ON i.proveedor=p.idproveedor
-                    INNER JOIN users u
-                    ON u.id=i.autor
-                    INNER JOIN almacenes a
-                    ON a.idalmacen=i.almacen
-                    INNER JOIN moneda m
-                    ON i.moneda=m.id
-                    INNER JOIN tipocambio tc
-                    ON i.fechamov=tc.fecha
-                    WHERE i.fechamov BETWEEN '$ini' AND '$fin'
-                    -- and (i.gestion) = (SELECT gestionActual FROM `config`)
-                    AND i.almacen LIKE '%$alm' AND t.id LIKE '%$tin'
-                    GROUP BY i.idIngresos 
-                    ORDER BY i.gestion DESC, i.nmov DESC
+		    $sql="  SELECT
+                        i.nmov n,
+                        i.idIngresos,
+                        t.sigla,
+                        t.tipomov,
+                        i.fechamov,
+                        i.fechaIngreso fechaKardex,
+                        i.fecha,
+                        p.nombreproveedor,
+                        (SUM(id.totaldoc) + IFNULL(i.flete, 0)) total,
+                        SUM(id.total) totalSis,
+                        UPPER(CONCAT(u.first_name, ' ', u.last_name, '')) autor,
+                        i.moneda,
+                        a.almacen,
+                        m.sigla monedasigla,
+                        i.ordcomp,
+                        i.obs,
+                        i.anulado,
+                        i.tipocambio,
+                        tc.tipocambio valorTipoCambio,
+                        SUM(id.total) / tc.tipoCambio totalsus,
+                        t.sigla,
+                        i.almacen idAlmacen,
+                        CASE
+                            WHEN i.anulado = 1 THEN 'ANULADO'
+                            WHEN i.estado = 0 THEN 'PENDIENTE'
+                            WHEN i.estado = 1 THEN 'APROBADO'
+                        END estado,
+                        CASE
+                            WHEN i.tipoDoc = 1 THEN i.nfact
+                            WHEN i.tipoDoc = 2 THEN 'SIN FACTURA'
+                            WHEN i.tipoDoc = 3 THEN 'EN TRANSITO'
+                        END tipoDoc,
+                        i.tipomov idTipoMov
+                    FROM
+                        ingresos i
+                        INNER JOIN ingdetalle id ON i.idingresos = id.idingreso
+                        INNER JOIN tmovimiento t ON i.tipomov = t.id
+                        INNER JOIN provedores p ON i.proveedor = p.idproveedor
+                        INNER JOIN users u ON u.id = i.autor
+                        INNER JOIN almacenes a ON a.idalmacen = i.almacen
+                        INNER JOIN moneda m ON i.moneda = m.id
+                        INNER JOIN tipocambio tc ON i.fechamov = tc.fecha
+                    WHERE
+                        i.almacen LIKE '%$alm'
+                        AND t.id LIKE '%$tin'
+                        AND i.fechamov BETWEEN '$ini'
+                        AND '$fin'
+                    GROUP BY
+                        i.idIngresos
+                    ORDER BY
+                        i.gestion DESC,
+                        i.nmov DESC
             ";
         }
         else
         {
-            $sql="SELECT i.nmov n,i.idIngresos,t.sigla,t.tipomov,t.id as idtipomov, i.fechamov, p.nombreproveedor,p.idproveedor, i.nfact, i.flete, i.img_route,
-				SUM(id.total) total, i.estado,i.fecha, CONCAT(u.first_name,' ', u.last_name) autor, i.moneda, m.id as idmoneda, a.almacen, 
-                a.idalmacen, m.sigla monedasigla, i.ordcomp, i.obs, i.anulado,i.tipocambio, tc.tipocambio valorTipoCambio, 
-                SUM(id.total)/tc.tipoCambio totalsus,i.tipoDoc
-			FROM ingresos i
-            INNER JOIN ingdetalle id
-            on i.idingresos=id.idingreso
-			INNER JOIN tmovimiento  t
-			ON i.tipomov = t.id
-			INNER JOIN provedores p
-			ON i.proveedor=p.idproveedor
-			INNER JOIN users u
-			ON u.id=i.autor
-			INNER JOIN almacenes a
-			ON a.idalmacen=i.almacen
-			INNER JOIN moneda m
-			ON i.moneda=m.id
-            INNER JOIN tipocambio tc
-            ON i.fechamov = tc.fecha
-            WHERE idIngresos=$id
-			ORDER BY i.idIngresos DESC
-            LIMIT 1
+            $sql="SELECT
+                    i.nmov n,
+                    i.idIngresos,
+                    t.sigla,
+                    t.tipomov,
+                    t.id as idtipomov,
+                    i.fechamov,
+                    p.nombreproveedor,
+                    p.idproveedor,
+                    i.nfact,
+                    i.flete,
+                    i.img_route,
+                    SUM(id.total) total,
+                    i.estado,
+                    i.fecha,
+                    CONCAT(u.first_name, ' ', u.last_name) autor,
+                    i.moneda,
+                    m.id as idmoneda,
+                    a.almacen,
+                    a.idalmacen,
+                    m.sigla monedasigla,
+                    i.ordcomp,
+                    i.obs,
+                    i.anulado,
+                    i.tipocambio,
+                    tc.tipocambio valorTipoCambio,
+                    SUM(id.total) / tc.tipoCambio totalsus,
+                    i.tipoDoc,
+                    i.fechaIngreso
+                FROM
+                    ingresos i
+                    INNER JOIN ingdetalle id on i.idingresos = id.idingreso
+                    INNER JOIN tmovimiento t ON i.tipomov = t.id
+                    INNER JOIN provedores p ON i.proveedor = p.idproveedor
+                    INNER JOIN users u ON u.id = i.autor
+                    INNER JOIN almacenes a ON a.idalmacen = i.almacen
+                    INNER JOIN moneda m ON i.moneda = m.id
+                    INNER JOIN tipocambio tc ON i.fechamov = tc.fecha
+                WHERE
+                    idIngresos = $id
+                ORDER BY
+                    i.idIngresos DESC
+                LIMIT
+                    1
             ";
             
 
