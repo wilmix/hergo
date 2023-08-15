@@ -102,8 +102,16 @@ function agregarTabla(res , nombre) {
             },
             {
                 field: 'fecha',
-                title: 'Fecha',
+                title: 'Fecha Documento',
                 align: 'center',
+                formatter: formato_fecha
+
+            },
+            {
+                field: 'fechaKardex',
+                title: 'Fecha Kardex',
+                align: 'center',
+                visible: false,
                 formatter: formato_fecha
 
             },
