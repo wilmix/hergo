@@ -255,6 +255,8 @@ function mostrarTablaIngresosTraspaso(res) {
 }
 function mostrarTablaIngresos(res) {
     almacen = $("#almacen_filtro").val()
+    tipoIngreso = $("#tipo_filtro").val()
+    console.log(tipoIngreso);
     $("#tingresos").bootstrapTable({
 
         data: res,
@@ -314,12 +316,22 @@ function mostrarTablaIngresos(res) {
                 sortable: true,
             },
             {
+                field: 'ordcomp',
+                title: "Baja",
+                align: 'center',
+                searchable:false,
+                width:'20px',
+                visible: tipoIngreso == 5?true:false,
+            },
+            
+            {
                 field: 'tipoDoc',
                 title: "Documento",
                 align: 'center',
                 sortable: true,
                 width:'80px',
                 searchable:true,
+                visible: tipoIngreso != 5?true:false,
                 filter: {
                     type: "select",
                     data: datosselect[5]
