@@ -166,10 +166,10 @@ $(document).on("keyup","#cantidad_imp,#punitario_imp",function(){
     var tipoingreso=$("#tipomov_imp2").val()
     cant=(cant=="")?0:cant;
     costo=(costo=="")?0:costo;
-    /* if(tipoingreso==2 || tipoingreso==3)//si es compra local idcompralocal=2
-    { */
+    if(tipoingreso==2 || tipoingreso==3)//si es compra local idcompralocal=2
+    {
         costo=calculoCostoInventarios(cant,costo)
-    /* } */
+    } 
     //total=cant*costo;
     $("#constounitario").val(costo);//costo calculado
     /***para la alerta*******/
@@ -411,12 +411,8 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
         articulos.push({id})
     }
 
+    costo=tipoingreso==5 ? totalfac : calculoCostoInventarios(cant,costo)
 
-    /* if(tipoingreso==2 || tipoingreso==3 )//si es compra local idcompralocal=2
-    { */
-        totalfac = costo
-        costo=calculoCostoInventarios(cant,costo)
-   /*  } */ 
     total=cant*costo; 
     let punitfac=cant==0?0:(totalfac/cant);
     let articulo
