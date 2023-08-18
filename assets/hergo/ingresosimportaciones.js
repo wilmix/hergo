@@ -386,9 +386,7 @@ function calculoCostoInventarios(cantidad, costo) {
 
     return costoFinal
 }
-function agregarArticulo() //faltaria el id costo; si se guarda en la base primero
-{
-    //idcosto=12;
+function agregarArticulo() {
     let id=$("#idArticulo").val()
     let codigo=$("#articulo_impTest").val()
     let descripcion=$("#Descripcion_imp").val()
@@ -411,7 +409,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
         articulos.push({id})
     }
 
-    costo=tipoingreso==5 ? totalfac : calculoCostoInventarios(cant,costo)
+    costo = tipoingreso == 5 ||  tipoingreso == 16 ? totalfac : calculoCostoInventarios(cant,costo)
 
     total=cant*costo; 
     let punitfac=cant==0?0:(totalfac/cant);
