@@ -136,6 +136,7 @@ class Emitir_model extends CI_Model
                     p.descripcion label 
                 FROM
                     siat_sincro_tipo_metodo_pago p 
+                ORDER BY CAST(p.codigoClasificador AS SIGNED)
                 ";
 		$query=$this->db->query($sql);		
 		return $query->result_array();
@@ -324,6 +325,7 @@ class Emitir_model extends CI_Model
                     INNER JOIN siat_sincro_unidad_medida su ON su.codigoClasificador = u.siat_codigo
                 WHERE
                     fd.idFactura ='$id'
+                ORDER BY fd.ArticuloCodigo
                 ";
 		$query=$this->db->query($sql);		
 		return $query->result();
@@ -649,7 +651,9 @@ class Emitir_model extends CI_Model
                     AND MONTH(fs.fechaEmision) = $mes
                     AND YEAR(f.fechaFac) = $año
                     AND MONTH(f.fechaFac) = $mes
-                    AND DAY(f.fechaFac) = $dia";
+                    AND DAY(f.fechaFac) = $dia
+                    AND f.lote = 0
+        ";
         $query=$this->db->query($sql);		
         return $query->row();
     }
