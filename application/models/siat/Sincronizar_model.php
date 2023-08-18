@@ -148,7 +148,7 @@ class Sincronizar_model extends CI_Model
                     MAX(ss.id) sincro_id,
                     sts.id,
                     sts.tabla,
-                    DATE_FORMAT(MAX(ss.created_at), '%d/%m/%Y %H:%i') created_at
+                    DATE_FORMAT(MAX(ss.created_at), '%d/%m/%Y') created_at
                 FROM
                     sincronizaciones_siat ss
                     INNER JOIN siat_tablas_sincro sts ON sts.id = ss.sincro_tabla_id
