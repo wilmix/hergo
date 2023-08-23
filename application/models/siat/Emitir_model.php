@@ -295,12 +295,14 @@ class Emitir_model extends CI_Model
                     f.moneda,
                     fs.montoTotalMoneda,
                     f.total,
-                    f.lote
+                    f.lote,
+                    tc.tipocambio tipoCambio 
                 FROM
                     factura f
                     INNER JOIN factura_siat fs ON fs.factura_id = f.idFactura
                     INNER JOIN clientes c ON c.idCliente = f.cliente 
                     INNER JOIN almacenes a ON a.idalmacen = f.almacen
+                    INNER JOIN tipocambio tc ON tc.fecha = f.fechaFac
                 WHERE
                     f.idFactura = '$id'
                 ";

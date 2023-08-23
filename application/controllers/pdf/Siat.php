@@ -28,7 +28,7 @@ class Siat extends CI_Controller {
         //$this->pdf->AddPage('P',array(195,216));
         $this->pdf->AddPage('P','Letter');
         $this->pdf->AliasNbPages();
-        $this->pdf->SetAutoPageBreak(true,130); //40
+        $this->pdf->SetAutoPageBreak(true,120); //40
         $this->pdf->SetTitle('FAC' . '-' .$factura->numeroFactura. '-' . $factura->gestion);
         $this->pdf->SetLeftMargin(10);
         $this->pdf->SetRightMargin(10);
@@ -57,8 +57,9 @@ class Siat extends CI_Controller {
                 $this->pdf->Line(10,$this->pdf->GetY(),208,$this->pdf->GetY());
             }
            
-            $this->totales($totalFactura, $this->pdf->GetY(), $factura->montoTotalMoneda, $factura->moneda);
-            $this->literal($factura->total,$this->pdf->GetY()-15);
+            $this->literal($factura->total,$this->pdf->GetY());
+
+            $this->totales($totalFactura, $this->pdf->GetY()-5, $factura->montoTotalMoneda, $factura->moneda, $factura->tipoCambio);
 
         //guardar
        $this->pdf->Output('I','FAC' . '-' .$factura->numeroFactura. '-' . $factura->gestion .'.pdf',true);
@@ -66,18 +67,18 @@ class Siat extends CI_Controller {
   public function literal($total,$y)
   {
     $this->pdf->SetY($y);
-    $l =0;
+    $l = 0;
     $entera = intval(round($total,2));
     $ctvs = round((round($total,2) - $entera) * 100);
     $ctvs = sprintf('%02d',$ctvs);
     $ctvs = ($ctvs == 0) ? '00' : $ctvs;
     $this->pdf->SetFont('Arial','',8);
-    $this->pdf->Cell(10,5,'SON: ',$l,0,'L',1);
+    $this->pdf->Cell(10,5,'SON: ',$l,0,'L',0);
     $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';
     //$this->pdf->Cell(113,6,$literal,$l,0,'l',1);
     $this->pdf->MultiCell(113,5,utf8_decode($literal),$l,'L',0);
   }
-  public function totales($totalFactura, $y, $montoTotalMoneda, $moneda)
+  public function totales($totalFactura, $y, $montoTotalMoneda, $moneda, $tipoCambio)
   {
     $this->pdf->SetY($y);
     $this->pdf->SetFont('Arial','',8);
@@ -95,7 +96,10 @@ class Siat extends CI_Controller {
     if ($moneda == 2) {
       $this->pdf->SetX(133);
       $this->pdf->Cell(55,5,utf8_decode('MONTO A PAGAR (DOLAR)'),'TLB',0,'R',1);
-      $this->pdf->Cell(20,5,number_format($montoTotalMoneda, 2, ".", ","),'TB',1,'R',1);  
+      $this->pdf->Cell(20,5,number_format($montoTotalMoneda, 2, ".", ","),'TB',1,'R',1); 
+      $this->pdf->SetX(133);
+      $this->pdf->Cell(55,5,utf8_decode('TIPO DE CAMBIO'),'TLB',0,'R',1);
+      $this->pdf->Cell(20,5,number_format($tipoCambio, 2, ".", ","),'TB',1,'R',1);   
     }
     $this->pdf->SetX(133);
     $this->pdf->Cell(55,5,utf8_decode('IMPORTE BASE CRÉDITO FISCAL Bs'),'TLB',0,'R',1);
