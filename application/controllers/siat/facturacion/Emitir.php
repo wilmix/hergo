@@ -24,11 +24,10 @@ class Emitir extends CI_Controller
 	public function __construct()
 	{	
 		parent::__construct();
-		
 		$this->load->model('siat/Emitir_model');
 		$this->load->model('Egresos_model');
 		$this->load->model('Facturacion_model');
-
+		$this->libAcc = new LibAcceso();
 	}
 	public function pendientesFacturar()
 	{
