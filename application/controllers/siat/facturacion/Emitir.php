@@ -27,7 +27,6 @@ class Emitir extends CI_Controller
 		$this->load->model('siat/Emitir_model');
 		$this->load->model('Egresos_model');
 		$this->load->model('Facturacion_model');
-		$this->libAcc = new LibAcceso();
 	}
 	public function pendientesFacturar()
 	{
@@ -238,6 +237,7 @@ class Emitir extends CI_Controller
 	public function consultaFacturasSiat()
 	{
 		$this->accesoCheck(21);
+		$this->libAcc = new LibAcceso();
 		$this->titles('SiatFacturas','Siat Consulta Facturas','Facturas');
 
 		$permisos = $this->libAcc->retornarSubMenus($_SESSION['accesoMenu']);
