@@ -302,17 +302,18 @@ class Reportes_model extends CI_Model
 						
 					FROM articulos_activos aa
 					LEFT JOIN
-						(SELECT 
-							pit.`articulo`, 
-							a.`CodigoArticulo`, 
-							a.`Descripcion`,
-							u.`Sigla`,
-							pit.`cantidad`,
-							pit.`estado`,
-							pit.`recepcion`
+							(SELECT 
+								pit.`articulo`, 
+								a.`CodigoArticulo`, 
+								a.`Descripcion`,
+								u.`Sigla`,
+								pit.`cantidad`,
+								pit.`estado`,
+								p.recepcion
 							FROM pedidos_items pit
-							INNER JOIN articulos a ON a.`idArticulos` = pit.`articulo`
-							INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
+								INNER JOIN articulos a ON a.`idArticulos` = pit.`articulo`
+								INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
+								INNER JOIN pedidos p ON p.id = pit.idPedido
 							WHERE pit.`status` = FALSE
 						)back 
 					ON back.articulo = aa.`idArticulos`

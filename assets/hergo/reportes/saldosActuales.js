@@ -123,11 +123,11 @@ function retornarSaldosActuales() {
                 },
                 {
 					data: 'recepcion',
-					title: 'LLega el:',
+					title: 'Recepción Estimada:',
                     className: 'text-center',
                     searchable: false,
                     render: formato_fecha,
-                    visible: false
+                    //visible: false
                 },
                 {
 					data: 'estado',

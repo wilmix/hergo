@@ -84,7 +84,7 @@ function getBackOrders() {
                 },
                 {
 					data: 'estimada',
-					title: 'RECECIÒN ESTIMADA',
+					title: 'RECEPCIÒN ESTIMADA',
 					className: 'text-center',
 					render: formato_fecha,
                 },
