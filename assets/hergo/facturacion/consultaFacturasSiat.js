@@ -57,6 +57,10 @@ function getData() {
 					className: 'text-center',
 				},
 				{
+					data: 'numeroFacturaSearch',
+					visible: false
+				},
+				{
 					data: 'fechaFac',
 					title: 'FECHA',
 					className: 'text-center',
@@ -132,7 +136,8 @@ function getData() {
                 {
 					data: 'codigoRecepcion',
 					title: 'CODIGO RECEPCIÓN',
-					visible: false
+					visible: false,
+					//searchable: false
 				},
 				{
 					data: 'leyenda',
@@ -142,7 +147,8 @@ function getData() {
                 {
 					data: 'cuf',
 					title: 'CUF',
-					visible: false
+					visible: false,
+					//searchable: false
 				},
 				
                 {

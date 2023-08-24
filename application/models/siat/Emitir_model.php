@@ -341,7 +341,7 @@ class Emitir_model extends CI_Model
                     f.`idFactura`,
                     f.`lote`,
                     df.`manual`,
-                    -- CONCAT('F',f.`nFactura`) numeroFactura,
+                    CONCAT('*',f.`nFactura`,'*') numeroFacturaSearch,
                     f.`nFactura` numeroFactura,
                     f.`fechaFac`,
                     f.`ClienteNit`,
