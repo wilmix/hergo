@@ -238,14 +238,13 @@ class Emitir extends CI_Controller
 	}
 	public function consultaFacturasSiat()
 	{
-		$this->libAcc = new LibAcceso();
-		$permisos = $this->libAcc->retornarSubMenus($_SESSION['accesoMenu']);
-		$this->datos['permisoAnular'] = in_array(45, $permisos) ? 'true' : 'false';
-
 		$this->accesoCheck(21);
 		$this->titles('SiatFacturas','Siat Consulta Facturas','Facturas');
-			
+
+		$permisos = $this->libAcc->retornarSubMenus($_SESSION['accesoMenu']);
+		$this->datos['permisoAnular'] = in_array(45, $permisos) ? 'true' : 'false';
 		$this->datos['foot_script'][]=base_url('assets/hergo/facturacion/consultaFacturasSiat.js') .'?'.rand();
+			
 		$this->setView('siat/facturas/consultaFacturasSiat');
 	}
 	public function getFacturasSiat()

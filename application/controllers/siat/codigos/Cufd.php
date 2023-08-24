@@ -2,17 +2,20 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Cufd extends CI_Controller
 {
+    public $Cliente_model;
+	public $Almacen_model;
+	public $Cufd_model;
+    
 	public function __construct()
 	{	
 		parent::__construct();
         $this->load->model("Almacen_model");
         $this->load->model('siat/Cufd_model');
-
 	}
     public function index()
     {
         
-        //$this->accesoCheck(57);
+        $this->accesoCheck(71);
 		$this->titles('CUFD','Código Único de Facturación Diaria','');
 		$this->datos['foot_script'][]=base_url('assets/hergo/siat/codigos/cufd.js') .'?'.rand();
 		$this->setView('siat/codigos/cufd');

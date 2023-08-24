@@ -465,7 +465,8 @@ class Auth extends CI_Controller {
 	// create a new user
 	public function create_user()
     {
-		$this->libacceso->acceso(36);
+		//$this->libacceso->acceso(36);
+		$this->accesoCheck(36);
 		$this->titles('CrearUsuario','Crear Usuario','Configuración');
 		//if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
 

@@ -12,14 +12,14 @@ class Operaciones extends CI_Controller
 	}
     public function eventosSignificativos()
 	{
-		//$this->accesoCheck(67);
+		$this->accesoCheck(71);
 		$this->titles('EventosSignificativos','Eventos Significativos','SIAT');
 		$this->datos['foot_script'][]=base_url('assets/hergo/siat/operaciones/eventosSignificativos.js') .'?'.rand();
 		$this->setView('siat/operaciones/eventosSignificativos');
 	}
 	public function puntosVenta()
 	{
-		//$this->accesoCheck(67);
+		$this->accesoCheck(71);
 		$this->titles('PuntosVenta','Puntos de Venta','SIAT');
 		$this->datos['foot_script'][]=base_url('assets/hergo/siat/operaciones/puntosVenta.js') .'?'.rand();
 		$this->setView('siat/operaciones/puntosVenta');

@@ -12,14 +12,14 @@ class Sincronizar extends CI_Controller
 	}
     public function sincronizarCatalogos()
     {
-        //$this->accesoCheck(57);
+        $this->accesoCheck(71);
 		$this->titles('SincronizarDatos','Sincronizar Catálogos','');
 		$this->datos['foot_script'][]=base_url('assets/hergo/siat/sincronizar/sincronizarCatalogos.js') .'?'.rand();
 		$this->setView('siat/sincronizar/sincronizarCatalogos');
     }
     public function actividades()
     {
-        //$this->accesoCheck(57);
+        $this->accesoCheck(71);
 		$this->titles('SincronizarActividades','Sincronizar Actividades Económicas','');
 		$this->datos['foot_script'][]=base_url('assets/hergo/siat/sincronizar/actividades.js') .'?'.rand();
 		$this->setView('siat/sincronizar/actividades');
@@ -46,7 +46,7 @@ class Sincronizar extends CI_Controller
     }
     public function actividadesDocumentoSector()
     {
-        //$this->accesoCheck(57);
+        $this->accesoCheck(71);
 		$this->titles('ActividadesDocumentoSector','Sincronizar Actividades Documento Sector','');
 		$this->datos['foot_script'][]=base_url('assets/hergo/siat/sincronizar/actividadesDocumentoSector.js') .'?'.rand();
 		$this->setView('siat/sincronizar/actividadesDocumentoSector');
@@ -86,7 +86,7 @@ class Sincronizar extends CI_Controller
     }
     public function listaLeyendasFactura()
     {
-        //$this->accesoCheck(57);
+        $this->accesoCheck(71);
 		$this->titles('LeyendasFactura','Sincronizar Lista de Leyendas Factura','');
 		$this->datos['foot_script'][]=base_url('assets/hergo/siat/sincronizar/listaLeyendasFactura.js') .'?'.rand();
 		$this->setView('siat/sincronizar/listaLeyendasFactura');
@@ -109,7 +109,7 @@ class Sincronizar extends CI_Controller
     }
     public function listaMensajesServicios()
     {
-        //$this->accesoCheck(57);
+        $this->accesoCheck(71);
 		$this->titles('LeyendasFactura','Sincronizar Lista Mensajes de Servicio','');
 		$this->datos['foot_script'][]=base_url('assets/hergo/siat/sincronizar/listaMensajesServicios.js') .'?'.rand();
 		$this->setView('siat/sincronizar/listaMensajesServicios');
@@ -132,7 +132,7 @@ class Sincronizar extends CI_Controller
     }
     public function listaProductosServicios()
     {
-        //$this->accesoCheck(57);
+        $this->accesoCheck(71);
 		$this->titles('SincroProductosServicios','Sincronizar Lista Productos y Servicios','');
 		$this->datos['foot_script'][]=base_url('assets/hergo/siat/sincronizar/listaProductosServicios.js') .'?'.rand();
 		$this->setView('siat/sincronizar/listaProductosServicios');
@@ -156,7 +156,7 @@ class Sincronizar extends CI_Controller
     }
     public function parametricas()
     {
-        //$this->accesoCheck(57);
+        $this->accesoCheck(71);
 		$this->titles('SincroParametricas','Sincronizar Listado Paramétricas','');
 		$this->datos['foot_script'][]=base_url('assets/hergo/siat/sincronizar/parametricas.js') .'?'.rand();
 		$this->setView('siat/sincronizar/parametricas');
