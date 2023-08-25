@@ -663,15 +663,16 @@ $("#input-1").fileinput({
 });
 function tipoFactura(data, type, row){
 
-	
-
-	//$icon = row.cafc == '' || row.cafc == null ?  $comp2 : $manual
   if (row.cafc == '' || row.cafc == null) {
-    if (row.codigoRecepcion == '') {
+    if(row.pagadaF == 'ANULADA'){
+      $icon = '<div style=" font-size:1.5em; color:red;"><span class="fa fa-desktop computarizada"></span></div>'
+    } else if (row.codigoRecepcion == '') {
       $icon = '<div style=" font-size:1.5em; "><span class="fa fa-desktop computarizada"></span></div>'
     } else if(row.lote == '138'){
-      $icon = '<div style=" font-size:1.5em; color:blue;"><span class="fa fa-desktop computarizada"></span></div>'
-    } else {
+      $icon = '<div style=" font-size:1.5em; color:blue;"><span class="fa fa-external-link computarizada"></span></div>'
+    } else if(row.lote == '138' && row.pagadaF == 'ANULADA'){
+      $icon = '<div style=" font-size:1.5em; color:red;"><span class="fa fa-external-link computarizada"></span></div>'
+    }else {
       $icon = '<div style=" font-size:1.5em; color:green;"><span class="fa fa-desktop computarizada"></span></div>'
     }
   } else {
