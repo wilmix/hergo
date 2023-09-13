@@ -39,9 +39,9 @@ class Facturas extends CI_Controller
 		$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/Verhoeff.js');
 		$this->datos['cabeceras_script'][]=base_url('assets/codigoControl/qrcode.min.js');
 
-		/*$this->libAcc = new LibAcceso();
+		$this->libAcc = new LibAcceso();
 		$permisos = $this->libAcc->retornarSubMenus($_SESSION['accesoMenu']);
-		$this->datos['permisoAnular'] = in_array(45, $permisos) ? 'true' : 'false';*/
+		$this->datos['permisoAnular'] = in_array(45, $permisos) ? 'true' : 'false';
 	}
 	
 	public function index()
