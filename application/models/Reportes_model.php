@@ -66,13 +66,19 @@ class Reportes_model extends CI_Model
 					ON e.moneda=m.id 
 					INNER JOIN tipocambio tc
 					ON e.`fechamov` = tc.`fecha`
-					LEFT JOIN notaentregasinfo ne 
-					ON ne.egresos_id = e.idegresos
+					LEFT JOIN (
+								SELECT
+									*
+								FROM
+									notaentregasinfo ni
+								GROUP BY
+									ni.egresos_id
+								) ni ON ni.egresos_id = e.idegresos
 					WHERE
 					e.`estado`<>1
 					AND t.id = 7
 					AND e.anulado = 0
-					AND ne.tipoNota LIKE '%$tipoNota'
+					AND ni.tipoNota LIKE '%$tipoNota'
 					AND e.fechamov 
 					BETWEEN '$ini' AND '$fin'
 					AND e.almacen LIKE '%$alm'
