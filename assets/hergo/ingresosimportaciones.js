@@ -109,14 +109,14 @@ $(document).on("click","#agregar_articulo",function(){
     }
 })
 $(document).on("click",".eliminarArticulo",function(){   
-   let id=$("#idArticulo").val()
-    articulos.forEach(function(index, element) {
-        if (index.id == id) {
-            delete articulos[element]
-        }
-    })
-    $(this).parents("tr").remove()
-    calcularTotal()
+   let id = $(this).closest("tr").find(".estilofila.hidden").val(); // Obtener el ID del artículo
+
+    articulos = articulos.filter(function(element) {
+        return element.id !== id; // Filtrar para mantener todos los elementos excepto el que tiene el mismo ID
+    });
+
+    $(this).parents("tr").remove();
+    calcularTotal();
 })
 $(document).on("change","#almacen_imp",function(){
     loc_almacen = $("#almacen_imp").val()
@@ -404,7 +404,6 @@ function agregarArticulo() {
             return false;
         }
         articulos.push({id})
-
     } else {
         articulos.push({id})
     }
