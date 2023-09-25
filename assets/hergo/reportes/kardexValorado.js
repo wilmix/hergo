@@ -129,7 +129,7 @@ function agregarTabla(res , nombre) {
                 field: 'nombreproveedor',
                 title: 'Cliente | Proveedor',
                 align: 'left',
-                
+                formatter: clienteNotaInfo
             },
             {
                 field: 'p',
@@ -215,6 +215,12 @@ function operateFormatter3(value, row, index) {
     num = Math.round(value * 100) / 100
     num = num.toFixed(2);
     return (formatNumber.new(num));
+}
+function clienteNotaInfo(value, row, index) {
+    if (row.notaInfo == '') {
+        return (`${row.nombreproveedor}`);
+    }
+    return (`${row.nombreproveedor} (${row.notaInfo})`);
 }
 function costoPromedio4(value, row, index) {
     num = Number(value)
