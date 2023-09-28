@@ -85,7 +85,7 @@ class Proforma extends CI_Controller {
         $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '. $proforma->moneda;
         $this->pdf->Ln(1);
         $this->pdf->Cell(7,6,'SON:',$l,0,'L',1);
-        $this->pdf->Cell(156,6,$literal,$l,0,'l',1);
+        $this->pdf->Cell(156,6,utf8_decode($literal),$l,0,'l',1);
         //$this->pdf->Ln(5);
         $this->pdf->SetFillColor(20,60,190);
         //$this->pdf->Rect(10,$this->pdf->GetY()+5,200,1,'F');
