@@ -302,7 +302,8 @@ class Reportes_model extends CI_Model
 						(aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz`) total,
 						IFNULL(back.cantidad,0) backOrder,
 						back.recepcion,
-						'' back.estado,
+						-- back.estado,
+						' ' estado,
 						aa.`url`,
 						aa.precio
 						
