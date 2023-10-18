@@ -121,20 +121,20 @@ function retornarSaldosActuales() {
                     searchable: false,
                     render: numberDecimal
                 },
-                {
+                /* {
 					data: 'recepcion',
 					title: 'Recepción Estimada:',
                     className: 'text-center',
                     searchable: false,
                     render: formato_fecha,
-                    //visible: false
-                },
+                    width: '8%'
+                }, */
                 {
 					data: 'estado',
 					title: 'Estado',
                     className: 'text-right',
                     searchable: false,
-                    visible: false
+                    visible: true
                 },
 				
 
