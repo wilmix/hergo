@@ -602,6 +602,7 @@ class Reportes_model extends CI_Model
 					AND e.almacen LIKE '%$almacen'
 					AND e.`cliente` = '$cliente'
 					AND e.tipomov = 7
+				GROUP BY e.idegresos
 			UNION ALL 
 				SELECT c.`idCliente`, c.`nombreCliente`, p.`fechaPago`, p.`numPago`, p.`almacen`, 
 					CONCAT('Fac. ',f.`lote`,'-',f.nFactura,', ',p.`glosa`) glosa,
@@ -678,6 +679,7 @@ class Reportes_model extends CI_Model
 								AND e.almacen LIKE '%$almacen'
 								AND e.`cliente` = '$cliente'
 								AND e.tipomov = 7
+							GROUP BY e.idegresos
 			
 						UNION ALL 
 							SELECT c.`idCliente`, c.`nombreCliente`, p.`fechaPago`, p.`numPago`, p.`almacen`, 

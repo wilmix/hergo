@@ -127,7 +127,7 @@ class Reportes extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-			$res=$this->Reportes_model->mostrarSaldos(); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
+			$res=$this->Reportes_model->mostrarSaldos();
 			$res=$res->result_array();
 			echo json_encode($res);
 		}
@@ -1054,9 +1054,9 @@ class Reportes extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-        	$ini=$this->security->xss_clean($this->input->post("i"));
+        	/* $ini=$this->security->xss_clean($this->input->post("i"));
         	$fin=$this->security->xss_clean($this->input->post("f"));
-			$alm=$this->security->xss_clean($this->input->post("a"));
+			$alm=$this->security->xss_clean($this->input->post("a")); */
 			$res=$this->Reportes_model->showInventarioTM();
 			$res=$res->result_array();
 			echo json_encode($res);
