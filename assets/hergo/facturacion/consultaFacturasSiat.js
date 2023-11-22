@@ -197,8 +197,8 @@ function getData() {
 				{
 					text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
 					action: function (e, dt, node, config) {
-						pro.verificarEvento()
-						//getData()
+						//pro.verificarEvento()
+						getData()
 					}
 				},
 				{
