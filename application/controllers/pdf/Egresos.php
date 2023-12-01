@@ -27,6 +27,7 @@ class Egresos extends CI_Controller {
         'direccion' => $egreso->direccion ?? '',
         'telefono' => $egreso->telefono ?? '',
         'fax' => $egreso->fax ?? '',
+        'email' => $egreso->email ?? '',
         'moneda' => $egreso->moneda,
         'vendedor'=> $egreso->vendedor,
         'nVendedor'=> $egreso->nVendedor,
@@ -67,7 +68,12 @@ class Egresos extends CI_Controller {
                     $this->pdf->Cell(15,5,number_format($linea->cantidad, 2, ".", ","),'',0,'R',0);
                     $this->pdf->Cell(10,5,$linea->Sigla,'',0,'C',0);
                     $this->pdf->Cell(15,5,$linea->CodigoArticulo,'',0,'C',0);
-                    $this->pdf->Cell(110,5,utf8_decode($linea->Descripcion),0,0,'L',0);
+                    if (strlen($linea->Descripcion) > 65) {
+                        $this->pdf->MultiCell(110,4,iconv('UTF-8', 'windows-1252', ($linea->Descripcion)),0,'L',0);
+                        $this->pdf->SetXY(165,$this->pdf->GetY()-4);
+                    } else {
+                        $this->pdf->Cell(110,5,utf8_decode($linea->Descripcion),0,0,'L',0);
+                    }
                     $this->pdf->Cell(20,5,number_format($linea->punitario, 2, ".", ","),0,0,'R',1);
                     $this->pdf->Cell(20,5,number_format(round($linea->punitario,2) * $linea->cantidad, 2, ".", ","),0,0,'R',1);
                 $this->pdf->Ln(5);
