@@ -15,6 +15,20 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function retornar_almacenes()
+	{
+		$sql="SELECT
+				a.idalmacen,
+				a.almacen,
+				a.siglAlm
+			FROM
+				almacenes a
+			WHERE
+				a.`uso` = 1";
+		
+		$query=$this->db->query($sql);		
+		return $query;
+	}
 	public function retornar_almacen($id)
 	{
 		$sql="SELECT * from almacenes where idalmacen = $id";
@@ -299,13 +313,14 @@ class Reportes_model extends CI_Model
 						aa.`elAlto`,
 						aa.`potosi`,
 						aa.`santacruz`,
-						(aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz`) total,
+						aa.reserva,
+						aa.pasbol,
+						(aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz`+ aa.reserva + aa.pasbol) total,
 						IFNULL(back.cantidad,0) backOrder,
 						back.recepcion,
 						back.estado,
 						aa.`url`,
 						aa.precio
-						
 					FROM articulos_activos aa
 					LEFT JOIN
 							(SELECT 
@@ -592,7 +607,20 @@ class Reportes_model extends CI_Model
 					AND f.almacen LIKE '%$almacen'
 					AND c.`idCliente` = '$cliente'
 			UNION ALL
-				SELECT c.`idCliente`, c.`nombreCliente`,  e.`fechamov`, e.`nmov`, e.`almacen`, e.`obs`, ROUND(SUM(ed.`total`),2) saldoTotalNE , 0 , 0 
+				SELECT 
+					c.`idCliente`, 
+					c.`nombreCliente`,  
+					e.`fechamov`, 
+					e.`nmov`, 
+					e.`almacen`, 
+					e.`obs`, 
+					-- ROUND(SUM(ed.`total`),2) saldoTotalNE 
+					ROUND(
+						(SUM(ed.`total`)) - (SUM(ed.`cantFact` * ed.`punitario`)),
+						2
+					) saldoTotalNE,
+					0, 
+					0 
 				FROM egresos e
 					INNER JOIN egredetalle ed ON ed.`idegreso` = e.`idegresos`
 					INNER JOIN clientes c ON c.`idCliente` = e.`cliente`
@@ -802,8 +830,7 @@ class Reportes_model extends CI_Model
 	
 	public function showEstadoVentasCostoNew($alm,$ini,$fin,$mon)
 	{ 
-		$sql="CALL newKardex('$alm','$mon','$ini','$fin')
-		";
+		$sql="CALL newKardex('$alm','$mon','$ini','$fin','')";
 		$query=$this->db->query($sql);		
 		return $query;
 	}
