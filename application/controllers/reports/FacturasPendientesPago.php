@@ -11,7 +11,7 @@ class FacturasPendientesPago extends CI_Controller
 		$this->load->model("reports/FacturasPendientesPago_model");
 		$this->load->model("Ingresos_model");
 		$this->load->model("Reportes_model");
-		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		$this->datos['almacen']=$this->Reportes_model->retornar_almacenes();
 	}
 
     public function index()

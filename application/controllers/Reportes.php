@@ -12,7 +12,7 @@ class Reportes extends CI_Controller
 		parent::__construct();
 		$this->load->model("Reportes_model");
 		$this->load->model("Ingresos_model");
-		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		$this->datos['almacen']=$this->Reportes_model->retornar_almacenes();
 	}
 	public function saldosExcel()
     {       
@@ -143,7 +143,7 @@ class Reportes extends CI_Controller
 		$this->accesoCheck(31);
 		$this->titles('CostoItem','Reportes','Estado de Ventas y Costos por Item');
 		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/estadoVentasCosto.js') .'?'.rand();
-		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		////$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 		$this->setView('reportes/estadoVentasCostoItem');
 	}
 	public function mostrarEstadoVentasCosto()  
@@ -169,7 +169,7 @@ class Reportes extends CI_Controller
 		$this->accesoCheck(42);
 		$this->titles('CostoItemNew','Reportes','Estado de Ventas y Costos por Item Nuevo');
 		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/estadoVentasCostoNew.js') .'?'.rand();
-		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		////$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 		$this->setView('reportes/estadoVentasCostoItemNew');
 	}
 	public function pruebaKardex()
@@ -202,7 +202,7 @@ class Reportes extends CI_Controller
 		$this->accesoCheck(34);
 		$this->titles('KardexItems','Reportes','Kardex Individual Itemes Valorado');
 		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/kardexValorado.js') .'?'.rand();
-		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		//$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 		$this->datos['articulos']=$this->Reportes_model->retornarArticulos();
 		$this->setView('reportes/kardexIndividualValorado');
 	}
@@ -258,7 +258,7 @@ class Reportes extends CI_Controller
 		$this->accesoCheck(29);
 		$this->titles('ResumenLineaMes','Reportes','Resumen de Ventas por Linea y Mes');
 		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/resumenVentasLineaMes.js') .'?'.rand();
-        $this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");	
+        //$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");	
 		$this->setView('reportes/resumenVentasLineaMes');
 	}
 	public function mostrarVentasLineaMes()  //******cambiar a funcion del modelo
@@ -282,7 +282,7 @@ class Reportes extends CI_Controller
 		$this->accesoCheck(28);
 		$this->titles('PendientesPago','Facturas Pendientes de Pago','Reportes');
 		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/facturasPendientesPago.js') .'?'.rand();
-		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");	
+		//$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");	
 		$this->setView('reportes/facturasPendietesPago');
 	}
 	public function mostrarFacturasPendientesPago() 
@@ -305,7 +305,7 @@ class Reportes extends CI_Controller
 		$this->accesoCheck(30);
 		$this->titles('NEporFacturar','Reportes','Notas de Entrega por Facturar');
 		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/notasEntregaPorFacturar.js') .'?'.rand();
-        $this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+        //$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 		$this->setView('reportes/notasEntregaPorFacturar');
 	}
 	public function notasEntregaPorFacturarNew()
@@ -337,7 +337,7 @@ class Reportes extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-            $this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");				//*******agregar alm********
+            //$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");				//*******agregar alm********
 
 			$this->load->view('plantilla/head.php',$this->datos);
 			$this->load->view('plantilla/header.php',$this->datos);
@@ -430,7 +430,7 @@ class Reportes extends CI_Controller
 		$this->accesoCheck(31);
 		$this->titles('FacturaciónClientes','Reportes','Facturación Clientes');
 		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/facturacionClientes.js') .'?'.rand();
-		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");	
+		//$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");	
 		$this->setView('reportes/facturacionClientes');
 	}
 	public function mostrarFacturacionClientes()  
@@ -521,7 +521,7 @@ class Reportes extends CI_Controller
 		$this->accesoCheck(31);
 		$this->titles('DiarioIngresos','Reportes','Diario de Ingresos');
 		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/diarioIngresos.js') .'?'.rand();
-		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		//$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 		$this->datos['tipoingreso']=$this->Reportes_model->retornar_tablaMovimiento("+");
 		$this->datos['tipoPrefer']="2";
 		$this->setView('reportes/diarioIngresos');
@@ -569,7 +569,7 @@ class Reportes extends CI_Controller
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.js');
 			$this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/inputmask.numeric.extensions.js');
             $this->datos['cabeceras_script'][]=base_url('assets/plugins/inputmask/jquery.inputmask.js');
-			$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+			//$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 			//$this->datos['tingreso']=$this->Reportes_model->retornar_tablaMovimiento("+");
 			$this->datos['tipoingreso']=$this->Reportes_model->retornar_tablaMovimiento("+");
 
@@ -795,7 +795,7 @@ class Reportes extends CI_Controller
 		$this->accesoCheck(33);
 		$this->titles('LibroVentas','Reportes','Libro de Ventas');
 		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/libroVentas.js') .'?'.rand();
-		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		//$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 		$this->setView('reportes/libroVentas');
 	}
 	public function mostrarLibroVentas()  
@@ -835,7 +835,7 @@ class Reportes extends CI_Controller
 		$this->accesoCheck(40);
 		$this->titles('KardexCliente','Reportes','Kardex Individual Cliente');
 		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/kardexIndividualCliente.js') .'?'.rand();
-		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		//$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 		$this->setView('reportes/kardexIndividualCliente');
 	}
 	public function mostrarKardexIndividualCliente()  
@@ -867,7 +867,7 @@ class Reportes extends CI_Controller
 		$this->accesoCheck(41);
 		$this->titles('SaldoActualesItems','Saldo Actuales Items','Reportes');
 		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/saldosActualesItems.js') .'?'.rand();
-		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		////$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 		$this->datos['articulos']=$this->Reportes_model->retornarArticulos();
 		$this->datos['linea']=$this->Reportes_model->retornar_tabla("linea");
 		$this->setView('reportes/saldosActualesItems');
@@ -999,7 +999,7 @@ class Reportes extends CI_Controller
 		$this->accesoCheck(50);
 		$this->titles('ClienteItems','Reportes','Reporte Ventas por Cliente - Items');
 		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/clienteItems.js') .'?'.rand();
-		$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
+		//$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");
 		$this->setView('reportes/clientesItems');
 	}
 	public function showClienteItems()

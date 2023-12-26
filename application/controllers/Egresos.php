@@ -5,6 +5,7 @@ class Egresos extends CI_Controller
 	public $Ingresos_model;
 	public $Egresos_model;
 	public $Cliente_model;
+	public $Reportes_model;
 
 	
 	public function __construct()
@@ -14,7 +15,7 @@ class Egresos extends CI_Controller
 		$this->load->model("Ingresos_model");
 		$this->load->model("Egresos_model");
 		$this->load->model("Cliente_model");
-
+		$this->load->model("Reportes_model");
 	}
 	
 	public function index()
@@ -49,7 +50,7 @@ class Egresos extends CI_Controller
 			$this->datos['idegreso']=9;
 		}
 		
-		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
+		$this->datos['almacen']=$this->Reportes_model->retornar_almacenes();
 		$this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
 		$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
 		$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo")->result_array();			
@@ -69,7 +70,7 @@ class Egresos extends CI_Controller
 			$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
 			$this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
 		//$this->datos['fecha']=date('Y-m-d');
-			$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
+			$this->datos['user']=$this->Egresos_model->retornar_tablaUsers();
 			$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
 			$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
 		$this->datos['idegreso']=7;

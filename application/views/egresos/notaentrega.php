@@ -51,17 +51,21 @@
               <div class=" col-xs-6 col-sm-6 col-md-3">
                 <input type="text" name="almacen" value="<?= ($auxIdAlmacen)?>" class="hidden">
                 <label>Almacen: </label>
-                <select class="form-control form-control-sm" id="almacen_ne" name="almacen_ne" <?= ($cont)?"disabled":""?> <?= ($this->ion_auth->is_admin())?"readonly":"readonly"?>>
-                  <option value=<?=$id_Almacen_actual ?>
-                    selected="selected">
-                    <?= $almacen_actual ?>
-                  </option>
-                  <?php foreach ($almacen->result_array() as $fila): ?>
-                  <option value=<?=$fila['idalmacen'] ?>
-                    <?= ($idalmacen==$fila['idalmacen'])?"selected":"" ?> >
-                    <?= $fila['almacen'] ?>
-                  </option>
-                  <?php endforeach ?>
+                <select class="form-control form-control-sm" id="almacen_ne" name="almacen_ne">
+                    <?php if ($grupsOfUser == 'Nacional') : ?>
+                        <?php $almacenSeleccionado = false; ?>
+                        <?php foreach ($almacen->result_array() as $fila): ?>
+                            <?php if ($fila['idalmacen'] == $id_Almacen_actual && !$almacenSeleccionado): ?>
+                                <option value=<?= $fila['idalmacen'] ?> selected="selected"><?= $fila['almacen'] ?></option>
+                                <?php $almacenSeleccionado = true; ?>
+                            <?php else: ?>
+                                <option value=<?= $fila['idalmacen'] ?> ><?= $fila['almacen'] ?></option>
+                            <?php endif; ?>
+                        <?php endforeach ?>
+                    <?php else : ?>
+                        <option value=""></option>
+                        <option value=<?= $id_Almacen_actual ?> selected="selected"><?= $almacen_actual ?></option>
+                    <?php endif; ?>
                 </select>
               </div>
               <div class=" col-xs-6 col-sm-6 col-md-3">
@@ -101,18 +105,23 @@
                 </select>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-2">
-                <label>Vendedor:</label>
+                <label><?php echo( $auxIdTipoIngreso == 7 ? 'E.V.Responsable' : 'Responsable') ?> </label>
                 <select class="form-control form-control-sm" id="idUsuarioVendedor" name="idUsuarioVendedor">
-                  <option value=<?= isset($dcab) ? $dcab->vendedor : $user_id_actual ?>
-                    selected="selected">
-                    <?= isset($dcab) ? $dcab->nVendedor : $nombre_actual ?>
-                  </option>
-                  <?php foreach ($user->result_array() as $fila): ?>
-                    <option value=<?=$fila['id'] ?>
-                      <?=($fila['id']==$idvendedor)?"selected":""  ?> >
-                      <?= $fila['nombre']?>
-                    </option>
-                  <?php endforeach ?>
+                  <?php if ($auxIdTipoIngreso == 7): ?>
+                      <option disabled selected value="0">Seleccione vendedor</option>
+                      <?php foreach ($user->result_array() as $fila): ?>
+                      <option value=<?=$fila['id'] ?>
+                        <?=($fila['id']==$idvendedor)?"selected":""  ?> >
+                        <?= $fila['nombre']?>
+                      </option>
+                    <?php endforeach ?>
+                  <?php else: ?>
+                      <option value=<?= isset($dcab) ? $dcab->vendedor : $user_id_actual ?> selected="selected">
+                          <?= isset($dcab) ? $dcab->nVendedor : $nombre_actual ?>
+                      </option>
+                  <?php endif ?>
+
+                    
                 </select>                
               </div>
             </div> <!-- div class="form-group-sm row" PRIMERA FILA -->

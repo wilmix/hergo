@@ -225,7 +225,7 @@ $( function() {
     {      
         minLength: 2,
         autoFocus: true,
-        source: function (request, response) {        
+        source: function (request, response) {  
             $("#cargandocodigoTest").show(150)        
             $("#codigocorrectoTest").html('<i class="fa fa-times" style="color:#bf0707" aria-hidden="true"></i>')
             glob_guardar=false;
@@ -457,9 +457,14 @@ function actualizarMovimiento() {
 function validarTipoNotaTiempoCredito() {
     let tipoEgreso = $("#_tipomov_ne").val()
     let tipoNota = $("#tipoNota").val()
+    let vendedor = $("#idUsuarioVendedor").val()
     let tiempoCredito = $("#tiempoCredito").val()
     if ( tipoEgreso== 7 && tipoNota == 1 && (tiempoCredito == 0 || tiempoCredito == '')) {
         swal("Error", "Debe poner dias de crédito para Nota de Entrega tipo Venta", "error")
+        return false
+    }
+    if (tipoEgreso== 7 && (vendedor == '0' || vendedor == null)) {
+        swal("Error", "Debe seleccionar ejecutivo de ventas responsable de la nota de entrega.", "error")
         return false
     }
     return true

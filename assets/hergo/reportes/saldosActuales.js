@@ -108,6 +108,20 @@ function retornarSaldosActuales() {
                     render: numberDecimal
                 },
                 {
+					data: 'reserva',
+					title: 'Reserva',
+                    className: 'text-right',
+                    searchable: false,
+                    render: numberDecimal
+                },
+                {
+					data: 'pasbol',
+					title: 'PasBol',
+                    className: 'text-right',
+                    searchable: false,
+                    render: numberDecimal
+                },
+                {
 					data: 'total',
 					title: 'Total',
                     className: 'text-right',
