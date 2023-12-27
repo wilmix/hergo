@@ -310,6 +310,13 @@ const bill = new Vue({
 										bill.porFacturar('4')
 									}
 								},
+								{
+									extend: 'colvis',
+									text: 'PasBol',
+									action: function (e, dt, node, config) {
+										bill.porFacturar('9')
+									}
+								},
 		
 							]
 						},

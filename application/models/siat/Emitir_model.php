@@ -279,6 +279,7 @@ class Emitir_model extends CI_Model
                     a.ciudad,
                     a.phone telefono,
                     a.sucursal,
+                    f.anulada,
                     fs.codigoPuntoVenta,
                     f.nFactura numeroFactura,
                     fs.cuf,
