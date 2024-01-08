@@ -96,6 +96,42 @@ class Cierre_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query;
     }
+    public function newKardex($almacenes, $articulo, $ini, $fin, $moneda) {
+		// Formatear la cadena SQL con los valores proporcionados
+	   $sql = "CALL newKardex(" . $this->db->escape($almacenes) . ", '$moneda', '$ini', '$fin', " . $this->db->escape($articulo) . ")";
+	   $query = $this->db->query($sql, array($almacenes, $articulo));
+	   mysqli_next_result( $this->db->conn_id );
+	   $query=$this->db->query($sql);	
+	   $result = $query->result();
+	   $query->next_result(); 
+	   $query->free_result();
+	   return $result;
+   }
+    public function itemsSaldosNewKardex($alm)
+	{
+        $result = $this->newKardex($alm, '', '2023-01-01', '2023-12-31', '0');
+
+		 if ($result) {
+			$this->db->select(' idArticulo "0",
+                                codigo "1",
+                                descp "2",
+                                cantidadSaldo cantidad,
+                                ROUND(cpp, 2) "4",
+                                ROUND(SUM (invFinal), 2) "5",
+                                ROUND(cpp, 2) "6",
+                                ROUND(SUM (invFinal), 2) "7",
+                                cantidadSaldo "3"
+                                ');
+			$this->db->from('kardex3');
+			$this->db->where('idDetalle IS NULL');
+			$this->db->where('codigo IS NOT NULL');
+            $this->db->where('cantidadSaldo >', 0);
+            $this->db->group_by('codigo');
+
+			$inventarioFinal = $this->db->get()->result_array();
+            return $inventarioFinal;
+		} 
+    }
 
     public function gestionActual()
 	{

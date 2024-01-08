@@ -329,7 +329,7 @@ function retornarVerificarNegativos()
                     align: 'center',
                 },
                 {
-                    field: 'Facturado',
+                    field: 'facturado',
                     title: 'Facturado',
                     sortable: true,
                     width:'10px',

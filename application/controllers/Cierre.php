@@ -2,6 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Cierre extends CI_Controller
 {
+	public $Ingresos_model;
+	public $Cierre_model;
+
 	
 	public function __construct()
 	{	
@@ -160,10 +163,7 @@ class Cierre extends CI_Controller
 			$gestionII= date("Y", strtotime($fechaII));
 			$pendientes = $this->Cierre_model->showPendientes($gestionII)->result();
 			$negativos = $this->Cierre_model->showNegativos()->result();
-			$gestionActual = $this->Cierre_model->gestionActual()->row();
-			if ($gestionII != $gestionActual->gestionActual+1) {
-				echo json_encode(false);
-			} else if ($pendientes) {
+			if ($pendientes) {
 				echo json_encode(false);
 				return false;
 			} else if ($negativos) {
@@ -212,7 +212,9 @@ class Cierre extends CI_Controller
 			$ingreso->gestion = $gestion;
 			$ingreso->obs = 'INVENTARIO INICIAL '.$gestion. ' ' . $value->almacen;
 			$ingreso->nmov = $this->Ingresos_model->retornarNumMovimiento($ingreso->tipomov,$gestion,$ingreso->almacen);
-			$ingreso->articulos= $this->Cierre_model->itemsSaldos($ingreso->almacen)->result_array();
+			//$ingreso->articulos= $this->Cierre_model->itemsSaldos($ingreso->almacen)->result_array();
+			$ingreso->articulos= $this->Cierre_model->itemsSaldosNewKardex($ingreso->almacen);
+
 
 			if (empty($ingreso->articulos)) {
 				$id = '';
@@ -238,5 +240,15 @@ class Cierre extends CI_Controller
 
 		$saldos = $this->Cierre_model->updateSaldos($ingresos, $egresos, $gestion);
 		return $saldos;
+	}
+	function newKardex($alm) : void {
+		//$saldos = $this->Cierre_model->itemsSaldosNewKardex($alm);
+		$saldos = $this->Cierre_model->itemsSaldos($alm)->result_array();
+		var_dump($saldos);
+	}
+	function saldosActual($alm) : void {
+		$saldos = $this->Cierre_model->itemsSaldosNewKardex($alm);
+		//$saldos = $this->Cierre_model->itemsSaldos($alm)->result_array();
+		var_dump($saldos);
 	}
 }
