@@ -136,4 +136,31 @@ class Welcome_model extends CI_Model
         $this->db->where('cantidad', $cantidad);
         $this->db->update('ingdetalle', $data);
     }
+	public function newKardex($almacenes, $articulo, $ini, $fin, $moneda) {
+		// Formatear la cadena SQL con los valores proporcionados
+	   $sql = "CALL newKardex(" . $this->db->escape($almacenes) . ", '$moneda', '$ini', '$fin', " . $this->db->escape($articulo) . ")";
+	   $query = $this->db->query($sql, array($almacenes, $articulo));
+	   
+	   mysqli_next_result( $this->db->conn_id );
+	   $query=$this->db->query($sql);	
+	   $result = $query->result();
+	   $query->next_result(); 
+	   $query->free_result();
+
+	   return $result;
+   }
+   function allCodigos($almacenes, $articulo, $ini, $fin, $moneda) {
+		$result = $this->newKardex($almacenes, $articulo, $ini, $fin, $moneda);
+
+		 if ($result) {
+			$this->db->select('codigo');
+			$this->db->from('kardex3');
+			$this->db->where('idDetalle IS NULL');
+			//$this->db->where("SUBSTRING(codigo,1,2) = 'AR'", NULL, FALSE);
+			//$this->db->where('codigo', 'TM1100');
+			$codigos = $this->db->get()->result();
+		} 
+
+		return $codigos;
+   }
 }

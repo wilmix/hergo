@@ -7,11 +7,17 @@ class Welcome extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model("Welcome_model");
+		$this->ini = '2023-01-01';
+		$this->fin = '2023-12-31';
+		$this->moneda = '0';
+	}
+	function index() : string {
+		return print('Sistema de correción');
 	}
 
-	public function cambiarFechaKardex()
+	public function cambiarFechaKardex($almacen)
 	{
-		$result = $this->Welcome_model->kardexByCode(1,0,'2021-01-01','2021-12-31');
+		$result = $this->Welcome_model->kardexByCode($almacen,$this->moneda,$this->ini, $this->fin);
 		$dateNegative = null;
 		$data =[];
 		$n = 0;
@@ -50,7 +56,7 @@ class Welcome extends CI_Controller {
 		return $result;
 		//echo json_encode(print_r($result));
 	}
-	function identificarCostosEgresoTraspaso($articulo): void {
+	function identificarCostosEgresoTraspaso($articulo): array {
 		$resultLog = [];
 		$egresosTraspasos = $this->identificarEgresoTraspaso($articulo);
 		//print_r($egresosTraspasos);
@@ -88,6 +94,22 @@ class Welcome extends CI_Controller {
 			}
 			//break;
 		}
+		return $resultLog;
+	}
+	function modificarCostoTraspasos() : array {
+		$almacenes = '1,2,3,4,5,6,7,8,9,10';
+		$resultLog = [];
+		$codigos = $this->Welcome_model->allCodigos( $almacenes, '', $this->ini, $this->fin, $this->moneda);
+		//print_r($codigos); return false;
+		//$codigos = [];
+		foreach ($codigos as $key => $codigo) {
+			if ($codigo->codigo <> '') {
+				$log = $this->identificarCostosEgresoTraspaso($codigo->codigo);
+				//$log = [];
+        		$resultLog[] = ['key' => $key, 'codigo' => $codigo->codigo, 'log' => $log ];
+			}
+		}
 		print_r($resultLog);
 	}
+
 }
