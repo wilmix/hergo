@@ -903,7 +903,7 @@ class Facturas extends CI_Controller
 	}
 	public function emitirFacturaSiat()
 	{
-		//return "error Siat";
+		return "error Siat";
 		$this->accesoCheck(22);
 		$this->titles('SiatEmitirFactura','Facturacion Online','Facturas');
 		$this->datos['foot_script'][]=base_url('assets/hergo/facturacion/emitirFacturaSiat.js') .'?'.rand();
