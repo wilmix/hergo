@@ -12,6 +12,10 @@ class Welcome extends CI_Controller {
 		$this->moneda = '0';
 	}
 	function index() : string {
+		log_message('error', 'An error occurred.');
+        log_message('debug', 'Debugging information.');
+        log_message('info', 'Some informational message.');
+        
 		return print('Sistema de correción');
 	}
 
@@ -96,7 +100,7 @@ class Welcome extends CI_Controller {
 		}
 		return $resultLog;
 	}
-	function modificarCostoTraspasos() : array {
+	function modificarCostoTraspasos() : void {
 		$almacenes = '1,2,3,4,5,6,7,8,9,10';
 		$resultLog = [];
 		$codigos = $this->Welcome_model->allCodigos( $almacenes, '', $this->ini, $this->fin, $this->moneda);
