@@ -257,6 +257,7 @@ class Emitir_model extends CI_Model
             return $idFactura;
         }
         } catch (Exception $e) {
+            log_message('error', 'BBDD: ' . $e->getMessage());
             return $e->getMessage();
         }
         

@@ -7,15 +7,22 @@ class Welcome extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model("Welcome_model");
+		$this->load->model('siat/Emitir_model');
 		$this->ini = '2023-01-01';
 		$this->fin = '2023-12-31';
 		$this->moneda = '0';
 	}
 	function index() : string {
-		log_message('error', 'An error occurred.');
-        log_message('debug', 'Debugging information.');
-        log_message('info', 'Some informational message.');
-        
+		/* log_message('error', 'Un error ocurrio.');
+        log_message('debug', 'debugueando.');
+        log_message('info', 'informacion adicional.'); */
+		$factura = ['0'];
+		$facturaSiat = ['facturaSiat'];
+
+		//$almacenes = $this->Welcome_model->pruebaLogs();
+		$idFactura = $this->Emitir_model->storeFacturaSiat($factura, $facturaSiat);
+		print_r($idFactura);
+		
 		return print('Sistema de correción');
 	}
 

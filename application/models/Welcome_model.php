@@ -163,4 +163,15 @@ class Welcome_model extends CI_Model
 
 		return $codigos;
    }
+   function pruebaLogs() : array {
+	try {
+		// Tu código de consulta a la base de datos
+		$this->db->select('*');
+		$this->db->from('almacene');
+		$almacenes = $this->db->get()->result();
+		return $almacenes;
+	} catch (Exception $e) {
+		log_message('error', 'BBDD: ' . $e->getMessage());
+	}
+   }
 }
