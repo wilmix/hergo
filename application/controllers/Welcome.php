@@ -7,7 +7,7 @@ class Welcome extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model("Welcome_model");
-		$this->load->model('siat/Emitir_model');
+		$this->load->model("Cierre_model");
 		$this->ini = '2023-01-01';
 		$this->fin = '2023-12-31';
 		$this->moneda = '0';
@@ -16,13 +16,6 @@ class Welcome extends CI_Controller {
 		/* log_message('error', 'Un error ocurrio.');
         log_message('debug', 'debugueando.');
         log_message('info', 'informacion adicional.'); */
-		$factura = ['0'];
-		$facturaSiat = ['facturaSiat'];
-
-		//$almacenes = $this->Welcome_model->pruebaLogs();
-		$idFactura = $this->Emitir_model->storeFacturaSiat($factura, $facturaSiat);
-		print_r($idFactura);
-		
 		return print('Sistema de correción');
 	}
 
@@ -121,6 +114,14 @@ class Welcome extends CI_Controller {
 			}
 		}
 		print_r($resultLog);
+	}
+	public function updateSaldos($gestion)
+	{
+		$ingresos = $this->Cierre_model->selectInventarioInicial($gestion)->result();
+		$egresos =  $this->Cierre_model->notasEntregaPendientes()->result();
+
+		$saldos = $this->Welcome_model->updateSaldos($ingresos, $egresos);
+		return print_r($saldos);
 	}
 
 }

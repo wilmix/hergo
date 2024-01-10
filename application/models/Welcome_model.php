@@ -174,4 +174,26 @@ class Welcome_model extends CI_Model
 		log_message('error', 'BBDD: ' . $e->getMessage());
 	}
    }
+   public function updateSaldos($ingresos, $egresos)
+	{	
+        $this->db->trans_start();
+            $this->db->query("SET FOREIGN_KEY_CHECKS=0;");
+            $this->db->query("TRUNCATE TABLE saldoarticulos;");   
+            $this->db->query("SET FOREIGN_KEY_CHECKS=1;");
+
+            foreach ($ingresos as $value) {
+                $this->db->query("CALL actualizarTablaSaldoIngreso($value->idIngresos, $value->almacen);");
+            }
+            foreach ($egresos as $value) {
+                $this->db->query("CALL actualizarTablaSaldoEgreso($value->idegresos, $value->almacen);");
+            }
+
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE)
+        {
+            return  print_r('No se pudo realizar la actualizacion de saldos');
+        } else {
+            return print_r('Se realizó la actualizacion de saldos exitosamente');
+        }
+    }
 }
