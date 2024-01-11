@@ -117,7 +117,7 @@ class Welcome extends CI_Controller {
 	}
 	public function updateSaldos($gestion)
 	{
-		$ingresos = $this->Cierre_model->selectInventarioInicial($gestion)->result();
+		$ingresos = $this->Welcome_model->selectIngresos($gestion)->result();
 		$egresos =  $this->Cierre_model->notasEntregaPendientes()->result();
 
 		$saldos = $this->Welcome_model->updateSaldos($ingresos, $egresos);

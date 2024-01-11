@@ -196,4 +196,12 @@ class Welcome_model extends CI_Model
             return print_r('Se realizó la actualizacion de saldos exitosamente');
         }
     }
+	public function selectIngresos($gestion)
+	{
+		$sql="SELECT i.`idIngresos`, i.`almacen`
+        FROM ingresos i
+        WHERE i.`gestion` = $gestion";
+		$query=$this->db->query($sql);
+		return $query;
+    }
 }
