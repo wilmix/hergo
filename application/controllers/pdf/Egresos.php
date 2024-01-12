@@ -3,120 +3,107 @@
     require_once APPPATH."/third_party/fpdf/fpdf.php";
     require_once APPPATH."/third_party/numerosLetras/NumeroALetras.php";
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
-class Egresos extends CI_Controller {
-  public function index($id=null) {
-    //echo $id;
-    $this->load->model('Egresos_model');
-    $lineas = $this->Egresos_model->mostrarDetalle($id);
-    $egreso = $this->Egresos_model->mostrarEgresos($id)->row();
-    $idCliente = $egreso->idcliente;
-    $saldoDeudor = $this->Egresos_model->saldoDeudorCliente($idCliente)->row();
+class Egresos extends MY_Controller {
+    /* --------------------------------------------------------------
+     * VARIABLES
+     * ------------------------------------------------------------ */
+
+
+    protected $egreso;
+  
+    protected $egreso_items = 0;
+  
+    protected $totalEgreso = 0;
+
+    public function __construct()
+	{	
+        parent::__construct();
+        $this->load->model('Egresos_model');
+    }
+
+  public function index($id=0) {
+    $this->egreso = $this->Egresos_model->mostrarEgresos($id)->row();
+    $this->egreso_items = $this->Egresos_model->mostrarDetalle($id);
+    $saldoDeudor = $this->Egresos_model->saldoDeudorCliente($this->egreso->idcliente)->row();
+
     $params = array(
-        'almacen' => $egreso->almacen,
-        'autor' => $egreso->autor,
-        'clientePedido' => $egreso->clientePedido ?? '',
-        'fechamov' => $egreso->fechamov,
-        'numero' => $egreso->n,
-        'nombreCliente' => $egreso->nombreCliente,
-        'observaciones' => $egreso->obs ?? '',
-        'plazoPago' => $egreso->plazopago ?? '',
-        'sigla' => $egreso->sigla,
-        'tipocambio' => $egreso->tipocambio,
-        'tipoMov' => $egreso->tipomov,
-        'documento' => $egreso->documento,
-        'direccion' => $egreso->direccion ?? '',
-        'telefono' => $egreso->telefono ?? '',
-        'fax' => $egreso->fax ?? '',
-        'email' => $egreso->email ?? '',
-        'moneda' => $egreso->moneda,
-        'vendedor'=> $egreso->vendedor,
-        'nVendedor'=> $egreso->nVendedor,
-        'almDes'=>$egreso->almDes,
-        'nIng'=>$egreso->nIng,
-        'idTipoMov'=>$egreso->idtipomov,
+        'almacen' => $this->egreso->almacen,
+        'autor' => $this->egreso->autor,
+        'clientePedido' => $this->egreso->clientePedido ?? '',
+        'fechamov' => $this->egreso->fechamov,
+        'numero' => $this->egreso->n,
+        'nombreCliente' => $this->egreso->nombreCliente,
+        'observaciones' => $this->egreso->obs ?? '',
+        'plazoPago' => $this->egreso->plazopago ?? '',
+        'sigla' => $this->egreso->sigla,
+        'tipocambio' => $this->egreso->tipocambio,
+        'tipoMov' => $this->egreso->tipomov,
+        'documento' => $this->egreso->documento,
+        'direccion' => $this->egreso->direccion ?? '',
+        'telefono' => $this->egreso->telefono ?? '',
+        'fax' => $this->egreso->fax ?? '',
+        'email' => $this->egreso->email ?? '',
+        'moneda' => $this->egreso->moneda,
+        'vendedor'=> $this->egreso->vendedor,
+        'nVendedor'=> $this->egreso->nVendedor,
+        'almDes'=>$this->egreso->almDes,
+        'nIng'=>$this->egreso->nIng,
+        'idTipoMov'=>$this->egreso->idtipomov,
         'userName' => $this->session->userdata['nombre'],
-        'almDirec'=>$egreso->almDirec,
-        'almFono'=>$egreso->almFono,
+        'almDirec'=>$this->egreso->almDirec,
+        'almFono'=>$this->egreso->almFono,
         'saldoDeudor'=>$saldoDeudor->saldoDeudor,
         'fechaPrimeraFac'=>$saldoDeudor->fechaFac,
-
+        'almacen_destino_id'=>$this->egreso->almacen_destino_id
     );
-    $year = date('y',strtotime($egreso->fechamov));
-    /*echo '<pre>';
-    print_r($idCliente);
-    echo '</pre>';*/
+    $year = date('y',strtotime($this->egreso->fechamov));
+
+    /* echo '<pre>';
+    print_r($egreso->almacen_destino_id);
+    var_dump($egreso->almacen_destino_id);
+    echo '</pre>'; */
     
     $this->load->library('Egresos_lib', $params);
         $this->pdf = new Egresos_lib($params);
         //$this->pdf->AddPage('L',array(215,152));
         $this->pdf->AddPage('P','Letter');
         $this->pdf->AliasNbPages();
-        $this->pdf->SetTitle($egreso->sigla . ' - ' .$egreso->n . ' - ' . $year);
+        $this->pdf->SetTitle($this->egreso->sigla . ' - ' .$this->egreso->n . ' - ' . $year);
         $this->pdf->SetAutoPageBreak(true,150);//25
         $this->pdf->SetLeftMargin(10);
         $this->pdf->SetRightMargin(10);
         $this->pdf->SetFont('Arial', '', 8);
 
-        if ($egreso->moneda==='1') {
-            $n = 1;
-            $totalEgreso=0;
-            foreach ($lineas->result() as $linea) {
-                $totalEgreso += $linea->punitario * $linea->cantidad;
-                $this->pdf->SetFillColor(255,255,255);
-                    $this->pdf->Cell(5,5,$n++,'',0,'C',0); ///NUMERO DE FILA
+        if ($this->egreso->moneda==='1') {
 
-                    $this->pdf->Cell(15,5,number_format($linea->cantidad, 2, ".", ","),'',0,'R',0);
-                    $this->pdf->Cell(10,5,$linea->Sigla,'',0,'C',0);
-                    $this->pdf->Cell(15,5,$linea->CodigoArticulo,'',0,'C',0);
-                    if (strlen($linea->Descripcion) > 65) {
-                        $this->pdf->MultiCell(110,4,iconv('UTF-8', 'windows-1252', ($linea->Descripcion)),0,'L',0);
-                        $this->pdf->SetXY(165,$this->pdf->GetY()-4);
-                    } else {
-                        $this->pdf->Cell(110,5,utf8_decode($linea->Descripcion),0,0,'L',0);
-                    }
-                    $this->pdf->Cell(20,5,number_format($linea->punitario, 2, ".", ","),0,0,'R',1);
-                    $this->pdf->Cell(20,5,number_format(round($linea->punitario,2) * $linea->cantidad, 2, ".", ","),0,0,'R',1);
-                $this->pdf->Ln(5);
-            }
-            $entera = intval($totalEgreso);
-            $ctvs = round(($totalEgreso - $entera) * 100);
+            $this->detalleCompleto($this->egreso_items,  $this->totalEgreso);
+
+            $entera = intval($this->totalEgreso);
+            $ctvs = round(($this->totalEgreso - $entera) * 100);
             $ctvs = ($ctvs == 0) ? '00' : $ctvs;
                 $this->pdf->SetFont('Arial','B',8);
                 $this->pdf->SetFillColor(255,255,255);
                 $this->pdf->Cell(175,5,'TOTAL Bs.',0,0,'R',1);
-                $this->pdf->Cell(20,5,number_format($totalEgreso, 2, ".", ","),0,1,'R',1); 
+                $this->pdf->Cell(20,5,number_format($this->totalEgreso, 2, ".", ","),0,1,'R',1); 
                 $this->pdf->SetFont('Times','B',9);
                 $this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
-                //$literal = NumeroALetras::convertir($totalEgreso,'BOLIVIANOS','CENTAVOS');
+                //$literal = NumeroALetras::convertir($this->totalEgreso,'BOLIVIANOS','CENTAVOS');
                 //$this->pdf->Cell(186,6,$literal,0,0,'l',1);
                 $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';
                 $this->pdf->Cell(186,6,$literal,0,0,'l',1);
 
 
-        } elseif ($egreso->moneda==='2') {
-            $tipoCambio = floatval($egreso->tipocambio);
-            $n = 1;
-            $totalEgreso=0;
-            foreach ($lineas->result() as $linea) {
-                $totalEgreso += $linea->punitario * $linea->cantidad;
-                $this->pdf->SetFillColor(255,255,255);
-                    $this->pdf->Cell(5,5,$n++,'',0,'C',0); ///NUMERO DE FILA
-                    $this->pdf->Cell(15,5,number_format($linea->cantidad, 2, ".", ","),'',0,'R',0);
-                    $this->pdf->Cell(10,5,$linea->Sigla,'',0,'C',0);
-                    $this->pdf->Cell(15,5,$linea->CodigoArticulo,'',0,'C',0);
-                    $this->pdf->Cell(110,5,utf8_decode($linea->Descripcion),0,0,'L',0);
-                    $this->pdf->Cell(20,5,number_format($linea->punitario, 2, ".", ","),0,0,'R',1);
-                    $this->pdf->Cell(20,5,number_format($linea->punitario * $linea->cantidad, 2, ".", ","),'',0,'R',1);
-                $this->pdf->Ln(5);
-            }
-            $totalBolivianos = $totalEgreso*$tipoCambio;
+        } elseif ($this->egreso->moneda==='2') {
+            $tipoCambio = floatval($this->egreso->tipocambio);
+            $this->detalleCompleto($this->egreso_items);
+            $totalBolivianos = $this->totalEgreso*$tipoCambio;
             $entera = intval( $totalBolivianos);
             $ctvs = round(($totalBolivianos - $entera) * 100);
             $ctvs = ($ctvs == 0) ? '00' : $ctvs;
             $this->pdf->SetFont('Times','B',10);
             $this->pdf->SetFillColor(255,255,255);
             $this->pdf->Cell(175,5,'TOTAL $u$',0,0,'R',1);
-            $this->pdf->Cell(20,5,number_format($totalEgreso, 2, ".", ","),0,1,'R',1); 
+            $this->pdf->Cell(20,5,number_format($this->totalEgreso, 2, ".", ","),0,1,'R',1); 
             $this->pdf->Cell(175,5,'Tipo Cambio:',0,0,'R',1);
             $this->pdf->Cell(20,5,number_format($tipoCambio, 2, ".", ","),0,1,'R',1);
             $this->pdf->Cell(175,5,'TOTAL BOB',0,0,'R',1);
@@ -130,6 +117,32 @@ class Egresos extends CI_Controller {
             //$this->pdf->Cell(185,6,$literal,0,0,'l',1);
         } 
         //guardar
-      $this->pdf->Output($egreso->sigla . ' - ' . $egreso->n . ' - ' . $year.'.pdf', 'I');
+      $this->pdf->Output($this->egreso->sigla . ' - ' . $this->egreso->n . ' - ' . $year.'.pdf', 'I');
+  }
+  function detalleCompleto($lineas) : void {
+    $n = 1;
+    foreach ($lineas->result() as $linea) {
+        $this->totalEgreso += $linea->punitario * $linea->cantidad;
+        $this->pdf->SetFillColor(255,255,255);
+            $this->pdf->Cell(5,5,$n++,'',0,'C',0);
+            $this->pdf->Cell(15,5,number_format($linea->cantidad, 2, ".", ","),'',0,'R',0);
+            $this->pdf->Cell(10,5,$linea->Sigla,'',0,'C',0);
+            $this->pdf->Cell(15,5,$linea->CodigoArticulo,'',0,'C',0);
+            
+                if ($this->egreso->almacen_destino_id <> '9') {
+                    if (strlen($linea->Descripcion) > 65) {
+                        $this->pdf->MultiCell(110,4,iconv('UTF-8', 'windows-1252', ($linea->Descripcion)),0,'L',0);
+                        $this->pdf->SetXY(165,$this->pdf->GetY()-4);
+                    } else {
+                        $this->pdf->Cell(110,5,utf8_decode($linea->Descripcion),0,0,'L',0);
+                    }
+                    $this->pdf->Cell(20,5,number_format($linea->punitario, 2, ".", ","),0,0,'R',1);
+                    $this->pdf->Cell(20,5,number_format(round($linea->punitario,2) * $linea->cantidad, 2, ".", ","),0,0,'R',1);
+                } else {
+                    $this->pdf->Cell(150,5,utf8_decode($linea->Descripcion),0,0,'L',0);
+                }
+
+            $this->pdf->Ln(5);
+    }
   }
 }

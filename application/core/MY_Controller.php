@@ -22,6 +22,8 @@ class MY_Controller extends CI_Controller
 	public $cabeceras_css;
 	public $cabecera_script;
 	public $foot_script;
+	public $pdf;
+
 
 	public function __construct()
 	{	

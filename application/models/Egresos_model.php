@@ -121,6 +121,7 @@ class Egresos_model extends CI_Model
                         c.telefono,
                         c.fax,
                         c.email,
+                        ades.idalmacen almacen_destino_id,
                         ades.`almacen` almDes,
                         ing.`nmov` nIng,
                         a.`direccion` almDirec,

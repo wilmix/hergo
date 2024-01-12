@@ -141,9 +141,14 @@
                     $this->Cell(15,6,'CANT',0,0,'c',1);
                     $this->Cell(10,6,'UNID',0,0,'C',1);
                     $this->Cell(15,6,'CODIGO',0,0,'C',1);  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
-                    $this->Cell(110,6,'DESCRIPCION',0,0,'C',1);
-                    $this->Cell(20,6,'P/U',0,0,'R',1);
-                    $this->Cell(20,6,'TOTAL',0,0,'R',1);
+                    
+                    if ($this->datos['almacen_destino_id'] <> '9') {
+                        $this->Cell(110,6,'DESCRIPCION',0,0,'C',1);
+                        $this->Cell(20,6,'P/U',0,0,'R',1);
+                        $this->Cell(20,6,'TOTAL',0,0,'R',1);
+                    } else {
+                        $this->Cell(150,6,'DESCRIPCION',0,0,'C',1);
+                    }
                     $this->Ln(6);
         }
 
