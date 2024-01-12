@@ -25,43 +25,18 @@ class Egresos extends MY_Controller {
     $this->egreso = $this->Egresos_model->mostrarEgresos($id)->row();
     $this->egreso_items = $this->Egresos_model->mostrarDetalle($id);
     $saldoDeudor = $this->Egresos_model->saldoDeudorCliente($this->egreso->idcliente)->row();
+    $this->egreso->saldoDeudor = $saldoDeudor->saldoDeudor;
+    $this->egreso->fechaPrimeraFac = $saldoDeudor->fechaFac;
+    $this->egreso->userName = $this->session->userdata['nombre'];
 
-    $params = array(
-        'almacen' => $this->egreso->almacen,
-        'autor' => $this->egreso->autor,
-        'clientePedido' => $this->egreso->clientePedido ?? '',
-        'fechamov' => $this->egreso->fechamov,
-        'numero' => $this->egreso->n,
-        'nombreCliente' => $this->egreso->nombreCliente,
-        'observaciones' => $this->egreso->obs ?? '',
-        'plazoPago' => $this->egreso->plazopago ?? '',
-        'sigla' => $this->egreso->sigla,
-        'tipocambio' => $this->egreso->tipocambio,
-        'tipoMov' => $this->egreso->tipomov,
-        'documento' => $this->egreso->documento,
-        'direccion' => $this->egreso->direccion ?? '',
-        'telefono' => $this->egreso->telefono ?? '',
-        'fax' => $this->egreso->fax ?? '',
-        'email' => $this->egreso->email ?? '',
-        'moneda' => $this->egreso->moneda,
-        'vendedor'=> $this->egreso->vendedor,
-        'nVendedor'=> $this->egreso->nVendedor,
-        'almDes'=>$this->egreso->almDes,
-        'nIng'=>$this->egreso->nIng,
-        'idTipoMov'=>$this->egreso->idtipomov,
-        'userName' => $this->session->userdata['nombre'],
-        'almDirec'=>$this->egreso->almDirec,
-        'almFono'=>$this->egreso->almFono,
-        'saldoDeudor'=>$saldoDeudor->saldoDeudor,
-        'fechaPrimeraFac'=>$saldoDeudor->fechaFac,
-        'almacen_destino_id'=>$this->egreso->almacen_destino_id
-    );
+    $params = json_decode(json_encode($this->egreso), true);
     $year = date('y',strtotime($this->egreso->fechamov));
 
     /* echo '<pre>';
-    print_r($egreso->almacen_destino_id);
-    var_dump($egreso->almacen_destino_id);
-    echo '</pre>'; */
+    $paramsDirecto = json_decode(json_encode($this->egreso), true);
+    var_dump($paramsDirecto);
+    echo '</pre>';
+    return false; */
     
     $this->load->library('Egresos_lib', $params);
         $this->pdf = new Egresos_lib($params);

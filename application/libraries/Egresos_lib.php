@@ -14,15 +14,15 @@
             $autor = $this->datos['autor'];
             $fechamov = date('d/m/Y',strtotime($this->datos['fechamov']));
             $clientePedido = $this->datos['clientePedido'];
-            $numero = $this->datos['numero'];
+            $numero = $this->datos['n'];
             $nombreCliente = $this->datos['nombreCliente'];
             $sigla = $this->datos['sigla'];
-            $tipoMov = $this->datos['tipoMov'];
+            $tipoMov = $this->datos['tipomov'];
             $documento = $this->datos['documento'];
             $direccion = $this->datos['direccion'];
             $telefono = $this->datos['telefono'];
             $email = strtolower($this->datos['email']);
-            $idTipoMov = $this->datos['idTipoMov'];
+            $idTipoMov = $this->datos['idtipomov'];
             $almDes = $this->datos['almDes'];
             $nIng = $this->datos['nIng'];
             $vendedor = $this->datos['nVendedor'];
@@ -153,8 +153,8 @@
         }
 
         public function Footer(){
-            $observaciones = $this->datos['observaciones'];
-            $plazoPago = date('d/m/Y',strtotime($this->datos['plazoPago']));
+            $observaciones = $this->datos['obs'];
+            $plazoPago = date('d/m/Y',strtotime($this->datos['plazopago']));
             $plazoPago = ($plazoPago == '01/01/1970') ? '' : $plazoPago;
             $userName = $this->datos['userName'];
             $autor = $this->datos['autor'];
