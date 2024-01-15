@@ -49,47 +49,12 @@ class Egresos extends MY_Controller {
         $this->pdf->SetRightMargin(10);
         $this->pdf->SetFont('Arial', '', 8);
 
+        $this->detalleCompleto($this->egreso_items,  $this->totalEgreso);
+
         if ($this->egreso->moneda==='1') {
-
-            $this->detalleCompleto($this->egreso_items,  $this->totalEgreso);
-
-            $entera = intval($this->totalEgreso);
-            $ctvs = round(($this->totalEgreso - $entera) * 100);
-            $ctvs = ($ctvs == 0) ? '00' : $ctvs;
-                $this->pdf->SetFont('Arial','B',8);
-                $this->pdf->SetFillColor(255,255,255);
-                $this->pdf->Cell(175,5,'TOTAL Bs.',0,0,'R',1);
-                $this->pdf->Cell(20,5,number_format($this->totalEgreso, 2, ".", ","),0,1,'R',1); 
-                $this->pdf->SetFont('Times','B',9);
-                $this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
-                //$literal = NumeroALetras::convertir($this->totalEgreso,'BOLIVIANOS','CENTAVOS');
-                //$this->pdf->Cell(186,6,$literal,0,0,'l',1);
-                $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';
-                $this->pdf->Cell(186,6,$literal,0,0,'l',1);
-
-
+            $this->totalesBolivianos();
         } elseif ($this->egreso->moneda==='2') {
-            $tipoCambio = floatval($this->egreso->tipocambio);
-            $this->detalleCompleto($this->egreso_items);
-            $totalBolivianos = $this->totalEgreso*$tipoCambio;
-            $entera = intval( $totalBolivianos);
-            $ctvs = round(($totalBolivianos - $entera) * 100);
-            $ctvs = ($ctvs == 0) ? '00' : $ctvs;
-            $this->pdf->SetFont('Times','B',10);
-            $this->pdf->SetFillColor(255,255,255);
-            $this->pdf->Cell(175,5,'TOTAL $u$',0,0,'R',1);
-            $this->pdf->Cell(20,5,number_format($this->totalEgreso, 2, ".", ","),0,1,'R',1); 
-            $this->pdf->Cell(175,5,'Tipo Cambio:',0,0,'R',1);
-            $this->pdf->Cell(20,5,number_format($tipoCambio, 2, ".", ","),0,1,'R',1);
-            $this->pdf->Cell(175,5,'TOTAL BOB',0,0,'R',1);
-            $this->pdf->Cell(20,5,number_format($totalBolivianos, 2, ".", ","),0,1,'R',1); 
-            $this->pdf->SetFont('Courier','B',9);
-            $this->pdf->Cell(10,6,'SON: ',0,0,'L',1);
-            $entera = intval( $totalBolivianos);
-            $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';
-            $this->pdf->Cell(186,6,$literal,0,0,'l',1);
-            //$literal = NumeroALetras::convertir($totalBolivianos,'BOLIVIANOS','CENTAVOS');
-            //$this->pdf->Cell(185,6,$literal,0,0,'l',1);
+            $this->totalesDolares();
         } 
         //guardar
       $this->pdf->Output($this->egreso->sigla . ' - ' . $this->egreso->n . ' - ' . $year.'.pdf', 'I');
@@ -106,18 +71,57 @@ class Egresos extends MY_Controller {
             
                 if ($this->egreso->almacen_destino_id <> '9') {
                     if (strlen($linea->Descripcion) > 65) {
-                        $this->pdf->MultiCell(110,4,iconv('UTF-8', 'windows-1252', ($linea->Descripcion)),0,'L',0);
+                        $this->pdf->MultiCell(110,4,mb_convert_encoding($linea->Descripcion, 'ISO-8859-1', 'UTF-8'),0,'L',0);
                         $this->pdf->SetXY(165,$this->pdf->GetY()-4);
                     } else {
-                        $this->pdf->Cell(110,5,utf8_decode($linea->Descripcion),0,0,'L',0);
+                        $this->pdf->Cell(110,5,mb_convert_encoding($linea->Descripcion, 'ISO-8859-1', 'UTF-8'),0,0,'L',0);
                     }
                     $this->pdf->Cell(20,5,number_format($linea->punitario, 2, ".", ","),0,0,'R',1);
                     $this->pdf->Cell(20,5,number_format(round($linea->punitario,2) * $linea->cantidad, 2, ".", ","),0,0,'R',1);
                 } else {
-                    $this->pdf->Cell(150,5,utf8_decode($linea->Descripcion),0,0,'L',0);
+                    $this->pdf->Cell(150,5,mb_convert_encoding($linea->Descripcion, 'ISO-8859-1', 'UTF-8'),0,0,'L',0);
                 }
 
             $this->pdf->Ln(5);
+    }
+  }
+  function totalesBolivianos() : void {
+    if ($this->egreso->almacen_destino_id <> '9') {
+        $entera = intval($this->totalEgreso);
+        $ctvs = round(($this->totalEgreso - $entera) * 100);
+        $ctvs = ($ctvs == 0) ? '00' : $ctvs;
+            $this->pdf->SetFont('Arial','B',8);
+            $this->pdf->SetFillColor(255,255,255);
+            $this->pdf->Cell(175,5,'TOTAL Bs.',0,0,'R',1);
+            $this->pdf->Cell(20,5,number_format($this->totalEgreso, 2, ".", ","),0,1,'R',1); 
+            $this->pdf->SetFont('Times','B',9);
+            $this->pdf->Cell(9,6,'SON: ',0,0,'L',1);
+            //$literal = NumeroALetras::convertir($this->totalEgreso,'BOLIVIANOS','CENTAVOS');
+            //$this->pdf->Cell(186,6,$literal,0,0,'l',1);
+            $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';
+            $this->pdf->Cell(186,6,$literal,0,0,'l',1);
+    }
+  }
+  function totalesDolares() : void {
+    if ($this->egreso->almacen_destino_id <> '9') {
+        $tipoCambio = floatval($this->egreso->tipocambio);
+        $totalBolivianos = $this->totalEgreso*$tipoCambio;
+        $entera = intval( $totalBolivianos);
+        $ctvs = round(($totalBolivianos - $entera) * 100);
+        $ctvs = ($ctvs == 0) ? '00' : $ctvs;
+        $this->pdf->SetFont('Times','B',10);
+        $this->pdf->SetFillColor(255,255,255);
+        $this->pdf->Cell(175,5,'TOTAL $u$',0,0,'R',1);
+        $this->pdf->Cell(20,5,number_format($this->totalEgreso, 2, ".", ","),0,1,'R',1); 
+        $this->pdf->Cell(175,5,'Tipo Cambio:',0,0,'R',1);
+        $this->pdf->Cell(20,5,number_format($tipoCambio, 2, ".", ","),0,1,'R',1);
+        $this->pdf->Cell(175,5,'TOTAL BOB',0,0,'R',1);
+        $this->pdf->Cell(20,5,number_format($totalBolivianos, 2, ".", ","),0,1,'R',1); 
+        $this->pdf->SetFont('Courier','B',9);
+        $this->pdf->Cell(10,6,'SON: ',0,0,'L',1);
+        $entera = intval( $totalBolivianos);
+        $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '.'BOLIVIANOS';
+        $this->pdf->Cell(186,6,$literal,0,0,'l',1);
     }
   }
 }
