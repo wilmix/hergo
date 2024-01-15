@@ -275,7 +275,7 @@
                 <li class="listaPrecios"><a href="<?php echo base_url("reportes/listaPrecios") ?>">Lista de Precios</a></li>
                 <li class="saldosActuales"><a href="<?php echo base_url("reportes/saldosActuales") ?>">Saldos Resumen</a></li>
                 <li class="saldosActualesItems"><a href="<?php echo base_url("reportes/saldosActualesItems") ?>">Saldos Actuales Items</a></li>
-                <li class="FacturasPendientesPago"><a href="<?php echo base_url("reports/FacturasPendientesPago") ?>">Facturas Pendientes Pago<small class="label pull-right bg-green">new</small></a></li>
+                <li class="FacturasPendientesPago"><a href="<?php echo base_url("reports/FacturasPendientesPago") ?>">Facturas Pendientes Pago</a></li>
                 <li class="facturasPendietesPago"><a href="<?php echo base_url("reportes/facturasPendietesPago") ?>"><del>Facturas Pendientes Pago</del></a></li>
                 <li class="resumenVentasLineaMes"><a href="<?php echo base_url("reportes/resumenVentasLineaMes") ?>">Resumen de Ventas Linea Mes</a></li>
                 <li class="notasEntregaPorFacturar"><a href="<?php echo base_url("reportes/notasEntregaPorFacturar") ?>">Notas de Entrega por Facturar</a></li>
@@ -332,6 +332,7 @@
                 </span>
               </a>
               <ul class="treeview-menu">
+                <li class=""><a href="https://2023.hergo.app/" target="_blank"><i class="fa fa-arrow-circle-left"></i>Gestión 2023<small class="label pull-right bg-green">new</small></a></li>
                 <li class=""><a href="https://2022.hergo.app/" target="_blank"><i class="fa fa-arrow-circle-left"></i>Gestión 2022</a></li>
                 <li class=""><a href="https://2021.hergo.app/" target="_blank"><i class="fa fa-arrow-circle-left"></i>Gestión 2021</a></li>
                 <li class=""><a href="https://2020.hergo.app/" target="_blank"><i class="fa fa-arrow-circle-left"></i>Gestión 2020</a></li>
