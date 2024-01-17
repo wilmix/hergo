@@ -334,7 +334,7 @@ class Emitir_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query->result();
     }
-    public function getFacturasSiat($ini, $fin, $alm)
+    public function getFacturasSiat($ini, $fin, $codigoSucursal)
 	{
 		$sql="  SELECT
                     cuis.cuis,
@@ -354,7 +354,6 @@ class Emitir_model extends CI_Model
                     CONCAT(u.first_name, ' ', u.last_name) AS vendedor,
                     f.`anulada`,
                     f.fecha,
-                    -- GROUP_CONCAT(DISTINCT e.nmov ORDER BY e.nmov ASC SEPARATOR ' - ') AS movimientos,
                     f.glosa,
                     p.idPago,
                     p.`numPago`,
@@ -414,7 +413,8 @@ class Emitir_model extends CI_Model
                     sp.descripcion metodoPago,
                     fs.leyenda,
                     fs.fechaEmision fechaEmisionSiat,
-                    f.lote
+                    f.lote,
+                    a.almacen
                 FROM
                     factura_egresos fe
                     INNER JOIN egresos e on e.idegresos = fe.idegresos
@@ -430,10 +430,11 @@ class Emitir_model extends CI_Model
                     INNER JOIN clientes c ON c.idCliente = f.cliente
                     INNER JOIN siat_sincro_tipo_metodo_pago sp ON sp.codigoClasificador = fs.codigoMetodoPago
                     INNER JOIN siat_cuis cuis ON cuis.sucursal = fs.codigoSucursal AND cuis.codigoPuntoVenta = fs.codigoPuntoVenta AND cuis.active = 1
+                    INNER JOIN almacenes a ON a.idalmacen = f.almacen
                 WHERE
                     f.fechaFac BETWEEN '$ini'
                     AND '$fin'
-                    AND f.almacen = '$alm'
+                    AND fs.codigoSucursal = '$codigoSucursal'
                     AND (f.lote = 0 OR f.lote = '138')
                 GROUP BY
                     fe.idFactura
@@ -660,5 +661,12 @@ class Emitir_model extends CI_Model
         ";
         $query=$this->db->query($sql);		
         return $query->row();
+    }
+    public function getSucursalSiat($almacen)
+    {
+        $sql="  SELECT siat_sucursal FROM almacenes WHERE idalmacen = '$almacen'
+        ";
+        $query=$this->db->query($sql);		
+        return $query->row()->siat_sucursal;
     }
 }

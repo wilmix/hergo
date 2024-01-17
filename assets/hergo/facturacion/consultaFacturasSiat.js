@@ -52,6 +52,19 @@ function getData() {
 					width: '5%'
 				},
 				{
+					data: 'idAlmacen',
+					title: 'ALM',
+					className: 'text-center',
+					visible: false
+
+				},
+				{
+					data: 'almacen',
+					title: 'ALMACEN',
+					className: 'text-center'
+					
+				},
+				{
 					data: 'numeroFactura',
 					title: 'Nº',
 					className: 'text-center',
@@ -336,10 +349,9 @@ const pro = new Vue({
 	data: {
         almacen:document.getElementById("idAlmacenUsuario").value,
         almacenes: [
-            { alm: 'CENTRAL HERGO', value: '1' },
-            { alm: 'DEPOSITO EL ALTO', value: '2' },
-            { alm: 'POTOSI', value: '3' },
-            { alm: 'SANTA CRUZ', value: '4' },
+            { alm: 'CENTRAL HERGO - 0', value: '1' },
+            { alm: 'POTOSI - 6', value: '3' },
+            { alm: 'SANTA CRUZ - 5', value: '4' },
         ],
 		id:0,
 		disabled: document.getElementById("nacional").value == '' ? true : false,

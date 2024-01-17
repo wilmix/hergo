@@ -254,7 +254,8 @@ class Emitir extends CI_Controller
 		$ini=$this->security->xss_clean($this->input->post("ini"));
 		$fin=$this->security->xss_clean($this->input->post("fin"));
 		$alm= $this->input->post("alm");
-		$data=$this->Emitir_model->getFacturasSiat($ini, $fin, $alm); 
+		$codigoSucursal=$this->Emitir_model->getSucursalSiat($alm);
+		$data=$this->Emitir_model->getFacturasSiat($ini, $fin, $codigoSucursal); 
 		echo json_encode($data);
 	}
 	public function getMotivosAnulacion()
