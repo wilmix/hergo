@@ -93,6 +93,7 @@ class CI_Controller {
 		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
 		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 		$this->datos['grupsOfUser'] = $this->ion_auth->in_group('Nacional') ? 'Nacional' : false;
+		$this->datos['datosDataBase'] = $this->datosDataBase();
 		$cantidadNotasPendientes = $this->General_model->getCantidadNotasEntregaPendientes($this->datos['user_id_actual'])->pendientes;
 		$this->datos['cantidadNotasEntregaPendientes'] = $cantidadNotasPendientes;
 		$hoy = date('Y-m-d');
@@ -217,5 +218,14 @@ class CI_Controller {
 		if ($acceso_id > 0) {
 			$this->libacceso->acceso($acceso_id);
 		}
+	}
+	function datosDataBase() : string {
+		$this->load->database();
+		$username = $this->db->username;
+		$hostname = $this->db->hostname == 'db-mysql-nyc1-32426-do-user-2771900-0.a.db.ondigitalocean.com' ? 'DigitalOcean' : $this->db->hostname;
+		$database = $this->db->database;
+		$datosDB = "host:$hostname: user:$username database:$database";
+
+		return ENVIRONMENT == 'development' ? $datosDB : '';
 	}
 }

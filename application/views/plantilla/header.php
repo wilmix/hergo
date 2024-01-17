@@ -29,7 +29,14 @@
           <!-- Navbar Right Menu -->
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-              <!-- email  -->
+            <!-- database  -->
+            <li>
+              <a href="" target="_blank" class="dropdown-toggle" aria-expanded="true"> 
+                <i  <?php echo $datosDataBase == '' ?   '' :  'class="fa fa-database"'  ?>></i>
+                <?php echo $datosDataBase  ?>
+              </a>
+            </li>
+            <!-- email  -->
             <li class="dropdown messages-menu">
               <a href="https://webmail.hergo.com.bo/" target="_blank" class="dropdown-toggle" aria-expanded="true">
                 <i class="fa fa-envelope-o"></i>
