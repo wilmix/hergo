@@ -16,7 +16,8 @@ class Welcome extends CI_Controller {
 		/* log_message('error', 'Un error ocurrio.');
         log_message('debug', 'debugueando.');
         log_message('info', 'informacion adicional.'); */
-		return print('Sistema de correción');
+		print_r($_SERVER);
+		return false;
 	}
 
 	public function cambiarFechaKardex($almacen)
