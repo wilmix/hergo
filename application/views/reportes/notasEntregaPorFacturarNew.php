@@ -19,9 +19,16 @@
                   <?php endforeach ?>
                   <option value="">TODOS</option>
                 </select>
+                <select class="btn btn-primary btn-sm" name="tipoNota" id="tipoNota">
+                    <option value="1">Venta</option>
+                    <option value="2">Prestamo</option>
+                    <option value="3">Muestra</option>
+                    <option value="4">Reserva</option>
+                </select>
+
             </div>
 
-              <div class="form-group row">
+             <!--  <div class="form-group row">
                   <label class="col-sm-1 col-form-label">Cliente:</label>
                   <span style="margin-left: 10px;display: none;" id="cargandocliente">
                     <i class="fa fa-spinner fa-pulse fa-fw"></i>
@@ -37,7 +44,7 @@
                       </span>
                     </button>
                   </div>
-              </div>
+              </div> -->
           </div>
 
           <div class="text-center">
