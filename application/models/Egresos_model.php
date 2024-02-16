@@ -832,28 +832,29 @@ class Egresos_model extends CI_Model
     }
     public function saldoDeudorCliente($idCliente)
     {
-         $sql="SELECT fechaFac,(SUM(total) - SUM(montoPagado)) saldoDeudor
-         FROM
-         (
-         SELECT f.`idFactura` id, a.`almacen`, f.`ClienteFactura` cliente, f.`lote`, f.`nFactura`, f.`fechaFac`, f.`total`, IFNULL(pr.monto,0) montoPagado, CONCAT(u.`first_name`, ' ', u.`last_name`) vendedor, e.`plazopago`
-                 FROM factura f
-                 LEFT JOIN 
-                 (SELECT pf.`idPago`, pf.`idFactura`, SUM(pf.`monto`) monto
-                 FROM pago_factura pf 
-                 INNER JOIN pago p ON pf.`idPago` = p.`idPago` AND p.`anulado` = 0
-                 GROUP BY pf.`idFactura`) pr
-                 ON f.`idFactura` = pr.idFactura
-                 INNER JOIN almacenes a ON a.`idalmacen` = f.`almacen`
-                 INNER JOIN factura_egresos fe ON fe.`idFactura` = f.`idFactura`
-                 INNER JOIN egresos e ON e.`idegresos` = fe.`idegresos`
-                 INNER JOIN users u ON u.`id` = e.`vendedor`
-                 WHERE f.`anulada` = 0 
-                 AND f.`pagada` <>1 
-                 AND f.`cliente` = $idCliente
-                 AND  f.`nFactura` > 0
-                 GROUP BY f.`idFactura` 
-                 ORDER BY f.`fechaFac`
-         ) tb";
+         $sql=" SELECT
+                    fechaFac,
+                    SUM(montoTotal) saldoDeudor
+                FROM
+                    (
+                        SELECT
+                            f.idFactura factura_id,
+                            f.fechaFac,
+                            fs.montoTotal
+                        FROM
+                            factura f
+                            LEFT JOIN factura_siat fs ON f.idFactura = fs.factura_id
+                            INNER JOIN clientes c ON c.idCliente = f.cliente
+                            INNER JOIN factura_egresos fe ON fe.idFactura = f.idFactura
+                            LEFT JOIN notaentregasinfo ni ON ni.egresos_id = fe.idegresos
+                        WHERE
+                            f.anulada = 0
+                            AND f.pagada <> 1
+                            AND c.idCliente = $idCliente
+                            AND DATE_ADD(f.fecha, INTERVAL ni.tiempoCredito DAY) < CURDATE()
+                        GROUP BY
+                            f.idFactura
+                    ) facturasVencidas;";
         $query=$this->db->query($sql);
         return $query;        
     }
