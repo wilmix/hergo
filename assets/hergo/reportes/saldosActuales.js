@@ -115,17 +115,26 @@ function retornarSaldosActuales() {
                     render: numberDecimal
                 },
                 {
-					data: 'pasbol',
-					title: 'PasBol',
+					data: 'subTotal',
+					title: 'Total',
                     className: 'text-right',
                     searchable: false,
                     render: numberDecimal
                 },
                 {
-					data: 'total',
-					title: 'Total',
+					data: 'pasbol',
+					title: 'PasBol',
                     className: 'text-right',
                     searchable: false,
+                    visible: false,
+                    render: numberDecimal
+                },
+                {
+					data: 'total',
+					title: 'Total General',
+                    className: 'text-right',
+                    searchable: false,
+                    visible: false,
                     render: numberDecimal
                 },
                 {
@@ -148,7 +157,6 @@ function retornarSaldosActuales() {
 					title: 'Estado',
                     className: 'text-right',
                     searchable: false,
-                    visible: true
                 },
 				
 

@@ -315,6 +315,7 @@ class Reportes_model extends CI_Model
 						aa.`santacruz`,
 						aa.reserva,
 						aa.pasbol,
+						(aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz`+ aa.reserva) subTotal,
 						(aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz`+ aa.reserva + aa.pasbol) total,
 						IFNULL(back.cantidad,0) backOrder,
 						back.recepcion,
