@@ -105,7 +105,7 @@ const app = new Vue({
         cliente:'',
         clienteDato:'',
         complemento:'',
-        glosa:'',
+        glosa:'La disponibilidad de inventario está sujeta a cambios sin previo aviso.',
         porcentajeDescuento:0,
         descuento:0,
         totalFin:0,
