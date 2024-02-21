@@ -195,9 +195,9 @@
             $this->Cell(30,5, 'C.I.: .......................................................................',0,0,'L');
             $this->Cell(45, 5, '',0,0,'L');
 
-            $this->SetXY(10,-135);
+            $this->SetXY(9,-135);
             $this->SetFont('Arial','BI', 9);
-            $this->Cell(30,5, 'Saldo Deudor: ',0,0,'L',1);
+            $this->Cell(30,5, 'Fact. Vencidas: ',0,0,'L',1);
 
             $this->SetXY(35,-135);
             $this->SetFont('Arial','I', 9);
