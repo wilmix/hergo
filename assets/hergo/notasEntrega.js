@@ -318,15 +318,22 @@ function agregarArticulo() {
     if ((cant) > 0 && (costo) >= 0 && dcto >= 0) {
         if ((cant) <= (saldoAlmacen) && parseFloat(saldoAlmacen) > 0 || iniCod == 'SR' ) {
             addArticuloTable()
-        } else if (iniCod == 'CS') {
+        } /* else if (iniCod == 'CS') {
             swal(
                 'Oops...',
                 'No puede generar <b>Negativo</b> en la línea de <b>Señalética</b>, realice el ingreso correspondiente por favor.',
                 'error'
             )
-        }
+        } */
          else {
             swal({
+                type: 'error',
+                title: ' No generar negativos 🤬',
+                html: "No tiene suficiente <b>" + codigoArticulo + "</b> en su almacen.<br>",
+                showConfirmButton: false,
+                timer: 3500
+            })
+            /*swal({
                 title: 'Saldo Insuficiente',
                 html: "No tiene suficiente <b>" + codigoArticulo + "</b> en su almacen.<br>" + "Desea generar <b>NEGATIVO</b>?",
                 type: 'warning',
@@ -335,7 +342,7 @@ function agregarArticulo() {
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Si, Agregar',
                 cancelButtonText: 'No, Cancelar'
-            }).then((result) => {
+            }) .then((result) => {
                 swal({
                     type: 'error',
                     html: 'Usted generó un <b>NEGATIVO</b> en ' + codigoArticulo,
@@ -348,7 +355,7 @@ function agregarArticulo() {
                     showConfirmButton: false,
                     timer: 1500
                 })
-            })
+            }) */
         }
     } else {
         swal(

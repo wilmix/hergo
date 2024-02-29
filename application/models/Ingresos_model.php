@@ -67,8 +67,9 @@ class Ingresos_model extends CI_Model
                         END estado,
                         CASE
                             WHEN i.tipoDoc = 1 THEN i.nfact
-                            WHEN i.tipoDoc = 2 THEN 'SIN FACTURA'
-                            WHEN i.tipoDoc = 3 THEN 'EN TRANSITO'
+                            WHEN i.tipoDoc = 2 THEN 'SIN FAC-BIENES '
+                            WHEN i.tipoDoc = 3 THEN 'SIN FAC-SERVICIOS'
+                            WHEN i.tipoDoc = 4 THEN 'EN TRANSITO'
                         END tipoDoc,
                         i.tipomov idTipoMov
                     FROM

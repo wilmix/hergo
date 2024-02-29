@@ -256,12 +256,14 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
         {
             addArticulo()
         } else {
-            /*swal({
-                title: "Saldo Insuficiente",
-                html: "No tiene suficiente <b>" + articulo_impTest + "</b> en su almacen.<br>  <b>Ahora ya no se pueden crear negativos en traspasos. </b>",
+            swal({
                 type: 'error',
-              });*/
-             swal({
+                title: ' No generar negativos 🤬',
+                html: "No tiene suficiente <b>" + codigoArticulo + "</b> en su almacen.<br>",
+                showConfirmButton: false,
+                timer: 3500
+            })
+             /* swal({
                 title: 'Saldo Insuficiente',
                 html: "No tiene suficiente <b>" + articulo_impTest + "</b> en su almacen.<br>" + "Desea generar <b>NEGATIVO</b>?",
                 type: 'warning',
@@ -286,7 +288,7 @@ function agregarArticulo() //faltaria el id costo; si se guarda en la base prime
                             'error'
                         )
                     }
-            }); 
+            });  */
         }
 
     } else {
