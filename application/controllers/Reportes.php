@@ -13,6 +13,7 @@ class Reportes extends CI_Controller
 		$this->load->model("Reportes_model");
 		$this->load->model("Ingresos_model");
 		$this->datos['almacen']=$this->Reportes_model->retornar_almacenes();
+		$this->datos['sucursales']=$this->Reportes_model->retornar_sucursales();
 	}
 	public function saldosExcel()
     {       
@@ -258,18 +259,16 @@ class Reportes extends CI_Controller
 		$this->accesoCheck(29);
 		$this->titles('ResumenLineaMes','Reportes','Resumen de Ventas por Linea y Mes');
 		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/resumenVentasLineaMes.js') .'?'.rand();
-        //$this->datos['almacen']=$this->Reportes_model->retornar_tabla("almacenes");	
 		$this->setView('reportes/resumenVentasLineaMes');
 	}
-	public function mostrarVentasLineaMes()  //******cambiar a funcion del modelo
+	public function mostrarVentasLineaMes()
 	{
 		if($this->input->is_ajax_request())
         {
-        	$ini=$this->security->xss_clean($this->input->post("i"));//fecha inicio
-        	$fin=$this->security->xss_clean($this->input->post("f"));//FECHA FIN
-        	$alm=$this->security->xss_clean($this->input->post("a")); //almacen
-			$res=$this->Reportes_model->mostrarVentasLineaMes($ini,$fin,$alm); //*******************cambiar a nombre modelo -> funcion modelo (variable de js para filtrar)
-			$res=$res->result_array();
+        	$inicio=$this->security->xss_clean($this->input->post("inicio"));
+        	$fin=$this->security->xss_clean($this->input->post("fin"));
+        	$sucursal=$this->security->xss_clean($this->input->post("sucursal"));
+			$res=$this->Reportes_model->mostrarVentasLineaMes($inicio, $fin, $sucursal);
 			echo json_encode($res);
 		}
 		else

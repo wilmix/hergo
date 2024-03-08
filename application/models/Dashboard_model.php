@@ -11,50 +11,43 @@ class Dashboard_model extends CI_Model
     }
     public function mostrarVentasGestion($ini=null,$fin=null)
 	{ 
-		$sql="SELECT tbl.id, tbl.mes, tbl.gestion
-		, 
-		(ventasPotosi.montoPTS) montoPTS,
-		(ventasSantaCruz.montoSCZ) montoSCZ,
-		(ventasLaPaz.montoLP) montoLP,
-		((ventasPotosi.montoPTS) + (ventasSantaCruz.montoSCZ) + (ventasLaPaz.montoLP))totalMes
-		FROM
-		(
-			SELECT 
-				CONCAT((LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3)),(YEAR(f.`fechaFac`))) id, 
-				LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3) mes,
-				YEAR(f.`fechaFac`) gestion
-			FROM factura f
-			WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin' 
-			GROUP BY id
-			ORDER BY f.`fechaFac`
-		)tbl					
-			LEFT JOIN (
-					SELECT CONCAT((LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3)),(YEAR(f.`fechaFac`))) id, LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3) mes,YEAR(f.`fechaFac`) gestion, ROUND(SUM(f.`total`),2) montoPTS
-					FROM factura f
-					WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin'
-					AND f.`anulada`=0
-					AND f.`almacen` = 3
-					GROUP BY id
-					ORDER BY f.`fechaFac`
-			) ventasPotosi ON ventasPotosi.id = tbl.id
-			LEFT JOIN (
-					SELECT CONCAT((LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3)),(YEAR(f.`fechaFac`))) id, LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3) mes,YEAR(f.`fechaFac`) gestion, ROUND(SUM(f.`total`),2) montoSCZ
-					FROM factura f
-					WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin'
-					AND f.`anulada`=0
-					AND f.`almacen` = 4
-					GROUP BY id
-								ORDER BY f.`fechaFac`
-			) ventasSantaCruz ON ventasSantaCruz.id = tbl.id
-			LEFT JOIN (
-					SELECT CONCAT((LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3)),(YEAR(f.`fechaFac`))) id, LEFT(UPPER(DATE_FORMAT(f.`fechaFac`,'%M')),3) mes,YEAR(f.`fechaFac`) gestion, ROUND(SUM(f.`total`),2) montoLP
-					FROM factura f
-					WHERE f.`fechaFac` BETWEEN '$ini' AND '$fin'
-					AND f.`anulada`=0
-					AND f.`almacen` = 1
-					GROUP BY id
-					ORDER BY f.`fechaFac`
-			) ventasLaPaz ON ventasLaPaz.id = tbl.id";
+		$sql="SELECT
+				CONCAT(
+					UPPER(LEFT(MONTHNAME(f.fechaFac), 3)),
+					YEAR(f.fechaFac)
+				) AS id,
+				UPPER(LEFT(MONTHNAME(f.fechaFac), 3)) AS mes,
+				YEAR(f.fechaFac) AS gestion,
+				SUM(
+					CASE
+						WHEN f.almacen = '3' THEN total
+						ELSE 0
+					END
+				) AS montoPTS,
+				SUM(
+					CASE
+						WHEN f.almacen = '4' THEN total
+						ELSE 0
+					END
+				) AS montoSCZ,
+				SUM(
+					CASE
+						WHEN f.almacen = '1'
+						OR f.almacen = 9 THEN total
+						ELSE 0
+					END
+				) AS montoLP,
+				SUM(total) AS totalMes
+			FROM
+				factura f
+				INNER JOIN almacenes a ON a.idalmacen = f.almacen
+			WHERE
+				f.anulada = 0
+				AND f.fechaFac >= DATE_SUB(CURRENT_DATE, INTERVAL 14 MONTH)
+			GROUP BY
+				id,
+				mes,
+				gestion;";
 		$query=$this->db->query($sql);		
 		return $query;
 	}

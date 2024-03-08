@@ -58,7 +58,7 @@ $(document).ready(function () {
     tituloReporte()
     retornarVentasLineaMes();
 })
-$(document).on("change", "#almacen_filtro", function () {
+$(document).on("change", "#sucursal_filtro", function () {
     tituloReporte()
     retornarVentasLineaMes();
 })
@@ -76,11 +76,10 @@ $(document).on("change", "#moneda", function () {
 
 function retornarVentasLineaMes() 
 {
-    ini = iniciofecha.format('YYYY-MM-DD')
-    fin = finfecha.format('YYYY-MM-DD')
-    alm = $("#almacen_filtro").val()
-    mon = $("#moneda").val()
-    console.log(mon);
+    let ini = iniciofecha.format('YYYY-MM-DD')
+    let fin = finfecha.format('YYYY-MM-DD')
+    let sucursal = $("#sucursal_filtro").val()
+    let mon = $("#moneda").val()
 
     agregarcargando();
     $.ajax({
@@ -88,10 +87,10 @@ function retornarVentasLineaMes()
         url: base_url('index.php/Reportes/mostrarVentasLineaMes'),
         dataType: "json",
         data: {
-            i: ini,
-            f: fin,
-            a: alm
-        }, //**** variables para filtro
+            inicio: ini,
+            fin: fin,
+            sucursal: sucursal
+        },
     }).done(function (res) {
         quitarcargando();
         $("#tablaResumenVentasLineaMes").bootstrapTable('destroy');
@@ -119,15 +118,12 @@ function retornarVentasLineaMes()
                     title: 'Linea',
                     align: 'left',
                     formatter: formVacio,
-                    //sortable: true,
-                    //formatter: formVacio,
                 },
                 
                 {
                     field: mon == 1 ? 'eneD' : 'ene',
                     title: 'Enero',
                     align: 'right',
-                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -135,7 +131,6 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'febD' : 'feb',
                     title: 'Febrero',
                     align: 'right',
-                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -143,7 +138,6 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'marD' : 'mar',
                     title: 'Marzo',
                     align: 'right',
-                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -151,7 +145,6 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'abrD' : 'abr',
                     title: 'Abril',
                     align: 'right',
-                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -159,7 +152,6 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'mayD' : 'may',
                     title: 'Mayo',
                     align: 'right',
-                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -167,7 +159,6 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'junD' : 'jun',
                     title: 'Junio',
                     align: 'right',
-                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -175,7 +166,6 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'julD' : 'jul',
                     title: 'Julio',
                     align: 'right',
-                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -183,7 +173,6 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'agoD' : 'ago',
                     title: 'Agosto',
                     align: 'right',
-                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -191,7 +180,6 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'sepD' : 'sep',
                     title: 'Septiembre',
                     align: 'right',
-                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -199,7 +187,6 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'ocbD' : 'ocb',
                     title: 'Octubre',
                     align: 'right',
-                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -207,7 +194,6 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'novD' : 'nov',
                     title: 'Noviembre',
                     align: 'right',
-                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -215,7 +201,6 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'dicD' : 'dic',
                     title: 'Diciembre',
                     align: 'right',
-                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -223,7 +208,6 @@ function retornarVentasLineaMes()
                     field: mon == 1 ? 'totalD' : 'total',
                     title: 'Total',
                     align: 'right',
-                    //sortable: true,
                     formatter: operateFormatter3,
                     
                 },
@@ -240,13 +224,9 @@ function rowStyle(row, index) {
         return {
             css: {
                 "font-weight": "bold",
-                //"border-top": "3px solid white",
-                //"border-bottom": "3px solid white",
                 "text-align": "right",
-                //"padding": "15px",
                 "background-color": "#3c8dbc",
                 "color": "white",
-               // "font-size":"120%",
             }
         };
     }
@@ -286,10 +266,10 @@ function sumaColumna(data) {
 }
 
 function tituloReporte() {
-    let almText = $('#almacen_filtro').find(":selected").text();
+    let sucursalNombre = $('#sucursal_filtro').find(":selected").text();
     let mon = $('#moneda').val();
     mon = mon == 1 ? 'DOLARES' : 'BOLIVIANOS'
-    $('#tituloAlmacen').text(almText);
+    $('#tituloAlmacen').text(sucursalNombre);
     $('#ragoFecha').text("DEL " + iniciofecha.format('DD/MM/YYYY') + "  AL  " + finfecha.format('DD/MM/YYYY'));
     $('#monedaTitulo').text(mon);
 }

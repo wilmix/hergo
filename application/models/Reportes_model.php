@@ -29,6 +29,21 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
+	public function retornar_sucursales()
+	{
+		$sql="	SELECT
+					a.siat_sucursal codigoSucursal,
+					CONCAT(a.almacen, ' | ' ,a.sucursal) nombreSucursal,
+					a.idalmacen,
+					a.siglAlm
+				FROM
+					almacenes a
+				WHERE
+					a.siat_sucursal IS NOT NULL;";
+		
+		$query=$this->db->query($sql);		
+		return $query->result_array();
+	}
 	public function retornar_almacen($id)
 	{
 		$sql="SELECT * from almacenes where idalmacen = $id";
@@ -381,7 +396,7 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarVentasLineaMes($ini,$fin,$alm='')
+	public function mostrarVentasLineaMes($ini,$fin,$sucursal='')
 	{ 
 		$sql="SELECT  Linea, Sigla,
 		SUM(CASE WHEN MONTH(fechaFac)=1 THEN total ELSE 0 END) AS ene,
@@ -410,13 +425,13 @@ class Reportes_model extends CI_Model
 		SUM(CASE WHEN MONTH(fechaFac)=11 THEN dolares ELSE 0 END) AS novD,
 		SUM(CASE WHEN MONTH(fechaFac)=12 THEN dolares ELSE 0 END) AS dicD,
 		SUM(dolares) totalD
-		FROM detalleLinea
+		FROM detalleLineaSucursal
 		WHERE fechaFac BETWEEN '$ini' AND '$fin'
-		AND almacen LIKE '%$alm'
+		AND codigoSucursal LIKE '%$sucursal'
 		GROUP BY Sigla WITH ROLLUP
 		";
 		$query=$this->db->query($sql);		
-		return $query;
+		return $query->result_array();
 	}
 	public function mostrarLibroVentas($ini,$fin,$alm) 
 	{

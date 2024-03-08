@@ -87,7 +87,7 @@ class CI_Controller {
 
 		$this->datos['nombre_usuario']= $this->session->userdata('nombre');
 		$this->datos['almacen_usuario']= $this->session->userdata['datosAlmacen']->almacen;
-
+		$this->datos['sucursal_usuario'] = $this->session->userdata['datosAlmacen']->siat_sucursal;
 		$this->datos['user_id_actual']=$this->session->userdata['user_id'];
 		$this->datos['nombre_actual']=$this->session->userdata['nombre'];
 		$this->datos['almacen_actual']=$this->session->userdata['datosAlmacen']->almacen;
