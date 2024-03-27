@@ -319,42 +319,59 @@ class Reportes_model extends CI_Model
 	}
 	public function mostrarSaldos() 
 	{ 
-		$sql="SELECT 	aa.`idArticulos` id,
-						aa.`CodigoArticulo` codigo,
-						aa.`Descripcion` descripcion,
-						aa.`Sigla` uni,
-						aa.cpp,
-						aa.`laPaz`,
-						aa.`elAlto`,
-						aa.`potosi`,
-						aa.`santacruz`,
-						aa.reserva,
-						aa.pasbol,
-						(aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz`+ aa.reserva) subTotal,
-						(aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz`+ aa.reserva + aa.pasbol) total,
-						IFNULL(back.cantidad,0) backOrder,
-						back.recepcion,
-						back.estado,
-						aa.`url`,
-						aa.precio
-					FROM articulos_activos aa
-					LEFT JOIN
-							(SELECT 
-								pit.`articulo`, 
-								a.`CodigoArticulo`, 
-								a.`Descripcion`,
-								u.`Sigla`,
-								pit.`cantidad`,
-								pit.`estado`,
-								p.recepcion
-							FROM pedidos_items pit
-								INNER JOIN articulos a ON a.`idArticulos` = pit.`articulo`
-								INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
-								INNER JOIN pedidos p ON p.id = pit.idPedido
-							WHERE pit.`status` = FALSE
-						)back 
-					ON back.articulo = aa.`idArticulos`
-					ORDER BY aa.`CodigoArticulo`
+		$sql="	SELECT
+					aa.`idArticulos` id,
+					aa.`CodigoArticulo` codigo,
+					aa.`Descripcion` descripcion,
+					aa.`Sigla` uni,
+					aa.cpp,
+					aa.`laPaz`,
+					aa.`elAlto`,
+					aa.`potosi`,
+					aa.`santacruz`,
+					aa.reserva,
+					aa.pasbol,
+					(
+						aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz` + aa.reserva
+					) subTotal,
+					(
+						aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz` + aa.reserva + aa.pasbol
+					) total,
+					IFNULL(back.cantidad, 0) backOrder,
+					pendientes.cantidad pendienteAprobar,
+					back.recepcion,
+					back.estado,
+					aa.`url`,
+					aa.precio
+				FROM
+					articulos_activos aa
+					LEFT JOIN (
+						SELECT
+							pit.`articulo`,
+							pit.`cantidad`,
+							p.recepcion,
+							pit.`estado`
+						FROM
+							pedidos_items pit
+							INNER JOIN pedidos p ON p.id = pit.idPedido
+						WHERE
+							pit.`status` = FALSE
+					) back ON back.articulo = aa.`idArticulos`
+					LEFT JOIN (
+						SELECT
+							id.articulo,
+							id.cantidad
+						FROM
+							ingdetalle id
+							INNER JOIN ingresos i ON id.idIngreso = i.idIngresos
+						WHERE
+							i.tipomov = 3
+							AND i.anulado = 0
+							AND i.aprobado = 0
+							AND i.gestion > 2023
+					) pendientes ON pendientes.articulo = aa.idArticulos
+				ORDER BY
+					aa.`CodigoArticulo`
 		-- WHERE SUBSTRING(CodigoArticulo,1,2)<>'SR'
 		";
 		$query=$this->db->query($sql);		

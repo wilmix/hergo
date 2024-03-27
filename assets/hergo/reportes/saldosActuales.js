@@ -115,6 +115,13 @@ function retornarSaldosActuales() {
                     render: numberDecimal
                 },
                 {
+					data: 'pendienteAprobar',
+					title: 'Por Aprobar',
+                    className: 'text-right',
+                    searchable: false,
+                    render: numberDecimal
+                },
+                {
 					data: 'subTotal',
 					title: 'Total',
                     className: 'text-right',
