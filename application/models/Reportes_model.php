@@ -332,13 +332,13 @@ class Reportes_model extends CI_Model
 					aa.reserva,
 					aa.pasbol,
 					(
-						aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz` + aa.reserva
+						COALESCE(aa.`laPaz`, 0) + COALESCE(aa.`elAlto`, 0) + COALESCE(aa.`potosi`, 0) + COALESCE(aa.`santacruz`, 0) + COALESCE(aa.reserva, 0) + COALESCE(pendientes.cantidad, 0)
 					) subTotal,
 					(
-						aa.`laPaz` + aa.`elAlto` + aa.`potosi` + aa.`santacruz` + aa.reserva + aa.pasbol
+						COALESCE(aa.`laPaz`, 0) + COALESCE(aa.`elAlto`, 0) + COALESCE(aa.`potosi`, 0) + COALESCE(aa.`santacruz`, 0) + COALESCE(aa.reserva, 0) + COALESCE(aa.pasbol, 0) + COALESCE(pendientes.cantidad, 0)
 					) total,
-					IFNULL(back.cantidad, 0) backOrder,
-					pendientes.cantidad pendienteAprobar,
+					COALESCE(back.cantidad, 0) backOrder,
+					COALESCE(pendientes.cantidad, 0) pendienteAprobar,
 					back.recepcion,
 					back.estado,
 					aa.`url`,
