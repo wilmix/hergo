@@ -188,6 +188,9 @@ class Reportes extends CI_Controller
         	$ini=$this->security->xss_clean($this->input->post("ini")); 
 			$fin=$this->security->xss_clean($this->input->post("fin")); 
 			$mon=$this->security->xss_clean($this->input->post("mon")); 
+			if(empty($alm)) {
+				$alm = '1,2,3,4,5,6,7,8,9,10';
+			}
 			$res=$this->Reportes_model->showEstadoVentasCostoNew($alm,$ini,$fin,$mon); 
 			$res=$res->result_array();
 			echo json_encode($res);
