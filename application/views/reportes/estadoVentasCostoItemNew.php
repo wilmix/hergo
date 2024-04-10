@@ -19,8 +19,7 @@
             ?>   
           </div>
           <div class="text-center">
-            <h2>ESTADO DE VENTAS Y COSTOS POR ITEM NUEVO</h2>
-            <h3> Correción de diferencia sistema y inventarios</h3>
+            <h2>ESTADO DE VENTAS Y COSTOS POR ITEM</h2>
             <h3 id="tituloReporte"></h3>
             <h4 id="ragoFecha"></h4>
             <h4 id="monedaTitulo"></h4>
