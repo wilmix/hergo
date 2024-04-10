@@ -159,8 +159,10 @@
             $userName = $this->datos['userName'];
             $autor = $this->datos['autor'];
             $vendedor = $this->datos['nVendedor'];
-            $saldoDeudor = $this->datos['saldoDeudor'] ?? 0;
-            $fechaPriFac = $saldoDeudor ? ' - ' . date('d/m/Y',strtotime($this->datos['fechaPrimeraFac'])): '';
+            $saldoDeudorVencidas = $this->datos['saldoDeudorVencidas'] ?? 0;
+            $fechaPriFacVencidas = $saldoDeudorVencidas ? ' - ' . date('d/m/Y',strtotime($this->datos['fechaPrimeraFacVencidas'])): '';
+            $saldoDeudorTotal = $this->datos['saldoDeudorTotal'] ?? 0;
+            $fechaPriFacTotal = $saldoDeudorTotal ? ' - ' . date('d/m/Y',strtotime($this->datos['fechaPrimeraFacTotal'])): '';
             $this->SetLineWidth(0.5);
             $this->Line(10,127,206,127);
             $this->SetY(-150);
@@ -201,15 +203,24 @@
 
             $this->SetXY(35,-135);
             $this->SetFont('Arial','I', 9);
-            $this->Cell(30,5, number_format($saldoDeudor, 2, ".", ",") . ' '.  $fechaPriFac,0,0,'L',1);
+            $this->Cell(30,5, number_format($saldoDeudorVencidas, 2, ".", ",") . ' '.  $fechaPriFacVencidas,0,0,'L',1);
 
             $this->SetXY(160,-135);
             $this->SetFont('Arial','BI', 9);
             $this->Cell(30,5, 'Recibi Conforme',0,0,'L',1);
 
+            $this->SetXY(9,-130);
+            $this->SetFont('Arial','BI', 9);
+            $this->Cell(30,5, 'Saldo Deudor: ',0,0,'L',1);
+
+            $this->SetXY(35,-130);
+            $this->SetFont('Arial','I', 9);
+            $this->Cell(30,5, number_format($saldoDeudorTotal, 2, ".", ",") . ' '.  $fechaPriFacTotal,0,0,'L',1);
+
+
 
                 //NUMERO PIED PAGINA
-                $this->SetY(-135);
+                $this->SetY(-130);
                 $this->SetFont('Arial','I', 8);
                 $this->Cell(0,10, 'Pagina '.$this->PageNo().'/{nb}',0,0,'C' );
         }

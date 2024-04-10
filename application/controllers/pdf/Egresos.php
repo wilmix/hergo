@@ -24,9 +24,12 @@ class Egresos extends MY_Controller {
   public function index($id=0) {
     $this->egreso = $this->Egresos_model->mostrarEgresos($id)->row();
     $this->egreso_items = $this->Egresos_model->mostrarDetalle($id);
-    $saldoDeudor = $this->Egresos_model->saldoDeudorCliente($this->egreso->idcliente)->row();
-    $this->egreso->saldoDeudor = $saldoDeudor->saldoDeudor;
-    $this->egreso->fechaPrimeraFac = $saldoDeudor->fechaFac;
+    $saldoDeudorVencidas = $this->Egresos_model->saldoDeudorVencidas($this->egreso->idcliente)->row();
+    $saldoDeudorTotal = $this->Egresos_model->saldoDeudorTotal($this->egreso->idcliente)->row();
+    $this->egreso->saldoDeudorVencidas = $saldoDeudorVencidas->saldoDeudor;
+    $this->egreso->fechaPrimeraFacVencidas = $saldoDeudorVencidas->fechaFac;
+    $this->egreso->saldoDeudorTotal = $saldoDeudorTotal->saldoDeudor;
+    $this->egreso->fechaPrimeraFacTotal = $saldoDeudorTotal->fechaFac;
     $this->egreso->userName = $this->session->userdata['nombre'];
 
     $params = json_decode(json_encode($this->egreso), true);
