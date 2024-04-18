@@ -367,7 +367,7 @@ class Reportes_model extends CI_Model
 						WHERE
 							i.tipomov = 3
 							AND i.anulado = 0
-							AND i.aprobado = 0
+							AND i.estado = 0
 							AND i.gestion > 2023
 					) pendientes ON pendientes.articulo = aa.idArticulos
 				ORDER BY
