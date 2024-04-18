@@ -337,10 +337,19 @@ class Reportes_model extends CI_Model
 					(
 						COALESCE(aa.`laPaz`, 0) + COALESCE(aa.`elAlto`, 0) + COALESCE(aa.`potosi`, 0) + COALESCE(aa.`santacruz`, 0) + COALESCE(aa.reserva, 0) + COALESCE(aa.pasbol, 0) + COALESCE(pendientes.cantidad, 0)
 					) total,
-					COALESCE(back.cantidad, 0) backOrder,
+					COALESCE(SUM(back.cantidad), 0) backOrder,
 					COALESCE(pendientes.cantidad, 0) pendienteAprobar,
-					back.recepcion,
-					back.estado,
+					GROUP_CONCAT(
+						CONCAT(
+							back.cantidad,
+							' -> ',
+							back.estado,
+							' -> P-',
+							back.numeroPedido,
+							'/',
+							back.gestionPedido
+						) SEPARATOR '<br>'
+					) estadoPedido,
 					aa.`url`,
 					aa.precio
 				FROM
@@ -350,7 +359,9 @@ class Reportes_model extends CI_Model
 							pit.`articulo`,
 							pit.`cantidad`,
 							p.recepcion,
-							pit.`estado`
+							pit.`estado`,
+							RIGHT(YEAR(p.fecha), 2) AS gestionPedido,
+							p.n numeroPedido
 						FROM
 							pedidos_items pit
 							INNER JOIN pedidos p ON p.id = pit.idPedido
@@ -370,9 +381,10 @@ class Reportes_model extends CI_Model
 							AND i.estado = 0
 							AND i.gestion > 2023
 					) pendientes ON pendientes.articulo = aa.idArticulos
+				GROUP BY
+					aa.`idArticulos`
 				ORDER BY
 					aa.`CodigoArticulo`
-		-- WHERE SUBSTRING(CodigoArticulo,1,2)<>'SR'
 		";
 		$query=$this->db->query($sql);		
 		return $query;

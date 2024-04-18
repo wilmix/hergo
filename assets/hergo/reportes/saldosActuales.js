@@ -42,7 +42,7 @@ function retornarSaldosActuales() {
                 },
                 {
 					data: 'codigo',
-					title: 'Còdigo',
+					title: 'Codigo',
 					className: 'text-center',
                 },
                 {   
@@ -151,18 +151,10 @@ function retornarSaldosActuales() {
                     searchable: false,
                     render: numberDecimal
                 },
-                /* {
-					data: 'recepcion',
-					title: 'Recepción Estimada:',
-                    className: 'text-center',
-                    searchable: false,
-                    render: formato_fecha,
-                    width: '8%'
-                }, */
                 {
-					data: 'estado',
-					title: 'Estado',
-                    className: 'text-right',
+					data: 'estadoPedido',
+					title: 'Detalle BackOrder',
+                    className: 'text-left',
                     searchable: false,
                 },
 				
