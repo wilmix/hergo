@@ -155,7 +155,7 @@ function retornarSaldosActuales() {
 					data: 'estadoPedido',
 					title: 'Detalle BackOrder',
                     className: 'text-left',
-                    searchable: false,
+                    width: '20%'
                 },
 				
 
