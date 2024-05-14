@@ -344,10 +344,11 @@ class Reportes_model extends CI_Model
 							back.cantidad,
 							' -> ',
 							back.estado,
-							' -> P-',
+							'(P-',
 							back.numeroPedido,
 							'/',
-							back.gestionPedido
+							back.gestionPedido,
+							')'
 						) SEPARATOR '<br>'
 					) estadoPedido,
 					aa.`url`,
