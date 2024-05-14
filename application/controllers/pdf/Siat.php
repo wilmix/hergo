@@ -42,7 +42,7 @@ class Siat extends CI_Controller
       $this->pdf->Cell(15, 5, $linea->codigo, $l, 0, 'C', 0);
       $this->pdf->Cell(15, 5, number_format($linea->cantidad, 2, ".", ","), $l, 0, 'C', 0);
       $this->pdf->SetFont('Arial', '', 6);
-      $this->pdf->Cell(20, 5, $linea->unidad, $l, 0, 'C', 0);
+      $this->pdf->Cell(20, 5, mb_convert_encoding($linea->unidad, "ISO-8859-1") , $l, 0, 'C', 0);
       $this->pdf->SetFont('Arial', '', 7);
       $this->pdf->MultiCell(88, 5, mb_convert_encoding($linea->descripcion, "ISO-8859-1"), $l, 'L', 0);
       $this->pdf->SetXY(148, $this->pdf->GetY() - 5);
