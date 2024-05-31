@@ -353,6 +353,7 @@ class Egresos extends CI_Controller
 			$egreso->plazopago = $egreso->plazopago == '' ? $egreso->fechamov : $egreso->plazopago;
 			$egreso->clientePedido = $this->security->xss_clean($this->input->post('pedido_ne'));       
 			$egreso->vendedor = $this->security->xss_clean($this->input->post('idUsuarioVendedor'));
+			$egreso->tipoEgreso = $this->security->xss_clean($this->input->post('tipoNota'));
 
 			$notaEntrega = new stdclass();
 			if ($egreso->tipomov == 7) {
@@ -404,6 +405,7 @@ class Egresos extends CI_Controller
 			$egreso->plazopago = date('Y-m-d',strtotime($egreso->plazopago));
 			$egreso->clientePedido = $this->security->xss_clean($this->input->post('pedido_ne'));       
 			$egreso->vendedor = $this->security->xss_clean($this->input->post('idUsuarioVendedor'));
+			$egreso->tipoEgreso = $this->security->xss_clean($this->input->post('tipoNota'));
 
 			$notaEntregaTipo = new stdclass();
 			if ($egreso->tipomov == 7) {

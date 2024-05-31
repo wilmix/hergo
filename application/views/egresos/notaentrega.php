@@ -21,6 +21,8 @@
         $fechaMovimiento = new DateTime($originalDate);
         $fechaPago = new DateTime($dcab->plazopago);
         $tiempoCredito = $fechaMovimiento->diff($fechaPago)->format('%a');
+        $idegreso = $dcab->idtipomov;
+        $dcab->tipoNota = $dcab->tipoNota ?? $dcab->tipoEgreso;
     }
     else
     {
@@ -254,22 +256,33 @@
               <input type="text" class="form-control" id="obs_ne" name="obs_ne" value="<?= ($cont)?$dcab->obs:''  ?>" />
             </div>
             <div class="col-xs-12 col-md-2 hiddenVC">
-              <label for="tipoNota">Tipo:</label>
-              <select class="form-control form-control-sm" name="tipoNota" id="tipoNota">
+              <label for="tipoNota">Tipo: <?php echo '' ?></label>
+              <select class="form-control form-control-sm" name="tipoNota" id="tipoNota"  >
+              <option value="">Seleccionar</option>
                 <?php
                   // Definir opciones de tipoNota
+                  $opcionesVentaCaja = [
+                    1 => 'Venta'
+                  ];
                   $opcionesTipoNota = [
                     1 => 'Venta',
                     2 => 'Prestamo',
-                    3 => 'Muestra',
-                    4 => 'Reserva'
+                    3 => 'Muestra'
                   ];
+                  $opcionesBaja = [
+                    11 => 'Baja Reingreso',
+                    12 => 'Baja Definitiva'
+                  ];
+                  // Elegir las opciones basadas en idegreso
+                  $opciones = $idegreso == 6 ? $opcionesVentaCaja : ($idegreso == 7 ? $opcionesTipoNota : ($idegreso == 9 ? $opcionesBaja : []));
                   // Obtener tipoNota seleccionado
-                  $tipoNotaSeleccionado = isset($dcab) ? $dcab->tipoNota : 1;
+                  $tipoNotaSeleccionado = isset($dcab) ? $dcab->tipoNota : ($idegreso == 6 ? 1 : ($idegreso == 9 ? '' : ($idegreso == 7 ? '' : 1)));
+                  
+
                   // Mostrar opciones de tipoNota
-                  foreach ($opcionesTipoNota as $valor => $texto) {
-                    $seleccionado = $valor == $tipoNotaSeleccionado ? 'selected="selected"' : '';
-                    echo "<option value=\"$valor\" $seleccionado>$texto</option>";
+                  foreach ($opciones as $valor => $texto) {
+                      $seleccionado = $valor == $tipoNotaSeleccionado ? 'selected="selected"' : '';
+                      echo "<option value=\"$valor\" $seleccionado>$texto</option>";
                   }
                 ?>
               </select>

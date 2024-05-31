@@ -342,10 +342,12 @@ class Reportes_model extends CI_Model
 					COALESCE(pendientes.cantidad, 0) pendienteAprobar,
 					GROUP_CONCAT(
 						CONCAT(
+							'<b> ',
 							back.cantidad,
+							'</b> ',
 							' -> ',
 							back.estado,
-							'(P-',
+							' (P-',
 							back.numeroPedido,
 							'/',
 							back.gestionPedido,

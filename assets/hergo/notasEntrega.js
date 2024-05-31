@@ -16,9 +16,9 @@ $(document).ready(function () {
     tipoMovEgre = $("#_tipomov_ne").val()
     if (tipoMovEgre == 9 ) {
         $(".hiddenBaja").addClass("hidden");
-    } else if (tipoMovEgre == 6){
+    } /* else if (tipoMovEgre == 6){
         $(".hiddenVC").addClass("hidden");
-    }
+    } */
     console.log(tipoMovEgre);
     moneda = $("#moneda_ne").val()
     glob_guardar = false;
@@ -368,10 +368,12 @@ function agregarArticulo() {
 function guardarmovimiento() {
     let valuesToSubmit = $("#form_egreso").serialize()
     let articulos = $("#tablaEditarEgreso").bootstrapTable('getData')
+    let tipoNotaBaja = $("#tipoNota").val()
     /* articulos.forEach(element => {
         delete element.Descripcion;
     }); */
     let tipoEgreso = $("#tipomov_ne2").text()
+    let tipoEgresoVal = $("#tipomov_ne2").val()
     if (!validarTipoNotaTiempoCredito()) {
         return false
     }
@@ -385,6 +387,10 @@ function guardarmovimiento() {
     }
     if (!checkTipoCambio) {
         swal("Error", "No se tiene tipo de cambio para esta Fecha", "error")
+        return false;
+    }
+    if (!tipoNotaBaja && tipoEgresoVal != 6) {
+        swal("Error", "Seleccione un tipo de movimiento valido", "error")
         return false;
     }
     if (articulos.length > 0) {
@@ -423,6 +429,12 @@ function guardarmovimiento() {
     }
 }
 function actualizarMovimiento() {
+    let tipoNotaBaja = $("#tipoNota").val()
+    let tipoEgresoVal = $("#tipomov_ne2").val()
+    if (!tipoNotaBaja && tipoEgresoVal != 6) {
+        swal("Error", "Seleccione un tipo de movimiento valido", "error")
+        return false;
+    }
     if (!validarTipoNotaTiempoCredito()) {
         return false
     }
@@ -718,7 +730,13 @@ function retornarTablaEgresoDetalle(idEgreso=null) {
                             validate: validarTextTable,
                         },
                     },
-
+                    /* {
+                        field: 'saldo',
+                        title: "Saldo",
+                        align: 'right',
+                        class: "col-sm-1",
+                        formatter: formatoMoneda,
+                    }, */
                     {
                         field: 'cantidad',
                         title: "Cantidad",
@@ -804,6 +822,7 @@ $(document).on("click", ".editable-click", function () {
 })
 function validarCantidadFactura(value) {
     value = $.trim(value);
+    //const cantidad = parseFloat(row.cantidad)
     if ($.trim(value) == '') {
         return 'El dato es requerido..';
     }
@@ -823,6 +842,11 @@ function validarCantidadFactura(value) {
     if (parseFloat(row.cantidad) == parseFloat(row.cantFact)) {
         return 'El artículo fue facturado totalmente' 
     }
+    /* let totalAlmacen = parseFloat(row.cantidad) +  parseFloat(row.saldo)
+    console.log(totalAlmacen, row.cantidad, cantidad,  value)
+    if (parseFloat(totalAlmacen) < parseFloat(value)) {
+        return 'No hay suficiente saldo en el almacen' 
+    } */
 }
 function validatePUedit(value) {
     value = $.trim(value);

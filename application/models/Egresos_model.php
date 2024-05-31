@@ -94,6 +94,7 @@ class Egresos_model extends CI_Model
                         e.idEgresos,
                         t.sigla,
                         t.tipomov,
+                        e.tipoEgreso,
                         e.fechamov,
                         t.id as idtipomov,
                         c.nombreCliente,
@@ -221,32 +222,46 @@ class Egresos_model extends CI_Model
         $query=$this->db->query($sql);
         return $query;
     }
-	public function mostrarDetalle($id)//lista todos los detalles de un egreso
+	public function mostrarDetalle($id)
 	{
-		$sql="SELECT a.idArticulos,e.codigoProducto CodigoArticulo, e.descripcion Descripcion, e.cantidad, 
-        e.punitario punitario11, 
-        tc.`tipocambio`,
-        e.descuento, e.idingdetalle, 
-        e.idegreso, u.Sigla, round(e.cantidad-e.cantFact,2) cantidadReal, round(e.cantFact,2) cantFact,
-        case
-		when eg.moneda = 2 THEN ROUND(e.`punitario` / tc.`tipocambio`,2)
-		when eg.moneda = 1 THEN round(e.punitario,2)
-        end punitario,
-        case
-		when eg.moneda = 2 THEN round((ROUND(e.`punitario` / tc.`tipocambio`,2) * e.`cantidad`),2)
-		when eg.moneda = 1 THEN round(e.total,2)
-        end total
-		FROM egredetalle e
-		INNER JOIN articulos a
-		ON e.articulo = a.idArticulos
-        INNER JOIN unidad u
-        ON a.idUnidad=u.idUnidad
-        INNER JOIN egresos eg
-		ON eg.`idegresos` = e.`idegreso`
-		INNER JOIN tipocambio tc
-		ON eg.`fechamov` = tc.`fecha`
-         WHERE e.idegreso=$id
-         ORDER BY a.CodigoArticulo";
+		$sql="  SELECT
+                    a.idArticulos,
+                    e.codigoProducto CodigoArticulo,
+                    e.descripcion Descripcion,
+                    e.cantidad,
+                    sa.saldo,
+                    e.punitario punitario11,
+                    tc.`tipocambio`,
+                    e.descuento,
+                    e.idingdetalle,
+                    e.idegreso,
+                    u.Sigla,
+                    ROUND(e.cantidad - e.cantFact, 2) cantidadReal,
+                    ROUND(e.cantFact, 2) cantFact,
+                    CASE
+                        WHEN eg.moneda = 2 THEN ROUND(e.`punitario` / tc.`tipocambio`, 2)
+                        WHEN eg.moneda = 1 THEN round(e.punitario, 2)
+                    END punitario,
+                    CASE
+                        WHEN eg.moneda = 2 THEN ROUND(
+                            (
+                                ROUND(e.`punitario` / tc.`tipocambio`, 2) * e.`cantidad`
+                            ),
+                            2
+                        )
+                        WHEN eg.moneda = 1 THEN ROUND(e.total, 2)
+                    END total
+                FROM
+                    egredetalle e
+                    INNER JOIN articulos a ON e.articulo = a.idArticulos
+                    INNER JOIN unidad u ON a.idUnidad = u.idUnidad
+                    INNER JOIN egresos eg ON eg.`idegresos` = e.`idegreso`
+                    INNER JOIN tipocambio tc ON eg.`fechamov` = tc.`fecha`
+                    LEFT JOIN saldoarticulos sa ON sa.idArticulo = a.idArticulos AND sa.idAlmacen = eg.almacen
+                WHERE
+                    e.idegreso = $id
+                ORDER BY
+                    a.CodigoArticulo ASC";
 
 		$query=$this->db->query($sql);
 		return $query;
