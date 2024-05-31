@@ -87,6 +87,13 @@ function retornarSaldosActuales() {
                     render: numberDecimal
                 },
                 {
+					data: 'reserva',
+					title: 'Reserva LP',
+                    className: 'text-right',
+                    searchable: false,
+                    render: numberDecimal
+                },
+                {
 					data: 'elAlto',
 					title: 'El Alto',
                     className: 'text-right',
@@ -108,8 +115,8 @@ function retornarSaldosActuales() {
                     render: numberDecimal
                 },
                 {
-					data: 'reserva',
-					title: 'Reserva',
+					data: 'reserva_scz',
+					title: 'Reserva SCZ',
                     className: 'text-right',
                     searchable: false,
                     render: numberDecimal

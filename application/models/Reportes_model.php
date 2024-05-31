@@ -330,12 +330,13 @@ class Reportes_model extends CI_Model
 					aa.`potosi`,
 					aa.`santacruz`,
 					aa.reserva,
+					aa.reserva_scz,
 					aa.pasbol,
 					(
-						COALESCE(aa.`laPaz`, 0) + COALESCE(aa.`elAlto`, 0) + COALESCE(aa.`potosi`, 0) + COALESCE(aa.`santacruz`, 0) + COALESCE(aa.reserva, 0) + COALESCE(pendientes.cantidad, 0)
+						COALESCE(aa.`laPaz`, 0) + COALESCE(aa.reserva, 0) + COALESCE(aa.`elAlto`, 0) + COALESCE(aa.`potosi`, 0) + COALESCE(aa.`santacruz`, 0) + COALESCE(aa.reserva_scz, 0) +  COALESCE(pendientes.cantidad, 0)
 					) subTotal,
 					(
-						COALESCE(aa.`laPaz`, 0) + COALESCE(aa.`elAlto`, 0) + COALESCE(aa.`potosi`, 0) + COALESCE(aa.`santacruz`, 0) + COALESCE(aa.reserva, 0) + COALESCE(aa.pasbol, 0) + COALESCE(pendientes.cantidad, 0)
+						COALESCE(aa.`laPaz`, 0) + COALESCE(aa.reserva, 0) + COALESCE(aa.`elAlto`, 0) + COALESCE(aa.`potosi`, 0) + COALESCE(aa.`santacruz`, 0) + COALESCE(aa.reserva_scz, 0)  + COALESCE(pendientes.cantidad, 0) + COALESCE(aa.pasbol, 0) 
 					) total,
 					COALESCE(SUM(back.cantidad), 0) backOrder,
 					COALESCE(pendientes.cantidad, 0) pendienteAprobar,
