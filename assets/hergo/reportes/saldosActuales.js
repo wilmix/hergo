@@ -114,13 +114,13 @@ function retornarSaldosActuales() {
                     searchable: false,
                     render: numberDecimal
                 },
-                {
+                /* {
 					data: 'reserva_scz',
 					title: 'Reserva SCZ',
                     className: 'text-right',
                     searchable: false,
                     render: numberDecimal
-                },
+                }, */
                 {
 					data: 'pendienteAprobar',
 					title: 'Por Aprobar',
