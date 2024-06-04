@@ -69,6 +69,7 @@ function retornarSaldosActuales() {
 					title: 'CPP',
                     className: 'text-right',
                     searchable: false,
+                    visible:false,
                     render: numberDecimal
                 },
                  {
@@ -114,13 +115,13 @@ function retornarSaldosActuales() {
                     searchable: false,
                     render: numberDecimal
                 },
-                /* {
+                {
 					data: 'reserva_scz',
 					title: 'Reserva SCZ',
                     className: 'text-right',
                     searchable: false,
                     render: numberDecimal
-                }, */
+                },
                 {
 					data: 'pendienteAprobar',
 					title: 'Por Aprobar',
