@@ -228,7 +228,9 @@ const app = new Vue({
         if (this.saldo <= 0) {
           console.log('no hay stock');
         }
-        if (this.selectedart && this.cantidad > 0 && this.precioLista > 0) {
+        //if (this.selectedart && this.cantidad > 0 && this.precioLista > 0) {
+        if (this.selectedart && this.cantidad >= 0 && this.precioLista >= 0) {
+
           this.selectedart.cantidad = this.cantidad
           this.selectedart.marcaSigla = this.marca
           this.selectedart.tiempoEntrega = this.tiempoEntrega
