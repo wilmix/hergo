@@ -9,7 +9,7 @@ class Dashboard_model extends CI_Model
 		$this->load->helper('date');
 		$this->db->query("SET lc_time_names = 'es_BO'");
     }
-    public function mostrarVentasGestion($ini=null,$fin=null)
+    public function mostrarVentasGestion($interval)
 	{ 
 		$sql="SELECT
 				CONCAT(
@@ -42,8 +42,10 @@ class Dashboard_model extends CI_Model
 				factura f
 				INNER JOIN almacenes a ON a.idalmacen = f.almacen
 			WHERE
-				f.anulada = 0
-				AND f.fechaFac >= DATE_SUB(CURRENT_DATE, INTERVAL 14 MONTH)
+    			f.anulada = 0
+    			AND DATE_FORMAT(f.fechaFac, '%Y-%m') BETWEEN 
+        		DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL $interval MONTH), '%Y-%m') AND 
+        		DATE_FORMAT(DATE_SUB(LAST_DAY(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)), INTERVAL 1 DAY), '%Y-%m')
 			GROUP BY
 				id,
 				mes,

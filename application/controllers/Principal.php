@@ -22,9 +22,8 @@ class Principal extends CI_Controller
 	public function ventasGestion()
 	{
 		$this->libacceso->acceso(55);
-        	$ini=$this->security->xss_clean($this->input->post("i"));
-        	$fin=$this->security->xss_clean($this->input->post("f"));
-			$res=$this->Dashboard_model->mostrarVentasGestion($ini,$fin);
+        	$interval=$this->security->xss_clean($this->input->post("interval"));
+			$res=$this->Dashboard_model->mostrarVentasGestion($interval);
 			$res=$res->result_array();
 			echo json_encode($res);
 	}

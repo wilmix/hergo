@@ -20,10 +20,15 @@ function numberCoin (data, type, row){
 
 let today = moment().subtract(0, 'month').startOf('day').format('YYYY-MM-DD')
 let yearAgo = moment().subtract(12, 'month').startOf('month').format('YYYY-MM-DD')
+let chartSales
 
 function ventasChart(meses, alm1, alm2, alm3,totalMes) {
     var ctx = document.getElementById('ventas').getContext('2d');
-    var chart = new Chart(ctx, {
+    if (chartSales) {
+      chartSales.destroy();
+    }
+
+    chartSales = new Chart(ctx, {
         type: 'line',
         data: {
             labels: meses,
@@ -89,17 +94,20 @@ function ventasChart(meses, alm1, alm2, alm3,totalMes) {
     });
 }
 
+$(document).on("change", "#interval_select", function () {
+    agregarcargando()
+    getVentas();
+    quitarcargando();
+
+})
 function getVentas() {
-    today1 = moment().subtract(-1, 'day').startOf('day').format('YYYY-MM-DD')
-    ini = yearAgo
-    fin = today1
+    let interval = $("#interval_select").val()
     $.ajax({
       type: "POST",
       url: base_url('index.php/Principal/ventasGestion'),
       dataType: "json",
       data: {
-        i: ini,
-        f: fin,
+        interval: interval
       }, 
     }).done(function (res) {
       let montoLP = res.map (ventas => ventas.montoLP)

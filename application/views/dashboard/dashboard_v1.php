@@ -61,22 +61,35 @@
           <div class="box">
             <div class="box-header with-border">
               <h3 class="box-title">Ventas</h3>
+              <span>
+                <select  class="btn btn-sm  btn-flat pull-right" id="interval_select">
+                  <option value="3" >Intervalo 3</option>
+                  <option value="6" >Intervalo 6</option>
+                  <option value="9" >Intervalo 9</option>
+                  <option value="12" selected >Intervalo 12</option>
+                  <option value="18" >Intervalo 18</option>
+                  <option value="24" >Intervalo 24</option>
+                  <option value="36" >Intervalo 36</option>
+                  <option value="48" >Intervalo 48</option>
+                  <option value="60" >Intervalo 60</option>
+                </select>
+              </span>
             </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="chart hidden-xs">
-                    <!-- Sales Chart Canvas -->
-                    <canvas id="ventas" style="height: 180px; width: 645px;" width="645" height="180"></canvas>
+              <!-- /.box-header -->
+              <div class="box-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="chart hidden-xs">
+                      <!-- Sales Chart Canvas -->
+                      <canvas id="ventas" style="height: 180px; width: 645px;" width="645" height="180"></canvas>
+                    </div>
+                    <!-- /.chart-responsive -->
                   </div>
-                  <!-- /.chart-responsive -->
+                  <!-- /.col -->
                 </div>
-                <!-- /.col -->
+                <!-- /.row -->
               </div>
-              <!-- /.row -->
-            </div>
-            <!-- ./box-body -->
+              <!-- ./box-body -->
 
 
             <div class="box-footer">
