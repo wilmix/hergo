@@ -45,7 +45,7 @@ class Dashboard_model extends CI_Model
     			f.anulada = 0
     			AND DATE_FORMAT(f.fechaFac, '%Y-%m') BETWEEN 
         		DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL $interval MONTH), '%Y-%m') AND 
-        		DATE_FORMAT(DATE_SUB(LAST_DAY(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)), INTERVAL 1 DAY), '%Y-%m')
+        		DATE_FORMAT(DATE_SUB(LAST_DAY(DATE_SUB(CURDATE(), INTERVAL 0 MONTH)), INTERVAL 1 DAY), '%Y-%m')
 			GROUP BY
 				id,
 				mes,
