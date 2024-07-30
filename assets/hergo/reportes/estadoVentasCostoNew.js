@@ -213,6 +213,24 @@ function retornarestadoVentasCosto()
                         //footerFormatter: sumaColumna
                     },
                     {
+                        field: 'totalVentasNetasAcum',
+                        title: 'Ventas Netas',
+                        align: 'right',
+                        width:'80px',
+                        searchable: false,
+                        formatter: formatoDecimal,
+                        //footerFormatter: sumaColumna
+                    },
+                    {
+                        field: 'utilidadNeta',
+                        title: 'Utilidad Neta',
+                        align: 'right',
+                        width:'80px',
+                        searchable: false,
+                        formatter: formatoDecimal,
+                        //footerFormatter: sumaColumna
+                    },
+                    {
                         field: 'utilidad',
                         title: 'Utilidad',
                         align: 'right',
