@@ -957,11 +957,12 @@ class Reportes extends CI_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-        	$ini=$this->security->xss_clean($this->input->post("i"));
-        	$fin=$this->security->xss_clean($this->input->post("f"));
-			$alm=$this->security->xss_clean($this->input->post("a"));
-			$ti=$this->security->xss_clean($this->input->post("ti"));
-			$res=$this->Reportes_model->mostrarReporteEgreso($ini,$fin,$alm,$ti);
+        	$ini=$this->security->xss_clean($this->input->post("ini"));
+        	$fin=$this->security->xss_clean($this->input->post("fin"));
+			$alm=$this->security->xss_clean($this->input->post("alm"));
+			$tipoMov=$this->security->xss_clean($this->input->post("tipoMov"));
+			$tipoEgreso = $this->input->post("tipoEgreso");
+			$res=$this->Reportes_model->mostrarReporteEgreso($ini,$fin,$alm,$tipoMov,$tipoEgreso);
 			$res=$res->result_array();
 			echo json_encode($res);
 		}

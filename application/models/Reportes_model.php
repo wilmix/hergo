@@ -1077,55 +1077,85 @@ class Reportes_model extends CI_Model
 		$query=$this->db->query($sql);		
 		return $query;
 	}
-	public function mostrarReporteEgreso ($ini,$fin,$alm,$tin) 
+	public function mostrarReporteEgreso ($ini,$fin,$alm,$tipoMov,$tipoEgreso) 
 	{ 
-		$sql="SELECT id,
-		codigo,
-		siglaMov, 
-		almacen, 
-		tipomov,  
-		cliente, 
-		fecha, 
-		fechamov, 
-		nmov,  
-		descripcion, 
-		uni, 
-		mon, 
-		SUM(cantidad) cantidad,
-		punitario,
-		SUM(total) total,
-		SUM(totalDolares) totalDolares,
-		nombreAlmacen
-		FROM
-		(
-			SELECT 	ed.`idingdetalle` id, e.`almacen`,e.`tipomov`, tm.`tipomov` siglaMov, 
-			IF ( e.`tipomov` = 8,alt.`ciudad`,c.`nombreCliente` ) cliente, 
-				e.`fechamov`, e.`nmov`, 
-				a.`CodigoArticulo` codigo, a.`Descripcion` descripcion, 
-				u.`Sigla` uni, m.`sigla` mon, ed.`cantidad` , ed.`punitario`,
-				ROUND((ed.`punitario` * ed.`cantidad`),2) total, 
-				ROUND((ed.`punitario` /tc.`tipocambio`  * ed.`cantidad`),2) totalDolares,
-				e.`fecha` , al.`almacen` nombreAlmacen
-			FROM egredetalle ed
-				INNER JOIN egresos e ON e.`idegresos` = ed.`idegreso`
-				INNER JOIN articulos a ON a.`idArticulos` = ed.`articulo`
-				INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
-				INNER JOIN moneda m ON m.`id`= e.`moneda`
-				INNER JOIN tmovimiento tm ON tm.`id` = e.`tipomov`
-				INNER JOIN clientes c ON c.`idCliente` = e.`cliente`
-				INNER JOIN tipocambio tc ON tc.`fecha` = e.`fechamov`
-				INNER JOIN almacenes al ON al.`idalmacen` = e.`almacen`
-				LEFT JOIN traspasos tr ON tr.`idEgreso` = e.`idegresos`
-				LEFT JOIN ingresos itr ON itr.`idIngresos` = tr.`idIngreso`
-				LEFT JOIN almacenes alt ON alt.`idalmacen` = itr.`almacen`
-				WHERE  e.`fechamov` BETWEEN '$ini' AND '$fin'
-					AND e.`tipomov` LIKE '%$tin' 
-					AND e.`almacen` LIKE '%$alm' 
-					AND e.`anulado` = 0 
-			ORDER BY e.`almacen`, e.`tipomov` , cliente, nmov
-		)egr
-		-- GROUP BY  almacen,tipomov, cliente, id  WITH ROLLUP
-		GROUP BY  nmov, id  WITH ROLLUP";
+		$sql="	SELECT
+					id,
+					codigo,
+					siglaMov,
+					nombreAlmacen,
+					cliente,
+					fechamov,
+					nmov,
+					codigo,
+					descripcion,
+					uni,
+					SUM(cantidad) cantidad,
+					punitario,
+					SUM(total) total,
+					obs glosa,
+					CASE
+						WHEN tipoEgreso = 11 THEN 'REINGRESO'
+						WHEN tipoEgreso = 12 THEN 'BAJADEFINITIVA'
+						ELSE 'NODEFINIDO'
+					END AS tipoEgreso
+				FROM
+					(
+						SELECT
+							ed.`idingdetalle` id,
+							e.`almacen`,
+							e.`tipomov`,
+							tm.`tipomov` siglaMov,
+							IF (e.`tipomov` = 8, alt.`ciudad`, c.`nombreCliente`) cliente,
+							e.`fechamov`,
+							e.`nmov`,
+							a.`CodigoArticulo` codigo,
+							a.`Descripcion` descripcion,
+							u.`Sigla` uni,
+							m.`sigla` mon,
+							ed.`cantidad`,
+							ed.`punitario`,
+							ROUND((ed.`punitario` * ed.`cantidad`), 2) total,
+							ROUND(
+								(ed.`punitario` / tc.`tipocambio` * ed.`cantidad`),
+								2
+							) totalDolares,
+							e.`fecha`,
+							al.`almacen` nombreAlmacen,
+							e.`tipoEgreso`,
+							e.obs
+						FROM
+							egredetalle ed
+							INNER JOIN egresos e ON e.`idegresos` = ed.`idegreso`
+							INNER JOIN articulos a ON a.`idArticulos` = ed.`articulo`
+							INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
+							INNER JOIN moneda m ON m.`id` = e.`moneda`
+							INNER JOIN tmovimiento tm ON tm.`id` = e.`tipomov`
+							INNER JOIN clientes c ON c.`idCliente` = e.`cliente`
+							INNER JOIN tipocambio tc ON tc.`fecha` = e.`fechamov`
+							INNER JOIN almacenes al ON al.`idalmacen` = e.`almacen`
+							LEFT JOIN traspasos tr ON tr.`idEgreso` = e.`idegresos`
+							LEFT JOIN ingresos itr ON itr.`idIngresos` = tr.`idIngreso`
+							LEFT JOIN almacenes alt ON alt.`idalmacen` = itr.`almacen`
+						WHERE
+							e.`fechamov` BETWEEN '$ini'
+							AND '$fin'
+							AND e.`tipomov` LIKE '$tipoMov'
+							AND e.`almacen` LIKE '$alm'
+							AND e.`anulado` = 0
+							AND (
+								'' = '$tipoEgreso'
+								OR e.tipoEgreso LIKE '$tipoEgreso'
+							)
+						ORDER BY
+							e.`almacen`,
+							e.`tipomov`,
+							cliente,
+							nmov
+					) egr
+				GROUP BY
+					nmov,
+					id WITH ROLLUP";
 		
 		$query=$this->db->query($sql);		
 		return $query;

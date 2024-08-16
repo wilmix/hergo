@@ -67,6 +67,13 @@ $(document).on("change", "#almacen_filtro", function () {
     retornarReporteEgresos();
 })
 $(document).on("change", "#tipo_filtro", function () {
+    var filtroValor = $("#tipo_filtro").val();
+    if (filtroValor == 9) {
+        $("#tipoEgreso").show();
+    } else {
+        $("#tipoEgreso").hide();
+    }
+
     tituloReporte();
     retornarReporteEgresos();
 })
@@ -89,17 +96,19 @@ function retornarReporteEgresos() {
     let ini = iniciofecha.format('YYYY-MM-DD')
     let fin = finfecha.format('YYYY-MM-DD')
     let alm = $("#almacen_filtro").val()
-    let tipoingreso = $("#tipo_filtro").val()
+    let tipoMov = $("#tipo_filtro").val()
+    let tipoEgreso = $("#tipoEgreso").val()
     agregarcargando();
     $.ajax({
         type: "POST",
         url: base_url('index.php/Reportes/mostrarReporteEgresos'),
         dataType: "json",
         data: {
-            i: ini,
-            f: fin,
-            a: alm,
-            ti: tipoingreso
+            ini: ini,
+            fin: fin,
+            alm: alm,
+            tipoMov: tipoMov,
+            tipoEgreso: tipoEgreso
         },
     }).done(function (res) {
         for (let index = 0; index < res.length; index++) {
@@ -178,7 +187,7 @@ function retornarReporteEgresos() {
 
                 {
                     field: 'cliente',
-                    title: tipoingreso == 8 ? 'Destino' : 'Cliente' ,
+                    title: tipoMov == 8 ? 'Destino' : 'Cliente' ,
                     sortable: true,
                     searchable: false,
                     visible: true,
@@ -193,6 +202,13 @@ function retornarReporteEgresos() {
                     searchable: false,
                     sortable: true,
                     formatter: formato_fecha_corta_sub
+                },
+                {
+                    field: 'tipoEgreso',
+                    title: 'Tipo Baja',
+                    sortable: true,
+                    align: 'center',
+                    visible: tipoMov == 9 ? true : false 
                 },
                
                 {

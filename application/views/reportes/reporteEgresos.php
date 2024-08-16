@@ -9,8 +9,10 @@
                         $this->load->view('reportHead/buttonDate');
                         $this->load->view('reportHead/selectAlm');
                         $this->load->view('reportHead/selectTipo');
+                        $this->load->view('reportHead/selectEgresoTipo');
                         $this->load->view('reportHead/buttonRefresh');
                     ?>
+
                 </div>
                 <div class="text-center">
                     <h2>REPORTE EGRESOS - <span id="tituloAlmacen"></span></h2>
