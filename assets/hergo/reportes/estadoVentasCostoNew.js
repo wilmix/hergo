@@ -194,18 +194,8 @@ function retornarestadoVentasCosto()
                         formatter: formatoDecimalVacio,
                     },
                     {
-                        field: 'cmv',
-                        title: 'C.M.V.',
-                        align: 'right',
-                        width:'80px',
-                        searchable: false,
-                        formatter: formatoDecimal,
-                        //footerFormatter: sumaColumna
-                    },
-
-                    {
                         field: 'totalVentasAcum',
-                        title: 'Ventas',
+                        title: 'Ventas + IVA',
                         align: 'right',
                         width:'80px',
                         searchable: false,
@@ -222,8 +212,8 @@ function retornarestadoVentasCosto()
                         //footerFormatter: sumaColumna
                     },
                     {
-                        field: 'utilidadNeta',
-                        title: 'Utilidad Neta',
+                        field: 'cmv',
+                        title: 'C.M.V.',
                         align: 'right',
                         width:'80px',
                         searchable: false,
@@ -231,7 +221,7 @@ function retornarestadoVentasCosto()
                         //footerFormatter: sumaColumna
                     },
                     {
-                        field: 'utilidad',
+                        field: 'utilidadNeta',
                         title: 'Utilidad',
                         align: 'right',
                         width:'80px',
@@ -239,6 +229,15 @@ function retornarestadoVentasCosto()
                         formatter: formatoDecimal,
                         //footerFormatter: sumaColumna
                     },
+                    /* {
+                        field: 'utilidad',
+                        title: 'Utilidad',
+                        align: 'right',
+                        width:'80px',
+                        searchable: false,
+                        formatter: formatoDecimal,
+                        //footerFormatter: sumaColumna
+                    }, */
 
                 ]
             });
