@@ -5,7 +5,7 @@
        <!--  <button class="btn btn-success pull-right" id="excel" data-toggle="tooltip" title="Excel"><i class="far fa-file-excel"></i> Excel</button>
         <button onclick="window.print();" class="btn btn-primary pull-right" ><i class="fa fa-print"> </i> Imprimir</button> -->
           <div class="text-center">
-            <h2>SALDOS ACTUALES</h2>
+            <h2>SALDOS RESUMEN</h2>
           </div>
           <table id="tablaSaldosActuales" class="table table-hover display compact" style="width:100%">
           </table>

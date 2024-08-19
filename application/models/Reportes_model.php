@@ -332,6 +332,7 @@ class Reportes_model extends CI_Model
 					aa.reserva,
 					aa.reserva_scz,
 					aa.pasbol,
+					pendientes.cantidad,
 					(
 						COALESCE(aa.`laPaz`, 0) + COALESCE(aa.reserva, 0) + COALESCE(aa.`elAlto`, 0) + COALESCE(aa.`potosi`, 0) + COALESCE(aa.`santacruz`, 0) + COALESCE(aa.reserva_scz, 0) +  COALESCE(pendientes.cantidad, 0)
 					) subTotal,
@@ -387,6 +388,10 @@ class Reportes_model extends CI_Model
 					) pendientes ON pendientes.articulo = aa.idArticulos
 				GROUP BY
 					aa.`idArticulos`
+				HAVING
+					(
+						COALESCE(aa.`laPaz`, 0) + COALESCE(aa.reserva, 0) + COALESCE(aa.`elAlto`, 0) + COALESCE(aa.`potosi`, 0) + COALESCE(aa.`santacruz`, 0) + COALESCE(aa.reserva_scz, 0) + COALESCE(aa.pasbol, 0) + COALESCE(SUM(back.cantidad), 0) + COALESCE(pendientes.cantidad, 0)
+					) <> 0
 				ORDER BY
 					aa.`CodigoArticulo`
 		";
