@@ -1028,51 +1028,83 @@ class Reportes_model extends CI_Model
 		return $query;
 	}
 	public function mostrarReporteIngreso ($ini,$fin,$alm,$tin) 
-	{ //cambiar la consulta
-		$sql="SELECT id,
-		codigo,
-		siglaMov, 
-		almacen, 
-		tipomov,  
-		provedor, 
-		fecha, 
-		fechamov, 
-		nmov,  
-		descripcion,
-		uni, 
-		mon, 
-		SUM(cantidad) cantidad,
-		punitario,
-		SUM(total) total,
-		SUM(totalDolares) totalDolares,
-		nombreproveedor,
-		nombreAlmacen
-		FROM
-		(
-		SELECT id.`idIngdetalle` id, i.`almacen`,i.`tipomov`, tm.`tipomov` siglaMov, p.`nombreproveedor` provedor, i.`fechamov`, i.`nmov`, 
-		a.`CodigoArticulo` codigo, a.`Descripcion` descripcion, 
-		u.`Sigla` uni, m.`sigla` mon, id.`cantidad`, id.`punitario`,
-		ROUND((id.`punitario` * id.`cantidad`),2) total, 
-		ROUND((id.`punitario` /tc.`tipocambio`  * id.`cantidad`),2) totalDolares,
-		i.`fecha`, p.`nombreproveedor`, al.`almacen` nombreAlmacen
-		FROM ingdetalle id
-		INNER JOIN ingresos i ON i.`idIngresos` = id.`idIngreso`
-		INNER JOIN articulos a ON a.`idArticulos` = id.`articulo`
-		INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
-		INNER JOIN moneda m ON m.`id`= i.`moneda`
-		INNER JOIN tmovimiento tm ON tm.`id` = i.`tipomov`
-		INNER JOIN provedores p ON p.`idproveedor` = i.`proveedor`
-		INNER JOIN tipocambio tc ON tc.fecha = i.fechamov
-		INNER JOIN almacenes al ON al.`idalmacen` = i.`almacen`
-		WHERE  i.`fechamov` BETWEEN '$ini' AND '$fin'
-			AND i.`tipomov` LIKE '%$tin' 
-			AND i.`almacen` LIKE '%$alm' 
-			AND i.`anulado` = 0 
-			AND i.`estado` = 1
-		ORDER BY i.`almacen`, i.`tipomov`, provedor, nmov
-		)ing
-		-- GROUP BY  almacen,tipomov, provedor, id  WITH ROLLUP
-		GROUP BY  nmov, id  WITH ROLLUP";
+	{ 
+		$sql="	SELECT
+					id,
+					codigo,
+					siglaMov,
+					almacen,
+					tipomov,
+					provedor,
+					fecha,
+					fechamov,
+					nmov,
+					descripcion,
+					uni,
+					mon,
+					SUM(cantidad) cantidad,
+					punitario,
+					SUM(total) total,
+					SUM(totalDolares) totalDolares,
+					nombreproveedor,
+					nombreAlmacen,
+					almacenOrigen
+				FROM
+					(
+						SELECT
+							id.`idIngdetalle` id,
+							i.`almacen`,
+							i.`tipomov`,
+							tm.`tipomov` siglaMov,
+							p.`nombreproveedor` provedor,
+							i.`fechamov`,
+							i.`nmov`,
+							a.`CodigoArticulo` codigo,
+							a.`Descripcion` descripcion,
+							u.`Sigla` uni,
+							m.`sigla` mon,
+							id.`cantidad`,
+							id.`punitario`,
+							ROUND((id.`punitario` * id.`cantidad`), 2) total,
+							ROUND(
+								(id.`punitario` / tc.`tipocambio` * id.`cantidad`),
+								2
+							) totalDolares,
+							i.`fecha`,
+							p.`nombreproveedor`,
+							al.`almacen` nombreAlmacen,
+							ao.almacen almacenOrigen
+						FROM
+							ingdetalle id
+							INNER JOIN ingresos i ON i.`idIngresos` = id.`idIngreso`
+							INNER JOIN articulos a ON a.`idArticulos` = id.`articulo`
+							INNER JOIN unidad u ON u.`idUnidad` = a.`idUnidad`
+							INNER JOIN moneda m ON m.`id` = i.`moneda`
+							INNER JOIN tmovimiento tm ON tm.`id` = i.`tipomov`
+							INNER JOIN provedores p ON p.`idproveedor` = i.`proveedor`
+							INNER JOIN tipocambio tc ON tc.fecha = i.fechamov
+							INNER JOIN almacenes al ON al.`idalmacen` = i.`almacen`
+							LEFT JOIN traspasos t ON t.idIngreso = i.idIngresos
+							LEFT JOIN egresos e ON e.idegresos = t.idEgreso
+							LEFT JOIN almacenes ao ON ao.idalmacen = e.almacen
+							
+						WHERE
+							i.`fechamov` BETWEEN '$ini'
+							AND '$fin'
+							AND i.`tipomov` LIKE '%$tin'
+							AND i.`almacen` LIKE '%$alm'
+							AND i.`anulado` = 0
+							AND i.`estado` = 1
+						ORDER BY
+							i.`almacen`,
+							i.`tipomov`,
+							provedor,
+							nmov
+					) ing
+				GROUP BY
+					nmov,
+					id WITH ROLLUP
+		";
 		
 		$query=$this->db->query($sql);		
 		return $query;

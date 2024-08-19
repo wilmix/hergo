@@ -143,7 +143,14 @@ function retornarReporteIngresos() {
                     field: 'almacen',
                     title: 'Almacen',
                     sortable: true,
-                    visible: true,
+                    visible: false,
+                    align: 'center'
+                },
+                {
+                    field: 'almacenOrigen',
+                    title: 'Origen',
+                    sortable: true,
+                    visible: tipoingreso == 3 ? true : false,
                     align: 'center'
                 },
 
@@ -151,7 +158,7 @@ function retornarReporteIngresos() {
                     field: 'provedor',
                     title: 'Proveedor',
                     sortable: true,
-                    visible: true,
+                    visible: tipoingreso == 3 ? false : true,
                     /*filter: {
                         type: "select",
                         data: datosselect[0]
