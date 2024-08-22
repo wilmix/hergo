@@ -325,6 +325,7 @@ class Reportes_model extends CI_Model
 					aa.`Descripcion` descripcion,
 					aa.`Sigla` uni,
 					aa.cpp,
+					ultimoCosto.ultimoCosto,
 					aa.`laPaz`,
 					aa.`elAlto`,
 					aa.`potosi`,
@@ -386,6 +387,30 @@ class Reportes_model extends CI_Model
 							AND i.estado = 0
 							AND i.gestion > 2023
 					) pendientes ON pendientes.articulo = aa.idArticulos
+					LEFT JOIN (
+						SELECT
+							id.articulo,
+							id.punitario ultimoCosto
+						FROM
+							ingdetalle id
+							INNER JOIN ingresos i ON i.idIngresos = id.idIngreso
+							INNER JOIN articulos a ON a.idArticulos = id.articulo
+							INNER JOIN (
+								SELECT
+									id.articulo,
+									MAX(i.fecha) AS max_fecha
+								FROM
+									ingdetalle id
+									INNER JOIN ingresos i ON i.idIngresos = id.idIngreso
+								WHERE
+									i.gestion = 2024
+									AND i.anulado = 0
+									AND i.tipomov IN (16)
+								GROUP BY
+									id.articulo
+							) ultimos ON id.articulo = ultimos.articulo
+							AND i.fecha = ultimos.max_fecha
+					) ultimoCosto ON ultimoCosto.articulo = aa.idArticulos
 				GROUP BY
 					aa.`idArticulos`
 				HAVING
