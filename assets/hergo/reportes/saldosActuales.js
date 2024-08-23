@@ -69,7 +69,7 @@ function retornarSaldosActuales() {
 					title: 'CPP',
                     className: 'text-right',
                     searchable: false,
-                    visible:true,
+                    visible:false,
                     render: numberDecimal
                 },
                 {
@@ -77,7 +77,7 @@ function retornarSaldosActuales() {
 					title: 'Ultimo Costo',
                     className: 'text-right',
                     searchable: false,
-                    visible:true,
+                    visible:false,
                     render: numberDecimal
                 },
                  {
