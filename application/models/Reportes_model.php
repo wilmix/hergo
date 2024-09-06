@@ -341,7 +341,7 @@ class Reportes_model extends CI_Model
 						COALESCE(aa.`laPaz`, 0) + COALESCE(aa.reserva, 0) + COALESCE(aa.`elAlto`, 0) + COALESCE(aa.`potosi`, 0) + COALESCE(aa.`santacruz`, 0) + COALESCE(aa.reserva_scz, 0)  + COALESCE(pendientes.cantidad, 0) + COALESCE(aa.pasbol, 0) 
 					) total,
 					COALESCE(SUM(back.cantidad), 0) backOrder,
-					COALESCE(pendientes.cantidad, 0) pendienteAprobar,
+					CONCAT(COALESCE(SUM(pendientes.cantidad), 0), ' (', pendientes.cantidadPendientes, ')') pendienteAprobar,
 					GROUP_CONCAT(
 						CONCAT(
 							'<b> ',
@@ -377,7 +377,8 @@ class Reportes_model extends CI_Model
 					LEFT JOIN (
 						SELECT
 							id.articulo,
-							id.cantidad
+							SUM(id.cantidad) cantidad,
+							COUNT(id.articulo) cantidadPendientes
 						FROM
 							ingdetalle id
 							INNER JOIN ingresos i ON id.idIngreso = i.idIngresos
@@ -386,6 +387,7 @@ class Reportes_model extends CI_Model
 							AND i.anulado = 0
 							AND i.estado = 0
 							AND i.gestion > 2023
+						GROUP BY id.articulo
 					) pendientes ON pendientes.articulo = aa.idArticulos
 					LEFT JOIN (
 						SELECT

@@ -135,7 +135,7 @@ function retornarSaldosActuales() {
 					title: 'Por Aprobar',
                     className: 'text-right',
                     searchable: false,
-                    render: numberDecimal
+                    //render: numberDecimal
                 },
                 {
 					data: 'subTotal',
