@@ -84,8 +84,9 @@ $(document).on("click", "#pdf", function () {
     let ini = iniciofecha.format('YYYY-MM-DD')
     let fin = finfecha.format('YYYY-MM-DD')
     let alm = $("#almacen_filtro").val() == '' ? '1' : $("#almacen_filtro").val()
-    let tin = $("#tipo_filtro").val() == '' ? '1' : $("#tipo_filtro").val()
-    let imprimir = base_url("pdf/ReportEgresos/index/") + ini + '/' + fin + '/' + alm + '/' + tin;
+    let tipoMov = $("#tipo_filtro").val() == '' ? '1' : $("#tipo_filtro").val()
+    let tipoEgreso = $("#tipoEgreso").val() == '' ? '0' : $("#tipoEgreso").val()
+    let imprimir = base_url("pdf/ReportEgresos/index/") + ini + '/' + fin + '/' + alm + '/' + tipoMov+ '/' + tipoEgreso;
     console.log(imprimir);
     window.open(imprimir);
 })
@@ -112,29 +113,6 @@ function retornarReporteEgresos() {
         },
     }).done(function (res) {
         for (let index = 0; index < res.length; index++) {
-            /*if (res[index].id == null && res[index].tipomov == null && res[index].almacen == null && res[index].cliente == null) {
-                res[index].descripcion = `TOTAL GENERAL`
-                res[index].punitario = ''
-                res[index].almacen = ''
-                res[index].cliente = ''
-                res[index].fechamov = ''
-                res[index].nmov = ''
-                res[index].codigo = ''
-                res[index].uni = ''
-                res[index].mon = ''
-
-            } else if (res[index].id == null && res[index].tipomov == null  && res[index].cliente == null) {
-                res[index].descripcion = `TOTAL ALMACEN ${res[index].nombreAlmacen}:`
-                res[index].punitario = ''
-                res[index].almacen = ''
-                res[index].cliente = ''
-                res[index].fechamov = ''
-                res[index].nmov = ''
-                res[index].codigo = ''
-                res[index].uni = ''
-                res[index].mon = ''
-
-            } else*/
             if (res[index].id == null   && res[index].nmov == null) {
                 res[index].descripcion = `TOTAL ${res[index].siglaMov.toUpperCase()}:`
                 res[index].punitario = ''
