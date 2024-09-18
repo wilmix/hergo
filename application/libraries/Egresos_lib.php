@@ -1,14 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    // Incluimos el archivo fpdf
-    require_once APPPATH."/third_party/fpdf/fpdf.php";
-    
-    //Extendemos la clase Pdf de la clase fpdf para que herede todas sus variables y funciones
     class Egresos_lib extends FPDF {
         private $datos = array();
         public function __construct($params){
             parent::__construct();
             $this->datos = $params;
         }
+
         public function Header() {
             $almacen = $this->datos['almacen'];
             $autor = $this->datos['autor'];
@@ -34,14 +31,14 @@
             $this->Image('images/hergo.jpeg', 10, 10, 45 );
             $this->SetFont('Arial','B',8);
             $this->SetXY(15,20);
-            $this->Cell(40, 6, mb_convert_encoding($almacen . ' NIT: 1000991026', 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
+            $this->Cell(40, 6, convertToISO($almacen . ' NIT: 1000991026'), 0, 0, 'C');
             $this->Ln(3);
             $this->SetX(15);
             $this->SetFont('Arial','',5);
-            $this->Cell(40,6, utf8_decode($this->datos['almDirec']),0,0,'C');
+            $this->Cell(40,6, convertToISO($this->datos['almDirec']),0,0,'C');
             $this->Ln(3);
             $this->SetX(15);
-            $this->Cell(40,6, utf8_decode($this->datos['almFono']),0,0,'C');
+            $this->Cell(40,6, convertToISO($this->datos['almFono']),0,0,'C');
             $this->SetXY(10,10);
             $this->SetFont('Arial','B',18);
             $this->Cell(0,8, $tipoMov,0,0,'C');
@@ -58,31 +55,31 @@
                 if ($idTipoMov == '8') {
                     $this->SetXY(80,22);
                     $this->SetFont('Arial','B',12);
-                    $this->Cell(20,6, utf8_decode('Origen:'),0,0,'');
+                    $this->Cell(20,6, convertToISO('Origen:'),0,0,'');
                     $this->SetFont('Arial','',12);
-                    $this->Cell(150, 6, utf8_decode($almacen), 0,0,'L');
+                    $this->Cell(150, 6, convertToISO($almacen), 0,0,'L');
                     $this->SetXY(80,28);
                     $this->SetFont('Arial','B',12);
-                    $this->Cell(20,6, utf8_decode('Destino:'),0,0,'');
+                    $this->Cell(20,6, convertToISO('Destino:'),0,0,'');
                     $this->SetFont('Arial','',12);
-                    $this->Cell(150, 6, utf8_decode($almDes), 0,0,'L');
+                    $this->Cell(150, 6, convertToISO($almDes), 0,0,'L');
                 } else {
                     $this->SetFont('Arial','B',9);
-                    $this->Cell(20,6, utf8_decode('Señores: '),$l,0,'');
+                    $this->Cell(20,6, convertToISO('Señores: '),$l,0,'');
                     $this->SetFont('Arial','',9);
                     if (strlen($nombreCliente) > 51) {
                         $this->MultiCell(100, 4, mb_convert_encoding($nombreCliente, "ISO-8859-1"), $l, 'L', 0);
                         $this->SetXY(130, $this->GetY() -8);
                     } else {
-                        $this->Cell(100, 6, utf8_decode($nombreCliente), $l,0,'L');
+                        $this->Cell(100, 6, convertToISO($nombreCliente), $l,0,'L');
                     }
                     $this->SetFont('Arial','B',9);
-                    $this->Cell(10,6, utf8_decode('NIT: '),$l,0,'');
+                    $this->Cell(10,6, convertToISO('NIT: '),$l,0,'');
                     $this->SetFont('Arial','',9);
                     $this->Cell(30, 6, $documento, $l,0,'L');
                     $this->Ln(6);
                     $this->SetFont('Arial','B',9);
-                    $this->Cell(20,6, utf8_decode('Dirección: '),$l,0,'');
+                    $this->Cell(20,6, convertToISO('Dirección: '),$l,0,'');
                     if (!empty($direccion) && !empty($email)) {
                         $direccion_email = "$direccion | $email";
                     } elseif (!empty($direccion)) {
@@ -94,37 +91,37 @@
                     }
                     $this->SetFont('Arial','',8);
                     if (strlen($direccion_email) > 80) {
-                        $this->MultiCell(140, 4, mb_convert_encoding($direccion_email, "ISO-8859-1"), $l, 'L', 0);
+                        $this->MultiCell(140, 4, convertToISO($direccion_email), $l, 'L', 0);
                         $this->SetXY(10, $this->GetY() -6);
                     } else {
-                        $this->Cell(140, 6, utf8_decode($direccion_email), $l,0,'L');
+                        $this->Cell(140, 6, convertToISO($direccion_email), $l,0,'L');
                     }
                     $this->Ln(6);
                     $this->SetFont('Arial','B',9);
-                    $this->Cell(20,6, utf8_decode('Pedido Nº: '),$l,0,'');
+                    $this->Cell(20,6, convertToISO('Pedido Nº: '),$l,0,'');
                     $this->SetFont('Arial','',9);
-                    $this->Cell(60, 6, utf8_decode($clientePedido), $l,0,'L');
+                    $this->Cell(60, 6, convertToISO($clientePedido), $l,0,'L');
                     $this->SetFont('Arial','B',9);
-                    $this->Cell(10,6, utf8_decode(''),$l,0,'');
+                    $this->Cell(10,6, convertToISO(''),$l,0,'');
                     $this->SetFont('Arial','',9);
                     $this->Cell(30, 6, '', $l,0,'L');
                     $this->SetFont('Arial','B',9);
-                    $this->Cell(20,6, utf8_decode('Teléfono: '),$l,0,'');
+                    $this->Cell(20,6, convertToISO('Teléfono: '),$l,0,'');
                     $this->SetFont('Arial','',9);
-                    $this->Cell(45, 6, utf8_decode($telefono), $l,0,'L');
+                    $this->Cell(45, 6, convertToISO($telefono), $l,0,'L');
                     $this->Ln(6);
                 }
                 
                     if ($idTipoMov == '8') {
                             $this->SetXY(170,25);
                             $this->SetFont('Arial','B',15);
-                            $this->Cell(35,8,utf8_decode('IT - '.$nIng),1,1,'C');
+                            $this->Cell(35,8,convertToISO('IT - '.$nIng),1,1,'C');
                             $this->Ln(4);
                     } else {
                             //factura n
                             $this->SetXY(170,27);
                             $this->SetFont('Arial','B',12);
-                            $this->Cell(35,7,utf8_decode('FACTURA N°'),1,1,'C');
+                            $this->Cell(35,7,convertToISO('FACTURA N°'),1,1,'C');
                             $this->SetXY(170,34);
                             $this->SetFont('Arial','B',12);
                             $this->Cell(35,10, '',1,0,'C');
@@ -169,7 +166,7 @@
             $this->SetFont('Arial','BI', 9);
             $this->Cell(15,5, 'NOTA: ',0,0,'L',1);
             $this->SetFont('Arial','I', 8);
-            $this->Cell(110, 5, utf8_decode($observaciones), 0,0,'L',1);
+            $this->Cell(110, 5, convertToISO($observaciones), 0,0,'L',1);
             
             
             $this->Ln(5);
@@ -177,7 +174,7 @@
             $this->SetFont('Arial','BI', 9);
             $this->Cell(25,5, 'Emitido por:',0,0,'L',1);
             $this->SetFont('Arial','I', 9);
-            $this->Cell(40, 5, utf8_decode($vendedor), 0,0,'L');
+            $this->Cell(40, 5, convertToISO($vendedor), 0,0,'L');
             $this->SetFont('Arial','BI', 9);
             $this->Cell(20,5, 'Autorizado:',0,0,'L');
             $this->SetFont('Arial','I', 9);
@@ -217,10 +214,14 @@
             $this->SetFont('Arial','I', 9);
             $this->Cell(30,5, number_format($saldoDeudorTotal, 2, ".", ",") . ' '.  $fechaPriFacTotal,0,0,'L',1);
 
-            if ($this->datos['almacen'] == 'CENTRAL HERGO') {
-            $this->SetXY(153,-130);
-            $this->SetFont('Arial','BI', 9);
-            $this->Cell(30,5, 'Cta.Cte.Bs. BNB: 1000092297',0,0,'L',1);
+            if ($this->datos['almacen'] == 'SANTA CRUZ') {
+                $this->SetXY(153,-130);
+                $this->SetFont('Arial','BI', 9);
+                $this->Cell(30,5, 'Cta.Cte.Bs. BNB: 1000264616',0,0,'L',1);
+            } else {
+                $this->SetXY(153,-130);
+                $this->SetFont('Arial','BI', 9);
+                $this->Cell(30,5, 'Cta.Cte.Bs. BNB: 1000092297',0,0,'L',1);
             }
 
 

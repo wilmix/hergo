@@ -3,6 +3,7 @@
     require_once APPPATH."/third_party/fpdf/fpdf.php";
     require_once APPPATH."/third_party/numerosLetras/NumeroALetras.php";
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
+    require_once APPPATH."/libraries/utils.php";
 class Egresos extends MY_Controller {
     /* --------------------------------------------------------------
      * VARIABLES
@@ -74,15 +75,15 @@ class Egresos extends MY_Controller {
             
                 if ($this->egreso->almacen_destino_id <> '9') {
                     if (strlen($linea->Descripcion) > 65) {
-                        $this->pdf->MultiCell(110,4,mb_convert_encoding($linea->Descripcion, 'ISO-8859-1', 'UTF-8'),0,'L',0);
+                        $this->pdf->MultiCell(110,4,convertToISO($linea->Descripcion),0,'L',0);
                         $this->pdf->SetXY(165,$this->pdf->GetY()-4);
                     } else {
-                        $this->pdf->Cell(110,5,mb_convert_encoding($linea->Descripcion, 'ISO-8859-1', 'UTF-8'),0,0,'L',0);
+                        $this->pdf->Cell(110,5,convertToISO($linea->Descripcion),0,0,'L',0);
                     }
                     $this->pdf->Cell(20,5,number_format($linea->punitario, 2, ".", ","),0,0,'R',1);
                     $this->pdf->Cell(20,5,number_format(round($linea->punitario,2) * $linea->cantidad, 2, ".", ","),0,0,'R',1);
                 } else {
-                    $this->pdf->Cell(150,5,mb_convert_encoding($linea->Descripcion, 'ISO-8859-1', 'UTF-8'),0,0,'L',0);
+                    $this->pdf->Cell(150,5,convertToISO($linea->Descripcion),0,0,'L',0);
                 }
 
             $this->pdf->Ln(5);
