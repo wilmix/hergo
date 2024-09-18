@@ -1,9 +1,4 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-// Incluimos el archivo fpdf
-require_once APPPATH . "/third_party/fpdf/fpdf.php";
-require_once APPPATH . "/third_party/phpqrcode/qrlib.php";
-require_once APPPATH . "/third_party/multicell/PDF_MC_Table.php";
-//Extendemos la clase Pdf de la clase fpdf para que herede todas sus variables y funciones
 class FacturaSiatLib extends FPDF
 {
     private $datos = array();
@@ -31,12 +26,12 @@ class FacturaSiatLib extends FPDF
         $this->SetXY(10, 18);
         $this->Ln(2);
         $this->SetFont('Arial', 'B', 7);
-            $this->Cell(60, 4, mb_convert_encoding($this->datos['sucursal'], "ISO-8859-1"), 0, 1, 'C');
+            $this->Cell(60, 4, convertToISO($this->datos['sucursal']), 0, 1, 'C');
         $this->SetFont('Arial', '', 6);
-            $this->Cell(60, 3, mb_convert_encoding('No. Punto de Venta: ' . $this->datos['codigoPuntoVenta'], "ISO-8859-1"), 0, 1, 'C');
-            $this->Cell(60, 3, mb_convert_encoding($this->datos['direccion'], "ISO-8859-1"), 0, 1, 'C');
-            $this->Cell(60, 3, mb_convert_encoding('Teléfono: ' . $this->datos['telefono'], "ISO-8859-1"), 0, 1, 'C');
-            $this->Cell(60, 3, mb_convert_encoding($this->datos['ciudad'], "ISO-8859-1"), 0, 1, 'C');
+            $this->Cell(60, 3, convertToISO('No. Punto de Venta: ' . $this->datos['codigoPuntoVenta']), 0, 1, 'C');
+            $this->Cell(60, 3, convertToISO($this->datos['direccion']), 0, 1, 'C');
+            $this->Cell(60, 3, convertToISO('Teléfono: ' . $this->datos['telefono']), 0, 1, 'C');
+            $this->Cell(60, 3, convertToISO($this->datos['ciudad']), 0, 1, 'C');
 
 
         /*** derecha***/
@@ -47,14 +42,14 @@ class FacturaSiatLib extends FPDF
         $this->SetXY(138, 17);
         $this->SetFont('Arial', 'B', 8);
         $this->SetTextColor(0, 0, 0);
-            $this->Cell(32, 8, mb_convert_encoding('FACTURA N°:', "ISO-8859-1"), 0, 0, 'R');
+            $this->Cell(32, 8, convertToISO('FACTURA N°:'), 0, 0, 'R');
         $this->SetFont('Arial', 'B', 14);
-            $this->Cell(35, 8, mb_convert_encoding($this->datos['numeroFactura'], "ISO-8859-1"), 0, 0, 'C');
+            $this->Cell(35, 8, convertToISO($this->datos['numeroFactura']), 0, 0, 'C');
         $this->SetXY(138, 25);
         $this->SetFont('Arial', 'B', 7);
-            $this->Cell(32, 8, mb_convert_encoding('CÓD. AUTORIZACIÓN:', "ISO-8859-1"), 0, 0, 'R');
+            $this->Cell(32, 8, convertToISO('CÓD. AUTORIZACIÓN:'), 0, 0, 'R');
         $this->SetFont('Arial', 'B', 7);
-            $this->MultiCell(35, 4, mb_convert_encoding($this->datos['cuf'], "ISO-8859-1"), 0, 'L', 0);
+            $this->MultiCell(35, 4, convertToISO($this->datos['cuf']), 0, 'L', 0);
 
 
 
@@ -62,44 +57,44 @@ class FacturaSiatLib extends FPDF
         $this->SetXY(10, 42);
         $fontSize = 9;
         $this->SetFont('Arial', 'B', $fontSize);
-            $this->Cell(20, 6, mb_convert_encoding('Fecha: ', "ISO-8859-1"), $l, 0, '');
+            $this->Cell(20, 6, convertToISO('Fecha: '), $l, 0, '');
         $this->SetFont('Arial', '', $fontSize);
-            $this->Cell(40, 6, mb_convert_encoding($this->datos['fechaEmision'], "ISO-8859-1"), $l, 0, 'L');
+            $this->Cell(40, 6, convertToISO($this->datos['fechaEmision']), $l, 0, 'L');
         $this->SetFont('Arial', 'B', $fontSize);
         if ($this->datos['pedido'] == !'') {
-                $this->Cell(15, 6, mb_convert_encoding('Pedido: ', "ISO-8859-1"), $l, 0, '');
+                $this->Cell(15, 6, convertToISO('Pedido: '), $l, 0, '');
             $this->SetFont('Arial', '', $fontSize);
-                $this->Cell(68, 6, mb_convert_encoding($this->datos['pedido'], "ISO-8859-1"), $l, 0, 'L');
+                $this->Cell(68, 6, convertToISO($this->datos['pedido']), $l, 0, 'L');
         } else {
             $this->Cell(15, 6, '', $l, 0, '');
             $this->Cell(68, 6, '', $l, 0, '');
         }
         $this->SetFont('Arial', 'B', $fontSize);
-            $this->Cell(20, 6, mb_convert_encoding('NIT/CI/CEX:', "ISO-8859-1"), $l, 0, '');
+            $this->Cell(20, 6, convertToISO('NIT/CI/CEX:'), $l, 0, '');
         $this->SetFont('Arial', '', $fontSize);
 
         if ($this->datos['complemento']) {
             $this->SetFont('Arial', '', $fontSize);
-                $this->Cell(35, 6, mb_convert_encoding($this->datos['documentoNumero'] . ' - ' . $this->datos['complemento'], "ISO-8859-1"), $l, 0, 'R');
+                $this->Cell(35, 6, convertToISO($this->datos['documentoNumero'] . ' - ' . $this->datos['complemento']), $l, 0, 'R');
         } else {
-            $this->Cell(35, 6, mb_convert_encoding($this->datos['documentoNumero'], "ISO-8859-1"), $l, 0, 'R');
+            $this->Cell(35, 6, convertToISO($this->datos['documentoNumero']), $l, 0, 'R');
         }
         $this->Ln(6);
         $this->SetX(10);
         $this->SetFont('Arial', 'B', $fontSize);
-            $this->Cell(35, 6, mb_convert_encoding('Nombre/Razon Social: ', "ISO-8859-1"), $l, 0, '');
+            $this->Cell(35, 6, convertToISO('Nombre/Razon Social: '), $l, 0, '');
         $this->SetFont('Arial', '', $fontSize);
         if (strlen($this->datos['nombreRazonSocial']) > 55) {
-            $this->MultiCell(108, 4, mb_convert_encoding($this->datos['nombreRazonSocial'], "ISO-8859-1"), $l, 'L', 0);
+            $this->MultiCell(108, 4, convertToISO($this->datos['nombreRazonSocial']), $l, 'L', 0);
             $this->SetXY(153, $this->GetY() - 8);
         } else {
-            $this->MultiCell(108, 6, mb_convert_encoding($this->datos['nombreRazonSocial'], "ISO-8859-1"), $l, 'L', 0);
+            $this->MultiCell(108, 6, convertToISO($this->datos['nombreRazonSocial']), $l, 'L', 0);
             $this->SetXY(153, $this->GetY() - 6);
         }
         $this->SetFont('Arial', 'B', $fontSize);
-            $this->Cell(20, 6, mb_convert_encoding('Cod. Cliente:', "ISO-8859-1"), $l, 0, '');
+            $this->Cell(20, 6, convertToISO('Cod. Cliente:'), $l, 0, '');
         $this->SetFont('Arial', '', $fontSize);
-            $this->Cell(35, 6, mb_convert_encoding($this->datos['codigoCliente'], "ISO-8859-1"), $l, 0, 'R');
+            $this->Cell(35, 6, convertToISO($this->datos['codigoCliente']), $l, 0, 'R');
         $this->Ln(8);
 
 
@@ -113,19 +108,19 @@ class FacturaSiatLib extends FPDF
         $this->Line(10, 57, 208, 57);
 
         $this->SetFont('Arial', 'B', 6);
-            $this->MultiCell(15, 3, mb_convert_encoding('CÓDIGO PRODUCTO / SERVICIO', "ISO-8859-1"), $l, 'C', $f);
+            $this->MultiCell(15, 3, convertToISO('CÓDIGO PRODUCTO / SERVICIO', "ISO-8859-1"), $l, 'C', $f);
         $this->SetXY($x, $this->GetY() - 5);
-            $this->MultiCell(15, 3, mb_convert_encoding('CANTIDAD', "ISO-8859-1"), $l, 'C', $f);
+            $this->MultiCell(15, 3, convertToISO('CANTIDAD', "ISO-8859-1"), $l, 'C', $f);
         $this->SetXY($x += 15, $this->GetY() - 5);
-            $this->MultiCell(20, 3, mb_convert_encoding('UNIDAD DE MEDIDA', "ISO-8859-1"), $l, 'C', $f);
+            $this->MultiCell(20, 3, convertToISO('UNIDAD DE MEDIDA', "ISO-8859-1"), $l, 'C', $f);
         $this->SetXY($x += 20, $this->GetY() - 5);
-            $this->MultiCell(88, 3, mb_convert_encoding('DESCRIPCIÓN', "ISO-8859-1"), $l, 'C', $f);
+            $this->MultiCell(88, 3, convertToISO('DESCRIPCIÓN', "ISO-8859-1"), $l, 'C', $f);
         $this->SetXY($x += 88, $this->GetY() - 5);
-            $this->MultiCell(20, 3, mb_convert_encoding('PRECIO UNITARIO', "ISO-8859-1"), $l, 'R', $f);
+            $this->MultiCell(20, 3, convertToISO('PRECIO UNITARIO', "ISO-8859-1"), $l, 'R', $f);
         $this->SetXY($x += 20, $this->GetY() - 5);
-            $this->MultiCell(20, 3, mb_convert_encoding('DESCUENTO', "ISO-8859-1"), $l, 'R', $f);
+            $this->MultiCell(20, 3, convertToISO('DESCUENTO', "ISO-8859-1"), $l, 'R', $f);
         $this->SetXY($x += 20, $this->GetY() - 3);
-            $this->MultiCell(20, 3, mb_convert_encoding('SUBTOTAL', "ISO-8859-1"), $l, 'R', $f);
+            $this->MultiCell(20, 3, convertToISO('SUBTOTAL', "ISO-8859-1"), $l, 'R', $f);
 
         $this->Line(10, 66, 208, 66);
         $this->Ln(4);
@@ -141,20 +136,20 @@ class FacturaSiatLib extends FPDF
         if ($this->datos['glosa'] !== '') {
             $this->SetY($y);
             $this->SetFont('Arial', 'B', 7);
-                $this->Cell(15, 4, mb_convert_encoding('GLOSA:', "ISO-8859-1"), $l, 0, 'L');
+                $this->Cell(15, 4, convertToISO('GLOSA:'), $l, 0, 'L');
             $this->SetFont('Arial', '', 7);
-                $this->Cell(145, 4, mb_convert_encoding($this->datos['glosa'], "ISO-8859-1"), $l, 0, 'L');
+                $this->Cell(145, 4, convertToISO($this->datos['glosa']), $l, 0, 'L');
         }
         /*** leyendas ***/
         $this->SetY($y + 4);
-            $this->Cell(160, 4, mb_convert_encoding('ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAÍS, EL USO ILÍCITO SERÁ SANCIONADO PENALMENTE DE ACUERDO A LEY', "ISO-8859-1"), $l, 0, 'C');
+            $this->Cell(160, 4, convertToISO('ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAÍS, EL USO ILÍCITO SERÁ SANCIONADO PENALMENTE DE ACUERDO A LEY'), $l, 0, 'C');
         $this->SetY($y + 8);
-            $this->MultiCell(160, 3, mb_convert_encoding($this->datos['leyenda'], "ISO-8859-1"), $l, 'C', 0);
+            $this->MultiCell(160, 3, convertToISO($this->datos['leyenda']), $l, 'C', 0);
         $this->SetXY(10, $this->GetY());
         if ($this->datos['codigoEmision'] == '2') {
-            $this->MultiCell(160, 4, mb_convert_encoding('Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido fuera de línea, verifique su envío con su proveedor o en la página web www.impuestos.gob.bo', "ISO-8859-1"), $l, 'C', 0);
+            $this->MultiCell(160, 4, convertToISO('Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido fuera de línea, verifique su envío con su proveedor o en la página web www.impuestos.gob.bo'), $l, 'C', 0);
         } else {
-            $this->Cell(160, 4, mb_convert_encoding('Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido en una modalidad de facturación en línea', "ISO-8859-1"), $l, 0, 'C');
+            $this->Cell(160, 4, convertToISO('Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido en una modalidad de facturación en línea'), $l, 0, 'C');
         }
 
 

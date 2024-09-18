@@ -3,11 +3,17 @@
 require_once APPPATH . "/third_party/fpdf/fpdf.php";
 require_once APPPATH . "/third_party/numerosLetras/NumeroALetras.php";
 require_once APPPATH . "/third_party/multicell/PDF_MC_Table.php";
+require_once APPPATH . "/third_party/phpqrcode/qrlib.php";
+// Incluimos el archivo de utilidades
+require_once APPPATH . "/libraries/utils.php";
+
+/**
+ * @property Emitir_model $Emitir_model
+ * @property ReportEgresos_lib $pdf
+ */
+
 class Siat extends CI_Controller
 {
-  public $Emitir_model;
-  public $pdf;
-
   public function factura($id = null)
   {
     $this->load->model('siat/Emitir_model');
@@ -42,9 +48,9 @@ class Siat extends CI_Controller
       $this->pdf->Cell(15, 5, $linea->codigo, $l, 0, 'C', 0);
       $this->pdf->Cell(15, 5, number_format($linea->cantidad, 2, ".", ","), $l, 0, 'C', 0);
       $this->pdf->SetFont('Arial', '', 6);
-      $this->pdf->Cell(20, 5, mb_convert_encoding($linea->unidad, "ISO-8859-1") , $l, 0, 'C', 0);
+      $this->pdf->Cell(20, 5, convertToISO($linea->unidad), $l, 0, 'C', 0);
       $this->pdf->SetFont('Arial', '', 7);
-      $this->pdf->MultiCell(88, 5, mb_convert_encoding($linea->descripcion, "ISO-8859-1"), $l, 'L', 0);
+      $this->pdf->MultiCell(88, 5, convertToISO($linea->descripcion), $l, 'L', 0);
       $this->pdf->SetXY(148, $this->pdf->GetY() - 5);
       $this->pdf->Cell(20, 5, number_format($linea->precioUnitario, $decimales, ".", ","), $l, 0, 'R', 0);
       $this->pdf->Cell(20, 5, number_format($linea->descuento, 2, ".", ","), $l, 0, 'R', 0);
@@ -71,7 +77,7 @@ class Siat extends CI_Controller
     $this->pdf->SetFont('Arial', '', 8);
     $this->pdf->Cell(10, 5, 'SON: ', $l, 0, 'L', 0);
     $literal = NumeroALetras::convertir($entera) . $ctvs . '/100 ' . 'BOLIVIANOS';
-    $this->pdf->MultiCell(113, 5, mb_convert_encoding($literal, "ISO-8859-1"), $l, 'L', 0);
+    $this->pdf->MultiCell(113, 5, convertToISO($literal), $l, 'L', 0);
   }
   public function totales($totalFactura, $y, $montoTotalMoneda, $moneda, $tipoCambio)
   {
@@ -79,10 +85,10 @@ class Siat extends CI_Controller
     $this->pdf->SetFont('Arial', '', 8);
     $this->pdf->SetFillColor(255, 255, 255);
     $this->pdf->SetX(133);
-    $this->pdf->Cell(55, 5, mb_convert_encoding('SUBTOTAL Bs', "ISO-8859-1"), 'TL', 0, 'R', 1);
+    $this->pdf->Cell(55, 5, convertToISO('SUBTOTAL Bs'), 'TL', 0, 'R', 1);
     $this->pdf->Cell(20, 5, number_format($totalFactura, 2, ".", ","), 'T', 1, 'R', 1);
     $this->pdf->SetX(133);
-    $this->pdf->Cell(55, 5, mb_convert_encoding('DESCUENTO Bs', "ISO-8859-1"), 'TL', 0, 'R', 1);
+    $this->pdf->Cell(55, 5, convertToISO('DESCUENTO Bs'), 'TL', 0, 'R', 1);
     $this->pdf->Cell(20, 5, number_format(0, 2, ".", ","), 'T', 1, 'R', 1);
     $this->pdf->SetX(133);
     $this->pdf->SetFont('Arial', 'B', 8);
@@ -90,14 +96,14 @@ class Siat extends CI_Controller
     $this->pdf->Cell(20, 5, number_format($totalFactura, 2, ".", ","), 'T', 1, 'R', 1);
     if ($moneda == 2) {
       $this->pdf->SetX(133);
-      $this->pdf->Cell(55, 5, mb_convert_encoding('MONTO A PAGAR (DÓLAR)', "ISO-8859-1"), 'TLB', 0, 'R', 1);
+      $this->pdf->Cell(55, 5, convertToISO('MONTO A PAGAR (DÓLAR)'), 'TLB', 0, 'R', 1);
       $this->pdf->Cell(20, 5, number_format($montoTotalMoneda, 2, ".", ","), 'TB', 1, 'R', 1);
       $this->pdf->SetX(133);
-      $this->pdf->Cell(55, 5, mb_convert_encoding('TIPO DE CAMBIO', "ISO-8859-1"), 'TLB', 0, 'R', 1);
+      $this->pdf->Cell(55, 5, convertToISO('TIPO DE CAMBIO'), 'TLB', 0, 'R', 1);
       $this->pdf->Cell(20, 5, number_format($tipoCambio, 2, ".", ","), 'TB', 1, 'R', 1);
     }
     $this->pdf->SetX(133);
-    $this->pdf->Cell(55, 5, mb_convert_encoding('IMPORTE BASE CRÉDITO FISCAL Bs', "ISO-8859-1"), 'TLB', 0, 'R', 1);
+    $this->pdf->Cell(55, 5, convertToISO('IMPORTE BASE CRÉDITO FISCAL Bs'), 'TLB', 0, 'R', 1);
     $this->pdf->Cell(20, 5, number_format($totalFactura, 2, ".", ","), 'TB', 1, 'R', 1);
   }
 }
