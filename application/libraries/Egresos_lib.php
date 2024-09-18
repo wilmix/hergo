@@ -32,9 +32,9 @@
             $this->SetXY(10,10);
             
             $this->Image('images/hergo.jpeg', 10, 10, 45 );
-            $this->SetFont('Arial','B',9);
+            $this->SetFont('Arial','B',8);
             $this->SetXY(15,20);
-            $this->Cell(40,6, utf8_decode($almacen),0,0,'C');
+            $this->Cell(40, 6, mb_convert_encoding($almacen . ' NIT: 1000991026', 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
             $this->Ln(3);
             $this->SetX(15);
             $this->SetFont('Arial','',5);
@@ -217,9 +217,11 @@
             $this->SetFont('Arial','I', 9);
             $this->Cell(30,5, number_format($saldoDeudorTotal, 2, ".", ",") . ' '.  $fechaPriFacTotal,0,0,'L',1);
 
+            if ($this->datos['almacen'] == 'CENTRAL HERGO') {
             $this->SetXY(153,-130);
             $this->SetFont('Arial','BI', 9);
-            $this->Cell(30,5, 'Cuenta BNB: 1000092297',0,0,'L',1);
+            $this->Cell(30,5, 'Cta.Cte.Bs. BNB: 1000092297',0,0,'L',1);
+            }
 
 
 
