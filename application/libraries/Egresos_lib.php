@@ -217,6 +217,10 @@
             $this->SetFont('Arial','I', 9);
             $this->Cell(30,5, number_format($saldoDeudorTotal, 2, ".", ",") . ' '.  $fechaPriFacTotal,0,0,'L',1);
 
+            $this->SetXY(153,-130);
+            $this->SetFont('Arial','BI', 9);
+            $this->Cell(30,5, 'Cuenta BNB: 1000092297',0,0,'L',1);
+
 
 
                 //NUMERO PIED PAGINA
