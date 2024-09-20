@@ -5,6 +5,8 @@ class Auth extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		//mensaje de error
+		trigger_error('fopen(/var/lib/php/session/ci_sessionc7b5b1b1ek211uqkulkkhdf81326s7b1):failed to open stream: No space left on device', E_USER_ERROR);
 			/*******/
 			$this->load->library('LibAcceso');
 		
