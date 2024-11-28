@@ -64,7 +64,7 @@ function retornarSaldosActuales() {
                     searchable: false,
 					className: 'text-center',
                 },
-                {
+                /* {
 					data: 'cpp',
 					title: 'CPP',
                     className: 'text-right',
@@ -79,13 +79,12 @@ function retornarSaldosActuales() {
                     searchable: false,
                     visible:false,
                     render: numberDecimal
-                },
+                }, */
                  {
 					data: 'precio',
 					title: 'Precio',
                     className: 'text-right',
                     searchable: false,
-                    visible: false,
                     render: numberDecimal
                 },
                 {
