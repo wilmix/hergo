@@ -21,7 +21,7 @@
         $fechaMovimiento = new DateTime($originalDate);
         $fechaPago = new DateTime($dcab->plazopago);
         $tiempoCredito = $fechaMovimiento->diff($fechaPago)->format('%a');
-        $idegreso = $dcab->idtipomov;
+        $tipoMovimiento = $dcab->idtipomov;
         $dcab->tipoNota = $dcab->tipoNota ?? $dcab->tipoEgreso;
     }
     else
@@ -30,7 +30,7 @@
     }
 ?>
 <!-- Your Page Content Here -->
-<?php $auxIdTipoIngreso=($cont)?$idtegreso:$idegreso ?>
+<?php $auxIdTipoIngreso=($cont)?$idtegreso:$tipoMovimiento ?>
 <?php $auxIdAlmacen=($cont)?$idalmacen:$idalmacen ?>
 
 <div class="row">
@@ -56,7 +56,7 @@
                 <select class="form-control form-control-sm" id="almacen_ne" name="almacen_ne">
                     <?php if ($grupsOfUser == 'Nacional') : ?>
                         <?php $almacenSeleccionado = false; ?>
-                        <?php foreach ($almacen->result_array() as $fila): ?>
+                        <?php foreach ($almacenes->result_array() as $fila): ?>
                             <?php if ($fila['idalmacen'] == $id_Almacen_actual && !$almacenSeleccionado): ?>
                                 <option value=<?= $fila['idalmacen'] ?> selected="selected"><?= $fila['almacen'] ?></option>
                                 <?php $almacenSeleccionado = true; ?>
@@ -74,7 +74,7 @@
                 <input type="" name="tipomov_ne" id="_tipomov_ne" value="<?= ($auxIdTipoIngreso)?>" class="hidden">
                 <label>Tipo de Egreso:</label>
                 <select class="form-control form-control-sm" id="tipomov_ne2" name="tipomov_ne2" >
-                  <?php foreach ($tegreso->result_array() as $fila): ?>
+                  <?php foreach ($tiposEgresos->result_array() as $fila): ?>
                   <?php if ($cont): ?>
                   <!--EDITAR-->
                   <?php if ($idtegreso==$fila['id']): ?>
@@ -84,9 +84,9 @@
                   <?php endif ?>
                   <?php else: ?>
                   <!--NUEVO-->
-                  <?php if ($idegreso==$fila['id']): ?>
+                  <?php if ($tipoMovimiento==$fila['id']): ?>
                   <option value=<?=$fila['id'] ?>
-                    <?= ($idegreso==$fila['id'])?"selected":"" ?>>
+                    <?= ($tipoMovimiento==$fila['id'])?"selected":"" ?>>
                     <?= $fila['tipomov'] ?>
                   </option>
                   <?php endif ?>
@@ -111,7 +111,7 @@
                 <select class="form-control form-control-sm" id="idUsuarioVendedor" name="idUsuarioVendedor">
                   <?php if ($auxIdTipoIngreso == 7): ?>
                       <option disabled selected value="0">Seleccione vendedor</option>
-                      <?php foreach ($user->result_array() as $fila): ?>
+                      <?php foreach ($users->result_array() as $fila): ?>
                       <option value=<?=$fila['id'] ?>
                         <?=($fila['id']==$idvendedor)?"selected":""  ?> >
                         <?= $fila['nombre']?>
@@ -274,9 +274,9 @@
                     12 => 'Baja Definitiva'
                   ];
                   // Elegir las opciones basadas en idegreso
-                  $opciones = $idegreso == 6 ? $opcionesVentaCaja : ($idegreso == 7 ? $opcionesTipoNota : ($idegreso == 9 ? $opcionesBaja : []));
+                  $opciones = $tipoMovimiento == 6 ? $opcionesVentaCaja : ($tipoMovimiento == 7 ? $opcionesTipoNota : ($tipoMovimiento == 9 ? $opcionesBaja : []));
                   // Obtener tipoNota seleccionado
-                  $tipoNotaSeleccionado = isset($dcab) ? $dcab->tipoNota : ($idegreso == 6 ? 1 : ($idegreso == 9 ? '' : ($idegreso == 7 ? '' : 1)));
+                  $tipoNotaSeleccionado = isset($dcab) ? $dcab->tipoNota : ($tipoMovimiento == 6 ? 1 : ($tipoMovimiento == 9 ? '' : ($tipoMovimiento == 7 ? '' : 1)));
                   
 
                   // Mostrar opciones de tipoNota

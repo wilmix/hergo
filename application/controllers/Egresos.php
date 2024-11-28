@@ -40,29 +40,31 @@ class Egresos extends CI_Controller
 			case 'notaEntrega':
 				$this->accesoCheck(17);
 				$this->titles('NotaEntrega', 'Nota de Entrega', 'Egresos');
-				$this->datos['idegreso'] = 7;
+				$this->datos['tipoMovimiento'] = 7;
+				$this->loadClientFormData();
 				break;
 			case 'ventaCaja':
 				$this->accesoCheck(16);
 				$this->titles('VentaCaja', 'Ventas Caja', 'Egresos');
-				$this->datos['idegreso'] = 6;
+				$this->datos['tipoMovimiento'] = 6;
+				$this->loadClientFormData();
 				break;
 			case 'baja':
 				$this->accesoCheck(18);
 				$this->titles('Baja', 'Baja de Producto', 'Egresos');
-				$this->datos['idegreso'] = 9;
+				$this->datos['tipoMovimiento'] = 9;
 				break;
 			case 'traspaso':
 				$this->accesoCheck(20);
 				$this->titles('Traspasos', 'Formulario Traspaso', 'Egresos');
-				$this->datos['idegreso'] = 8;
+				$this->datos['tipoMovimiento'] = 8;
 				break;
 			default:
 				show_404();
 				return;
 		}
 		$this->loadCommonData();
-		$this->datos['foot_script'][] = base_url('assets/hergo/notasEntrega.js') . '?' . rand();
+		$this->datos['foot_script'][] = base_url('assets/hergo/formularioEgresos.js') . '?' . rand();
 		$this->setView('egresos/formularioEgresos');
 	}
 
@@ -569,10 +571,14 @@ class Egresos extends CI_Controller
 	}    
 	private function loadCommonData()
     {
-        $this->datos['almacen'] = $this->Reportes_model->retornar_almacenes();
-        $this->datos['tegreso'] = $this->Ingresos_model->retornar_tablaMovimiento("-");
-        $this->datos['user'] = $this->Egresos_model->retornar_tablaUsers("nombre");
-        $this->datos['tipodocumento'] = $this->Cliente_model->retornar_tabla("documentotipo")->result_array();
+        $this->datos['almacenes'] = $this->Reportes_model->retornar_almacenes();
+        $this->datos['tiposEgresos'] = $this->Ingresos_model->retornar_tablaMovimiento("-");
+        $this->datos['users'] = $this->Egresos_model->retornar_tablaUsers("nombre");
+	}	
+        
+	private function loadClientFormData()
+	{
+		$this->datos['tipodocumento'] = $this->Cliente_model->retornar_tabla("documentotipo")->result_array();
         $this->datos['tipocliente'] = $this->Cliente_model->retornar_tabla("clientetipo");
-    }
+	}
 }
