@@ -6,12 +6,12 @@ class Egresos extends CI_Controller
 	public $Egresos_model;
 	public $Cliente_model;
 	public $Reportes_model;
+	public $egreso;
 
 	
 	public function __construct()
 	{
 		parent::__construct();
-
 		$this->load->model("Ingresos_model");
 		$this->load->model("Egresos_model");
 		$this->load->model("Cliente_model");
@@ -21,7 +21,7 @@ class Egresos extends CI_Controller
 	public function index()
 	{
 		$this->accesoCheck(15);
-		$this->titles('Egresos','Consultas Egresos','Egresos',);
+		$this->titles('Egresos','Consultas Egresos','Egresos');
 		$this->libacceso->acceso(15);
 
 		$this->datos['foot_script'][]=base_url('assets/hergo/egresos.js') .'?'.rand();
@@ -40,29 +40,32 @@ class Egresos extends CI_Controller
 			case 'notaEntrega':
 				$this->accesoCheck(17);
 				$this->titles('NotaEntrega', 'Nota de Entrega', 'Egresos');
-				$this->datos['tipoMovimiento'] = 7;
+				$tipoMovimiento = 7;
 				$this->loadClientFormData();
 				break;
 			case 'ventaCaja':
 				$this->accesoCheck(16);
 				$this->titles('VentaCaja', 'Ventas Caja', 'Egresos');
-				$this->datos['tipoMovimiento'] = 6;
+				$tipoMovimiento = 6;
 				$this->loadClientFormData();
 				break;
 			case 'baja':
 				$this->accesoCheck(18);
 				$this->titles('Baja', 'Baja de Producto', 'Egresos');
-				$this->datos['tipoMovimiento'] = 9;
+				$tipoMovimiento = 9;
 				break;
 			case 'traspaso':
 				$this->accesoCheck(20);
 				$this->titles('Traspasos', 'Formulario Traspaso', 'Egresos');
-				$this->datos['tipoMovimiento'] = 8;
+				$tipoMovimiento = 8;
 				break;
 			default:
 				show_404();
 				return;
 		}
+		$this->datos['tipoMovimiento'] = $tipoMovimiento;
+		$this->datos['egreso'] = $this->initializeEgresoData(null, $tipoMovimiento);
+		
 		$this->loadCommonData();
 		$this->datos['foot_script'][] = base_url('assets/hergo/formularioEgresos.js') . '?' . rand();
 		$this->setView('egresos/formularioEgresos');
@@ -92,62 +95,64 @@ class Egresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	public function editarEgresos($id=null)
-	{
-		$this->accesoCheck(43);
-		if(!$this->Egresos_model->puedeeditar($id)) redirect("error");
-
-		$this->datos['foot_script'][]=base_url('assets/hergo/notasEntrega.js');
-
-		$this->datos['dcab']=$this->mostrarEgresosEdicion($id);//datos cabecera
-		$titulo = $this->datos['dcab']->tipomov . ' # '  . $this->datos['dcab']->n;
-		$this->titles('Modificar',$titulo,'Modificar');
-		//echo $titulo;die();
-		$this->datos['detalle']=$this->mostrarDetalleEditar($id);
-		if($this->datos['dcab']->idtipomov==8) redirect("error");
-		if($this->datos['dcab']->idtipomov==9) $this->datos['auxIdCliente']=1801; //cliente hergo
-		if($this->datos['dcab']->moneda==2)//si es dolares dividimos por el tipo de cambio
-		{
-			$tipodecambiovalor=$this->Ingresos_model->getTipoCambio($this->datos['dcab']->fechamov);            	
-			$tipodecambiovalor=$tipodecambiovalor->tipocambio;
-			
-			for ($i=0; $i < count($this->datos['detalle']) ; $i++) { 
-				$this->datos['detalle'][$i]["punitario"]=$this->datos['detalle'][$i]["punitario"]/$tipodecambiovalor;	            	
-				$this->datos['detalle'][$i]["total"]=$this->datos['detalle'][$i]["total"]/$tipodecambiovalor;	  
-			}		
-			
-		}
-		/* echo "<pre>";
-			print_r($this->datos['dcab']);
-		echo "</pre>";
-		die(); */
-		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-		$this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
-		$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo")->result_array();			
-		$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
-		$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");		
-
-		$this->setView('egresos/notaentrega');
-	}
-	public function mostrarEgresosEdicion($id)
-	{
-        $res=$this->Egresos_model->mostrarEgresos($id);
-        if($res->num_rows()>0)
-    	{
-    		$fila=$res->row();
-    		return $fila;
-    	}
-        else
-        {
-            return(false);
+	public function editar($id = null)
+    {
+        $this->accesoCheck(43);
+        if (!$this->Egresos_model->puedeeditar($id)) {
+            redirect("error");
         }
-	}
-	public function mostrarDetalleEditar($id)
-	{
-        $res=$this->Egresos_model->mostrarDetalle($id);
-        $res=$res->result_array();
-        return($res);
-	}
+
+        $this->datos['foot_script'][] = base_url('assets/hergo/formularioEgresos.js');
+
+        $this->datos['dcab'] = $this->mostrarEgresosEdicion($id); // datos cabecera
+        $titulo = $this->datos['dcab']->tipomov . ' # ' . $this->datos['dcab']->n;
+        $this->titles('Modificar', $titulo, 'Modificar');
+
+        $this->datos['detalle'] = $this->mostrarDetalleEditar($id);
+
+        if ($this->datos['dcab']->idtipomov == 8) {
+            $this->datos['auxIdCliente'] = 1801; // cliente hergo
+        }
+
+        if ($this->datos['dcab']->idtipomov == 9) {
+            $this->datos['auxIdCliente'] = 1801; // cliente hergo
+        }
+
+        if ($this->datos['dcab']->moneda == 2) { // si es dolares dividimos por el tipo de cambio
+            $this->convertirMoneda($this->datos['dcab']->fechamov, $this->datos['detalle']);
+        }
+		$this->datos['egreso'] = $this->initializeEgresoData($this->datos['dcab']);
+        $this->loadCommonData();
+        $this->loadClientFormData();
+
+        $this->setView('egresos/formularioEgresos');
+    }
+
+    private function convertirMoneda($fecha, &$detalle)
+    {
+        $tipodecambiovalor = $this->Ingresos_model->getTipoCambio($fecha)->tipocambio;
+
+        foreach ($detalle as &$item) {
+            $item["punitario"] /= $tipodecambiovalor;
+            $item["total"] /= $tipodecambiovalor;
+        }
+    }
+
+    public function mostrarEgresosEdicion($id)
+    {
+        $res = $this->Egresos_model->mostrarEgresos($id);
+        if ($res->num_rows() > 0) {
+            return $res->row();
+        } else {
+            return false;
+        }
+    }
+
+    public function mostrarDetalleEditar($id)
+    {
+        $res = $this->Egresos_model->mostrarDetalle($id);
+        return $res->result_array();
+    }
 	public function mostrarDetalleEditarPost()
 	{
 		$id = addslashes($this->security->xss_clean($this->input->post('id')));
@@ -580,5 +585,36 @@ class Egresos extends CI_Controller
 	{
 		$this->datos['tipodocumento'] = $this->Cliente_model->retornar_tabla("documentotipo")->result_array();
         $this->datos['tipocliente'] = $this->Cliente_model->retornar_tabla("clientetipo");
+	}
+
+	private function initializeEgresoData($dcab = null, $tipoMovimiento = 0)
+	{
+		$egreso = new stdClass();
+		$egreso->isEdit = isset($dcab);
+		$egreso->id = $egreso->isEdit ? $dcab->idEgresos : 0;
+		$egreso->idalmacen = $egreso->isEdit ? $dcab->idalmacen : 0;
+		$egreso->tipoMovimiento = $egreso->isEdit ? $dcab->idtipomov : $tipoMovimiento;
+		$egreso->tipoMov = $egreso->isEdit ? $dcab->tipomov : '';
+		$egreso->idmoneda = $egreso->isEdit ? $dcab->idmoneda : 0;
+		$egreso->idCliente = $egreso->isEdit ? $dcab->idcliente : 0;
+		$egreso->idVendedor = $egreso->isEdit ? $dcab->vendedor : 0;
+		$egreso->nombreVendedor = $egreso->isEdit ? $dcab->nVendedor : '';
+		$egreso->nmov = $egreso->isEdit ? $dcab->n : '';
+		
+		$egreso->fechaMovimiento = $egreso->isEdit ? new DateTime($dcab->fechamov) : '';
+		$egreso->fechaPago = $egreso->isEdit ? new DateTime($dcab->plazopago) : '';
+		$egreso->tiempoCredito = $egreso->isEdit ? $egreso->fechaMovimiento->diff($egreso->fechaPago)->format('%a') : 0;
+		
+		$egreso->tipoNota = $egreso->isEdit ? ($dcab->tipoNota ?? $dcab->tipoEgreso) : '';
+		$egreso->anulado = $egreso->isEdit ? $dcab->anulado : 0;
+		$egreso->nombreCliente = $egreso->isEdit ? $dcab->nombreCliente : '';
+		$egreso->pedidoCliente = $egreso->isEdit ? $dcab->clientePedido : '';
+		$egreso->observacion = $egreso->isEdit ? $dcab->obs : '';
+		$egreso->moneda = $egreso->isEdit ? $dcab->moneda : 0;
+		$egreso->plazoPago = $egreso->isEdit ? $dcab->plazopago : '';
+
+
+
+		return $egreso;
 	}
 }
