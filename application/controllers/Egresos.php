@@ -36,89 +36,36 @@ class Egresos extends CI_Controller
 	}
 	public function crear($tipo)
 	{
-		if ($tipo == 'notaEntrega') {
-			$this->accesoCheck(17);
-			$this->titles('NotaEntrega','Nota de Entrega','Egresos');
-			$this->datos['idegreso']=7;
-		} else if($tipo == 'ventaCaja') {
-			$this->accesoCheck(16);
-			$this->titles('VentaCaja','Ventas Caja','Egresos');
-			$this->datos['idegreso']=6;
-		} else if ($tipo == 'baja'){
-			$this->accesoCheck(18);
-			$this->titles('Baja','Baja de Producto','Egresos');
-			$this->datos['idegreso']=9;
+		switch ($tipo) {
+			case 'notaEntrega':
+				$this->accesoCheck(17);
+				$this->titles('NotaEntrega', 'Nota de Entrega', 'Egresos');
+				$this->datos['idegreso'] = 7;
+				break;
+			case 'ventaCaja':
+				$this->accesoCheck(16);
+				$this->titles('VentaCaja', 'Ventas Caja', 'Egresos');
+				$this->datos['idegreso'] = 6;
+				break;
+			case 'baja':
+				$this->accesoCheck(18);
+				$this->titles('Baja', 'Baja de Producto', 'Egresos');
+				$this->datos['idegreso'] = 9;
+				break;
+			case 'traspaso':
+				$this->accesoCheck(20);
+				$this->titles('Traspasos', 'Formulario Traspaso', 'Egresos');
+				$this->datos['idegreso'] = 8;
+				break;
+			default:
+				show_404();
+				return;
 		}
-		
-		$this->datos['almacen']=$this->Reportes_model->retornar_almacenes();
-		$this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
-		$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
-		$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo")->result_array();			
-		$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
-
-		$this->datos['foot_script'][]=base_url('assets/hergo/notasEntrega.js') .'?'.rand();
-
-		$this->setView('egresos/notaentrega');
-	}
-	public function notaentrega()
-	{
-		$this->accesoCheck(17);
-		$this->titles('NotaEntrega','Nota de Entrega','Egresos');
-
-			$this->datos['foot_script'][]=base_url('assets/hergo/notasEntrega.js') .'?'.rand();
-
-			$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-			$this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
-		//$this->datos['fecha']=date('Y-m-d');
-			$this->datos['user']=$this->Egresos_model->retornar_tablaUsers();
-			$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
-			$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
-		$this->datos['idegreso']=7;
-		
-		$this->setView('egresos/notaentrega');
+		$this->loadCommonData();
+		$this->datos['foot_script'][] = base_url('assets/hergo/notasEntrega.js') . '?' . rand();
+		$this->setView('egresos/formularioEgresos');
 	}
 
-	public function VentasCaja()
-	{
-		$this->accesoCheck(16);
-		$this->titles('VentaCaja','Ventas Caja','Egresos');
-		
-			$this->datos['foot_script'][]=base_url('assets/hergo/notasEntrega.js') .'?'.rand();
-
-			$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-        	$this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
-		//$this->datos['fecha']=date('Y-m-d');
-
-			$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
-			$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
-			$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
-						
-		$this->datos['idegreso']=6;
-
-		$this->setView('egresos/notaentrega');
-
-	}
-
-	public function BajaProducto()
-	{
-		$this->accesoCheck(18);
-		$this->titles('Baja','Baja de Producto','Egresos');
-		
-			$this->datos['foot_script'][]=base_url('assets/hergo/notasEntrega.js') .'?'.rand();
-		
-			$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
-			$this->datos['tegreso']=$this->Ingresos_model->retornar_tablaMovimiento("-");
-		//$this->datos['fecha']=date('Y-m-d');
-		//$this->datos['clientes']=$this->Ingresos_model->retornar_tabla("clientes");
-			$this->datos['user']=$this->Egresos_model->retornar_tablaUsers("nombre");
-		//$this->datos['auxIdCliente']=1801; //cliente hergo
-			$this->datos['tipodocumento']=$this->Cliente_model->retornar_tabla("documentotipo");			
-			$this->datos['tipocliente']=$this->Cliente_model->retornar_tabla("clientetipo");
-		$this->datos['idegreso']=9;
-
-		$this->setView('egresos/notaentrega');
-	}
-		
 	public function mostrarEgresos()
 	{
 		if($this->input->is_ajax_request())
@@ -143,7 +90,6 @@ class Egresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-
 	public function editarEgresos($id=null)
 	{
 		$this->accesoCheck(43);
@@ -621,4 +567,12 @@ class Egresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}    
+	private function loadCommonData()
+    {
+        $this->datos['almacen'] = $this->Reportes_model->retornar_almacenes();
+        $this->datos['tegreso'] = $this->Ingresos_model->retornar_tablaMovimiento("-");
+        $this->datos['user'] = $this->Egresos_model->retornar_tablaUsers("nombre");
+        $this->datos['tipodocumento'] = $this->Cliente_model->retornar_tabla("documentotipo")->result_array();
+        $this->datos['tipocliente'] = $this->Cliente_model->retornar_tabla("clientetipo");
+    }
 }
