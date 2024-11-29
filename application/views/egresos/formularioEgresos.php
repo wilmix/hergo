@@ -14,11 +14,12 @@
               <input id="idegreso" name="idegreso" type="text" class="hidden" value="<?= $egreso->id ?>">
               <input id="nmov" name="nmov" type="text" class="hidden" value="<?= $egreso->nmov ?>">
               <input id="idMoneda" name="idMoneda" type="text" class="hidden" value="<?= $egreso->idmoneda ?>">
+              <input id="_tipomov_ne" name="tipomov_ne" type="text" value="<?= $egreso->tipoMovimiento ?>" class="hidden">
             <?php endif ?>
 
             <div class="row">
               <!-- Almacen -->
-              <div class=" col-xs-6 col-sm-6 col-md-3">
+              <div class=" col-xs-6 col-sm-6 col-md-2">
                 <input type="text" name="almacen" value="<?= $egreso->idalmacen ?>" class="hidden">
                 <label>Almacen: </label>
                 <select class="form-control form-control-sm" id="almacen_ne" name="almacen_ne">
@@ -39,30 +40,32 @@
                 </select>
               </div>
               <!-- Tipo de Egreso -->
-              <div class=" col-xs-6 col-sm-6 col-md-3">
-                <input type="" name="tipomov_ne" id="_tipomov_ne" value="<?= $egreso->tipoMovimiento ?>" class="hidden">
-                <label>Tipo de Egreso:</label>
-                <select class="form-control form-control-sm" id="tipomov_ne2" name="tipomov_ne2">
-                  <?php foreach ($tiposEgresos->result_array() as $fila): ?>
-                    <?php if ($egreso->isEdit): ?>
-                      <!--EDITAR-->
-                      <?php if ($egreso->tipoMovimiento == $fila['id']): ?>
-                        <option value=<?= $fila['id'] ?> "selected">
-                          <?= $fila['tipomov'] ?>
-                        </option>
+              <?php if ($egreso->tipoMovimiento == 8): ?>
+                <div class=" col-xs-6 col-sm-6 col-md-3">
+                  <input type="" name="tipomov_ne" id="_tipomov_ne" value="<?= $egreso->tipoMovimiento ?>" class="hidden">
+                  <label>Tipo de Egreso:</label>
+                  <select class="form-control form-control-sm" id="tipomov_ne2" name="tipomov_ne2">
+                    <?php foreach ($tiposEgresos->result_array() as $fila): ?>
+                      <?php if ($egreso->isEdit): ?>
+                        <!--EDITAR-->
+                        <?php if ($egreso->tipoMovimiento == $fila['id']): ?>
+                          <option value=<?= $fila['id'] ?> "selected">
+                            <?= $fila['tipomov'] ?>
+                          </option>
+                        <?php endif ?>
+                      <?php else: ?>
+                        <!--NUEVO-->
+                        <?php if ($egreso->tipoMovimiento == $fila['id']): ?>
+                          <option value=<?= $fila['id'] ?>
+                            <?= ($egreso->tipoMovimiento == $fila['id']) ? "selected" : "" ?>>
+                            <?= $fila['tipomov'] ?>
+                          </option>
+                        <?php endif ?>
                       <?php endif ?>
-                    <?php else: ?>
-                      <!--NUEVO-->
-                      <?php if ($egreso->tipoMovimiento == $fila['id']): ?>
-                        <option value=<?= $fila['id'] ?>
-                          <?= ($egreso->tipoMovimiento == $fila['id']) ? "selected" : "" ?>>
-                          <?= $fila['tipomov'] ?>
-                        </option>
-                      <?php endif ?>
-                    <?php endif ?>
-                  <?php endforeach ?>
-                </select>
-              </div>
+                    <?php endforeach ?>
+                  </select>
+                </div>
+              <?php endif; ?>
               <!-- Fecha -->
               <div class="col-xs-6 col-sm-6 col-md-2">
                 <label>Fecha:</label>
@@ -122,7 +125,7 @@
               <div class="hiddenBaja hiddenVC col-xs-4 col-sm-4 col-md-2">
                 <label>Días de Crédito: </label>
                 <input id="tiempoCredito" name="tiempoCredito" type="number" class="form-control form-control-sm"
-                  value="<?= ($egreso->isEdit) ? $egreso->tiempoCredito : '0' ?>">
+                  value="<?= $egreso->tiempoCredito ?>">
               </div>
               <!-- Boton Cliente -->
               <div class="hiddenBaja col-xs-4 col-md-2">

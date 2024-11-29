@@ -95,7 +95,7 @@ class Egresos extends CI_Controller
 			die("PAGINA NO ENCONTRADA");
 		}
 	}
-	public function editar($id = null)
+	public function editarEgresos($id = null)
     {
         $this->accesoCheck(43);
         if (!$this->Egresos_model->puedeeditar($id)) {
@@ -600,11 +600,9 @@ class Egresos extends CI_Controller
 		$egreso->idVendedor = $egreso->isEdit ? $dcab->vendedor : 0;
 		$egreso->nombreVendedor = $egreso->isEdit ? $dcab->nVendedor : '';
 		$egreso->nmov = $egreso->isEdit ? $dcab->n : '';
-		
-		$egreso->fechaMovimiento = $egreso->isEdit ? new DateTime($dcab->fechamov) : '';
-		$egreso->fechaPago = $egreso->isEdit ? new DateTime($dcab->plazopago) : '';
-		$egreso->tiempoCredito = $egreso->isEdit ? $egreso->fechaMovimiento->diff($egreso->fechaPago)->format('%a') : 0;
-		
+		$egreso->fechaMovimiento = $egreso->isEdit ? (new DateTime($dcab->fechamov))->format('Y-m-d') : '';
+    	$egreso->fechaPago = $egreso->isEdit ? (new DateTime($dcab->plazopago))->format('Y-m-d') : '';
+    	$egreso->tiempoCredito = $egreso->isEdit ? (new DateTime($dcab->fechamov))->diff(new DateTime($dcab->plazopago))->format('%a') : 0;
 		$egreso->tipoNota = $egreso->isEdit ? ($dcab->tipoNota ?? $dcab->tipoEgreso) : '';
 		$egreso->anulado = $egreso->isEdit ? $dcab->anulado : 0;
 		$egreso->nombreCliente = $egreso->isEdit ? $dcab->nombreCliente : '';
@@ -612,8 +610,6 @@ class Egresos extends CI_Controller
 		$egreso->observacion = $egreso->isEdit ? $dcab->obs : '';
 		$egreso->moneda = $egreso->isEdit ? $dcab->moneda : 0;
 		$egreso->plazoPago = $egreso->isEdit ? $dcab->plazopago : '';
-
-
 
 		return $egreso;
 	}
