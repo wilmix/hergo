@@ -2,8 +2,8 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body">
-       <!--  <button class="btn btn-success pull-right" id="excel" data-toggle="tooltip" title="Excel"><i class="far fa-file-excel"></i> Excel</button>
-        <button onclick="window.print();" class="btn btn-primary pull-right" ><i class="fa fa-print"> </i> Imprimir</button> -->
+
+      <input id="verCPP" type="hidden" value="<?= $verCPP ?>">
           <div class="text-center">
             <h2>SALDOS RESUMEN</h2>
           </div>
@@ -29,3 +29,7 @@
     </div>
   </div>
 </div>
+
+<script>
+  var verCPP = <?= json_encode($verCPP) ?>;
+</script>

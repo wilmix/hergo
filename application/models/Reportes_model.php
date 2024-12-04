@@ -341,7 +341,7 @@ class Reportes_model extends CI_Model
 						COALESCE(aa.`laPaz`, 0) + COALESCE(aa.reserva, 0) + COALESCE(aa.`elAlto`, 0) + COALESCE(aa.`potosi`, 0) + COALESCE(aa.`santacruz`, 0) + COALESCE(aa.reserva_scz, 0)  + COALESCE(pendientes.cantidad, 0) + COALESCE(aa.pasbol, 0) 
 					) total,
 					COALESCE(SUM(back.cantidad), 0) backOrder,
-					CONCAT(COALESCE(SUM(pendientes.cantidad), 0), ' (', pendientes.cantidadPendientes, ')') pendienteAprobar,
+					CONCAT(COALESCE((pendientes.cantidad), 0), ' (', pendientes.cantidadPendientes, ')') pendienteAprobar,
 					GROUP_CONCAT(
 						CONCAT(
 							'<b> ',
