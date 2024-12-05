@@ -121,7 +121,7 @@ class Reportes extends CI_Controller
 	{
 		$this->accesoCheck(27);
 		$accesoMenu = array_column($this->session->accesoMenu, 'subMenu');
-		$this->datos['verCPP'] = in_array(73, $accesoMenu);
+		$this->datos['verCPP'] = in_array(72, $accesoMenu);
 		$this->titles('SaldosResumen','Saldos Resumen','Reportes');
 		$this->datos['foot_script'][]=base_url('assets/hergo/reportes/saldosActuales.js') .'?'.rand();
 		$this->setView('reportes/saldosActuales');
