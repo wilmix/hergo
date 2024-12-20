@@ -299,6 +299,15 @@ function mostrarTablaEgresos(res) {
                 formatter: tipoNota,
             },
             {
+                field: "tipoEgreso",
+                title: "Tipo Baja",
+                sortable: true,
+                align: 'center',
+                searchable: true,
+                visible: false,
+                formatter: tipoEgreso,
+            },
+            {
                 field: "clientePedido",
                 title: "N° Pedido",
                 sortable: true,
@@ -523,6 +532,21 @@ function tipoNota(value, row, index) {
         case '4':
             return ('Reserva');
             break;          
+        default:
+            return ("-");
+            break;
+    }
+    
+}
+function tipoEgreso(value, row, index) {
+    console.log(value);
+    switch (value) {
+        case '11':
+            return ('*Reingreso*');
+            break;
+        case '12':
+            return ('*Definitiva*');
+            break;
         default:
             return ("-");
             break;

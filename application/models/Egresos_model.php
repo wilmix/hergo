@@ -38,6 +38,7 @@ class Egresos_model extends CI_Model
                     e.idEgresos,
                     t.sigla,
                     t.tipomov,
+                    e.tipoEgreso,
                     e.fechamov,
                     c.nombreCliente,
                     ROUND((d.`punitario` * d.`cantidad`), 2) total1,
