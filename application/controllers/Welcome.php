@@ -8,8 +8,8 @@ class Welcome extends CI_Controller {
 		parent::__construct();
 		$this->load->model("Welcome_model");
 		$this->load->model("Cierre_model");
-		$this->ini = '2023-01-01';
-		$this->fin = '2023-12-31';
+		$this->ini = '2024-01-01';
+		$this->fin = '2024-12-31';
 		$this->moneda = '0';
 	}
 	function index() : string {
