@@ -405,7 +405,7 @@ class Reportes_model extends CI_Model
 									ingdetalle id
 									INNER JOIN ingresos i ON i.idIngresos = id.idIngreso
 								WHERE
-									i.gestion = 2024
+									i.gestion = 2025
 									AND i.anulado = 0
 									AND i.tipomov IN (16)
 								GROUP BY
