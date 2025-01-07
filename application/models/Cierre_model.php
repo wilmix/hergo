@@ -109,7 +109,7 @@ class Cierre_model extends CI_Model
    }
     public function itemsSaldosNewKardex($alm)
 	{
-        $result = $this->newKardex($alm, '', '2023-01-01', '2023-12-31', '0');
+        $result = $this->newKardex($alm, '', '2024-01-01', '2024-12-31', '0');
 
 		 if ($result) {
 			$this->db->select(' idArticulo "0",
