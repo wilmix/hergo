@@ -1,4 +1,4 @@
-let ini = moment().subtract(0, 'year').startOf('year').format('YYYY-MM-DD')
+let ini = moment().subtract(1, 'year').startOf('year').format('YYYY-MM-DD')
 let fin = moment().subtract(0, 'year').endOf('year').format('YYYY-MM-DD')
 let editBack = $("#editBack").val()
 $(document).ready(function () {
