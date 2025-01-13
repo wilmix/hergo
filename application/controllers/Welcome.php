@@ -1,8 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+// cSpell: disable
 class Welcome extends CI_Controller {
+
 	public $Welcome_model;
+	public $ini;
+	public $fin;
+	public $moneda;
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -20,9 +25,21 @@ class Welcome extends CI_Controller {
 		return false;
 	}
 
-	public function cambiarFechaKardex($almacen)
+	public function cambiarFechaKardex($proyecto)
 	{
-		$result = $this->Welcome_model->kardexByCode($almacen,$this->moneda,$this->ini, $this->fin);
+		set_time_limit(600);
+		if ($proyecto == 'p1') {
+			$almacenes = '1,2,3,5,6,7,9,10';
+		} else if ($proyecto == 'p2') {
+			$almacenes = '4,8';
+		} else {
+			print_r('Proyecto no encontrado');
+			return;
+		}
+
+		$result = $this->Welcome_model->kardexByCode($almacenes,$this->moneda,$this->ini, $this->fin);
+		
+		
 		$dateNegative = null;
 		$data =[];
 		$n = 0;
@@ -41,8 +58,12 @@ class Welcome extends CI_Controller {
 				$dateNegative = $value->fechakardex;
 				continue;
 			}
+
 			else if ($value->operacion == '+'  && isset($dateNegative)) {
 				$value->newDate = $dateNegative;
+				if ($value->fechakardex == $value->newDate) {
+					continue; // No hacer nada si las fechas son iguales
+				}
 				$n = $n +1;
 				$data = array(
 					'fechaIngreso' => $value->newDate

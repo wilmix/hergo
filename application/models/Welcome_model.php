@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
- 
+// cSpell: disable
 class Welcome_model extends CI_Model  
 {
 	public function __construct()
@@ -10,12 +10,25 @@ class Welcome_model extends CI_Model
 	}
     public function kardexByCode($alm,$mon,$ini,$fin) 
 	{ 
-		$sql="CALL kardexByCode('$alm','$mon','$ini','$fin');";
-		mysqli_next_result( $this->db->conn_id );
-		$query=$this->db->query($sql);	
+		// Llamar al procedimiento almacenado
+		set_time_limit(300);
+		$sql = "CALL newKardex(?, ?, ?, ?, '');";
+		$this->db->query($sql, array($alm, $mon, $ini, $fin));
+		
+		// Procesar todos los resultados del procedimiento almacenado
+		while ($this->db->conn_id->more_results() && $this->db->conn_id->next_result()) {
+			if ($res = $this->db->conn_id->store_result()) {
+				$res->free();
+			}
+		}
+		
+		// Obtener los resultados de kardex3
+		$sql = "SELECT * FROM kardex3;";
+		$query = $this->db->query($sql);
+		
 		$res = $query->result();
-		$query->next_result(); 
 		$query->free_result(); 
+		
 		return $res;
 	}
 	public function update_date($id, $data)
@@ -25,7 +38,7 @@ class Welcome_model extends CI_Model
 	}
 	public function kardex($almacenes, $articulo) {
 		 // Formatear la cadena SQL con los valores proporcionados
-		$sql = "CALL newKardex(" . $this->db->escape($almacenes) . ", '0', '2023-01-01', '2023-12-31', " . $this->db->escape($articulo) . ")";
+		$sql = "CALL newKardex(" . $this->db->escape($almacenes) . ", '0', '2024-01-01', '2024-12-31', " . $this->db->escape($articulo) . ")";
     	$query = $this->db->query($sql, array($almacenes, $articulo));
         
 		mysqli_next_result( $this->db->conn_id );
