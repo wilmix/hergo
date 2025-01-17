@@ -1,5 +1,6 @@
-let iniciofecha = moment().year(gestion).startOf('year');
-let finfecha = moment().year(gestion).endOf('year');
+let iniciofecha = moment().year(gestionActual).startOf('year');
+let finfecha = moment().year(gestionActual).endOf('year');
+
 $(document).ready(function(){
     $('#export').click(function () {
         $('#estadoVentasCostosNew').tableExport({
@@ -9,8 +10,8 @@ $(document).ready(function(){
         })
       });
 
-        let start = moment().year(gestion).startOf('year');
-        let end = moment().year(gestion).endOf('year');
+        let start = moment().year(gestionActual).startOf('year');
+        let end = moment().year(gestionActual).endOf('year');
 
         $(function () {
             moment.locale('es');
@@ -33,7 +34,7 @@ $(document).ready(function(){
             endDate: end,
             ranges: {
                 'Mes Actual': [moment().subtract(0, 'month').startOf('month'), moment().subtract(0, 'month').endOf('month')],
-                "Gestión Actual": [moment().year(gestion).startOf('year'), moment().year(gestion).endOf('year')],
+                "Gestión Actual": [moment().year(gestionActual).startOf('year'), moment().year(gestionActual).endOf('year')],
                 "Gestión Anterior": [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
 
             }

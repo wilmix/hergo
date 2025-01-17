@@ -4,6 +4,7 @@
     <input type="hidden" id="baseurl" value="<?php echo base_url() ?>">
     <input type="hidden" id="user_id_actual" value="<?php echo $user_id_actual ?>">
     <input type="hidden" id="base_url_siat" value="<?php echo $this->config->item('base_url_siat') ?>">
+    <input type="hidden"  id="gestionActual" value="<?php echo $gestionActual->gestionActual ?>">
 
     <div class="wrapper">
 

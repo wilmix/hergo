@@ -94,6 +94,7 @@ class CI_Controller {
 		$this->datos['id_Almacen_actual']=$this->session->userdata['datosAlmacen']->idalmacen;
 		$this->datos['grupsOfUser'] = $this->ion_auth->in_group('Nacional') ? 'Nacional' : false;
 		$this->datos['datosDataBase'] = $this->datosDataBase();
+		$this->datos['gestionActual'] = $this->General_model->getGestionActual();
 		$cantidadNotasPendientes = $this->General_model->getCantidadNotasEntregaPendientes($this->datos['user_id_actual'])->pendientes;
 		$this->datos['cantidadNotasEntregaPendientes'] = $cantidadNotasPendientes;
 		$hoy = date('Y-m-d');
