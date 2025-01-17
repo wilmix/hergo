@@ -1,5 +1,5 @@
-let iniciofecha = moment().subtract(0, 'year').startOf('year')
-let finfecha = moment().subtract(0, 'year').endOf('year')
+let iniciofecha = moment().year(gestionActual).startOf('year');
+let finfecha = moment().year(gestionActual).endOf('year');
 
 $(document).ready(function () {
     $(".tiponumerico").inputmask({
@@ -10,8 +10,8 @@ $(document).ready(function () {
         autoUnmask: true
     });
 
-    var start = moment().subtract(0, 'year').startOf('year')
-    var end = moment().subtract(0, 'year').endOf('year')
+    let start = moment().year(gestionActual).startOf('year');
+    let end = moment().year(gestionActual).endOf('year');
     $(function () {
         moment.locale('es');
         function cb(start, end) {
@@ -29,7 +29,7 @@ $(document).ready(function () {
             startDate: start,
             endDate: end,
             ranges: {
-                'Gestion Actual': [moment().subtract(0, 'year').startOf('year'), moment().subtract(0, 'year').endOf('year')],
+                "Gestión Actual": [moment().year(gestionActual).startOf('year'), moment().year(gestionActual).endOf('year')],
                 "Hace un Año": [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
                 'Hace dos Años': [moment().subtract(2, 'year').startOf('year'), moment().subtract(2, 'year').endOf('year')],
                 'Hace tres Años': [moment().subtract(3, 'year').startOf('year'), moment().subtract(3, 'year').endOf('year')],
