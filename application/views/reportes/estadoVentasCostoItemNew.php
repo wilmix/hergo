@@ -13,7 +13,7 @@
           <div id="toolbar2" class="form-inline">
             <?php
                 $this->load->view('reportHead/buttonDate');
-                $this->load->view('reportHead/selectAlm');
+                $this->load->view('reportHead/selecAlmGrupos');
                 $this->load->view('reportHead/selectCoin');
                 $this->load->view('reportHead/buttonRefresh');
             ?>   

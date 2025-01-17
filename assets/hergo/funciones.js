@@ -5,6 +5,7 @@ var glob_user_id = $('#user_id_actual').val()
 var fechaHoySystem 
 const CPV = 0
 var PermisosUser
+let gestion = 2024
 const isAdminGlobal = $('#isAdmin').val()
 const isNacionalGlobal = $('#nacional').val()
 glob_tipoCambio = parseFloat($("#mostrarTipoCambio").text())

@@ -190,8 +190,12 @@ class Reportes extends CI_Controller
         	$ini=$this->security->xss_clean($this->input->post("ini")); 
 			$fin=$this->security->xss_clean($this->input->post("fin")); 
 			$mon=$this->security->xss_clean($this->input->post("mon")); 
-			if(empty($alm)) {
+			if($alm == 'all') {
 				$alm = '1,2,3,4,5,6,7,8,9,10';
+			} else if($alm == 'pc1') {
+				$alm = '1,2,3,5,6,7,9,10';
+			} else if($alm == 'pc2') {
+				$alm = '4,8';
 			}
 			$res=$this->Reportes_model->showEstadoVentasCostoNew($alm,$ini,$fin,$mon); 
 			$res=$res->result_array();
