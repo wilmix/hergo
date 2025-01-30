@@ -17,9 +17,8 @@ const cuis = new Vue({
         nombrePuntoVenta:'',
         tiposPuntoVenta: [],
         codigoTipoPuntoVenta: [],
-        sucursal:''
-
-
+        sucursal:'',
+        almacen_id:''
 	},
     mounted() {
 		this.getAlmacenesCuis()
@@ -257,10 +256,10 @@ const cuis = new Vue({
             });
         },
         getCuis(){
-            if (!this.sucursal || !this.puntoVenta) {
+            if (!this.sucursal || !this.puntoVenta || !this.almacen_id) {
                 swal({
                     title: 'Error ',
-                    text: 'Seleccione un Sucursal o punto de venta validos',
+                    text: 'Seleccione un Sucursal, almacen, punto de venta validos',
                     type: 'error', 
                     showCancelButton: false,
                 })
@@ -274,7 +273,8 @@ const cuis = new Vue({
                 data: {
                         "cliente": {
                             "codigoSucursal": this.sucursal,
-                            "codigoPuntoVenta": this.puntoVenta
+                            "codigoPuntoVenta": this.puntoVenta,
+                            "almacen_id": this.almacen_id
                         }
                 },
             }).done(function (res) {
@@ -393,4 +393,4 @@ const cuis = new Vue({
         }
 
 	},
-  })
+})
