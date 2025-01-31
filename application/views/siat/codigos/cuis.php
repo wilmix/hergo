@@ -12,6 +12,10 @@
           <input type="text" class="form-control" v-model="puntoVenta">
         </div>
         <div class="col-md-2">
+          <label class="control-label">Almacen ID</label>
+          <input type="text" class="form-control" v-model="almacen_id">
+        </div>
+        <div class="col-md-2">
           <label class="control-label">&nbsp</label>
           <button type="button" class="btn btn-primary" @click="getCuis">Generar Cuis</button>
         </div>
