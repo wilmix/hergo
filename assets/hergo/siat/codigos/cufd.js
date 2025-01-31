@@ -39,7 +39,7 @@ const cufd = new Vue({
         },
         getCufd(row){
             agregarcargando()
-            if (Object.keys(cufd.infoSincro).length !== 17) {
+            /* if (Object.keys(cufd.infoSincro).length !== 17) {
                 quitarcargando()
                 swal({
                     title: `Error`,
@@ -48,7 +48,7 @@ const cufd = new Vue({
                     showCancelButton: false,
                 })
                 return false
-            }
+            } */
 
             $.ajax({
                 type: "POST",
