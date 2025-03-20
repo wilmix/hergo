@@ -1061,6 +1061,11 @@ class Reportes_model extends CI_Model
 	}
 	public function mostrarReporteIngreso ($ini,$fin,$alm,$tin) 
 	{ 
+		// Definir la cláusula GROUP BY según el tipo de ingreso
+		$groupByClause = ($tin == '3') 
+        ? "GROUP BY almacenOrigen, nmov, id WITH ROLLUP"
+        : "GROUP BY nmov, id WITH ROLLUP";
+
 		$sql="	SELECT
 					id,
 					codigo,
@@ -1133,9 +1138,7 @@ class Reportes_model extends CI_Model
 							provedor,
 							nmov
 					) ing
-				GROUP BY
-					nmov,
-					id WITH ROLLUP
+				$groupByClause
 		";
 		
 		$query=$this->db->query($sql);		
@@ -1143,6 +1146,11 @@ class Reportes_model extends CI_Model
 	}
 	public function mostrarReporteEgreso ($ini,$fin,$alm,$tipoMov,$tipoEgreso) 
 	{ 
+		// Definir la cláusula GROUP BY según el tipo de movimiento
+		$groupByClause = ($tipoMov == '8') 
+        ? "GROUP BY cliente, nmov, id WITH ROLLUP"
+        : "GROUP BY nmov, id WITH ROLLUP";
+
 		$sql="	SELECT
 					id,
 					codigo,
@@ -1217,9 +1225,7 @@ class Reportes_model extends CI_Model
 							cliente,
 							nmov
 					) egr
-				GROUP BY
-					nmov,
-					id WITH ROLLUP";
+				$groupByClause";
 		
 		$query=$this->db->query($sql);		
 		return $query;

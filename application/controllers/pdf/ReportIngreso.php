@@ -13,8 +13,9 @@ class ReportIngreso extends CI_Controller {
 
       $tmov = $lineas ? strtoupper($lineas[0]->siglaMov) : '';
       $alm = $lineas ? $lineas[0]->nombreAlmacen : '';
-      //print_r($lineas);
-      //die();
+      
+      //print_r($lineas);die();
+      
       
     //PARAMETROS PARA LA LIBRERIA
     $params = array(
@@ -41,7 +42,7 @@ class ReportIngreso extends CI_Controller {
           $this->pdf->SetX(10);
           $this->pdf->SetFillColor(255,255,255);
           $this->pdf->SetFont('Arial', 'B' , 7);
-          $this->pdf->Cell(80,5,utf8_decode($linea->nombreproveedor),'0',1,'L',1);
+          $this->pdf->Cell(80,5,utf8_decode($linea->almacenOrigen),'0',1,'L',1);
           $this->filas($linea);
         } else {
           $this->filas($linea);

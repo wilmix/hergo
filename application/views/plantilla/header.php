@@ -37,6 +37,12 @@
                 <?php echo $datosDataBase  ?>
               </a>
             </li>
+            <li>
+              <a href="" target="_blank" class="dropdown-toggle" aria-expanded="true"> 
+                <i  <?php echo $gestionAnterior == '' ?   '' :  'class="fa fa-calendar"'  ?>></i>
+                <?php echo $gestionAnterior == '' ?   '' : 'CONSULTAS: ' . $gestionAnterior  ?>
+              </a>
+            </li>
             <!-- email  -->
             <li class="dropdown messages-menu">
               <a href="https://webmail.hergo.com.bo/" target="_blank" class="dropdown-toggle" aria-expanded="true">
