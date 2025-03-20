@@ -1,5 +1,5 @@
-var iniciofecha = moment().subtract(0, 'year').startOf('year')
-var finfecha = moment().subtract(0, 'year').endOf('year')
+var iniciofecha = moment().year(gestionActual).startOf('year')
+var finfecha = moment().year(gestionActual).endOf('year')
 $(document).ready(function () {
     $('#export').click(function () {
         $('#tablaResumenVentasLineaMes').tableExport({
@@ -16,12 +16,8 @@ $(document).ready(function () {
         autoUnmask: true
     });
 
-    var start = moment().subtract(0, 'year').startOf('year')
-    var end = moment().subtract(0, 'year').endOf('year')
-    var actual = moment().subtract(0, 'year').startOf('year')
-    var unanterior = moment().subtract(1, 'year').startOf('year')
-    var dosanterior = moment().subtract(2, 'year').startOf('year')
-    var tresanterior = moment().subtract(3, 'year').startOf('year')
+    var start = iniciofecha
+    var end = finfecha
 
     $(function () {
         moment.locale('es');

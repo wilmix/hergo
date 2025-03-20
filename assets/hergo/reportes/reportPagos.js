@@ -1,5 +1,5 @@
-let iniciofecha = moment().subtract(0, 'year').startOf('year')
-let finfecha = moment().subtract(0, 'year').endOf('year')
+let iniciofecha = moment().year(gestionActual).startOf('year')
+let finfecha = moment().year(gestionActual).endOf('year')
 
 $(document).ready(function () {
     $('#export').click(function () {
