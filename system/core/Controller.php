@@ -98,6 +98,7 @@ class CI_Controller {
 		$this->datos['gestionAnterior'] = '';
 		$cantidadNotasPendientes = $this->General_model->getCantidadNotasEntregaPendientes($this->datos['user_id_actual'])->pendientes;
 		$this->datos['cantidadNotasEntregaPendientes'] = $cantidadNotasPendientes;
+		$this->datos['cufdStatus'] = $this->General_model->getCufdStatus();
 		$hoy = date('Y-m-d');
 		$tipoCambio = $this->General_model->getTipoCambio($hoy);
 		if ($tipoCambio) {

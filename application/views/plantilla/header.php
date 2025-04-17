@@ -43,6 +43,39 @@
                 <?php echo $gestionAnterior == '' ?   '' : 'CONSULTAS: ' . $gestionAnterior  ?>
               </a>
             </li>
+            <!-- Status Cufd -->
+            <li class="dropdown notifications-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                <span>CUFD</span>
+                <?php if(isset($cufdStatus)): ?>
+                  <?php if($cufdStatus->total_vigentes == 0): ?>
+                    <span class="label label-danger"><?php echo $cufdStatus->total_vigentes ?></span>
+                  <?php elseif($cufdStatus->total_vigentes < 3): ?>
+                    <span class="label label-warning"><?php echo $cufdStatus->total_vigentes ?></span>
+                  <?php else: ?>
+                    <span class="label label-success"><?php echo $cufdStatus->total_vigentes ?></span>
+                  <?php endif; ?>
+                <?php endif; ?>
+              </a>
+              <ul class="dropdown-menu">
+                <li class="header">
+                  <?php if(isset($cufdStatus)): ?>
+                    <?php if($cufdStatus->total_vigentes == 0): ?>
+                      <span class="text-danger">No Existen CUFDs vigentes</span>
+                    <?php elseif($cufdStatus->total_vigentes < 3): ?>
+                      <span class="text-warning">Hay <?php echo $cufdStatus->total_vigentes ?> CUFD(s) vigente(s)</span>
+                    <?php else: ?>
+                      <span class="text-success">Todos los CUFDs están vigentes (<?php echo $cufdStatus->total_vigentes ?>)</span>
+                    <?php endif; ?>
+                  <?php endif; ?>
+                </li>
+                <li>
+                  <a href="<?php echo base_url('index.php/siat/codigos/Cufd') ?>">
+                    <i class="fa fa-refresh text-aqua"></i> Administrar CUFDs
+                  </a>
+                </li>
+              </ul>
+            </li>
             <!-- email  -->
             <li class="dropdown messages-menu">
               <a href="https://webmail.hergo.com.bo/" target="_blank" class="dropdown-toggle" aria-expanded="true">

@@ -150,4 +150,29 @@ class General_model extends CI_Model
         $sql=$this->db->query($sql);
         return $sql->row();
     }
+    
+    public function getCufdStatus ()
+    {
+        $sql = "SELECT 
+                    COUNT(*) as total_vigentes
+                FROM
+                    siat_cufd c
+                    INNER JOIN (
+                        SELECT
+                            MAX(c.id) cufd_id_last
+                        FROM
+                            siat_cufd c
+                        GROUP BY
+                            c.cuis
+                    ) last_cufd ON last_cufd.cufd_id_last = c.id
+                    INNER JOIN siat_cuis cuis on cuis.cuis = c.cuis AND cuis.active = 1
+                    INNER JOIN almacenes a ON a.siat_sucursal = cuis.sucursal
+                WHERE
+                    STR_TO_DATE(c.fechaVigencia,'%Y-%m-%dT%T') > NOW()";
+
+            $query = $this->db->query($sql);
+            $result = $query->row();
+            
+        return $result;
+    }
 }
