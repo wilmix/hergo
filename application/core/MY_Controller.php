@@ -217,13 +217,16 @@ class MY_Controller extends CI_Controller
 		}
 	}
 	function datosDataBase() : string {
+		// Check both environment and the custom config setting
+		if (ENVIRONMENT !== 'development' || $this->config->item('show_database_info') === FALSE) {
+			return '';  // Return empty string in production/testing or when explicitly disabled
+		}
+		
 		$this->load->database();
 		$username = $this->db->username;
 		$hostname = $this->db->hostname == 'db-mysql-nyc1-32426-do-user-2771900-0.a.db.ondigitalocean.com' ? 'DigitalOcean' : $this->db->hostname;
 		$database = $this->db->database;
-		$datosDB = "host:$hostname: user:$username database:$database";
-
-		return ENVIRONMENT == 'development' ? $datosDB : '';
+		return "host:$hostname: user:$username database:$database";
 	}
   
 }

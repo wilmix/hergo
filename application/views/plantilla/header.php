@@ -27,16 +27,16 @@
           <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
           </a>
-          <!-- Navbar Right Menu -->
-          <div class="navbar-custom-menu">
-            <ul class="nav navbar-nav">
-            <!-- database  -->
+          <!-- Navbar Right Menu -->          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">            <!-- database information display controlled by config -->
+            <?php if (!empty($datosDataBase)): ?>
             <li>
               <a href="" target="_blank" class="dropdown-toggle" aria-expanded="true"> 
-                <i  <?php echo $datosDataBase == '' ?   '' :  'class="fa fa-database"'  ?>></i>
-                <?php echo $datosDataBase  ?>
+                <i class="fa fa-database"></i>
+                <?php echo $datosDataBase ?>
               </a>
             </li>
+            <?php endif; ?>
             <li>
               <a href="" target="_blank" class="dropdown-toggle" aria-expanded="true"> 
                 <i  <?php echo $gestionAnterior == '' ?   '' :  'class="fa fa-calendar"'  ?>></i>
