@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class MarcaArticulos extends CI_Controller 
+class MarcaArticulos extends MY_Controller 
 {
 
     

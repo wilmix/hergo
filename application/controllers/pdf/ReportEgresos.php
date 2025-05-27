@@ -8,7 +8,7 @@
  * @property Reportes_model $Reportes_model
  * @property ReportEgresos_lib $pdf
  */
-class ReportEgresos extends CI_Controller {
+class ReportEgresos extends MY_Controller {
   public function index($ini,$fin,$alm,$tipoMov,$tipoEgreso) {
       //CARGAR MODELO
         $alm = $alm == 0 ? '' : $alm;

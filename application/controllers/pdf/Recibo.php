@@ -3,7 +3,7 @@
     require_once APPPATH."/third_party/fpdf/fpdf.php";
     require_once APPPATH."/third_party/numerosLetras/NumeroALetras.php";
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
-class Recibo extends CI_Controller {
+class Recibo extends MY_Controller {
   public function index($id=null) {
     //echo $id;
     $this->load->model('Pagos_model');

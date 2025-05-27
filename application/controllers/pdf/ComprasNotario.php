@@ -3,7 +3,7 @@
     require_once APPPATH."/third_party/fpdf/fpdf.php";
     require_once APPPATH."/third_party/numerosLetras/NumeroALetras.php";
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
-class ComprasNotario extends CI_Controller {
+class ComprasNotario extends MY_Controller {
   public function index($month, $year) {
     //CARGAR MODELO
     $this->load->model('pdf/ReportePDF_model');

@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Pagos extends CI_Controller  /////**********nombre controlador
+class Pagos extends MY_Controller  /////**********nombre controlador
 {
 	
 	public function __construct()

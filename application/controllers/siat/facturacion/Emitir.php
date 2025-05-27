@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Emitir extends CI_Controller
+class Emitir extends MY_Controller
 {
 	public $load;
 	public $libAcc;

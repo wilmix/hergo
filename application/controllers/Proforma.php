@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Proforma extends CI_Controller
+class Proforma extends MY_Controller
 {
 	
 	public function __construct()

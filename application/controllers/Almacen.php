@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Almacen extends CI_Controller
+class Almacen extends MY_Controller
 {
 	
 	public function __construct()

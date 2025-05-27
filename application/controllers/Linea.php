@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Linea extends CI_Controller {
+class Linea extends MY_Controller {
 
     
 

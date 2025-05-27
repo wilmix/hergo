@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class FacturasPendientesPago extends CI_Controller
+class FacturasPendientesPago extends MY_Controller
 {
 	public $FacturasPendientesPago_model;
 	public $Reportes_model;

@@ -3,7 +3,7 @@
     require_once APPPATH."/third_party/fpdf/fpdf.php";
     require_once APPPATH."/third_party/numerosLetras/NumeroALetras.php";
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
-class ReportIngreso extends CI_Controller {
+class ReportIngreso extends MY_Controller {
   public function index($ini,$fin,$alm,$tin) {
       //CARGAR MODELO
         $alm = $alm == 0 ? '' : $alm;

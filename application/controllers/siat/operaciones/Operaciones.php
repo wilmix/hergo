@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Operaciones extends CI_Controller
+class Operaciones extends MY_Controller
 {
 	
 	public function __construct()

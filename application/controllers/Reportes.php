@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class Reportes extends CI_Controller
+class Reportes extends MY_Controller
 {
 	public $Reportes_model;
 	

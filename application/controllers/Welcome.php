@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 // cSpell: disable
-class Welcome extends CI_Controller {
+class Welcome extends MY_Controller {
 
 	public $Welcome_model;
 	public $ini;

@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Cierre extends CI_Controller
+class Cierre extends MY_Controller
 {
 	public $Ingresos_model;
 	public $Cierre_model;

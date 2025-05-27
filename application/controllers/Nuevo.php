@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Nuevo extends CI_Controller
+class Nuevo extends MY_Controller
 {
 	
 	public function __construct()

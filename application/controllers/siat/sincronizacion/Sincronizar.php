@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Sincronizar extends CI_Controller
+class Sincronizar extends MY_Controller
 {
     public $Sincronizar_model;
 	public function __construct()

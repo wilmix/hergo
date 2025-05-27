@@ -4,7 +4,7 @@ require 'vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class ReportesExcel extends CI_Controller
+class ReportesExcel extends MY_Controller
 {
 	
 	public function __construct()

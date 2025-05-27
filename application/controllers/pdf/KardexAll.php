@@ -3,7 +3,7 @@
     require_once APPPATH."/third_party/fpdf/fpdf.php";
     require_once APPPATH."/third_party/numerosLetras/NumeroALetras.php";
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
-class KardexAll extends CI_Controller {
+class KardexAll extends MY_Controller {
   public function index($id=1) {
     ini_set('max_execution_time', 0); 
 		ini_set('memory_limit','2048M');

@@ -3,7 +3,7 @@
     require_once APPPATH."/third_party/fpdf/fpdf.php";
     require_once APPPATH."/third_party/numerosLetras/NumeroALetras.php";
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
-class OrdenCompraPDF extends CI_Controller {
+class OrdenCompraPDF extends MY_Controller {
   public function index($id=null) {
     //CARGAR MODELO
     $this->load->model('Pedidos_model');

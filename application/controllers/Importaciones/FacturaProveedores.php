@@ -1,7 +1,7 @@
 
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class FacturaProveedores extends CI_Controller
+class FacturaProveedores extends MY_Controller
 {
 	
 	public function __construct()

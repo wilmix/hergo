@@ -3,7 +3,7 @@
 require 'vendor/autoload.php';
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
-class SpacesDO extends CI_Controller {
+class SpacesDO extends MY_Controller {
   public function index()
   {
     // Configure a client using Spaces

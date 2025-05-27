@@ -12,7 +12,7 @@ require_once APPPATH . "/libraries/utils.php";
  * @property ReportEgresos_lib $pdf
  */
 
-class Siat extends CI_Controller
+class Siat extends MY_Controller
 {
   public function factura($id = null)
   {

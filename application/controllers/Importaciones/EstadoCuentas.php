@@ -1,7 +1,7 @@
 
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class EstadoCuentas extends CI_Controller
+class EstadoCuentas extends MY_Controller
 {
 	
 	public function __construct()

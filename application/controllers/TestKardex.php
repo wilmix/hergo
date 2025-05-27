@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class TestKardex extends CI_Controller
+class TestKardex extends MY_Controller
 {
 	
 	public function __construct()

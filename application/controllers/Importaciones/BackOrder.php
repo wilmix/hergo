@@ -1,7 +1,7 @@
 
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class BackOrder extends CI_Controller
+class BackOrder extends MY_Controller
 {
 	
 	public function __construct()

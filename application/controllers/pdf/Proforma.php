@@ -3,7 +3,7 @@
     require_once APPPATH."/third_party/fpdf/fpdf.php";
     require_once APPPATH."/third_party/numerosLetras/NumeroALetras.php";
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
-class Proforma extends CI_Controller {
+class Proforma extends MY_Controller {
   public function index($id, $dist=14, $imgSize=12,$firma=0) {
 
     $this->load->model('Proforma_model');

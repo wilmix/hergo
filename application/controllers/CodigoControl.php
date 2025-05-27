@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class CodigoControl extends CI_Controller
+class CodigoControl extends MY_Controller
 {
 	
 	public function __construct()

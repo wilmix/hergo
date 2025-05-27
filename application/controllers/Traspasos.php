@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Traspasos extends CI_Controller
+class Traspasos extends MY_Controller
 {
 	private $traspaso;
 	public function __construct()

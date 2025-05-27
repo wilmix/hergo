@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Egresos extends CI_Controller
+class Egresos extends MY_Controller
 {
 	public $Ingresos_model;
 	public $Egresos_model;

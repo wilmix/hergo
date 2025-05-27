@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Ingresos extends CI_Controller
+class Ingresos extends MY_Controller
 {
 	
 	public function __construct()

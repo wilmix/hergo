@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  
-class IngresoReporte extends CI_Controller {
+class IngresoReporte extends MY_Controller {
  
   public function index()
   {

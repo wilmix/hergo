@@ -3,7 +3,7 @@
     require_once APPPATH."/third_party/fpdf/fpdf.php";
     require_once APPPATH."/third_party/numerosLetras/NumeroALetras.php";
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
-class SaldosActuales extends CI_Controller {
+class SaldosActuales extends MY_Controller {
   public function index($id=1) {
         $this->load->model('Reportes_model');
         $lineas = $this->Reportes_model->mostrarSaldosActualesItems($id)->result();

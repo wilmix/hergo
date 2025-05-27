@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Cuis extends CI_Controller
+class Cuis extends MY_Controller
 {
 	public function __construct()
 	{	

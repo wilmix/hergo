@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 require 'vendor/autoload.php';
 
-class Excel extends CI_Controller
+class Excel extends MY_Controller
 {
 	public $arr;
     public $file;

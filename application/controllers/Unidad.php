@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Unidad extends CI_Controller {
+class Unidad extends MY_Controller {
 
     
 

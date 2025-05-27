@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  
-class Articulos_pdf extends CI_Controller {
+class Articulos_pdf extends MY_Controller {
  
   public function index() {
         // Se carga el modelo alumno

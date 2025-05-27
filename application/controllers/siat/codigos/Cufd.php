@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Cufd extends CI_Controller
+class Cufd extends MY_Controller
 {
     public $Cliente_model;
 	public $Almacen_model;
