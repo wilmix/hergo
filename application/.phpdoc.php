@@ -56,5 +56,6 @@ class CI_Model {}
  * @property Ingresos_model $Ingresos_model Ingresos model
  * @property Egresos_model $Egresos_model Egresos model
  * @property FPDF $pdf PDF library
+ * @property Proforma_model $Proforma_model Proforma model
  */
 class MY_Controller extends CI_Controller {}

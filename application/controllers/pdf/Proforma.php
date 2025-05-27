@@ -4,6 +4,9 @@
     require_once APPPATH."/third_party/numerosLetras/NumeroALetras.php";
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
 class Proforma extends MY_Controller {
+  public $dist;
+  public $imgSize;
+
   public function generar($id, $dist=14, $imgSize=12,$firma=0) {
 
     $this->load->model('Proforma_model');
@@ -48,8 +51,8 @@ class Proforma extends MY_Controller {
             } else {
               $this->pdf->Cell(25,10,$this->pdf->Image('assets/img_articulos/check_blue.png', $this->pdf->GetX() + 10, $this->pdf->GetY()+2, 5 ),$l,0,'R',0);
             }
-            $this->pdf->Cell(15,5,utf8_decode($item->codigo),$l,0,'C',0);  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
-            $this->pdf->MultiCell(45,5,iconv('UTF-8', 'windows-1252', ($item->descrip)),$l,'L',0);
+            $this->pdf->Cell(15,5,iconv('UTF-8', 'windows-1252//TRANSLIT', $item->codigo),$l,0,'C',0);  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
+            $this->pdf->MultiCell(45,5,iconv('UTF-8', 'windows-1252//TRANSLIT', ($item->descrip)),$l,'L',0);
             $this->pdf->SetXY(100,$this->pdf->GetY()-5);
             $this->pdf->Cell(15,5,$item->marca,$l,0,'C',0);
             /* $this->pdf->SetXY(100,$this->pdf->GetY()-5);
@@ -85,7 +88,7 @@ class Proforma extends MY_Controller {
         $literal = NumeroALetras::convertir($entera).$ctvs.'/100 '. $proforma->moneda;
         $this->pdf->Ln(1);
         $this->pdf->Cell(7,6,'SON:',$l,0,'L',1);
-        $this->pdf->Cell(156,6,utf8_decode($literal),$l,0,'l',1);
+        $this->pdf->Cell(156,6,iconv('UTF-8', 'windows-1252//TRANSLIT', $literal),$l,0,'l',1);
         //$this->pdf->Ln(5);
         $this->pdf->SetFillColor(20,60,190);
         //$this->pdf->Rect(10,$this->pdf->GetY()+5,200,1,'F');
@@ -101,7 +104,7 @@ class Proforma extends MY_Controller {
       $this->pdf->SetFont('Roboto','B',8); 
       //$this->pdf->SetFont('Roboto','',8);
       $this->pdf->SetTextColor(255,255,255);
-      $this->pdf->Cell(200,5, utf8_decode('OBSERVACIONES: '),1,0,'C',1);
+      $this->pdf->Cell(200,5, iconv('UTF-8', 'windows-1252//TRANSLIT', 'OBSERVACIONES: '),1,0,'C',1);
       $this->pdf->Ln(5);
       $this->pdf->SetTextColor(0,0,0);
       //$this->pdf->SetFont('Arial','',8);
