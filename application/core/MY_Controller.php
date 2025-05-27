@@ -5,8 +5,36 @@
  *
  * @link http://github.com/jamierumbelow/codeigniter-base-controller
  * @copyright Copyright (c) 2012, Jamie Rumbelow <http://jamierumbelow.net>
+ * 
+ * @property CI_Loader $load
+ * @property CI_Input $input
+ * @property CI_Security $security
+ * @property CI_DB_query_builder $db
+ * @property CI_Config $config
+ * @property CI_Session $session
+ * @property CI_Email $email
+ * @property CI_Form_validation $form_validation
+ * @property CI_Output $output
+ * @property CI_URI $uri
+ * @property CI_Hooks $hooks
+ * @property CI_Lang $lang
+ * @property CI_Calendar $calendar
+ * @property CI_Typography $typography
+ * @property CI_Upload $upload
+ * @property CI_User_agent $agent
+ * @property CI_Table $table
+ * @property CI_Parser $parser
+ * @property CI_Image_lib $image_lib
+ * @property CI_Benchmark $benchmark
+ * @property CI_Router $router
+ * @property LibAcceso $libacceso
+ * @property Ion_auth $ion_auth
+ * @property FPDF $pdf
+ * @property General_model $General_model
+ * @property Ingresos_model $Ingresos_model
+ * @property Egresos_model $Egresos_model
+ * @property Admin_model $Admin_model
  */
-
 class MY_Controller extends CI_Controller
 {
     public $datos;

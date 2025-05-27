@@ -325,17 +325,17 @@ const modal = new Vue({
 			modal.codigo = row.codigo
 			modal.descrip = row.descrip
 			modal.uni = row.uni
-			modal.antPrecioBol = row.precioBob
-			modal.antPrecioDolares = row.precioDol
-			modal.antCosto = row.costo
-			modal.antPorcentaje = row.porcentaje
+			modal.antPrecioBol = row.precioBob || 0
+			modal.antPrecioDolares = row.precioDol || 0
+			modal.antCosto = row.costo || 0
+			modal.antPorcentaje = row.porcentaje || 0
 			modal.subtitle = `${row.codigo} || ${row.descrip} || ${row.uni}`
-			modal.costo = row.costo
-			modal.porcentaje = row.porcentaje
-			modal.sugeridoDolares = Math.round((row.costo / (0.84 - (row.porcentaje/100))) * 100) / 100
+			modal.costo = row.costo || 0
+			modal.porcentaje = row.porcentaje || 0
+			modal.sugeridoDolares = Math.round(((row.costo || 0) / (0.84 - ((row.porcentaje || 0)/100))) * 100) / 100
 			modal.sugeridoBOB = Math.round(modal.sugeridoDolares * 6.96 * 100) / 100
-			modal.precioBol = row.precioBob
-			modal.precioDolares = row.precioDol
+			modal.precioBol = row.precioBob || 0
+			modal.precioDolares = row.precioDol || 0
 			$("#modalPrecio").modal("show");
 		},
 		precioSugerido(){
@@ -350,10 +350,10 @@ const modal = new Vue({
 				type: 'POST',
 				data: {
 					id: modal.id,
-					costo: modal.costo,
-					porcentaje: modal.porcentaje,
-					precioBol: modal.precioBol,
-					precioDolares: modal.precioDolares,
+					costo: modal.costo === '' ? '0' : modal.costo,
+					porcentaje: modal.porcentaje === '' ? '0' : modal.porcentaje,
+					precioBol: modal.precioBol === '' ? '0' : modal.precioBol,
+					precioDolares: modal.precioDolares === '' ? '0' : modal.precioDolares,
 					codigo: modal.codigo,
 					descrip: modal.descrip,
 					uni:modal.uni,

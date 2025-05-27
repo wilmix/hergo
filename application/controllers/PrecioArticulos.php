@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class PrecioArticulos extends CI_Controller
+
+/**
+ * PrecioArticulos Controller
+ */
+class PrecioArticulos extends MY_Controller
 {
 	
 	public function __construct()
@@ -43,10 +47,10 @@ class PrecioArticulos extends CI_Controller
 			
 			$id = $this->input->post('id');
 			$item = new stdclass();
-			$item->costo = $this->input->post('costo');
-			$item->porcentaje = $this->input->post('porcentaje');
-			$item->precio = $this->input->post('precioBol');
-			$item->precioDol = $this->input->post('precioDolares');
+			$item->costo = $this->input->post('costo') === '' ? '0' : $this->input->post('costo');
+			$item->porcentaje = $this->input->post('porcentaje') === '' ? '0' : $this->input->post('porcentaje');
+			$item->precio = $this->input->post('precioBol') === '' ? '0' : $this->input->post('precioBol');
+			$item->precioDol = $this->input->post('precioDolares') === '' ? '0' : $this->input->post('precioDolares');
 			$item->updatedPrecio_by = $this->session->userdata('user_id');
 			$item->updatedPrecio_at = date('Y-m-d H:i:s');
 
