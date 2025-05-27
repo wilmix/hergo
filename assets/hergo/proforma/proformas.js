@@ -225,7 +225,7 @@ $(document).on("click", "button.print", function () {
 	let dist = 10
 	let imgSize = 12
 	let firma = pro.firma ? 1 : 0
-	let print = base_url("pdf/Proforma/index/") + `${row.id}/${dist}/${imgSize}/${firma}`
+	let print = base_url("pdf/Proforma/generar/") + `${row.id}/${dist}/${imgSize}/${firma}`
 	window.open(print);
 })
 $(document).on("click", "button.edit", function () {
