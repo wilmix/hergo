@@ -1,4 +1,4 @@
-  $(document).ready(function(){
+$(document).ready(function(){
   
   
     getVentasHoy()
@@ -556,3 +556,35 @@ function showNegatives() {
 		console.log("Request Failed: " + err);
 	});
 }
+
+function updateUsdtRate() {
+    $.ajax({
+        url: base_url("index.php/Principal/getUsdtRate"),
+        type: "GET",
+        dataType: "json",
+        success: function(response) {
+            try {
+                // Format the USDT rate
+                const rate = parseFloat(response.usdt_min_bob);
+                if (!isNaN(rate)) {
+                    $("#usdt").text(rate.toFixed(2));
+                } else {
+                    $("#usdt").text("--");
+                }
+                
+            } catch (e) {
+                console.error("Error processing USDT response:", e);
+                $("#usdt").text("--");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching USDT rate:", error);
+            $("#usdt").text("--");
+        }
+    });
+}
+
+// Update USDT rate every minute
+$(document).ready(function() {
+    updateUsdtRate();
+});

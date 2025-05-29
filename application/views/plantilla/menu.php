@@ -1,4 +1,4 @@
-      <!-- ***MENU***Left side column. contains the logo and sidebar -->
+<!-- ***MENU***Left side column. contains the logo and sidebar -->
       <aside class="main-sidebar">
 
         <!-- sidebar: style can be found in sidebar.less -->
@@ -32,7 +32,10 @@
 
             <!-- Sidebar Menu -->
           <ul class="sidebar-menu" id="masterMenu">
-            <li class="header">MENU <span class="pull-right hidden-xs" >T/C: <b id="mostrarTipoCambio"><?= $tipoCambio ?></b></span></li>
+            <li class="hidden">MENU <span class="pull-right hidden-xs" >T/C: <b id="mostrarTipoCambio"><?= $tipoCambio ?></b></span></li>
+            
+            <li class="header">USDT <span class="pull-right hidden-xs"><b id="usdt">...</b></span></li>
+
             <!-- Administración -->
             <li class="treeview">
               <a href="#"><i class="fa fa fa-server"></i> <span>Administración</span>

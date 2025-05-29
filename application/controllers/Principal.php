@@ -130,4 +130,39 @@ class Principal extends MY_Controller
 		<?php 
 
 	}
+	public function getUsdtRate()
+	{
+        $url = 'https://api.sas.willysalas.com/api/usdt-rates/latest';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        
+        $response = curl_exec($ch);
+        $error = curl_error($ch);
+        curl_close($ch);
+        
+        if ($response === false) {
+            echo json_encode([
+                'error' => 'Failed to fetch USDT rate',
+                'details' => $error,
+                'usdt_min_bob' => '0.00',
+                'recorded_at' => date('Y-m-d H:i:s')
+            ]);
+            return;
+        }
+        
+        $data = json_decode($response, true);
+        if (json_last_error() !== JSON_ERROR_NONE || !isset($data['usdt_min_bob'])) {
+            echo json_encode([
+                'error' => 'Invalid response format',
+                'usdt_min_bob' => '0.00',
+                'recorded_at' => date('Y-m-d H:i:s')
+            ]);
+            return;
+        }
+        
+        echo $response;
+    }
 }
