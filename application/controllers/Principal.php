@@ -1,7 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+
+/**
+ * Principal Controller
+ * 
+ * @property Reportes_model $Reportes_model
+ * @property Dashboard_model $Dashboard_model
+ * @property Ingresos_model $Ingresos_model
+ */
 class Principal extends MY_Controller
 {
+    public $Reportes_model;
+    public $Dashboard_model;
+    public $Ingresos_model;
 	
 	public function __construct()
 	{	
