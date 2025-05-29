@@ -179,7 +179,7 @@ const app = new Vue({
                 allowOutsideClick: false,                                                                        
                 }).then(function(){
                   agregarcargando()
-                  let print = base_url("pdf/Proforma/index/") + res.id;
+                  let print = base_url("pdf/Proforma/generar/") + res.id;
                   window.open(print);
                   window.location.href=base_url("index.php/Proforma");
                 })
@@ -191,7 +191,7 @@ const app = new Vue({
                 allowOutsideClick: false,                                                                        
                 }).then(function(){
                   agregarcargando()
-                  let print = base_url("pdf/Proforma/index/") + res.id;
+                  let print = base_url("pdf/Proforma/generar/") + res.id;
                   window.open(print);
                   window.location.href=base_url("index.php/Proforma");
                 })
