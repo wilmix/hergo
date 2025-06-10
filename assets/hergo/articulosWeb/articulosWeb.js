@@ -36,11 +36,17 @@ const web = new Vue({
 		n1: {},
 		n2: {},
 		n3: {},
-		id: 0
+		id: 0,
+		eliminarPdf: false,
+		eliminarVideo: false,
+		eliminarImagen: false,
 	},
 	mounted() {
 		this.getItems()
 		this.getData()
+		$('#pdf').on('fileclear', () => { this.eliminarPdf = true })
+		$('#video').on('fileclear', () => { this.eliminarVideo = true })
+		$('#imagen').on('fileclear', () => { this.eliminarImagen = true })
 	},
 	methods:{
 		getItems(){
@@ -238,6 +244,9 @@ const web = new Vue({
 			this.n3 = row.n3 == null ? 0 : {id:row.n3_id,label:row.n3}
 			this.codigo = row.codigo_sis
 			this.desc_sis = row.descripcion_sis
+			this.eliminarPdf = false
+			this.eliminarVideo = false
+			this.eliminarImagen = false
 			$("#itemWeb").modal("show");
 		},
 		getItem(n1, n2){
@@ -278,6 +287,7 @@ const web = new Vue({
 				initialCaption: pdf,
 				language: "es",
 				showUpload: false,
+				showRemove: true,
 				maxFileSize: 5120,
 			});
 			//$('#pdf').fileinput('refresh');
@@ -289,6 +299,7 @@ const web = new Vue({
 				initialCaption: video,
 				language: "es",
 				showUpload: false,
+				showRemove: true,
 				maxFileSize: 202400,
 			});
 			//$('#video').fileinput('refresh');
@@ -323,6 +334,9 @@ const web = new Vue({
             formData.append('id_nivel1', this.n1 ? this.n1.id : 0 )
             formData.append('id_nivel2', this.n2 ? this.n2.id : 0 )
             formData.append('id_nivel3', this.n3 ? this.n3.id : 0 )
+            formData.append('eliminarPdf', this.eliminarPdf ? 1 : 0)
+            formData.append('eliminarVideo', this.eliminarVideo ? 1 : 0)
+            formData.append('eliminarImagen', this.eliminarImagen ? 1 : 0)
 
             $.ajax({
                 url: base_url('index.php/web/ArticulosWeb/addItemWeb'),

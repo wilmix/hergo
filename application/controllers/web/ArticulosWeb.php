@@ -85,6 +85,20 @@ class ArticulosWeb extends MY_Controller
 			$item['video'] = $this->uploadSpaces($_FILES, 'web/videos/', 'video', 'video/mp4');
 		}
 
+		$eliminarPdf = $this->input->post('eliminarPdf');
+		$eliminarVideo = $this->input->post('eliminarVideo');
+		$eliminarImagen = $this->input->post('eliminarImagen');
+
+		if ($eliminarPdf) {
+			$item['fichaTecnica'] = null;
+		}
+		if ($eliminarVideo) {
+			$item['video'] = null;
+		}
+		if ($eliminarImagen) {
+			$item['imagen'] = null;
+		}
+
 		if ($id == 0) {
 			$item['created_by'] = $this->session->userdata('user_id');
 			$this->ArticulosWeb_model->storeItem($item);
