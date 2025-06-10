@@ -54,36 +54,47 @@ class ArticulosWeb extends MY_Controller
 	}
 	public function addItemWeb()
 	{
-		$id =$this->input->post('id');
+		$id = $this->input->post('id');
+		$n1_id = (int) $this->input->post('id_nivel1');
+		$n2_id = (int) $this->input->post('id_nivel2');
+		$n3_id = (int) $this->input->post('id_nivel3');
+
+		if ($n1_id <= 0) {
+			http_response_code(400);
+			echo json_encode(['error' => 'Debe seleccionar al menos el Nivel 1.']);
+			return;
+		}
+
 		$item = [
 			'articulo_id' => $this->input->post('articulo_id'),
 			'titulo' => $this->input->post('titulo'),
-			'descripcion' => ($this->input->post('descripcion')),
-			'n1_id' => $this->input->post('id_nivel1'),
-			'n2_id' => $this->input->post('id_nivel2'),
-			'n3_id' => $this->input->post('id_nivel3'),
-			'created_by' => $this->session->userdata('user_id'),
-			'imagen' => ($_FILES['imagen']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/items/','imagen','image/jpg'),
-			'fichaTecnica' => ($_FILES['pdf']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/pdf/','pdf','application/pdf'),
-			'video' => ($_FILES['video']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/videos/','video','video/mp4'),
-			'updated_by' => $this->session->userdata('user_id'),
+			'descripcion' => $this->input->post('descripcion'),
+			'n1_id' => $n1_id,
+			'n2_id' => ($n2_id > 0) ? $n2_id : null,
+			'n3_id' => ($n3_id > 0) ? $n3_id : null,
 		];
+
+		// Manejo de archivos solo si realmente se subió uno
+		if (isset($_FILES['imagen']) && is_uploaded_file($_FILES['imagen']['tmp_name'])) {
+			$item['imagen'] = $this->uploadSpaces($_FILES, 'web/items/', 'imagen', 'image/jpg');
+		}
+		if (isset($_FILES['pdf']) && is_uploaded_file($_FILES['pdf']['tmp_name'])) {
+			$item['fichaTecnica'] = $this->uploadSpaces($_FILES, 'web/pdf/', 'pdf', 'application/pdf');
+		}
+		if (isset($_FILES['video']) && is_uploaded_file($_FILES['video']['tmp_name'])) {
+			$item['video'] = $this->uploadSpaces($_FILES, 'web/videos/', 'video', 'video/mp4');
+		}
+
 		if ($id == 0) {
+			$item['created_by'] = $this->session->userdata('user_id');
 			$this->ArticulosWeb_model->storeItem($item);
 		} else if ($id > 0) {
-			if ( $item['imagen'] == '' ) {
-				unset($item['imagen']);
-			}
-			if ( $item['fichaTecnica'] == '' ) {
-				unset($item['fichaTecnica']);
-			}
-			if ( $item['video'] == '' ) {
-				unset($item['video']);
-			}
+			$item['updated_by'] = $this->session->userdata('user_id');
 			$item['updated_at'] = date('Y-m-d H:i:s');
 			$this->ArticulosWeb_model->updateItem($id, $item);
 		}
-		echo json_encode($item);
+
+		echo json_encode(['success' => true]);
 	}
 	public function uploadSpaces($file, $folder, $field, $type)
 	{

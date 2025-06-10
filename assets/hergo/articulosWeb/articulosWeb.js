@@ -1,5 +1,3 @@
-
-
 function showImage(value, row, index, route, xxx)
 {
     let ruta=""
@@ -319,32 +317,48 @@ const web = new Vue({
                 })
                 return
             }
-			let formData = new FormData($('#formItemWeb')[0])
-			formData.append('id', this.id ? this.id : 0)
-			formData.append('articulo_id', this.articulo_id)
-			formData.append('id_nivel1', this.n1 ? this.n1.id : 0 )
-			formData.append('id_nivel2', this.n2 ? this.n2.id : 0 )
-			formData.append('id_nivel3', this.n3 ? this.n3.id : 0 )
+            let formData = new FormData($('#formItemWeb')[0])
+            formData.append('id', this.id ? this.id : 0)
+            formData.append('articulo_id', this.articulo_id)
+            formData.append('id_nivel1', this.n1 ? this.n1.id : 0 )
+            formData.append('id_nivel2', this.n2 ? this.n2.id : 0 )
+            formData.append('id_nivel3', this.n3 ? this.n3.id : 0 )
 
-			/* for(let pair of formData.entries()) {
-				console.log(pair[0]+ ', '+ pair[1]); 
-			} 
-			quitarcargando()
-			return */
- 			
             $.ajax({
                 url: base_url('index.php/web/ArticulosWeb/addItemWeb'),
                 type: "POST",      
                 data: formData,    
-				cache: false,
-				contentType: false,
-				processData: false,
-				dataType: "json" 
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: "json" 
             }).done(function(res){
+                if(res.error){
+                    quitarcargando()
+                    swal({
+                        title: 'Error',
+                        text: res.error,
+                        type: 'error',
+                        showCancelButton: false,
+                    })
+                    return
+                }
                 $("#itemWeb").modal("hide");
                 quitarcargando()
-				web.getItems()
-            }) 
+                web.getItems()
+            }).fail(function(jqXHR, textStatus, errorThrown){
+                quitarcargando()
+                let msg = 'Ocurrió un error inesperado.'
+                if(jqXHR.responseJSON && jqXHR.responseJSON.error){
+                    msg = jqXHR.responseJSON.error
+                }
+                swal({
+                    title: 'Error',
+                    text: msg,
+                    type: 'error',
+                    showCancelButton: false,
+                })
+            })
         },
 		getLevel(n, table, where){
 			if (table == 'web_nivel2') {
