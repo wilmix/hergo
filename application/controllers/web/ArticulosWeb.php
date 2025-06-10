@@ -1,5 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * @property ArticulosWeb_model $ArticulosWeb_model
+ */
 class ArticulosWeb extends MY_Controller
 {
 	
@@ -63,6 +66,7 @@ class ArticulosWeb extends MY_Controller
 			'imagen' => ($_FILES['imagen']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/items/','imagen','image/jpg'),
 			'fichaTecnica' => ($_FILES['pdf']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/pdf/','pdf','application/pdf'),
 			'video' => ($_FILES['video']['name'] == '') ? '' : $this->uploadSpaces($_FILES, 'web/videos/','video','video/mp4'),
+			'updated_by' => $this->session->userdata('user_id'),
 		];
 		if ($id == 0) {
 			$this->ArticulosWeb_model->storeItem($item);
@@ -83,6 +87,7 @@ class ArticulosWeb extends MY_Controller
 	}
 	public function uploadSpaces($file, $folder, $field, $type)
 	{
+		// @intelephense-ignore-next-line
 		$client = new Aws\S3\S3Client($this->config->item('credentialsSpacesDO'));
 		$uploadObject = $client->putObject([
 				'Bucket' => 'hergo-space',
