@@ -126,27 +126,65 @@ class Proforma_model extends CI_Model
     }
 
 
-    public function storeProforma($id, $proforma)
-	{	
-        if ($id > 0 ) {
+    public function checkAlmacenExists($id) {
+        return $this->db->where('idalmacen', $id)
+                       ->get('almacenes')
+                       ->num_rows() > 0;
+    }
+
+    public function checkMonedaExists($id) {
+        return $this->db->where('id', $id)
+                       ->get('moneda')
+                       ->num_rows() > 0;
+    }
+
+    public function checkTipoExists($id) {
+        return $this->db->where('id', $id)
+                       ->get('proforma_tipo')
+                       ->num_rows() > 0;
+    }
+
+    public function checkArticuloExists($id) {
+        return $this->db->where('idArticulos', $id)
+                       ->get('articulos')
+                       ->num_rows() > 0;
+    }
+
+    public function storeProforma($id, $proforma) {
+        try {
             $this->db->trans_start();
+
+            $items = $proforma->items;
+            unset($proforma->items); // Remove items before inserting main record
+
+            if ($id > 0) {
                 $this->db->where('id', $id);
                 $this->db->update('proforma', $proforma);
                 
+                // Delete existing items
                 $this->db->where('proforma_id', $id);
                 $this->db->delete('proforma_items');
-                $this->storeItems($id, $proforma);
+            } else {
+                $this->db->insert('proforma', $proforma);
+                $id = $this->db->insert_id();
+            }
+
+            // Store items
+            if (!empty($items)) {
+                $this->storeItems($id, (object)['items' => $items]);
+            }
 
             $this->db->trans_complete();
-            return ( $this->db->trans_status() === FALSE ) ? false : $id;
-        } else {
-            $this->db->trans_start();
-                $this->db->insert("proforma", $proforma);
-                $id=$this->db->insert_id();
 
-                $this->storeItems($id, $proforma);
-            $this->db->trans_complete();
-            return ( $this->db->trans_status() === FALSE ) ? false : $id;
+            if ($this->db->trans_status() === FALSE) {
+                throw new Exception('Error en la transacción de base de datos');
+            }
+
+            return $id;
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
+            log_message('error', 'Error al guardar proforma: ' . $e->getMessage());
+            return false;
         }
     }
     public function updateProforma($id, $proforma){

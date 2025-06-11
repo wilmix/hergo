@@ -3,50 +3,60 @@
   <div class="col-xs-12">
     <div id="app" class="box">
       <div class="box-header with-border">
-        <!-- <h3 class="box-title" v-text="title"></h3> -->
+        <div v-if="errorMessage" class="alert alert-danger alert-dismissible">
+          <button type="button" class="close" @click="errorMessage = ''" aria-hidden="true">&times;</button>
+          <h4><i class="icon fa fa-ban"></i> Error!</h4>
+          {{ errorMessage }}
+        </div>
       </div>
       <div class="box-body">
-        <form action="" method="post" id="form_pedidos">
+        <form action="" method="post" id="form_pedidos" @submit.prevent="store" novalidate>
           <!-- 0 -->
           <input type="text" id="idProforma" value="<?php echo isset($id) ? $id : '' ?>" hidden>
           <!-- 1 -->
           <div class="row">
             <!-- fecha -->
-            <div class="form-group col-sm-6 col-md-2">
-              <label for="fecha">Fecha:</label>
-                <vuejs-datepicker  v-model="fecha" :language="es" :format="customFormatter" name="fecha" input-class="form-control">
-                </vuejs-datepicker>
+            <div class="form-group col-sm-6 col-md-2" :class="{'has-error': errors.fecha}">
+              <label for="fecha">Fecha: <span class="text-danger">*</span></label>
+              <vuejs-datepicker v-model="fecha" :language="es" :format="customFormatter" name="fecha" input-class="form-control">
+              </vuejs-datepicker>
+              <span class="help-block" v-if="errors.fecha">{{ errors.fecha }}</span>
             </div>
             <!-- almacen -->
-            <div class="form-group col-sm-6 col-md-2">
-              <label for="recepcion">Almacen:</label>
-                <select class="form-control" 
-                            :disabled="disabled"
-                            v-model="almacen" 
-                            id="almacen" 
-                            name="almacen">
-                    <option v-for="option in almacenes" 
-                            v-bind:value="option.value"
-                            v-text="option.alm">
-                    </option>
-                </select>
+            <div class="form-group col-sm-6 col-md-2" :class="{'has-error': errors.almacen}">
+              <label for="almacen">Almacen: <span class="text-danger">*</span></label>
+              <select class="form-control" 
+                      :disabled="disabled"
+                      v-model="almacen" 
+                      id="almacen" 
+                      name="almacen">
+                  <option value="">Seleccione almacén</option>
+                  <option v-for="option in almacenes" 
+                          v-bind:value="option.value"
+                          v-text="option.alm">
+                  </option>
+              </select>
+              <span class="help-block" v-if="errors.almacen">{{ errors.almacen }}</span>
             </div>
             <!-- MONEDA -->
-            <div class="form-group col-sm-6 col-md-2">
-              <label for="recepcion">Moneda:</label>
-                <select class="form-control" 
-                            v-model="moneda" 
-                            name="moneda">
-                    <option v-for="option in monedas" 
-                            v-bind:value="option.value"
-                            v-text="option.moneda">
-                    </option>
-                </select>
+            <div class="form-group col-sm-6 col-md-2" :class="{'has-error': errors.moneda}">
+              <label for="moneda">Moneda: <span class="text-danger">*</span></label>
+              <select class="form-control" 
+                      v-model="moneda" 
+                      name="moneda">
+                  <option value="">Seleccione moneda</option>
+                  <option v-for="option in monedas" 
+                          v-bind:value="option.value"
+                          v-text="option.moneda">
+                  </option>
+              </select>
+              <span class="help-block" v-if="errors.moneda">{{ errors.moneda }}</span>
             </div>
             <!-- cliente -->
-            <div class="form-group col-sm-12 col-md-2">
-              <label for="cliente">Cliente:</label>
+            <div class="form-group col-sm-12 col-md-2" :class="{'has-error': errors.clienteDato}">
+              <label for="cliente">Cliente: <span class="text-danger">*</span></label>
               <input type="text" class="form-control" id="clienteDato" name="clienteDato" v-model="clienteDato">
+              <span class="help-block" v-if="errors.clienteDato">{{ errors.clienteDato }}</span>
             </div>
             <!-- complemento -->
             <div class="form-group col-sm-12 col-md-2">
@@ -285,8 +295,11 @@
           <!-- botones -->
           <div class="row">
               <div class="col-xs-12 text-center">
-                <button type="button" class="btn btn-primary" @click="store" v-text="btnGuardar"></button>
-                <button type="button" class="btn btn-default" @click="cleanForm">Cancelar</button>
+                <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
+                  <i class="fa fa-spinner fa-spin" v-if="isSubmitting"></i>
+                  {{ btnGuardar }}
+                </button>
+                <button type="button" class="btn btn-default" @click="cleanForm" :disabled="isSubmitting">Cancelar</button>
             </div>
           </div>
         </form>

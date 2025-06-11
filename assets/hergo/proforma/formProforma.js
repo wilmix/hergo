@@ -1,4 +1,3 @@
-
 let url_img = base_url('assets/img_articulos/hergo.jpg')
 $(document).ready(function(){
   
@@ -65,7 +64,7 @@ const app = new Vue({
     el: '#app',
     components: {
       vuejsDatepicker
-  },
+    },
     data: {
       /* datos */
         articulosArray:[],
@@ -105,13 +104,17 @@ const app = new Vue({
         cliente:'',
         clienteDato:'',
         complemento:'',
-        glosa:'La disponibilidad de inventario está sujeta a cambios sin previo aviso.',
+        glosa: `La disponibilidad de inventario está sujeta a cambios sin previo aviso.
+                TODO PRODUCTO ES FACTURADO`,
         porcentajeDescuento:0,
         descuento:0,
         totalFin:0,
         totalDoc:0,
         items:[],
-        btnGuardar:'Guardar'
+        btnGuardar:'Guardar',
+        errors: {},
+        errorMessage: '',
+        isSubmitting: false
        
     },
   created: function () {
@@ -124,91 +127,123 @@ const app = new Vue({
     }
   },
     methods: {
+      clearErrors() {
+        this.errors = {}
+        this.errorMessage = ''
+      },
+      validateForm() {
+        let isValid = true
+        this.clearErrors()
+
+        if (!this.fecha) {
+          this.errors.fecha = 'La fecha es requerida'
+          isValid = false
+        }
+        if (!this.almacen) {
+          this.errors.almacen = 'Debe seleccionar un almacén'
+          isValid = false
+        }
+        if (!this.moneda) {
+          this.errors.moneda = 'Debe seleccionar una moneda'
+          isValid = false
+        }
+        if (!this.clienteDato) {
+          this.errors.clienteDato = 'El cliente es requerido'
+          isValid = false
+        }
+        if (!this.tipo) {
+          this.errors.tipo = 'Debe seleccionar un tipo'
+          isValid = false
+        }
+        if (!this.items || !this.items.length) {
+          this.errorMessage = 'Debe agregar al menos un ítem a la proforma'
+          isValid = false
+        }
+
+        return isValid
+      },
       store(e){
+        if (!this.validateForm()) {
+          quitarcargando()
+          return
+        }
+
+        this.isSubmitting = true
         agregarcargando()
         this.edit = false
         this.total()
        
-        e.preventDefault()
-        if (!this.clienteDato || !this.items.length>0) {
-          quitarcargando()
-          swal({
-            title: 'Error',
-            text: "Por favor llene correctamente el formulario",
-            type: 'error', 
-            showCancelButton: false,
-          })
-          return
-        }
-        let form = new FormData();
+        let form = new FormData()
         form.append('id', this.id)
         form.append('fecha', moment(this.fecha).format('YYYY-MM-DD'))
         form.append('almacen', this.almacen)
         form.append('clienteDato', this.clienteDato)
-        form.append('complemento', this.complemento)
+        form.append('complemento', this.complemento || '')
         form.append('n', this.n)
         form.append('moneda', this.moneda)
-        form.append('condicionesPago', this.condicionPago)
-        form.append('porcentajeDescuento', this.porcentajeDescuento)
-        form.append('descuento', this.descuento)
+        form.append('condicionesPago', this.condicionPago || '')
+        form.append('porcentajeDescuento', this.porcentajeDescuento || 0)
+        form.append('descuento', this.descuento || 0)
         form.append('totalFin', this.totalFin)
-        form.append('validez', this.validez)
+        form.append('validez', this.validez || '')
         form.append('tipo', this.tipo)
-        form.append('lugarEntrega', this.lugarEntrega)
-        form.append('glosa', this.glosa)
-        form.append('tiempoEntregaC', this.tiempoEntregaC)
-        form.append('garantia', this.garantia)
+        form.append('lugarEntrega', this.lugarEntrega || '')
+        form.append('glosa', this.glosa || '')
+        form.append('tiempoEntregaC', this.tiempoEntregaC || '')
+        form.append('garantia', this.garantia || '')
         form.append('items', JSON.stringify(this.items))
-        /* for(let pair of form.entries()) { console.log(pair[0]+ ', '+ pair[1]); };  quitarcargando(); return; */
+
         $.ajax({
           url: base_url('index.php/Proforma/store'),
-          type: "post",      
-          data: form,                                    
+          type: "post",
+          data: form,
           processData: false,
           contentType: false,
-          cache:false, 
-        }).done(function(res){
-          res = JSON.parse(res)
-          if (res.status == true) {
-            quitarcargando()
-            if (app.id) {
-              swal({
-                title: "Editado!",
-                text: "La proforma se modificó con éxito",
-                type: "success",        
-                allowOutsideClick: false,                                                                        
-                }).then(function(){
-                  agregarcargando()
-                  let print = base_url("pdf/Proforma/generar/") + res.id;
-                  window.open(print);
-                  window.location.href=base_url("index.php/Proforma");
-                })
-            } else {
-              swal({
-                title: "Guardado!",
-                text: "La proforma se guardó con éxito",
-                type: "success",        
-                allowOutsideClick: false,                                                                        
-                }).then(function(){
-                  agregarcargando()
-                  let print = base_url("pdf/Proforma/generar/") + res.id;
-                  window.open(print);
-                  window.location.href=base_url("index.php/Proforma");
-                })
-            }
-          } else {
-            quitarcargando()
+          cache: false,
+          dataType: 'json'
+        }).done((response) => {
+          if (response.status) {
             swal({
-              title: 'Error',
-              text: "Error al guardar la proforma, verifique los datos.",
-              type: 'error', 
-              showCancelButton: false,
+              title: "¡Éxito!",
+              text: response.message,
+              type: "success"
+            }).then(() => {
+              window.location.href = base_url("Proforma")
             })
-            return
+          } else {
+            this.handleErrors(response)
           }
-          
-        }) 
-
+        }).fail((xhr) => {
+          this.handleAjaxError(xhr)
+        }).always(() => {
+          this.isSubmitting = false
+          quitarcargando()
+        })
+      },
+      handleErrors(response) {
+        if (response.errors) {
+          this.errors = response.errors
+          this.errorMessage = response.message || 'Por favor corrija los errores en el formulario'
+        } else {
+          this.errorMessage = response.message || 'Error al guardar la proforma'
+        }
+        // Scroll to first error
+        this.$nextTick(() => {
+          const firstError = document.querySelector('.has-error')
+          if (firstError) {
+            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }
+        })
+      },
+      handleAjaxError(xhr) {
+        if (xhr.status === 422) {
+          // Validation errors
+          const response = xhr.responseJSON
+          this.handleErrors(response)
+        } else {
+          this.errorMessage = 'Error en el servidor. Por favor intente nuevamente.'
+          console.error('Error:', xhr.responseText)
+        }
       },
       getTipos(){
         agregarcargando()
