@@ -203,6 +203,9 @@ const app = new Vue({
           dataType: 'json'
         }).done((response) => {
           if (response.status) {
+            // Abrir el PDF en una nueva pestaña
+            const pdfUrl = base_url('pdf/Proforma/generar/' + response.id);
+            window.open(pdfUrl, '_blank');
             swal({
               title: "¡Éxito!",
               text: response.message,
