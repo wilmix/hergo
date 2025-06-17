@@ -9,7 +9,7 @@
  * @property ReportEgresos_lib $pdf
  */
 class ReportEgresos extends MY_Controller {
-  public function index($ini,$fin,$alm,$tipoMov,$tipoEgreso) {
+  public function index($ini = null, $fin = null, $alm = null, $tipoMov = null, $tipoEgreso = null) {
       //CARGAR MODELO
         $alm = $alm == 0 ? '' : $alm;
         $tipoMov = $tipoMov == 0 ? '' : $tipoMov;
