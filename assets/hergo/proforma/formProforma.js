@@ -205,13 +205,14 @@ const app = new Vue({
           if (response.status) {
             // Abrir el PDF en una nueva pestaña
             const pdfUrl = base_url('pdf/Proforma/generar/' + response.id);
-            window.open(pdfUrl, '_blank');
+            
             swal({
               title: "¡Éxito!",
               text: response.message,
               type: "success"
             }).then(() => {
-              window.location.href = base_url("Proforma")
+              window.open(pdfUrl, '_blank');
+              window.location.href = base_url("Proforma/formProforma/crear")
             })
           } else {
             this.handleErrors(response)
