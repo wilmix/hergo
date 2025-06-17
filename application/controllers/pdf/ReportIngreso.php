@@ -4,7 +4,7 @@
     require_once APPPATH."/third_party/numerosLetras/NumeroALetras.php";
     require_once APPPATH."/third_party/multicell/PDF_MC_Table.php";
 class ReportIngreso extends MY_Controller {
-  public function index($ini,$fin,$alm,$tin) {
+  public function index($ini = null, $fin = null, $alm = null, $tin = null) {
       //CARGAR MODELO
         $alm = $alm == 0 ? '' : $alm;
         $tin = $tin == 0 ? '' : $tin;
