@@ -473,7 +473,7 @@ function alertacosto(costounitario,costobase)
         $("#constounitario").css("color","#fff")
     }
 }
-function guardarmovimiento()
+/* function guardarmovimiento()
 {     
     var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
     var tablaaux=tablatoarray();
@@ -521,11 +521,11 @@ function guardarmovimiento()
     }
     else
     {
-        
-        swal("Error", "No se tiene datos en la tabla para guardar","error")
+        quitarcargando();
+        swal("Error", "No se tiene datos en la tabla para guardar...","error")
     }
-}
-function actualizarMovimiento()
+} */
+/* function actualizarMovimiento()
 {     
     var valuesToSubmit = $("#form_ingresoImportaciones").serialize();
     var tablaaux=tablatoarray();
@@ -565,7 +565,7 @@ function actualizarMovimiento()
     {
         alert("no se tiene datos en la tabla para guardar")
     }
-}
+} */
 function updateIngreso()
 {     
     agregarcargando()
@@ -590,10 +590,9 @@ function updateIngreso()
                         type: "success",        
                         allowOutsideClick: false,                                                                        
                         }).then(function(){
-                            console.log(returndata)
-                            window.location.href=base_url("Ingresos");
                             let imprimir = base_url("pdf/Ingresos/index/") + returndata;
-                            window.open(imprimir);
+                            window.open(imprimir, '_blank');
+                            window.location.href = base_url("Ingresos");
                         })
                     return false
                 } else {
@@ -617,6 +616,7 @@ function updateIngreso()
             },
         });
     } else {
+        quitarcargando();
         swal("Error", "No se tiene datos en la tabla para guardar","error")
     }
 }
@@ -763,11 +763,11 @@ function storeIngreso()
                         text: "El ingreso se guardo con éxito",
                         type: "success",        
                         allowOutsideClick: false,                                                                        
-                        }).then(function(){
-                            location.reload();
-                            let imprimir = base_url("pdf/Ingresos/index/") + returndata;
-                            window.open(imprimir);
-                        })
+                    }).then(function(){
+                        let imprimir = base_url("pdf/Ingresos/index/") + res;
+                        window.open(imprimir, '_blank');
+                        location.reload(); 
+                    })
                 } else {
                     quitarcargando()
                     swal(
@@ -786,6 +786,7 @@ function storeIngreso()
             },
         });
     } else {
+        quitarcargando();
         swal("Error", "No se tiene datos en la tabla para guardar","error")
     }
 
