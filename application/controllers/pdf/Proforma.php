@@ -111,11 +111,10 @@ class Proforma extends MY_Controller {
       foreach ($glosas as $glosa) {
         $glosa = iconv('UTF-8', 'windows-1252//TRANSLIT', trim($glosa));
         $this->pdf->MultiCell(200,5,$glosa,0,'L',0);
-        $this->pdf->SetXY(10,$this->pdf->GetY()-5);
       }
       $this->pdf->SetDrawColor(20,60,190);
       $this->pdf->SetLineWidth(1);
-      $this->pdf->Line(10,$this->pdf->GetY()+6,210,$this->pdf->GetY()+6);
+      $this->pdf->Line(10,$this->pdf->GetY(),210,$this->pdf->GetY());
     }
   }
 }
