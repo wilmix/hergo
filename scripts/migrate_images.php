@@ -3,29 +3,69 @@
  * Script para migrar imágenes locales a DigitalOcean Spaces
  * 
  * Este script utiliza la arquitectura avanzada de gestión de archivos para
- * migrar todas las imágenes de artículos desde el almacenamiento local a
- * DigitalOcean Spaces.
+ * migrar todas las imágenes desde el almacenamiento local a DigitalOcean Spaces.
  * 
- * Uso: php migrate_images.php [módulo]
- * Por defecto: php migrate_images.php articulos
+ * Uso desde la raíz del proyecto: 
+ *   php scripts/migrate_images.php [módulo] [tamaño_lote]
+ * 
+ * Ejemplos:
+ *   php scripts/migrate_images.php articulos 50
+ *   php scripts/migrate_images.php clientes 20
+ * 
+ * Parámetros:
+ *   [módulo]      - El módulo cuyos archivos deseas migrar (default: articulos)
+ *   [tamaño_lote] - Número de imágenes a procesar por lote (default: 50)
+ * 
+ * Requisitos:
+ *   - PHP con extensiones: mysqli, curl, fileinfo
+ *   - Acceso a la base de datos configurada en database.php
+ *   - Credenciales de DigitalOcean Spaces configuradas en storage.php o variables de entorno
+ * 
+ * Notas:
+ *   - El script usa rutas absolutas, por lo que puede ejecutarse desde cualquier ubicación
+ *   - Se recomienda hacer un respaldo de la base de datos antes de ejecutar
+ *   - Para migrar muchas imágenes, ejecute el script varias veces hasta completar
+ *   - La columna ImagenUrl debe existir en la tabla correspondiente
  */
 
 // Cargar CodeIgniter
 define('BASEPATH', true); // Hack para evitar el acceso directo
-require_once '../application/config/constants.php';
-require_once '../vendor/autoload.php';
+
+// Determinar la ruta base del proyecto independientemente de dónde se ejecute el script
+$scriptDir = dirname(__FILE__);
+$projectRoot = realpath($scriptDir . '/..');
+
+// Usar rutas absolutas para los archivos requeridos
+require_once $projectRoot . '/application/config/constants.php';
+require_once $projectRoot . '/vendor/autoload.php';
 
 // Configurar entrada por línea de comandos
 $modulo = isset($argv[1]) ? $argv[1] : 'articulos';
 $batchSize = isset($argv[2]) ? (int)$argv[2] : 50;
 
-// Cargar configuraciones
-require_once '../application/config/database.php';
-require_once '../application/config/storage.php';
+// Cargar configuraciones usando rutas absolutas
+require_once $projectRoot . '/application/config/database.php';
+require_once $projectRoot . '/application/config/storage.php';
 
 echo "=== Script de migración de imágenes a DigitalOcean Spaces ===\n";
 echo "Módulo: $modulo\n";
-echo "Tamaño de batch: $batchSize\n\n";
+echo "Tamaño de batch: $batchSize\n";
+echo "Ruta del proyecto: $projectRoot\n\n";
+
+// Verificar extensiones requeridas
+$requiredExtensions = ['mysqli', 'curl', 'fileinfo'];
+$missingExtensions = [];
+foreach ($requiredExtensions as $ext) {
+    if (!extension_loaded($ext)) {
+        $missingExtensions[] = $ext;
+    }
+}
+
+if (!empty($missingExtensions)) {
+    echo "ADVERTENCIA: Las siguientes extensiones PHP requeridas no están instaladas: " . 
+         implode(', ', $missingExtensions) . "\n";
+    echo "El script podría fallar. Instale las extensiones e intente nuevamente.\n\n";
+}
 
 // Inicializar la conexión a la base de datos
 $mysqli = new mysqli(
@@ -40,13 +80,12 @@ if ($mysqli->connect_error) {
 }
 
 // Configuración específica por módulo
-switch ($modulo) {
-    case 'articulos':
+switch ($modulo) {    case 'articulos':
         $tableName = 'articulos';
         $idColumn = 'idArticulos';
         $imageColumn = 'Imagen';
         $imageUrlColumn = 'ImagenUrl';
-        $localDir = '../assets/img_articulos/';
+        $localDir = $projectRoot . '/assets/img_articulos/';
         $spacesDir = 'hg/articulos/';
         break;
     case 'clientes':
@@ -54,7 +93,7 @@ switch ($modulo) {
         $idColumn = 'idCliente';
         $imageColumn = 'Logo';
         $imageUrlColumn = 'LogoUrl';
-        $localDir = '../assets/img_clientes/';
+        $localDir = $projectRoot . '/assets/img_clientes/';
         $spacesDir = 'hg/clientes/';
         break;
     // Agregar más módulos aquí
@@ -76,8 +115,13 @@ if ($result->num_rows === 0) {
 }
 
 // Inicializar cliente S3
-$s3Client = new Aws\S3\S3Client($config['credentialsSpacesDO']);
-$bucket = $config['spaces_bucket'];
+try {
+    $s3Client = new Aws\S3\S3Client($config['credentials_spaces']);
+    $bucket = $config['spaces_bucket'];
+} catch (Exception $e) {
+    die("Error al inicializar cliente S3: " . $e->getMessage() . "\n" .
+        "Verifica que las credenciales estén correctamente configuradas en storage.php o en las variables de entorno.\n");
+}
 
 // Consultar registros con imágenes sin URL
 $sql = "SELECT `$idColumn`, `$imageColumn` FROM `$tableName` 

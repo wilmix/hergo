@@ -18,7 +18,7 @@ EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
 -- Actualizar registros existentes
--- Esto establecerá ImagenUrl='articulos/nombre_imagen' para todas las imágenes existentes
+-- Esto establecerá ImagenUrl='hg/articulos/nombre_imagen' para todas las imágenes existentes
 UPDATE articulos
-SET ImagenUrl = CONCAT('articulos/', Imagen)
+SET ImagenUrl = CONCAT('hg/articulos/', Imagen)
 WHERE Imagen IS NOT NULL AND Imagen != '' AND ImagenUrl IS NULL;
