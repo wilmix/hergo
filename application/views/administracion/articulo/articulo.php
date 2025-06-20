@@ -252,7 +252,8 @@ th:hover .filterControl {
                 <div class="col-md-9 col-lg-9">
                   <!--<input type="file" id="imagen" name="imagen" id="imagenarticulo">-->                  
                   <input id="imagenes" name="imagenes" type="file" class="file-loading" accept="image/*">
-                  <p class="help-block">Seleccione imagen para el articulo menor a 1mb.</p>
+                  <input type="hidden" id="imagenEliminada" name="imagenEliminada" value="0">
+                  <p class="help-block">*Seleccione imagen para el articulo menor a 1mb.*</p>
                 </div>
               </div> 
               

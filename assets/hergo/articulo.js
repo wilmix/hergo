@@ -1,18 +1,38 @@
+/**
+ * Módulo de Artículos
+ * Gestiona la interfaz de usuario para visualizar, crear, editar y eliminar artículos.
+ */
+
+// URL base para mostrar imágenes de artículos desde DigitalOcean Spaces usando el subdominio CDN personalizado.
+// Si cambias la configuración de tu CDN o subdominio, actualiza esta variable.
+let baseSpacesUrl = "https://images.hergo.app/";
+
 function permisoArticulos() {
     (!checkAuth(46)) ? $('#btnCrear').addClass('hide') : $('#btnCrear').removeClass('hide')
 }
+
 $(document).ready(function(){
-    retornarTabla()
-    permisoArticulos()
-    formItemValidator()
+    // Inicializar la tabla de artículos
+    retornarTabla();
+    
+    // Verificar permisos
+    permisoArticulos();
+    
+    // Configurar validador del formulario
+    formItemValidator();
+    
+    // Configurar selector de archivos para imágenes
     $("#imagenes").fileinput({
         language: "es",
         showUpload: false,
         previewFileType: "image",
         maxFileSize: 1024,
-      
     });
-   
+    
+    // Configurar manejo de eliminación de imágenes
+    $(document).on('fileclear', '#imagenes', function() {
+        $('#imagenEliminada').val(1); // Set the hidden field to indicate image deletion
+    });
 })
 $(document).on("change", "#is_active", function () {
     retornarTabla();
@@ -236,6 +256,7 @@ $(document).on("click",".btnnuevo",function(){
       
     });
     $('#imagenes').fileinput('refresh');
+    $('#imagenEliminada').val(0); // Reset the hidden field
 })
 $(document).on("click",".botoncerrarmodal",function(){
    resetForm('#form_articulo')
@@ -245,7 +266,7 @@ function mostrarModal(fila)
 {
     //console.log(fila);
     getCodigosSiat(fila.codigoCaeb)
-    cargarimagen(fila.Imagen)
+    cargarimagen(fila.Imagen, fila.ImagenUrl)
     $("#id_articulo").val(fila.idArticulos)
     $("#codigoarticulo").val(fila.CodigoArticulo)
     $("#descrpcionarticulo").val(fila.Descripcion)
@@ -428,23 +449,39 @@ function retornarTabla()
     console.log( "Request Failed: " + err );
     });
 }
+/**
+ * Renderiza la columna de imagen en la tabla de artículos
+ * 
+ * @param {string} value - Nombre de la imagen (vieja estructura)
+ * @param {Object} row - Fila completa de datos del artículo
+ * @param {number} index - Índice de la fila
+ * @returns {string} HTML para mostrar la imagen en la tabla
+ */
 function mostrarimagen(value, row, index)
 {
-    let ruta=""
-    let imagen=""
-    if((value=="")||(value==null))
-    {
-        ruta="/assets/img_articulos/hergo.jpg"
-        clase=""
+    let ruta = "";
+    let clase = "imagenminiatura";
+    let baseSpacesUrl = "https://images.hergo.app/"; // URL base para imágenes en Spaces
+    
+    // Determinar la ruta de la imagen
+    if (row.ImagenUrl) {
+        // Construir la URL completa con la base de Spaces
+        ruta = baseSpacesUrl + row.ImagenUrl;
     }
-    else
-    {
-        clase="imagenminiatura"
-        ruta="/assets/img_articulos/"+value
+    else if (value && value !== "") {
+        // Compatibilidad con imágenes antiguas
+        ruta = base_url("/assets/img_articulos/" + value);
     }
-
-    imagen = '<div class="contimg"><img src="'+base_url(ruta)+'" class="'+clase+'"></div>'
-    return [imagen].join('')
+    else {
+        // Imagen predeterminada
+        ruta = base_url("/assets/img_articulos/hergo.jpg");
+        clase = ""; // Sin clase para imagen predeterminada
+    }
+    
+    // Construir el HTML para la miniatura
+    let imagen = '<div class="contimg"><img src="' + ruta + '" class="' + clase + '"></div>';
+    
+    return imagen;
 }
 
 function verproductoservicio(value, row, index)
@@ -482,23 +519,44 @@ $(document).on("click",".imagenminiatura",function(){
     $("#prev_imagen").modal("show");
 })
 
-function cargarimagen(imagen)
+/**
+ * Carga una imagen en el componente de entrada de archivo
+ * 
+ * @param {string} imagen - Nombre de la imagen (para compatibilidad con imágenes locales)
+ * @param {string} imagenUrl - Ruta relativa de la imagen en Spaces (si existe)
+ */
+function cargarimagen(imagen, imagenUrl)
 {
-    ruta=(imagen=="")?"/assets/img_articulos/ninguno.png":"/assets/img_articulos/"+imagen
+    let ruta;
+    
+    // Determinar la ruta correcta de la imagen
+    if (imagenUrl) {
+        // Usar la URL de Spaces con la base URL
+        ruta = baseSpacesUrl + imagenUrl;
+    }
+    else if (imagen && imagen !== "") {
+        // Compatibilidad con imágenes antiguas en el servidor local
+        ruta = base_url("/assets/img_articulos/" + imagen);
+    }
+    else {
+        // Imagen por defecto si no hay ninguna
+        ruta = base_url("/assets/img_articulos/ninguno.png");
+    }
+    
+    // Configurar el componente fileinput para mostrar la imagen existente
     $('#imagenes').fileinput('destroy');
-    //console.log(base_url(ruta))
+    
     $("#imagenes").fileinput({
-        initialPreview: [
-            base_url(ruta)
-        ],
+        initialPreview: [ruta],
         initialPreviewAsData: true,
-        
-        initialCaption: imagen,
+        initialCaption: imagen || (imagenUrl ? imagenUrl.split('/').pop() : ''),
         language: "es",
         showUpload: false,
         previewFileType: "image",
         maxFileSize: 1024,
     });
+    
     $('#imagenes').fileinput('refresh');
+    $('#imagenEliminada').val(0); // Reset the hidden field
 }
 
