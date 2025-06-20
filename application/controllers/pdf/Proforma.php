@@ -102,22 +102,19 @@ class Proforma extends MY_Controller {
       $this->pdf->Ln(6);
       $this->pdf->SetFillColor(20,60,190);
       $this->pdf->SetFont('Roboto','B',8); 
-      //$this->pdf->SetFont('Roboto','',8);
       $this->pdf->SetTextColor(255,255,255);
       $this->pdf->Cell(200,5, iconv('UTF-8', 'windows-1252//TRANSLIT', 'OBSERVACIONES: '),1,0,'C',1);
       $this->pdf->Ln(5);
       $this->pdf->SetTextColor(0,0,0);
-      //$this->pdf->SetFont('Arial','',8);
       $this->pdf->SetFont('Roboto','',8);
       $glosas = explode('<br />',$glosas);
       foreach ($glosas as $glosa) {
+        $glosa = iconv('UTF-8', 'windows-1252//TRANSLIT', trim($glosa));
         $this->pdf->MultiCell(200,5,$glosa,0,'L',0);
-        $this->pdf->SetXY(10,$this->pdf->GetY()-5);
       }
       $this->pdf->SetDrawColor(20,60,190);
       $this->pdf->SetLineWidth(1);
-      $this->pdf->Line(10,$this->pdf->GetY()+6,210,$this->pdf->GetY()+6);
-
+      $this->pdf->Line(10,$this->pdf->GetY(),210,$this->pdf->GetY());
     }
   }
 }
