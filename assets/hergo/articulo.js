@@ -3,9 +3,8 @@
  * Gestiona la interfaz de usuario para visualizar, crear, editar y eliminar artículos.
  */
 
-// URL base para mostrar imágenes de artículos desde DigitalOcean Spaces usando el subdominio CDN personalizado.
-// Si cambias la configuración de tu CDN o subdominio, actualiza esta variable.
-let baseSpacesUrl = "https://images.hergo.app/";
+// FileUtils se usa para gestionar URLs de imágenes en DigitalOcean Spaces
+// La configuración se centraliza en esta clase para mantener consistencia en toda la app
 
 function permisoArticulos() {
     (!checkAuth(46)) ? $('#btnCrear').addClass('hide') : $('#btnCrear').removeClass('hide')
@@ -21,18 +20,14 @@ $(document).ready(function(){
     // Configurar validador del formulario
     formItemValidator();
     
-    // Configurar selector de archivos para imágenes
-    $("#imagenes").fileinput({
-        language: "es",
-        showUpload: false,
-        previewFileType: "image",
+    // Configurar selector de archivos para imágenes usando FileUtils
+    FileUtils.setupFileInput("#imagenes", {
         maxFileSize: 1024,
+        allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif']
     });
     
-    // Configurar manejo de eliminación de imágenes
-    $(document).on('fileclear', '#imagenes', function() {
-        $('#imagenEliminada').val(1); // Set the hidden field to indicate image deletion
-    });
+    // Configurar manejo de eliminación de imágenes usando FileUtils
+    FileUtils.handleFileClear('#imagenes', '#imagenEliminada');
 })
 $(document).on("change", "#is_active", function () {
     retornarTabla();
@@ -527,36 +522,49 @@ $(document).on("click",".imagenminiatura",function(){
  */
 function cargarimagen(imagen, imagenUrl)
 {
-    let ruta;
+    let existingImagePath = null;
     
     // Determinar la ruta correcta de la imagen
     if (imagenUrl) {
-        // Usar la URL de Spaces con la base URL
-        ruta = baseSpacesUrl + imagenUrl;
+        // Usar la URL relativa de Spaces
+        existingImagePath = imagenUrl;
     }
     else if (imagen && imagen !== "") {
-        // Compatibilidad con imágenes antiguas en el servidor local
-        ruta = base_url("/assets/img_articulos/" + imagen);
-    }
-    else {
-        // Imagen por defecto si no hay ninguna
-        ruta = base_url("/assets/img_articulos/ninguno.png");
+        // Compatibilidad con imágenes antiguas (ruta completa)
+        existingImagePath = base_url("/assets/img_articulos/" + imagen);
     }
     
-    // Configurar el componente fileinput para mostrar la imagen existente
-    $('#imagenes').fileinput('destroy');
-    
-    $("#imagenes").fileinput({
-        initialPreview: [ruta],
-        initialPreviewAsData: true,
-        initialCaption: imagen || (imagenUrl ? imagenUrl.split('/').pop() : ''),
-        language: "es",
+    // Configurar el componente fileinput usando FileUtils
+    FileUtils.setupFileInput("#imagenes", {
         showUpload: false,
         previewFileType: "image",
-        maxFileSize: 1024,
-    });
+        maxFileSize: 1024
+    }, existingImagePath);
     
-    $('#imagenes').fileinput('refresh');
-    $('#imagenEliminada').val(0); // Reset the hidden field
+    // FileUtils ya maneja el estado del campo oculto para eliminación
+}
+
+/**
+ * Obtiene los detalles completos de un artículo usando AJAX
+ * 
+ * @param {number} id - ID del artículo
+ * @returns {Promise} - Promesa que resuelve con los detalles del artículo
+ */
+function getArticuloById(id) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: base_url("index.php/Articulos/getArticuloDetails"),
+            dataType: "json",
+            type: 'POST',
+            data: {
+                id: id
+            },
+        }).done(function(articulo) {
+            resolve(articulo);
+        }).fail(function(error) {
+            console.error("Error al obtener detalles del artículo:", error);
+            reject(error);
+        });
+    });
 }
 

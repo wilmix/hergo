@@ -12,12 +12,14 @@ class Articulos extends MY_Controller
 		parent::__construct();
 		$this->load->model("Articulo_model");
 		$this->load->library("FileStorage");
+		$this->load->config('storage', TRUE);
 	}
 	
 	public function index()
 	{
 		$this->accesoCheck(2);
 		$this->titles('Articulos','Articulos','Administracion',);
+		$this->datos['foot_script'][]=base_url('assets/hergo/fileutils.js').'?'.rand();
 		$this->datos['foot_script'][]=base_url('assets/hergo/articulo.js').'?'.rand();
 
 		$this->datos['unidad']=$this->Articulo_model->retornar_tabla("unidad");	
@@ -97,17 +99,35 @@ class Articulos extends MY_Controller
 	 */
 	private function _handleArticuloImage(&$item, $id)
 	{
-		$uploadedImage = $this->subir_imagen($id, $_FILES);
 		$imagenEliminada = $this->input->post('imagenEliminada');
 		$isUpdate = ($id > 0);
 		
 		// Caso 1: Se ha subido una nueva imagen
-		if ($uploadedImage && $uploadedImage !== "") {
-			$item->Imagen = $uploadedImage;
-			$item->ImagenUrl = "hg/articulos/{$uploadedImage}";
+		if (!empty($_FILES['imagenes']['name'])) {
+			// La configuración ya se ha cargado en el constructor
+			
+			// Usar la biblioteca FileStorage para subir el archivo
+			$result = $this->filestorage->uploadToSpaces('articulos', $_FILES, 'imagenes');
+			
+			if ($result['success']) {
+				// Para retrocompatibilidad, guardamos solo el nombre del archivo en Imagen
+				$item->Imagen = pathinfo($result['path'], PATHINFO_BASENAME);
+				// Y la ruta completa relativa en ImagenUrl
+				$item->ImagenUrl = $result['path'];
+			} else {
+				log_message('error', 'Error al subir imagen de artículo: ' . $result['message']);
+			}
 		}
 		// Caso 2: Se ha eliminado la imagen existente
 		else if ($imagenEliminada == '1') {
+			// Si hay una actualización y tenemos una imagen anterior, eliminarla de Spaces
+			if ($isUpdate) {
+				$articuloActual = $this->Articulo_model->getById($id);
+				if (!empty($articuloActual->ImagenUrl)) {
+					$this->filestorage->deleteFromSpaces($articuloActual->ImagenUrl);
+				}
+			}
+			
 			$item->Imagen = "";
 			$item->ImagenUrl = "";
 		}
@@ -128,11 +148,27 @@ class Articulos extends MY_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-
 			$uso = $this->input->post("uso");
-			$res=$this->Articulo_model->mostrarArticulos($uso);
-			$res=$res->result_array();
-			echo json_encode($res);
+			$res = $this->Articulo_model->mostrarArticulos($uso);
+			$articulos = $res->result_array();
+			
+			// Agregar URL completa para todas las imágenes
+			$cdnUrl = $this->config->item('spaces_cdn_url', 'storage');
+			foreach ($articulos as $key => $articulo) {
+				// Si existe ImagenUrl, usar esa para la URL completa
+				if (!empty($articulo['ImagenUrl'])) {
+					$articulos[$key]['ImagenUrlCompleta'] = $cdnUrl . $articulo['ImagenUrl'];
+				} 
+				// Si no hay ImagenUrl pero hay Imagen (caso legacy), usar ruta local
+				else if (!empty($articulo['Imagen'])) {
+					// Mantener compatibilidad con imágenes antiguas
+					$articulos[$key]['ImagenUrlCompleta'] = base_url('assets/img_articulos/' . $articulo['Imagen']);
+				} else {
+					$articulos[$key]['ImagenUrlCompleta'] = '';
+				}
+			}
+			
+			echo json_encode($articulos);
 		}
 		else
 		{
@@ -155,27 +191,52 @@ class Articulos extends MY_Controller
 		}
 	}
 	/**
-	 * Sube una imagen del artículo a DigitalOcean Spaces
+	 * Obtiene la ruta de la imagen para un artículo
 	 * 
-	 * @param int $id ID del artículo
-	 * @param array $archivo_img Array $_FILES con la imagen
-	 * @return string Nombre del archivo subido o cadena vacía si no hay imagen
+	 * @param string $imagenUrl URL relativa de la imagen
+	 * @return string URL completa de la imagen o cadena vacía si no hay imagen
 	 */
-	private function subir_imagen($id, $archivo_img)
+	private function obtenerUrlImagen($imagenUrl)
 	{
-		if(empty($archivo_img['imagenes']['name'])) {
+		if(empty($imagenUrl)) {
 			return "";
 		}
 		
-		// Usar la biblioteca FileStorage para subir el archivo
-		$result = $this->filestorage->uploadToSpaces('articulos', $archivo_img, 'imagenes');
+		// Cargar la configuración para obtener la URL base del CDN
+		$this->config->load('storage', TRUE);
+		$cdnUrl = $this->config->item('spaces_cdn_url', 'storage');
 		
-		if($result['success']) {
-			// Devolvemos solo el nombre del archivo, sin la ruta
-			return pathinfo($result['path'], PATHINFO_BASENAME);
+		return $cdnUrl . $imagenUrl;
+	}
+	/**
+	 * Obtiene los detalles de un artículo con URLs completas para imágenes
+	 * 
+	 * @param int $id ID del artículo
+	 * @return objeto Artículo con información completa
+	 */
+	public function getArticuloDetails()
+	{
+		if($this->input->is_ajax_request())
+        {
+			$id = $this->input->post("id");
+			$articulo = $this->Articulo_model->getArticuloById($id);
+			
+			// Convertir a array para manipular
+			$articuloArray = (array)$articulo;
+			
+			// Agregar URL completa de la imagen si existe
+			if (!empty($articuloArray['ImagenUrl'])) {
+				$cdnUrl = $this->config->item('spaces_cdn_url', 'storage');
+				$articuloArray['ImagenUrlCompleta'] = $cdnUrl . $articuloArray['ImagenUrl'];
+			} else {
+				$articuloArray['ImagenUrlCompleta'] = '';
+			}
+			
+			echo json_encode($articuloArray);
 		}
-		
-		log_message('error', 'Error al subir imagen de artículo: ' . $result['message']);
-		return "";
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
 	}
 }

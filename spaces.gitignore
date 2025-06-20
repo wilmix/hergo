@@ -1,0 +1,8 @@
+# No incluir el archivo con credenciales reales
+application/config/storage_credentials.php
+
+# Archivos migrados
+/assets/img_articulos/*
+!/assets/img_articulos/ninguno.png
+/assets/img_clientes/*
+!/assets/img_clientes/ninguno.png

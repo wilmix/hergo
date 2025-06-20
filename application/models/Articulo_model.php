@@ -129,4 +129,21 @@ class Articulo_model extends CI_Model
 		$query = $this->db->query($sql);	
 		return $query->row();
 	}
+	/**
+	 * Obtiene un artículo por su ID
+	 * 
+	 * Versión simplificada que devuelve solo los campos básicos del artículo
+	 * 
+	 * @param int $id ID del artículo
+	 * @return object Datos del artículo
+	 */
+	public function getById($id)
+	{
+		$this->db->select('idArticulos, Imagen, ImagenUrl');
+		$this->db->from('articulos');
+		$this->db->where('idArticulos', $id);
+		$query = $this->db->get();
+		
+		return $query->row();
+	}
 }
