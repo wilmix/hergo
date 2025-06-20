@@ -6,18 +6,24 @@
  * migrar todas las imágenes desde el almacenamiento local a DigitalOcean Spaces.
  * 
  * Uso desde la raíz del proyecto: 
- *   php scripts/migrate_images.php [módulo] [tamaño_lote] [grupo_bd] [debug]
+ *   php scripts/migrate_images.php [módulo] [tamaño_lote] [grupo_bd] [opciones]
  * 
  * Ejemplos:
  *   php scripts/migrate_images.php articulos 50
  *   php scripts/migrate_images.php articulos 20 production
  *   php scripts/migrate_images.php clientes 30 hergo debug
+ *   php scripts/migrate_images.php articulos 50 default force
+ *   php scripts/migrate_images.php articulos 10 default debug force test
  * 
  * Parámetros:
  *   [módulo]      - El módulo cuyos archivos deseas migrar (default: articulos)
  *   [tamaño_lote] - Número de imágenes a procesar por lote (default: 50)
  *   [grupo_bd]    - Grupo de conexión a usar en database.php (default: local)
- *   [debug]       - Activar modo depuración, usar "debug" (opcional)
+ * 
+ * Opciones:
+ *   debug  - Activar modo depuración con información detallada
+ *   force  - Forzar la migración incluso si ya hay una URL (sobrescribe)
+ *   test   - Modo prueba (no realiza cambios reales)
  * 
  * Requisitos:
  *   - PHP con extensiones: mysqli, curl, fileinfo
@@ -50,7 +56,11 @@ require_once $projectRoot . '/vendor/autoload.php';
 $modulo = isset($argv[1]) ? $argv[1] : 'articulos';
 $batchSize = isset($argv[2]) ? (int)$argv[2] : 50;
 $dbGroup = isset($argv[3]) ? $argv[3] : 'local';
+
+// Opciones
 $debug = in_array('debug', $argv);
+$force = in_array('force', $argv);
+$test = in_array('test', $argv);
 
 // Cargar configuraciones usando rutas absolutas
 require_once $projectRoot . '/application/config/database.php';
@@ -115,9 +125,7 @@ try {
         $db[$dbGroup]['password'], 
         $db[$dbGroup]['database'],
         $port
-    );
-
-    if ($mysqli->connect_error) {
+    );    if ($mysqli->connect_error) {
         echo "Error con mysqli: " . $mysqli->connect_error . "\n";
         echo "Intentando conexión alternativa con PDO...\n";        
         // Alternativa: usar PDO para la conexión
@@ -228,6 +236,29 @@ switch ($modulo) {    case 'articulos':
 // Verificar existencia de directorios y tabla
 if (!is_dir($localDir)) {
     die("Error: Directorio local '$localDir' no encontrado.\n");
+} else if ($debug) {
+    echo "Directorio local encontrado: $localDir\n";
+    // Lista algunos archivos del directorio para verificar
+    $files = @scandir($localDir);
+    if ($files) {
+        $imageCount = 0;
+        $sampleFiles = [];
+        foreach ($files as $file) {
+            if ($file != '.' && $file != '..' && is_file($localDir . $file)) {
+                $imageCount++;
+                if (count($sampleFiles) < 5) {
+                    $sampleFiles[] = $file;
+                }
+            }
+        }
+        echo "Encontrados $imageCount archivos en el directorio local.\n";
+        if (!empty($sampleFiles)) {
+            echo "Ejemplos de archivos: " . implode(', ', $sampleFiles) . "\n";
+        }
+    } else {
+        echo "No se pudo leer el contenido del directorio. Verificar permisos.\n";
+    }
+    echo "\n";
 }
 
 // Verificar si la columna URL existe, si no, crearla
@@ -236,6 +267,26 @@ if ($result->num_rows === 0) {
     echo "La columna '$imageUrlColumn' no existe. Creándola...\n";
     $mysqli->query("ALTER TABLE `$tableName` ADD COLUMN `$imageUrlColumn` VARCHAR(255) NULL AFTER `$imageColumn`");
     echo "Columna creada.\n";
+} else if ($debug) {
+    echo "La columna '$imageUrlColumn' existe en la tabla.\n\n";
+    
+    // Mostrar algunos ejemplos de registros que deberían ser migrados
+    $sampleSql = "SELECT `$idColumn`, `$imageColumn` FROM `$tableName` 
+                  WHERE `$imageColumn` IS NOT NULL AND `$imageColumn` != '' 
+                  AND (`$imageUrlColumn` IS NULL OR `$imageUrlColumn` = '')
+                  LIMIT 5";
+    $sampleResult = $mysqli->query($sampleSql);
+    
+    if ($sampleResult->num_rows > 0) {
+        echo "Ejemplos de registros que serán migrados:\n";
+        echo "ID | Nombre de Archivo | ¿Existe?\n";
+        echo "------------------------------\n";
+        while ($row = $sampleResult->fetch_assoc()) {
+            $fileExists = file_exists($localDir . $row[$imageColumn]) ? "Sí" : "No";
+            echo "{$row[$idColumn]} | {$row[$imageColumn]} | $fileExists\n";
+        }
+        echo "\n";
+    }
 }
 
 // Inicializar cliente S3
@@ -249,26 +300,123 @@ try {
         throw new Exception("No se encontraron credenciales para DigitalOcean Spaces");
     }
     
+    // Verificar que la configuración tenga todos los campos necesarios
+    $requiredFields = ['version', 'region', 'endpoint'];
+    $missingFields = [];
+    
+    foreach ($requiredFields as $field) {
+        if (!isset($credentials[$field])) {
+            $missingFields[] = $field;
+        }
+    }
+    
+    // Verificar credenciales
+    if (!isset($credentials['credentials']['key']) || !isset($credentials['credentials']['secret'])) {
+        $missingFields[] = 'credentials.key y/o credentials.secret';
+    }
+    
+    if (!empty($missingFields)) {
+        throw new Exception("Faltan campos requeridos en la configuración: " . implode(', ', $missingFields));
+    }
+    
     echo "Inicializando cliente S3...\n";
+    
+    if ($debug) {
+        echo "Configuración S3:\n";
+        echo "- Region: " . $credentials['region'] . "\n";
+        echo "- Endpoint: " . $credentials['endpoint'] . "\n";
+        echo "- Version: " . $credentials['version'] . "\n";
+        echo "- Key: " . substr($credentials['credentials']['key'], 0, 4) . "..." . "\n";
+    }
+    
     $s3Client = new Aws\S3\S3Client($credentials);
     $bucket = $config['spaces_bucket'] ?? 'hergo-space';
+    
+    // Verificar que el bucket existe y es accesible
+    if ($debug) {
+        try {
+            $s3Client->headBucket(['Bucket' => $bucket]);
+            echo "Bucket '$bucket' verificado - OK\n";
+        } catch (Exception $e) {
+            echo "ADVERTENCIA: No se pudo verificar el bucket '$bucket'. El error fue: " . $e->getMessage() . "\n";
+        }
+    }
+    
     echo "Cliente S3 inicializado correctamente. Bucket: $bucket\n\n";
 } catch (Exception $e) {
     die("Error al inicializar cliente S3: " . $e->getMessage() . "\n" .
         "Verifica que las credenciales estén correctamente configuradas en storage.php o en las variables de entorno.\n");
 }
 
-// Consultar registros con imágenes sin URL
-$sql = "SELECT `$idColumn`, `$imageColumn` FROM `$tableName` 
-        WHERE `$imageColumn` IS NOT NULL AND `$imageColumn` != '' 
-        AND (`$imageUrlColumn` IS NULL OR `$imageUrlColumn` = '')
-        LIMIT $batchSize";
+// Consultar registros con imágenes para migrar
+if ($force) {
+    // Con force, migra todas las imágenes aunque ya tengan URL
+    $sql = "SELECT `$idColumn`, `$imageColumn`, `$imageUrlColumn` FROM `$tableName` 
+            WHERE `$imageColumn` IS NOT NULL AND `$imageColumn` != '' 
+            LIMIT $batchSize";
+    echo "MODO FORCE ACTIVADO: Se migrarán todas las imágenes, incluso las que ya tengan URL.\n\n";
+} else {
+    // Sin force, solo migra imágenes sin URL
+    $sql = "SELECT `$idColumn`, `$imageColumn`, `$imageUrlColumn` FROM `$tableName` 
+            WHERE `$imageColumn` IS NOT NULL AND `$imageColumn` != '' 
+            AND (`$imageUrlColumn` IS NULL OR `$imageUrlColumn` = '')
+            LIMIT $batchSize";
+}
+
+if ($test) {
+    echo "MODO TEST ACTIVADO: No se realizarán cambios reales en la base de datos ni en Spaces.\n\n";
+}
+
+if ($debug) {
+    echo "SQL de consulta: $sql\n\n";
+    
+    // Contar total de imágenes en la tabla
+    $countTotalSql = "SELECT COUNT(*) as total FROM `$tableName` WHERE `$imageColumn` IS NOT NULL AND `$imageColumn` != ''";
+    $countTotalResult = $mysqli->query($countTotalSql);
+    $totalImages = $countTotalResult->fetch_assoc()['total'];
+    
+    // Contar imágenes ya migradas
+    $countMigratedSql = "SELECT COUNT(*) as migrated FROM `$tableName` 
+                         WHERE `$imageColumn` IS NOT NULL AND `$imageColumn` != '' 
+                         AND `$imageUrlColumn` IS NOT NULL AND `$imageUrlColumn` != ''";
+    $countMigratedResult = $mysqli->query($countMigratedSql);
+    $migratedImages = $countMigratedResult->fetch_assoc()['migrated'];
+    
+    echo "Estadísticas de imágenes:\n";
+    echo "- Total de registros con imagen: $totalImages\n";
+    echo "- Registros ya migrados: $migratedImages\n";
+    echo "- Registros pendientes de migrar: " . ($totalImages - $migratedImages) . "\n\n";
+}
 
 $result = $mysqli->query($sql);
 $totalRegistros = $result->num_rows;
 
 if ($totalRegistros === 0) {
-    echo "No hay imágenes por migrar.\n";
+    echo "No hay imágenes por migrar en este lote.\n";
+    
+    // Verificar si la tabla tiene imágenes en absoluto
+    $checkImagesSql = "SELECT COUNT(*) as has_images FROM `$tableName` WHERE `$imageColumn` IS NOT NULL AND `$imageColumn` != ''";
+    $checkImagesResult = $mysqli->query($checkImagesSql);
+    $hasImages = $checkImagesResult->fetch_assoc()['has_images'];
+    
+    if ($hasImages === '0') {
+        echo "La tabla $tableName no contiene registros con imágenes.\n";
+    } else {
+        // Verificar si la columna URL existe y tiene valores
+        $checkUrlColumnSql = "SELECT COUNT(*) as has_url FROM `$tableName` 
+                             WHERE `$imageColumn` IS NOT NULL AND `$imageColumn` != '' 
+                             AND `$imageUrlColumn` IS NOT NULL AND `$imageUrlColumn` != ''";
+        $checkUrlColumnResult = $mysqli->query($checkUrlColumnSql);
+        $hasUrlValues = $checkUrlColumnResult->fetch_assoc()['has_url'];
+        
+        if ($hasUrlValues > 0) {
+            echo "Parece que las imágenes ya han sido migradas. $hasUrlValues registros tienen valores en la columna $imageUrlColumn.\n";
+        } else {
+            echo "La tabla tiene imágenes pero ninguna cumple con los criterios para migración.\n";
+            echo "Verifique que la columna $imageUrlColumn existe y está configurada correctamente.\n";
+        }
+    }
+    
     exit(0);
 }
 
@@ -294,11 +442,21 @@ function createSlug($string) {
 // Procesar registros
 $migrados = 0;
 $errores = 0;
+$skipped = 0;
 
 while ($row = $result->fetch_assoc()) {
     $id = $row[$idColumn];
     $filename = $row[$imageColumn];
+    $existingUrl = isset($row[$imageUrlColumn]) ? $row[$imageUrlColumn] : null;
     $localPath = $localDir . $filename;
+    
+    if ($existingUrl && !$force) {
+        if ($debug) {
+            echo "Saltando ID $id, ya tiene URL: $existingUrl\n";
+        }
+        $skipped++;
+        continue;
+    }
     
     echo "Procesando ID $id, archivo: $filename... ";
     
@@ -319,23 +477,29 @@ while ($row = $result->fetch_assoc()) {
         $contentType = finfo_file($finfo, $localPath);
         finfo_close($finfo);
         
-        // Subir a Spaces
-        $s3Client->putObject([
-            'Bucket' => $bucket,
-            'Key' => $spacesPath,
-            'SourceFile' => $localPath,
-            'ACL' => 'public-read',
-            'ContentType' => $contentType
-        ]);
-        
-        // Actualizar base de datos
-        $stmt = $mysqli->prepare("UPDATE `$tableName` SET `$imageUrlColumn` = ? WHERE `$idColumn` = ?");
-        $stmt->bind_param("si", $spacesPath, $id);
-        $stmt->execute();
-        $stmt->close();
-        
-        echo "OK\n";
-        $migrados++;
+        if ($test) {
+            // En modo test, simular pero no ejecutar
+            echo "TEST: Simularía subir '$localPath' a '$spacesPath' con tipo '$contentType'... OK\n";
+            $migrados++;
+        } else {
+            // Subir a Spaces
+            $s3Client->putObject([
+                'Bucket' => $bucket,
+                'Key' => $spacesPath,
+                'SourceFile' => $localPath,
+                'ACL' => 'public-read',
+                'ContentType' => $contentType
+            ]);
+            
+            // Actualizar base de datos
+            $stmt = $mysqli->prepare("UPDATE `$tableName` SET `$imageUrlColumn` = ? WHERE `$idColumn` = ?");
+            $stmt->bind_param("si", $spacesPath, $id);
+            $stmt->execute();
+            $stmt->close();
+            
+            echo "OK\n";
+            $migrados++;
+        }
     } catch (Exception $e) {
         echo "ERROR: " . $e->getMessage() . "\n";
         $errores++;
@@ -344,13 +508,16 @@ while ($row = $result->fetch_assoc()) {
 
 // Resumen
 echo "\n=== Resumen de migración ===\n";
-echo "Total procesados: $totalRegistros\n";
+echo "Total encontrados: $totalRegistros\n";
 echo "Éxitos: $migrados\n";
 echo "Errores: $errores\n";
+echo "Saltados: $skipped\n";
 
-if ($migrados > 0) {
+if ($test) {
+    echo "\nESTE FUE UN MODO DE PRUEBA - No se realizaron cambios reales.\n";
+} else if ($migrados > 0) {
     echo "\nLas imágenes se han migrado con éxito a DigitalOcean Spaces.\n";
-    echo "Para ver las imágenes migradas: " . $config['spaces_cdn_url'] . $spacesDir . "\n";
+    echo "Para ver las imágenes migradas: " . (isset($config['spaces_cdn_url']) ? $config['spaces_cdn_url'] . $spacesDir : "https://$bucket.{$credentials['region']}.digitaloceanspaces.com/$spacesDir") . "\n";
 }
 
 // Si hay más registros por procesar
