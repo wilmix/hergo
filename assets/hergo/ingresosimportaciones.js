@@ -17,6 +17,17 @@ $(document).ready(function(){
     const existingImage = $('#img_url').val();
     FileUtils.setupFileInput('#img_route', {}, existingImage);
     FileUtils.handleFileClear('#img_route', '#img_delete');
+
+    // Set flag when image is cleared by clicking the 'remove' button
+    $('#img_route').on('fileclear', function(event) {
+        $('#imagenEliminada').val('1');
+    });
+
+    // Reset flag when a new image is selected
+    $('#img_route').on('change', function(event) {
+        $('#imagenEliminada').val('0');
+    });
+
     tipomov = $("#tipomov_imp2").val()
     console.log(tipomov);
     if (tipomov == 5) {

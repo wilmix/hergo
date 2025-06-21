@@ -277,6 +277,7 @@ if ($cont) {
                 <div class="form-group">
                   <label for="img_route">Imagen de comprobante:</label>
                   <input id="img_route" name="img_route" type="file" accept="image/*">
+                  <input type="hidden" id="imagenEliminada" name="imagenEliminada" value="0">
                 </div>
               </div>
             </div>
