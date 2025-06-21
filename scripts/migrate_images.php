@@ -247,6 +247,14 @@ switch ($modulo) {    case 'articulos':
         $localDir = $projectRoot . '/assets/img_ingresos/';
         $spacesDir = 'hg/ingresos/';
         break;
+    case 'pagos':
+        $tableName = 'pago';
+        $idColumn = 'idPago';
+        $imageColumn = 'img_route';
+        $imageUrlColumn = 'img_url';
+        $localDir = $projectRoot . '/assets/img_pagos/';
+        $spacesDir = 'hg/pagos/';
+        break;
     // Agregar más módulos aquí
     default:
         die("Error: Módulo '$modulo' no soportado.\n");
