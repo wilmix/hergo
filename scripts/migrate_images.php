@@ -14,6 +14,7 @@
  *   php scripts/migrate_images.php clientes 30 hergo debug
  *   php scripts/migrate_images.php articulos 50 default force
  *   php scripts/migrate_images.php articulos 10 default debug force test
+ *   php scripts/migrate_images.php articulos 50 default clean debug
  * 
  * Parámetros:
  *   [módulo]      - El módulo cuyos archivos deseas migrar (default: articulos)
@@ -24,6 +25,15 @@
  *   debug  - Activar modo depuración con información detallada
  *   force  - Forzar la migración incluso si ya hay una URL (sobrescribe)
  *   test   - Modo prueba (no realiza cambios reales)
+ *   clean  - Limpiar los datos de URL existentes para empezar de nuevo
+ * 
+ * Solución de problemas:
+ *   1. Si no aparecen imágenes para migrar pero no están en Spaces:
+ *      - Use 'clean' para restablecer las URLs y volver a migrar
+ *      - Use 'debug' para ver detalles y diagnosticar problemas
+ *   2. Si hay error de bucket:
+ *      - Verifique que el nombre del bucket en storage.php sea correcto
+ *      - Verifique que las credenciales en storage_credentials.php sean válidas
  * 
  * Requisitos:
  *   - PHP con extensiones: mysqli, curl, fileinfo
@@ -61,6 +71,7 @@ $dbGroup = isset($argv[3]) ? $argv[3] : 'local';
 $debug = in_array('debug', $argv);
 $force = in_array('force', $argv);
 $test = in_array('test', $argv);
+$clean = in_array('clean', $argv); // Para limpiar los datos incorrectos de URL
 
 // Cargar configuraciones usando rutas absolutas
 require_once $projectRoot . '/application/config/database.php';
@@ -268,7 +279,19 @@ if ($result->num_rows === 0) {
     $mysqli->query("ALTER TABLE `$tableName` ADD COLUMN `$imageUrlColumn` VARCHAR(255) NULL AFTER `$imageColumn`");
     echo "Columna creada.\n";
 } else if ($debug) {
-    echo "La columna '$imageUrlColumn' existe en la tabla.\n\n";
+    echo "La columna '$imageUrlColumn' existe en la tabla.\n";
+    
+    // Si se especificó la opción clean, resetear los valores de ImagenUrl
+    if ($clean) {
+        if ($test) {
+            echo "Modo TEST - CLEAN: Se simularía restablecer los valores de la columna $imageUrlColumn a NULL\n";
+        } else {
+            echo "Restableciendo los valores de la columna $imageUrlColumn a NULL...\n";
+            $resetQuery = "UPDATE `$tableName` SET `$imageUrlColumn` = NULL WHERE 1";
+            $resetResult = $mysqli->query($resetQuery);
+            echo "¡Columna restablecida! Ahora se pueden migrar nuevamente todas las imágenes.\n";
+        }
+    }
     
     // Mostrar algunos ejemplos de registros que deberían ser migrados
     $sampleSql = "SELECT `$idColumn`, `$imageColumn` FROM `$tableName` 
@@ -278,7 +301,7 @@ if ($result->num_rows === 0) {
     $sampleResult = $mysqli->query($sampleSql);
     
     if ($sampleResult->num_rows > 0) {
-        echo "Ejemplos de registros que serán migrados:\n";
+        echo "\nEjemplos de registros que serán migrados:\n";
         echo "ID | Nombre de Archivo | ¿Existe?\n";
         echo "------------------------------\n";
         while ($row = $sampleResult->fetch_assoc()) {
@@ -286,6 +309,8 @@ if ($result->num_rows === 0) {
             echo "{$row[$idColumn]} | {$row[$imageColumn]} | $fileExists\n";
         }
         echo "\n";
+    } else {
+        echo "\nNo hay ejemplos de registros para migrar (sin URL asignada).\n\n";
     }
 }
 
@@ -327,10 +352,38 @@ try {
         echo "- Endpoint: " . $credentials['endpoint'] . "\n";
         echo "- Version: " . $credentials['version'] . "\n";
         echo "- Key: " . substr($credentials['credentials']['key'], 0, 4) . "..." . "\n";
+        
+        // Verificar si estamos usando variables de entorno
+        echo "- Variables de entorno:\n";
+        echo "  DO_SPACES_KEY: " . (getenv('DO_SPACES_KEY') ? "Definida" : "No definida") . "\n";
+        echo "  DO_SPACES_SECRET: " . (getenv('DO_SPACES_SECRET') ? "Definida" : "No definida") . "\n";
+        
+        // Verificar el contenido efectivo de key y secret
+        if (empty($credentials['credentials']['key']) || $credentials['credentials']['key'] === '') {
+            echo "¡ADVERTENCIA! La clave de acceso (key) está vacía\n";
+        }
+        
+        if (empty($credentials['credentials']['secret']) || $credentials['credentials']['secret'] === '') {
+            echo "¡ADVERTENCIA! La clave secreta (secret) está vacía\n";
+        }
     }
     
-    $s3Client = new Aws\S3\S3Client($credentials);
+    // Configurar el bucket
     $bucket = $config['spaces_bucket'] ?? 'hergo-space';
+    
+    // Ajustar el bucket para el entorno de producción si es necesario
+    if ($bucket === 'hergo-space') {
+        // Esta es la versión correcta del nombre del bucket
+        $alternativeBucketNames = ['hergo.space', 'hergospace', 'hergo-app-space'];
+        
+        if ($debug) {
+            echo "- Bucket a usar: $bucket\n";
+            echo "- Buckets alternativos: " . implode(', ', $alternativeBucketNames) . "\n";
+        }
+    }
+    
+    // Crear el cliente S3
+    $s3Client = new Aws\S3\S3Client($credentials);
     
     // Verificar que el bucket existe y es accesible
     if ($debug) {
@@ -339,10 +392,34 @@ try {
             echo "Bucket '$bucket' verificado - OK\n";
         } catch (Exception $e) {
             echo "ADVERTENCIA: No se pudo verificar el bucket '$bucket'. El error fue: " . $e->getMessage() . "\n";
+            
+            // Intentar listar todos los buckets disponibles
+            echo "Intentando listar los buckets disponibles...\n";
+            try {
+                $result = $s3Client->listBuckets();
+                $buckets = $result->get('Buckets');
+                if (!empty($buckets)) {
+                    echo "Buckets disponibles:\n";
+                    foreach ($buckets as $b) {
+                        echo "- " . $b['Name'] . "\n";
+                    }
+                    
+                    // Si encontramos un bucket, usemos el primero
+                    if (count($buckets) > 0) {
+                        $firstBucket = $buckets[0]['Name'];
+                        echo "¡CAMBIANDO! Usando el primer bucket disponible: $firstBucket\n";
+                        $bucket = $firstBucket;
+                    }
+                } else {
+                    echo "No se encontraron buckets disponibles.\n";
+                }
+            } catch (Exception $e2) {
+                echo "No se pudo listar buckets: " . $e2->getMessage() . "\n";
+            }
         }
     }
     
-    echo "Cliente S3 inicializado correctamente. Bucket: $bucket\n\n";
+    echo "Cliente S3 inicializado. Bucket a usar: $bucket\n\n";
 } catch (Exception $e) {
     die("Error al inicializar cliente S3: " . $e->getMessage() . "\n" .
         "Verifica que las credenciales estén correctamente configuradas en storage.php o en las variables de entorno.\n");
@@ -385,7 +462,27 @@ if ($debug) {
     echo "Estadísticas de imágenes:\n";
     echo "- Total de registros con imagen: $totalImages\n";
     echo "- Registros ya migrados: $migratedImages\n";
-    echo "- Registros pendientes de migrar: " . ($totalImages - $migratedImages) . "\n\n";
+    echo "- Registros pendientes de migrar: " . ($totalImages - $migratedImages) . "\n";
+    
+    // Verificar el formato de las URLs almacenadas
+    if ($migratedImages > 0) {
+        $sampleUrlsSql = "SELECT `$idColumn`, `$imageUrlColumn` FROM `$tableName` 
+                          WHERE `$imageUrlColumn` IS NOT NULL AND `$imageUrlColumn` != '' 
+                          LIMIT 5";
+        $sampleUrlsResult = $mysqli->query($sampleUrlsSql);
+        
+        echo "\nEjemplos de URLs ya migradas:\n";
+        while ($row = $sampleUrlsResult->fetch_assoc()) {
+            echo "- ID {$row[$idColumn]}: {$row[$imageUrlColumn]}\n";
+            
+            // Verificar si la URL comienza con el formato correcto
+            $url = $row[$imageUrlColumn];
+            if (strpos($url, 'hg/articulos/') !== 0) {
+                echo "  ¡ADVERTENCIA! El formato de esta URL no comienza con 'hg/articulos/'\n";
+            }
+        }
+        echo "\n";
+    }
 }
 
 $result = $mysqli->query($sql);
@@ -513,11 +610,23 @@ echo "Éxitos: $migrados\n";
 echo "Errores: $errores\n";
 echo "Saltados: $skipped\n";
 
+// Construir URLs para acceso a las imágenes
+$cdnUrl = isset($config['spaces_cdn_url']) ? $config['spaces_cdn_url'] : null;
+$spacesDirectUrl = "https://$bucket.{$credentials['region']}.digitaloceanspaces.com/";
+
 if ($test) {
     echo "\nESTE FUE UN MODO DE PRUEBA - No se realizaron cambios reales.\n";
+    
+    if ($debug) {
+        echo "\nURLs de acceso para las imágenes:\n";
+        echo "1. URL de CDN (si configurada): " . ($cdnUrl ? $cdnUrl . $spacesDir : "No configurada") . "\n";
+        echo "2. URL directa de Spaces: $spacesDirectUrl" . $spacesDir . "\n";
+    }
 } else if ($migrados > 0) {
     echo "\nLas imágenes se han migrado con éxito a DigitalOcean Spaces.\n";
-    echo "Para ver las imágenes migradas: " . (isset($config['spaces_cdn_url']) ? $config['spaces_cdn_url'] . $spacesDir : "https://$bucket.{$credentials['region']}.digitaloceanspaces.com/$spacesDir") . "\n";
+    echo "URLs para acceder a las imágenes:\n";
+    echo "- URL de CDN (recomendada): " . ($cdnUrl ? $cdnUrl . $spacesDir : "No configurada") . "\n";
+    echo "- URL directa de Spaces: $spacesDirectUrl" . $spacesDir . "\n";
 }
 
 // Si hay más registros por procesar
