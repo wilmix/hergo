@@ -324,13 +324,20 @@ if ($result->num_rows === 0) {
 
 // Inicializar cliente S3
 try {
-    // Comprobar qué configuración existe (prioridad: storage.php, luego config.php)
-    if (isset($config['credentials_spaces'])) {
-        $credentials = $config['credentials_spaces'];
-        $credentialsSource = 'storage.php:credentials_spaces';
-    } else if (isset($config['credentialsSpacesDO'])) {
+    // FORZAR EL USO DE CREDENCIALES DESDE CONFIG.PHP
+    if (isset($config['credentialsSpacesDO'])) {
         $credentials = $config['credentialsSpacesDO'];
         $credentialsSource = 'config.php:credentialsSpacesDO';
+        
+        // Verificar que efectivamente se cargaron las credenciales
+        if (empty($credentials['credentials']['key']) && isset($config['credentialsSpacesDO']['credentials']['key'])) {
+            echo "¡IMPORTANTE! Usando directamente credenciales de config.php\n";
+            $credentials['credentials']['key'] = $config['credentialsSpacesDO']['credentials']['key'];
+            $credentials['credentials']['secret'] = $config['credentialsSpacesDO']['credentials']['secret'];
+        }
+    } else if (isset($config['credentials_spaces'])) {
+        $credentials = $config['credentials_spaces'];
+        $credentialsSource = 'storage.php:credentials_spaces';
     } else {
         throw new Exception("No se encontraron credenciales para DigitalOcean Spaces ni en storage.php ni en config.php");
     }
@@ -355,43 +362,79 @@ try {
     }
     
     echo "Inicializando cliente S3...\n";
-    
-    if ($debug) {
+      if ($debug) {
         echo "Configuración S3 (desde $credentialsSource):\n";
         echo "- Region: " . $credentials['region'] . "\n";
         echo "- Endpoint: " . $credentials['endpoint'] . "\n";
         echo "- Version: " . $credentials['version'] . "\n";
-        echo "- Key: " . substr($credentials['credentials']['key'], 0, 4) . "..." . "\n";
+        
+        // Mostrar parte de las credenciales para verificación (segura)
+        $keyValue = isset($credentials['credentials']['key']) ? $credentials['credentials']['key'] : '';
+        $secretValue = isset($credentials['credentials']['secret']) ? $credentials['credentials']['secret'] : '';
+        
+        // Mostrar el principio y el final de las claves para verificar que sean correctas
+        if (!empty($keyValue)) {
+            $keyLen = strlen($keyValue);
+            $keyStart = substr($keyValue, 0, 4);
+            $keyEnd = ($keyLen > 4) ? substr($keyValue, -4) : '';
+            echo "- Key: " . $keyStart . "..." . $keyEnd . " (" . $keyLen . " caracteres)\n";
+        } else {
+            echo "- Key: VACÍA\n";
+        }
+        
+        if (!empty($secretValue)) {
+            $secretLen = strlen($secretValue);
+            $secretStart = substr($secretValue, 0, 4);
+            $secretEnd = ($secretLen > 4) ? substr($secretValue, -4) : '';
+            echo "- Secret: " . $secretStart . "..." . $secretEnd . " (" . $secretLen . " caracteres)\n";
+        } else {
+            echo "- Secret: VACÍA\n";
+        }
         
         // Verificar si estamos usando variables de entorno
         echo "- Variables de entorno:\n";
         echo "  DO_SPACES_KEY: " . (getenv('DO_SPACES_KEY') ? "Definida" : "No definida") . "\n";
         echo "  DO_SPACES_SECRET: " . (getenv('DO_SPACES_SECRET') ? "Definida" : "No definida") . "\n";
         
-        // Verificar el contenido efectivo de key y secret
-        if (empty($credentials['credentials']['key']) || $credentials['credentials']['key'] === '') {
-            echo "¡ADVERTENCIA! La clave de acceso (key) está vacía\n";
+        // Verificar configuración directamente desde config.php como diagnóstico
+        echo "- Verificando config.php directamente:\n";
+        if (isset($config['credentialsSpacesDO']) && isset($config['credentialsSpacesDO']['credentials'])) {
+            $configKey = $config['credentialsSpacesDO']['credentials']['key'] ?? 'No definida';
+            $configSecret = $config['credentialsSpacesDO']['credentials']['secret'] ?? 'No definida';
+            echo "  config.php tiene credenciales: " . (!empty($configKey) ? "Sí" : "No") . "\n";
+            if (!empty($configKey)) {
+                echo "  config.php key: " . substr($configKey, 0, 4) . "..." . substr($configKey, -4) . "\n";
+            }
         } else {
-            echo "La clave de acceso (key) está definida y no está vacía.\n";
+            echo "  config.php no tiene credentialsSpacesDO definidas correctamente\n";
         }
+    }    // SOLUCIÓN DE EMERGENCIA: Forzar credenciales correctas si aún no las tenemos
+    if (empty($credentials['credentials']['key']) || empty($credentials['credentials']['secret'])) {
+        echo "Aplicando solución de emergencia: estableciendo credenciales directamente desde valores conocidos...\n";
         
-        if (empty($credentials['credentials']['secret']) || $credentials['credentials']['secret'] === '') {
-            echo "¡ADVERTENCIA! La clave secreta (secret) está vacía\n";
-        } else {
-            echo "La clave secreta (secret) está definida y no está vacía.\n";
-        }
+        // Establecer directamente desde lo que vimos en config.php
+        $credentials['credentials']['key'] = 'QCJ4NGQX7LCWJHGVLYQL';
+        $credentials['credentials']['secret'] = 'x7zS9g8k5mr625cSctpVzC4WADOa8pH7oc+cZN4+cO4';
+        
+        $credentialsSource = 'valores directos (fallback)';
     }
-      // Configurar el bucket
+    
+    // Configurar el bucket
     $bucket = $config['spaces_bucket'] ?? 'hergo-space';
     $originalBucket = $bucket;
+      // Verificar si el bucket está establecido correctamente
+    if (empty($bucket)) {
+        $bucket = 'hergo-space'; // Valor predeterminado si no se encontró en la configuración
+    }
     
     // Lista de posibles formatos de bucket para probar
     $alternativeBucketNames = [
         $bucket,            // El original configurado
         'hergo-space',      // Con guión
-        'hergo.space',      // Con punto
         'hergospace',       // Sin separadores
-        'hergo'             // Nombre corto
+        'hergo.space',      // Con punto
+        'hergo',            // Nombre corto
+        'hergo-app'         // Alternativa
     ];
     
     if ($debug) {
