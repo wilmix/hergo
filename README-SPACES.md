@@ -33,11 +33,11 @@ hergo-space (bucket)
 └── hg
     ├── articulos
     │   └── [imágenes de artículos]
-    ├── clientes
-    │   └── [imágenes de clientes]
+    ├── ingresos
+    │   └── [imágenes de facturas o comprobantes]
     ├── usuarios
     │   └── [imágenes de perfil]
-    ├── documentos
+    ├── pagos
     │   └── [archivos PDF, etc.]
     └── [otros módulos]
 ```

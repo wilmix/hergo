@@ -14,7 +14,9 @@ let moneda
 let tipomov 
 
 $(document).ready(function(){
-    fileImg()
+    const existingImage = $('#img_url').val();
+    FileUtils.setupFileInput('#img_route', {}, existingImage);
+    FileUtils.handleFileClear('#img_route', '#img_delete');
     tipomov = $("#tipomov_imp2").val()
     console.log(tipomov);
     if (tipomov == 5) {
@@ -268,15 +270,6 @@ $(document).on("click","#recuperarMovimiento",function(){
         $(".tipoDocumento").val('')
     }
 }) */
-function fileImg() {
-    $("#img_route").fileinput({
-        language: "es",
-        showUpload: false,
-        previewFileType: "image",
-        maxFileSize: 1024,
-        showPreview: false,
-    });
-}
 function cargandoSaldoCosto()
 {
     $(".cargandoCostoSaldo").css("display","");

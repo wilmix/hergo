@@ -1,5 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+/**
+ * @property Ingresos_model $Ingresos_model
+ * @property Egresos_model $Egresos_model
+ * @property FileStorage $filestorage
+ */
 class Ingresos extends MY_Controller
 {
 	
@@ -8,6 +13,8 @@ class Ingresos extends MY_Controller
 		parent::__construct();
 		$this->load->model("Ingresos_model");
 		$this->load->model("Egresos_model");
+		$this->load->library("FileStorage");
+		$this->load->config('storage', TRUE);
 	}
 	public function index()
 	{
@@ -23,6 +30,7 @@ class Ingresos extends MY_Controller
 	{
 		$this->accesoCheck(13);
 		$this->titles('Importaciones','Importaciones','Ingresos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/fileutils.js').'?'.rand();
 		$this->datos['foot_script'][]=base_url('assets/hergo/ingresosimportaciones.js') .'?'.rand();
 		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
 		$this->datos['tingreso']=$this->Ingresos_model->retornar_tablaMovimiento("+");
@@ -37,6 +45,7 @@ class Ingresos extends MY_Controller
 	{
 		$this->accesoCheck(12);
 		$this->titles('ComprasLocales','Compras Locales','Ingresos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/fileutils.js').'?'.rand();
 		$this->datos['foot_script'][]=base_url('assets/hergo/ingresosimportaciones.js') .'?'.rand();
 		
 		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
@@ -53,6 +62,7 @@ class Ingresos extends MY_Controller
 	{
 		$this->accesoCheck(14);
 		$this->titles('Reingresos','Reingresos','Ingresos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/fileutils.js').'?'.rand();
 		$this->datos['foot_script'][]=base_url('assets/hergo/ingresosimportaciones.js') .'?'.rand();
 		$this->datos['almacen']=$this->Ingresos_model->retornar_tabla("almacenes");
 		$this->datos['tingreso']=$this->Ingresos_model->retornar_tablaMovimiento("+");
@@ -69,6 +79,7 @@ class Ingresos extends MY_Controller
 
 		$this->accesoCheck(70);
 		$this->titles('ModificarIngresos','Modificar Ingresos','Ingresos');
+		$this->datos['foot_script'][]=base_url('assets/hergo/fileutils.js').'?'.rand();
 		$this->datos['foot_script'][]=base_url('assets/hergo/ingresosimportaciones.js') .'?'.rand();
 		
 		$this->datos['dcab']=$this->mostrarIngresosEdicion($id);
@@ -90,6 +101,53 @@ class Ingresos extends MY_Controller
 		
 		$this->setView('ingresos/importaciones/importaciones2');
 	}
+	private function _handleFacturaImage(&$ingreso, $id)
+	{
+		$imagenEliminada = $this->input->post('imagenEliminada');
+		$isUpdate = ($id > 0);
+		
+		// Caso 1: Se ha subido una nueva imagen
+		if (!empty($_FILES['img_route']['name'])) {
+			
+			// Usar la biblioteca FileStorage para subir el archivo
+			$result = $this->filestorage->uploadToSpaces('ingresos', $_FILES, 'img_route');
+			
+			if ($result['success']) {
+				// Para retrocompatibilidad, guardamos solo el nombre del archivo en img_route
+				$ingreso->img_route = pathinfo($result['path'], PATHINFO_BASENAME);
+				// Y la ruta completa relativa en img_url
+				$ingreso->img_url = $result['path'];
+			} else {
+				log_message('error', 'Error al subir imagen de ingreso: ' . $result['message']);
+			}
+		}
+		// Caso 2: Se ha eliminado la imagen existente
+		else if ($imagenEliminada == '1') {
+			// Si hay una actualización y tenemos una imagen anterior, eliminarla de Spaces
+			if ($isUpdate) {
+				$ingresoActual = $this->Ingresos_model->mostrarIngresos($id)->row();
+				if (!empty($ingresoActual->img_url)) {
+					$this->filestorage->deleteFromSpaces($ingresoActual->img_url);
+				}
+			}
+			
+			$ingreso->img_route = "";
+			$ingreso->img_url = "";
+		}
+		// Caso 3: No se ha cambiado la imagen
+		else {
+			if ($isUpdate) {
+				// En actualización, no incluimos estos campos para no modificarlos
+				if (property_exists($ingreso, 'img_route')) unset($ingreso->img_route);
+				if (property_exists($ingreso, 'img_url')) unset($ingreso->img_url);
+			} else {
+				// En creación, establecemos valores vacíos
+				$ingreso->img_route = "";
+				$ingreso->img_url = "";
+			}
+		}
+	}
+
 	public function mostrarIngresos()
 	{
 		if($this->input->is_ajax_request())
@@ -390,19 +448,6 @@ class Ingresos extends MY_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-			$config = [
-				"upload_path" => "./assets/img_ingresos/",
-				"allowed_types" => "png|jpg|jpeg"
-			];
-			$this->load->library("upload",$config);
-			if ($this->upload->do_upload('img_route')) {
-				$img = array("upload_data" => $this->upload->data());
-				$img_name = $img['upload_data']['file_name'];
-			}
-			else{
-				//echo $this->upload->display_errors();
-				$img_name = '';
-			}
 			$ingreso = new stdclass();
 			$ingreso->almacen = $this->security->xss_clean($this->input->post('almacen_imp'));
         	$ingreso->tipomov = $this->security->xss_clean($this->input->post('tipomov_imp'));
@@ -417,26 +462,21 @@ class Ingresos extends MY_Controller
 			$ingreso->tipoDoc = $this->security->xss_clean($this->input->post('tipoDoc'));
 			$ingreso->obs = strtoupper($this->input->post('obs_imp'));
 			$ingreso->flete = $this->security->xss_clean($this->input->post('flete'));
-			$ingreso->img_route = $img_name;
 			$ingreso->articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
-			
+
+			$this->_handleFacturaImage($ingreso, 0);
 
 			$tipocambio=$this->Ingresos_model->getTipoCambio($ingreso->fechamov);
 			$ingreso->tipoCambio=$tipocambio->tipocambio;
 
 			$ingreso->autor=$this->session->userdata('user_id');
 			$ingreso->fecha = date('Y-m-d H:i:s');
-			//$ingreso->fechaIngreso = $ingreso->fechamov;
 			$gestion= $this->Ingresos_model->getGestionActual()->gestionActual;
 
-			//$gestion= date("Y", strtotime($ingreso->fechamov));
 			$ingreso->gestion = $gestion;
 			$ingreso->nmov = $this->Ingresos_model->retornarNumMovimiento($ingreso->tipomov,$gestion,$ingreso->almacen);
 
-			//echo json_encode($ingreso);return;
-
 			$id = $this->Ingresos_model->storeIngreso($ingreso);
-
 
 			if($id)
         	{
@@ -486,24 +526,9 @@ class Ingresos extends MY_Controller
     {
 		if($this->input->is_ajax_request())
         {
-			$imgName = $this->input->post('img_name');
-			$config = [
-				"upload_path" => "./assets/img_ingresos/",
-				"allowed_types" => "png|jpg|jpeg"
-			];
-			$this->load->library("upload",$config);
-			if ($this->upload->do_upload('img_route')) {
-				$img = array("upload_data" => $this->upload->data());
-				$img_name = $img['upload_data']['file_name'];
-			}
-			else{
-				//echo $this->upload->display_errors();
-				$img_name = isset($imgName) ? $imgName : '';
-			}
-			$ingreso = new stdclass();
 			$idIngresos = $this->security->xss_clean($this->input->post('idingresoimportacion'));
+			$ingreso = new stdclass();
 			$ingreso->fechamov = $this->security->xss_clean($this->input->post('fechamov_imp'));
-			$ingreso->img_route = $img_name;
 			$ingreso->fechamov = date('Y-m-d',strtotime($ingreso->fechamov));
 			$ingreso->fechaIngreso = $this->input->post('fecha_kardex');
 			$ingreso->fechaIngreso = date('Y-m-d',strtotime($ingreso->fechaIngreso));
@@ -516,9 +541,9 @@ class Ingresos extends MY_Controller
 			$ingreso->estado = 0;
 			$ingreso->flete = $this->security->xss_clean($this->input->post('flete'));
 			$ingreso->articulos=json_decode($this->security->xss_clean($this->input->post('tabla')));
-			$ingreso->fechaIngreso = $this->security->xss_clean($this->input->post('fecha_kardex'));
-			$ingreso->fechaIngreso = date('Y-m-d',strtotime($ingreso->fechaIngreso));
 			
+			$this->_handleFacturaImage($ingreso, $idIngresos);
+
 			$gestionFechaIngreso = date("Y", strtotime($ingreso->fechamov)); 
 			$gestionUpdate = $this->Ingresos_model->gestionUpdate($idIngresos)->gestion; 
 
@@ -529,7 +554,6 @@ class Ingresos extends MY_Controller
 			$tipocambio=$this->Ingresos_model->getTipoCambio($ingreso->fechamov);
 			$ingreso->tipoCambio = $tipocambio->tipocambio;
 			$ingreso->autor=$this->session->userdata('user_id');
-			//$ingreso->fecha = date('Y-m-d H:i:s');
 
 			$id = $this->Ingresos_model->updateIngreso($idIngresos, $ingreso);
 			$id = intval($id);

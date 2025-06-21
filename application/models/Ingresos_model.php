@@ -1,4 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * @property FileStorage $filestorage
+ */
 class Ingresos_model extends CI_Model
 {
 	public function __construct()
@@ -57,6 +60,7 @@ class Ingresos_model extends CI_Model
                         i.anulado,
                         i.tipocambio,
                         tc.tipocambio valorTipoCambio,
+                        i.img_url,
                         SUM(id.total) / tc.tipoCambio totalsus,
                         t.sigla,
                         i.almacen idAlmacen,
@@ -107,6 +111,7 @@ class Ingresos_model extends CI_Model
                     i.nfact,
                     i.flete,
                     i.img_route,
+                    i.img_url,
                     SUM(id.total) total,
                     i.estado,
                     i.fecha,
@@ -140,11 +145,13 @@ class Ingresos_model extends CI_Model
                 LIMIT
                     1
             ";
-            
-
         }
         
 		$query=$this->db->query($sql);
+        $row = $query->row();
+
+
+
 		return $query;
 	}
     public function mostrarIngresosTraspasos($id=null,$ini=null,$fin=null,$alm="",$tin="")

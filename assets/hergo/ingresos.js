@@ -253,6 +253,22 @@ function mostrarTablaIngresosTraspaso(res) {
         ]
     });
 }
+function imageFormatter(value, row, index) {
+    let url = '';
+    const baseSpacesUrl = 'https://images.hergo.app/';
+
+    if (value && value.trim() !== '') {
+        url = baseSpacesUrl + value;
+    } else if (row.img_route && row.img_route.trim() !== '') {
+        url = base_url('assets/img_ingresos/' + row.img_route);
+    }
+
+    if (url) {
+        return `<a href="${url}" target="_blank"><img src="${url}" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;"></a>`;
+    }
+    return '';
+}
+
 function mostrarTablaIngresos(res) {
     almacen = $("#almacen_filtro").val()
     tipoIngreso = $("#tipo_filtro").val()
@@ -397,6 +413,13 @@ function mostrarTablaIngresos(res) {
                 sortable: true,
                 visible: false,
                 align: 'center',
+            },
+            {
+                field: "img_url",
+                title: "Imagen",
+                searchable:false,
+                align: 'center',
+                formatter: imageFormatter
             },
             {
                 field: "estado",
@@ -544,8 +567,7 @@ function verdetalle(fila) {
         mon: fila.moneda
     }
     retornarajax(base_url("index.php/Ingresos/mostrarDetalle"), datos, function (data) {
-        console.log( data.respuesta[0].img_route);
-        let url = data.respuesta[0].img_route
+        
         estado = validarresultado_ajax(data);
         if (estado) {
             var totaldoc = 0;
@@ -609,7 +631,8 @@ function verdetalle(fila) {
             $("#totaldocdetalle").val(totaldoc);
             $("#totalsisdetalle").val(totalsis);
             $("#titulo_modalIgresoDetalle").html(fila.tipomov);
-            url ? itemImage(url) : cleanItemImage()
+
+
 
 
             idTipoMov == 5 ? $("#tituloDetalleFac").html('') : $("#tituloDetalleFac").html(csFact);

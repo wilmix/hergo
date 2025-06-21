@@ -37,6 +37,8 @@ if ($cont) {
             <div>
               <input id="nmov" type="number" class="hidden" name="nmov" value="<?= ($cont) ? $dcab->n : ""  ?>" />
               <input id="img_name" type="text" class="hidden" name="img_name" value="<?= ($cont) ? $dcab->img_route : ""  ?>" />
+              <input id="img_url" type="hidden" name="img_url" value="<?= ($cont) ? $dcab->img_url : '' ?>">
+              <input id="img_delete" type="hidden" name="img_delete" value="0">
             </div>
             <!--PRIMERA FILA-->
             <div class="row">
