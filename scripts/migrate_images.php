@@ -241,7 +241,7 @@ switch ($modulo) {    case 'articulos':
         break;
     case 'ingresos':
         $tableName = 'ingresos';
-        $idColumn = 'idingreso';
+        $idColumn = 'idIngresos';
         $imageColumn = 'img_route';
         $imageUrlColumn = 'img_url';
         $localDir = $projectRoot . '/assets/img_ingresos/';
