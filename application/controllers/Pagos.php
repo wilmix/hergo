@@ -1,7 +1,14 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Pagos extends MY_Controller  /////**********nombre controlador
+class Pagos extends MY_Controller
 {
+	/**
+	 * @property Pagos_model $Pagos_model
+	 * @property Egresos_model $Egresos_model
+	 * @property Facturacion_model $Facturacion_model
+	 * @property Ingresos_model $Ingresos_model
+	 * @property FileStorage $filestorage
+	 */
 	
 	public function __construct()
 	{	
@@ -10,6 +17,8 @@ class Pagos extends MY_Controller  /////**********nombre controlador
 		$this->load->model("Egresos_model");
 		$this->load->model("Facturacion_model");
 		$this->load->model("Ingresos_model");
+		$this->load->library("FileStorage");
+		$this->load->config('storage', TRUE);
 	}
 	public function index()
 	{
@@ -39,7 +48,8 @@ class Pagos extends MY_Controller  /////**********nombre controlador
 	{
 		$this->accesoCheck(24);
 		$this->titles('RecibirPago','Recibir Pago','Pagos');
-		$this->datos['foot_script'][]=base_url('assets/hergo/recibirPagos.js') .'?'.rand();
+		$this->datos['foot_script'][]=base_url('assets/hergo/fileutils.js').'?'.time();
+		$this->datos['foot_script'][]=base_url('assets/hergo/recibirPagos.js') .'?'.time();
 		$this->datos['almacen']=$this->Pagos_model->retornar_tabla("almacenes");
 		$this->datos['tipoPago']=$this->Pagos_model->retornar_tabla("tipoPago");
 		$this->datos['bancos']=$this->Pagos_model->retornar_tabla("bancos");
@@ -50,9 +60,8 @@ class Pagos extends MY_Controller  /////**********nombre controlador
 	{
 		$this->accesoCheck(25);
 		$this->titles('EditarPago','Editar Pago','Pagos');
-		$this->datos['foot_script'][]=base_url('assets/hergo/recibirPagos.js') .'?'.rand();
-		//$this->datos['foot_script'][]=base_url('assets/hergo/editarPago.js') .'?'.rand();
-
+		$this->datos['foot_script'][]=base_url('assets/hergo/fileutils.js').'?'.time();
+		$this->datos['foot_script'][]=base_url('assets/hergo/recibirPagos.js') .'?'.time();
 		$this->datos['almacen']=$this->Pagos_model->retornar_tabla("almacenes");
 		$this->datos['tipoPago']=$this->Pagos_model->retornar_tabla("tipoPago");
 		$this->datos['bancos']=$this->Pagos_model->retornar_tabla("bancos");
@@ -130,7 +139,7 @@ class Pagos extends MY_Controller  /////**********nombre controlador
 			$numPago=$this->retornarNumPago($data->almacen, $gestion);
 			$pago = new stdclass();
 			$pago->almacen=$data->almacen;
-			$pago->img_route = $img_name;
+			$this->_handleComprobanteImage($pago, 0);
 			$pago->numPago=$numPago;
 			$pago->fechaPago=$data->fechaPago;
 			$pago->fechaPago = date('Y-m-d',strtotime($pago->fechaPago));
@@ -166,6 +175,51 @@ class Pagos extends MY_Controller  /////**********nombre controlador
 		else
 		{
 			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	private function _handleComprobanteImage(&$pago, $id)
+	{
+		$imagenEliminada = $this->input->post('imagenEliminada');
+		$isUpdate = ($id > 0);
+		
+		// Caso 1: Se ha subido una nueva imagen
+		if (!empty($_FILES['img_route']['name'])) {
+			// Usar la biblioteca FileStorage para subir el archivo
+			$result = $this->filestorage->uploadToSpaces('pagos', $_FILES, 'img_route');
+			
+			if ($result['success']) {
+				// Para retrocompatibilidad, guardamos solo el nombre del archivo en img_route
+				$pago->img_route = pathinfo($result['path'], PATHINFO_BASENAME);
+				// Y la ruta completa relativa en img_url
+				$pago->img_url = $result['path'];
+			} else {
+				log_message('error', 'Error al subir imagen de pago: ' . $result['message']);
+			}
+		}
+		// Caso 2: Se ha eliminado la imagen existente
+		else if ($imagenEliminada == '1') {
+			// Si hay una actualización y tenemos una imagen anterior, eliminarla de Spaces
+			if ($isUpdate) {
+				$pagoActual = $this->Pagos_model->retornarEdicion($id)->row();
+				if (!empty($pagoActual->img_url)) {
+					$this->filestorage->deleteFromSpaces($pagoActual->img_url);
+				}
+			}
+			
+			$pago->img_route = "";
+			$pago->img_url = "";
+		}
+		// Caso 3: No se ha cambiado la imagen
+		else {
+			if ($isUpdate) {
+				// En actualización, no incluimos estos campos para no modificarlos
+				if (property_exists($pago, 'img_route')) unset($pago->img_route);
+				if (property_exists($pago, 'img_url')) unset($pago->img_url);
+			} else {
+				// En creación, establecemos valores vacíos
+				$pago->img_route = "";
+				$pago->img_url = "";
+			}
 		}
 	}
 	public function validate() {
@@ -293,7 +347,7 @@ class Pagos extends MY_Controller  /////**********nombre controlador
 			$gestion = date('Y',strtotime($data->fechaPago));
 			
 			$pago = new stdclass();
-			$pago->img_route = $img_name; 
+			$this->_handleComprobanteImage($pago, $idPago);
 			$pago->fechaPago=$data->fechaPago;
 			$pago->fechaPago = date('Y-m-d',strtotime($pago->fechaPago));
 			$pago->moneda=$data->moneda;

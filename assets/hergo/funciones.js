@@ -433,8 +433,9 @@ function mantenerMenu() {
   let pathname = window.location.pathname;
   let dir = pathname.split("/")
   let menu = dir[dir.length - 1];
-  $("#masterMenu").find("." + menu).addClass("active").closest(".treeview").addClass("active");
-
+  if(menu) {
+    $("#masterMenu").find("[class*='" + menu + "']").addClass("active").closest(".treeview").addClass("active");
+  }
 }
 function numberDecimal(value, row, index) {
   num = Math.round(value * 100) / 100

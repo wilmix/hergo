@@ -1,4 +1,3 @@
-
 var iniciofecha=moment().subtract(0, 'year').startOf('year')
 var finfecha=moment().subtract(0, 'year').endOf('year')
 $(document).ready(function(){
@@ -240,19 +239,14 @@ function retornarTablaPagos()
 
     function mostrarimagen(value, row, index)
     {
-        let ruta=""
-        let imagen=""
-        if((value=="")||(value==null))
-        {
-            ruta=""
-            clase=""
-        }
-        else
-        {
-            clase="imagenminiatura"
-            ruta="assets/img_pagos/"+value
-            imagen = '<div class="contimg"><img src="'+base_url(ruta)+'" class="'+clase+'"></div>'
-            return [imagen].join('')
+        if (row.img_url) {
+            var baseUrl = window.storageBaseUrl || 'https://images.hergo.app/';
+            var fullUrl = baseUrl + row.img_url;
+            return '<a href="' + fullUrl + '" target="_blank"><img src="' + fullUrl + '" style="width: 40px; height: 40px; object-fit: cover;" class="img-rounded" alt="Comprobante"></a>';
+        } else if (value) {
+            return '<a href="<?php echo base_url(); ?>assets/img_pagos/' + value + '" target="_blank"><img src="<?php echo base_url(); ?>assets/img_pagos/' + value + '" style="width: 40px; height: 40px; object-fit: cover;" class="img-rounded" alt="Comprobante"></a>';
+        } else {
+            return '<span class="label label-default">Sin Imagen</span>';
         }
 
     }

@@ -150,7 +150,9 @@
                 <div class="upload_image">
                   <div class="form-group col-md-6">
                     <label for="img_route">Imagen de Pago:</label>
-                    <input id="img_route" @change="getImagen" name="img_route" type="file" class="file-loading" accept="image/*">
+                    <input id="img_route" @change="getImagen" name="img_route" type="file" class="file-loading" accept="image/*" data-existing-img="<?= isset($cab->img_url) ? $cab->img_url : '' ?>">
+                    <div id="imagePreview" class="preview-container"></div>
+                    <input type="hidden" id="imagenEliminada" name="imagenEliminada" value="0">
                   </div>
                 </div>  
                 <!-- Cheque -->
@@ -250,3 +252,4 @@
   </tr>
 
 </script>
+
