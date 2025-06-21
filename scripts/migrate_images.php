@@ -75,7 +75,15 @@ $clean = in_array('clean', $argv); // Para limpiar los datos incorrectos de URL
 
 // Cargar configuraciones usando rutas absolutas
 require_once $projectRoot . '/application/config/database.php';
-require_once $projectRoot . '/application/config/storage.php';
+
+// Cargar storage.php si existe
+$storage_file = $projectRoot . '/application/config/storage.php';
+if (file_exists($storage_file)) {
+    require_once $storage_file;
+}
+
+// Cargar config.php para obtener las credenciales
+require_once $projectRoot . '/application/config/config.php';
 
 echo "=== Script de migración de imágenes a DigitalOcean Spaces ===\n";
 echo "Módulo: $modulo\n";
@@ -316,13 +324,15 @@ if ($result->num_rows === 0) {
 
 // Inicializar cliente S3
 try {
-    // Comprobar qué configuración existe
+    // Comprobar qué configuración existe (prioridad: storage.php, luego config.php)
     if (isset($config['credentials_spaces'])) {
         $credentials = $config['credentials_spaces'];
+        $credentialsSource = 'storage.php:credentials_spaces';
     } else if (isset($config['credentialsSpacesDO'])) {
         $credentials = $config['credentialsSpacesDO'];
+        $credentialsSource = 'config.php:credentialsSpacesDO';
     } else {
-        throw new Exception("No se encontraron credenciales para DigitalOcean Spaces");
+        throw new Exception("No se encontraron credenciales para DigitalOcean Spaces ni en storage.php ni en config.php");
     }
     
     // Verificar que la configuración tenga todos los campos necesarios
@@ -347,7 +357,7 @@ try {
     echo "Inicializando cliente S3...\n";
     
     if ($debug) {
-        echo "Configuración S3:\n";
+        echo "Configuración S3 (desde $credentialsSource):\n";
         echo "- Region: " . $credentials['region'] . "\n";
         echo "- Endpoint: " . $credentials['endpoint'] . "\n";
         echo "- Version: " . $credentials['version'] . "\n";
@@ -361,61 +371,79 @@ try {
         // Verificar el contenido efectivo de key y secret
         if (empty($credentials['credentials']['key']) || $credentials['credentials']['key'] === '') {
             echo "¡ADVERTENCIA! La clave de acceso (key) está vacía\n";
+        } else {
+            echo "La clave de acceso (key) está definida y no está vacía.\n";
         }
         
         if (empty($credentials['credentials']['secret']) || $credentials['credentials']['secret'] === '') {
             echo "¡ADVERTENCIA! La clave secreta (secret) está vacía\n";
+        } else {
+            echo "La clave secreta (secret) está definida y no está vacía.\n";
         }
     }
-    
-    // Configurar el bucket
+      // Configurar el bucket
     $bucket = $config['spaces_bucket'] ?? 'hergo-space';
+    $originalBucket = $bucket;
     
-    // Ajustar el bucket para el entorno de producción si es necesario
-    if ($bucket === 'hergo-space') {
-        // Esta es la versión correcta del nombre del bucket
-        $alternativeBucketNames = ['hergo.space', 'hergospace', 'hergo-app-space'];
-        
-        if ($debug) {
-            echo "- Bucket a usar: $bucket\n";
-            echo "- Buckets alternativos: " . implode(', ', $alternativeBucketNames) . "\n";
-        }
+    // Lista de posibles formatos de bucket para probar
+    $alternativeBucketNames = [
+        $bucket,            // El original configurado
+        'hergo-space',      // Con guión
+        'hergo.space',      // Con punto
+        'hergospace',       // Sin separadores
+        'hergo'             // Nombre corto
+    ];
+    
+    if ($debug) {
+        echo "- Bucket configurado: $bucket\n";
+        echo "- Buckets alternativos a probar: " . implode(', ', array_slice($alternativeBucketNames, 1)) . "\n";
     }
     
     // Crear el cliente S3
     $s3Client = new Aws\S3\S3Client($credentials);
+    $bucketVerified = false;
     
-    // Verificar que el bucket existe y es accesible
-    if ($debug) {
+    // Probar cada bucket si hay problemas
+    foreach ($alternativeBucketNames as $testBucket) {
+        if ($debug && $testBucket !== $originalBucket) {
+            echo "Probando bucket alternativo: $testBucket\n";
+        }
+        
         try {
-            $s3Client->headBucket(['Bucket' => $bucket]);
-            echo "Bucket '$bucket' verificado - OK\n";
+            $s3Client->headBucket(['Bucket' => $testBucket]);
+            $bucket = $testBucket;
+            $bucketVerified = true;
+            echo "¡Bucket '$bucket' verificado - OK!\n";
+            break;
         } catch (Exception $e) {
-            echo "ADVERTENCIA: No se pudo verificar el bucket '$bucket'. El error fue: " . $e->getMessage() . "\n";
-            
-            // Intentar listar todos los buckets disponibles
-            echo "Intentando listar los buckets disponibles...\n";
-            try {
-                $result = $s3Client->listBuckets();
-                $buckets = $result->get('Buckets');
-                if (!empty($buckets)) {
-                    echo "Buckets disponibles:\n";
-                    foreach ($buckets as $b) {
-                        echo "- " . $b['Name'] . "\n";
-                    }
-                    
-                    // Si encontramos un bucket, usemos el primero
-                    if (count($buckets) > 0) {
-                        $firstBucket = $buckets[0]['Name'];
-                        echo "¡CAMBIANDO! Usando el primer bucket disponible: $firstBucket\n";
-                        $bucket = $firstBucket;
-                    }
-                } else {
-                    echo "No se encontraron buckets disponibles.\n";
-                }
-            } catch (Exception $e2) {
-                echo "No se pudo listar buckets: " . $e2->getMessage() . "\n";
+            if ($debug) {
+                echo "No se pudo verificar el bucket '$testBucket': " . $e->getMessage() . "\n";
             }
+        }
+    }
+    
+    if (!$bucketVerified) {
+        echo "ADVERTENCIA: No se pudo verificar ningún bucket. Intentando listar todos los buckets disponibles...\n";
+        try {
+            $result = $s3Client->listBuckets();
+            $buckets = $result->get('Buckets');
+            if (!empty($buckets)) {
+                echo "Buckets disponibles:\n";
+                foreach ($buckets as $b) {
+                    echo "- " . $b['Name'] . "\n";
+                }
+                  // Si encontramos un bucket, usemos el primero
+                if (count($buckets) > 0) {
+                    $firstBucket = $buckets[0]['Name'];
+                    echo "¡CAMBIANDO! Usando el primer bucket disponible: $firstBucket\n";
+                    $bucket = $firstBucket;
+                    $bucketVerified = true;
+                }
+            } else {
+                echo "No se encontraron buckets disponibles.\n";
+            }
+        } catch (Exception $e2) {
+            echo "No se pudo listar buckets: " . $e2->getMessage() . "\n";
         }
     }
     
@@ -573,29 +601,51 @@ while ($row = $result->fetch_assoc()) {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $contentType = finfo_file($finfo, $localPath);
         finfo_close($finfo);
-        
-        if ($test) {
+          if ($test) {
             // En modo test, simular pero no ejecutar
             echo "TEST: Simularía subir '$localPath' a '$spacesPath' con tipo '$contentType'... OK\n";
             $migrados++;
         } else {
-            // Subir a Spaces
-            $s3Client->putObject([
-                'Bucket' => $bucket,
-                'Key' => $spacesPath,
-                'SourceFile' => $localPath,
-                'ACL' => 'public-read',
-                'ContentType' => $contentType
-            ]);
-            
-            // Actualizar base de datos
-            $stmt = $mysqli->prepare("UPDATE `$tableName` SET `$imageUrlColumn` = ? WHERE `$idColumn` = ?");
-            $stmt->bind_param("si", $spacesPath, $id);
-            $stmt->execute();
-            $stmt->close();
-            
-            echo "OK\n";
-            $migrados++;
+            try {
+                // Subir a Spaces
+                $s3Client->putObject([
+                    'Bucket' => $bucket,
+                    'Key' => $spacesPath,
+                    'SourceFile' => $localPath,
+                    'ACL' => 'public-read',
+                    'ContentType' => $contentType
+                ]);
+                
+                // Actualizar base de datos solo si la carga fue exitosa
+                $stmt = $mysqli->prepare("UPDATE `$tableName` SET `$imageUrlColumn` = ? WHERE `$idColumn` = ?");
+                $stmt->bind_param("si", $spacesPath, $id);
+                $stmt->execute();
+                $stmt->close();
+                
+                echo "OK\n";
+                $migrados++;
+                
+                // Breve pausa entre uploads para evitar límites de tasa
+                usleep(100000); // 100ms
+                
+            } catch (Exception $uploadError) {
+                $errorMsg = $uploadError->getMessage();
+                
+                // Verificar si es un error de acceso o autenticación
+                if (strpos($errorMsg, '403 Forbidden') !== false || 
+                    strpos($errorMsg, 'AccessDenied') !== false) {
+                    
+                    echo "ERROR DE ACCESO: No tienes permisos para subir a este bucket.\n";
+                    echo "Detalles: " . $errorMsg . "\n";
+                    
+                    // Detener el script para evitar más errores
+                    die("Error fatal: Sin acceso de escritura al bucket '$bucket'. Verifica tus credenciales y permisos.\n");
+                    
+                } else {
+                    echo "ERROR: " . $errorMsg . "\n";
+                    $errores++;
+                }
+            }
         }
     } catch (Exception $e) {
         echo "ERROR: " . $e->getMessage() . "\n";
