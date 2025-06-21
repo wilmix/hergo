@@ -115,13 +115,21 @@ $(document).ready(function(){
     retornarPagosPendientes();
 })
 function fileImg() {
-    $("#img_route").fileinput({
-        language: "es",
-        showUpload: false,
-        previewFileType: "image",
-        maxFileSize: 1024,
-        showPreview: false,
-    });
+    // Si FileUtils está disponible, usar su método para mostrar imagen previa
+    if (typeof FileUtils !== 'undefined' && $('#img_route').length) {
+        const existingImg = $('#img_route').data('existing-img');
+        FileUtils.setupFileInput($('#img_route')[0], {}, existingImg);
+        FileUtils.handleFileClear($('#img_route')[0], '#imagenEliminada');
+    } else {
+        // Fallback básico si FileUtils no está definido
+        $("#img_route").fileinput({
+            language: "es",
+            showUpload: false,
+            previewFileType: "image",
+            maxFileSize: 1024,
+            showPreview: false,
+        });
+    }
 }
 $(document).on("change","#fechaPago",function(){
     fechaPagoHoy = $('#fechaPago').val()
