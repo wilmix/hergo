@@ -239,13 +239,13 @@ switch ($modulo) {    case 'articulos':
         $localDir = $projectRoot . '/assets/img_articulos/';
         $spacesDir = 'hg/articulos/';
         break;
-    case 'clientes':
-        $tableName = 'clientes';
-        $idColumn = 'idCliente';
-        $imageColumn = 'Logo';
-        $imageUrlColumn = 'LogoUrl';
-        $localDir = $projectRoot . '/assets/img_clientes/';
-        $spacesDir = 'hg/clientes/';
+    case 'ingresos':
+        $tableName = 'ingresos';
+        $idColumn = 'idingreso';
+        $imageColumn = 'img_route';
+        $imageUrlColumn = 'img_url';
+        $localDir = $projectRoot . '/assets/img_ingresos/';
+        $spacesDir = 'hg/ingresos/';
         break;
     // Agregar más módulos aquí
     default:
