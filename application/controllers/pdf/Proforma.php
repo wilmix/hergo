@@ -40,6 +40,11 @@ class Proforma extends MY_Controller {
       $url = 'https://images.hergo.app/hg/articulos/check_blue.png';
     }
     
+    // Asegurarnos de que la URL tenga el formato correcto
+    if (substr($url, 0, 4) !== 'http') {
+      $url = 'https://images.hergo.app/' . ltrim($url, '/');
+    }
+    
     // Log para debug
     error_log("Procesando imagen: " . $url);
     
@@ -59,22 +64,77 @@ class Proforma extends MY_Controller {
     $tempFile = $tempDir . '/' . md5($url) . '.' . $extension;
     
     // Si la imagen temporal ya existe, usarla
-    if (!file_exists($tempFile)) {      // Descargar desde Spaces
+    if (!file_exists($tempFile)) {
+      // Descargar desde Spaces
       error_log("Intentando descargar: " . $url);
       $imageContent = @file_get_contents($url);
+      
+      // Si falla la descarga principal, intentar alternativas
       if ($imageContent === false) {
         error_log("Error descargando imagen: " . $url);
-        // Si falla la descarga, usar una imagen por defecto
-        $defaultUrl = 'https://images.hergo.app/hg/articulos/check_blue.png';
-        error_log("Intentando usar imagen por defecto: " . $defaultUrl);
-        $imageContent = @file_get_contents($defaultUrl);
-        if ($imageContent === false) {
-          error_log("Error fatal: No se pudo cargar ni siquiera la imagen por defecto");
-          throw new Exception("No se pudo cargar la imagen por defecto");
+          // Intentar versiones alternativas de la URL
+        $urlsToTry = [];
+        
+        // Si la URL viene del campo imgUrl, quitemos el prefijo 1750474548- y probemos con otros formatos
+        if (strpos($url, '1750474') !== false) {
+          $parts = explode('-', basename($url), 2);
+          if (count($parts) > 1) {
+            // Si encontramos el timestamp, probemos otras variantes
+            $justFileName = $parts[1];
+            $urlsToTry[] = 'https://images.hergo.app/hg/articulos/' . $justFileName;
+          }
         }
-        $extension = 'png';
-        $tempFile = $tempDir . '/check_blue.png';
+        
+        // Si la URL tiene formato para artículos, intentar varias combinaciones
+        if (strpos($url, '/hg/articulos/') !== false) {
+          $fileName = basename($url);
+          $fileNameLower = strtolower($fileName);
+          
+          // Lista de timestamps observados en diferentes casos
+          $timestamps = ['1750474548', '1750474825'];
+          
+          // Probar con diferentes timestamps
+          foreach ($timestamps as $ts) {
+            $urlsToTry[] = 'https://images.hergo.app/hg/articulos/' . $ts . '-' . $fileNameLower;
+          }
+          
+          // También probar con versiones sin timestamp
+          $urlsToTry[] = 'https://images.hergo.app/hg/articulos/' . $fileNameLower;
+          $urlsToTry[] = 'https://images.hergo.app/hg/articulos/' . $fileName;
+          
+          // Si el nombre ya tiene timestamp, probar sin él
+          if (preg_match('/^(\d+)(.+)$/', $fileName, $matches)) {
+            $justName = $matches[2];
+            foreach ($timestamps as $ts) {
+              $urlsToTry[] = 'https://images.hergo.app/hg/articulos/' . $ts . '-' . strtolower($justName);
+            }
+            $urlsToTry[] = 'https://images.hergo.app/hg/articulos/' . strtolower($justName);
+          }
+        }
+        
+        foreach ($urlsToTry as $altUrl) {
+          error_log("Intentando URL alternativa: " . $altUrl);
+          $imageContent = @file_get_contents($altUrl);
+          if ($imageContent !== false) {
+            error_log("Imagen encontrada en URL alternativa: " . $altUrl);
+            break;
+          }
+        }
+        
+        // Si ninguna alternativa funcionó, usar la imagen por defecto
+        if ($imageContent === false) {
+          $defaultUrl = 'https://images.hergo.app/hg/articulos/check_blue.png';
+          error_log("Intentando usar imagen por defecto: " . $defaultUrl);
+          $imageContent = @file_get_contents($defaultUrl);
+          if ($imageContent === false) {
+            error_log("Error fatal: No se pudo cargar ni siquiera la imagen por defecto");
+            throw new Exception("No se pudo cargar la imagen por defecto");
+          }
+          $extension = 'png';
+          $tempFile = $tempDir . '/check_blue.png';
+        }
       }
+      
       error_log("Guardando imagen en: " . $tempFile);
       file_put_contents($tempFile, $imageContent);
     }
@@ -92,17 +152,38 @@ class Proforma extends MY_Controller {
           $this->pdf->SetFillColor(255,255,255);
           $this->pdf->SetTextColor(0,0,0);
           $this->pdf->SetFont('Roboto','',8);
-            $this->pdf->Cell(5,5,$n++,$l,0,'C',0);
-            
-            error_log("DEBUG =====================================");
+            $this->pdf->Cell(5,5,$n++,$l,0,'C',0);            error_log("DEBUG =====================================");
             error_log("Procesando item: " . print_r($item, true));
             
             $imageUrl = '';
             
-            // Usar el campo img para construir la URL
-            if (!empty($item->img)) {
-                $imageUrl = 'https://images.hergo.app/hg/articulos/' . $item->img;
-                error_log("Usando campo img para URL: " . $imageUrl);
+            // IMPORTANTE: Usar primero el campo imgUrl (ImagenUrl) que ya contiene la ruta completa correcta
+            if (!empty($item->imgUrl)) {
+                $imageUrl = 'https://images.hergo.app/' . ltrim($item->imgUrl, '/');
+                error_log("Usando campo imgUrl directamente: " . $imageUrl);
+            }
+            // Como fallback, si no hay imgUrl, intentar construir la URL a partir del campo img
+            else if (!empty($item->img)) {
+                // Basándonos en el formato observado: 1750474548-1652886794tm5160.jpg                // Convertir a minúsculas porque Spaces usa minúsculas
+                $baseName = strtolower($item->img); 
+                
+                // Probar con varios timestamps para ser más robusto
+                // Vimos que TM5160 usa 1750474825 mientras que VC1254 usa 1750474548
+                $timestamp1 = "1750474548";  // Primer timestamp observado
+                $timestamp2 = "1750474825";  // Segundo timestamp observado
+                
+                $imageUrl = 'https://images.hergo.app/hg/articulos/' . $timestamp1 . '-' . $baseName;
+                error_log("Usando URL formateada para Spaces desde img: " . $imageUrl);
+                
+                // Registrar URLs alternativas para depuración o para usar en getImageFromSpaces
+                error_log("URL alternativa 1: https://images.hergo.app/hg/articulos/" . $timestamp2 . '-' . $baseName);
+                error_log("URL alternativa 2: https://images.hergo.app/hg/articulos/" . $baseName);
+                
+                // Como respaldo, intentar también con el formato específico que vimos en el ejemplo
+                if (empty($imageUrl)) {
+                    $imageUrl = 'https://images.hergo.app/hg/articulos/1750474548-' . strtolower($item->img);
+                    error_log("Intentando URL alternativa: " . $imageUrl);
+                }
             }
 
             try {

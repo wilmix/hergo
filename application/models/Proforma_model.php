@@ -109,7 +109,8 @@ class Proforma_model extends CI_Model
                         pit.industria,
                         pit.precio precioLista,
                         pit.total,
-                        a.Imagen img
+                        a.Imagen img,
+                        a.ImagenUrl imgUrl
                         
                     FROM
                         proforma_items pit
