@@ -1,4 +1,4 @@
-let url_img = base_url('assets/img_articulos/hergo.jpg')
+let url_img = 'https://images.hergo.app/hg/general/hergo.jpg'
 $(document).ready(function(){
   
   
@@ -37,25 +37,21 @@ Vue.component("card-product",{
   props:{
     url_img : String,
     selectedart: Object
-  },
-  methods:{
+  },  methods:{
     url_art(){
+      let url;
       if (this.selectedart) {
-        // Primero intentar usar imgUrl con FileUtils (nueva forma con Spaces)
+        // Usar exclusivamente imgUrl con FileUtils (forma con Spaces)
         if (this.selectedart.imgUrl) {
           url = FileUtils.getFullUrl(this.selectedart.imgUrl);
         }
-        // Si no hay imgUrl, intentar usar el campo img antiguo como fallback
-        else if (this.selectedart.img) {
-          url = base_url('assets/img_articulos/'+this.selectedart.img);
-        }
-        // Si no hay ninguna imagen, usar la imagen por defecto
+        // Si no hay imgUrl, usar la imagen por defecto de Spaces
         else {
-          url = base_url('assets/img_articulos/hergo.jpg');
+          url = url_img; // URL por defecto ya definida como https://images.hergo.app/hg/general/hergo.jpg
         }
         this.selectedart.url_img = url;
       } else {
-        url = base_url('assets/img_articulos/hergo.jpg');
+        url = url_img; // URL por defecto ya definida como https://images.hergo.app/hg/general/hergo.jpg
       }
       return url
     },
@@ -404,15 +400,14 @@ const app = new Vue({
           data: {
                   id:id,
                 },
-        }).done(function (res) {
-          console.log(res);
+        }).done(function (res) {          console.log(res);
           agregarcargando()
-          items = res.items
+          let items = res.items;
           items.forEach(e => {
-            if (e.img == '' || e.img == null) {
-              e.url_img = url_img
+            if (e.imgUrl) {
+              e.url_img = FileUtils.getFullUrl(e.imgUrl);
             } else {
-              e.url_img = base_url('assets/img_articulos/'+ e.img)
+              e.url_img = url_img; // URL por defecto ya definida como https://images.hergo.app/hg/general/hergo.jpg
             }
           });
           app.n = res.proforma.num
