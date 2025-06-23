@@ -40,22 +40,42 @@ class Proforma extends MY_Controller {
       $url = 'https://images.hergo.app/hg/articulos/check_blue.png';
     }
     
+    // Log para debug
+    error_log("Procesando imagen: " . $url);
+    
     $tempDir = sys_get_temp_dir() . '/hergo_temp_images';
     if (!file_exists($tempDir)) {
       mkdir($tempDir, 0777, true);
     }
+    error_log("Directorio temporal: " . $tempDir);
 
-    // Crear un nombre de archivo único basado en la URL
-    $tempFile = $tempDir . '/' . md5($url) . '.jpg';
+    // Obtener la extensión original del archivo
+    $extension = strtolower(pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION));
+    if (!in_array($extension, ['jpg', 'jpeg', 'png'])) {
+      $extension = 'jpg'; // default extension
+    }
+
+    // Crear un nombre de archivo único basado en la URL manteniendo la extensión
+    $tempFile = $tempDir . '/' . md5($url) . '.' . $extension;
     
     // Si la imagen temporal ya existe, usarla
-    if (!file_exists($tempFile)) {
-      // Descargar desde Spaces
+    if (!file_exists($tempFile)) {      // Descargar desde Spaces
+      error_log("Intentando descargar: " . $url);
       $imageContent = @file_get_contents($url);
       if ($imageContent === false) {
+        error_log("Error descargando imagen: " . $url);
         // Si falla la descarga, usar una imagen por defecto
-        $imageContent = @file_get_contents('https://images.hergo.app/hg/articulos/check_blue.png');
+        $defaultUrl = 'https://images.hergo.app/hg/articulos/check_blue.png';
+        error_log("Intentando usar imagen por defecto: " . $defaultUrl);
+        $imageContent = @file_get_contents($defaultUrl);
+        if ($imageContent === false) {
+          error_log("Error fatal: No se pudo cargar ni siquiera la imagen por defecto");
+          throw new Exception("No se pudo cargar la imagen por defecto");
+        }
+        $extension = 'png';
+        $tempFile = $tempDir . '/check_blue.png';
       }
+      error_log("Guardando imagen en: " . $tempFile);
       file_put_contents($tempFile, $imageContent);
     }
     
