@@ -7,6 +7,12 @@ class Proforma extends MY_Controller {
   public $dist;
   public $imgSize;
 
+  public function __construct() {
+    parent::__construct();
+    $this->load->library('FileStorage');
+    $this->load->config('storage', TRUE);
+  }
+
   public function generar($id, $dist=14, $imgSize=12,$firma=0) {
 
     $this->load->model('Proforma_model');
@@ -29,7 +35,33 @@ class Proforma extends MY_Controller {
         $this->items($items,$proforma);
 
       $this->pdf->Output('I',$proforma->num . '-' . $year . ' | ' . $proforma->clienteNombre . ' | ' . $proforma->tipo . ' | ' . strtoupper($meses[($mes)-1]) . '.pdf',true);
+  }  private function getImageFromSpaces($url) {
+    if (empty($url)) {
+      $url = 'https://images.hergo.app/hg/articulos/check_blue.png';
+    }
+    
+    $tempDir = sys_get_temp_dir() . '/hergo_temp_images';
+    if (!file_exists($tempDir)) {
+      mkdir($tempDir, 0777, true);
+    }
+
+    // Crear un nombre de archivo único basado en la URL
+    $tempFile = $tempDir . '/' . md5($url) . '.jpg';
+    
+    // Si la imagen temporal ya existe, usarla
+    if (!file_exists($tempFile)) {
+      // Descargar desde Spaces
+      $imageContent = @file_get_contents($url);
+      if ($imageContent === false) {
+        // Si falla la descarga, usar una imagen por defecto
+        $imageContent = @file_get_contents('https://images.hergo.app/hg/articulos/check_blue.png');
+      }
+      file_put_contents($tempFile, $imageContent);
+    }
+    
+    return $tempFile;
   }
+
   public function items($items,$proforma)
   {
         $l = 0;
@@ -39,34 +71,29 @@ class Proforma extends MY_Controller {
           $total += $item->total;
           $this->pdf->SetFillColor(255,255,255);
           $this->pdf->SetTextColor(0,0,0);
-          //$this->pdf->SetFont('Arial','',8); 
           $this->pdf->SetFont('Roboto','',8);
-            $this->pdf->Cell(5,5,$n++,$l,0,'C',0); 
-            $url_img= $item->img ? 'assets/img_articulos/' . $item->img : 'assets/img_articulos/' . $item->img;
-            $url_img_e = 'assets/img_articulos/' . $item->img;
-            /* $url_img= $item->img ? 'assets/img_articulos/' . $item->img : 'assets/img_articulos/check_blue.png';
-            $this->pdf->Cell(25,10,$this->pdf->Image($url_img, $this->pdf->GetX() + 5, $this->pdf->GetY()+1, 12 ),$l,0,'C',0); */
-            if (($item->img  != '')) {
-              $this->pdf->Cell(25,10,$this->pdf->Image($url_img_e, $this->pdf->GetX() + 5, $this->pdf->GetY()+1, $this->imgSize ),$l,0,'C',0);
+            $this->pdf->Cell(5,5,$n++,$l,0,'C',0);            // Usar URLs de Spaces usando el campo ImagenUrl
+            if (!empty($item->ImagenUrl)) {
+                $imageUrl = 'https://images.hergo.app/' . $item->ImagenUrl;
+                $imgPath = $this->getImageFromSpaces($imageUrl);
+                $this->pdf->Cell(25,10,$this->pdf->Image($imgPath, $this->pdf->GetX() + 5, $this->pdf->GetY()+1, $this->imgSize ),$l,0,'C',0);
             } else {
-              $this->pdf->Cell(25,10,$this->pdf->Image('assets/img_articulos/check_blue.png', $this->pdf->GetX() + 10, $this->pdf->GetY()+2, 5 ),$l,0,'R',0);
+                $defaultImgPath = $this->getImageFromSpaces('https://images.hergo.app/hg/articulos/check_blue.png');
+                $this->pdf->Cell(25,10,$this->pdf->Image($defaultImgPath, $this->pdf->GetX() + 10, $this->pdf->GetY()+2, 5 ),$l,0,'R',0);
             }
-            $this->pdf->Cell(15,5,iconv('UTF-8', 'windows-1252//TRANSLIT', $item->codigo),$l,0,'C',0);  //ANCHO,ALTO,TEXTO,BORDE,SALTO DE LINEA, CENTREADO, RELLENO
+
+            $this->pdf->Cell(15,5,iconv('UTF-8', 'windows-1252//TRANSLIT', $item->codigo),$l,0,'C',0);
             $this->pdf->MultiCell(45,5,iconv('UTF-8', 'windows-1252//TRANSLIT', ($item->descrip)),$l,'L',0);
             $this->pdf->SetXY(100,$this->pdf->GetY()-5);
             $this->pdf->Cell(15,5,$item->marca,$l,0,'C',0);
-            /* $this->pdf->SetXY(100,$this->pdf->GetY()-5);
-            $this->pdf->MultiCell(15,5,iconv('UTF-8', 'windows-1252', ($item->marca)),$l,'C',0);
-            $this->pdf->SetXY(115,$this->pdf->GetY()-5); */
             $this->pdf->Cell(15,5,$item->industria,$l,0,'C',0);
             $this->pdf->Cell(15,5,$item->tiempoEntrega,$l,0,'C',0);
             $this->pdf->Cell(15,5,number_format($item->cantidad, 2, ".", ","),$l,0,'R',0);
             $this->pdf->Cell(10,5,$item->uni,$l,0,'R',0);
             $this->pdf->Cell(20,5,number_format($item->precioLista, 2, ".", ","),$l,0,'R',0);
             $this->pdf->Cell(20,5,number_format($item->total, 2, ".", ","),$l,0,'R',0);
-          $this->pdf->Ln($this->dist);//DISTANCIA ENTRE LINEAS 
+          $this->pdf->Ln($this->dist);
           $this->pdf->Line($this->pdf->GetX(),$this->pdf->GetY(),$this->pdf->GetX()+200,$this->pdf->GetY());
-          //$this->pdf->SetY($this->pdf->GetY()-5);
         }
         //$this->pdf->SetY($this->pdf->GetY()-5);
         $this->pdf->SetFont('Roboto','B',8);
