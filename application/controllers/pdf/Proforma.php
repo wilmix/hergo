@@ -92,15 +92,42 @@ class Proforma extends MY_Controller {
           $this->pdf->SetFillColor(255,255,255);
           $this->pdf->SetTextColor(0,0,0);
           $this->pdf->SetFont('Roboto','',8);
-            $this->pdf->Cell(5,5,$n++,$l,0,'C',0);            // Usar URLs de Spaces usando el campo ImagenUrl
+            $this->pdf->Cell(5,5,$n++,$l,0,'C',0);            // Debug info - Usar print_r para ver la estructura completa
+            error_log("DEBUG =====================================");
+            error_log("Procesando item: " . print_r($item, true));
+            
+            $imageUrl = '';
+            
+            // Primero intentar usar ImagenUrl
             if (!empty($item->ImagenUrl)) {
-                $imageUrl = 'https://images.hergo.app/' . $item->ImagenUrl;
-                $imgPath = $this->getImageFromSpaces($imageUrl);
-                $this->pdf->Cell(25,10,$this->pdf->Image($imgPath, $this->pdf->GetX() + 5, $this->pdf->GetY()+1, $this->imgSize ),$l,0,'C',0);
-            } else {
+                $imageUrl = 'https://images.hergo.app/' . ltrim($item->ImagenUrl, '/');
+                error_log("Usando ImagenUrl directamente: " . $imageUrl);
+            }
+            // Si no hay ImagenUrl pero hay Imagen, construir la URL
+            else if (!empty($item->Imagen)) {
+                $imageUrl = 'https://images.hergo.app/hg/articulos/' . ltrim($item->Imagen, '/');
+                error_log("Usando campo Imagen: " . $imageUrl);
+            }
+
+            try {
+                if (!empty($imageUrl)) {
+                    error_log("Intentando cargar imagen desde: " . $imageUrl);
+                    $imgPath = $this->getImageFromSpaces($imageUrl);
+                    if (file_exists($imgPath)) {
+                        error_log("Imagen descargada exitosamente en: " . $imgPath);
+                        $this->pdf->Cell(25,10,$this->pdf->Image($imgPath, $this->pdf->GetX() + 5, $this->pdf->GetY()+1, $this->imgSize ),$l,0,'C',0);
+                    } else {
+                        throw new Exception("Archivo temporal no existe");
+                    }
+                } else {
+                    throw new Exception("No hay URL de imagen");
+                }
+            } catch (Exception $e) {
+                error_log("Error procesando imagen: " . $e->getMessage() . ". Usando default");
                 $defaultImgPath = $this->getImageFromSpaces('https://images.hergo.app/hg/articulos/check_blue.png');
                 $this->pdf->Cell(25,10,$this->pdf->Image($defaultImgPath, $this->pdf->GetX() + 10, $this->pdf->GetY()+2, 5 ),$l,0,'R',0);
             }
+            error_log("DEBUG =====================================");
 
             $this->pdf->Cell(15,5,iconv('UTF-8', 'windows-1252//TRANSLIT', $item->codigo),$l,0,'C',0);
             $this->pdf->MultiCell(45,5,iconv('UTF-8', 'windows-1252//TRANSLIT', ($item->descrip)),$l,'L',0);
@@ -115,7 +142,7 @@ class Proforma extends MY_Controller {
           $this->pdf->Ln($this->dist);
           $this->pdf->Line($this->pdf->GetX(),$this->pdf->GetY(),$this->pdf->GetX()+200,$this->pdf->GetY());
         }
-        //$this->pdf->SetY($this->pdf->GetY()-5);
+
         $this->pdf->SetFont('Roboto','B',8);
         $this->pdf->Cell(180,5,'Total:','T',0,'R',1); 
         $this->pdf->Cell(20,5,number_format($total, 2, ".", ","),'T',0,'R',1); 
@@ -136,12 +163,8 @@ class Proforma extends MY_Controller {
         $this->pdf->Ln(1);
         $this->pdf->Cell(7,6,'SON:',$l,0,'L',1);
         $this->pdf->Cell(156,6,iconv('UTF-8', 'windows-1252//TRANSLIT', $literal),$l,0,'l',1);
-        //$this->pdf->Ln(5);
         $this->pdf->SetFillColor(20,60,190);
-        //$this->pdf->Rect(10,$this->pdf->GetY()+5,200,1,'F');
         $this->observaciones($proforma->glosa);
-        
-   
   }
   public function observaciones($glosas)
   {
