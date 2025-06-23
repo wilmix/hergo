@@ -25,6 +25,7 @@ class Proforma extends MY_Controller {
 		if ($this->datos['id']>0) {
 			$this->titles('EditarProforma','Editar Proforma','Proformas',);
 		}
+		$this->datos['foot_script'][]=base_url('assets/hergo/fileutils.js') .'?'.rand();
 		$this->datos['foot_script'][]=base_url('assets/hergo/proforma/formProforma.js') .'?'.rand();
 		$this->setView('proforma/formProforma');
 	}

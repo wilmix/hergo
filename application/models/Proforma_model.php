@@ -109,7 +109,7 @@ class Proforma_model extends CI_Model
                         pit.industria,
                         pit.precio precioLista,
                         pit.total,
-                        a.Imagen img,
+                        -- a.Imagen img,
                         a.ImagenUrl imgUrl
                         
                     FROM
@@ -248,7 +248,7 @@ class Proforma_model extends CI_Model
                     a.precio,
                     a.precioDol,
                     sa.saldo,
-                    a.Imagen img,
+                    a.ImagenUrl imgUrl,
                     l.Linea linea 
                 FROM
                     articulos a
@@ -328,12 +328,11 @@ class Proforma_model extends CI_Model
         $query=$this->db->query($sql);	
 		return $query->result_array();
     }
-    public function getArticulo($id, $alm)
+    public function articuloID($id,$alm)
 	{ 
     	$sql="      SELECT
                         a.idArticulos id,
                         a.CodigoArticulo codigo,
-                        CONCAT(a.CodigoArticulo, ' | ' , a.Descripcion) label,
                         a.Descripcion descrip,
                         m.Marca marca,
                         m.Sigla marcaSigla,
@@ -341,7 +340,7 @@ class Proforma_model extends CI_Model
                         a.precio,
                         a.precioDol,
                         sa.saldo,
-                        a.Imagen img,
+                        a.ImagenUrl imgUrl,
                         l.Linea linea
                     FROM
                         articulos a
@@ -355,6 +354,10 @@ class Proforma_model extends CI_Model
         $query=$this->db->query($sql);	
 		return $query->row();
     }
-
+    public function getArticulo($id, $alm)
+    {
+        // Este es simplemente un alias de articuloID para mantener compatibilidad
+        return $this->articuloID($id, $alm);
+    }
 
 }

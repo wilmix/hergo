@@ -41,10 +41,21 @@ Vue.component("card-product",{
   methods:{
     url_art(){
       if (this.selectedart) {
-        url = this.selectedart.img ?  base_url('assets/img_articulos/'+this.selectedart.img) : base_url('assets/img_articulos/hergo.jpg')
-        this.selectedart.url_img = url
+        // Primero intentar usar imgUrl con FileUtils (nueva forma con Spaces)
+        if (this.selectedart.imgUrl) {
+          url = FileUtils.getFullUrl(this.selectedart.imgUrl);
+        }
+        // Si no hay imgUrl, intentar usar el campo img antiguo como fallback
+        else if (this.selectedart.img) {
+          url = base_url('assets/img_articulos/'+this.selectedart.img);
+        }
+        // Si no hay ninguna imagen, usar la imagen por defecto
+        else {
+          url = base_url('assets/img_articulos/hergo.jpg');
+        }
+        this.selectedart.url_img = url;
       } else {
-        url = base_url('assets/img_articulos/hergo.jpg')
+        url = base_url('assets/img_articulos/hergo.jpg');
       }
       return url
     },
