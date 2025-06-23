@@ -261,6 +261,8 @@ function imageFormatter(value, row, index) {
         url = baseSpacesUrl + value;
     } else if (row.img_route && row.img_route.trim() !== '') {
         url = base_url('assets/img_ingresos/' + row.img_route);
+    } else {
+        return '<span class="label label-default">Sin Imagen</span>';
     }
 
     if (url) {
@@ -416,7 +418,7 @@ function mostrarTablaIngresos(res) {
             },
             {
                 field: "img_url",
-                title: "Imagen",
+                title: "Comprobante",
                 searchable:false,
                 align: 'center',
                 formatter: imageFormatter
