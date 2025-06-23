@@ -11,12 +11,15 @@ class OrdenesCompra extends MY_Controller
 		$this->load->model("Egresos_model");
 		$this->load->model("Cliente_model");
 		$this->load->model("Pedidos_model");
+		$this->load->library("FileStorage");
+		$this->load->config('storage', TRUE);
 	}
 	
 	public function index()
 	{
 		$this->accesoCheck(61);
 		$this->titles('OrdenesCompra','Consulta Orden de Compra','Importaciones');
+		$this->datos['foot_script'][]=base_url('assets/hergo/fileutils.js') .'?'.rand();
 		$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/ordenesCompra.js') .'?'.rand();
 		$this->setView('importaciones/OrdenesCompra');
 	}
@@ -107,31 +110,41 @@ class OrdenesCompra extends MY_Controller
 	{
 		if($this->input->is_ajax_request())
         {
-			$config = [
-				"upload_path" => "./assets/facComProv/",
-				"allowed_types" => "pdf"
-			];
-			$this->load->library("upload",$config);
-				if ($this->upload->do_upload('url')) {
-					$pdf = array("upload_data" => $this->upload->data());
-					$url = $pdf['upload_data']['file_name'];
-				}
-				else{
-					//echo $this->upload->display_errors();
-					$url = '';
-				}
+			// Utilizar FileStorage para subir el archivo a Spaces
+			if (!empty($_FILES['url']['name'])) {
+				$uploadResult = $this->filestorage->uploadToSpaces('facturaComercial', $_FILES, 'url');
+				$url_pdf = $uploadResult['success'] ? $uploadResult['path'] : '';
+				$url = $uploadResult['success'] ? $_FILES['url']['name'] : ''; // Guardamos nombre original en url para compatibilidad
+			} else {
+				$url_pdf = '';
+				$url = '';
+			}
 				$id = '';
 			$asoFac = new stdclass();
-			$asoFac->id_orden = $this->security->xss_clean($this->input->post('id_orden'));
-			$asoFac->n = strtoupper($this->security->xss_clean($this->input->post('n')));
-			$asoFac->fecha = $this->security->xss_clean($this->input->post('fecha'));
-			$asoFac->proveedor = $this->security->xss_clean($this->input->post('id_proveedor'));
-			$asoFac->monto = $this->security->xss_clean($this->input->post('monto'));
-			$asoFac->tiempo_credito = $this->security->xss_clean($this->input->post('tiempo_credito'));
-			$asoFac->monto = $this->security->xss_clean($this->input->post('monto'));
-			$asoFac->url = $url;
-			$asoFac->transporte = strtoupper($this->security->xss_clean($this->input->post('transporte')));
-			$asoFac->glosa = strtoupper($this->security->xss_clean($this->input->post('glosa')));
+			
+			// Validamos cada campo por separado para evitar valores nulos
+			$id_orden = $this->input->post('id_orden');
+			$n = $this->input->post('n');
+			$fecha = $this->input->post('fecha');
+			$id_proveedor = $this->input->post('id_proveedor');
+			$monto = $this->input->post('monto');
+			$tiempo_credito = $this->input->post('tiempo_credito');
+			
+			$asoFac->id_orden = $id_orden ? $this->security->xss_clean($id_orden) : 0;
+			$asoFac->n = $n ? strtoupper($this->security->xss_clean($n)) : '';
+			$asoFac->fecha = $fecha ? $this->security->xss_clean($fecha) : date('Y-m-d');
+			$asoFac->proveedor = $id_proveedor ? $this->security->xss_clean($id_proveedor) : 0;
+			$asoFac->monto = $monto ? $this->security->xss_clean($monto) : 0;
+			$asoFac->tiempo_credito = $tiempo_credito ? $this->security->xss_clean($tiempo_credito) : 0;
+			$asoFac->url = $url; // Mantener compatibilidad
+			$asoFac->url_pdf = $url_pdf; // Nueva columna para la ruta en Spaces
+			
+			// Prevenir valores nulos en transporte y glosa
+			$transporte = $this->input->post('transporte');
+			$glosa = $this->input->post('glosa');
+			
+			$asoFac->transporte = $transporte ? strtoupper($this->security->xss_clean($transporte)) : '';
+			$asoFac->glosa = $glosa ? strtoupper($this->security->xss_clean($glosa)) : '';
 			$asoFac->created_by = $this->session->userdata('user_id');
 
 			
