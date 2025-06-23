@@ -251,8 +251,9 @@ function aprobados (data, type, row) {
 
 $(document).on("click", "button.see", function () {
 	let row = table.row( $(this).parents('tr') ).data();
-    console.log(row.url == true);
-    let pdf = base_url("assets/facComProv/") + row.url;
+    console.log(row.url);
+    // Si la URL ya es completa, usarla directamente, si no, construirla con FileUtils
+    let pdf = row.url.startsWith('http') ? row.url : FileUtils.getFullUrl(row.url);
     window.open(pdf)
 })
 
@@ -308,7 +309,7 @@ Vue.component('modal', {
 			/* quitarcargando()
 			return */
 			$.ajax({
-				url: base_url("index.php/Importaciones/OrdenesCompra/storeAsociarFactura"),
+				url: base_url("index.php/Importaciones/FacturaProveedores/storeAsociarFactura"),
 				type: 'POST',
 				data: formData,
 				cache: false,

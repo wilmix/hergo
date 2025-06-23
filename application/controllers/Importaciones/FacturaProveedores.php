@@ -1,4 +1,3 @@
-
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class FacturaProveedores extends MY_Controller
@@ -11,11 +10,14 @@ class FacturaProveedores extends MY_Controller
 		$this->load->model("Egresos_model");
 		$this->load->model("Cliente_model");
 		$this->load->model("Pedidos_model");
+		$this->load->library("FileStorage");
+		$this->load->config('storage', TRUE);
 	}
 	public function index()
 	{
 		$this->accesoCheck(62);
 		$this->titles('PagoProveedores','Pago Proveedores','Importaciones');
+		$this->datos['foot_script'][]=base_url('assets/hergo/fileutils.js') .'?'.rand();
 		$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/facturaProveedores.js') .'?'.rand();
 		$this->setView('importaciones/FacturaProveedores');
 	}
@@ -38,19 +40,14 @@ class FacturaProveedores extends MY_Controller
 	{
 		if($this->input->is_ajax_request())
 		{
-			$config = [
-				"upload_path" => "./assets/pagoProveedores/",
-				"allowed_types" => "pdf"
-			];
-			$this->load->library("upload",$config);
-				if ($this->upload->do_upload('url_pago')) {
-					$pdf = array("upload_data" => $this->upload->data());
-					$url = $pdf['upload_data']['file_name'];
-				}
-				else{
-					//echo $this->upload->display_errors();
-					$url = '';
-				}
+			// Utilizar FileStorage para subir el archivo a Spaces
+			if (!empty($_FILES['url_pago']['name'])) {
+				$uploadResult = $this->filestorage->uploadToSpaces('facturaComercial', $_FILES, 'url_pago');
+				$url = $uploadResult['success'] ? $uploadResult['path'] : '';
+			} else {
+				$url = '';
+			}
+			
 			$pago = new stdclass();
 			$pago->fecha = $this->input->post('fechaPago');
 			$pago->url = $url;
@@ -70,6 +67,47 @@ class FacturaProveedores extends MY_Controller
 				echo json_encode($id);
 			}
 
+		}
+		else
+		{
+			die("PAGINA NO ENCONTRADA");
+		}
+	}
+	public function storeAsociarFactura()
+	{
+		if($this->input->is_ajax_request())
+		{
+			// Utilizar FileStorage para subir el archivo a Spaces
+			if (!empty($_FILES['url']['name'])) {
+				$uploadResult = $this->filestorage->uploadToSpaces('facturaComercial', $_FILES, 'url');
+				$url = $uploadResult['success'] ? $uploadResult['path'] : '';
+			} else {
+				$url = '';
+			}
+			
+			$factServ = new stdclass();
+			$factServ->fecha = $this->input->post('fecha');
+			$factServ->n = $this->input->post('n');
+			$factServ->tiempo_credito = $this->input->post('tiempo_credito');
+			$factServ->monto = $this->input->post('monto');
+			$factServ->transporte = $this->input->post('transporte');
+			$factServ->glosa = $this->input->post('glosa');
+			$factServ->url = $url;
+			$factServ->id_orden = $this->input->post('id_orden');
+			$factServ->id_proveedor = $this->input->post('id_proveedor');
+			$factServ->created_by = $this->session->userdata('user_id');
+			
+			$id = $this->Pedidos_model->storeFactServ($factServ);
+			if($id)
+			{
+				$res = new stdclass();
+				$res->status = true;
+				$res->id = $id;
+				$res->factServ = $factServ;
+				echo json_encode($res);
+			} else {
+				echo json_encode(false);
+			}
 		}
 		else
 		{
