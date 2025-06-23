@@ -92,21 +92,17 @@ class Proforma extends MY_Controller {
           $this->pdf->SetFillColor(255,255,255);
           $this->pdf->SetTextColor(0,0,0);
           $this->pdf->SetFont('Roboto','',8);
-            $this->pdf->Cell(5,5,$n++,$l,0,'C',0);            // Debug info - Usar print_r para ver la estructura completa
+            $this->pdf->Cell(5,5,$n++,$l,0,'C',0);
+            
             error_log("DEBUG =====================================");
             error_log("Procesando item: " . print_r($item, true));
             
             $imageUrl = '';
             
-            // Primero intentar usar ImagenUrl
-            if (!empty($item->ImagenUrl)) {
-                $imageUrl = 'https://images.hergo.app/' . ltrim($item->ImagenUrl, '/');
-                error_log("Usando ImagenUrl directamente: " . $imageUrl);
-            }
-            // Si no hay ImagenUrl pero hay Imagen, construir la URL
-            else if (!empty($item->Imagen)) {
-                $imageUrl = 'https://images.hergo.app/hg/articulos/' . ltrim($item->Imagen, '/');
-                error_log("Usando campo Imagen: " . $imageUrl);
+            // Usar el campo img para construir la URL
+            if (!empty($item->img)) {
+                $imageUrl = 'https://images.hergo.app/hg/articulos/' . $item->img;
+                error_log("Usando campo img para URL: " . $imageUrl);
             }
 
             try {
