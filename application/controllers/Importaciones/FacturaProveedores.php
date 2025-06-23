@@ -43,14 +43,17 @@ class FacturaProveedores extends MY_Controller
 			// Utilizar FileStorage para subir el archivo a Spaces
 			if (!empty($_FILES['url_pago']['name'])) {
 				$uploadResult = $this->filestorage->uploadToSpaces('facturaComercial', $_FILES, 'url_pago');
-				$url = $uploadResult['success'] ? $uploadResult['path'] : '';
+				$url_pdf = $uploadResult['success'] ? $uploadResult['path'] : '';
+				$url = $uploadResult['success'] ? $_FILES['url_pago']['name'] : ''; // Guardamos nombre original en url para compatibilidad
 			} else {
+				$url_pdf = '';
 				$url = '';
 			}
 			
 			$pago = new stdclass();
 			$pago->fecha = $this->input->post('fechaPago');
-			$pago->url = $url;
+			$pago->url = $url; // Mantiene la columna url para compatibilidad
+			$pago->url_pdf = $url_pdf; // Nueva columna para la ruta en Spaces
 			$pago->total = $this->input->post('total');
 			$pago->created_by = $this->session->userdata('user_id');
 			$pago->pagos = json_decode($this->input->post('pagos'));
@@ -80,8 +83,10 @@ class FacturaProveedores extends MY_Controller
 			// Utilizar FileStorage para subir el archivo a Spaces
 			if (!empty($_FILES['url']['name'])) {
 				$uploadResult = $this->filestorage->uploadToSpaces('facturaComercial', $_FILES, 'url');
-				$url = $uploadResult['success'] ? $uploadResult['path'] : '';
+				$url_pdf = $uploadResult['success'] ? $uploadResult['path'] : '';
+				$url = $uploadResult['success'] ? $_FILES['url']['name'] : ''; // Guardamos nombre original en url para compatibilidad
 			} else {
+				$url_pdf = '';
 				$url = '';
 			}
 			
@@ -92,7 +97,8 @@ class FacturaProveedores extends MY_Controller
 			$factServ->monto = $this->input->post('monto');
 			$factServ->transporte = $this->input->post('transporte');
 			$factServ->glosa = $this->input->post('glosa');
-			$factServ->url = $url;
+			$factServ->url = $url; // Mantiene la columna url para compatibilidad
+			$factServ->url_pdf = $url_pdf; // Nueva columna para la ruta en Spaces
 			$factServ->id_orden = $this->input->post('id_orden');
 			$factServ->id_proveedor = $this->input->post('id_proveedor');
 			$factServ->created_by = $this->session->userdata('user_id');

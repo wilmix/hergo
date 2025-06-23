@@ -155,7 +155,7 @@ class Pedidos_model extends CI_Model
                     fp.`monto`,  
                     DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY) vencimiento,
                     IF (CURDATE() < DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY),'VIGENTE','VENCIDA') estado,
-                    fp.`url`, 
+                    fp.`url`,
                     tpp.totalPago, 
                     (IFNULL(fp.`monto`,0) - IFNULL(tpp.totalPago,0)) saldo
                 FROM

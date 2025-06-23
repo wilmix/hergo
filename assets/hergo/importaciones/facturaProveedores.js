@@ -251,10 +251,19 @@ function aprobados (data, type, row) {
 
 $(document).on("click", "button.see", function () {
 	let row = table.row( $(this).parents('tr') ).data();
-    console.log(row.url);
-    // Si la URL ya es completa, usarla directamente, si no, construirla con FileUtils
-    let pdf = row.url.startsWith('http') ? row.url : FileUtils.getFullUrl(row.url);
-    window.open(pdf)
+    console.log(row.url, row.url_pdf);
+    
+    // Si existe url_pdf, es una URL de Spaces
+    if (row.url_pdf) {
+        // Si la URL ya es completa, usarla directamente, si no, construirla con FileUtils
+        let pdf = row.url_pdf.startsWith('http') ? row.url_pdf : FileUtils.getFullUrl(row.url_pdf);
+        window.open(pdf);
+    } 
+    // Caso contrario, usar la url tradicional
+    else {
+        let pdf = base_url("assets/facComProv/") + row.url;
+        window.open(pdf);
+    }
 })
 
 $(document).on("click", "button.addPago", function () {
