@@ -183,7 +183,7 @@ function getLanguageSettings() {
 }
 
 function mostrarimagen(value, row, index) {
-    const ruta = value ? `/assets/img_articulos/${value}` : "/assets/img_articulos/hergo.jpg";
+    const urlSpaces = value ? `https://images.hergo.app/${value}` : "https://images.hergo.app/hg/general/hergo.jpg";
     const clase = value ? "imagenminiatura" : "";
-    return `<div class="contimg"><img src="${base_url(ruta)}" class="${clase}"></div>`;
+    return `<div class=\"contimg\"><img src=\"${urlSpaces}\" class=\"${clase}\"></div>`;
 }
