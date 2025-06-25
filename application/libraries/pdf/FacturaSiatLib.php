@@ -1,7 +1,38 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 class FacturaSiatLib extends FPDF
 {
+    var $angle = 0;
     private $datos = array();
+
+    function Rotate($angle, $x=-1, $y=-1)
+    {
+        if($x==-1)
+            $x=$this->x;
+        if($y==-1)
+            $y=$this->y;
+        if($this->angle!=0)
+            $this->_out('Q');
+        $this->angle=$angle;
+        if($angle!=0)
+        {
+            $angle*=@M_PI/180;
+            $c=cos($angle);
+            $s=sin($angle);
+            $cx=$x*$this->k;
+            $cy=($this->h-$y)*$this->k;
+            $this->_out(sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm', $c, $s, -$s, $c, $cx, $cy, -$cx, -$cy));
+        }
+    }
+
+    function _endpage()
+    {
+        if($this->angle!=0)
+        {
+            $this->angle=0;
+            $this->_out('Q');
+        }
+        parent::_endpage();
+    }
     public function __construct($params)
     {
         parent::__construct();
@@ -9,6 +40,16 @@ class FacturaSiatLib extends FPDF
     }
     public function Header()
     {
+        // Marca de agua ANULADA
+        if (isset($this->datos['anulada']) && $this->datos['anulada'] == 1) {
+            $this->SetFont('Arial', 'B', 80);
+            $this->SetTextColor(255, 180, 180); // Color más suave
+            $this->Rotate(45, 55, 160); // Posición más arriba
+            $this->Text(55, 160, 'ANULADA');
+            $this->Rotate(0);
+            $this->SetTextColor(0,0,0); // Reset text color
+        }
+
         /*** imagen ***/
         $l = '0';
         $this->SetXY(10, 9);
