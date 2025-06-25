@@ -55,13 +55,13 @@
             <!-- cliente -->
             <div class="form-group col-sm-12 col-md-2" :class="{'has-error': errors.clienteDato}">
               <label for="cliente">Cliente: <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="clienteDato" name="clienteDato" v-model="clienteDato">
+              <input type="text" class="form-control" id="clienteDato" name="clienteDato" v-model="clienteDato" maxlength="150">
               <span class="help-block" v-if="errors.clienteDato">{{ errors.clienteDato }}</span>
             </div>
             <!-- complemento -->
             <div class="form-group col-sm-12 col-md-2">
               <label for="cliente">Complemento:</label>
-              <textarea class="form-control" id="complemento" rows="1"name="complemento" v-model="complemento"></textarea>
+              <textarea class="form-control" id="complemento" rows="1"name="complemento" v-model="complemento" maxlength="200"></textarea>
             </div>
             <!-- <div class="form-group col-sm-12 col-md-4">
               <label for="cliente">Cliente:</label>
@@ -76,19 +76,19 @@
             <!-- condicionPago -->
             <div class="form-group col-sm-6 col-md-2">
               <label for="condicionPago">Condicion de Pago:</label>
-              <input type="text" class="form-control" name="condicionPago" v-model="condicionPago">
+              <input type="text" class="form-control" name="condicionPago" v-model="condicionPago" maxlength="150">
             </div>
             
             <!-- validez -->
             <div class="form-group col-sm-6 col-md-2" >
               <label for="validez">Validez de Oferta: </label>
-              <input type="text" class="form-control" id="validez" name="validez" @change="total" v-model="validez">
+              <input type="text" class="form-control" id="validez" name="validez" @change="total" v-model="validez" maxlength="150">
             </div>
 
             <!-- lugarEntrega -->
             <div class="form-group col-sm-6 col-md-2" >
               <label for="lugarEntrega">Lugar de entrega: </label>
-              <input type="text" class="form-control" id="lugarEntrega" name="lugarEntrega" @change="total" v-model="lugarEntrega">
+              <input type="text" class="form-control" id="lugarEntrega" name="lugarEntrega" @change="total" v-model="lugarEntrega" maxlength="150">
             </div>
 
             <!-- descuento -->
@@ -114,13 +114,13 @@
             <!-- garantia -->
             <div class="form-group col-sm-6 col-md-2" >
               <label for="garantia">Garantia: </label>
-              <input type="text" class="form-control" id="garantia" name="garantia" v-model="garantia">
+              <input type="text" class="form-control" id="garantia" name="garantia" v-model="garantia" maxlength="100">
             </div>
 
             <!-- tiempoEntregaC -->
             <div class="form-group col-sm-6 col-md-2" >
               <label for="tiempoEntregaC">Tiempo de Entrega (opcional): </label>
-              <input type="text" class="form-control" id="tiempoEntregaC" name="tiempoEntregaC" v-model="tiempoEntregaC">
+              <input type="text" class="form-control" id="tiempoEntregaC" name="tiempoEntregaC" v-model="tiempoEntregaC" maxlength="50">
             </div>
 
            
@@ -158,17 +158,17 @@
             <!-- industria -->
             <div class="form-group col-sm-0 col-md-2">
             <label for="industria">Industria:</label>
-              <input type="text" class="form-control" v-model="industria" maxlength="6">
+              <input type="text" class="form-control" v-model="industria" maxlength="50">
             </div>
             <!-- marca -->
             <div class="form-group col-sm-0 col-md-2">
               <label for="industria">Marca:</label>
-              <input type="text" class="form-control" v-model="marca" maxlength="6">
+              <input type="text" class="form-control" v-model="marca" maxlength="50">
             </div>
             <!-- TiempoEntrega -->
             <div class="form-group col-sm-0 col-md-2">
             <label for="tiempoEntrega">TiempoEntrega:</label>
-              <input type="text" class="form-control" v-model="tiempoEntrega" maxlength="9">
+              <input type="text" class="form-control" v-model="tiempoEntrega" maxlength="50">
             </div>
             <!-- cantidad -->
             <div class="form-group col-sm-4 col-md-2">
@@ -178,7 +178,7 @@
             <!-- precio -->
             <div class="form-group col-sm-4 col-md-2">
               <label for="precioLista">Precio de Lista:</label>
-              <input type="number" style="text-align:right;" class="form-control" v-model.number="precioLista">
+              <input type="number" style="text-align:right;" class="form-control" v-model.number="precioLista" @keydown.enter.prevent="addDetalle">
             </div>
             <!-- addButton -->
             <div class="col-sm-4 col-xs-12 col-md-2">
@@ -221,7 +221,7 @@
                   </td>
                   <div>
                     <td v-if="edit" class="text-left col-md-4"> 
-                      <input type="text" class="form-control input-sm" v-model="item.descrip" v-on:keyup.enter="editRow"></input>
+                      <input type="text" class="form-control input-sm" v-model="item.descrip" v-on:keyup.enter="editRow" maxlength="1000"></input>
                     </td>
                     <td v-else @dblclick="editRow()" class="text-left col-md-4">{{ item.descrip }}</td>
                   </div>
@@ -287,7 +287,7 @@
               <!-- cotizacion -->
               <div class="form-group col-sm-12 col-md-12">
                 <label for="glosa">Observaciones:</label>
-                <textarea class="form-control" id="glosa" rows="3"name="glosa" v-model="glosa"></textarea>
+                <textarea class="form-control" id="glosa" rows="3"name="glosa" v-model="glosa" maxlength="1000"></textarea>
               </div>
             </div>
           </div>

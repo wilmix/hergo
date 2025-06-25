@@ -86,11 +86,11 @@ class Proforma extends MY_Controller {
         // Optional fields
         $this->form_validation->set_rules('complemento', 'Complemento', 'trim|max_length[200]');
         $this->form_validation->set_rules('condicionesPago', 'Condiciones de Pago', 'trim|max_length[150]');
-        $this->form_validation->set_rules('validezOferta', 'Validez de Oferta', 'trim|max_length[150]');
+        $this->form_validation->set_rules('validez', 'Validez de Oferta', 'trim|max_length[150]');
         $this->form_validation->set_rules('lugarEntrega', 'Lugar de Entrega', 'trim|max_length[150]');
         $this->form_validation->set_rules('porcentajeDescuento', 'Porcentaje de Descuento', 'trim|numeric|greater_than_equal_to[0]');
         $this->form_validation->set_rules('descuento', 'Descuento', 'trim|numeric|greater_than_equal_to[0]');
-        $this->form_validation->set_rules('tiempoEntrega', 'Tiempo de Entrega', 'trim|max_length[50]');
+        $this->form_validation->set_rules('tiempoEntregaC', 'Tiempo de Entrega', 'trim|max_length[50]');
         $this->form_validation->set_rules('garantia', 'Garantía', 'trim|max_length[100]');
         $this->form_validation->set_rules('glosa', 'Glosa', 'trim|max_length[1000]');
 
@@ -194,24 +194,46 @@ class Proforma extends MY_Controller {
             return FALSE;
         }
 
-        foreach ($items as $item) {
+        foreach ($items as $key => $item) {
+            $item_num = $key + 1;
             if (!isset($item->id) || !isset($item->cantidad) || !isset($item->precioLista)) {
-                $this->form_validation->set_message('check_items', 'Los items deben tener id, cantidad y precio');
+                $this->form_validation->set_message('check_items', "El ítem {$item_num} es inválido.");
                 return FALSE;
             }
             
             if (!is_numeric($item->cantidad) || $item->cantidad <= 0) {
-                $this->form_validation->set_message('check_items', 'La cantidad debe ser mayor a cero');
+                $this->form_validation->set_message('check_items', "La cantidad del ítem {$item_num} debe ser mayor a cero.");
                 return FALSE;
             }
 
             if (!is_numeric($item->precioLista) || $item->precioLista < 0) {
-                $this->form_validation->set_message('check_items', 'El precio debe ser mayor o igual a cero');
+                $this->form_validation->set_message('check_items', "El precio del ítem {$item_num} debe ser mayor o igual a cero.");
                 return FALSE;
             }
 
             if (!$this->Proforma_model->checkArticuloExists($item->id)) {
-                $this->form_validation->set_message('check_items', 'Uno de los artículos seleccionados no existe');
+                $this->form_validation->set_message('check_items', "El artículo del ítem {$item_num} no existe.");
+                return FALSE;
+            }
+
+            // Validation for item description and other fields
+            if (isset($item->descrip) && strlen($item->descrip) > 1000) {
+                $this->form_validation->set_message('check_items', "La descripción del ítem {$item_num} no puede exceder los 1000 caracteres.");
+                return FALSE;
+            }
+
+            if (isset($item->marcaSigla) && strlen($item->marcaSigla) > 50) {
+                $this->form_validation->set_message('check_items', "La marca del ítem {$item_num} no puede exceder los 50 caracteres.");
+                return FALSE;
+            }
+
+            if (isset($item->industria) && strlen($item->industria) > 50) {
+                $this->form_validation->set_message('check_items', "La industria del ítem {$item_num} no puede exceder los 50 caracteres.");
+                return FALSE;
+            }
+
+            if (isset($item->tiempoEntrega) && strlen($item->tiempoEntrega) > 50) {
+                $this->form_validation->set_message('check_items', "El tiempo de entrega del ítem {$item_num} no puede exceder los 50 caracteres.");
                 return FALSE;
             }
         }

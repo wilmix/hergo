@@ -157,6 +157,44 @@ const app = new Vue({
         if (!this.clienteDato) {
           this.errors.clienteDato = 'El cliente es requerido'
           isValid = false
+        } else if (this.clienteDato.length > 150) {
+          this.errors.clienteDato = 'El nombre del cliente no debe exceder los 150 caracteres.'
+          isValid = false
+        }
+
+        if (this.complemento && this.complemento.length > 200) {
+          this.errors.complemento = 'El complemento no debe exceder los 200 caracteres.'
+          isValid = false
+        }
+
+        if (this.condicionPago && this.condicionPago.length > 150) {
+          this.errors.condicionPago = 'La condición de pago no debe exceder los 150 caracteres.'
+          isValid = false
+        }
+
+        if (this.validez && this.validez.length > 150) {
+          this.errors.validez = 'La validez de la oferta no debe exceder los 150 caracteres.'
+          isValid = false
+        }
+
+        if (this.lugarEntrega && this.lugarEntrega.length > 150) {
+          this.errors.lugarEntrega = 'El lugar de entrega no debe exceder los 150 caracteres.'
+          isValid = false
+        }
+
+        if (this.tiempoEntregaC && this.tiempoEntregaC.length > 50) {
+          this.errors.tiempoEntregaC = 'El tiempo de entrega no debe exceder los 50 caracteres.'
+          isValid = false
+        }
+
+        if (this.garantia && this.garantia.length > 100) {
+          this.errors.garantia = 'La garantía no debe exceder los 100 caracteres.'
+          isValid = false
+        }
+
+        if (this.glosa && this.glosa.length > 1000) {
+          this.errors.glosa = 'Las observaciones no deben exceder los 1000 caracteres.'
+          isValid = false
         }
         if (!this.tipo) {
           this.errors.tipo = 'Debe seleccionar un tipo'
@@ -233,10 +271,14 @@ const app = new Vue({
       },
       handleErrors(response) {
         if (response.errors) {
-          this.errors = response.errors
-          this.errorMessage = response.message || 'Por favor corrija los errores en el formulario'
+          this.errors = response.errors;
+          if (response.errors.items) {
+            this.errorMessage = response.errors.items;
+          } else {
+            this.errorMessage = response.message || 'Por favor corrija los errores en el formulario';
+          }
         } else {
-          this.errorMessage = response.message || 'Error al guardar la proforma'
+          this.errorMessage = response.message || 'Error al guardar la proforma';
         }
         // Scroll to first error
         this.$nextTick(() => {
