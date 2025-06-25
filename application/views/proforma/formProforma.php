@@ -221,7 +221,7 @@
                   </td>
                   <div>
                     <td v-if="edit" class="text-left col-md-4"> 
-                      <input type="text" class="form-control input-sm" v-model="item.descrip" v-on:keyup.enter="editRow" maxlength="1000"></input>
+                      <textarea class="form-control" v-model="item.descrip" maxlength="1000" rows="3" @blur="editRow(item)" @keydown.enter.ctrl.prevent="editRow(item)"></textarea>
                     </td>
                     <td v-else @dblclick="editRow()" class="text-left col-md-4">{{ item.descrip }}</td>
                   </div>
