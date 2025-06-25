@@ -22,6 +22,10 @@ class Siat extends MY_Controller
     $lineas = $this->Emitir_model->getDetalleFactura($id, $decimales);
     $params = (array) $factura;
 
+    // Lógica para mostrar el título opcionalmente
+    $showHeader = $this->input->get('con_titulo') ? true : false;
+    $params['showHeader'] = $showHeader;
+
     /* echo '<pre>';
      print_r($lineas);
      print_r($factura);

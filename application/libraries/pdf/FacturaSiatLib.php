@@ -13,14 +13,19 @@ class FacturaSiatLib extends FPDF
         $l = '0';
         $this->SetXY(10, 9);
         $this->Image('images/hergo.jpeg', 15, 8, 45);
-        /*** titulo ***/
-        $this->SetFont('Arial', 'B', 24);
-        $this->SetTextColor(0, 0, 200);
-            $this->Cell(0, 15, '', 0, 0, 'C');
-        $this->Ln(10);
-        /*** subtitulo ***/
-        $this->SetFont('Arial', 'B', 12);
-            $this->Cell(0, 10, '', 0, 0, 'C');
+
+        // Mostrar título y subtítulo solo si showHeader es true
+        if (isset($this->datos['showHeader']) && $this->datos['showHeader'] === true) {
+            /*** titulo ***/
+            $this->SetFont('Arial', 'B', 24);
+            $this->SetTextColor(0, 0, 200);
+                $this->Cell(0, 15, 'FACTURA', 0, 0, 'C');
+            $this->Ln(8);
+            /*** subtitulo ***/
+            $this->SetFont('Arial', '', 9);
+            $this->SetTextColor(0, 0, 0);
+            $this->Cell(0, 10, convertToISO('(Con Derecho a Crédito Fiscal)'), 0, 0, 'C');
+        }
 
         /*** izquierda***/
         $this->SetXY(10, 18);

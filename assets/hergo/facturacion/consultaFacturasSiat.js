@@ -314,7 +314,7 @@ function printPago(value, row, index) {
 
 $(document).on("click", "button.print", function () {
     let row = getRow(table, this)
-	let print = base_url(`pdf/Siat/factura/${row.idFactura}`)
+	let print = base_url(`pdf/Siat/factura/${row.idFactura}?con_titulo=0`)
 	window.open(print);
 })
 $(document).on("click", "button.linkSiat", function () {
