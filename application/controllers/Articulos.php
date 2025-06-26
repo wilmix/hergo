@@ -5,11 +5,11 @@ class Articulos extends MY_Controller
 	/**
 	 * @var Articulo_model
 	 */
-	protected $Articulo_model;
+	public $Articulo_model;
 	/**
 	 * @var FileStorage
 	 */
-	protected $filestorage;
+	public $filestorage;
 
 	public function __construct()
 	{	
