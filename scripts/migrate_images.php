@@ -265,7 +265,7 @@ switch ($modulo) {    case 'articulos':
         $spacesDir = 'hg/facturaComercial/';
         break;
     case 'pagoFacturaComercial':
-        $tableName = 'fact_prov';
+        $tableName = 'pago_prov';
         $idColumn = 'id';
         $imageColumn = 'url';
         $imageUrlColumn = 'url_pdf';
