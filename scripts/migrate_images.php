@@ -256,13 +256,21 @@ switch ($modulo) {    case 'articulos':
         $spacesDir = 'hg/pagos/';
         break;
     // Agregar más módulos aquí
-        case 'facturaComercial':
+    case 'facturaComercial':
         $tableName = 'fact_prov';
         $idColumn = 'id';
         $imageColumn = 'url';
         $imageUrlColumn = 'url_pdf';
         $localDir = $projectRoot . '/assets/facComProv/';
         $spacesDir = 'hg/facturaComercial/';
+        break;
+    case 'pagoFacturaComercial':
+        $tableName = 'fact_prov';
+        $idColumn = 'id';
+        $imageColumn = 'url';
+        $imageUrlColumn = 'url_pdf';
+        $localDir = $projectRoot . '/assets/img_pagos/';
+        $spacesDir = 'hg/pagoFacturaComercial/';
         break;
     default:
         die("Error: Módulo '$modulo' no soportado.\n");
