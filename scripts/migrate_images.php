@@ -269,7 +269,7 @@ switch ($modulo) {    case 'articulos':
         $idColumn = 'id';
         $imageColumn = 'url';
         $imageUrlColumn = 'url_pdf';
-        $localDir = $projectRoot . '/assets/img_pagos/';
+        $localDir = $projectRoot . '/assets/pagoProveedores/';
         $spacesDir = 'hg/pagoFacturaComercial/';
         break;
     default:
