@@ -473,9 +473,6 @@ const pago = new Vue({
 			formData.append('pagos', JSON.stringify(this.pagoslist))
 
 
-			/* for(let pair of formData.entries()) {
-				console.log(pair[0]+ ', '+ pair[1]); 
-			}  */
 			$.ajax({
 				url: base_url("index.php/Importaciones/FacturaProveedores/storePago"),
 				type: 'POST',
@@ -484,36 +481,47 @@ const pago = new Vue({
 				contentType: false,
 				processData: false,
 				success: function (returndata) {
-					res = JSON.parse(returndata)
-					console.log(res);
-					if (res.status == true) {
-						quitarcargando()
-						swal({
-							title: "Registrado!",
-							text: "El pago se asoció con éxito",
-							type: "success",        
-							allowOutsideClick: false,                                                                        
-							}).then(function(){
-								agregarcargando()
-								location.reload();
-							})
-					} else {
-						quitarcargando()
-						swal(
-							'Error',
-							'Error al guardar el Pago',
-							'error'
-						)
-					}
+					try {
+                        res = JSON.parse(returndata)
+                    } catch (e) {
+                        quitarcargando();
+                        swal('Error', 'Respuesta inesperada del servidor.', 'error');
+                        return;
+                    }
+                    console.log(res);
+                    if (res.status == true) {
+                        quitarcargando()
+                        swal({
+                            title: "Registrado!",
+                            text: "El pago se asoció con éxito",
+                            type: "success",        
+                            allowOutsideClick: false,                                                                        
+                        }).then(function(){
+                            agregarcargando()
+                            location.reload();
+                        })
+                    } else {
+                        quitarcargando()
+                        swal(
+                            'Error',
+                            res.message ? res.message : 'Error al guardar el Pago',
+                            'error'
+                        )
+                    }
 				},
-				error : function (returndata) {
-					swal(
-						'Error',
-						'Error',
-						'error'
-					)
-				},
-			});
+				error: function (xhr) {
+                    quitarcargando();
+                    let msg = 'Error inesperado en el servidor.';
+                    try {
+                        let res = JSON.parse(xhr.responseText);
+                        if (res && res.message) msg = res.message;
+                    } catch (e) {}
+                    swal('Error', msg, 'error');
+                },
+                complete: function() {
+                    quitarcargando();
+                }
+            });
 		},
 		cancel(e){
 			e.preventDefault()

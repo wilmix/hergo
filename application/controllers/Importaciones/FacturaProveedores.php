@@ -40,36 +40,41 @@ class FacturaProveedores extends MY_Controller
 	{
 		if($this->input->is_ajax_request())
 		{
-			// Utilizar FileStorage para subir el archivo a Spaces
-			if (!empty($_FILES['url_pago']['name'])) {
-				$uploadResult = $this->filestorage->uploadToSpaces('facturaComercial', $_FILES, 'url_pago');
-				$url_pdf = $uploadResult['success'] ? $uploadResult['path'] : '';
-				$url = $uploadResult['success'] ? $_FILES['url_pago']['name'] : ''; // Guardamos nombre original en url para compatibilidad
-			} else {
-				$url_pdf = '';
-				$url = '';
+			try {
+				// Utilizar FileStorage para subir el archivo a Spaces
+				if (!empty($_FILES['url_pago']['name'])) {
+					$uploadResult = $this->filestorage->uploadToSpaces('facturaComercial', $_FILES, 'url_pago');
+					$url_pdf = $uploadResult['success'] ? $uploadResult['path'] : '';
+					$url = $uploadResult['success'] ? $_FILES['url_pago']['name'] : '';
+				} else {
+					$url_pdf = '';
+					$url = '';
+				}
+				$pago = new stdclass();
+				$pago->fecha = $this->input->post('fechaPago');
+				$pago->url = $url;
+				$pago->url_pdf = $url_pdf;
+				$pago->total = $this->input->post('total');
+				$pago->created_by = $this->session->userdata('user_id');
+				$pago->pagos = json_decode($this->input->post('pagos'));
+				$id = $this->Pedidos_model->storePago($pago);
+				if($id)
+				{
+					$res = new stdclass();
+					$res->status = true;
+					$res->id = $id;
+					$res->orden = $pago;
+					echo json_encode($res);
+				} else {
+					echo json_encode(['status'=>false, 'message'=>'No se pudo guardar el pago.']);
+				}
+			} catch (Exception $e) {
+				http_response_code(500);
+				echo json_encode([
+					'status' => false,
+					'message' => 'Se produjo un error en el servidor: ' . $e->getMessage()
+				]);
 			}
-			
-			$pago = new stdclass();
-			$pago->fecha = $this->input->post('fechaPago');
-			$pago->url = $url; // Mantiene la columna url para compatibilidad
-			$pago->url_pdf = $url_pdf; // Nueva columna para la ruta en Spaces
-			$pago->total = $this->input->post('total');
-			$pago->created_by = $this->session->userdata('user_id');
-			$pago->pagos = json_decode($this->input->post('pagos'));
-			//echo json_encode($pago);die();
-			$id = $this->Pedidos_model->storePago($pago);
-			if($id)
-			{
-				$res = new stdclass();
-				$res->status = true;
-				$res->id = $id;
-				$res->orden = $pago;
-				echo json_encode($res);
-			} else {
-				echo json_encode($id);
-			}
-
 		}
 		else
 		{
