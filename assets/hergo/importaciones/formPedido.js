@@ -1,5 +1,5 @@
 
-let url_img = base_url('assets/img_articulos/hergo.jpg')
+
 $(document).ready(function(){
 
 })
@@ -30,7 +30,7 @@ const app = new Vue({
         rotacion:'0.00',
         cpp:'0.00',
         img:'',
-        url_img:base_url('assets/img_articulos/hergo.jpg'),
+        url_img:FileUtils.getFullUrl('hg/general/hergo.jpg'),
         cantidad:0.00,
         precioFabrica:0.00,
         /* documento */
@@ -126,7 +126,7 @@ const app = new Vue({
         this.img = selected.img
         this.rotacion = selected.rotacion
         this.posicionArancel = selected.posicionArancel
-        this.url_img = this.img ? FileUtils.getFullUrl(this.img) : url_img
+        this.url_img = this.img ? FileUtils.getFullUrl(this.img) : FileUtils.getFullUrl('hg/general/hergo.jpg')
       },
       cleanCard(){
         this.selectedArticulo = null
