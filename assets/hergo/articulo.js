@@ -454,29 +454,15 @@ function retornarTabla()
  */
 function mostrarimagen(value, row, index)
 {
-    let ruta = "";
-    let clase = "imagenminiatura";
-    let baseSpacesUrl = "https://images.hergo.app/"; // URL base para imágenes en Spaces
+    // Obtener URL completa usando FileUtils, con fallback a imagen por defecto
+    const imageUrl = FileUtils.getFullUrl(row.ImagenUrl) || FileUtils.getFullUrl('hg/general/hergo.jpg');
     
-    // Determinar la ruta de la imagen
-    if (row.ImagenUrl) {
-        // Construir la URL completa con la base de Spaces
-        ruta = baseSpacesUrl + row.ImagenUrl;
-    }
-    else if (value && value !== "") {
-        // Compatibilidad con imágenes antiguas
-        ruta = base_url("/assets/img_articulos/" + value);
-    }
-    else {
-        // Imagen predeterminada
-        ruta = base_url("/assets/img_articulos/hergo.jpg");
-        clase = ""; // Sin clase para imagen predeterminada
-    }
-    
-    // Construir el HTML para la miniatura
-    let imagen = '<div class="contimg"><img src="' + ruta + '" class="' + clase + '"></div>';
-    
-    return imagen;
+    return `<img src="${imageUrl}" 
+                alt="imagen articulo" 
+                class="imagenminiatura" 
+                style="width: 50px; height: 50px; cursor:pointer" 
+                data-toggle="modal" 
+                data-target="#prev_imagen">`;
 }
 
 function verproductoservicio(value, row, index)
