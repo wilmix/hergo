@@ -391,8 +391,9 @@ class Pedidos_model extends CI_Model
                         WHEN fp.id IS NULL THEN 'VIGENTE'
                         WHEN (CURDATE() < DATE_ADD(fp.`fecha`,INTERVAL fp.`tiempo_credito` DAY)) THEN 'VIGENTE'
                         ELSE 'VENCIDA'
-                    END estadoOrden
-                    
+                    END estadoOrden,
+                    fp.url_pdf facturaComercialPdf,
+                    pp.url_pdf pagoFacturaComercialPdf
                 FROM ordenescompra oc
                     INNER JOIN pedidos p 
                         ON p.`id` = oc.`id_pedido`

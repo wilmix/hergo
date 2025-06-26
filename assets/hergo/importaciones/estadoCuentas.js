@@ -117,6 +117,25 @@ function getEstadoCuentas() {
 					className: 'text-center',
 					//sorting: false,
                 },
+				{
+					title: 'DOCUMENTOS',
+					data: null,
+					className: 'text-center',
+					render: function (data, type, row) {
+						let factureLink = ''
+						let paymentLink = ''
+						if (row.facturaComercialPdf) {
+							let url = FileUtils.getFullUrl(row.facturaComercialPdf)
+							factureLink = `<a href="${url}" target="_blank">Factura</a>`
+						}
+						if (row.pagoFacturaComercialPdf) {
+							let url = FileUtils.getFullUrl(row.pagoFacturaComercialPdf)
+							paymentLink = `<a href="${url}" target="_blank">Pago</a>`
+						}
+						return `${factureLink} <br> ${paymentLink}`
+					}
+				},
+
 			],
 			stateSave: true,
 			stateSaveParams: function (settings, data) {

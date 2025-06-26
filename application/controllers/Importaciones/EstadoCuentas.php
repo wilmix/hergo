@@ -16,6 +16,7 @@ class EstadoCuentas extends MY_Controller
 	{
 		$this->accesoCheck(63);
 		$this->titles('EstadoCuentas','Estado de Cuentas','Importaciones');
+		$this->datos['foot_script'][]=base_url('assets/hergo/fileutils.js') .'?'.rand();
 		$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/estadoCuentas.js') .'?'.rand();
 		$this->setView('importaciones/estadoCuentas');
 	}
