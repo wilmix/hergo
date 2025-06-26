@@ -31,8 +31,9 @@
             <div class="form-group col-sm-3 col-md-3">
               <div class="upload_image">
                 <div class="form-group">
-                  <label for="img_route">Comprobante:</label>
-                  <input id="url_pago" name="url_pago" type="file" accept="application/pdf">
+                  <label for="url_pago">Comprobante:</label>
+                  <input id="url_pago" name="url_pago" type="file" accept="image/*,application/pdf">
+                  <input type="hidden" id="pago_url_delete" name="pago_url_delete" value="0">
                 </div>
               </div> 
             </div>
@@ -166,8 +167,9 @@
                   <div class="form-group col-sm-3 col-md-3">
                     <div class="upload_image">
                       <div class="form-group">
-                        <label for="img_route">Comprobante:</label>
-                        <input id="url" name="url" type="file" accept="application/pdf">
+                        <label for="url">Comprobante:</label>
+                        <input id="url" name="url" type="file" accept="image/*,application/pdf">
+                        <input type="hidden" id="url_delete" name="url_delete" value="0">
                       </div>
                     </div> 
                   </div>

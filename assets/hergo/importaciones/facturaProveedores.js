@@ -8,6 +8,17 @@ $(document).ready(function () {
 		getFacturaProveedores()
 	});
 
+	FileUtils.setupFileInput('#url_pago', {});
+    FileUtils.handleFileClear('#url_pago', '#pago_url_delete');
+
+    $('#url_pago').on('fileclear', function(event) {
+        $('#pago_url_delete').val('1');
+    });
+
+    $('#url_pago').on('change', function(event) {
+        $('#pago_url_delete').val('0');
+    });
+
 })
 $(document).on("change", "#estadoFiltro", function () {
     getFacturaProveedores()
@@ -290,6 +301,20 @@ Vue.component('modal', {
 			errors:''             
         }
 	},
+    mounted: function() {
+        this.$nextTick(function () {
+            FileUtils.setupFileInput('#url', {});
+            FileUtils.handleFileClear('#url', '#url_delete');
+
+            $('#url').on('fileclear', function(event) {
+                $('#url_delete').val('1');
+            });
+
+            $('#url').on('change', function(event) {
+                $('#url_delete').val('0');
+            });
+        })
+    },
 	methods:{     
 		customFormatter(date) {
 			return moment(date).format('D MMMM  YYYY');

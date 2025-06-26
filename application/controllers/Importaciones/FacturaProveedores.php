@@ -43,7 +43,7 @@ class FacturaProveedores extends MY_Controller
 			try {
 				// Utilizar FileStorage para subir el archivo a Spaces
 				if (!empty($_FILES['url_pago']['name'])) {
-					$uploadResult = $this->filestorage->uploadToSpaces('facturaComercial', $_FILES, 'url_pago');
+					$uploadResult = $this->filestorage->uploadToSpaces('pagoFacturaComercial', $_FILES, 'url_pago');
 					$url_pdf = $uploadResult['success'] ? $uploadResult['path'] : '';
 					$url = $uploadResult['success'] ? $_FILES['url_pago']['name'] : '';
 				} else {
