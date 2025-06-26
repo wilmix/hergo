@@ -126,7 +126,7 @@ const app = new Vue({
         this.img = selected.img
         this.rotacion = selected.rotacion
         this.posicionArancel = selected.posicionArancel
-        this.url_img = this.img ? base_url('assets/img_articulos/'+this.img) : url_img
+        this.url_img = this.img ? FileUtils.getFullUrl(this.img) : url_img
       },
       cleanCard(){
         this.selectedArticulo = null

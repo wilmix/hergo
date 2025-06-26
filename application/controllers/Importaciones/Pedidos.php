@@ -38,6 +38,7 @@ class Pedidos extends MY_Controller
 	{
 		$this->accesoCheck(58);
 		$this->titles('FormPedido','Formulario Pedido','Importaciones');
+		$this->datos['foot_script'][]=base_url('assets/hergo/fileutils.js') .'?'.rand();
 		$this->datos['foot_script'][]=base_url('assets/hergo/importaciones/formPedido.js') .'?'.rand();
 		$this->setView('importaciones/formPedido');
 	}
