@@ -3,9 +3,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Articulos extends MY_Controller
 {
 	/**
-	 * @property Articulo_model $Articulo_model
-	 * @property FileStorage $filestorage
+	 * @var Articulo_model
 	 */
+	protected $Articulo_model;
+	/**
+	 * @var FileStorage
+	 */
+	protected $filestorage;
 
 	public function __construct()
 	{	
