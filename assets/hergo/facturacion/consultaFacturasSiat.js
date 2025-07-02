@@ -1,6 +1,8 @@
 let ini = moment().subtract(0, 'year').startOf('year').format('YYYY-MM-DD')
 let fin = moment().subtract(0, 'year').endOf('year').format('YYYY-MM-DD')
 let permisoAnular
+let fechaLimiteAnulacion = null;
+
 $(document).ready(function () {
 	permisoAnular = $("#permisoAnular").val()
     console.log(permisoAnular);
@@ -10,6 +12,9 @@ $(document).ready(function () {
 	$('#reportrange').on('apply.daterangepicker', function (ev, picker) {
 		getData()
 	});
+    getFechaLimiteAnulacion().done(function(res) {
+        fechaLimiteAnulacion = res.fecha_limite_anulacion;
+    });
 })
 
 
@@ -340,8 +345,31 @@ $(document).on("click", "button.xml", function () {
 
 })
 $(document).on("click", "button.anular", function () {
+    // Validar fecha límite antes de mostrar el modal
+    if (!fechaLimiteAnulacion) {
+        swal({
+            title: 'Error',
+            html: 'No se pudo obtener la fecha límite de anulación. Intente de nuevo o contacte a soporte.',
+            type: 'error',
+            showCancelButton: false,
+            allowOutsideClick: false,
+        });
+        return;
+    }
+    let ahora = moment();
+    let limite = moment(fechaLimiteAnulacion);
+    if (ahora.isAfter(limite)) {
+        swal({
+            title: 'No permitido',
+            html: 'No se puede anular la factura porque ya pasó la fecha o periodo de anulación.',
+            type: 'error',
+            showCancelButton: false,
+            allowOutsideClick: false,
+        });
+        return;
+    }
     let row = getRow(table, this)
-	pro.showModalAnular(row)
+    pro.showModalAnular(row)
 })
 
 const pro = new Vue({
@@ -595,3 +623,11 @@ const pro = new Vue({
 
 	}
 })
+
+function getFechaLimiteAnulacion() {
+    return $.ajax({
+        type: "GET",
+        url: base_url('index.php/siat/facturacion/Emitir/getFechaLimiteAnulacion'),
+        dataType: "json"
+    });
+}

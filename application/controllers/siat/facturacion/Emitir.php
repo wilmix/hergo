@@ -388,5 +388,13 @@ class Emitir extends MY_Controller
 		$info = $this->Emitir_model->checkFacturasInventarios($año, $mes, $dia); 
 		echo json_encode($info);
 	 }
+	public function getFechaLimiteAnulacion()
+	{
+		$this->load->model('Configuracion_model');
+		$query = $this->Configuracion_model->retornar_tabla('config');
+		$row = $query->row();
+		$fecha_limite = isset($row->fecha_limite_anulacion) ? $row->fecha_limite_anulacion : null;
+		echo json_encode(['fecha_limite_anulacion' => $fecha_limite]);
+	}
 
 }
