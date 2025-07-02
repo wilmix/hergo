@@ -2,6 +2,7 @@ let ini = moment().subtract(0, 'year').startOf('year').format('YYYY-MM-DD')
 let fin = moment().subtract(0, 'year').endOf('year').format('YYYY-MM-DD')
 let permisoAnular
 let fechaLimiteAnulacion = null;
+let fechaLimiteAnulacionGlobal = null;
 
 $(document).ready(function () {
 	permisoAnular = $("#permisoAnular").val()
@@ -17,281 +18,325 @@ $(document).ready(function () {
     });
 })
 
+function getPeriodoAbierto(fechaLimite) {
+    // El periodo abierto es el mes anterior a la fecha límite
+    let limite = moment(fechaLimite);
+    return {
+        year: limite.subtract(1, 'month').year(),
+        month: limite.month() // 0-indexed
+    };
+}
+
+function isFacturaMesActual(fechaFac) {
+    let fecha = moment(fechaFac);
+    let ahora = moment();
+    return fecha.year() === ahora.year() && fecha.month() === ahora.month();
+}
+
+function isFacturaMesAnterior(fechaFac, fechaLimite) {
+    let fecha = moment(fechaFac);
+    let periodo = getPeriodoAbierto(fechaLimite);
+    return fecha.year() === periodo.year && fecha.month() === periodo.month;
+}
+
+function isFacturaMesAnteriorOMasVieja(fechaFac, fechaLimite) {
+    let fecha = moment(fechaFac);
+    let periodo = getPeriodoAbierto(fechaLimite);
+    if (fecha.year() < periodo.year) return true;
+    if (fecha.year() === periodo.year && fecha.month() < periodo.month) return true;
+    return false;
+}
 
 function getData() {
-	agregarcargando()
-	$.ajax({
-		type: "POST",
-		url: base_url('index.php/siat/facturacion/Emitir/getFacturasSiat'),
-		dataType: "json",
-		data: {
+    agregarcargando();
+    getFechaLimiteAnulacion().done(function(res) {
+        fechaLimiteAnulacionGlobal = res.fecha_limite_anulacion;
+        $.ajax({
+            type: "POST",
+            url: base_url('index.php/siat/facturacion/Emitir/getFacturasSiat'),
+            dataType: "json",
+            data: {
                 ini:ini,
                 fin:fin,
                 alm:pro.almacen
-		},
-	}).done(function (res) {
-        //console.log(res);
-		table = $('#table').DataTable({
-			data: res,
-			//select: true,
-			destroy: true,
-			dom: 'Bfrtip',
-			responsive: true,
-			lengthMenu: [
-				[10, 25, 50, -1],
-				['10 filas', '25 filas', '50 filas', 'Todo']
-			],
-			pageLength: 10,
-			columns: [
-				{
-					data: 'idFactura',
-					title: 'id',
-					className: 'text-center',
-                    visible: false
-				},
-				{
-					data: '',
-					title: 'TIPO',
-					className: 'text-center',
-					render: tipoFactura,
-					width: '5%'
-				},
-				{
-					data: 'idAlmacen',
-					title: 'ALM',
-					className: 'text-center',
-					visible: false
+            },
+        }).done(function (res) {
+            table = $('#table').DataTable({
+                data: res,
+                destroy: true,
+                dom: 'Bfrtip',
+                responsive: true,
+                lengthMenu: [
+                    [10, 25, 50, -1],
+                    ['10 filas', '25 filas', '50 filas', 'Todo']
+                ],
+                pageLength: 10,
+                columns: [
+                    {
+                        data: 'idFactura',
+                        title: 'id',
+                        className: 'text-center',
+                        visible: false
+                    },
+                    {
+                        data: '',
+                        title: 'TIPO',
+                        className: 'text-center',
+                        render: tipoFactura,
+                        width: '5%'
+                    },
+                    {
+                        data: 'idAlmacen',
+                        title: 'ALM',
+                        className: 'text-center',
+                        visible: false
 
-				},
-				{
-					data: 'almacen',
-					title: 'ALMACEN',
-					className: 'text-center'
-					
-				},
-				{
-					data: 'numeroFactura',
-					title: 'Nº',
-					className: 'text-center',
-				},
-				{
-					data: 'numeroFacturaSearch',
-					visible: false
-				},
-				{
-					data: 'fechaFac',
-					title: 'FECHA',
-					className: 'text-center',
-					render: formato_fecha,
-					visible: false
-				},
-                {
-					data: 'fechaEmisionSiat',
-					title: 'FECHA SIAT',
-					className: 'text-center',
-					render: formato_fecha_corta,
-				},
-                {
-					data: 'ClienteNit',
-					title: 'DOCUMENTO',
-					width: '10%'
-				},
-				{
-					data: 'ClienteFactura',
-					title: 'CLIENTE',
-				},
-                {
-					data: 'movEgreso',
-					title: 'Movimiento',
-                    render:printEgreso,
-					width: '10%'
-				},
-				{
-					data: 'total',
-					title: 'TOTAL',
-					sorting: false,
-					className: 'text-right',
-					render: numberDecimal
-				},
-                {
-					data: 'pedido',
-					title: 'PEDIDO',
-					className: 'text-center',
-					visible: false
-				},
-				{
-					data: 'metodoPago',
-					title: 'METODO PAGO',
-					className: 'text-center',
-					visible: true
-				},
-                {
-					data: 'pagos',
-					title: 'PAGOS',
-                    render:printPago
-				},
-				{
-					data: 'vendedor',
-					title: 'VENDEDOR',
-					className: 'text-right',
-					sorting: false,
-					width: '10%'
-				},
-                {
-					data: 'fecha',
-					title: 'CREADO EN:',
-					className: 'text-center',
-					render: formato_fecha_corta,
-					visible: false
-				},
-				{
-					data: 'emisor',
-					title: 'EMITIDO POR:',
-					className: 'text-right',
-					sorting: false,
-					visible: false
-				},
-                {
-					data: 'codigoRecepcion',
-					title: 'CODIGO RECEPCIÓN',
-					visible: false,
-					//searchable: false
-				},
-				{
-					data: 'leyenda',
-					title: 'LEYENDA',
-					visible: false
-				},
-                {
-					data: 'cuf',
-					title: 'CUF',
-					visible: false,
-					//searchable: false
-				},
-				
-                {
-                    data:'pagadaF',
-                    title:"Pagado",
-					className: 'text-right',
-                },  
-				{
-					data: null,
-					title: '',
-					width: '120px',
-					className: 'text-center',
-					render: buttons
-				},
-			],
-			stateSave: true,
-			stateSaveParams: function (settings, data) {
-				data.order = []
-			},
-			buttons: [
-				{
-					extend: 'copy',
-					text: '<i class="fas fa-copy" style="font-size:18px;"> </i>',
-					titleAttr: 'Configuracion',
-					header: false,
-					title: null,
-					exportOptions: {
-						columns: [':visible'],
-						title: null,
-						modifier: {
-							order: 'current',
-						}
-					}
-				},
-				{
-					extend: 'excel',
-					text: '<i class="fas fa-file-excel" aria-hidden="true" style="font-size:18px;"> </i>',
-					titleAttr: 'ExportExcel',
-					autoFilter: true,
-					//messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
-					title: 'Reporte Facturas',
-					exportOptions: {
-						columns: ':visible'
-					},
-				},
-				{
-					text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
-					action: function (e, dt, node, config) {
-						//pro.verificarEvento()
-						getData()
-					}
-				},
-				{
-					extend: 'collection',
-					text: '<i class="fa fa-cogs" aria-hidden="true" style="font-size:18px;"></i>',
-					titleAttr: 'Configuracion',
-					autoClose: true,
-					buttons: [
-						'pageLength',
-						{
-							extend: 'colvis',
-							text: '<i class="fas fa-eye" aria-hidden="true"> Ver/Ocultar</i>',
-							collectionLayout: 'fixed two-column',
-							postfixButtons: ['colvisRestore']
-						},
-						{
-							text: '<i class="fas fa-redo" aria-hidden="true"> Reestablecer</i>',
-							className: 'btn btn-link',
-							action: function (e, dt, node, config) {
-								table.state.clear()
-								getData()
-							}
-						},
+                    },
+                    {
+                        data: 'almacen',
+                        title: 'ALMACEN',
+                        className: 'text-center'
+                        
+                    },
+                    {
+                        data: 'numeroFactura',
+                        title: 'Nº',
+                        className: 'text-center',
+                    },
+                    {
+                        data: 'numeroFacturaSearch',
+                        visible: false
+                    },
+                    {
+                        data: 'fechaFac',
+                        title: 'FECHA',
+                        className: 'text-center',
+                        render: formato_fecha,
+                        visible: false
+                    },
+                    {
+                        data: 'fechaEmisionSiat',
+                        title: 'FECHA SIAT',
+                        className: 'text-center',
+                        render: formato_fecha_corta,
+                    },
+                    {
+                        data: 'ClienteNit',
+                        title: 'DOCUMENTO',
+                        width: '10%'
+                    },
+                    {
+                        data: 'ClienteFactura',
+                        title: 'CLIENTE',
+                    },
+                    {
+                        data: 'movEgreso',
+                        title: 'Movimiento',
+                        render:printEgreso,
+                        width: '10%'
+                    },
+                    {
+                        data: 'total',
+                        title: 'TOTAL',
+                        sorting: false,
+                        className: 'text-right',
+                        render: numberDecimal
+                    },
+                    {
+                        data: 'pedido',
+                        title: 'PEDIDO',
+                        className: 'text-center',
+                        visible: false
+                    },
+                    {
+                        data: 'metodoPago',
+                        title: 'METODO PAGO',
+                        className: 'text-center',
+                        visible: true
+                    },
+                    {
+                        data: 'pagos',
+                        title: 'PAGOS',
+                        render:printPago
+                    },
+                    {
+                        data: 'vendedor',
+                        title: 'VENDEDOR',
+                        className: 'text-right',
+                        sorting: false,
+                        width: '10%'
+                    },
+                    {
+                        data: 'fecha',
+                        title: 'CREADO EN:',
+                        className: 'text-center',
+                        render: formato_fecha_corta,
+                        visible: false
+                    },
+                    {
+                        data: 'emisor',
+                        title: 'EMITIDO POR:',
+                        className: 'text-right',
+                        sorting: false,
+                        visible: false
+                    },
+                    {
+                        data: 'codigoRecepcion',
+                        title: 'CODIGO RECEPCIÓN',
+                        visible: false,
+                        //searchable: false
+                    },
+                    {
+                        data: 'leyenda',
+                        title: 'LEYENDA',
+                        visible: false
+                    },
+                    {
+                        data: 'cuf',
+                        title: 'CUF',
+                        visible: false,
+                        //searchable: false
+                    },
+                    
+                    {
+                        data:'pagadaF',
+                        title:"Pagado",
+                        className: 'text-right',
+                    },  
+                    {
+                        data: null,
+                        title: '',
+                        width: '120px',
+                        className: 'text-center',
+                        render: buttons
+                    },
+                ],
+                stateSave: true,
+                stateSaveParams: function (settings, data) {
+                    data.order = []
+                },
+                buttons: [
+                    {
+                        extend: 'copy',
+                        text: '<i class="fas fa-copy" style="font-size:18px;"> </i>',
+                        titleAttr: 'Configuracion',
+                        header: false,
+                        title: null,
+                        exportOptions: {
+                            columns: [':visible'],
+                            title: null,
+                            modifier: {
+                                order: 'current',
+                            }
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="fas fa-file-excel" aria-hidden="true" style="font-size:18px;"> </i>',
+                        titleAttr: 'ExportExcel',
+                        autoFilter: true,
+                        //messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.',
+                        title: 'Reporte Facturas',
+                        exportOptions: {
+                            columns: ':visible'
+                        },
+                    },
+                    {
+                        text: '<i class="fas fa-sync" aria-hidden="true" style="font-size:18px;"></i>',
+                        action: function (e, dt, node, config) {
+                            //pro.verificarEvento()
+                            getData()
+                        }
+                    },
+                    {
+                        extend: 'collection',
+                        text: '<i class="fa fa-cogs" aria-hidden="true" style="font-size:18px;"></i>',
+                        titleAttr: 'Configuracion',
+                        autoClose: true,
+                        buttons: [
+                            'pageLength',
+                            {
+                                extend: 'colvis',
+                                text: '<i class="fas fa-eye" aria-hidden="true"> Ver/Ocultar</i>',
+                                collectionLayout: 'fixed two-column',
+                                postfixButtons: ['colvisRestore']
+                            },
+                            {
+                                text: '<i class="fas fa-redo" aria-hidden="true"> Reestablecer</i>',
+                                className: 'btn btn-link',
+                                action: function (e, dt, node, config) {
+                                    table.state.clear()
+                                    getData()
+                                }
+                            },
 
-					]
-				},
-			],
-			order: [],
-			fixedHeader: {
-				header: true,
-				footer: true
-			},
-			//paging: false,
-			//responsive: true,
-			language: datatableLangage
+                        ]
+                    },
+                ],
+                order: [],
+                fixedHeader: {
+                    header: true,
+                    footer: true
+                },
+                //paging: false,
+                //responsive: true,
+                language: datatableLangage
 
-		});
-		quitarcargando();
-	}).fail(function (jqxhr, textStatus, error) {
-		let err = textStatus + ", " + error;
-		console.log("Request Failed: " + err);
-	});
+            });
+            quitarcargando();
+        }).fail(function (jqxhr, textStatus, error) {
+            let err = textStatus + ", " + error;
+            console.log("Request Failed: " + err);
+        });
+    });
 }
 
 function buttons (data, type, row) {
-	let anular = `<button type="button" class="btn btn-default anular">
-					<span class="fa fa-ban" aria-hidden="true">
-					</span>
-				</button>`
-	let xml = `<button type="button" class="btn btn-default xml">
-					<span class="fa fa-file-text-o" aria-hidden="true">
-					</span>
-				</button>`
-	let pdf = `<button type="button" class="btn btn-default print">
-					<span class="fa fa-print" aria-hidden="true">
-					</span>
-				</button>`
-	let verificar = `<button type="button" class="btn btn-default check">
-		<span class="fa fa-check" aria-hidden="true">
-		</span>
-	</button>`
-	let linkSiat = `<button type="button" class="btn btn-default linkSiat" title="top">
-		<span class="fa fa-external-link" aria-hidden="true">
-		</span>
-	</button>`
-	let buttons
-	if (row.anulada == 1 || row.pagada == 1) {
-		buttons = `${pdf}${xml}${linkSiat}`
-	} else if (permisoAnular == 'true') {
-		buttons = `${pdf}${xml}${anular}${linkSiat}`
-	} else {
-		buttons = `${pdf}${xml}${linkSiat}`
-	}
-	return buttons
+    let anular = `<button type="button" class="btn btn-default anular">
+                    <span class="fa fa-ban" aria-hidden="true">
+                    </span>
+                </button>`
+    let xml = `<button type="button" class="btn btn-default xml">
+                    <span class="fa fa-file-text-o" aria-hidden="true">
+                    </span>
+                </button>`
+    let pdf = `<button type="button" class="btn btn-default print">
+                    <span class="fa fa-print" aria-hidden="true">
+                    </span>
+                </button>`
+    let linkSiat = `<button type="button" class="btn btn-default linkSiat" title="top">
+        <span class="fa fa-external-link" aria-hidden="true">
+        </span>
+    </button>`
+    let buttons = `${pdf}${xml}${linkSiat}`;
+    if (row.anulada == 1 || row.pagada == 1) {
+        return buttons;
+    }
+    if (!fechaLimiteAnulacionGlobal) {
+        return buttons;
+    }
+    let ahora = moment();
+    let limite = moment(fechaLimiteAnulacionGlobal);
+    // Mostrar botón si es del mes actual
+    if (isFacturaMesActual(row.fechaFac)) {
+        if (permisoAnular == 'true') {
+            return `${pdf}${xml}${anular}${linkSiat}`;
+        } else {
+            return buttons;
+        }
+    }
+    // Mostrar botón si es del periodo abierto (mes anterior a la fecha límite) y estamos antes de la fecha límite
+    if (isFacturaMesAnterior(row.fechaFac, fechaLimiteAnulacionGlobal) && ahora.isBefore(limite)) {
+        if (permisoAnular == 'true') {
+            return `${pdf}${xml}${anular}${linkSiat}`;
+        } else {
+            return buttons;
+        }
+    }
+    // Nunca mostrar botón para meses anteriores al periodo abierto
+    return buttons;
 }
+
 function printEgreso(value, row, index) {
     link=''
     movEgresos = JSON.parse(value)
@@ -345,31 +390,42 @@ $(document).on("click", "button.xml", function () {
 
 })
 $(document).on("click", "button.anular", function () {
-    // Validar fecha límite antes de mostrar el modal
-    if (!fechaLimiteAnulacion) {
+    // Consultar la fecha límite en tiempo real antes de mostrar el modal
+    getFechaLimiteAnulacion().done(function(res) {
+        let fechaLimiteAnulacion = res.fecha_limite_anulacion;
+        if (!fechaLimiteAnulacion) {
+            swal({
+                title: 'Error',
+                html: 'No se pudo obtener la fecha límite de anulación. Intente de nuevo o contacte a soporte.',
+                type: 'error',
+                showCancelButton: false,
+                allowOutsideClick: false,
+            });
+            return;
+        }
+        let ahora = moment();
+        let limite = moment(fechaLimiteAnulacion);
+        if (ahora.isAfter(limite)) {
+            swal({
+                title: 'No permitido',
+                html: 'La anulación de facturas para este periodo ya no está permitida.',
+                type: 'error',
+                showCancelButton: false,
+                allowOutsideClick: false,
+            });
+            return;
+        }
+        let row = getRow(table, this)
+        pro.showModalAnular(row)
+    }.bind(this)).fail(function() {
         swal({
             title: 'Error',
-            html: 'No se pudo obtener la fecha límite de anulación. Intente de nuevo o contacte a soporte.',
+            html: 'No se pudo consultar la fecha límite de anulación. Intente de nuevo o contacte a soporte.',
             type: 'error',
             showCancelButton: false,
             allowOutsideClick: false,
         });
-        return;
-    }
-    let ahora = moment();
-    let limite = moment(fechaLimiteAnulacion);
-    if (ahora.isAfter(limite)) {
-        swal({
-            title: 'No permitido',
-            html: 'No se puede anular la factura porque ya pasó la fecha o periodo de anulación.',
-            type: 'error',
-            showCancelButton: false,
-            allowOutsideClick: false,
-        });
-        return;
-    }
-    let row = getRow(table, this)
-    pro.showModalAnular(row)
+    });
 })
 
 const pro = new Vue({
