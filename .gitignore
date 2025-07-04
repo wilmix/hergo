@@ -43,6 +43,7 @@ nbproject/
 *.stTheme.cache
 
 # === IMÁGENES Y RESPALDOS (NO VERSIONAR) ===
+images/firmas/
 assets/img_articulos/
 assets/img_pagos/
 assets/img_ingresos/
