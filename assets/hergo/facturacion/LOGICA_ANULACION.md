@@ -9,12 +9,15 @@ Controlar de manera precisa y transparente cuándo se permite anular una factura
 
 1. **Facturas del mes actual (mes en curso):**
    - Siempre pueden ser anuladas (siempre se muestra el botón de anular), salvo que estén pagadas o ya anuladas.
+   - **No existe ninguna restricción de fecha límite para anulación en el mes actual.**
 
-2. **Facturas del periodo abierto (mes anterior al mes actual):**
-   - Solo pueden ser anuladas si la fecha actual es **anterior** a la `fecha_limite_anulacion` definida en la base de datos.
-   - Ejemplo: Si la fecha límite es `2025-07-07 09:00:00`, el periodo abierto es **junio 2025**. Hasta el 7 de julio a las 9:00, se puede anular facturas de junio.
+2. **Facturas del periodo anterior (mes anterior al mes actual):**
+   - Siempre se muestra el botón de anular (si no está pagada o anulada).
+   - Al hacer clic, solo pueden ser anuladas si la fecha actual es **anterior o igual** a la `fecha_limite_anulacion` definida en la base de datos.
+   - Si la fecha actual es posterior a la fecha límite, se muestra un mensaje y no se permite anular.
+   - Ejemplo: Si la fecha límite es `2025-07-07 09:00:00`, el periodo anterior es **junio 2025**. Hasta el 7 de julio a las 9:00, se puede anular facturas de junio.
 
-3. **Facturas de meses anteriores al periodo abierto:**
+3. **Facturas de meses anteriores al periodo anterior:**
    - Nunca pueden ser anuladas (nunca se muestra el botón de anular).
 
 4. **Facturas pagadas o ya anuladas:**
@@ -24,16 +27,18 @@ Controlar de manera precisa y transparente cuándo se permite anular una factura
 
 ## Ejemplo práctico
 
-- **Hoy:** 2 de julio de 2025
+- **Hoy:** 4 de julio de 2025
 - **fecha_limite_anulacion:** `2025-07-07 09:00:00`
 
-| Fecha de la factura | ¿Se muestra botón de anular? | Motivo                                                        |
-|---------------------|------------------------------|---------------------------------------------------------------|
-| 2025-07-01          | Sí                           | Es del mes actual (julio 2025)                                |
-| 2025-06-15          | Sí                           | Es del periodo abierto (junio 2025, antes de la fecha límite) |
-| 2025-05-20          | No                           | Es de un mes anterior al periodo abierto                      |
-| 2025-06-10 (pagada) | No                           | Está pagada                                                   |
-| 2025-07-03 (anulada)| No                           | Ya está anulada                                               |
+| Fecha de la factura | ¿Se muestra botón de anular? | ¿Permite anular? | Motivo                                                        |
+|---------------------|------------------------------|------------------|---------------------------------------------------------------|
+| 2025-07-01          | Sí                           | Sí               | Es del mes actual (julio 2025, sin restricción)               |
+| 2025-07-04          | Sí                           | Sí               | Es del mes actual (julio 2025, sin restricción)               |
+| 2025-06-15          | Sí                           | Sí               | Es del periodo anterior (junio 2025, antes de la fecha límite)|
+| 2025-06-10 (pagada) | No                           | No               | Está pagada                                                   |
+| 2025-05-20          | No                           | No               | Es de un mes anterior al periodo anterior                     |
+| 2025-07-03 (anulada)| No                           | No               | Ya está anulada                                               |
+| 2025-06-20 (después del 7/julio) | Sí              | No               | Superó la fecha límite de anulación para junio                |
 
 ---
 
@@ -41,8 +46,9 @@ Controlar de manera precisa y transparente cuándo se permite anular una factura
 
 - La fecha límite de anulación se consulta desde la base de datos antes de renderizar la tabla.
 - La lógica se aplica en la función que genera los botones de acción en la tabla (`buttons`).
-- Se usan funciones auxiliares para comparar el mes/año de la factura con el periodo abierto y la fecha actual.
-- El botón de anular solo aparece si todas las condiciones anteriores se cumplen.
+- El botón de anular se muestra siempre para el mes actual y el mes anterior (si no está pagada o anulada).
+- La restricción de la fecha límite para el mes anterior se valida solo al hacer clic en el botón, mostrando un mensaje si no se permite anular.
+- Se usan funciones auxiliares para comparar el mes/año de la factura con el periodo actual y el periodo anterior, así como la fecha actual.
 
 ---
 
@@ -64,14 +70,15 @@ flowchart TD
     A["¿Factura pagada o anulada?"] -- "Sí" --> B["No mostrar botón"]
     A -- "No" --> C{"¿Factura del mes actual?"}
     C -- "Sí" --> D["Mostrar botón"]
-    C -- "No" --> E{"¿Factura del periodo abierto?"}
-    E -- "Sí" --> F{"¿Hoy es antes de la fecha límite?"}
-    F -- "Sí" --> D
-    F -- "No" --> B
+    C -- "No" --> E{"¿Factura del periodo anterior?"}
+    E -- "Sí" --> F["Mostrar botón"]
+    F --> G{"¿Hoy es antes o igual a la fecha límite?"}
+    G -- "Sí" --> H["Permitir anular"]
+    G -- "No" --> I["Mostrar mensaje: No permitido"]
     E -- "No" --> B
 ```
 
 > **Nota para principiantes:**
-> - Este diagrama representa la lógica de decisión para mostrar el botón de anular.
+> - Este diagrama representa la lógica de decisión para mostrar el botón de anular y la validación al hacer clic.
 > - Mermaid es un lenguaje de marcado para diagramas, muy útil para documentar procesos lógicos en Markdown.
 > - Si necesitas exportar el diagrama como imagen, puedes usar herramientas online como [Mermaid Live Editor](https://mermaid-js.github.io/mermaid-live-editor/) para pegar el código y descargarlo como PNG o SVG. 

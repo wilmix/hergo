@@ -28,7 +28,8 @@ function getPeriodoAbierto(fechaLimite) {
 }
 
 function isFacturaMesActual(fechaFac) {
-    let fecha = moment(fechaFac);
+    // Forzar formato YYYY-MM-DD para evitar problemas de zona horaria o formato
+    let fecha = moment(fechaFac, ["YYYY-MM-DD", "YYYY-MM-DD HH:mm:ss", moment.ISO_8601]);
     let ahora = moment();
     return fecha.year() === ahora.year() && fecha.month() === ahora.month();
 }
@@ -309,31 +310,22 @@ function buttons (data, type, row) {
         </span>
     </button>`
     let buttons = `${pdf}${xml}${linkSiat}`;
+    // Si la factura está anulada o pagada, nunca mostrar botón de anular
     if (row.anulada == 1 || row.pagada == 1) {
         return buttons;
     }
     if (!fechaLimiteAnulacionGlobal) {
         return buttons;
     }
-    let ahora = moment();
-    let limite = moment(fechaLimiteAnulacionGlobal);
-    // Mostrar botón si es del mes actual
-    if (isFacturaMesActual(row.fechaFac)) {
+    // Mostrar el botón solo para el mes actual y el mes anterior
+    if (isFacturaMesActual(row.fechaFac) || isFacturaMesAnterior(row.fechaFac, fechaLimiteAnulacionGlobal)) {
         if (permisoAnular == 'true') {
             return `${pdf}${xml}${anular}${linkSiat}`;
         } else {
             return buttons;
         }
     }
-    // Mostrar botón si es del periodo abierto (mes anterior a la fecha límite) y estamos antes de la fecha límite
-    if (isFacturaMesAnterior(row.fechaFac, fechaLimiteAnulacionGlobal) && ahora.isBefore(limite)) {
-        if (permisoAnular == 'true') {
-            return `${pdf}${xml}${anular}${linkSiat}`;
-        } else {
-            return buttons;
-        }
-    }
-    // Nunca mostrar botón para meses anteriores al periodo abierto
+    // Para dos meses o más atrás, nunca mostrar el botón
     return buttons;
 }
 
@@ -390,7 +382,14 @@ $(document).on("click", "button.xml", function () {
 
 })
 $(document).on("click", "button.anular", function () {
-    // Consultar la fecha límite en tiempo real antes de mostrar el modal
+    let row = getRow(table, this);
+    // Log para depuración
+    console.log("[ANULAR] fechaFac:", row.fechaFac, "| isMesActual:", isFacturaMesActual(row.fechaFac));
+    // Si la factura es del mes actual, permitir anular sin restricción
+    if (isFacturaMesActual(row.fechaFac)) {
+        pro.showModalAnular(row);
+        return;
+    }
     getFechaLimiteAnulacion().done(function(res) {
         let fechaLimiteAnulacion = res.fecha_limite_anulacion;
         if (!fechaLimiteAnulacion) {
@@ -415,8 +414,7 @@ $(document).on("click", "button.anular", function () {
             });
             return;
         }
-        let row = getRow(table, this)
-        pro.showModalAnular(row)
+        pro.showModalAnular(row);
     }.bind(this)).fail(function() {
         swal({
             title: 'Error',
