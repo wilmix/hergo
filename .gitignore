@@ -1,46 +1,63 @@
-.DS_Store
-/vendor
+########################################
+# SISTEMA HERGO .gitignore
+# Organización y comentarios por sección
+########################################
 
+# === SISTEMA Y DEPENDENCIAS ===
+.DS_Store
+vendor/
+
+# === CACHE Y LOGS ===
 application/cache/*
 !application/cache/index.html
 !application/cache/.htaccess
-
 application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
 
+# === ARCHIVOS DE BUILD Y TEMPORALES ===
 user_guide_src/build/*
 user_guide_src/cilexer/build/*
 user_guide_src/cilexer/dist/*
 user_guide_src/cilexer/pycilexer.egg-info/*
 
+# === BACKUPS Y ARCHIVOS TEMPORALES ===
 application/third_party/back/*
+application/config/config.php.save*
+application/controllers/*.save
 
+# === ARCHIVOS DE CONFIGURACIÓN SENSIBLES ===
+application/config/config.php
+application/config/database.php
 
-# IDE Files
-#-------------------------
-/nbproject/
-.idea/*
+# === ARCHIVOS DE PRUEBA ===
+test
 
-## Sublime Text cache files
+# === ARCHIVOS DE IDE Y EDITORES ===
+nbproject/
+.idea/
+*.sublime-workspace
+*.sublime-project
 *.tmlanguage.cache
 *.tmPreferences.cache
 *.stTheme.cache
-*.sublime-workspace
-*.sublime-project
-#config codeigniter
-/application/config/config.php
-application/config/database.php
-test
-application/config/config.php
-/assets/img_articulos
-/assets/img_pagos
-/assets/img_ingresos
-/assets/imagenes
-/assets/facComProv
-assets/pagoProveedores
-/qr
-.htaccess
 
-/application/third_party/phpqrcode
+# === IMÁGENES Y RESPALDOS (NO VERSIONAR) ===
+assets/img_articulos/
+assets/img_pagos/
+assets/img_ingresos/
+assets/imagenes/
+assets/facComProv/
+assets/pagoProveedores/
+assets/back_facComProv/
+assets/back_img_ingresos/
+assets/back_img_pagos/
+assets/back_pagoProveedores/
+
+# === OTROS DIRECTORIOS DE ARCHIVOS GENERADOS ===
+qr/
+
+# === ARCHIVOS Y CARPETAS ESPECÍFICAS ===
+.htaccess
+application/third_party/phpqrcode
 
